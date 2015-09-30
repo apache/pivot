@@ -23,8 +23,10 @@ public class Utils {
     /**
      * Decide if two strings are the same content (not just the same reference).
      * <p> Works properly for either string being <tt>null</tt>.
+     * @param s1 First string to compare (can be {@code null}).
+     * @param s2 Second string to compare (can also be {@code null}).
      * @return  <tt>true</tt> if both strings are <tt>null</tt> or if
-     * <code>s1.equals(s2)</code> returns <tt>true</tt>.
+     * <code>s1.equals(s2)</code>.
      */
     public static boolean stringsAreEqual(String s1, String s2) {
         if (s1 == null && s2 == null) {

@@ -371,6 +371,7 @@ public final class Time implements Comparable<Time>, Serializable {
      *
      * @param value A string in the form of <tt>[hh]:[mm]:[ss]</tt> or
      * <tt>[hh]:[mm]:[ss].[nnn]</tt> (e.g. 17:19:20 or 17:19:20.412).
+     * @return The {@code Time} value corresponding to the input string.
      */
     public static Time decode(String value) {
         Matcher matcher = PATTERN.matcher(value);

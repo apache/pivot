@@ -437,6 +437,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      *
      * @param value A string in the form of <tt>[YYYY]-[MM]-[DD]</tt> (e.g.
      * 2008-07-23).
+     * @return The {@code CalendarDate} corresponding to the input string.
      */
     public static CalendarDate decode(String value) {
         Matcher matcher = PATTERN.matcher(value);

@@ -27,8 +27,9 @@ public class MessageBus {
     /**
      * Subscribes a listener to a message topic.
      *
-     * @param topic
-     * @param messageListener
+     * @param <T> The type of the topic.
+     * @param topic The topic class to subscribe to.
+     * @param messageListener The listener we want to attach.
      */
     public static <T> void subscribe(Class<? super T> topic, MessageBusListener<T> messageListener) {
         ListenerList<MessageBusListener<?>> topicListeners = messageTopics.get(topic);
@@ -46,8 +47,10 @@ public class MessageBus {
     /**
      * Unsubscribe a listener from a message topic.
      *
-     * @param topic
-     * @param messageListener
+     * @param <T> The type of the topic.
+     * @param topic The topic class to subscribe to.
+     * @param messageListener The listener to unsubscribe.
+     * @throws IllegalArgumentException if there are no listeners subscribed.
      */
     public static <T> void unsubscribe(Class<? super T> topic, MessageBusListener<T> messageListener) {
         ListenerList<MessageBusListener<?>> topicListeners = messageTopics.get(topic);
@@ -65,7 +68,8 @@ public class MessageBus {
     /**
      * Sends a message to subscribed topic listeners.
      *
-     * @param message
+     * @param <T> The type of the topic.
+     * @param message The message to send to all subscribed listeners.
      */
     @SuppressWarnings("unchecked")
     public static <T> void sendMessage(T message) {

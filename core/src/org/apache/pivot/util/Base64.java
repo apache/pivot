@@ -75,6 +75,7 @@ public final class Base64 {
      * Encodes the specified data into a base64 string.
      *
      * @param bytes The unencoded raw data.
+     * @return The base64 encoded string.
      */
     public static String encode(byte[] bytes) {
         StringBuilder buf = new StringBuilder(4 * (bytes.length / 3 + 1));
@@ -103,6 +104,7 @@ public final class Base64 {
      * Decodes the specified base64 string back into its raw data.
      *
      * @param encoded The base64 encoded string.
+     * @return The decoded data bytes.
      */
     public static byte[] decode(String encoded) {
         int padding = 0;

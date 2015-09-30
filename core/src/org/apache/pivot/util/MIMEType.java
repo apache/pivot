@@ -35,6 +35,7 @@ public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     /**
      * Returns the base type of this MIME type (i.e. the type string minus
      * parameter values).
+     * @return The base type.
      */
     public String getBaseType() {
         return this.baseType;

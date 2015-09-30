@@ -23,8 +23,8 @@ public interface NodeListener {
     /**
      * Called when a node's parent has changed.
      *
-     * @param node
-     * @param previousParent
+     * @param node The node that has moved.
+     * @param previousParent The previous parent of this node.
      */
     public void parentChanged(Node node, Element previousParent);
 }

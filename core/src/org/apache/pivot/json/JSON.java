@@ -38,6 +38,7 @@ public class JSON {
     /**
      * Returns the value at a given path.
      *
+     * @param <T> The type of value to expect.
      * @param root The root object.
      * @param path The path to the value as a JavaScript path.
      * @return The value at the given path.
@@ -51,6 +52,7 @@ public class JSON {
     /**
      * Returns the value at a given path.
      *
+     * @param <T> The type of value to expect.
      * @param root The root object.
      * @param keys The path to the value as a sequence of keys.
      * @return The value at the given path.
@@ -123,9 +125,10 @@ public class JSON {
     /**
      * Sets the value at the given path.
      *
-     * @param root
-     * @param path
-     * @param value
+     * @param <T> The type of value we're dealing with.
+     * @param root The root object.
+     * @param path The path to the desired location from the root.
+     * @param value The new value to set at the given path.
      * @return The value previously associated with the path.
      */
     @SuppressWarnings("unchecked")
@@ -169,8 +172,9 @@ public class JSON {
     /**
      * Removes the value at the given path.
      *
-     * @param root
-     * @param path
+     * @param <T> The type of value we're dealing with.
+     * @param root The root object.
+     * @param path The path to the object (from the root) to remove.
      * @return The value that was removed.
      */
     @SuppressWarnings("unchecked")
@@ -207,8 +211,9 @@ public class JSON {
     /**
      * Tests the existence of a path in a given object.
      *
-     * @param root
-     * @param path
+     * @param <T> The type of value we're dealing with.
+     * @param root The root object.
+     * @param path The path to test (from the root).
      * @return <tt>true</tt> if the path exists; <tt>false</tt>, otherwise.
      */
     @SuppressWarnings("unchecked")
@@ -254,7 +259,8 @@ public class JSON {
     /**
      * Parses a JSON path into a sequence of string keys.
      *
-     * @param path
+     * @param path The path to parse.
+     * @return The sequence of keys corresponding to the given path.
      */
     public static Sequence<String> parse(String path) {
         if (path == null) {

@@ -35,6 +35,8 @@ public class Service {
      * attempts to load a resource with this name from the META-INF/services
      * directory. The resource is expected to be a text file containing a single
      * line that is the name of the provider class.
+     * @return The provider object (if any), or {@code null} if the provider
+     * cannot be found or loaded.
      */
     @SuppressWarnings("resource")
     public static Object getProvider(String providerName) {

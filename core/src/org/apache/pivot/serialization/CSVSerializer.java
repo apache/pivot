@@ -116,6 +116,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Returns the character set used to encode/decode the CSV data.
+     * @return The current character set.
      */
     public Charset getCharset() {
         return charset;
@@ -124,6 +125,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Returns the type of the item that will be instantiated by the serializer
      * during a read operation.
+     * @return The type of the item to be returned by the serializer.
      */
     public Type getItemType() {
         return itemType;
@@ -131,6 +133,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Returns the keys that will be read or written by this serializer.
+     * @return The sequence of read/write keys.
      */
     public Sequence<String> getKeys() {
         return keys;
@@ -139,7 +142,8 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Sets the keys that will be read or written by this serializer.
      *
-     * @param keys
+     * @param keys The keys to be read/written.
+     * @throws IllegalArgumentException for {@code null} input.
      */
     public void setKeys(Sequence<String> keys) {
         if (keys == null) {
@@ -152,7 +156,8 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Sets the keys that will be read or written by this serializer.
      *
-     * @param keys
+     * @param keys The list of keys to be read/written.
+     * @throws IllegalArgumentException for {@code null} input.
      */
     public void setKeys(String... keys) {
         if (keys == null) {
@@ -164,6 +169,8 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Returns the serializer's write keys flag.
+     * @return <tt>true</tt> if keys will be written, <tt>false</tt> otherwise.
+     * @see #setWriteKeys(boolean)
      */
     public boolean getWriteKeys() {
         return writeKeys;
@@ -182,6 +189,8 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     /**
      * Returns the serializer's verbosity flag.
+     * @return <tt>true</tt> if the serializer is echoing input, <tt>false</tt>
+     * if not.
      */
     public boolean isVerbose() {
         return verbose;
@@ -191,7 +200,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * Sets the serializer's verbosity flag. When verbosity is enabled, all data
      * read or written will be echoed to the console.
      *
-     * @param verbose
+     * @param verbose Whether or not to echo the input.
      */
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
@@ -201,6 +210,10 @@ public class CSVSerializer implements Serializer<List<?>> {
      * Reads values from a comma-separated value stream.
      *
      * @param inputStream The input stream from which data will be read.
+     * @return The list of values read from the stream.
+     * @throws IOException for any errors during reading.
+     * @throws SerializationException for any formatting errors with the data.
+     * @throws IllegalArgumentException for {@code null} input stream.
      * @see #readObject(Reader)
      */
     @SuppressWarnings("resource")
@@ -227,6 +240,9 @@ public class CSVSerializer implements Serializer<List<?>> {
      * in the CSV file to keys in the key sequence. <p> If no keys have been
      * specified when this method is called, they are assumed to be defined in
      * the first line of the file.
+     * @throws IOException for any errors during reading.
+     * @throws SerializationException for any formatting errors with the data.
+     * @throws IllegalArgumentException for {@code null} input reader.
      */
     public List<?> readObject(Reader reader) throws IOException, SerializationException {
         if (reader == null) {
@@ -421,8 +437,11 @@ public class CSVSerializer implements Serializer<List<?>> {
     /**
      * Writes values to a comma-separated value stream.
      *
-     * @param items
+     * @param items The list of items to write.
      * @param outputStream The output stream to which data will be written.
+     * @throws IOException for any errors during writing.
+     * @throws SerializationException for any formatting errors with the data.
+     * @throws IllegalArgumentException for {@code null} input arguments.
      * @see #writeObject(List, Writer)
      */
     @SuppressWarnings("resource")
@@ -453,6 +472,8 @@ public class CSVSerializer implements Serializer<List<?>> {
      * items must be instances of <tt>Dictionary&lt;String, Objecti&gt;</tt>. The dictionary
      * values will be written out in the order specified by the key sequence.
      * @param writer The writer to which data will be written.
+     * @throws IOException for any errors during writing.
+     * @throws IllegalArgumentException for {@code null} input arguments.
      */
     @SuppressWarnings("unchecked")
     public void writeObject(List<?> items, Writer writer) throws IOException {

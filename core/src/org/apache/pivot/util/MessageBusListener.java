@@ -24,7 +24,7 @@ public interface MessageBusListener<T> {
      * Called when a message has been sent via
      * {@link MessageBus#sendMessage(Object)}.
      *
-     * @param message
+     * @param message The message that was just sent.
      */
     public void messageSent(T message);
 }

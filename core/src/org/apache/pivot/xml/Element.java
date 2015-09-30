@@ -76,7 +76,7 @@ public class Element extends Node implements List<Node> {
         }
 
         /**
-         * Returns the attribute's local name.
+         * @return The attribute's local name.
          */
         public String getLocalName() {
             return localName;
@@ -84,6 +84,8 @@ public class Element extends Node implements List<Node> {
 
         /**
          * Returns the fully-qualified name of the attribute.
+         * @return The local name if there is no namespace defined, or
+         * the fully-qualified name if there is a namespace.
          */
         public String getName() {
             String name;
@@ -97,7 +99,7 @@ public class Element extends Node implements List<Node> {
         }
 
         /**
-         * Returns the attribute's value.
+         * @return The attribute's value.
          */
         public String getValue() {
             return value;
@@ -106,7 +108,8 @@ public class Element extends Node implements List<Node> {
         /**
          * Sets the attribute's value.
          *
-         * @param value
+         * @param value New value for this attribute.
+         * @throws IllegalArgumentException if the value is {@code null}.
          */
         public void setValue(String value) {
             if (value == null) {
@@ -177,7 +180,7 @@ public class Element extends Node implements List<Node> {
         /**
          * Adds an attribute to the sequence.
          *
-         * @param attribute
+         * @param attribute New attribute to add.
          */
         @Override
         public int add(Attribute attribute) {
@@ -190,8 +193,11 @@ public class Element extends Node implements List<Node> {
         /**
          * Inserts an attribute into the sequence at a specific location.
          *
-         * @param attribute
-         * @param index
+         * @param attribute The new attribute to insert.
+         * @param index The location where it is to be inserted.
+         * @throws IllegalArgumentException if the attribute is {@code null} or
+         * if the attribute already is assigned to an element, or if the attribute's
+         * name has already been added here.
          */
         @Override
         public void insert(Attribute attribute, int index) {
@@ -217,6 +223,8 @@ public class Element extends Node implements List<Node> {
         }
 
         /**
+         * @param index Not used.
+         * @param item Not used.
          * @throws UnsupportedOperationException This method is not supported.
          * Use {@link Attribute#setValue(String)} instead.
          */
@@ -228,7 +236,7 @@ public class Element extends Node implements List<Node> {
         /**
          * Removes an attribute from the sequence.
          *
-         * @param attribute
+         * @param attribute The attribute to remove.
          */
         @Override
         public int remove(Attribute attribute) {
@@ -243,8 +251,8 @@ public class Element extends Node implements List<Node> {
         /**
          * Removes a range of attributes from the sequence.
          *
-         * @param index
-         * @param count
+         * @param index Starting location for the attributes to remove.
+         * @param count Number to remove.
          */
         @Override
         public Sequence<Attribute> remove(int index, int count) {
@@ -266,7 +274,9 @@ public class Element extends Node implements List<Node> {
         /**
          * Returns the attribute at a given index.
          *
-         * @param index
+         * @param index Index of the item to retrieve.
+         * @return The item at that index, or {@code null} if there is no
+         * attribute at that index.
          */
         @Override
         public Attribute get(int index) {
@@ -276,8 +286,8 @@ public class Element extends Node implements List<Node> {
         /**
          * Determines the index of an attribute.
          *
-         * @param attribute
-         * @return The index of the attribute, if found; otherwise, <tt>-1</tt>.
+         * @param attribute The attribute to look up.
+         * @return The index of the attribute, if found; otherwise <tt>-1</tt>.
          */
         @Override
         public int indexOf(Attribute attribute) {
@@ -285,7 +295,7 @@ public class Element extends Node implements List<Node> {
         }
 
         /**
-         * Returns the number of attributes in the sequence.
+         * @return The number of attributes in the sequence.
          */
         @Override
         public int getLength() {
@@ -293,7 +303,7 @@ public class Element extends Node implements List<Node> {
         }
 
         /**
-         * Returns an iterator over the attribute sequence.
+         * @return An iterator over the attribute sequence.
          */
         @Override
         public Iterator<Attribute> iterator() {
@@ -366,9 +376,9 @@ public class Element extends Node implements List<Node> {
         /**
          * Tests for the existence of a namespace declared by this element.
          *
-         * @param prefix
+         * @param prefix Namespace prefix to test for.
          * @return <tt>true</tt> if this element declares a namespace with the
-         * given prefix; <tt>false</tt>, otherwise.
+         * given prefix; <tt>false</tt> otherwise.
          */
         @Override
         public boolean containsKey(String prefix) {
@@ -446,7 +456,7 @@ public class Element extends Node implements List<Node> {
         /**
          * Returns an attribute value.
          *
-         * @param attributeName
+         * @param attributeName Name of the attribute whose value we are interested in.
          * @return The value associated with the given attribute, or
          * <tt>null</tt>
          */
@@ -459,8 +469,8 @@ public class Element extends Node implements List<Node> {
         /**
          * Sets an attribute value.
          *
-         * @param attributeName
-         * @param value
+         * @param attributeName The attribute to set the new value for.
+         * @param value New value for this attribute.
          * @return The value previously associated with the given attribute, or
          * <tt>null</tt> if the attribute did not previously exist.
          */
@@ -496,8 +506,9 @@ public class Element extends Node implements List<Node> {
         /**
          * Removes an attribute.
          *
-         * @param attributeName
-         * @return The value previously associated with the given attribute.
+         * @param attributeName Name of the attribute to remove.
+         * @return The value previously associated with the given attribute,
+         * or {@code null} if the attribute did not exist.
          */
         @Override
         public String remove(String attributeName) {
@@ -512,9 +523,9 @@ public class Element extends Node implements List<Node> {
         /**
          * Tests for the existence of an attribute.
          *
-         * @param attributeName
+         * @param attributeName Name of the attribute to test for.
          * @return <tt>true</tt> if this element defines the given attribute;
-         * <tt>false</tt>, otherwise.
+         * <tt>false</tt> otherwise.
          */
         @Override
         public boolean containsKey(String attributeName) {
@@ -562,7 +573,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Returns the element's local name.
+     * @return The element's local name.
      */
     public String getLocalName() {
         return localName;
@@ -570,6 +581,8 @@ public class Element extends Node implements List<Node> {
 
     /**
      * Returns the fully-qualified name of the element.
+     * @return The local name if no namespace is defined, or
+     * the fully-qualified name if there is a namespace.
      */
     public String getName() {
         String name;
@@ -609,7 +622,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Returns the element's namespace dictionary.
+     * @return The element's namespace dictionary.
      */
     public NamespaceDictionary getNamespaces() {
         return namespaceDictionary;
@@ -646,14 +659,14 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Returns the element's element dictionary.
+     * @return The element's element dictionary.
      */
     public ElementDictionary getElementDictionary() {
         return elementDictionary;
     }
 
     /**
-     * Returns the element's attribute dictionary.
+     * @return The element's attribute dictionary.
      */
     public AttributeSequence getAttributes() {
         return attributeSequence;
@@ -662,8 +675,9 @@ public class Element extends Node implements List<Node> {
     /**
      * Adds a node to this element.
      *
-     * @param node
+     * @param node The node to be added.
      * @return The index at which the node was added.
+     * @throws IllegalArgumentException if the node already has a parent.
      */
     @Override
     public int add(Node node) {
@@ -680,8 +694,8 @@ public class Element extends Node implements List<Node> {
     /**
      * Inserts a node at a specific location within this element.
      *
-     * @param node
-     * @param index
+     * @param node The node to insert.
+     * @param index The index within this element where to insert the node.
      */
     @Override
     public void insert(Node node, int index) {
@@ -705,7 +719,9 @@ public class Element extends Node implements List<Node> {
     /**
      * Removes a node from this element.
      *
-     * @param node
+     * @param node The node to remove.
+     * @return The index of the node before it was removed, or
+     * {@code -1} if the node was not found.
      */
     @Override
     public int remove(Node node) {
@@ -720,9 +736,9 @@ public class Element extends Node implements List<Node> {
     /**
      * Removes a range of nodes from this element.
      *
-     * @param index
-     * @param count
-     * @return The removed nodes.
+     * @param index The starting index of the nodes to remove.
+     * @param count The number of nodes to remove.
+     * @return The sequence of removed nodes.
      */
     @Override
     public Sequence<Node> remove(int index, int count) {
@@ -758,7 +774,9 @@ public class Element extends Node implements List<Node> {
     /**
      * Returns the node at the given index.
      *
-     * @param index
+     * @param index The desired index.
+     * @return The node at that index, or {@code null} if there
+     * is no node at that location.
      */
     @Override
     public Node get(int index) {
@@ -812,7 +830,7 @@ public class Element extends Node implements List<Node> {
      * Determines if this element defines any attributes.
      *
      * @return <tt>true</tt> if this element does not define any attributes;
-     * <tt>false</tt>, otherwise.
+     * <tt>false</tt> otherwise.
      */
     @Override
     public boolean isEmpty() {
@@ -869,7 +887,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Returns the element's listener list.
+     * @return The element's listener list.
      */
     @Override
     public ListenerList<ListListener<Node>> getListListeners() {
@@ -877,7 +895,7 @@ public class Element extends Node implements List<Node> {
     }
 
     /**
-     * Returns the element listener list.
+     * @return The element listener list.
      */
     public ListenerList<ElementListener> getElementListeners() {
         return elementListeners;

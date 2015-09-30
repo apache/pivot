@@ -66,59 +66,59 @@ public interface ElementListener {
     /**
      * Called when an element's default namespace URI has changed.
      *
-     * @param element
-     * @param previousDefaultNamespaceURI
+     * @param element The element that has changed.
+     * @param previousDefaultNamespaceURI The previous value of the default namespace URI.
      */
     public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI);
 
     /**
      * Called when a namespace has been added to an element.
      *
-     * @param element
-     * @param prefix
+     * @param element The element that has been changed.
+     * @param prefix The new namespace prefix that has been set.
      */
     public void namespaceAdded(Element element, String prefix);
 
     /**
-     * Called when an element attribute has been updated.
+     * Called when a namespace {@code URI} has been updated.
      *
-     * @param element
-     * @param prefix
-     * @param previousURI
+     * @param element The element that has had the namespace updated.
+     * @param prefix The namespace prefix for this element.
+     * @param previousURI The previous value of the namespace URI.
      */
     public void namespaceUpdated(Element element, String prefix, String previousURI);
 
     /**
      * Called when a namespace has been removed from an element.
      *
-     * @param element
-     * @param prefix
-     * @param uri
+     * @param element The element that is changing.
+     * @param prefix The namespace prefix that has been removed.
+     * @param uri The {@code URI} that was removed.
      */
     public void namespaceRemoved(Element element, String prefix, String uri);
 
     /**
      * Called when an attribute has been added to an element.
      *
-     * @param element
-     * @param index
+     * @param element The element that has changed.
+     * @param index The index where the new attribute was added.
      */
     public void attributeInserted(Element element, int index);
 
     /**
      * Called when attributes have been removed from an element.
      *
-     * @param element
-     * @param index
-     * @param attributes
+     * @param element The element that has changed.
+     * @param index Starting index of the attributes that were removed.
+     * @param attributes The sequence of removed attributes.
      */
     public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes);
 
     /**
      * Called when an attribute's value has changed.
      *
-     * @param attribute
-     * @param previousValue
+     * @param attribute The attribute whose value has changed.
+     * @param previousValue The previous value for this attribute.
      */
     public void attributeValueChanged(Element.Attribute attribute, String previousValue);
 }

@@ -37,7 +37,7 @@ public abstract class Node {
     private NodeListenerList nodeListeners = new NodeListenerList();
 
     /**
-     * Returns the parent element of the node.
+     * @return The parent element of the node.
      */
     public Element getParent() {
         return parent;
@@ -46,7 +46,7 @@ public abstract class Node {
     /**
      * Sets the parent element of the node.
      *
-     * @param parent
+     * @param parent New parent for this node.
      */
     protected void setParent(Element parent) {
         Element previousParent = this.parent;
@@ -56,7 +56,7 @@ public abstract class Node {
     }
 
     /**
-     * Returns the node listener list.
+     * @return The node listener list.
      */
     public ListenerList<NodeListener> getNodeListeners() {
         return nodeListeners;

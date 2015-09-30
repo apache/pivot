@@ -76,69 +76,69 @@ public interface JSONSerializerListener {
     /**
      * Called when the serializer has begun reading a dictionary value.
      *
-     * @param jsonSerializer
-     * @param value
+     * @param jsonSerializer The serializer in question.
+     * @param value The dictionary just started.
      */
     public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value);
 
     /**
      * Called when the serializer has finished reading a dictionary value.
      *
-     * @param jsonSerializer
+     * @param jsonSerializer The serializer in operation.
      */
     public void endDictionary(JSONSerializer jsonSerializer);
 
     /**
      * Called when the serializer has read a dictionary key.
      *
-     * @param jsonSerializer
-     * @param key
+     * @param jsonSerializer The active serializer.
+     * @param key The key just read.
      */
     public void readKey(JSONSerializer jsonSerializer, String key);
 
     /**
      * Called when the serializer has begun reading a sequence value.
      *
-     * @param jsonSerializer
-     * @param value
+     * @param jsonSerializer The serializer.
+     * @param value The sequence just started.
      */
     public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value);
 
     /**
      * Called when the serializer has finished reading a sequence value.
      *
-     * @param jsonSerializer
+     * @param jsonSerializer The current serializer.
      */
     public void endSequence(JSONSerializer jsonSerializer);
 
     /**
      * Called when the serializer has read a string value.
      *
-     * @param jsonSerializer
-     * @param value
+     * @param jsonSerializer The active serializer.
+     * @param value The string value just read.
      */
     public void readString(JSONSerializer jsonSerializer, String value);
 
     /**
      * Called when the serializer has read a numeric value.
      *
-     * @param jsonSerializer
-     * @param value
+     * @param jsonSerializer The active serializer.
+     * @param value The numeric value just read.
      */
     public void readNumber(JSONSerializer jsonSerializer, Number value);
 
     /**
      * Called when the serializer has read a boolean value.
      *
-     * @param jsonSerializer
-     * @param value
+     * @param jsonSerializer The serializer.
+     * @param value The boolean value just read.
      */
     public void readBoolean(JSONSerializer jsonSerializer, Boolean value);
 
     /**
      * Called when the serializer has read a null value.
      *
-     * @param jsonSerializer
+     * @param jsonSerializer The currently active serializer.
      */
     public void readNull(JSONSerializer jsonSerializer);
 }

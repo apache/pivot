@@ -43,23 +43,23 @@ public interface XMLSerializerListener {
     /**
      * Called when the serializer has begun reading an element.
      *
-     * @param xmlSerializer
-     * @param element
+     * @param xmlSerializer The active serializer.
+     * @param element The element we are beginning to read.
      */
     public void beginElement(XMLSerializer xmlSerializer, Element element);
 
     /**
      * Called when the serializer has finished reading an element.
      *
-     * @param xmlSerializer
+     * @param xmlSerializer The active serializer.
      */
     public void endElement(XMLSerializer xmlSerializer);
 
     /**
      * Called when the serializer has read a text node.
      *
-     * @param xmlSerializer
-     * @param textNode
+     * @param xmlSerializer The current serializer.
+     * @param textNode The text node that was just read.
      */
     public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode);
 }

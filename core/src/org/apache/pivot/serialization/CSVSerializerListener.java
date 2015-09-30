@@ -45,23 +45,23 @@ public interface CSVSerializerListener {
     /**
      * Called when the serializer has begun reading the list.
      *
-     * @param csvSerializer
-     * @param list
+     * @param csvSerializer The active serializer.
+     * @param list The list just begun.
      */
     public void beginList(CSVSerializer csvSerializer, List<?> list);
 
     /**
      * Called when the serializer has finished reading the list.
      *
-     * @param csvSerializer
+     * @param csvSerializer The current serializer.
      */
     public void endList(CSVSerializer csvSerializer);
 
     /**
      * Called when the serializer has read an item.
      *
-     * @param csvSerializer
-     * @param item
+     * @param csvSerializer The current serializer.
+     * @param item The item just read.
      */
     public void readItem(CSVSerializer csvSerializer, Object item);
 }

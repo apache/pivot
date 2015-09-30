@@ -77,7 +77,7 @@ public class FileSizeFormat extends Format {
     /**
      * This method is not supported.
      *
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException always.
      */
     @Override
     public Object parseObject(String arg0, ParsePosition arg1) {
@@ -87,7 +87,7 @@ public class FileSizeFormat extends Format {
     /**
      * Returns a shared file size format instance.
      *
-     * @return A shared file format size instance.
+     * @return A shared instance of this object.
      */
     public static FileSizeFormat getInstance() {
         return FILE_SIZE_FORMAT;

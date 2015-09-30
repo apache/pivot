@@ -163,6 +163,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Returns the character set used to encode/decode the JSON data.
+     * @return The current character set.
      */
     public Charset getCharset() {
         return charset;
@@ -171,6 +172,7 @@ public class JSONSerializer implements Serializer<Object> {
     /**
      * Returns the type of the object that will be returned by
      * {@link #readObject(Reader)}.
+     * @return The current object type.
      */
     public Type getType() {
         return type;
@@ -179,6 +181,10 @@ public class JSONSerializer implements Serializer<Object> {
     /**
      * Returns a flag indicating whether or not map keys will always be
      * quote-delimited.
+     * <p> Note: the JSON "standard" requires keys to be delimited.
+     * @return <tt>true</tt> if map keys must always be delmited (that is,
+     * enclosed in double quotes), <tt>false</tt> for the default behavior
+     * that does not require double quotes.
      */
     public boolean getAlwaysDelimitMapKeys() {
         return alwaysDelimitMapKeys;
@@ -196,6 +202,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Returns the serializer's verbosity flag.
+     * @return The verbosity flag for this serializer.
      */
     public boolean isVerbose() {
         return verbose;
@@ -205,7 +212,7 @@ public class JSONSerializer implements Serializer<Object> {
      * Sets the serializer's verbosity flag. When verbosity is enabled, all data
      * read or written will be echoed to the console.
      *
-     * @param verbose
+     * @param verbose <tt>true</tt> to set verbose mode, <tt>false</tt> to disable.
      */
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
@@ -242,6 +249,8 @@ public class JSONSerializer implements Serializer<Object> {
      * <li>java.lang.String</li> <li>java.lang.Number</li>
      * <li>java.lang.Boolean</li> <li><tt>null</tt></li> <li>A JavaBean
      * object</li> </ul>
+     * @throws IOException for any I/O related errors while reading.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public Object readObject(Reader reader) throws IOException, SerializationException {
         if (reader == null) {
@@ -820,8 +829,10 @@ public class JSONSerializer implements Serializer<Object> {
     /**
      * Writes data to a JSON stream.
      *
-     * @param object
+     * @param object The root object to be written.
      * @param outputStream The output stream to which data will be written.
+     * @throws IOException for any errors during the writing process.
+     * @throws SerializationException for any formatting errors in the data.
      * @see #writeObject(Object, Writer)
      */
     @SuppressWarnings("resource")
@@ -850,6 +861,8 @@ public class JSONSerializer implements Serializer<Object> {
      * <li>java.lang.Number</li> <li>java.lang.Boolean</li>
      * <li><tt>null</tt></li> </ul>
      * @param writer The writer to which data will be written.
+     * @throws IOException for any errors during the writing process.
+     * @throws SerializationException for any formatting errors in the data.
      */
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, Writer writer) throws IOException,
@@ -1020,6 +1033,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed object.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Object parse(String json) throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
@@ -1039,6 +1053,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed string.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static String parseString(String json) throws SerializationException {
         return (String) parse(json);
@@ -1049,6 +1064,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed number.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Number parseNumber(String json) throws SerializationException {
         return (Number) parse(json);
@@ -1059,6 +1075,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed short.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Short parseShort(String json) throws SerializationException {
         return (Short) parse(json);
@@ -1069,6 +1086,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed integer.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Integer parseInteger(String json) throws SerializationException {
         return (Integer) parse(json);
@@ -1079,6 +1097,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed number.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Long parseLong(String json) throws SerializationException {
         return (Long) parse(json);
@@ -1089,6 +1108,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed float.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Float parseFloat(String json) throws SerializationException {
         return (Float) parse(json);
@@ -1099,6 +1119,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed double.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Double parseDouble(String json) throws SerializationException {
         return (Double) parse(json);
@@ -1109,6 +1130,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed boolean.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static Boolean parseBoolean(String json) throws SerializationException {
         return (Boolean) parse(json);
@@ -1119,6 +1141,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed list.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static List<?> parseList(String json) throws SerializationException {
         return (List<?>) parse(json);
@@ -1129,6 +1152,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param json The JSON value.
      * @return The parsed map.
+     * @throws SerializationException for any formatting errors in the data.
      */
     @SuppressWarnings("unchecked")
     public static Map<String, ?> parseMap(String json) throws SerializationException {
@@ -1141,6 +1165,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param value The object to convert.
      * @return The resulting JSON string.
+     * @throws SerializationException for any formatting errors in the data.
      * @see #toString(Object, boolean)
      */
     public static String toString(Object value) throws SerializationException {
@@ -1154,6 +1179,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param alwaysDelimitMapKeys A flag indicating whether or not map keys will
      * always be quote-delimited.
      * @return The resulting JSON string.
+     * @throws SerializationException for any formatting errors in the data.
      */
     public static String toString(Object value, boolean alwaysDelimitMapKeys)
         throws SerializationException {
