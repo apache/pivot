@@ -143,6 +143,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Gets the host name that was requested.
+     * @return The host name from the request.
      */
     public String getHostname() {
         return hostname.get();
@@ -151,6 +152,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Returns the Internet Protocol (IP) port number of the interface on which
      * the request was received.
+     * @return The port number from the request.
      */
     public int getPort() {
         return port.get().intValue();
@@ -158,6 +160,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Returns the portion of the request URL representing the context path.
+     * @return The context path from the request URL.
      */
     public String getContextPath() {
         return contextPath.get();
@@ -165,6 +168,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Returns the portion of the request URL representing the servlet path.
+     * @return The servlet path parsed out of the request URL.
      */
     public String getServletPath() {
         return servletPath.get();
@@ -172,6 +176,8 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Tells whether the request has been encrypted over HTTPS.
+     * @return {@code true} if the request was sent over HTTPS, {@code false} otherwise
+     * (regular HTTP).
      */
     public boolean isSecure() {
         return secure.get().booleanValue();
@@ -179,6 +185,8 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Returns the name of the HTTP protocol that the request is using.
+     * @return The {@code "http"} or {@code "https"} protocol string depending
+     * on the {@link #isSecure} setting.
      */
     public String getProtocol() {
         return isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL;
@@ -186,6 +194,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     /**
      * Returns the location of this servlet.
+     * @return The {@link URL} associated with this servlet.
      */
     public URL getLocation() {
         URL location;
@@ -202,6 +211,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Returns the servlet's parameter dictionary, which holds the values passed
      * in the HTTP request query string.
+     * @return The set of parameters passed in this query.
      */
     public QueryDictionary getParameters() {
         return parameters.get();
@@ -210,6 +220,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Returns the servlet's request header dictionary, which holds the HTTP
      * request headers.
+     * @return The set of request headers set in this query.
      */
     public QueryDictionary getRequestHeaders() {
         return requestHeaders.get();
@@ -218,6 +229,7 @@ public abstract class QueryServlet extends HttpServlet {
     /**
      * Returns the servlet's response header dictionary, which holds the HTTP
      * response headers that will be sent back to the client.
+     * @return The current set of response headers to return to the client.
      */
     public QueryDictionary getResponseHeaders() {
         return responseHeaders.get();
@@ -228,7 +240,7 @@ public abstract class QueryServlet extends HttpServlet {
      * immediately prior to the {@link #validate(Query.Method, Path)} method.
      * <p> The default implementation is a no-op.
      *
-     * @throws ServletException
+     * @throws ServletException on any kind of error.
      */
     protected void prepare() throws ServletException {
         // No-op
@@ -239,7 +251,7 @@ public abstract class QueryServlet extends HttpServlet {
      * guaranteed to be called even if the HTTP handler method throws. <p> The
      * default implementation is a no-op.
      *
-     * @throws ServletException
+     * @throws ServletException on any kind of error.
      */
     protected void dispose() throws ServletException {
         // No-op
@@ -250,9 +262,9 @@ public abstract class QueryServlet extends HttpServlet {
      * immediately prior to the HTTP handler method. <p> The default
      * implementation is a no-op.
      *
-     * @param method
-     * @param path
-     * @throws QueryException
+     * @param method The type of query this is.
+     * @param path The path to the server resources.
+     * @throws QueryException if there is a problem, Houston.
      */
     protected void validate(Query.Method method, Path path) throws QueryException {
         // No-op
@@ -262,9 +274,9 @@ public abstract class QueryServlet extends HttpServlet {
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
      *
-     * @param path
+     * @param path The request path.
      * @return The result of the GET.
-     * @throws QueryException
+     * @throws QueryException on any error.
      */
     protected Object doGet(Path path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
@@ -274,11 +286,11 @@ public abstract class QueryServlet extends HttpServlet {
      * Handles an HTTP POST request. The default implementation throws an HTTP
      * 405 query exception.
      *
-     * @param path
-     * @param value
+     * @param path The path of this request.
+     * @param value The value parsed from the POST request data.
      * @return A URL containing the location of the created resource, or
      * <tt>null</tt> if operation did not result in the creation of a resource.
-     * @throws QueryException
+     * @throws QueryException on errors.
      */
     protected URL doPost(Path path, Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
@@ -288,22 +300,22 @@ public abstract class QueryServlet extends HttpServlet {
      * Handles an HTTP GET request. The default implementation throws an HTTP
      * 405 query exception.
      *
-     * @param path
-     * @param value
+     * @param path The server path for this request.
+     * @param value The value parsed from the PUT request data.
      * @return <tt>true</tt> if the operation resulted in the creation of a
      * resource; <tt>false</tt>, otherwise.
-     * @throws QueryException
+     * @throws QueryException on any error.
      */
     protected boolean doPut(Path path, Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
     /**
-     * Handles an HTTP GET request. The default implementation throws an HTTP
+     * Handles an HTTP DELETE request. The default implementation throws an HTTP
      * 405 query exception.
      *
-     * @param path
-     * @throws QueryException
+     * @param path The server path for this request.
+     * @throws QueryException if there was a problem.
      */
     protected void doDelete(Path path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
@@ -313,9 +325,10 @@ public abstract class QueryServlet extends HttpServlet {
      * Creates a serializer that will be used to serialize the current request
      * data.
      *
-     * @param method
-     * @param path
-     * @throws QueryException
+     * @param method Type of query this serializer will apply to.
+     * @param path The server path this is intended for.
+     * @return The newly created serializer for this request.
+     * @throws QueryException if there is a problem.
      */
     protected abstract Serializer<?> createSerializer(Query.Method method, Path path)
         throws QueryException;

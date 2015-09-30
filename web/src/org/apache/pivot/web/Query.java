@@ -158,10 +158,12 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Creates a new web query.
      *
-     * @param hostname
-     * @param port
-     * @param path
-     * @param secure
+     * @param hostname Name of the host to contact for this web query.
+     * @param port Port number on that host.
+     * @param path The resource path on the host that is the target of this query.
+     * @param secure A flag to say whether to use {@code http} or {@code https} as the protocol.
+     * @param executorService The executor to use for running the query (in the background).
+     * @throws IllegalArgumentException if the {@code URL} cannot be constructed.
      */
     public Query(String hostname, int port, String path, boolean secure, ExecutorService executorService) {
         super(executorService);
@@ -255,6 +257,7 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Returns the web query's parameter dictionary. Parameters are passed via
      * the query string of the web query's URL.
+     * @return The current set of query parameters.
      */
     public QueryDictionary getParameters() {
         return parameters;
@@ -263,6 +266,7 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Returns the web query's request header dictionary. Request headers are
      * passed via HTTP headers when the query is executed.
+     * @return The current set of request headers.
      */
     public QueryDictionary getRequestHeaders() {
         return requestHeaders;
@@ -271,6 +275,7 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Returns the web query's response header dictionary. Response headers are
      * returned via HTTP headers when the query is executed.
+     * @return The current set of response headers.
      */
     public QueryDictionary getResponseHeaders() {
         return responseHeaders;
@@ -288,6 +293,7 @@ public abstract class Query<V> extends IOTask<V> {
     /**
      * Returns the serializer used to stream the value passed to or from the web
      * query. By default, an instance of {@link JSONSerializer} is used.
+     * @return The current serializer.
      */
     public Serializer<?> getSerializer() {
         return serializer;
@@ -298,6 +304,7 @@ public abstract class Query<V> extends IOTask<V> {
      * query.
      *
      * @param serializer The serializer (must be non-null).
+     * @throws IllegalArgumentException if the input is {@code null}.
      */
     public void setSerializer(Serializer<?> serializer) {
         if (serializer == null) {
@@ -316,6 +323,8 @@ public abstract class Query<V> extends IOTask<V> {
      * {@link QueryListener#requestSent(Query) requestSent} phases of the
      * <tt>QueryListener</tt> lifecycle methods. Interested listeners can poll
      * for this value during that phase.
+     * @return Number of bytes sent by POST or PUT requests, or 0 for GET and
+     * DELETE.
      */
     public long getBytesSent() {
         return bytesSent;
@@ -330,6 +339,7 @@ public abstract class Query<V> extends IOTask<V> {
      * {@link QueryListener#responseReceived(Query) responseReceived} phases of
      * the <tt>QueryListener</tt> lifecycle methods. Interested listeners can
      * poll for this value during that phase.
+     * @return The number of bytes received.
      */
     public long getBytesReceived() {
         return bytesReceived;
@@ -344,6 +354,7 @@ public abstract class Query<V> extends IOTask<V> {
      * the server did not specify a <tt>Content-Length</tt> HTTP response
      * header, a value of <tt>-1</tt> will be returned to indicate that this
      * value is unknown.
+     * @return The expected number of bytes to received based on the content length.
      */
     public long getBytesExpected() {
         return bytesExpected;
@@ -461,7 +472,7 @@ public abstract class Query<V> extends IOTask<V> {
     }
 
     /**
-     * Returns the query listener list.
+     * @return The query listener list.
      */
     public ListenerList<QueryListener<V>> getQueryListeners() {
         return queryListeners;

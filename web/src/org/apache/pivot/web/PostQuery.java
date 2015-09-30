@@ -49,6 +49,7 @@ public class PostQuery extends Query<URL> {
     /**
      * Returns the value that will be POSTed to the server when the query is
      * executed.
+     * @return The value to send.
      */
     public Object getValue() {
         return value;

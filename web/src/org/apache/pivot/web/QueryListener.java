@@ -49,7 +49,7 @@ public interface QueryListener<V> {
      * Called when a query has connected to the server but the request has not
      * yet been sent.
      *
-     * @param query
+     * @param query The query that has just connected.
      */
     public void connected(Query<V> query);
 
@@ -57,21 +57,21 @@ public interface QueryListener<V> {
      * Called when the request has been sent to the server but the response has
      * not yet been received.
      *
-     * @param query
+     * @param query The query whose request has been sent.
      */
     public void requestSent(Query<V> query);
 
     /**
      * Called when a response has been received from the server.
      *
-     * @param query
+     * @param query The query whose response has just been received.
      */
     public void responseReceived(Query<V> query);
 
     /**
-     * Called when an error has occurred
+     * Called when an error has occurred.
      *
-     * @param query
+     * @param query The query that has failed.
      */
     public void failed(Query<V> query);
 }
