@@ -399,7 +399,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
         return newBindings;
     }
- 
+
     /**
      * Deserializes an object hierarchy from a BXML resource. <p> This is the
      * base version of the method. It does not set the "location" or "resources"

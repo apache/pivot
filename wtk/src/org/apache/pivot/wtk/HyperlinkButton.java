@@ -122,7 +122,7 @@ public class HyperlinkButton extends LinkButton {
      * to the target {@link URI}.
      * @param text Alternate text for the hyperlink.
      * @param uri The target of this hyperlink.
-     */ 
+     */
     public HyperlinkButton(String text, URI uri) {
         this(uri);
         setButtonData(text);
@@ -196,7 +196,7 @@ public class HyperlinkButton extends LinkButton {
      * @param url Target of this hyperlink.
      * @throws URISyntaxException if the <code>URL</code> does not specify
      * a valid {@link URI}.
-     */ 
+     */
     public void setUrl(URL url)
         throws URISyntaxException
     {

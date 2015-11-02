@@ -1561,7 +1561,7 @@ public abstract class Component implements ConstrainedVisual {
      * Maps a point in this component's coordinate system to the specified
      * ancestor's coordinate space.
      *
-     * @param ancestor The ancestor container of this component. 
+     * @param ancestor The ancestor container of this component.
      * @param xArgument The x-coordinate in this component's coordinate space.
      * @param yArgument The y-coordinate in this component's coordinate space.
      * @return A point containing the translated coordinates, or <tt>null</tt> if
@@ -1597,7 +1597,7 @@ public abstract class Component implements ConstrainedVisual {
      * Maps a point in this component's coordinate system to the specified
      * ancestor's coordinate space.
      *
-     * @param ancestor The ancestor container of this component. 
+     * @param ancestor The ancestor container of this component.
      * @param location The coordinates in this component's coordinate space.
      * @return A point containing the translated coordinates, or <tt>null</tt> if
      * the component is not a descendant of the specified ancestor.
@@ -1614,7 +1614,7 @@ public abstract class Component implements ConstrainedVisual {
      * Maps a point in the specified ancestor's coordinate space to this
      * component's coordinate system.
      *
-     * @param ancestor The ancestor container of this component. 
+     * @param ancestor The ancestor container of this component.
      * @param xArgument The x-coordinate in the ancestors's coordinate space.
      * @param yArgument The y-coordinate in the ancestor's coordinate space.
      * @return A point containing the translated coordinates, or <tt>null</tt> if
@@ -2353,7 +2353,7 @@ public abstract class Component implements ConstrainedVisual {
      *
      * @param direction The direction in which to transfer focus.
      * @return The new component that has received the focus or <tt>null</tt>
-     * if no component is focused. 
+     * if no component is focused.
      */
     public Component transferFocus(FocusTraversalDirection direction) {
         Component component = null;
