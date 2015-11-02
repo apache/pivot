@@ -45,16 +45,17 @@ public interface DialogStateListener extends DialogCloseListener {
     /**
      * Called to preview a dialog close event.
      *
-     * @param dialog
-     * @param result
+     * @param dialog The dialog that is requesting to close.
+     * @param result The result flag ({@code true} means "OK", while {@code false} roughly means "Cancel").
+     * @return       The consensus vote as to whether or not to allow the close to occur.
      */
     public Vote previewDialogClose(Dialog dialog, boolean result);
 
     /**
      * Called when a dialog close event has been vetoed.
      *
-     * @param dialog
-     * @param reason
+     * @param dialog The dialog that is not going to close because of this veto.
+     * @param reason The vote result that indicates the veto.
      */
     public void dialogCloseVetoed(Dialog dialog, Vote reason);
 }

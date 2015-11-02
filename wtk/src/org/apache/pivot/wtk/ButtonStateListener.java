@@ -23,8 +23,8 @@ public interface ButtonStateListener {
     /**
      * Called when a button's state has changed.
      *
-     * @param button
-     * @param previousState
+     * @param button        The button whose state changed.
+     * @param previousState The previous state of the button.
      */
     public void stateChanged(Button button, Button.State previousState);
 }

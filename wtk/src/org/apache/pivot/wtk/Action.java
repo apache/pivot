@@ -136,6 +136,8 @@ public abstract class Action {
     /**
      * Returns a text description of the action. Subclasses should override this
      * to return a meaningful description if one is needed.
+     *
+     * @return The text description of the action.
      */
     public String getDescription() {
         return null;

@@ -47,6 +47,7 @@ public interface CardPaneListener {
      *
      * @param cardPane The source of the event.
      * @param selectedIndex The index that will be selected.
+     * @return The consensus vote as to whether to allow this change.
      */
     public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex);
 

@@ -47,8 +47,8 @@ public interface ComponentDecoratorListener {
      * Called when a decorator has been inserted into a component's decorator
      * sequence.
      *
-     * @param component
-     * @param index
+     * @param component The component that has changed.
+     * @param index     The starting index of the decorator that has been inserted.
      */
     public void decoratorInserted(Component component, int index);
 
@@ -56,9 +56,9 @@ public interface ComponentDecoratorListener {
      * Called when a decorator has been updated in a component's decorator
      * sequence.
      *
-     * @param component
-     * @param index
-     * @param previousDecorator
+     * @param component         The component that has changed.
+     * @param index             The index of the decorator that has been updated.
+     * @param previousDecorator The previous decorator at that index.
      */
     public void decoratorUpdated(Component component, int index, Decorator previousDecorator);
 
@@ -66,9 +66,9 @@ public interface ComponentDecoratorListener {
      * Called when decorators have been removed from a component's decorator
      * sequence.
      *
-     * @param component
-     * @param index
-     * @param decorators
+     * @param component  The component that has changed.
+     * @param index      The starting index where decorators were removed.
+     * @param decorators The complete sequence of decorators that were removed.
      */
     public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators);
 }

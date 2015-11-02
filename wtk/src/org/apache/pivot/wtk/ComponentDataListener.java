@@ -43,8 +43,8 @@ public interface ComponentDataListener {
     /**
      * Called when a value has been added to a component's user data dictionary.
      *
-     * @param component
-     * @param key
+     * @param component The component that has changed.
+     * @param key       The key for the key/value pair that was added to this component's data dictionary.
      */
     public void valueAdded(Component component, String key);
 
@@ -52,9 +52,9 @@ public interface ComponentDataListener {
      * Called when a value has been updated in a component's user data
      * dictionary.
      *
-     * @param component
-     * @param key
-     * @param previousValue
+     * @param component     The component that has changed.
+     * @param key           The key for the value that has been updated.
+     * @param previousValue The previous value for this key.
      */
     public void valueUpdated(Component component, String key, Object previousValue);
 
@@ -62,9 +62,9 @@ public interface ComponentDataListener {
      * Called when a value has been removed from a component's user data
      * dictionary.
      *
-     * @param component
-     * @param key
-     * @param value
+     * @param component The component that has changed.
+     * @param key       The key for the key/value pair that has been removed.
+     * @param value     The corresponding value that was removed.
      */
     public void valueRemoved(Component component, String key, Object value);
 }

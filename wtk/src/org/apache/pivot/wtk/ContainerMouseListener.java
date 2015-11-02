@@ -50,9 +50,9 @@ public interface ContainerMouseListener {
     /**
      * Called when the mouse is moved over a container.
      *
-     * @param container
-     * @param x
-     * @param y
+     * @param container The container under the mouse.
+     * @param x         The X-position of the mouse.
+     * @param y         The Y-position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -61,10 +61,10 @@ public interface ContainerMouseListener {
     /**
      * Called when the mouse is pressed over a container.
      *
-     * @param container
-     * @param button
-     * @param x
-     * @param y
+     * @param container The container under the mouse.
+     * @param button    Which button was pressed.
+     * @param x         The X-position of the mouse.
+     * @param y         The Y-position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -73,10 +73,10 @@ public interface ContainerMouseListener {
     /**
      * Called when the mouse is released over a container.
      *
-     * @param container
-     * @param button
-     * @param x
-     * @param y
+     * @param container The container under the mouse.
+     * @param button    Which mouse button was released.
+     * @param x         The X-position at the time of release.
+     * @param y         The Y-position at the time of release.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
@@ -85,12 +85,12 @@ public interface ContainerMouseListener {
     /**
      * Called when the mouse wheel is scrolled over a container.
      *
-     * @param container
-     * @param scrollType
-     * @param scrollAmount
-     * @param wheelRotation
-     * @param x
-     * @param y
+     * @param container     The container under the mouse.
+     * @param scrollType    Which type of scroll happened.
+     * @param scrollAmount  How much scrolling was requested.
+     * @param wheelRotation The amount and direction of wheel rotation.
+     * @param x             The X-position of the mouse at the time.
+     * @param y             The Y-position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */

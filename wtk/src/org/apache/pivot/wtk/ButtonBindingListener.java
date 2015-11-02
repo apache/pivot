@@ -76,24 +76,24 @@ public interface ButtonBindingListener {
     /**
      * Called when a button's buttonData key has changed.
      *
-     * @param button
-     * @param previousButtonDataKey
+     * @param button                The button that has changed.
+     * @param previousButtonDataKey The previous binding key for the button data.
      */
     public void buttonDataKeyChanged(Button button, String previousButtonDataKey);
 
     /**
      * Called when a button's buttonData bind type has changed.
      *
-     * @param button
-     * @param previousButtonDataBindType
+     * @param button                     The button that has changed.
+     * @param previousButtonDataBindType The previous bind type for the button data.
      */
     public void buttonDataBindTypeChanged(Button button, BindType previousButtonDataBindType);
 
     /**
      * Called when a button's buttonData bind mapping has changed.
      *
-     * @param button
-     * @param previousButtonDataBindMapping
+     * @param button                        The button that has changed.
+     * @param previousButtonDataBindMapping The previous bind mapping for the button data.
      */
     public void buttonDataBindMappingChanged(Button button,
         Button.ButtonDataBindMapping previousButtonDataBindMapping);
@@ -101,24 +101,24 @@ public interface ButtonBindingListener {
     /**
      * Called when a button's selected key has changed.
      *
-     * @param button
-     * @param previousSelectedKey
+     * @param button              The button that has changed.
+     * @param previousSelectedKey The previous binding key for the selected state.
      */
     public void selectedKeyChanged(Button button, String previousSelectedKey);
 
     /**
      * Called when a button's selected bind type has changed.
      *
-     * @param button
-     * @param previousSelectedBindType
+     * @param button                   The button that has changed.
+     * @param previousSelectedBindType The previous bind type for the selected state.
      */
     public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType);
 
     /**
      * Called when a button's selected bind mapping has changed.
      *
-     * @param button
-     * @param previousSelectedBindMapping
+     * @param button                      The button that has changed.
+     * @param previousSelectedBindMapping The previous bind mapping for the selected state.
      */
     public void selectedBindMappingChanged(Button button,
         Button.SelectedBindMapping previousSelectedBindMapping);
@@ -126,24 +126,24 @@ public interface ButtonBindingListener {
     /**
      * Called when a button's state key has changed.
      *
-     * @param button
-     * @param previousStateKey
+     * @param button           The button that has changed.
+     * @param previousStateKey The previous binding key for the button state.
      */
     public void stateKeyChanged(Button button, String previousStateKey);
 
     /**
      * Called when a button's state bind type has changed.
      *
-     * @param button
-     * @param previousStateBindType
+     * @param button                The button that has changed.
+     * @param previousStateBindType The previous bind type for the button state.
      */
     public void stateBindTypeChanged(Button button, BindType previousStateBindType);
 
     /**
      * Called when a button's state bind mapping has changed.
      *
-     * @param button
-     * @param previousStateBindMapping
+     * @param button                   The button that has changed.
+     * @param previousStateBindMapping The previous bind mapping for the button state.
      */
     public void stateBindMappingChanged(Button button,
         Button.StateBindMapping previousStateBindMapping);

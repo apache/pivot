@@ -40,9 +40,9 @@ public interface AccordionAttributeListener {
     /**
      * Called when a panel's header data attribute has changed.
      *
-     * @param accordion
-     * @param component
-     * @param previousHeaderData
+     * @param accordion           The enclosing accordion that has changed.
+     * @param component           The child component in question.
+     * @param previousHeaderData  The previous header data for this component.
      */
     public void headerDataChanged(Accordion accordion, Component component,
         Object previousHeaderData);
@@ -50,9 +50,9 @@ public interface AccordionAttributeListener {
     /**
      * Called when a panel's tooltip text has changed.
      *
-     * @param accordion
-     * @param component
-     * @param previousTooltipText
+     * @param accordion           The enclosing accordion that has changed.
+     * @param component           The child component in question.
+     * @param previousTooltipText The previous tooltip text for the component.
      */
     public void tooltipTextChanged(Accordion accordion, Component component,
         String previousTooltipText);

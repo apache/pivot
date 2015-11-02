@@ -52,8 +52,8 @@ public interface ContainerListener {
      * Called when a component has been inserted into a container's component
      * sequence.
      *
-     * @param container
-     * @param index
+     * @param container The container that has changed.
+     * @param index     The index where the new component has been inserted.
      */
     public void componentInserted(Container container, int index);
 
@@ -61,9 +61,9 @@ public interface ContainerListener {
      * Called when components have been removed from a container's component
      * sequence.
      *
-     * @param container
-     * @param index
-     * @param removed
+     * @param container The container that has changed.
+     * @param index     The starting index of the components that were removed.
+     * @param removed   The complete sequence of removed components.
      */
     public void componentsRemoved(Container container, int index, Sequence<Component> removed);
 
@@ -71,17 +71,17 @@ public interface ContainerListener {
      * Called when a component has moved from one z-index to another within a
      * container.
      *
-     * @param container
-     * @param from
-     * @param to
+     * @param container The container that has changed.
+     * @param from      The starting index of the component (in Z-order).
+     * @param to        The place in the Z-order where this component ended up.
      */
     public void componentMoved(Container container, int from, int to);
 
     /**
      * Called when a container's focus traversal policy has changed.
      *
-     * @param container
-     * @param previousFocusTraversalPolicy
+     * @param container                    The container that has changed.
+     * @param previousFocusTraversalPolicy The previous value of the focus traversal policy for this container.
      */
     public void focusTraversalPolicyChanged(Container container,
         FocusTraversalPolicy previousFocusTraversalPolicy);

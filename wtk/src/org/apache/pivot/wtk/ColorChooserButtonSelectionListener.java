@@ -25,8 +25,8 @@ public interface ColorChooserButtonSelectionListener {
     /**
      * Called when a color chooser button's selected color has changed.
      *
-     * @param colorChooserButton
-     * @param previousSelectedColor
+     * @param colorChooserButton    The color chooser button that changed.
+     * @param previousSelectedColor The previously selected color.
      */
     public void selectedColorChanged(ColorChooserButton colorChooserButton,
         Color previousSelectedColor);

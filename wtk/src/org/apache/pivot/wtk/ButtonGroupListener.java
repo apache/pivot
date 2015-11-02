@@ -43,24 +43,24 @@ public interface ButtonGroupListener {
     /**
      * Called when a button has been added to a button group.
      *
-     * @param buttonGroup
-     * @param button
+     * @param buttonGroup The button group that has changed.
+     * @param button      The button that was added to the group.
      */
     public void buttonAdded(ButtonGroup buttonGroup, Button button);
 
     /**
      * Called when a button has been removed from a button group.
      *
-     * @param buttonGroup
-     * @param button
+     * @param buttonGroup The button group that has changed.
+     * @param button      The button that was removed from the group.
      */
     public void buttonRemoved(ButtonGroup buttonGroup, Button button);
 
     /**
      * Called when a button group's selection has changed.
      *
-     * @param buttonGroup
-     * @param previousSelection
+     * @param buttonGroup       The button group that changed.
+     * @param previousSelection The previously selected button in the group.
      */
     public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection);
 }

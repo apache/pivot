@@ -54,32 +54,32 @@ public interface CalendarListener {
     /**
      * Called when a calendar's year value has changed.
      *
-     * @param calendar
-     * @param previousYear
+     * @param calendar     The calendar that changed.
+     * @param previousYear The previously selected year.
      */
     public void yearChanged(Calendar calendar, int previousYear);
 
     /**
      * Called when a calendar's month value has changed.
      *
-     * @param calendar
-     * @param previousMonth
+     * @param calendar      The calendar that changed.
+     * @param previousMonth The previously selected month value.
      */
     public void monthChanged(Calendar calendar, int previousMonth);
 
     /**
      * Called when a calendar's locale has changed.
      *
-     * @param calendar
-     * @param previousLocale
+     * @param calendar       The calendar that changed.
+     * @param previousLocale The previously selected locale for the calendar.
      */
     public void localeChanged(Calendar calendar, Locale previousLocale);
 
     /**
      * Called when a calendar's disabled date filter has changed.
      *
-     * @param calendar
-     * @param previousDisabledDateFilter
+     * @param calendar                   The calendar that changed.
+     * @param previousDisabledDateFilter The previous disabled date filter.
      */
     public void disabledDateFilterChanged(Calendar calendar,
         Filter<CalendarDate> previousDisabledDateFilter);

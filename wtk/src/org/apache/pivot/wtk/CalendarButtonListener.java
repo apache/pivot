@@ -54,32 +54,32 @@ public interface CalendarButtonListener {
     /**
      * Called when a calendar button's year value has changed.
      *
-     * @param calendarButton
-     * @param previousYear
+     * @param calendarButton The calendar button that changed.
+     * @param previousYear   The previously selected year.
      */
     public void yearChanged(CalendarButton calendarButton, int previousYear);
 
     /**
      * Called when a calendar button's month value has changed.
      *
-     * @param calendarButton
-     * @param previousMonth
+     * @param calendarButton The calendar button that changed.
+     * @param previousMonth  The previously selected month.
      */
     public void monthChanged(CalendarButton calendarButton, int previousMonth);
 
     /**
      * Called when a calendar button's locale has changed.
      *
-     * @param calendarButton
-     * @param previousLocale
+     * @param calendarButton The calendar button that changed.
+     * @param previousLocale The previously selected locale for the calendar.
      */
     public void localeChanged(CalendarButton calendarButton, Locale previousLocale);
 
     /**
      * Called when a calendar button's disabled date filter has changed.
      *
-     * @param calendarButton
-     * @param previousDisabledDateFilter
+     * @param calendarButton             The calendar button that changed.
+     * @param previousDisabledDateFilter The previous disabled date filter.
      */
     public void disabledDateFilterChanged(CalendarButton calendarButton,
         Filter<CalendarDate> previousDisabledDateFilter);

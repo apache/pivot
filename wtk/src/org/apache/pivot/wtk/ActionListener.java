@@ -23,7 +23,7 @@ public interface ActionListener {
     /**
      * Called when an action's enabled state has changed.
      *
-     * @param action
+     * @param action The action that has been enabled/disabled.
      */
     public void enabledChanged(Action action);
 }

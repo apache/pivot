@@ -220,8 +220,8 @@ public abstract class Container extends Component implements Sequence<Component>
     /**
      * Moves a component within the component sequence.
      *
-     * @param from
-     * @param to
+     * @param from The index where the component is currently located.
+     * @param to The index to move it to.
      */
     public void move(int from, int to) {
         assertEventDispatchThread();
@@ -521,6 +521,7 @@ public abstract class Container extends Component implements Sequence<Component>
      *
      * @param component The component from which focus will be transferred.
      * @param direction The direction in which to transfer focus.
+     * @return The newly focused component.
      */
     public Component transferFocus(Component component, FocusTraversalDirection direction) {
         Component componentUpdated = component;
@@ -554,7 +555,7 @@ public abstract class Container extends Component implements Sequence<Component>
     }
 
     /**
-     * Returns this container's focus traversal policy.
+     * @return This container's focus traversal policy.
      */
     public FocusTraversalPolicy getFocusTraversalPolicy() {
         return this.focusTraversalPolicy;
@@ -622,7 +623,7 @@ public abstract class Container extends Component implements Sequence<Component>
     /**
      * Propagates binding to subcomponents.
      *
-     * @param context
+     * @param context The object we're binding to.
      */
     @Override
     public void load(Object context) {
@@ -634,7 +635,7 @@ public abstract class Container extends Component implements Sequence<Component>
     /**
      * Propagates binding to subcomponents.
      *
-     * @param context
+     * @param context The object we're binding to.
      */
     @Override
     public void store(Object context) {

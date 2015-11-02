@@ -25,8 +25,8 @@ public interface CalendarButtonSelectionListener {
     /**
      * Called when a calendar button's selected date has changed.
      *
-     * @param calendarButton
-     * @param previousSelectedDate
+     * @param calendarButton       The calendar button that changed.
+     * @param previousSelectedDate The date that was previously selected in the calendar.
      */
     public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate);
 }

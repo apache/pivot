@@ -23,7 +23,7 @@ public interface DialogListener {
     /**
      * Called when a dialog's modal flag has changed.
      *
-     * @param dialog
+     * @param dialog The dialog that has changed.
      */
     public void modalChanged(Dialog dialog);
 }

@@ -45,24 +45,24 @@ public interface CalendarBindingListener {
     /**
      * Called when a calendar's selected date key has changed.
      *
-     * @param calendar
-     * @param previousSelectedDateKey
+     * @param calendar                The calendar that was updated.
+     * @param previousSelectedDateKey The previous bind key for the calendar's selected date.
      */
     public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey);
 
     /**
      * Called when a calendar's selected date bind type has changed.
      *
-     * @param calendar
-     * @param previousSelectedDateBindType
+     * @param calendar                     The calendar that has changed.
+     * @param previousSelectedDateBindType The previous bind type for the selected date.
      */
     public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType);
 
     /**
      * Called when a calendar's selected date bind mapping has changed.
      *
-     * @param calendar
-     * @param previousSelectedDateBindMapping
+     * @param calendar                        The calendar that changed.
+     * @param previousSelectedDateBindMapping The previous bind mapping for the selected date.
      */
     public void selectedDateBindMappingChanged(Calendar calendar,
         Calendar.SelectedDateBindMapping previousSelectedDateBindMapping);

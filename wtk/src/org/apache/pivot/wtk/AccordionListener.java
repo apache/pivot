@@ -46,25 +46,25 @@ public interface AccordionListener {
     /**
      * Called when a panel has been inserted into a accordion's panel sequence.
      *
-     * @param accordion
-     * @param index
+     * @param accordion The accordion that has changed.
+     * @param index     The index of the newly inserted panel.
      */
     public void panelInserted(Accordion accordion, int index);
 
     /**
      * Called when a panel has been removed from an accordion's panel sequence.
      *
-     * @param accordion
-     * @param index
-     * @param removed
+     * @param accordion The accordion that has changed.
+     * @param index     The starting index of the panel(s) that were removed.
+     * @param removed   The sequence of removed panels.
      */
     public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed);
 
     /**
      * Called when an accordion's header data renderer has changed.
      *
-     * @param accordion
-     * @param previousHeaderDataRenderer
+     * @param accordion                  The accordion that was changed.
+     * @param previousHeaderDataRenderer The previous version of the header data renderer.
      */
     public void headerDataRendererChanged(Accordion accordion,
         Button.DataRenderer previousHeaderDataRenderer);

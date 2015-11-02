@@ -23,7 +23,7 @@ public interface ComponentClassListener {
     /**
      * Called when the focused component changes.
      *
-     * @param previousFocusedComponent
+     * @param previousFocusedComponent The component that previously had the focus (can be {@code null}).
      */
     public void focusedComponentChanged(Component previousFocusedComponent);
 }

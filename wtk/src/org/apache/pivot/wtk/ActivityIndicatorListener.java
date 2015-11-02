@@ -23,7 +23,7 @@ public interface ActivityIndicatorListener {
     /**
      * Called when an activity indicator's active state has changed.
      *
-     * @param activityIndicator
+     * @param activityIndicator Component whose state has changed.
      */
     public void activeChanged(ActivityIndicator activityIndicator);
 }

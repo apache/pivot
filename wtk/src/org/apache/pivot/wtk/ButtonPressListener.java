@@ -23,7 +23,7 @@ public interface ButtonPressListener {
     /**
      * Called when a button is pressed.
      *
-     * @param button
+     * @param button The button that was just pressed.
      */
     public void buttonPressed(Button button);
 }

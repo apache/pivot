@@ -38,16 +38,16 @@ public interface BorderListener {
     /**
      * Called when a border's title has changed.
      *
-     * @param border
-     * @param previousTitle
+     * @param border        The border component that has changed.
+     * @param previousTitle The previous title for the border.
      */
     public void titleChanged(Border border, String previousTitle);
 
     /**
      * Called when a border's content component has changed.
      *
-     * @param border
-     * @param previousContent
+     * @param border          The border that has changed.
+     * @param previousContent The previous content of the border.
      */
     public void contentChanged(Border border, Component previousContent);
 }

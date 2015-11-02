@@ -47,6 +47,7 @@ public interface AccordionSelectionListener {
      *
      * @param accordion The source of the event.
      * @param selectedIndex The index that will be selected.
+     * @return The consensus vote as to whether to allow the selected index change.
      */
     public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex);
 

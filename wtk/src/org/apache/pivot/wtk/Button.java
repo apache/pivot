@@ -51,7 +51,7 @@ public abstract class Button extends Component {
         /**
          * Converts button data to a string representation.
          *
-         * @param data
+         * @param data The button's data.
          * @return The data's string representation, or <tt>null</tt> if the data
          * does not have a string representation. <p> Note that this method may
          * be called often during keyboard navigation, so implementations should
@@ -68,7 +68,9 @@ public abstract class Button extends Component {
          * Converts a context value to a selection state during a
          * {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value from the bound object that must be
+         * converted to a {@code boolean} value for the "selected" state.
+         * @return The converted value.
          */
         public boolean isSelected(Object value);
 
@@ -76,7 +78,10 @@ public abstract class Button extends Component {
          * Converts a selection state to a context value during a
          * {@link Component#store(Object)} operation.
          *
-         * @param selected
+         * @param selected The button's "selected" value which must be
+         * converted to a suitable value to store as the bound object's
+         * property.
+         * @return The converted "selected" value.
          */
         public Object valueOf(boolean selected);
     }
@@ -89,7 +94,9 @@ public abstract class Button extends Component {
          * Converts a context value to a button state during a
          * {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The bound object's property value which must be
+         * converted to a button's state value.
+         * @return The converted button state.
          */
         public State toState(Object value);
 
@@ -97,13 +104,16 @@ public abstract class Button extends Component {
          * Converts a button state to a context value during a
          * {@link Component#store(Object)} operation.
          *
-         * @param state
+         * @param state The button's current state value which must be
+         * converted to a value suitable for storage in the bound object's
+         * property.
+         * @return The converted state value.
          */
         public Object valueOf(State state);
     }
 
     /**
-     * Translates between button buttonData and context data during data
+     * Translates between a button's buttonData and context data during data
      * binding.
      */
     public interface ButtonDataBindMapping {
@@ -111,7 +121,10 @@ public abstract class Button extends Component {
          * Converts a context value to button data during a
          * {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value returned from the bound object
+         * which must be converted to a suitable value for the
+         * button's data.
+         * @return The converted button data.
          */
         public Object toButtonData(Object value);
 
@@ -119,7 +132,10 @@ public abstract class Button extends Component {
          * Converts button data to a context value during a
          * {@link Component#store(Object)} operation.
          *
-         * @param buttonData
+         * @param buttonData The button's current button data which
+         * must be converted to a suitable value for the object's
+         * property.
+         * @return The converted value suitable for the object.
          */
         public Object valueOf(Object buttonData);
     }
@@ -408,7 +424,7 @@ public abstract class Button extends Component {
     }
 
     /**
-     * Returns the button's selected state.
+     * @return The button's selected state.
      */
     public boolean isSelected() {
         return (getState() == State.SELECTED);
@@ -417,23 +433,23 @@ public abstract class Button extends Component {
     /**
      * Sets the button's selected state.
      *
-     * @param selected
+     * @param selected The new "selected" value.
      */
     public void setSelected(boolean selected) {
         setState(selected ? State.SELECTED : State.UNSELECTED);
     }
 
     /**
-     * Returns the button's selection state.
+     * @return The button's selection state (for tri-state buttons).
      */
     public State getState() {
         return state;
     }
 
     /**
-     * Sets the button's selection state.
+     * Sets the button's tri-state selection state.
      *
-     * @param state
+     * @param state The new button selection state.
      */
     public void setState(State state) {
         if (state == null) {
@@ -469,7 +485,7 @@ public abstract class Button extends Component {
     }
 
     /**
-     * Returns the button's toggle state.
+     * @return The button's toggle state.
      */
     public boolean isToggleButton() {
         return toggleButton;
@@ -478,7 +494,7 @@ public abstract class Button extends Component {
     /**
      * Sets the button's toggle state.
      *
-     * @param toggleButton
+     * @param toggleButton Whether or not this should be a toggle button.
      */
     public void setToggleButton(boolean toggleButton) {
         if (this.toggleButton != toggleButton) {
@@ -497,7 +513,7 @@ public abstract class Button extends Component {
     }
 
     /**
-     * Returns the button's tri-state state.
+     * @return The button's tri-state state.
      */
     public boolean isTriState() {
         return triState;
@@ -506,7 +522,7 @@ public abstract class Button extends Component {
     /**
      * Sets the button's tri-state state.
      *
-     * @param triState
+     * @param triState Whether or not to make this a tri-state button.
      */
     public void setTriState(boolean triState) {
         if (!toggleButton) {
@@ -565,10 +581,19 @@ public abstract class Button extends Component {
         }
     }
 
+    /**
+     * @return The binding key used for this button's data.
+     */
     public String getButtonDataKey() {
         return buttonDataKey;
     }
 
+    /**
+     * Set the binding key to use for this button's data.
+     *
+     * @param buttonDataKey The binding key for button data, which should be
+     * a field name or object "property" that supplies the button data.
+     */
     public void setButtonDataKey(String buttonDataKey) {
         String previousButtonDataKey = this.buttonDataKey;
         if (previousButtonDataKey != buttonDataKey) {
@@ -577,6 +602,10 @@ public abstract class Button extends Component {
         }
     }
 
+    /**
+     * @return The type of binding used for button data (that is "load", "store"
+     * or "both").
+     */
     public BindType getButtonDataBindType() {
         return buttonDataBindType;
     }
@@ -594,10 +623,21 @@ public abstract class Button extends Component {
         }
     }
 
+    /**
+     * @return The bind mapping used for button data.
+     */
     public ButtonDataBindMapping getButtonDataBindMapping() {
         return buttonDataBindMapping;
     }
 
+    /**
+     * Set the bind mapping used for this button's data.  This is a method that is used
+     * make a translation between the type of object needed for this button's data and
+     * the actual data supplied by the bound object.
+     *
+     * @param buttonDataBindMapping The new mapping to use (can be {@code null} to disable
+     * bind mapping).
+     */
     public void setButtonDataBindMapping(ButtonDataBindMapping buttonDataBindMapping) {
         ButtonDataBindMapping previousButtonDataBindMapping = this.buttonDataBindMapping;
 

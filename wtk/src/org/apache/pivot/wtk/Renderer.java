@@ -67,7 +67,7 @@ import org.apache.pivot.collections.Dictionary;
  */
 public interface Renderer extends ConstrainedVisual {
     /**
-     * Returns the renderer's style dictionary.
+     * @return The renderer's style dictionary.
      */
     public Dictionary<String, Object> getStyles();
 }

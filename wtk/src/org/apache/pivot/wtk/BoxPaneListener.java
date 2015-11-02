@@ -23,7 +23,7 @@ public interface BoxPaneListener {
     /**
      * Called when a box pane's orientation has changed.
      *
-     * @param boxPane
+     * @param boxPane The box pane whose orientation has changed.
      */
     public void orientationChanged(BoxPane boxPane);
 }

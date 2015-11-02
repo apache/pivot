@@ -43,23 +43,23 @@ public interface ActionClassListener {
     /**
      * Called when an action has been added to the named action dictionary.
      *
-     * @param id
+     * @param id The identifier for the newly added action.
      */
     public void actionAdded(String id);
 
     /**
      * Called when an action has been updated in the named action dictionary.
      *
-     * @param id
-     * @param previousAction
+     * @param id             The identifier for the updated action.
+     * @param previousAction The previous {@link Action} associated with this identifier.
      */
     public void actionUpdated(String id, Action previousAction);
 
     /**
      * Called when an action has been removed from the named action dictionary.
      *
-     * @param id
-     * @param action
+     * @param id     Identifier for the action that was removed.
+     * @param action The removed action.
      */
     public void actionRemoved(String id, Action action);
 }

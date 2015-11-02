@@ -46,8 +46,8 @@ public interface ColorChooserButtonBindingListener {
     /**
      * Called when a color chooser button's selected color key has changed.
      *
-     * @param colorChooserButton
-     * @param previousSelectedColorKey
+     * @param colorChooserButton       The color chooser button that has changed.
+     * @param previousSelectedColorKey The previous binding key for the selected color.
      */
     public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
         String previousSelectedColorKey);
@@ -56,8 +56,8 @@ public interface ColorChooserButtonBindingListener {
      * Called when a color chooser button's selected color bind type has
      * changed.
      *
-     * @param colorChooserButton
-     * @param previousSelectedColorBindType
+     * @param colorChooserButton            The color chooser button that has changed.
+     * @param previousSelectedColorBindType The previous bind type for the selected color.
      */
     public void selectedColorBindTypeChanged(ColorChooserButton colorChooserButton,
         BindType previousSelectedColorBindType);
@@ -66,8 +66,8 @@ public interface ColorChooserButtonBindingListener {
      * Called when a color chooser button's selected color bind mapping has
      * changed.
      *
-     * @param colorChooserButton
-     * @param previousSelectedColorBindMapping
+     * @param colorChooserButton               The color chooser button that has changed.
+     * @param previousSelectedColorBindMapping The previous bind mapping for the selected color.
      */
     public void selectedColorBindMappingChanged(ColorChooserButton colorChooserButton,
         ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping);
