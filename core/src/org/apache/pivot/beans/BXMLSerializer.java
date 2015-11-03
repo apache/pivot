@@ -1105,11 +1105,25 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                         if (value.equals(BXML_PREFIX + ":" + null)) {
                                             attribute.value = null;
                                         } else {
-                                            if (!JSON.containsKey(namespace, value)) {
-                                                throw new SerializationException("Value \"" + value + "\" is not defined.");
+                                            if (JSON.containsKey(namespace, value)) {
+                                                attribute.value = JSON.get(namespace, value);
+                                            } else {
+                                                Object nashornGlobal = namespace.get(NASHORN_GLOBAL);
+                                                if (nashornGlobal == null) {
+                                                    throw new SerializationException("Value \"" + value + "\" is not defined.");
+                                                } else {
+                                                    if (nashornGlobal instanceof Bindings) {
+                                                        Bindings bindings = (Bindings)nashornGlobal;
+                                                        if (bindings.containsKey(value)) {
+                                                            attribute.value = bindings.get(value);
+                                                        } else {
+                                                            throw new SerializationException("Value \"" + value + "\" is not defined.");
+                                                        }
+                                                    } else {
+                                                        throw new SerializationException("Value \"" + value + "\" is not defined.");
+                                                    }
+                                                }
                                             }
-
-                                            attribute.value = JSON.get(namespace, value);
                                         }
                                     }
                                 } else {
