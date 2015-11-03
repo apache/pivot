@@ -43,6 +43,8 @@ public final class Clipboard {
 
     /**
      * Retrieves the contents of the clipboard.
+     *
+     * @return The current clipboard content manifest.
      */
     public static Manifest getContent() {
         Manifest contentLocal = Clipboard.content;
@@ -62,7 +64,7 @@ public final class Clipboard {
     /**
      * Places content on the clipboard.
      *
-     * @param content
+     * @param content The new content manifest to place on the clipboard.
      */
     public static void setContent(LocalManifest content) {
         setContent(content, null);
@@ -71,7 +73,10 @@ public final class Clipboard {
     /**
      * Places content on the clipboard.
      *
-     * @param content
+     * @param content The new content manifest for the clipboard.
+     * @param clipboardContentListener A listener for changes in the content
+     * (which can be {@code null}).
+     * @throws IllegalArgumentException if the content is {@code null}.
      */
     public static void setContent(LocalManifest content,
         ClipboardContentListener clipboardContentListener) {

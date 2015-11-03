@@ -37,14 +37,16 @@ public class Calendar extends Container {
         /**
          * Converts a context value to a calendar date.
          *
-         * @param value
+         * @param value The value retrieved from the bound object.
+         * @return The value converted to a calendar date.
          */
         public CalendarDate toDate(Object value);
 
         /**
          * Converts a calendar date to a context value.
          *
-         * @param calendarDate
+         * @param calendarDate The current calendar date value from the component.
+         * @return The converted object value suitable for persistence in the bound object.
          */
         public Object valueOf(CalendarDate calendarDate);
     }
@@ -154,6 +156,8 @@ public class Calendar extends Container {
 
     /**
      * Gets the year to which this calendar is currently set.
+     *
+     * @return The current year value.
      */
     public int getYear() {
         return year;
@@ -161,6 +165,8 @@ public class Calendar extends Container {
 
     /**
      * Sets this calendar's year.
+     *
+     * @param year The new year to set this calendar to.
      */
     public void setYear(int year) {
         int previousYear = this.year;
@@ -173,6 +179,8 @@ public class Calendar extends Container {
 
     /**
      * Gets the month to which this calendar is currently set.
+     *
+     * @return The current month value.
      */
     public int getMonth() {
         return month;
@@ -180,6 +188,8 @@ public class Calendar extends Container {
 
     /**
      * Sets this calendar's month.
+     *
+     * @param month The new month value to set this calendar to.
      */
     public void setMonth(int month) {
         int previousMonth = this.month;
@@ -191,7 +201,7 @@ public class Calendar extends Container {
     }
 
     /**
-     * Gets the currently selected date, or <tt>null</tt> if no date is
+     * @return The currently selected date, or <tt>null</tt> if no date is
      * selected.
      */
     public CalendarDate getSelectedDate() {
@@ -220,6 +230,7 @@ public class Calendar extends Container {
      *
      * @param selectedDate A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>
      * (e.g. 2008-07-23)
+     * @throws IllegalArgumentException if the given date is {@code null}.
      */
     public final void setSelectedDate(String selectedDate) {
         if (selectedDate == null) {
@@ -230,7 +241,7 @@ public class Calendar extends Container {
     }
 
     /**
-     * Returns the locale used to present calendar data.
+     * @return The locale used to present calendar data.
      */
     public Locale getLocale() {
         return locale;
@@ -239,7 +250,8 @@ public class Calendar extends Container {
     /**
      * Sets the locale used to present calendar data.
      *
-     * @param locale
+     * @param locale The new locale for this calendar.
+     * @throws IllegalArgumentException if the locale argument is {@code null}.
      */
     public void setLocale(Locale locale) {
         if (locale == null) {
@@ -261,6 +273,7 @@ public class Calendar extends Container {
      * following rules: <ul> <li>If variant is specified, language and country
      * are required;</li> <li>Otherwise, if country is specified, language is
      * required;</li> <li>Otherwise, language is required.</li> </ul>
+     * @throws IllegalArgumentException if the given locale dictionary is {@code null}.
      */
     public void setLocale(Dictionary<String, ?> locale) {
         if (locale == null) {
@@ -285,6 +298,8 @@ public class Calendar extends Container {
      *
      * @param locale A JSON map containing values for language, country, and
      * variant.
+     * @throws IllegalArgumentException if the locale string is {@code null}
+     * or if it cannot be parsed successfully.
      * @see #setLocale(Dictionary)
      */
     public void setLocale(String locale) {
@@ -314,6 +329,8 @@ public class Calendar extends Container {
 
     /**
      * Gets the data binding key that is set on this calendar.
+     *
+     * @return The current value of the selected date binding key.
      */
     public String getSelectedDateKey() {
         return selectedDateKey;
@@ -321,6 +338,8 @@ public class Calendar extends Container {
 
     /**
      * Sets this calendar's data binding key.
+     *
+     * @param selectedDateKey The new key to use for binding to the selected date.
      */
     public void setSelectedDateKey(String selectedDateKey) {
         String previousSelectedDateKey = this.selectedDateKey;
@@ -400,21 +419,21 @@ public class Calendar extends Container {
     }
 
     /**
-     * Returns the calendar listener list.
+     * @return The calendar listener list.
      */
     public ListenerList<CalendarListener> getCalendarListeners() {
         return calendarListeners;
     }
 
     /**
-     * Returns the calendar selection listener list.
+     * @return The calendar selection listener list.
      */
     public ListenerList<CalendarSelectionListener> getCalendarSelectionListeners() {
         return calendarSelectionListeners;
     }
 
     /**
-     * Returns the calendar binding listener list.
+     * @return The calendar binding listener list.
      */
     public ListenerList<CalendarBindingListener> getCalendarBindingListeners() {
         return calendarBindingListeners;

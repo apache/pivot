@@ -60,45 +60,46 @@ public interface ExpanderListener {
     /**
      * Called when an expander's title has changed.
      *
-     * @param expander
-     * @param previousTitle
+     * @param expander      The expander that has changed.
+     * @param previousTitle The previous title for the expander.
      */
     public void titleChanged(Expander expander, String previousTitle);
 
     /**
      * Called when an expander's collapsible flag has changed.
      *
-     * @param expander
+     * @param expander The expander that has changed.
      */
     public void collapsibleChanged(Expander expander);
 
     /**
      * Called to preview an expanded change event.
      *
-     * @param expander
+     * @param expander The expander that is about to expand or collapse.
+     * @return The consensus vote as to whether to allow the change.
      */
     public Vote previewExpandedChange(Expander expander);
 
     /**
      * Called when an expanded change event has been vetoed.
      *
-     * @param expander
-     * @param reason
+     * @param expander The expander that is not going to change.
+     * @param reason   The consensus vote that disallowed the change.
      */
     public void expandedChangeVetoed(Expander expander, Vote reason);
 
     /**
      * Called when an expander's expanded state has changed.
      *
-     * @param expander
+     * @param expander The expander that has now expanded or collapsed.
      */
     public void expandedChanged(Expander expander);
 
     /**
      * Called when an expander's content component has changed.
      *
-     * @param expander
-     * @param previousContent
+     * @param expander        The expander that has changed content.
+     * @param previousContent The previous content of the expander.
      */
     public void contentChanged(Expander expander, Component previousContent);
 }

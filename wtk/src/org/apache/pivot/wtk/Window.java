@@ -545,7 +545,7 @@ public class Window extends Container {
      * Tests whether this window is an owning ancestor of a given window. A
      * window is not considered an owner of itself.
      *
-     * @param window
+     * @param window The window which could be an owned descendant of this window.
      * @return <tt>true</tt> if this window is an owning ancestor of the given
      * window; <tt>false</tt>, otherwise.
      */
@@ -585,7 +585,7 @@ public class Window extends Container {
     /**
      * Opens the window.
      *
-     * @param display
+     * @param display The display on which to open this window.
      */
     public final void open(Display display) {
         open(display, null);
@@ -596,6 +596,7 @@ public class Window extends Container {
      *
      * @param ownerArgument The window's owner. The window is opened on the
      * owner's display.
+     * @throws IllegalArgumentException if the owner argument is {@code null}.
      */
     public final void open(Window ownerArgument) {
         if (ownerArgument == null) {
@@ -769,7 +770,7 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the icons for this window.
+     * @return The icons for this window.
      */
     public IconImageSequence getIcons() {
         return iconImageSequence;
@@ -840,7 +841,7 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the bounds of the window's client area.
+     * @return The bounds of the window's client area.
      */
     public Bounds getClientArea() {
         Window.Skin windowSkin = (Window.Skin) getSkin();
@@ -873,8 +874,8 @@ public class Window extends Container {
     /**
      * Called to notify a window that its active state has changed.
      *
-     * @param active
-     * @param obverseWindow
+     * @param active        The new value of the "active" state for this window.
+     * @param obverseWindow The "other" window (that is now in the obverse state).
      */
     protected void setActive(boolean active, Window obverseWindow) {
         windowListeners.activeChanged(this, obverseWindow);
@@ -928,7 +929,7 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the window descendant to which focus will be restored when this
+     * @return The window descendant to which focus will be restored when this
      * window is moved to the front.
      */
     public Component getFocusDescendant() {
@@ -961,7 +962,7 @@ public class Window extends Container {
     }
 
     /**
-     * Returns the action mappings for this window.
+     * @return The action mappings for this window.
      */
     public ActionMappingSequence getActionMappings() {
         return actionMappingSequence;
@@ -969,6 +970,8 @@ public class Window extends Container {
 
     /**
      * Determines if this is the top-most window.
+     *
+     * @return {@code true} if this window is at the top of the Z-order of its display.
      */
     public boolean isTopMost() {
         Display display = getDisplay();
@@ -977,6 +980,8 @@ public class Window extends Container {
 
     /**
      * Determines if this is the bottom-most window.
+     *
+     * @return {@code true} if this window is at the bottom of the Z-order of its display.
      */
     public boolean isBottomMost() {
         Display display = getDisplay();

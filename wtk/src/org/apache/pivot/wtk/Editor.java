@@ -21,7 +21,7 @@ package org.apache.pivot.wtk;
  */
 public interface Editor {
     /**
-     * Tells whether or not an edit is currently in progress.
+     * @return Flag saying whether or not an edit is currently in progress.
      */
     public boolean isEditing();
 

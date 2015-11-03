@@ -374,7 +374,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         }
 
         /**
-         * Access the current scale (or zoom) factor for the entire application's
+         * @return The current scale (or zoom) factor for the entire application's
          * display.
          * @see #setScale
          */
@@ -387,6 +387,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
          * the entire application's display.
          * <p> For the main application window, a {@link org.apache.pivot.wtk.effects.ScaleDecorator}
          * cannot be used.  This method (and related ones) must be used instead.
+         * @param scale The new scale (zoom) factor for the entire display.
          * @see #scaleUp
          * @see #scaleDown
          * @see #getScale
@@ -457,6 +458,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         /**
          * Under some conditions, e.g. running under Linux in an applet,
          * volatile buffering can reduce performance.
+         * @param enabled Whether or not to use volatile image painting.
          */
         public void setVolatileImagePaintEnabled(boolean enabled) {
             volatileImagePaintEnabled = enabled;
@@ -1747,7 +1749,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
     }
 
     /**
-     * Resource properties accessor.
+     * @return The dictionary of cached resources.
      */
     public static ResourceCacheDictionary getResourceCache() {
         return resourceCacheDictionary;
@@ -1757,7 +1759,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * Adds the styles from a named stylesheet to the named or typed style
      * collections.
      *
-     * @param resourceName
+     * @param resourceName The resource name of the stylesheet to apply.
      */
     @SuppressWarnings("unchecked")
     public static void applyStylesheet(String resourceName) {
@@ -1830,6 +1832,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * @param callback The task to execute.
      * @param delay The length of time to wait before executing the task (in
      * milliseconds).
+     * @return The callback object.
      */
     public static ScheduledCallback scheduleCallback(Runnable callback, long delay) {
         ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
@@ -1856,6 +1859,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * @param callback The task to execute.
      * @param period The interval at which the task will be repeated (in
      * milliseconds).
+     * @return The callback object.
      */
     public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long period) {
         return scheduleRecurringCallback(callback, 0, period);
@@ -1870,6 +1874,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * task (milliseconds).
      * @param period The interval at which the task will be repeated (also in
      * milliseconds).
+     * @return The callback object.
      */
     public static ScheduledCallback scheduleRecurringCallback(Runnable callback, long delay,
         long period) {
@@ -1895,6 +1900,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * returns without waiting for the task to complete.
      *
      * @param callback The task to execute.
+     * @return The callback object (used to manipulate or wait for the task).
      */
     public static QueuedCallback queueCallback(Runnable callback) {
         return queueCallback(callback, false);
@@ -1907,6 +1913,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * @param callback The task to execute.
      * @param wait If <tt>true</tt>, does not return until the task has
      * executed. Otherwise, returns immediately.
+     * @return The callback object (used to manipulate or wait for the task).
      */
     public static QueuedCallback queueCallback(Runnable callback, boolean wait) {
         QueuedCallback queuedCallback = new QueuedCallback(callback);

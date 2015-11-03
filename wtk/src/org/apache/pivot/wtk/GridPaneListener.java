@@ -60,51 +60,51 @@ public interface GridPaneListener {
     /**
      * Called when a grid pane's column count has changed.
      *
-     * @param gridPane
-     * @param previousColumnCount
+     * @param gridPane            The grid pane that has changed.
+     * @param previousColumnCount The previous column count for the grid.
      */
     public void columnCountChanged(GridPane gridPane, int previousColumnCount);
 
     /**
      * Called when a row has been inserted into a grid pane.
      *
-     * @param gridPane
-     * @param index
+     * @param gridPane The grid pane that has changed.
+     * @param index    The index of the row that was just inserted.
      */
     public void rowInserted(GridPane gridPane, int index);
 
     /**
      * Called when rows have been removed from a grid pane.
      *
-     * @param gridPane
-     * @param index
-     * @param rows
+     * @param gridPane The grid pane that has changed.
+     * @param index    The starting index of the row(s) that were removed.
+     * @param rows     The complete sequence of removed rows.
      */
     public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows);
 
     /**
      * Called when a cell has been inserted into a grid pane.
      *
-     * @param row
-     * @param column
+     * @param row    The parent row of the cell that was inserted.
+     * @param column The column index of the inserted cell.
      */
     public void cellInserted(GridPane.Row row, int column);
 
     /**
-     * Called when cell's have been removed from a grid pane.
+     * Called when cells have been removed from a grid pane.
      *
-     * @param row
-     * @param column
-     * @param removed
+     * @param row     The parent row of the removed cell(s).
+     * @param column  The starting column index of the removed cells.
+     * @param removed The complete sequence of removed cells.
      */
     public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed);
 
     /**
      * Called when a cell has been updated in a grid pane.
      *
-     * @param row
-     * @param column
-     * @param previousComponent
+     * @param row               The parent row object of the updated cell.
+     * @param column            The column index of the updated cell.
+     * @param previousComponent The previous contents of this cell.
      */
     public void cellUpdated(GridPane.Row row, int column, Component previousComponent);
 }

@@ -55,41 +55,41 @@ public interface FormListener {
     /**
      * Called when a form section has been inserted.
      *
-     * @param form
-     * @param index
+     * @param form  The form that has changed.
+     * @param index The index where the new section has been inserted.
      */
     public void sectionInserted(Form form, int index);
 
     /**
      * Called when form sections have been removed.
      *
-     * @param form
-     * @param index
-     * @param removed
+     * @param form    The form that has changed.
+     * @param index   The starting index where sections were removed.
+     * @param removed The complete sequence of the removed sections.
      */
     public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed);
 
     /**
      * Called when a form section's heading has changed.
      *
-     * @param section
+     * @param section The form section whose heading changed.
      */
     public void sectionHeadingChanged(Form.Section section);
 
     /**
      * Called when a form field has been inserted.
      *
-     * @param section
-     * @param index
+     * @param section The enclosing form section that has changed.
+     * @param index   The index where a new field has been inserted.
      */
     public void fieldInserted(Form.Section section, int index);
 
     /**
-     * Called when forms fields items have been removed.
+     * Called when form fields have been removed.
      *
-     * @param section
-     * @param index
-     * @param fields
+     * @param section The enclosing form section.
+     * @param index   The starting index where fields were removed.
+     * @param fields  The complete sequence of fields that were removed.
      */
     public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields);
 }

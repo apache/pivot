@@ -155,7 +155,12 @@ public class FileBrowserSheet extends Sheet {
         return rootDirectory;
     }
 
-    // set the root folder but without firing events
+    /**
+     * Set the root folder but without firing events.
+     *
+     * @param rootFolder The new root directory to browse.
+     * @throws IllegalArgumentException if the folder argument is {@code null}.
+     */
     public void setRootFolder(String rootFolder) {
         if (rootFolder == null) {
             throw new IllegalArgumentException("Root folder is null.");
@@ -203,7 +208,8 @@ public class FileBrowserSheet extends Sheet {
     /**
      * When in single-select mode, returns the currently selected file.
      *
-     * @return The currently selected file.
+     * @return The currently selected file or {@code null} if nothing is selected.
+     * @throws IllegalStateException if not in single-select mode.
      */
     public File getSelectedFile() {
         if (mode == Mode.OPEN_MULTIPLE) {
@@ -216,7 +222,7 @@ public class FileBrowserSheet extends Sheet {
     /**
      * Sets the selection to a single file.
      *
-     * @param file
+     * @param file The single file to be selected or {@code null} to select nothing.
      */
     public void setSelectedFile(File file) {
         if (file == null) {
@@ -247,6 +253,10 @@ public class FileBrowserSheet extends Sheet {
      *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
+     * @throws IllegalArgumentException if the selected files sequence is {@code null}
+     * or if the sequence is longer than one file and multi-select is not enabled, or
+     * if any entry is the sequence is {@code null} or whose parent is not the
+     * current root directory.
      */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
         if (selectedFiles == null) {

@@ -179,7 +179,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Gets the year to which this calendar button is currently set.
+     * @return The year to which this calendar button is currently set.
      */
     public int getYear() {
         return year;
@@ -187,6 +187,8 @@ public class CalendarButton extends Button {
 
     /**
      * Sets this calendar's year.
+     *
+     * @param year The new current year for this calendar button.
      */
     public void setYear(int year) {
         int previousYear = this.year;
@@ -198,7 +200,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Gets the month to which this calendar button is currently set.
+     * @return The month to which this calendar button is currently set.
      */
     public int getMonth() {
         return month;
@@ -206,6 +208,8 @@ public class CalendarButton extends Button {
 
     /**
      * Sets this calendar's month.
+     *
+     * @param month The new month value to set this calendar button to.
      */
     public void setMonth(int month) {
         int previousMonth = this.month;
@@ -248,6 +252,7 @@ public class CalendarButton extends Button {
      *
      * @param selectedDate A string in the form of <tt>[YYYY]-[MM]-[DD]</tt>
      * (e.g. 2008-07-23)
+     * @throws IllegalArgumentException if the selected data value is {@code null}.
      */
     public final void setSelectedDate(String selectedDate) {
         if (selectedDate == null) {
@@ -258,7 +263,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Returns the locale used to present calendar data.
+     * @return The locale used to present calendar data.
      */
     public Locale getLocale() {
         return locale;
@@ -267,7 +272,8 @@ public class CalendarButton extends Button {
     /**
      * Sets the locale used to present calendar data.
      *
-     * @param locale
+     * @param locale The new locale used to format/present the data.
+     * @throws IllegalArgumentException if the given locale is {@code null}.
      */
     public void setLocale(Locale locale) {
         if (locale == null) {
@@ -289,6 +295,7 @@ public class CalendarButton extends Button {
      * following rules: <ul> <li>If variant is specified, language and country
      * are required;</li> <li>Otherwise, if country is specified, language is
      * required;</li> <li>Otherwise, language is required.</li> </ul>
+     * @throws IllegalArgumentException if the given locale dictionary is {@code null}.
      */
     public void setLocale(Dictionary<String, ?> locale) {
         if (locale == null) {
@@ -313,6 +320,8 @@ public class CalendarButton extends Button {
      *
      * @param locale A JSON map containing values for language, country, and
      * variant.
+     * @throws IllegalArgumentException if the locale string is {@code null} or
+     * if there is a problem parsing the string.
      * @see #setLocale(Dictionary)
      */
     public void setLocale(String locale) {
@@ -341,7 +350,7 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Gets the data binding key that is set on this calendar button.
+     * @return The data binding key that is set on this calendar button.
      */
     public String getSelectedDateKey() {
         return selectedDateKey;
@@ -349,6 +358,8 @@ public class CalendarButton extends Button {
 
     /**
      * Sets this calendar button's data binding key.
+     *
+     * @param selectedDateKey The new binding key for the calendar's selected date.
      */
     public void setSelectedDateKey(String selectedDateKey) {
         String previousSelectedDateKey = this.selectedDateKey;
@@ -439,14 +450,14 @@ public class CalendarButton extends Button {
     }
 
     /**
-     * Returns the calendar button listener list.
+     * @return The calendar button listener list.
      */
     public ListenerList<CalendarButtonListener> getCalendarButtonListeners() {
         return calendarButtonListeners;
     }
 
     /**
-     * Returns the calendar button selection listener list.
+     * @return The calendar button selection listener list.
      */
     public ListenerList<CalendarButtonSelectionListener> getCalendarButtonSelectionListeners() {
         return calendarButtonSelectionListeners;

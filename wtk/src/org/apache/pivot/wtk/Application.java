@@ -109,6 +109,7 @@ public interface Application {
      *
      * @param display The display on which this application was started.
      * @param properties Initialization properties passed to the application.
+     * @throws Exception if there is any problem during startup.
      */
     public void startup(Display display, Map<String, String> properties) throws Exception;
 
@@ -118,16 +119,21 @@ public interface Application {
      * @param optional If <tt>true</tt>, the shutdown may be cancelled by
      * returning a value of <tt>true</tt>.
      * @return <tt>true</tt> to cancel shutdown, <tt>false</tt> to continue.
+     * @throws Exception if there is a problem during shutdown.
      */
     public boolean shutdown(boolean optional) throws Exception;
 
     /**
      * Called to notify the application that it is being suspended.
+     *
+     * @throws Exception if there is a problem doing the suspend.
      */
     public void suspend() throws Exception;
 
     /**
      * Called when a suspended application has been resumed.
+     *
+     * @throws Exception if there is a problem doing the resume.
      */
     public void resume() throws Exception;
 }

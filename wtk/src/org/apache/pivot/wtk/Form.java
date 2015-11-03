@@ -294,7 +294,8 @@ public class Form extends Container {
         /**
          * Sets the flag's message type.
          *
-         * @param messageType
+         * @param messageType The new message type for this flag.
+         * @throws IllegalArgumentException if the message type is {@code null}.
          */
         public void setMessageType(MessageType messageType) {
             if (messageType == null) {
@@ -450,6 +451,7 @@ public class Form extends Container {
      *
      * @param messageType The message type to count, or <tt>null</tt> to return
      * the count of all flagged fields regardless of message type.
+     * @return The number of flagged fields.
      */
     public int getFlaggedFieldCount(MessageType messageType) {
         int count = 0;
@@ -530,6 +532,8 @@ public class Form extends Container {
      * Finds the {@link Form.Section} that the given component belongs to. Only
      * finds the section if the component is a direct child of the section.
      *
+     * @param component The component in question.
+     * @return The section this component belongs to.
      * @see #getEnclosingSection getEnclosingSection(Component)
      */
     public static Section getSection(Component component) {
@@ -541,6 +545,7 @@ public class Form extends Container {
      * search up the parent hierarchy in case the component is nested inside
      * other containers inside the form.
      *
+     * @param component The component in question.
      * @return The form section this component (or one of its parents) belongs
      * to or <code>null</code> if the component does not belong to a form.
      * @see #getSection getSection(Component)

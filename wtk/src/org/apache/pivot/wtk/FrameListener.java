@@ -23,8 +23,8 @@ public interface FrameListener {
     /**
      * Called when a frame's menu bar has changed.
      *
-     * @param frame
-     * @param previousMenuBar
+     * @param frame           The frame that has changed.
+     * @param previousMenuBar The previous menu bar for this frame.
      */
     public void menuBarChanged(Frame frame, MenuBar previousMenuBar);
 }

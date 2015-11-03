@@ -68,14 +68,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
         /**
          * Called when the host window for secondary display has been opened.
          *
-         * @param display
+         * @param display The new secondary display.
          */
         public void hostWindowOpened(Display display);
 
         /**
          * Called when the host window for secondary display has been closed.
          *
-         * @param display
+         * @param display The secondary display.
          */
         public void hostWindowClosed(Display display);
     }
@@ -407,6 +407,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
      *
      * @param optional If <tt>true</tt>, shutdown is optional and may be
      * cancelled. If <tt>false</tt>, shutdown cannot be cancelled.
+     * @return Whether shutdown was canceled by the application.
      */
     public static boolean exit(boolean optional) {
         boolean cancelShutdown = false;
@@ -737,6 +738,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Returns the full-screen mode flag.
+     * @return Whether or not the application is/should be displayed full screen.
      */
     public static boolean isFullScreen() {
         return fullScreenHostFrame.isVisible();
@@ -745,7 +747,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     /**
      * Sets the full-screen mode flag.
      *
-     * @param fullScreen
+     * @param fullScreen Whether to display the application full screen.
      */
     public static void setFullScreen(boolean fullScreen) {
         setFullScreen(fullScreen, true);
@@ -816,7 +818,9 @@ public final class DesktopApplicationContext extends ApplicationContext {
     /**
      * Sizes the window's native host frame to match its preferred size.
      *
-     * @param window
+     * @param window The window to size.
+     * @throws IllegalArgumentException if the window parameter is {@code null}.
+     * @throws IllegalStateException if the application is being displayed full screen.
      */
     public static void sizeHostToFit(Window window) {
         if (window == null) {
@@ -837,12 +841,17 @@ public final class DesktopApplicationContext extends ApplicationContext {
     /**
      * Creates a new secondary display.
      *
-     * @param width
-     * @param height
-     * @param x
-     * @param y
-     * @param modal
-     * @param owner
+     * @param width       The new width for the secondary display.
+     * @param height      The height for the secondary display.
+     * @param x           The new X-position for the display.
+     * @param y           The new Y-position for the display.
+     * @param modal       Whether or not the new display is to be modal.
+     * @param resizable   Whether or not to make the new display resizable by the user.
+     * @param undecorated Whether the new display should be undecorated (that is just a bare window) or normal.
+     * @param owner       The owner for the new display.
+     * @param displayCloseListener The listener for the dialog being closed.
+     * @return The newly created display.
+     * @throws IllegalStateException if the full screen flag is set.
      */
     public static Display createDisplay(int width, int height, int x, int y, boolean modal,
         boolean resizable, boolean undecorated, java.awt.Window owner,
@@ -858,8 +867,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         hostDialog.setUndecorated(undecorated);
 
         // Open the window in a callback; otherwise, if it is modal, it will
-        // block the
-        // calling thread
+        // block the calling thread
         ApplicationContext.queueCallback(new Runnable() {
             @Override
             public void run() {

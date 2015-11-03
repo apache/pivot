@@ -41,28 +41,28 @@ public interface FormAttributeListener {
     }
 
     /**
-     * Called when a fields's label attribute has changed.
+     * Called when a field's label attribute has changed.
      *
-     * @param form
-     * @param field
-     * @param previousLabel
+     * @param form          The enclosing form.
+     * @param field         The field whose form label has changed.
+     * @param previousLabel The previous form label for this field.
      */
     public void labelChanged(Form form, Component field, String previousLabel);
 
     /**
      * Called when a fields's required attribute has changed.
      *
-     * @param form
-     * @param field
+     * @param form  The enclosing form.
+     * @param field The field that is or is not now required.
      */
     public void requiredChanged(Form form, Component field);
 
     /**
      * Called when a field's flag attribute has changed.
      *
-     * @param form
-     * @param field
-     * @param previousFlag
+     * @param form         The enclosing form.
+     * @param field        The field whose flag attribute has changed.
+     * @param previousFlag The previous flag value for this field.
      */
     public void flagChanged(Form form, Component field, Form.Flag previousFlag);
 }

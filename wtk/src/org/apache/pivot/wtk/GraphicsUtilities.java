@@ -228,6 +228,9 @@ public final class GraphicsUtilities {
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot} or (b) A {@linkplain GraphicsUtilities#decodePaint(Dictionary)
      * JSON dictionary describing a Paint value}.
+     * @return The decoded paint value.
+     * @throws IllegalArgumentException if the given value is {@code null} or
+     * there is a problem decoding the value.
      */
     public static Paint decodePaint(String value) {
         if (value == null) {
@@ -267,6 +270,8 @@ public final class GraphicsUtilities {
      * {@value #CENTER_Y_KEY} (coordinates), {@value #RADIUS_KEY} (a number),
      * {@value #STOPS_KEY} (a list of dictionaries with keys
      * {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li> </ul>
+     * @return The fully decoded paint value.
+     * @throws IllegalArgumentException if there is no paint type key found. 
      */
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);

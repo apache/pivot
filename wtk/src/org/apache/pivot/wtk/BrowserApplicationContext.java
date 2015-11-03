@@ -351,6 +351,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * Retrieves a named application.
      *
      * @param name The name of the applet hosting the application.
+     * @return The application being run in the given applet (if any).
+     * @throws IllegalArgumentException if the name is {@code null}.
      */
     public static Application getApplication(String name) {
         if (name == null) {
@@ -371,8 +373,9 @@ public final class BrowserApplicationContext extends ApplicationContext {
     /**
      * Evaluates a script in the page context and returns the result.
      *
-     * @param script
-     * @param application
+     * @param script      The script to be run.
+     * @param application The application used to find the correct applet.
+     * @return The result of the script evaluation.
      */
     public static Object eval(String script, Application application) {
         if (application == null) {

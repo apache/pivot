@@ -131,7 +131,9 @@ public class FileBrowser extends Container {
     /**
      * Sets the root directory. Clears any existing file selection.
      *
-     * @param rootDirectory
+     * @param rootDirectory The new root directory to browse in.
+     * @throws IllegalArgumentException if the argument is {@code null}
+     * or is not a directory.
      */
     public void setRootDirectory(File rootDirectory) {
         if (rootDirectory == null || !rootDirectory.isDirectory()) {
@@ -154,9 +156,11 @@ public class FileBrowser extends Container {
     /**
      * Adds a file to the file selection.
      *
-     * @param file
+     * @param file The new file to add to the selection.
      * @return <tt>true</tt> if the file was added; <tt>false</tt> if it was
      * already selected.
+     * @throws IllegalArgumentException if the file argument is {@code null}
+     * or if the file is not in the current root directory.
      */
     public boolean addSelectedFile(final File file) {
         if (file == null) {
@@ -183,9 +187,10 @@ public class FileBrowser extends Container {
     /**
      * Removes a file from the file selection.
      *
-     * @param file
+     * @param file The previously selected file to be removed from the selection.
      * @return <tt>true</tt> if the file was removed; <tt>false</tt> if it was
      * not already selected.
+     * @throws IllegalArgumentException if the file argument is {@code null}.
      */
     public boolean removeSelectedFile(File file) {
         if (file == null) {
@@ -216,7 +221,7 @@ public class FileBrowser extends Container {
     /**
      * Sets the selection to a single file.
      *
-     * @param file
+     * @param file The only file to select, or {@code null} to select nothing.
      */
     public void setSelectedFile(File file) {
         if (file == null) {
@@ -247,6 +252,10 @@ public class FileBrowser extends Container {
      *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
+     * @throws IllegalArgumentException if the selected files sequence is {@code null}
+     * or if the sequence is longer than one file and multi-select is not enabled, or
+     * if any entry is the sequence is {@code null} or whose parent is not the
+     * current root directory.
      */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
         if (selectedFiles == null) {
@@ -299,7 +308,7 @@ public class FileBrowser extends Container {
     }
 
     /**
-     * Returns the file browser's multi-select state.
+     * @return The file browser's multi-select state.
      */
     public boolean isMultiSelect() {
         return multiSelect;

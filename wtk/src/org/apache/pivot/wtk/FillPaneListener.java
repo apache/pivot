@@ -23,7 +23,7 @@ public interface FillPaneListener {
     /**
      * Called when a fill pane's orientation has changed.
      *
-     * @param fillPane
+     * @param fillPane The fill pane that has changed.
      */
     public void orientationChanged(FillPane fillPane);
 }
