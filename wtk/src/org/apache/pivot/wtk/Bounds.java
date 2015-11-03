@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing the bounds of an object.
@@ -46,13 +47,8 @@ public final class Bounds implements Serializable {
     }
 
     public Bounds(Point origin, Dimensions size) {
-        if (origin == null) {
-            throw new IllegalArgumentException("origin is null.");
-        }
-
-        if (size == null) {
-            throw new IllegalArgumentException("size is null.");
-        }
+        Utils.checkNull(origin, "origin");
+        Utils.checkNull(size, "size");
 
         x = origin.x;
         y = origin.y;
@@ -61,9 +57,7 @@ public final class Bounds implements Serializable {
     }
 
     public Bounds(Bounds bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null.");
-        }
+        Utils.checkNull(bounds, "bounds");
 
         x = bounds.x;
         y = bounds.y;
@@ -72,9 +66,7 @@ public final class Bounds implements Serializable {
     }
 
     public Bounds(Dictionary<String, ?> bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null.");
-        }
+        Utils.checkNull(bounds, "bounds");
 
         if (bounds.containsKey(X_KEY)) {
             x = ((Integer) bounds.get(X_KEY)).intValue();
@@ -102,9 +94,7 @@ public final class Bounds implements Serializable {
     }
 
     public Bounds(java.awt.Rectangle rectangle) {
-        if (rectangle == null) {
-            throw new IllegalArgumentException("rectangle is null.");
-        }
+        Utils.checkNull(rectangle, "rectangle");
 
         x = rectangle.x;
         y = rectangle.y;
@@ -160,9 +150,7 @@ public final class Bounds implements Serializable {
     }
 
     public boolean contains(Point point) {
-        if (point == null) {
-            throw new IllegalArgumentException("point is null");
-        }
+        Utils.checkNull(point, "point");
 
         return contains(point.x, point.y);
     }
@@ -173,9 +161,7 @@ public final class Bounds implements Serializable {
     }
 
     public boolean contains(Bounds bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null");
-        }
+        Utils.checkNull(bounds, "bounds");
 
         return contains(bounds.x, bounds.y, bounds.width, bounds.height);
     }
@@ -187,9 +173,7 @@ public final class Bounds implements Serializable {
     }
 
     public boolean intersects(Bounds bounds) {
-        if (bounds == null) {
-            throw new IllegalArgumentException("bounds is null");
-        }
+        Utils.checkNull(bounds, "bounds");
 
         return intersects(bounds.x, bounds.y, bounds.width, bounds.height);
     }
@@ -236,14 +220,12 @@ public final class Bounds implements Serializable {
         return getClass().getName() + " [" + x + "," + y + ";" + width + "x" + height + "]";
     }
 
-    public static Bounds decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
+    public static Bounds decode(String boundsValue) {
+        Utils.checkNull(boundsValue, "boundsValue");
 
         Bounds bounds;
         try {
-            bounds = new Bounds(JSONSerializer.parseMap(value));
+            bounds = new Bounds(JSONSerializer.parseMap(boundsValue));
         } catch (SerializationException exception) {
             throw new IllegalArgumentException(exception);
         }

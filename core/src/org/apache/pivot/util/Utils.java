@@ -38,4 +38,26 @@ public class Utils {
         return s1.equals(s2);
     }
 
+    /**
+     * Check if the input argument is {@code null} and throw an
+     * {@link IllegalArgumentException} if so, with an optional
+     * message derived from the given string.
+     *
+     * @param value The argument value to check for {@code null}.
+     * @param description A description for the value used to
+     * construct a message like {@code "xxx must not be null."}. Can be
+     * {@code null} in which case a plain {@link IllegalArgumentException}
+     * is thrown without any detail message.
+     * @throws IllegalArgumentException if the value is {@code null}.
+     */
+    public static void checkNull(Object value, String description) {
+        if (value == null) {
+            if (description == null) {
+                throw new IllegalArgumentException();
+            } else {
+                throw new IllegalArgumentException(description + " must not be null.");
+            }
+        }
+    }
+
 }

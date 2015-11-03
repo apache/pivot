@@ -35,6 +35,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.effects.Decorator;
 
 /**
@@ -177,9 +178,7 @@ public abstract class Component implements ConstrainedVisual {
 
         @Override
         public void insert(Decorator decorator, int index) {
-            if (decorator == null) {
-                throw new IllegalArgumentException("decorator is null");
-            }
+            Utils.checkNull(decorator, "decorator");
 
             // Repaint the the component's previous decorated region
             if (parent != null) {
@@ -198,9 +197,7 @@ public abstract class Component implements ConstrainedVisual {
 
         @Override
         public Decorator update(int index, Decorator decorator) {
-            if (decorator == null) {
-                throw new IllegalArgumentException("decorator is null.");
-            }
+            Utils.checkNull(decorator, "decorator");
 
             // Repaint the the component's previous decorated region
             if (parent != null) {
@@ -744,9 +741,7 @@ public abstract class Component implements ConstrainedVisual {
      */
     @SuppressWarnings("unchecked")
     protected void setSkin(Skin skin) {
-        if (skin == null) {
-            throw new IllegalArgumentException("skin is null.");
-        }
+        Utils.checkNull(skin, "skin");
 
         if (this.skin != null) {
             throw new IllegalStateException("Skin is already installed.");
@@ -868,9 +863,7 @@ public abstract class Component implements ConstrainedVisual {
 
     @SuppressWarnings("unchecked")
     public Container getAncestor(String ancestorTypeName) throws ClassNotFoundException {
-        if (ancestorTypeName == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(ancestorTypeName, "ancestorTypeName");
 
         return getAncestor((Class<? extends Container>) Class.forName(ancestorTypeName));
     }
@@ -898,9 +891,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public final void setSize(Dimensions size) {
-        if (size == null) {
-            throw new IllegalArgumentException("size is null.");
-        }
+        Utils.checkNull(size, "size");
 
         setSize(size.width, size.height);
     }
@@ -1105,9 +1096,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public final void setPreferredSize(Dimensions preferredSize) {
-        if (preferredSize == null) {
-            throw new IllegalArgumentException("preferredSize is null.");
-        }
+        Utils.checkNull(preferredSize, "preferredSize");
 
         setPreferredSize(preferredSize.width, preferredSize.height);
     }
@@ -1232,9 +1221,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param widthLimits The new width limits (min and max).
      */
     public final void setWidthLimits(Limits widthLimits) {
-        if (widthLimits == null) {
-            throw new IllegalArgumentException("widthLimits is null.");
-        }
+        Utils.checkNull(widthLimits, "widthLimits");
 
         setWidthLimits(widthLimits.minimum, widthLimits.maximum);
     }
@@ -1316,9 +1303,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param heightLimits The new height limits (min and max).
      */
     public final void setHeightLimits(Limits heightLimits) {
-        if (heightLimits == null) {
-            throw new IllegalArgumentException("heightLimits is null.");
-        }
+        Utils.checkNull(heightLimits, "heightLimits");
 
         setHeightLimits(heightLimits.minimum, heightLimits.maximum);
     }
@@ -1415,9 +1400,7 @@ public abstract class Component implements ConstrainedVisual {
      * @see #setLocation(int, int)
      */
     public final void setLocation(Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location cannot be null.");
-        }
+        Utils.checkNull(location, "location");
 
         setLocation(location.x, location.y);
     }
@@ -1568,9 +1551,7 @@ public abstract class Component implements ConstrainedVisual {
      * the component is not a descendant of the specified ancestor.
      */
     public Point mapPointToAncestor(final Container ancestor, int xArgument, int yArgument) {
-        if (ancestor == null) {
-            throw new IllegalArgumentException("ancestor is null");
-        }
+        Utils.checkNull(ancestor, "ancestor");
 
         int xArgumentMutable = xArgument;
         int yArgumentMutable = yArgument;
@@ -1603,9 +1584,7 @@ public abstract class Component implements ConstrainedVisual {
      * the component is not a descendant of the specified ancestor.
      */
     public Point mapPointToAncestor(Container ancestor, Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(location, "location");
 
         return mapPointToAncestor(ancestor, location.x, location.y);
     }
@@ -1621,9 +1600,7 @@ public abstract class Component implements ConstrainedVisual {
      * the component is not a descendant of the specified ancestor.
      */
     public Point mapPointFromAncestor(final Container ancestor, int xArgument, int yArgument) {
-        if (ancestor == null) {
-            throw new IllegalArgumentException("ancestor is null");
-        }
+        Utils.checkNull(ancestor, "ancestor");
 
         int xArgumentMutable = xArgument;
         int yArgumentMutable = yArgument;
@@ -1646,9 +1623,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     public Point mapPointFromAncestor(Container ancestor, Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(location, "location");
 
         return mapPointFromAncestor(ancestor, location.x, location.y);
     }
@@ -1694,9 +1669,7 @@ public abstract class Component implements ConstrainedVisual {
      * part of the component hierarchy.
      */
     public Bounds getVisibleArea(Bounds area) {
-        if (area == null) {
-            throw new IllegalArgumentException("area is null.");
-        }
+        Utils.checkNull(area, "area");
 
         return getVisibleArea(area.x, area.y, area.width, area.height);
     }
@@ -1768,9 +1741,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param area The area to be made visible.
      */
     public void scrollAreaToVisible(Bounds area) {
-        if (area == null) {
-            throw new IllegalArgumentException("area is null.");
-        }
+        Utils.checkNull(area, "area");
 
         scrollAreaToVisible(area.x, area.y, area.width, area.height);
     }
@@ -1951,9 +1922,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param immediate Whether or not the area needs immediate painting.
      */
     public final void repaint(Bounds area, boolean immediate) {
-        if (area == null) {
-            throw new IllegalArgumentException("area is null.");
-        }
+        Utils.checkNull(area, "area");
 
         repaint(area.x, area.y, area.width, area.height, immediate);
     }
@@ -2512,9 +2481,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param styles A map containing the styles to apply.
      */
     public void setStyles(Map<String, ?> styles) {
-        if (styles == null) {
-            throw new IllegalArgumentException("styles is null.");
-        }
+        Utils.checkNull(styles, "styles");
 
         for (String key : styles) {
             getStyles().put(key, styles.get(key));
@@ -2528,9 +2495,7 @@ public abstract class Component implements ConstrainedVisual {
      * @throws SerializationException if the string doesn't conform to JSON standards.
      */
     public void setStyles(String styles) throws SerializationException {
-        if (styles == null) {
-            throw new IllegalArgumentException("styles is null.");
-        }
+        Utils.checkNull(styles, "styles");
 
         setStyles(JSONSerializer.parseMap(styles));
     }
@@ -2557,9 +2522,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param styleName The name of an already loaded style to apply.
      */
     public void setStyleName(String styleName) {
-        if (styleName == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(styleName, "styleName");
 
         Map<String, ?> stylesLocal = namedStyles.get(styleName);
 
@@ -2576,9 +2539,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param styleNames List of style names to apply to this component.
      */
     public void setStyleNames(Sequence<String> styleNames) {
-        if (styleNames == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(styleNames, "styleNames");
 
         for (int i = 0, n = styleNames.getLength(); i < n; i++) {
             setStyleName(styleNames.get(i));
@@ -2591,9 +2552,7 @@ public abstract class Component implements ConstrainedVisual {
      * @param styleNames Comma-delimited list of style names to apply.
      */
     public void setStyleNames(String styleNames) {
-        if (styleNames == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(styleNames, "styleNames");
 
         for (String styleName : styleNames.split(",")) {
             setStyleName(styleName.trim());
@@ -2601,7 +2560,6 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
-     * Returns the user data dictionary.
      * @return The user data dictionary for this component.
      */
     public UserDataDictionary getUserData() {

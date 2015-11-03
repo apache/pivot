@@ -25,6 +25,7 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.media.Image;
 
@@ -76,9 +77,7 @@ public class Window extends Container {
 
             if (keyStroke != previousKeyStroke) {
                 if (window != null) {
-                    if (keyStroke == null) {
-                        throw new IllegalStateException();
-                    }
+                    Utils.checkNull(keyStroke, "keyStroke");
 
                     if (window.actionMap.containsKey(keyStroke)) {
                         throw new IllegalArgumentException("A mapping for " + keyStroke
@@ -99,9 +98,7 @@ public class Window extends Container {
         }
 
         public void setKeyStroke(String keyStroke) {
-            if (keyStroke == null) {
-                throw new IllegalArgumentException("keyStroke is null.");
-            }
+            Utils.checkNull(keyStroke, "keyStroke");
 
             setKeyStroke(Keyboard.KeyStroke.decode(keyStroke));
         }
@@ -115,9 +112,7 @@ public class Window extends Container {
 
             if (action != previousAction) {
                 if (window != null) {
-                    if (action == null) {
-                        throw new IllegalStateException();
-                    }
+                    Utils.checkNull(action, "action");
 
                     window.actionMap.put(keyStroke, action);
 
@@ -129,9 +124,7 @@ public class Window extends Container {
         }
 
         public void setAction(String actionID) {
-            if (actionID == null) {
-                throw new IllegalArgumentException("actionID is null");
-            }
+            Utils.checkNull(actionID, "actionID");
 
             Action actionLocal = Action.getNamedActions().get(actionID);
             if (actionLocal == null) {
@@ -550,9 +543,7 @@ public class Window extends Container {
      * window; <tt>false</tt>, otherwise.
      */
     public boolean isOwner(Window window) {
-        if (window == null) {
-            throw new IllegalArgumentException("window is null.");
-        }
+        Utils.checkNull(window, "window");
 
         Window ownerLocal = window.getOwner();
 
@@ -599,9 +590,7 @@ public class Window extends Container {
      * @throws IllegalArgumentException if the owner argument is {@code null}.
      */
     public final void open(Window ownerArgument) {
-        if (ownerArgument == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(ownerArgument, "owner");
 
         open(ownerArgument.getDisplay(), ownerArgument);
     }
@@ -615,9 +604,7 @@ public class Window extends Container {
      * has no owner.
      */
     public void open(Display display, Window ownerArgument) {
-        if (display == null) {
-            throw new IllegalArgumentException("display is null.");
-        }
+        Utils.checkNull(display, "display");
 
         if (ownerArgument != null) {
             if (!ownerArgument.isOpen()) {
@@ -784,9 +771,7 @@ public class Window extends Container {
      * @param iconURL The location of the icon to set.
      */
     public void setIcon(URL iconURL) {
-        if (iconURL == null) {
-            throw new IllegalArgumentException("iconURL is null.");
-        }
+        Utils.checkNull(iconURL, "iconURL");
 
         Image icon = Image.loadFromCache(iconURL);
 
@@ -802,14 +787,12 @@ public class Window extends Container {
      * @see #setIcon(URL)
      */
     public void setIcon(String iconName) {
-        if (iconName == null) {
-            throw new IllegalArgumentException("iconName is null.");
-        }
+        Utils.checkNull(iconName, "iconName");
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(iconName.substring(1));
         if (url == null) {
-            throw new IllegalArgumentException("cannot find icon resource " + iconName);
+            throw new IllegalArgumentException("Cannot find icon resource " + iconName);
         }
         setIcon(url);
     }
