@@ -141,6 +141,7 @@ public class HyperlinkButton extends LinkButton {
 
     /**
      * Access the {@link URI} which is the target of this hyperlink.
+     * @return The target for this hyperlink.
      */
     public URI getUri() {
         return action == null ? null : action.getUri();

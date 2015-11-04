@@ -23,9 +23,9 @@ public interface DragSource {
     /**
      * Called by the framework to initiate a drag operation.
      *
-     * @param component
-     * @param x
-     * @param y
+     * @param component The component to drag from.
+     * @param x The X-position of the mouse at the beginning of the drag.
+     * @param y The Y-position of the mouse.
      * @return <tt>true</tt> to accept the drag; <tt>false</tt> to reject it.
      */
     public boolean beginDrag(Component component, int x, int y);
@@ -33,8 +33,8 @@ public interface DragSource {
     /**
      * Called by the framework to terminate a drag operation.
      *
-     * @param component
-     * @param dropAction
+     * @param component The drag component.
+     * @param dropAction Which operation to perform at the end of the drag.
      */
     public void endDrag(Component component, DropAction dropAction);
 
@@ -47,7 +47,7 @@ public interface DragSource {
     public boolean isNative();
 
     /**
-     * Returns the drag content.
+     * @return The drag content.
      */
     public LocalManifest getContent();
 

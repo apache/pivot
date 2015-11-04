@@ -61,24 +61,24 @@ public interface ListButtonBindingListener {
     /**
      * Called when a list button's list data key has changed.
      *
-     * @param listButton
-     * @param previousListDataKey
+     * @param listButton          The list button that has changed.
+     * @param previousListDataKey The previous binding key for the list data.
      */
     public void listDataKeyChanged(ListButton listButton, String previousListDataKey);
 
     /**
      * Called when a list button's list data bind type has changed.
      *
-     * @param listButton
-     * @param previousListDataBindType
+     * @param listButton               The list button that has changed.
+     * @param previousListDataBindType The previous bind type for the list data.
      */
     public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType);
 
     /**
      * Called when a list button's list data bind mapping has changed.
      *
-     * @param listButton
-     * @param previousListDataBindMapping
+     * @param listButton                  The list button that has changed.
+     * @param previousListDataBindMapping The previous bind mapping for the list data.
      */
     public void listDataBindMappingChanged(ListButton listButton,
         ListView.ListDataBindMapping previousListDataBindMapping);
@@ -86,16 +86,16 @@ public interface ListButtonBindingListener {
     /**
      * Called when a list button's selected item key has changed.
      *
-     * @param listButton
-     * @param previousSelectedItemKey
+     * @param listButton              The list button that has changed.
+     * @param previousSelectedItemKey The previous binding key for the button's selected item.
      */
     public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey);
 
     /**
      * Called when a list button's selected item bind type has changed.
      *
-     * @param listButton
-     * @param previousSelectedItemBindType
+     * @param listButton                   The list button that has changed.
+     * @param previousSelectedItemBindType The previous bind type for the selected item.
      */
     public void selectedItemBindTypeChanged(ListButton listButton,
         BindType previousSelectedItemBindType);
@@ -103,8 +103,8 @@ public interface ListButtonBindingListener {
     /**
      * Called when a list button's selected item bind mapping has changed.
      *
-     * @param listButton
-     * @param previousSelectedItemBindMapping
+     * @param listButton                      The list button that has changed.
+     * @param previousSelectedItemBindMapping The previous bind mapping for the button's selected item.
      */
     public void selectedItemBindMappingChanged(ListButton listButton,
         ListView.ItemBindMapping previousSelectedItemBindMapping);

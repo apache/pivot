@@ -53,39 +53,39 @@ public interface ListButtonItemListener {
     /**
      * Called when an item is inserted into a list button's list data.
      *
-     * @param listButton
-     * @param index
+     * @param listButton The list button that has changed.
+     * @param index      The index where the new data was inserted.
      */
     public void itemInserted(ListButton listButton, int index);
 
     /**
      * Called when items are removed from a list button's list data.
      *
-     * @param listButton
-     * @param index
-     * @param count
+     * @param listButton The list button that has changed.
+     * @param index      The starting index of the removed data items.
+     * @param count      The number of items removed.
      */
     public void itemsRemoved(ListButton listButton, int index, int count);
 
     /**
      * Called when an item is updated within a list button's list data.
      *
-     * @param listButton
-     * @param index
+     * @param listButton The list button whose data has changed.
+     * @param index      The index into the data list of the updated item.
      */
     public void itemUpdated(ListButton listButton, int index);
 
     /**
      * Called when a list button's list data has been cleared.
      *
-     * @param listButton
+     * @param listButton The list button whose data was cleared.
      */
     public void itemsCleared(ListButton listButton);
 
     /**
      * Called when a list button's list data is sorted.
      *
-     * @param listButton
+     * @param listButton The list button whose data has been sorted.
      */
     public void itemsSorted(ListButton listButton);
 }

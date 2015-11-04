@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component that allows the user to select a color.
@@ -32,14 +33,17 @@ public class ColorChooser extends Container {
         /**
          * Converts a context value to a color.
          *
-         * @param value
+         * @param value The value returned from the bound object.
+         * @return The value converted to a {@link Color}.
          */
         public Color toColor(Object value);
 
         /**
          * Converts a color to a context value.
          *
-         * @param color
+         * @param color The color value selected in this component.
+         * @return The color value converted to a format suitable for
+         * persistence in the bound object.
          */
         public Object valueOf(Color color);
     }
@@ -103,7 +107,7 @@ public class ColorChooser extends Container {
     }
 
     /**
-     * Gets the currently selected color, or <tt>null</tt> if no color is
+     * @return The currently selected color, or <tt>null</tt> if no color is
      * selected.
      */
     public Color getSelectedColor() {
@@ -133,15 +137,13 @@ public class ColorChooser extends Container {
      * selection.
      */
     public void setSelectedColor(String selectedColor) {
-        if (selectedColor == null) {
-            throw new IllegalArgumentException("selectedColor is null.");
-        }
+        Utils.checkNull(selectedColor, "selectedColor");
 
         setSelectedColor(Color.decode(selectedColor));
     }
 
     /**
-     * Gets the data binding key that is set on this color chooser.
+     * @return The data binding key that is set on this color chooser.
      */
     public String getSelectedColorKey() {
         return selectedColorKey;
@@ -149,6 +151,8 @@ public class ColorChooser extends Container {
 
     /**
      * Sets this color chooser's data binding key.
+     *
+     * @param selectedColorKey The binding key for the selected color.
      */
     public void setSelectedColorKey(String selectedColorKey) {
         String previousSelectedColorKey = this.selectedColorKey;
@@ -164,9 +168,7 @@ public class ColorChooser extends Container {
     }
 
     public void setSelectedColorBindType(BindType selectedColorBindType) {
-        if (selectedColorBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedColorBindType, "selectedColorBindType");
 
         BindType previousSelectedColorBindType = this.selectedColorBindType;
 
@@ -240,14 +242,14 @@ public class ColorChooser extends Container {
     }
 
     /**
-     * Returns the color chooser selection listener list.
+     * @return The color chooser selection listener list.
      */
     public ListenerList<ColorChooserSelectionListener> getColorChooserSelectionListeners() {
         return colorChooserSelectionListeners;
     }
 
     /**
-     * Returns the color chooser binding listener list.
+     * @return The color chooser binding listener list.
      */
     public ListenerList<ColorChooserBindingListener> getColorChooserBindingListeners() {
         return colorChooserBindingListeners;

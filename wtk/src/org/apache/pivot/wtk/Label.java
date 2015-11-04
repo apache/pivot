@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component that displays a string of text.
@@ -31,7 +32,8 @@ public class Label extends Component {
          * Converts a value from the bind context to a text representation
          * during a {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The bound value from the component.
+         * @return The value converted to a {@link String} suitable for the label text.
          */
         public String toString(Object value);
 
@@ -39,7 +41,9 @@ public class Label extends Component {
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
          *
-         * @param text
+         * @param text The label text to be converted.
+         * @return The text value converted to a value suitable for persistence
+         * in the bound object.
          */
         public Object valueOf(String text);
     }
@@ -108,9 +112,7 @@ public class Label extends Component {
     }
 
     /**
-     * Returns the label's text.
-     *
-     * @return The text.
+     * @return The label's text.
      */
     public String getText() {
         return text;
@@ -119,12 +121,12 @@ public class Label extends Component {
     /**
      * Set the text of the Label.
      *
-     * @param text The text to set, must be not null.
+     * @param text The text to set, must be not {@code null}.
+     * @throws IllegalArgumentException if the text is {@code null} or if
+     * the text length exceeds the allowed maximum.
      */
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "text");
 
         if (text.length() > maximumLength) {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
@@ -142,7 +144,7 @@ public class Label extends Component {
      * null (to avoid the setText throw an IllegalArgumentException). This is
      * useful to be called by code.
      *
-     * @param text The text to set
+     * @param text The text to set (if {@code null} will set an empty string {@code ""}).
      * @see #setText
      */
     public void setTextOrEmpty(String text) {
@@ -159,8 +161,6 @@ public class Label extends Component {
     }
 
     /**
-     * Returns the maximum length of the label text.
-     *
      * @return The maximum length of the label text.
      */
     public int getMaximumLength() {
@@ -171,6 +171,7 @@ public class Label extends Component {
      * Sets the maximum length of the label text.
      *
      * @param maximumLength The maximum length of the label text.
+     * @throws IllegalArgumentException if the length given is negative.
      */
     public void setMaximumLength(int maximumLength) {
         if (maximumLength < 0) {
@@ -210,9 +211,7 @@ public class Label extends Component {
     }
 
     public void setTextBindType(BindType textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(textBindType, "textBindType");
 
         BindType previousTextBindType = this.textBindType;
 

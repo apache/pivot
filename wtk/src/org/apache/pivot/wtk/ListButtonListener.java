@@ -58,16 +58,16 @@ public interface ListButtonListener {
     /**
      * Called when a list button's list data has changed.
      *
-     * @param listButton
-     * @param previousListData
+     * @param listButton       The list button that has changed.
+     * @param previousListData The previous list data.
      */
     public void listDataChanged(ListButton listButton, List<?> previousListData);
 
     /**
      * Called when a list button's item renderer has changed.
      *
-     * @param listButton
-     * @param previousItemRenderer
+     * @param listButton           The list button that was changed.
+     * @param previousItemRenderer The previous renderer for the button's items.
      */
     public void itemRendererChanged(ListButton listButton,
         ListView.ItemRenderer previousItemRenderer);
@@ -75,15 +75,15 @@ public interface ListButtonListener {
     /**
      * Called when a list button's repeatable flag has changed.
      *
-     * @param listButton
+     * @param listButton The list button that has changed.
      */
     public void repeatableChanged(ListButton listButton);
 
     /**
      * Called when a list button's disabled item filter has changed.
      *
-     * @param listButton
-     * @param previousDisabledItemFilter
+     * @param listButton                 The list button that has changed.
+     * @param previousDisabledItemFilter The previous disabled item filter for the list button.
      */
     public void disabledItemFilterChanged(ListButton listButton,
         Filter<?> previousDisabledItemFilter);
@@ -91,8 +91,8 @@ public interface ListButtonListener {
     /**
      * Called when a list button's list size has changed.
      *
-     * @param listButton
-     * @param previousListSize
+     * @param listButton       The list button that has changed.
+     * @param previousListSize The previous value of the visible list size.
      */
     public void listSizeChanged(ListButton listButton, int previousListSize);
 }

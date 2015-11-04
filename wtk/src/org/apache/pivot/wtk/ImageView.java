@@ -24,6 +24,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.media.Image;
@@ -45,7 +46,7 @@ public class ImageView extends Component {
         }
 
         /**
-         * Returns the load type supported by this mapping.
+         * @return The load type supported by this mapping.
          */
         public Type getType();
 
@@ -53,7 +54,8 @@ public class ImageView extends Component {
          * Converts a value from the bind context to an image representation
          * during a {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value returned from the bound object.
+         * @return The image converted from the bound value.
          */
         public Image toImage(Object value);
 
@@ -61,7 +63,8 @@ public class ImageView extends Component {
          * Converts a value from the bind context to an image location during a
          * {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value returned from the bound object.
+         * @return The value converted to an image URL.
          */
         public URL toImageURL(Object value);
 
@@ -69,15 +72,22 @@ public class ImageView extends Component {
          * Converts a value from the bind context to an image resource name
          * during a {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value returned from the bound object.
+         * @return The value converted to an image name.
          */
         public String toImageName(Object value);
 
         /**
-         * Converts a text string to a value to be stored in the bind context
+         * Converts an image to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
+         * <p> Note: if the bind type is {@link Type#URL} or {@link Type#NAME} then
+         * this will likely entail also persisting the image itself
+         * somewhere else and returning the name/location of the stored
+         * image.
          *
-         * @param image
+         * @param image The image currently stored in the image view.
+         * @return The image converted to a value suitable for persistence
+         * in the bound object.
          */
         public Object valueOf(Image image);
     }
@@ -188,9 +198,7 @@ public class ImageView extends Component {
      * @param imageURL The location of the image to set.
      */
     public final void setImage(final URL imageURL) {
-        if (imageURL == null) {
-            throw new IllegalArgumentException("imageURL is null.");
-        }
+        Utils.checkNull(imageURL, "imageURL");
 
         Image imageLocal = (Image) ApplicationContext.getResourceCache().get(imageURL);
 
@@ -253,9 +261,7 @@ public class ImageView extends Component {
      * @see #setImage(URL)
      */
     public final void setImage(String imageName) {
-        if (imageName == null) {
-            throw new IllegalArgumentException("imageName is null.");
-        }
+        Utils.checkNull(imageName, "imageName");
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(imageName.substring(1));
@@ -317,9 +323,7 @@ public class ImageView extends Component {
     }
 
     public void setImageBindType(BindType imageBindType) {
-        if (imageBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(imageBindType, "imageBindType");
 
         BindType previousImageBindType = this.imageBindType;
 
@@ -400,14 +404,14 @@ public class ImageView extends Component {
     }
 
     /**
-     * Returns the image view listener list.
+     * @return The image view listener list.
      */
     public ListenerList<ImageViewListener> getImageViewListeners() {
         return imageViewListeners;
     }
 
     /**
-     * Returns the image view binding listener list.
+     * @return The image view binding listener list.
      */
     public ListenerList<ImageViewBindingListener> getImageViewBindingListeners() {
         return imageViewBindingListeners;

@@ -40,15 +40,15 @@ public interface ImageViewListener {
     /**
      * Called when an image view's image has changed.
      *
-     * @param imageView
-     * @param previousImage
+     * @param imageView     The image view whose image has changed.
+     * @param previousImage The previous image associated with this image view.
      */
     public void imageChanged(ImageView imageView, Image previousImage);
 
     /**
      * Called when an image view's asynchronous flag has changed.
      *
-     * @param imageView
+     * @param imageView The image view whose asynchronous flag has changed.
      */
     public void asynchronousChanged(ImageView imageView);
 }

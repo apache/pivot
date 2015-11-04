@@ -30,6 +30,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ListView.ListDataBindMapping;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
@@ -301,7 +302,7 @@ public class ListButton extends Button {
     /**
      * Creates a list button with the given button data and an empty list.
      *
-     * @param buttonData
+     * @param buttonData The button data (that is text and/or icon) for the list button.
      */
     public ListButton(Object buttonData) {
         this(buttonData, new ArrayList<>());
@@ -310,7 +311,7 @@ public class ListButton extends Button {
     /**
      * Creates a list button with no button data and the given list data.
      *
-     * @param listData
+     * @param listData The initial list data for the list button.
      */
     public ListButton(List<?> listData) {
         this(null, listData);
@@ -379,9 +380,7 @@ public class ListButton extends Button {
      */
     @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
-        if (listData == null) {
-            throw new IllegalArgumentException("listData is null.");
-        }
+        Utils.checkNull(listData, "listData");
 
         List<?> previousListData = this.listData;
 
@@ -413,11 +412,11 @@ public class ListButton extends Button {
      *
      * @param listData The list data to be presented by the list button as a
      * JSON array.
+     * @throws IllegalArgumentException if the data string is {@code null} or
+     * cannot be propertly parsed into a list.
      */
     public final void setListData(String listData) {
-        if (listData == null) {
-            throw new IllegalArgumentException("listData is null.");
-        }
+        Utils.checkNull(listData, "listData");
 
         try {
             setListData(JSONSerializer.parseList(listData));
@@ -431,11 +430,11 @@ public class ListButton extends Button {
      *
      * @param listData A URL referring to a JSON file containing the data to be
      * presented by the list button.
+     * @throws IllegalArgumentException if the URL is {@code null} or
+     * the URL data stream cannot be propertly parsed into a list.
      */
     public void setListData(URL listData) {
-        if (listData == null) {
-            throw new IllegalArgumentException("listData is null.");
-        }
+        Utils.checkNull(listData, "listData");
 
         JSONSerializer jsonSerializer = new JSONSerializer();
 
@@ -474,7 +473,7 @@ public class ListButton extends Button {
     }
 
     /**
-     * Returns the list button's repeatable flag.
+     * @return The list button's repeatable flag.
      */
     public boolean isRepeatable() {
         return repeatable;
@@ -483,7 +482,8 @@ public class ListButton extends Button {
     /**
      * Sets the list button's repeatable flag.
      *
-     * @param repeatable
+     * @param repeatable Whether this list button's action is repeatable
+     * (that is, the action can be triggered even if the selection is unchanged).
      */
     public void setRepeatable(boolean repeatable) {
         if (this.repeatable != repeatable) {
@@ -581,7 +581,7 @@ public class ListButton extends Button {
     }
 
     /**
-     * Returns the list size.
+     * @return The list size.
      */
     public int getListSize() {
         return listSize;
@@ -591,7 +591,8 @@ public class ListButton extends Button {
      * Sets the list size. If the number of items in the list exceeds this
      * value, the list will scroll.
      *
-     * @param listSize
+     * @param listSize The number of visible items in the list.
+     * @throws IllegalArgumentException if the specified size is negative.
      */
     public void setListSize(int listSize) {
         if (listSize < -1) {
@@ -787,28 +788,28 @@ public class ListButton extends Button {
     }
 
     /**
-     * Returns the list button listener list.
+     * @return The list button listener list.
      */
     public ListenerList<ListButtonListener> getListButtonListeners() {
         return listButtonListeners;
     }
 
     /**
-     * Returns the list button item listener list.
+     * @return The list button item listener list.
      */
     public ListenerList<ListButtonItemListener> getListButtonItemListeners() {
         return listButtonItemListeners;
     }
 
     /**
-     * Returns the list button selection listener list.
+     * @return The list button selection listener list.
      */
     public ListenerList<ListButtonSelectionListener> getListButtonSelectionListeners() {
         return listButtonSelectionListeners;
     }
 
     /**
-     * Returns the list button binding listener list.
+     * @return The list button binding listener list.
      */
     public ListenerList<ListButtonBindingListener> getListButtonBindingListeners() {
         return listButtonBindingListeners;

@@ -20,6 +20,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.Locale;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing the system keyboard.
@@ -116,9 +117,7 @@ public final class Keyboard {
         }
 
         public static KeyStroke decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException("value is null.");
-            }
+            Utils.checkNull(value, "value");
 
             int keyCode = KeyCode.UNDEFINED;
             int modifiersLocal = 0x00;
@@ -261,7 +260,7 @@ public final class Keyboard {
     private static int modifiers = 0;
 
     /**
-     * Returns a bitfield representing the keyboard modifiers that are currently
+     * @return A bitfield representing the keyboard modifiers that are currently
      * pressed.
      */
     public static int getModifiers() {
@@ -275,7 +274,7 @@ public final class Keyboard {
     /**
      * Tests the pressed state of a modifier.
      *
-     * @param modifier
+     * @param modifier The modifier to test.
      * @return <tt>true</tt> if the modifier is pressed; <tt>false</tt>,
      * otherwise.
      */

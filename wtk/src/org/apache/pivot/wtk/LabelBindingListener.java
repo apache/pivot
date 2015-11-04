@@ -44,24 +44,24 @@ public interface LabelBindingListener {
     /**
      * Called when a label's text key has changed.
      *
-     * @param label
-     * @param previousTextKey
+     * @param label           The label whose binding has changed.
+     * @param previousTextKey The previous binding key for the label text.
      */
     public void textKeyChanged(Label label, String previousTextKey);
 
     /**
      * Called when a label's text bind type has changed.
      *
-     * @param label
-     * @param previousTextBindType
+     * @param label                The label whose binding has changed.
+     * @param previousTextBindType The previous bind type for the label text.
      */
     public void textBindTypeChanged(Label label, BindType previousTextBindType);
 
     /**
      * Called when a label's text bind mapping has changed.
      *
-     * @param label
-     * @param previousTextBindMapping
+     * @param label                   The label whose binding has changed.
+     * @param previousTextBindMapping The previous bind mapping for the label text.
      */
     public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping);
 }

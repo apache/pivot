@@ -23,6 +23,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Container that arranges components in a two-dimensional grid, where every
@@ -67,9 +68,7 @@ public class GridPane extends Container {
 
         @Override
         public void insert(Component component, int index) {
-            if (component == null) {
-                throw new IllegalArgumentException("Component is null.");
-            }
+            Utils.checkNull(component, "component");
 
             if (component.getParent() != null) {
                 throw new IllegalArgumentException("Component already has a parent.");
@@ -88,9 +87,7 @@ public class GridPane extends Container {
             Component previousComponent = cells.get(index);
 
             if (component != previousComponent) {
-                if (component == null) {
-                    throw new IllegalArgumentException("Component is null.");
-                }
+                Utils.checkNull(component, "Component");
 
                 if (component.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
@@ -188,12 +185,10 @@ public class GridPane extends Container {
 
         @Override
         public void insert(Row row, int index) {
-            if (row == null) {
-                throw new IllegalArgumentException("row is null.");
-            }
+            Utils.checkNull(row, "Row");
 
             if (row.getGridPane() != null) {
-                throw new IllegalArgumentException("row is already in use by another grid pane.");
+                throw new IllegalArgumentException("Row is already in use by another grid pane.");
             }
 
             rows.insert(row, index);
@@ -336,7 +331,7 @@ public class GridPane extends Container {
     /**
      * Creates a new grid pane with the specified column count.
      *
-     * @param columnCount
+     * @param columnCount Number of columns for this grid.
      */
     public GridPane(int columnCount) {
         if (columnCount < 0) {
@@ -359,7 +354,7 @@ public class GridPane extends Container {
     }
 
     /**
-     * Returns the number of columns in the grid pane.
+     * @return The number of columns in the grid pane.
      */
     public int getColumnCount() {
         return columnCount;
@@ -368,7 +363,7 @@ public class GridPane extends Container {
     /**
      * Sets the number of columns in the grid pane.
      *
-     * @param columnCount
+     * @param columnCount The new number of columns in the grid.
      */
     public void setColumnCount(int columnCount) {
         int previousColumnCount = this.columnCount;
@@ -380,9 +375,7 @@ public class GridPane extends Container {
     }
 
     /**
-     * Returns the grid pane row sequence.
-     *
-     * @return The grid pane row sequence
+     * @return The grid pane row sequence.
      */
     public RowSequence getRows() {
         return rowSequence;
@@ -404,6 +397,7 @@ public class GridPane extends Container {
      * Returns the bounds of a given row.
      *
      * @param row The row index.
+     * @return The bounds for the given row.
      */
     public Bounds getRowBounds(int row) {
         GridPane.Skin gridPaneSkin = (GridPane.Skin) getSkin();
@@ -426,6 +420,7 @@ public class GridPane extends Container {
      * Returns the bounds of a given column.
      *
      * @param column The column index.
+     * @return The bounds of the given column.
      */
     public Bounds getColumnBounds(int column) {
         GridPane.Skin gridPaneSkin = (GridPane.Skin) getSkin();
@@ -435,10 +430,10 @@ public class GridPane extends Container {
     /**
      * Gets the component at the specified cell in this grid pane.
      *
-     * @param rowIndex The row index of the cell
-     * @param columnIndex The column index of the cell
+     * @param rowIndex The row index of the cell.
+     * @param columnIndex The column index of the cell.
      * @return The component in the specified cell, or <tt>null</tt> if the cell
-     * is empty
+     * is empty.
      */
     public Component getCellComponent(int rowIndex, int columnIndex) {
         Row row = rows.get(rowIndex);
@@ -456,9 +451,9 @@ public class GridPane extends Container {
      * Overrides the base method to check whether or not a cell component is
      * being removed, and fires the appropriate event in that case.
      *
-     * @param index The index at which components were removed
-     * @param count The number of components removed
-     * @return The sequence of components that were removed
+     * @param index The index at which components were removed.
+     * @param count The number of components removed.
+     * @return The sequence of components that were removed.
      */
     @Override
     public Sequence<Component> remove(int index, int count) {
@@ -477,7 +472,7 @@ public class GridPane extends Container {
     }
 
     /**
-     * Returns the grid pane listener list.
+     * @return The grid pane listener list.
      */
     public ListenerList<GridPaneListener> getGridPaneListeners() {
         return gridPaneListeners;

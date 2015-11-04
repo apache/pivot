@@ -39,16 +39,16 @@ public interface LabelListener {
     /**
      * Called when a label's text has changed.
      *
-     * @param label
-     * @param previousText
+     * @param label        The label that has changed.
+     * @param previousText The previous text associated with the label.
      */
     public void textChanged(Label label, String previousText);
 
     /**
      * Called when a label text maximum length has changed.
      *
-     * @param label
-     * @param previousMaximumLength
+     * @param label                 The label that has changed.
+     * @param previousMaximumLength The previous maximum text length for the label.
      */
     public void maximumLengthChanged(Label label, int previousMaximumLength);
 

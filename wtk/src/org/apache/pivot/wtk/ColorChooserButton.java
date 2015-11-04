@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.content.ListButtonColorItemRenderer;
 
 /**
@@ -118,7 +119,7 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * @return the popup window associated with this components skin
+     * @return The popup window associated with this component's skin.
      */
     public Window getListPopup() {
         return ((ColorChooserButton.Skin) getSkin()).getColorChooserPopup();
@@ -134,8 +135,6 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * Returns the currently selected color.
-     *
      * @return The currently selected color, or <tt>null</tt> if nothing is
      * selected.
      */
@@ -163,17 +162,16 @@ public class ColorChooserButton extends Button {
      * Sets the selected color.
      *
      * @param selectedColor A string representing a color.
+     * @throws IllegalArgumentException if the string is {@code null}.
      */
     public final void setSelectedColor(String selectedColor) {
-        if (selectedColor == null) {
-            throw new IllegalArgumentException("selectedColor is null.");
-        }
+        Utils.checkNull(selectedColor, "selectedColor");
 
         setSelectedColor(Color.decode(selectedColor));
     }
 
     /**
-     * Gets the data binding key that is set on this color chooser button.
+     * @return The data binding key that is set on this color chooser button.
      */
     public String getSelectedColorKey() {
         return selectedColorKey;
@@ -181,6 +179,8 @@ public class ColorChooserButton extends Button {
 
     /**
      * Sets this color chooser button's data binding key.
+     *
+     * @param selectedColorKey The binding key for the selected color.
      */
     public void setSelectedColorKey(String selectedColorKey) {
         String previousSelectedColorKey = this.selectedColorKey;
@@ -197,9 +197,7 @@ public class ColorChooserButton extends Button {
     }
 
     public void setSelectedColorBindType(BindType selectedColorBindType) {
-        if (selectedColorBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedColorBindType, "selectedColorBindType");
 
         BindType previousSelectedColorBindType = this.selectedColorBindType;
 
@@ -273,14 +271,14 @@ public class ColorChooserButton extends Button {
     }
 
     /**
-     * Returns the color chooser button selection listener list.
+     * @return The color chooser button selection listener list.
      */
     public ListenerList<ColorChooserButtonSelectionListener> getColorChooserButtonSelectionListeners() {
         return colorChooserButtonSelectionListeners;
     }
 
     /**
-     * Returns the color chooser button binding listener list.
+     * @return The color chooser button binding listener list.
      */
     public ListenerList<ColorChooserButtonBindingListener> getColorChooserButtonBindingListeners() {
         return colorChooserButtonBindingListeners;

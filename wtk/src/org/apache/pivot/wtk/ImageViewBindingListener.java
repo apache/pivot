@@ -44,24 +44,24 @@ public interface ImageViewBindingListener {
     /**
      * Called when an image view's image key has changed.
      *
-     * @param imageView
-     * @param previousImageKey
+     * @param imageView        The image view whose binding has changed.
+     * @param previousImageKey The previous binding key for the image.
      */
     public void imageKeyChanged(ImageView imageView, String previousImageKey);
 
     /**
      * Called when a image views's image bind type has changed.
      *
-     * @param imageView
-     * @param previousImageBindType
+     * @param imageView             The image view whose binding has changed.
+     * @param previousImageBindType The previous bind type for the image.
      */
     public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType);
 
     /**
-     * Called when an image view's text bind mapping has changed.
+     * Called when an image view's bind mapping has changed.
      *
-     * @param imageView
-     * @param previousImageBindMapping
+     * @param imageView                The image view whose binding has changed.
+     * @param previousImageBindMapping The previous bind mapping for the image.
      */
     public void imageBindMappingChanged(ImageView imageView,
         ImageView.ImageBindMapping previousImageBindMapping);
