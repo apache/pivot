@@ -371,39 +371,21 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                         String fileName = saveAsTextInput.getText();
                         // Contents of the entry field could be:
                         // 1. Just a new file name in the current root directory
-                        // 2. A relative or absolute path that is an existing
-                        // directory
-                        // to navigate to
-                        // 3. A relative or absolute path including the new file
-                        // name
-                        // in an existing directory
-                        // So, first make it an absolute path
-                        // TODO: all this logic needs changing (not sure how)
-                        // with VFS
-                        // because you could type in a whole new URI and have to
-                        // change
-                        // managers
+                        // 2. A relative or absolute path that is an existing directory
+                        //    to navigate to
+                        // 3. A relative or absolute path including the new file name
+                        //    in an existing directory
+                        // But, almost none of this is easy to do in the VFS realm,
+                        // so, we are just going to assume that it is relative to the
+                        // current location and let the chips fall ...
                         try {
-                            FileObject selectedFile = manager.resolveFile(fileName);
+                            FileObject selectedFile = manager.resolveFile(fileBrowser.getRootDirectory(), fileName);
                             // if (!selectedFile.isAbsolute() &&
                             // !fileName.startsWith(File.separator)) {
-                            if (baseFileName == null
-                                || !baseFileName.isAncestor(selectedFile.getName())) {
-                                selectedFile = manager.resolveFile(fileBrowser.getRootDirectory(),
-                                    fileName);
-                            } else {
-                                // TODO: is there really anything to do here?
-                                // selectedFile =
-                                // selectedFile.getAbsoluteFile();
-                            }
                             if (selectedFile.exists() && selectedFile.getType() == FileType.FOLDER) {
                                 try {
-                                    // TODO: what to do about canonical file
-                                    // representations?
-                                    FileObject root = /*
-                                                       * selectedFile.
-                                                       * getCanonicalFile();
-                                                       */selectedFile;
+                                    // TODO: what to do about canonical file representations?
+                                    FileObject root = /* selectedFile.getCanonicalFile(); */ selectedFile;
                                     fileBrowserSheet.setRootDirectory(root);
                                     fileBrowser.setRootDirectory(root);
                                     setHostLabel(root);
@@ -415,8 +397,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                                 vote = Vote.DENY;
                             } else {
                                 FileObject root = selectedFile.getParent();
-                                if (root != null && root.exists()
-                                    && root.getType() == FileType.FOLDER) {
+                                if (root != null && root.exists() && root.getType() == FileType.FOLDER) {
                                     try {
                                         // TODO: canonical file again
                                         // fileBrowserSheet.setRootDirectory(root.getCanonicalFile());
