@@ -930,7 +930,11 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 }
 
                 // Gets the underlying file
-                File file = (File) fileTableView.getTableData().get(fileTableView.getRowAt(y));
+                int row = fileTableView.getRowAt(y);
+                if (row < 0) {
+                    return;
+                }
+                File file = (File) fileTableView.getTableData().get(row);
 
                 // Construct and show the tooltip.
                 final Tooltip tooltip = new Tooltip();
