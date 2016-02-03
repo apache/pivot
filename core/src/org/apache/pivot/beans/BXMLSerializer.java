@@ -105,6 +105,22 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
+/*    private static void printBindings(java.util.Map<String,Object> bindings) {
+	System.out.format("=== Bindings %1$s ===%n", bindings);
+	for (String key : bindings.keySet()) {
+	    Object value = bindings.get(key);
+	    System.out.format("key: %1$s, value: %2$s [%3$s]%n", key, value, Integer.toHexString(System.identityHashCode(value)));
+	    if (key.equals(NASHORN_GLOBAL)) {
+		Bindings globalBindings = (Bindings)value;
+		for (String globalKey : globalBindings.keySet()) {
+		    Object globalValue = globalBindings.get(globalKey);
+		    System.out.format("    global key: %1$s, value: %2$s [%3$s]%n", globalKey, globalValue, Integer.toHexString(System.identityHashCode(globalValue)));
+		}
+	    }
+	}
+	System.out.println("=====================");
+    }
+*/
     private class AttributeInvocationHandler implements InvocationHandler {
         private ScriptEngine scriptEngine;
         private String event;
@@ -310,6 +326,21 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             @Override
             public Object put(String key, Object value) {
+                // Okay, this is a hack that seems to fix problems with included scripts
+                // under Java 8 (Nashorn) where a new global object gets setup that
+                // doesn't include any of the old values.
+                // TODO: do we need to do this if "inline" is not true on the INCLUDE?
+                if (key.equals(NASHORN_GLOBAL)) {
+                    Object oldGlobal = namespace.put(key, value);
+                    // We have to copy the old global values into the new one
+                    if (oldGlobal != null && oldGlobal instanceof Bindings &&
+                        value != null && value instanceof Bindings) {
+                        Bindings oldGlobalBindings = (Bindings)oldGlobal;
+                        Bindings newBindings = (Bindings)value;
+                        newBindings.putAll(oldGlobalBindings);
+                    }
+                    return oldGlobal;
+                }
                 return namespace.put(key, value);
             }
 
@@ -977,7 +1008,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     case INCLUDE: {
                         property = (localName.equals(INCLUDE_SRC_ATTRIBUTE)
                             || localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)
-                            || localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE) || localName.equals(INCLUDE_INLINE_ATTRIBUTE));
+                            || localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE)
+                            || localName.equals(INCLUDE_INLINE_ATTRIBUTE));
                         break;
                     }
 
@@ -1304,8 +1336,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         + "\" not found.");
                 }
 
-                // Don't pollute the engine namespace with the listener
-                // functions
+                // Don't pollute the engine namespace with the listener functions
                 scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
 
                 try {
