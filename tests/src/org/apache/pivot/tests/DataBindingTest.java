@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.tests;
 
+import java.awt.Color;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
@@ -24,6 +25,7 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
@@ -88,6 +90,22 @@ public class DataBindingTest extends Application.Adapter {
     }
 
     private Window window = null;
+    private HashMap<String, Object> context = new HashMap<String, Object>();
+    private int currentColorIndex = -1;
+
+    private static Color[] labelColors = {
+        Color.RED,
+        Color.decode("#FFA500"),
+        Color.decode("#FFD700"),
+        Color.GREEN,
+        Color.BLUE,
+        Color.decode("#4B0082"),
+        Color.decode("#EE82EE")
+    };
+    private Color getNextColor() {
+        currentColorIndex = (currentColorIndex + 1) % labelColors.length;
+        return labelColors[currentColorIndex];
+    }
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -95,18 +113,29 @@ public class DataBindingTest extends Application.Adapter {
         window = (Window) bxmlSerializer.readObject(DataBindingTest.class, "data_binding_test.bxml");
         window.open(display);
 
-        HashMap<String, Object> context = new HashMap<String, Object>();
         context.put("id1", "1");
         context.put("id2", "2");
         context.put("id3", "3");
 
         window.getContent().load(context);
 
-        context = new HashMap<String, Object>();
-        window.getContent().store(context);
-
-        Label textLabel = (Label)(bxmlSerializer.getNamespace().get("bindingDataText"));
+        final Label textLabel = (Label)(bxmlSerializer.getNamespace().get("bindingDataText"));
         textLabel.setText(JSONSerializer.toString(context));
+
+        Button storeButton = (Button)(bxmlSerializer.getNamespace().get("storeButton"));
+        storeButton.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                window.getContent().store(context);
+                try {
+                    textLabel.setText(JSONSerializer.toString(context));
+                    textLabel.getStyles().put("color", getNextColor());
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
     }
 
     @Override
