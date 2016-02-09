@@ -22,14 +22,33 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <bxml:define xmlns="org.apache.pivot.collections">
         <ArrayList bxml:id="list">
-            <HashMap id="1" text="A"/>
-            <HashMap id="2" text="B"/>
-            <HashMap id="3" text="C"/>
-            <HashMap id="4" text="D"/>
+            <HashMap id="1" text="A 'No' uttered from the deepest conviction is better than a 'Yes' merely uttered to please, or worse, to avoid trouble."/>
+            <HashMap id="2" text="Back of every noble life there are principles that have fashioned it."/>
+            <HashMap id="3" text="Calamities are of two kinds: misfortune to ourselves, and good fortune to others."/>
+            <HashMap id="4" text="Danger breeds best on too much confidence."/>
         </ArrayList>
     </bxml:define>
 
-    <BoxPane orientation="vertical">
+    <BoxPane orientation="vertical" styles="{fill:true, padding:10}">
+        <Separator heading="A TableView containing the underlying data for each component below:"/>
+        <Border>
+            <ScrollPane horizontalScrollBarPolicy="fill" >
+                <TableView tableData="$list" bxml:id="dataTableView" >
+                    <columns>
+                        <TableView.Column name="id" headerData="ID" width="20" />
+                        <TableView.Column name="text" headerData="Text" width="1*"/>
+                    </columns>
+                </TableView>
+                <columnHeader>
+                    <TableViewHeader tableView="$dataTableView" sortMode="single_column"/>
+                </columnHeader>
+            </ScrollPane>
+        </Border>
+
+        <Separator heading="This is the 'selected item' binding data for each component:"/>
+        <Label bxml:id="bindingDataText"/>
+
+        <Separator heading="A ListView with selected key 'id1':"/>
         <ListView listData="$list" selectedItemKey="id1">
             <itemRenderer>
                 <tests:DataBindingTest.TestListViewItemRenderer/>
@@ -39,6 +58,7 @@ limitations under the License.
             </selectedItemBindMapping>
         </ListView>
 
+        <Separator heading="A ListButton with selected key 'id2':"/>
         <ListButton listData="$list" selectedItemKey="id2">
             <dataRenderer>
                 <tests:DataBindingTest.TestListButtonDataRenderer/>
@@ -51,6 +71,7 @@ limitations under the License.
             </selectedItemBindMapping>
         </ListButton>
 
+        <Separator heading="A Spinner with selected key 'id3':"/>
         <Spinner spinnerData="$list" selectedItemKey="id3">
             <itemRenderer>
                 <tests:DataBindingTest.TestSpinnerItemRenderer/>
@@ -59,5 +80,13 @@ limitations under the License.
                 <tests:DataBindingTest.TestBindMapping/>
             </selectedItemBindMapping>
         </Spinner>
+
+        <Separator/>
+        <Border styles="{padding:6,backgroundColor:'#F0E68C'}">
+            <BoxPane orientation="horizontal">
+                <Label text="Quotes taken from here:"/>
+                <HyperlinkButton uri="http://www.quotes.net"/>
+            </BoxPane>
+        </Border>
     </BoxPane>
 </Window>

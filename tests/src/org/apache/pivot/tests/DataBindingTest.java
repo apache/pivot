@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.Window;
@@ -36,33 +37,12 @@ import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 public class DataBindingTest extends Application.Adapter {
     public static class TestListButtonDataRenderer extends ListButtonDataRenderer {
         @Override
-        public void render(final Object data, Button button, boolean highlighted) {
-            Object dataLoaded = data;
-            if (dataLoaded != null) {
-                dataLoaded = JSON.get(data, "text");
-            }
-
-            super.render(dataLoaded, button, highlighted);
-        }
-
-        @Override
-        public String toString(Object data) {
-            return JSON.get(data, "text");
+        public String toString(Object item) {
+            return JSON.get(item, "text");
         }
     }
 
     public static class TestListViewItemRenderer extends ListViewItemRenderer {
-        @Override
-        public void render(final Object item, int index, final ListView listView, boolean selected,
-            Button.State state, boolean highlighted, boolean disabled) {
-            Object itemLoaded = item;
-            if (itemLoaded != null) {
-                itemLoaded = JSON.get(item, "text");
-            }
-
-            super.render(itemLoaded, index, listView, selected, state, highlighted, disabled);
-        }
-
         @Override
         public String toString(Object item) {
             return JSON.get(item, "text");
@@ -71,23 +51,13 @@ public class DataBindingTest extends Application.Adapter {
 
     public static class TestSpinnerItemRenderer extends SpinnerItemRenderer {
         @Override
-        public void render(final Object item, final Spinner spinner) {
-            Object itemLoaded = item;
-            if (itemLoaded != null) {
-                itemLoaded = JSON.get(item, "text");
-            }
-
-            super.render(itemLoaded, spinner);
-        }
-
-        @Override
         public String toString(Object item) {
             return JSON.get(item, "text");
         }
     }
 
-    public static class TestBindMapping implements ListView.ItemBindMapping,
-        Spinner.ItemBindMapping {
+    public static class TestBindMapping
+        implements ListView.ItemBindMapping, Spinner.ItemBindMapping {
         @Override
         public int indexOf(List<?> list, Object value) {
             int i = 0;
@@ -135,7 +105,8 @@ public class DataBindingTest extends Application.Adapter {
         context = new HashMap<>();
         window.getContent().store(context);
 
-        System.out.println(JSONSerializer.toString(context));
+        Label textLabel = (Label)(bxmlSerializer.getNamespace().get("bindingDataText"));
+        textLabel.setText(JSONSerializer.toString(context));
     }
 
     @Override
