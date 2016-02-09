@@ -45,8 +45,8 @@ limitations under the License.
             </ScrollPane>
         </Border>
 
-        <Separator heading="This is the 'selected item' binding data for each component:"/>
-        <Label bxml:id="bindingDataText"/>
+        <Separator heading="This is the current 'selected item' binding data for each component:"/>
+        <Label bxml:id="bindingDataText" styles="{font:'Monospaced Bold'}"/>
 
         <Separator heading="A ListView with selected key 'id1':"/>
         <ListView listData="$list" selectedItemKey="id1">
@@ -81,6 +81,11 @@ limitations under the License.
             </selectedItemBindMapping>
         </Spinner>
 
+        <Separator heading="Press 'Store' to test the other half of data binding."/>
+        <BoxPane styles="{horizontalAlignment:'center'}">
+            <PushButton bxml:id="storeButton" buttonData="Store"/>
+        </BoxPane>
+
         <Separator/>
         <Border styles="{padding:6,backgroundColor:'#F0E68C'}">
             <BoxPane orientation="horizontal">
@@ -88,5 +93,6 @@ limitations under the License.
                 <HyperlinkButton uri="http://www.quotes.net"/>
             </BoxPane>
         </Border>
+
     </BoxPane>
 </Window>
