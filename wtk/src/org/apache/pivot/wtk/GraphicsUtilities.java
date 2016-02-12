@@ -228,11 +228,14 @@ public final class GraphicsUtilities {
                 color = (Color)Color.class.getDeclaredField(valueLowercase).get(null);
             } catch (Exception exception) {
                 // PIVOT-985: special case for two values (plus spelling variants)
-                // that don't work with just a pure lower case name lookup
+                // that don't work with just a pure lower case name lookup, plus the
+                // British spelling variant of the standard "gray".
                 if (valueLowercase.equals("darkgray") || valueLowercase.equals("darkgrey")) {
                     color = Color.darkGray;
                 } else if (valueLowercase.equals("lightgray") || valueLowercase.equals("lightgrey")) {
                     color = Color.lightGray;
+                } else if (valueLowercase.equals("grey")) {
+                    color = Color.gray;
                 } else {
                     throw new IllegalArgumentException("\"" + valueLowercase
                         + "\" is not a valid color constant.");
