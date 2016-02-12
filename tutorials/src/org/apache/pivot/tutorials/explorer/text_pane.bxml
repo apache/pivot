@@ -29,7 +29,7 @@ limitations under the License.
         <Paragraph font="Arial BOLD 24">abcd</Paragraph>
         <Paragraph font="Arial ITALIC 24">abcd</Paragraph>
         <Paragraph foregroundColor="red">abcd</Paragraph>
-        <Paragraph backgroundColor="red">abcd</Paragraph>
+        <Paragraph backgroundColor="lightGray">abcd</Paragraph>
         <Paragraph>abcd</Paragraph>
         <NumberedList style="decimal">
           <List.Item>
