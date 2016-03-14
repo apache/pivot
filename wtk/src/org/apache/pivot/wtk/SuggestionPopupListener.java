@@ -47,8 +47,8 @@ public interface SuggestionPopupListener {
     /**
      * Called when a suggestion popup's suggestions have changed.
      *
-     * @param suggestionPopup
-     * @param previousSuggestionData
+     * @param suggestionPopup The source of this event.
+     * @param previousSuggestionData The previous data that was being shown.
      */
     public void suggestionDataChanged(SuggestionPopup suggestionPopup,
         List<?> previousSuggestionData);
@@ -56,8 +56,8 @@ public interface SuggestionPopupListener {
     /**
      * Called when a suggestion popup's item renderer has changed.
      *
-     * @param suggestionPopup
-     * @param previousSuggestionRenderer
+     * @param suggestionPopup The source of this event.
+     * @param previousSuggestionRenderer The previous item renderer.
      */
     public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
         ListView.ItemRenderer previousSuggestionRenderer);
@@ -65,8 +65,8 @@ public interface SuggestionPopupListener {
     /**
      * Called when a suggestion popup's list size has changed.
      *
-     * @param suggestionPopup
-     * @param previousListSize
+     * @param suggestionPopup The source of this event.
+     * @param previousListSize The previous value of the visible window.
      */
     public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize);
 }

@@ -23,8 +23,8 @@ public interface SliderValueListener {
     /**
      * Called when a slider's value has changed.
      *
-     * @param slider
-     * @param previousValue
+     * @param slider The slider whose value has changed.
+     * @param previousValue What the previous value was.
      */
     public void valueChanged(Slider slider, int previousValue);
 }

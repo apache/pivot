@@ -43,16 +43,16 @@ public interface MeterListener {
     /**
      * Called when a meter's percentage value has changed.
      *
-     * @param meter
-     * @param previousPercentage
+     * @param meter The meter that is changing.
+     * @param previousPercentage What the meter's percentage value used to be.
      */
     public void percentageChanged(Meter meter, double previousPercentage);
 
     /**
      * Called when a meter's text has changed.
      *
-     * @param meter
-     * @param previousText
+     * @param meter The meter that has changed.
+     * @param previousText The previous meter text.
      */
     public void textChanged(Meter meter, String previousText);
 

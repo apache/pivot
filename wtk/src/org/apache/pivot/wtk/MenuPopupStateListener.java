@@ -45,23 +45,24 @@ public interface MenuPopupStateListener {
     /**
      * Called to preview a menu popup close event.
      *
-     * @param menuPopup
-     * @param immediate
+     * @param menuPopup The source of the event.
+     * @param immediate Whether the close is meant to be immediate.
+     * @return The verdict as to whether to close from this listener.
      */
     public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate);
 
     /**
      * Called when a menu popup close event has been vetoed.
      *
-     * @param menuPopup
-     * @param reason
+     * @param menuPopup The source of the event.
+     * @param reason The accumulated vote that caused the veto.
      */
     public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason);
 
     /**
      * Called when a menu popup has closed.
      *
-     * @param menuPopup
+     * @param menuPopup The menu popup that closed.
      */
     public void menuPopupClosed(MenuPopup menuPopup);
 }

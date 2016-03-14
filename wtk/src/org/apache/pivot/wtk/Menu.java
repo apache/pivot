@@ -202,15 +202,15 @@ public class Menu extends Container {
         /**
          * Called when an item's menu has changed.
          *
-         * @param item
-         * @param previousMenu
+         * @param item The item that has been moved.
+         * @param previousMenu The menu where the item used to live.
          */
         public void menuChanged(Item item, Menu previousMenu);
 
         /**
          * Called when an item's active state has changed.
          *
-         * @param item
+         * @param item The item that is changing.
          */
         public void activeChanged(Item item);
     }
@@ -357,25 +357,25 @@ public class Menu extends Container {
         /**
          * Called when a menu item has been inserted.
          *
-         * @param section
-         * @param index
+         * @param section The section that is changing.
+         * @param index The index where the item was inserted.
          */
         public void itemInserted(Section section, int index);
 
         /**
          * Called when menu items have been removed.
          *
-         * @param section
-         * @param index
-         * @param removed
+         * @param section The section that has changed.
+         * @param index The starting index of the removed items.
+         * @param removed The sequence of the items that were removed.
          */
         public void itemsRemoved(Section section, int index, Sequence<Item> removed);
 
         /**
          * Called when a section's name has changed.
          *
-         * @param section
-         * @param previousName
+         * @param section The section that changed.
+         * @param previousName The previous name for this section.
          */
         public void nameChanged(Section section, String previousName);
     }
@@ -518,7 +518,7 @@ public class Menu extends Container {
     }
 
     /**
-     * Retrieves the parent item of this menu.
+     * @return The parent item of this menu.
      */
     public Item getItem() {
         return item;

@@ -51,41 +51,41 @@ public interface SuggestionPopupItemListener {
     }
 
     /**
-     * Called when an item is inserted into a list button's list data.
+     * Called when an item is inserted into the suggestion popup's data list.
      *
-     * @param suggestionPopup
-     * @param index
+     * @param suggestionPopup The source of this event.
+     * @param index The location where the item was inserted.
      */
     public void itemInserted(SuggestionPopup suggestionPopup, int index);
 
     /**
-     * Called when items are removed from a list button's list data.
+     * Called when items are removed from the suggestion popup's data list.
      *
-     * @param suggestionPopup
-     * @param index
-     * @param count
+     * @param suggestionPopup The source of this event.
+     * @param index The starting index where items were removed.
+     * @param count The number of items that were removed.
      */
     public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count);
 
     /**
-     * Called when an item is updated within a list button's list data.
+     * Called when an item is updated within a suggestion popup's data list.
      *
-     * @param suggestionPopup
-     * @param index
+     * @param suggestionPopup The source of this event.
+     * @param index Which item was updated.
      */
     public void itemUpdated(SuggestionPopup suggestionPopup, int index);
 
     /**
      * Called when a list button's list data has been cleared.
      *
-     * @param suggestionPopup
+     * @param suggestionPopup The source of this event.
      */
     public void itemsCleared(SuggestionPopup suggestionPopup);
 
     /**
      * Called when a list button's list data is sorted.
      *
-     * @param suggestionPopup
+     * @param suggestionPopup The source of this event.
      */
     public void itemsSorted(SuggestionPopup suggestionPopup);
 }

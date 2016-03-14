@@ -23,8 +23,8 @@ public interface TableViewHeaderPressListener {
     /**
      * Called when a table view header has been pressed.
      *
-     * @param tableViewHeader
-     * @param index
+     * @param tableViewHeader The source of this event.
+     * @param index The location in this header that was pressed.
      */
     public void headerPressed(TableViewHeader tableViewHeader, int index);
 }

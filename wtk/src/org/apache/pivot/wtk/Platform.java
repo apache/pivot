@@ -96,7 +96,7 @@ public class Platform {
     }
 
     /**
-     * Returns the system multi-click interval.
+     * @return The system multi-click interval.
      */
     public static int getMultiClickInterval() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -110,7 +110,7 @@ public class Platform {
     }
 
     /**
-     * Returns the system cursor blink rate.
+     * @return The system cursor blink rate.
      */
     public static int getCursorBlinkRate() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -124,28 +124,28 @@ public class Platform {
     }
 
     /**
-     * Returns the system drag threshold.
+     * @return The system drag threshold.
      */
     public static int getDragThreshold() {
         return java.awt.dnd.DragSource.getDragThreshold();
     }
 
     /**
-     * Returns the system command modifier key.
+     * @return The system command modifier key.
      */
     public static Modifier getCommandModifier() {
         return COMMAND_MODIFIER;
     }
 
     /**
-     * Returns the word navigation modifier key.
+     * @return The word navigation modifier key.
      */
     public static Modifier getWordNavigationModifier() {
         return WORD_NAVIGATION_MODIFIER;
     }
 
     /**
-     * Returns the keystroke modifier separator text.
+     * @return The keystroke modifier separator text.
      */
     public static String getKeyStrokeModifierSeparator() {
         return KEYSTROKE_MODIFIER_SEPARATOR;

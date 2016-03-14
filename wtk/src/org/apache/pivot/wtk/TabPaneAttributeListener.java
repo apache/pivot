@@ -39,9 +39,9 @@ public interface TabPaneAttributeListener {
     /**
      * Called when a tab's tab data attribute has changed.
      *
-     * @param tabPane
-     * @param component
-     * @param previousTabData
+     * @param tabPane The source of this event.
+     * @param component The component whose tab pane data has changed.
+     * @param previousTabData What the tab data attribute used to be.
      */
     public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData);
 

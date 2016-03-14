@@ -57,8 +57,8 @@ public class RangeSelection {
      * Adds a range to the selection, merging and removing intersecting ranges
      * as needed.
      *
-     * @param start
-     * @param end
+     * @param start Where to start the new range.
+     * @param end The end of the new range.
      * @return A sequence containing the ranges that were added.
      */
     public Sequence<Span> addRange(int start, int end) {
@@ -155,8 +155,8 @@ public class RangeSelection {
      * Removes a range from the selection, truncating and removing intersecting
      * ranges as needed.
      *
-     * @param start
-     * @param end
+     * @param start Start of the range to remove.
+     * @param end The end of the range to remove.
      * @return A sequence containing the ranges that were removed.
      */
     public Sequence<Span> removeRange(int start, int end) {
@@ -242,23 +242,23 @@ public class RangeSelection {
     }
 
     /**
-     * Returns the range at a given index.
+     * @return The range at a given index.
      *
-     * @param index
+     * @param index The index in question.
      */
     public Span get(int index) {
         return selectedRanges.get(index);
     }
 
     /**
-     * Returns the number of ranges in the selection.
+     * @return The number of ranges in the selection.
      */
     public int getLength() {
         return selectedRanges.getLength();
     }
 
     /**
-     * Returns an immutable wrapper around the selected ranges.
+     * @return An immutable wrapper around the selected ranges.
      */
     public ImmutableList<Span> getSelectedRanges() {
         return new ImmutableList<>(selectedRanges);
@@ -267,7 +267,7 @@ public class RangeSelection {
     /**
      * Determines the index of a range in the selection.
      *
-     * @param range
+     * @param range The range to look for.
      * @return The index of the range, if it exists in the selection;
      * <tt>-1</tt>, otherwise.
      */
@@ -287,7 +287,7 @@ public class RangeSelection {
     /**
      * Tests for the presence of an index in the selection.
      *
-     * @param index
+     * @param index The index to look for in the selection.
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
     public boolean containsIndex(int index) {
@@ -301,7 +301,7 @@ public class RangeSelection {
      * Inserts an index into the span sequence (e.g. when items are inserted
      * into the model data).
      *
-     * @param index
+     * @param index The location to insert into the sequence.
      * @return The number of ranges that were updated.
      */
     public int insertIndex(int index) {
@@ -345,8 +345,8 @@ public class RangeSelection {
      * Removes a range of indexes from the span sequence (e.g. when items are
      * removed from the model data).
      *
-     * @param index
-     * @param count
+     * @param index Start index to remove.
+     * @param count Number of indexes to remove.
      * @return The number of ranges that were updated.
      */
     public int removeIndexes(int index, int count) {
@@ -377,8 +377,8 @@ public class RangeSelection {
     /**
      * Ensures that the start value is less than or equal to the end value.
      *
-     * @param start
-     * @param end
+     * @param start The new proposed start value.
+     * @param end The new proposed end.
      * @return A span containing the normalized range.
      */
     public static Span normalize(int start, int end) {

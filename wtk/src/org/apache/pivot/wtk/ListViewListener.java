@@ -79,46 +79,46 @@ public interface ListViewListener {
     /**
      * Called when a list view's list data has changed.
      *
-     * @param listView
-     * @param previousListData
+     * @param listView         The source of the event.
+     * @param previousListData The previous list data that was displayed.
      */
     public void listDataChanged(ListView listView, List<?> previousListData);
 
     /**
      * Called when a list view's item renderer has changed.
      *
-     * @param listView
-     * @param previousItemRenderer
+     * @param listView             The source of the event.
+     * @param previousItemRenderer The previous renderer used for each item.
      */
     public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer);
 
     /**
      * Called when a list view's item editor has changed.
      *
-     * @param listView
-     * @param previousItemEditor
+     * @param listView           The source of the event.
+     * @param previousItemEditor The previous editor used for updating items.
      */
     public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor);
 
     /**
      * Called when a list view's select mode has changed.
      *
-     * @param listView
-     * @param previousSelectMode
+     * @param listView           The source of the event.
+     * @param previousSelectMode The previous selection mode.
      */
     public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode);
 
     /**
      * Called when a list view's checkmarks enabled flag has changed.
      *
-     * @param listView
+     * @param listView The list view that has been changed.
      */
     public void checkmarksEnabledChanged(ListView listView);
 
     /**
      * Called when a list view's tri-state checkmarks flag has been changed.
      *
-     * @param listView
+     * @param listView The list view that has been changed.
      */
     public void checkmarksTriStateChanged(ListView listView);
 
@@ -126,23 +126,24 @@ public interface ListViewListener {
      * Called when a list view's flag to decide if mixed checkbox state should
      * be treated as checked has been changed.
      *
-     * @param listView
+     * @param listView The list view that has been changed.
      */
     public void checkmarksMixedAsCheckedChanged(ListView listView);
 
     /**
      * Called when a list view's disabled item filter has changed.
      *
-     * @param listView
-     * @param previousDisabledItemFilter
+     * @param listView                   The source of the event.
+     * @param previousDisabledItemFilter The previous filter function used to disable specific items.
      */
     public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter);
 
     /**
      * Called when a list view's disabled checkmark filter has changed.
      *
-     * @param listView
-     * @param previousDisabledCheckmarkFilter
+     * @param listView                        The source of the event.
+     * @param previousDisabledCheckmarkFilter The previous filter function used to disable checkmarks
+     *                                        for certain items.
      */
     public void disabledCheckmarkFilterChanged(ListView listView,
         Filter<?> previousDisabledCheckmarkFilter);

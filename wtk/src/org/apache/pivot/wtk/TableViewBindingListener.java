@@ -78,24 +78,24 @@ public interface TableViewBindingListener {
     /**
      * Called when a table view's table data key has changed.
      *
-     * @param tableView
-     * @param previousTableDataKey
+     * @param tableView The source of this event.
+     * @param previousTableDataKey The previous key for the table data.
      */
     public void tableDataKeyChanged(TableView tableView, String previousTableDataKey);
 
     /**
      * Called when a table view's table data bind type has changed.
      *
-     * @param tableView
-     * @param previousTableDataBindType
+     * @param tableView The source of this event.
+     * @param previousTableDataBindType The previous bind type for the table data.
      */
     public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType);
 
     /**
      * Called when a table view's table data bind mapping has changed.
      *
-     * @param tableView
-     * @param previousTableDataBindMapping
+     * @param tableView The source of this event.
+     * @param previousTableDataBindMapping The previous bind mapping for the table data.
      */
     public void tableDataBindMappingChanged(TableView tableView,
         TableView.TableDataBindMapping previousTableDataBindMapping);
@@ -103,24 +103,24 @@ public interface TableViewBindingListener {
     /**
      * Called when a table view's selected row key has changed.
      *
-     * @param tableView
-     * @param previousSelectedRowKey
+     * @param tableView The source of this event.
+     * @param previousSelectedRowKey The previous key for the selected row.
      */
     public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey);
 
     /**
      * Called when a table view's selected row bind type has changed.
      *
-     * @param tableView
-     * @param previousSelectedRowBindType
+     * @param tableView The source of this event.
+     * @param previousSelectedRowBindType The previous bind type for the selected row.
      */
     public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType);
 
     /**
      * Called when a table view's selected row bind mapping has changed.
      *
-     * @param tableView
-     * @param previousSelectedRowBindMapping
+     * @param tableView The source of the event.
+     * @param previousSelectedRowBindMapping The previous bind mapping for the selected row.
      */
     public void selectedRowBindMappingChanged(TableView tableView,
         TableView.SelectedRowBindMapping previousSelectedRowBindMapping);
@@ -128,16 +128,16 @@ public interface TableViewBindingListener {
     /**
      * Called when a table view's selected rows key has changed.
      *
-     * @param tableView
-     * @param previousSelectedRowsKey
+     * @param tableView The source of this event.
+     * @param previousSelectedRowsKey The previous key for obtaining the selected rows value.
      */
     public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey);
 
     /**
      * Called when a table view's selected rows bind type has changed.
      *
-     * @param tableView
-     * @param previousSelectedRowsBindType
+     * @param tableView The source of this event.
+     * @param previousSelectedRowsBindType The previous bind type for the selected rows.
      */
     public void selectedRowsBindTypeChanged(TableView tableView,
         BindType previousSelectedRowsBindType);
@@ -145,8 +145,8 @@ public interface TableViewBindingListener {
     /**
      * Called when a table view's selected rows bind mapping has changed.
      *
-     * @param tableView
-     * @param previousSelectedRowsBindMapping
+     * @param tableView The source of this event.
+     * @param previousSelectedRowsBindMapping The previous value of the bind mapping for the selected rows.
      */
     public void selectedRowsBindMappingChanged(TableView tableView,
         TableView.SelectedRowBindMapping previousSelectedRowsBindMapping);

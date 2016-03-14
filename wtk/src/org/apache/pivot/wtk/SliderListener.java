@@ -38,9 +38,9 @@ public interface SliderListener {
     /**
      * Called when a slider's range has changed.
      *
-     * @param slider
-     * @param previousStart
-     * @param previousEnd
+     * @param slider The slider that has changed.
+     * @param previousStart The previous start of the slider's range.
+     * @param previousEnd The previous end value.
      */
     public void rangeChanged(Slider slider, int previousStart, int previousEnd);
 

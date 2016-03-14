@@ -49,17 +49,17 @@ public interface TableViewSortListener {
     /**
      * Called when a sort has been added to a table view.
      *
-     * @param tableView
-     * @param columnName
+     * @param tableView The source of this event.
+     * @param columnName The new column name added to the sort criteria.
      */
     public void sortAdded(TableView tableView, String columnName);
 
     /**
      * Called when a sort has been updated in a table view.
      *
-     * @param tableView
-     * @param columnName
-     * @param previousSortDirection
+     * @param tableView The source of this event.
+     * @param columnName The column that was updated.
+     * @param previousSortDirection The previous value of the sort direction for this column.
      */
     public void sortUpdated(TableView tableView, String columnName,
         SortDirection previousSortDirection);
@@ -67,16 +67,16 @@ public interface TableViewSortListener {
     /**
      * Called when a sort has been removed from a table view.
      *
-     * @param tableView
-     * @param columnName
-     * @param sortDirection
+     * @param tableView The source of this event.
+     * @param columnName The column name that was removed from the sort criteria.
+     * @param sortDirection What the sort direction was for this column.
      */
     public void sortRemoved(TableView tableView, String columnName, SortDirection sortDirection);
 
     /**
      * Called when a table view's sort has changed.
      *
-     * @param tableView
+     * @param tableView The source of this event.
      */
     public void sortChanged(TableView tableView);
 }

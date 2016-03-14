@@ -23,8 +23,8 @@ public interface SeparatorListener {
     /**
      * Called when a separator's heading has changed.
      *
-     * @param separator
-     * @param previousHeading
+     * @param separator The separator that changed.
+     * @param previousHeading What the heading used to be.
      */
     public void headingChanged(Separator separator, String previousHeading);
 }

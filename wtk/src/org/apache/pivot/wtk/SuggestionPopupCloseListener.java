@@ -23,7 +23,7 @@ public interface SuggestionPopupCloseListener {
     /**
      * Called when a suggestion popup has closed.
      *
-     * @param suggestionPopup
+     * @param suggestionPopup The suggestion popup that has closed.
      */
     public void suggestionPopupClosed(SuggestionPopup suggestionPopup);
 }

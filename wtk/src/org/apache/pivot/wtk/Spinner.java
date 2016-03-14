@@ -53,7 +53,7 @@ public class Spinner extends Container {
         /**
          * Converts a spinner item to a string representation.
          *
-         * @param item
+         * @param item The item from the spinner's data.
          * @return The item's string representation, or <tt>null</tt> if the item
          * does not have a string representation. <p> Note that this method may
          * be called often during keyboard navigation, so implementations should
@@ -70,7 +70,8 @@ public class Spinner extends Container {
          * Converts a context value to spinner data during a
          * {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value retrieved from the user context.
+         * @return That object converted to a list.
          */
         public List<?> toSpinnerData(Object value);
 
@@ -78,7 +79,8 @@ public class Spinner extends Container {
          * Converts spinner data to a context value during a
          * {@link Component#store(Object)} operation.
          *
-         * @param spinnerData
+         * @param spinnerData The spinner data list.
+         * @return This list converted to data that can be stored in the user context.
          */
         public Object valueOf(List<?> spinnerData);
     }
@@ -112,6 +114,7 @@ public class Spinner extends Container {
          *
          * @param spinnerData The source spinner data.
          * @param index The index of the value to retrieve.
+         * @return The item at the given index.
          */
         public Object get(List<?> spinnerData, int index);
     }
@@ -369,8 +372,6 @@ public class Spinner extends Container {
     }
 
     /**
-     * Returns the spinner data.
-     *
      * @return The data currently presented by the spinner.
      */
     public List<?> getSpinnerData() {
@@ -436,7 +437,7 @@ public class Spinner extends Container {
     }
 
     /**
-     * Returns the item renderer used for items in this list.
+     * @return The item renderer used for items in this list.
      */
     public ItemRenderer getItemRenderer() {
         return itemRenderer;
@@ -445,7 +446,7 @@ public class Spinner extends Container {
     /**
      * Sets the item renderer to be used for items in this list.
      *
-     * @param itemRenderer The item renderer for the list.
+     * @param itemRenderer The new item renderer for the list.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
         if (itemRenderer == null) {
@@ -461,12 +462,17 @@ public class Spinner extends Container {
     }
 
     /**
+     * @return Whether or not this spinner's values are circular.
      */
     public boolean isCircular() {
         return circular;
     }
 
     /**
+     * Set whether the values in this spinner wrap around from the end
+     * back to the beginning (and vice-versa).
+     *
+     * @param circular The new setting for this spinner.
      */
     public void setCircular(boolean circular) {
         if (circular != this.circular) {
@@ -476,8 +482,6 @@ public class Spinner extends Container {
     }
 
     /**
-     * Returns the currently selected index.
-     *
      * @return The currently selected index.
      */
     public int getSelectedIndex() {
@@ -700,28 +704,28 @@ public class Spinner extends Container {
     }
 
     /**
-     * Returns the spinner listener list.
+     * @return The spinner listener list.
      */
     public ListenerList<SpinnerListener> getSpinnerListeners() {
         return spinnerListeners;
     }
 
     /**
-     * Returns the spinner item listener list.
+     * @return The spinner item listener list.
      */
     public ListenerList<SpinnerItemListener> getSpinnerItemListeners() {
         return spinnerItemListeners;
     }
 
     /**
-     * Returns the spinner selection listener list.
+     * @return The spinner selection listener list.
      */
     public ListenerList<SpinnerSelectionListener> getSpinnerSelectionListeners() {
         return spinnerSelectionListeners;
     }
 
     /**
-     * Returns the spinner binding listener list.
+     * @return The spinner binding listener list.
      */
     public ListenerList<SpinnerBindingListener> getSpinnerBindingListeners() {
         return spinnerBindingListeners;

@@ -113,7 +113,7 @@ public abstract class Viewport extends Container {
     }
 
     /**
-     * Returns the (single) component (typically a {@link Container}) that we
+     * @return The (single) component (typically a {@link Container}) that we
      * are providing a windowed (or scrollable) view of.
      */
     public Component getView() {
@@ -123,6 +123,8 @@ public abstract class Viewport extends Container {
     /**
      * Set the single component (typically a {@link Container}) that we will
      * provide a windowed (or scrollable) view of.
+     *
+     * @param view The new component (container) we are viewing.
      */
     public void setView(Component view) {
         Component previousView = this.view;
@@ -173,7 +175,7 @@ public abstract class Viewport extends Container {
     }
 
     /**
-     * The bounds of the Viewport within the container, for example, in
+     * @return The bounds of the Viewport within the container, for example, in
      * ScrollPaneSkin, this excludes the scrollbars.
      */
     public Bounds getViewportBounds() {

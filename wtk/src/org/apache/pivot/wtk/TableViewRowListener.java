@@ -79,7 +79,7 @@ public interface TableViewRowListener {
     /**
      * Called when the rows in a table view have been cleared.
      *
-     * @param tableView
+     * @param tableView The source of the event.
      */
     public void rowsCleared(TableView tableView);
 

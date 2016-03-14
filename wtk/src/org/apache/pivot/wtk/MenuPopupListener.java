@@ -23,8 +23,8 @@ public interface MenuPopupListener {
     /**
      * Called when a menu popup's menu has changed.
      *
-     * @param menuPopup
-     * @param previousMenu
+     * @param menuPopup The menu popup source of this event.
+     * @param previousMenu What the menu used to be for this popup.
      */
     public void menuChanged(MenuPopup menuPopup, Menu previousMenu);
 }

@@ -79,7 +79,7 @@ public interface ListViewItemListener {
     /**
      * Called when the items in a list view have been cleared.
      *
-     * @param listView
+     * @param listView The source of the event.
      */
     public void itemsCleared(ListView listView);
 

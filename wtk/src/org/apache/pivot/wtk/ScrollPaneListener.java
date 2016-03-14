@@ -55,8 +55,8 @@ public interface ScrollPaneListener {
     /**
      * Called when the scroll pane's horizontal scroll bar policy changed.
      *
-     * @param scrollPane
-     * @param previousPolicy
+     * @param scrollPane The source of the event.
+     * @param previousPolicy The previous horizontal scroll bar policy.
      */
     public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollPane.ScrollBarPolicy previousPolicy);
@@ -64,8 +64,8 @@ public interface ScrollPaneListener {
     /**
      * Called when the scroll pane's vertical scroll bar policy changed.
      *
-     * @param scrollPane
-     * @param previousPolicy
+     * @param scrollPane The source of the event.
+     * @param previousPolicy The previous vertical scroll bar policy.
      */
     public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollPane.ScrollBarPolicy previousPolicy);
@@ -73,24 +73,24 @@ public interface ScrollPaneListener {
     /**
      * Called when the scroll pane's row header changed.
      *
-     * @param scrollPane
-     * @param previousRowHeader
+     * @param scrollPane The source of the event.
+     * @param previousRowHeader The previous row header for this scroll pane.
      */
     public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader);
 
     /**
      * Called when the scroll pane's column header changed.
      *
-     * @param scrollPane
-     * @param previousColumnHeader
+     * @param scrollPane The source of the event.
+     * @param previousColumnHeader The previous column header for this scroll pane.
      */
     public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader);
 
     /**
      * Called when the scroll pane's corner component changed.
      *
-     * @param scrollPane
-     * @param previousCorner
+     * @param scrollPane The source of the event.
+     * @param previousCorner The previous corner component.
      */
     public void cornerChanged(ScrollPane scrollPane, Component previousCorner);
 }

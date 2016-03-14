@@ -181,8 +181,8 @@ public final class Span {
     }
 
     /**
-     * Returns a normalized equivalent of the span in which <tt>start</tt> is
-     * guaranteed to be less than end.
+     * @return A normalized equivalent of the span in which <tt>start</tt> is
+     * guaranteed to be less than <tt>end</tt>.
      */
     public Span normalize() {
         return new Span(Math.min(start, end), Math.max(start, end));

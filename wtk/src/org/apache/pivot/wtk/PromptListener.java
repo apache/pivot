@@ -60,49 +60,49 @@ public interface PromptListener {
     /**
      * Called when a prompt's message type has changed.
      *
-     * @param prompt
-     * @param previousMessageType
+     * @param prompt The prompt object that has been changed.
+     * @param previousMessageType The message type before the change.
      */
     public void messageTypeChanged(Prompt prompt, MessageType previousMessageType);
 
     /**
      * Called when a prompt's message has changed.
      *
-     * @param prompt
-     * @param previousMessage
+     * @param prompt The prompt whose message has changed.
+     * @param previousMessage What the message used to be.
      */
     public void messageChanged(Prompt prompt, String previousMessage);
 
     /**
      * Called when a prompt's body has changed.
      *
-     * @param prompt
-     * @param previousBody
+     * @param prompt The prompt that has changed.
+     * @param previousBody What the body of this prompt used to be.
      */
     public void bodyChanged(Prompt prompt, Component previousBody);
 
     /**
      * Called when an option has been inserted into a prompt's option sequence.
      *
-     * @param prompt
-     * @param index
+     * @param prompt The prompt whose options have changed.
+     * @param index The location where the new option was inserted.
      */
     public void optionInserted(Prompt prompt, int index);
 
     /**
      * Called when options have been removed from a prompt's option sequence.
      *
-     * @param prompt
-     * @param index
-     * @param removed
+     * @param prompt The prompt whose options have changed.
+     * @param index The starting location of the removed options.
+     * @param removed The actual sequence of options removed.
      */
     public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed);
 
     /**
      * Called when a prompt's selected option has changed.
      *
-     * @param prompt
-     * @param previousSelectedOption
+     * @param prompt The prompt that changed.
+     * @param previousSelectedOption The option that used to be the selected one.
      */
     public void selectedOptionChanged(Prompt prompt, int previousSelectedOption);
 }

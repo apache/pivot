@@ -44,7 +44,7 @@ public final class Mouse {
     private static Component capturer = null;
 
     /**
-     * Returns a bitfield representing the mouse buttons that are currently
+     * @return A bitfield representing the mouse buttons that are currently
      * pressed.
      */
     public static int getButtons() {
@@ -58,7 +58,7 @@ public final class Mouse {
     /**
      * Tests the pressed state of a button.
      *
-     * @param button
+     * @param button The button to test.
      * @return <tt>true</tt> if the button is pressed; <tt>false</tt>, otherwise.
      */
     public static boolean isPressed(Button button) {
@@ -66,7 +66,7 @@ public final class Mouse {
     }
 
     /**
-     * Returns the number of mouse buttons.
+     * @return The number of mouse buttons.
      */
     public static int getButtonCount() {
         return MouseInfo.getNumberOfButtons();
@@ -141,7 +141,7 @@ public final class Mouse {
     }
 
     /**
-     * Returns the current cursor.
+     * @return The current cursor.
      *
      * @throws IllegalStateException If the mouse is not currently captured.
      */
@@ -238,7 +238,8 @@ public final class Mouse {
     /**
      * Sets the cursor to an explicit value.
      *
-     * @param cursor
+     * @param cursor The new mouse cursor value.
+     * @throws IllegalArgumentException if the cursor value is {@code null}.
      * @throws IllegalStateException If the mouse is not currently captured.
      */
     public static void setCursor(Cursor cursor) {
@@ -258,7 +259,9 @@ public final class Mouse {
     /**
      * Sets the cursor based on a given component.
      *
-     * @param component
+     * @param component The component used to set the cursor.
+     * @throws IllegalArgumentException if the component is {@code null}, or
+     * if the component is not currently visible.
      */
     public static void setCursor(final Component component) {
         if (component == null) {

@@ -212,7 +212,7 @@ public class TableView extends Component {
         }
 
         /**
-         * Returns the column header data renderer.
+         * @return The column header data renderer.
          */
         public HeaderDataRenderer getHeaderDataRenderer() {
             return headerDataRenderer;
@@ -221,7 +221,7 @@ public class TableView extends Component {
         /**
          * Sets the column header data renderer.
          *
-         * @param headerDataRenderer
+         * @param headerDataRenderer The new renderer for the header data.
          */
         public void setHeaderDataRenderer(HeaderDataRenderer headerDataRenderer) {
             if (headerDataRenderer == null) {
@@ -313,7 +313,7 @@ public class TableView extends Component {
         }
 
         /**
-         * Gets the minimum and maximum widths to which the column can size.
+         * @return The minimum and maximum widths to which the column can size.
          */
         public Limits getWidthLimits() {
             return new Limits(minimumWidth, maximumWidth);
@@ -500,8 +500,8 @@ public class TableView extends Component {
         /**
          * Converts table view cell data to a string representation.
          *
-         * @param row
-         * @param columnName
+         * @param row The row object.
+         * @param columnName The name of the column.
          * @return The cell data's string representation, or <tt>null</tt> if the
          * data does not have a string representation. <p> Note that this method
          * may be called often during keyboard navigation, so implementations
@@ -532,7 +532,7 @@ public class TableView extends Component {
         /**
          * Converts table view header data to a string representation.
          *
-         * @param item
+         * @param item The header data item.
          * @return The data's string representation, or <tt>null</tt> if the data
          * does not have a string representation. <p> Note that this method may
          * be called often during keyboard navigation, so implementations should
@@ -548,9 +548,9 @@ public class TableView extends Component {
         /**
          * Called to begin editing a table row.
          *
-         * @param tableView
-         * @param rowIndex
-         * @param columnIndex
+         * @param tableView The table view being edited.
+         * @param rowIndex Index of the row to edit.
+         * @param columnIndex Index of the column to edit.
          */
         public void beginEdit(TableView tableView, int rowIndex, int columnIndex);
 
@@ -563,7 +563,7 @@ public class TableView extends Component {
         public void endEdit(boolean result);
 
         /**
-         * Tests whether an edit is currently in progress.
+         * @return Whether an edit is currently in progress.
          */
         public boolean isEditing();
     }
@@ -590,14 +590,17 @@ public class TableView extends Component {
         /**
          * Converts a context value to table data.
          *
-         * @param value
+         * @param value The value retrieved from the user object.
+         * @return The object converted to list data for the table.
          */
         public List<?> toTableData(Object value);
 
         /**
          * Converts table data to a context value.
          *
-         * @param tableData
+         * @param tableData The current table list data.
+         * @return The list converted to a form suitable for storage
+         * in the user object.
          */
         public Object valueOf(List<?> tableData);
     }
@@ -621,6 +624,7 @@ public class TableView extends Component {
          *
          * @param tableData The source table data.
          * @param index The index of the value to retrieve.
+         * @return The object value at that index.
          */
         public Object get(List<?> tableData, int index);
     }
@@ -1190,7 +1194,7 @@ public class TableView extends Component {
     /**
      * Creates a new table view populated with the given table data.
      *
-     * @param tableData
+     * @param tableData The initial data for this table view.
      */
     public TableView(List<?> tableData) {
         setTableData(tableData);
@@ -1376,8 +1380,8 @@ public class TableView extends Component {
     /**
      * Sets the selection to a single range.
      *
-     * @param start
-     * @param end
+     * @param start The start of the selection range.
+     * @param end The end of the range.
      */
     public void setSelectedRange(int start, int end) {
         ArrayList<Span> selectedRanges = new ArrayList<>();
@@ -1403,7 +1407,7 @@ public class TableView extends Component {
      * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
      *
-     * @param selectedRanges
+     * @param selectedRanges The new sequence of selected ranges.
      * @return The ranges that were actually set.
      */
     public Sequence<Span> setSelectedRanges(Sequence<Span> selectedRanges) {
@@ -1714,7 +1718,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Returns the current selection mode.
+     * @return The current selection mode.
      */
     public SelectMode getSelectMode() {
         return selectMode;
@@ -1745,7 +1749,7 @@ public class TableView extends Component {
     }
 
     /**
-     * Returns the table view's sort dictionary.
+     * @return The table view's sort dictionary.
      */
     public SortDictionary getSort() {
         return sortDictionary;
@@ -1754,8 +1758,9 @@ public class TableView extends Component {
     /**
      * Sets the table view's sort.
      *
-     * @param columnName
-     * @param sortDirection
+     * @param columnName The column name to sort on.
+     * @param sortDirection Whether ascending or descending sort on that column.
+     * @return The new sort criteria.
      */
     @SuppressWarnings("unchecked")
     public Dictionary<String, SortDirection> setSort(String columnName, SortDirection sortDirection) {
@@ -1772,6 +1777,8 @@ public class TableView extends Component {
      *
      * @param sort A sequence of key/value pairs representing the sort. Keys
      * represent column names and values represent sort direction.
+     * @return The new sort criteria.
+     * @throws IllegalArgumentException if the sort parameter is {@code null}.
      */
     public Dictionary<String, SortDirection> setSort(
         Sequence<Dictionary.Pair<String, SortDirection>> sort) {
@@ -1800,7 +1807,10 @@ public class TableView extends Component {
      * Sets the table view's sort.
      *
      * @param sort A JSON list containing JSON objects representing the sort.
+     * @return The new sort criteria.
      * @see #setSort(Sequence)
+     * @throws IllegalArgumentException if the sort parameter is {@code null}
+     * or can't be parsed from the JSON input.
      */
     public final Dictionary<String, SortDirection> setSort(String sort) {
         if (sort == null) {

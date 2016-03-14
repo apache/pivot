@@ -23,8 +23,8 @@ public interface ScrollBarValueListener {
     /**
      * Called when a scroll bar's value has changed.
      *
-     * @param scrollBar
-     * @param previousValue
+     * @param scrollBar The scroll bar that is changing.
+     * @param previousValue The previous value of this scroll bar.
      */
     public void valueChanged(ScrollBar scrollBar, int previousValue);
 }

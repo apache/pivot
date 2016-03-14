@@ -47,22 +47,23 @@ public interface RollupStateListener {
     /**
      * Called to preview a rollup expansion event.
      *
-     * @param rollup
+     * @param rollup The rollup that might change.
+     * @return The result of this listener voting on the expansion.
      */
     public Vote previewExpandedChange(Rollup rollup);
 
     /**
      * Called when a rollup expansion event has been vetoed.
      *
-     * @param rollup
-     * @param reason
+     * @param rollup The rollup that didn't change.
+     * @param reason The reason the expansion was vetoed.
      */
     public void expandedChangeVetoed(Rollup rollup, Vote reason);
 
     /**
      * Called when a rollup's expanded state changed.
      *
-     * @param rollup
+     * @param rollup The rollup that did change.
      */
     public void expandedChanged(Rollup rollup);
 }

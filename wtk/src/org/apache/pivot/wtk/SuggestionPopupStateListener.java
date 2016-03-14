@@ -45,16 +45,17 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
     /**
      * Called to preview a suggestion popup close event.
      *
-     * @param suggestionPopup
-     * @param result
+     * @param suggestionPopup The source of this event.
+     * @param result What the result would be.
+     * @return What this listener thinks about closing the popup with this result.
      */
     public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result);
 
     /**
      * Called when a suggestion popup close event has been vetoed.
      *
-     * @param suggestionPopup
-     * @param reason
+     * @param suggestionPopup The source of this event.
+     * @param reason The accumulated vote that forced the veto.
      */
     public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason);
 }

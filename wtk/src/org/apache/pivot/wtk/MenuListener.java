@@ -45,25 +45,25 @@ public interface MenuListener {
     /**
      * Called when a menu section has been inserted.
      *
-     * @param menu
-     * @param index
+     * @param menu The source of the event.
+     * @param index Where the menu section was inserted.
      */
     public void sectionInserted(Menu menu, int index);
 
     /**
      * Called when menu sections have been removed.
      *
-     * @param menu
-     * @param index
-     * @param removed
+     * @param menu The menu that changed.
+     * @param index The starting index of the removal.
+     * @param removed The actual menu sections that were removed from the menu.
      */
     public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed);
 
     /**
      * Called when a menu's active item has changed.
      *
-     * @param menu
-     * @param previousActiveItem
+     * @param menu The menu that changed.
+     * @param previousActiveItem What the previously active menu item was.
      */
     public void activeItemChanged(Menu menu, Menu.Item previousActiveItem);
 }

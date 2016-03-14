@@ -57,40 +57,40 @@ public interface TableViewListener {
     /**
      * Called when a table view's table data has changed.
      *
-     * @param tableView
-     * @param previousTableData
+     * @param tableView The source of this event.
+     * @param previousTableData The previous data list for this table view.
      */
     public void tableDataChanged(TableView tableView, List<?> previousTableData);
 
     /**
      * Called when a table view's column source has changed.
      *
-     * @param tableView
-     * @param previousColumnSource
+     * @param tableView The source of this event.
+     * @param previousColumnSource The previous column source for this table.
      */
     public void columnSourceChanged(TableView tableView, TableView previousColumnSource);
 
     /**
      * Called when a table view's row editor has changed.
      *
-     * @param tableView
-     * @param previousRowEditor
+     * @param tableView The source of this event.
+     * @param previousRowEditor The row editor that was previously used.
      */
     public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor);
 
     /**
      * Called when a table view's select mode has changed.
      *
-     * @param tableView
-     * @param previousSelectMode
+     * @param tableView The source of the event.
+     * @param previousSelectMode What the select mode used to be.
      */
     public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode);
 
     /**
      * Called when a table view's disabled row filter has changed.
      *
-     * @param tableView
-     * @param previousDisabledRowFilter
+     * @param tableView The table view in question.
+     * @param previousDisabledRowFilter What the previous filter for disabled rows was.
      */
     public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter);
 }

@@ -45,23 +45,23 @@ public interface SpinnerListener {
     /**
      * Called when a spinner's data has changed.
      *
-     * @param spinner
-     * @param previousSpinnerData
+     * @param spinner The source of this event.
+     * @param previousSpinnerData What the spinner data used to be.
      */
     public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData);
 
     /**
      * Called when a spinner's item renderer has changed.
      *
-     * @param spinner
-     * @param previousItemRenderer
+     * @param spinner The source of this event.
+     * @param previousItemRenderer What the item renderer used to be.
      */
     public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer);
 
     /**
      * Called when a spinner's circular property has changed.
      *
-     * @param spinner
+     * @param spinner The source of this event.
      */
     public void circularChanged(Spinner spinner);
 }

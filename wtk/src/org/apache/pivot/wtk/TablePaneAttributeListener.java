@@ -39,18 +39,18 @@ public interface TablePaneAttributeListener {
     /**
      * Called when a component's row span attribute has changed.
      *
-     * @param tablePane
-     * @param component
-     * @param previousRowSpan
+     * @param tablePane The source of this event.
+     * @param component The component that changed.
+     * @param previousRowSpan What the row span value used to be.
      */
     public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan);
 
     /**
      * Called when a component's column span attribute has changed.
      *
-     * @param tablePane
-     * @param component
-     * @param previousColumnSpan
+     * @param tablePane The source of this event.
+     * @param component THe component that changed.
+     * @param previousColumnSpan What the column span for this component used to be.
      */
     public void columnSpanChanged(TablePane tablePane, Component component, int previousColumnSpan);
 }

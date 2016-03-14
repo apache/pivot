@@ -254,14 +254,14 @@ public class SuggestionPopup extends Window {
     }
 
     /**
-     * Returns the text input for which suggestions will be provided.
+     * @return The text input for which suggestions will be provided.
      */
     public TextInput getTextInput() {
         return textInput;
     }
 
     /**
-     * Returns the list of suggestions presented by the popup.
+     * @return The list of suggestions presented by the popup.
      */
     public List<?> getSuggestionData() {
         return suggestionData;
@@ -270,7 +270,7 @@ public class SuggestionPopup extends Window {
     /**
      * Sets the list of suggestions presented by the popup.
      *
-     * @param suggestionData
+     * @param suggestionData The new list of suggestions to present.
      */
     @SuppressWarnings("unchecked")
     public void setSuggestionData(List<?> suggestionData) {
@@ -305,7 +305,7 @@ public class SuggestionPopup extends Window {
     }
 
     /**
-     * Returns the list view item renderer used to present suggestions.
+     * @return The list view item renderer used to present suggestions.
      */
     public ListView.ItemRenderer getSuggestionRenderer() {
         return suggestionRenderer;
@@ -314,7 +314,7 @@ public class SuggestionPopup extends Window {
     /**
      * Sets the list view item renderer used to present suggestions.
      *
-     * @param suggestionRenderer
+     * @param suggestionRenderer The new item renderer.
      */
     public void setSuggestionRenderer(ListView.ItemRenderer suggestionRenderer) {
         ListView.ItemRenderer previousSuggestionRenderer = this.suggestionRenderer;
@@ -365,6 +365,12 @@ public class SuggestionPopup extends Window {
         return item;
     }
 
+    /**
+     * Set the selected suggestion.
+     *
+     * @param suggestion The new item to select (can be {@code null} to
+     * make nothing selected).
+     */
     @SuppressWarnings("unchecked")
     public void setSelectedSuggestion(Object suggestion) {
         setSelectedIndex((suggestion == null) ? -1
@@ -372,7 +378,7 @@ public class SuggestionPopup extends Window {
     }
 
     /**
-     * Returns the list size.
+     * @return The list size.
      */
     public int getListSize() {
         return listSize;
@@ -382,7 +388,7 @@ public class SuggestionPopup extends Window {
      * Sets the list size. If the number of items in the list exceeds this
      * value, the list will scroll.
      *
-     * @param listSize
+     * @param listSize The new number of items that are visible.
      */
     public void setListSize(int listSize) {
         if (listSize < -1) {

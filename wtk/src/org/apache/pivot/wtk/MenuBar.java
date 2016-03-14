@@ -168,15 +168,15 @@ public class MenuBar extends Container {
         /**
          * Called when an item's menu has changed.
          *
-         * @param item
-         * @param previousMenu
+         * @param item The item that has been moved.
+         * @param previousMenu The menu where the item used to be located.
          */
         public void menuChanged(Item item, Menu previousMenu);
 
         /**
          * Called when an item's active state has changed.
          *
-         * @param item
+         * @param item The item whose active state has changed.
          */
         public void activeChanged(Item item);
     }

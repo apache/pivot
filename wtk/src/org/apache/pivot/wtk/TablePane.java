@@ -816,7 +816,7 @@ public class TablePane extends Container {
     }
 
     /**
-     * Returns the bounds of a given row.
+     * @return The bounds of a given row.
      *
      * @param row The row index.
      */
@@ -826,8 +826,6 @@ public class TablePane extends Container {
     }
 
     /**
-     * Returns the table pane column sequence.
-     *
      * @return The table pane column sequence
      */
     public ColumnSequence getColumns() {
@@ -847,7 +845,7 @@ public class TablePane extends Container {
     }
 
     /**
-     * Returns the bounds of a given column.
+     * @return The bounds of a given column.
      *
      * @param column The column index.
      */
@@ -901,14 +899,14 @@ public class TablePane extends Container {
     }
 
     /**
-     * Returns the table pane listener list.
+     * @return The table pane listener list.
      */
     public ListenerList<TablePaneListener> getTablePaneListeners() {
         return tablePaneListeners;
     }
 
     /**
-     * Returns the table pane attribute listener list.
+     * @return The table pane attribute listener list.
      */
     public ListenerList<TablePaneAttributeListener> getTablePaneAttributeListeners() {
         return tablePaneAttributeListeners;

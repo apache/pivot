@@ -245,6 +245,8 @@ public class RadioButtonGroup extends ButtonGroup {
      * reached.<br> Instead, the search will 'wrap' and continue from the
      * opposite bound until each button in the entire group has been tested for
      * inclusion. <br><br> Defaults to <code>false</code>
+     *
+     * @return Whether the group is circular.
      */
     public boolean isCircular() {
         return circular;
@@ -258,6 +260,8 @@ public class RadioButtonGroup extends ButtonGroup {
      * reached.<br> Instead, the search will 'wrap' and continue from the
      * opposite bound until each button in the entire group has been tested for
      * inclusion.
+     *
+     * @param circular New setting for the group.
      */
     public void setCircular(boolean circular) {
         this.circular = circular;
@@ -266,6 +270,8 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * When true, TAB and SHIFT+TAB transfer focus out of the RadioButtonGroup.
      * <br> Defaults to <code>false</code>
+     *
+     * @return Whether focus transfers out of the group on TAB.
      */
     public boolean isIntraGroupFocusTransferEnabled() {
         return intraGroupFocusTransferEnabled;
@@ -274,6 +280,8 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Controls whether TAB and SHIFT+TAB will transfer focus out of the
      * RadioButtonGroup, or simply maintain their default behaviour.
+     *
+     * @param intraGroupFocusTransferEnabled New setting for this group.
      */
     public void setIntraGroupFocusTransferEnabled(boolean intraGroupFocusTransferEnabled) {
         this.intraGroupFocusTransferEnabled = intraGroupFocusTransferEnabled;
@@ -282,8 +290,10 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Add a button to the group.
      *
+     * @param button The button to add.
      * @see Group#add(Object)
      * @see Sequence#add(Object)
+     * @throws IllegalArgumentException if the button parameter is {@code null}.
      */
     @Override
     public boolean add(Button button) {
@@ -298,8 +308,9 @@ public class RadioButtonGroup extends ButtonGroup {
     }
 
     /**
-     * Return the button at the specified index.
+     * @return The button at the specified index.
      *
+     * @param index The location to retrieve the button from.
      * @see Sequence#get(int)
      */
     public Button get(int index) {
@@ -307,7 +318,7 @@ public class RadioButtonGroup extends ButtonGroup {
     }
 
     /**
-     * Return the number of buttons in the group.
+     * @return The number of buttons in the group.
      *
      * @see Sequence#getLength()
      */
@@ -318,8 +329,9 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Return the index (order) of the button within the group.
      *
-     * @return The index or -1 if the button does not belong to this
-     * RadioButtonGroup
+     * @param button The button to search for in this group.
+     * @return The index or {@link #NOT_FOUND_INDEX} if the button does not belong to this
+     * RadioButtonGroup.
      * @see Sequence#indexOf(Object)
      */
     public int indexOf(Button button) {
@@ -329,7 +341,10 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Insert a button at the specified index.
      *
+     * @param button The button to be inserted.
+     * @param index Where to insert the button.
      * @see Sequence#insert(Object, int)
+     * @throws IllegalArgumentException if the button parameter is {@code null}.
      */
     public void insert(Button button, int index) {
         if (button == null) {
@@ -344,6 +359,8 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Remove the button from the group.
      *
+     * @param button The button to remove from this group.
+     * @return Success indicator.
      * @see Group#remove(Object)
      * @see Sequence#remove(Object)
      */
@@ -363,6 +380,10 @@ public class RadioButtonGroup extends ButtonGroup {
      * Remove <code>count</code> buttons from the group starting at
      * <code>index</code>.
      *
+     * @param index Starting point for the removal.
+     * @param count Number of buttons to remove.
+     * @return The sequence of buttons actually removed (will not be
+     * {@code null}, but could be an empty sequence).
      * @see Sequence#remove(int, int)
      */
     public Sequence<Button> remove(int index, int count) {
@@ -379,7 +400,7 @@ public class RadioButtonGroup extends ButtonGroup {
     }
 
     /**
-     * Return an iterator for the <strong>ordered</strong> list of buttons
+     * @return An iterator for the <strong>ordered</strong> list of buttons
      */
     @Override
     public Iterator<Button> iterator() {
@@ -402,6 +423,8 @@ public class RadioButtonGroup extends ButtonGroup {
     /**
      * Select and <strong>focus</strong> the button at the specified index,
      * unless the index is NOT_FOUND_INDEX.
+     *
+     * @param index The new selection index for the group.
      */
     public void setSelection(int index) {
         if (index != NOT_FOUND_INDEX) {

@@ -23,7 +23,7 @@ public interface MenuItemSelectionListener {
     /**
      * Called when a descendant item of this menu has been selected.
      *
-     * @param menuItem
+     * @param menuItem The newly selected menu item.
      */
     public void itemSelected(Menu.Item menuItem);
 }

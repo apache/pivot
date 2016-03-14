@@ -25,8 +25,8 @@ public interface MovieViewListener {
     /**
      * Called when an movie view's movie has changed.
      *
-     * @param movieView
-     * @param previousMovie
+     * @param movieView The move view that has changed.
+     * @param previousMovie The previous movie content.
      */
     public void movieChanged(MovieView movieView, Movie previousMovie);
 }

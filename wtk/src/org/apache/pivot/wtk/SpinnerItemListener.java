@@ -53,39 +53,39 @@ public interface SpinnerItemListener {
     /**
      * Called when an item is inserted into a spinner's data.
      *
-     * @param spinner
-     * @param index
+     * @param spinner The source of the event.
+     * @param index Where the item was inserted.
      */
     public void itemInserted(Spinner spinner, int index);
 
     /**
      * Called when items are removed from a spinner's data.
      *
-     * @param spinner
-     * @param index
-     * @param count
+     * @param spinner The source of this event.
+     * @param index The start of the items that were removed.
+     * @param count The number of items removed from there.
      */
     public void itemsRemoved(Spinner spinner, int index, int count);
 
     /**
      * Called when an item is updated within a spinner's data.
      *
-     * @param spinner
-     * @param index
+     * @param spinner The source of this event.
+     * @param index The location of the item that was updated.
      */
     public void itemUpdated(Spinner spinner, int index);
 
     /**
      * Called when a spinner's data has been cleared.
      *
-     * @param spinner
+     * @param spinner The source of this event.
      */
     public void itemsCleared(Spinner spinner);
 
     /**
      * Called when a spinner's data is sorted.
      *
-     * @param spinner
+     * @param spinner The source of this event.
      */
     public void itemsSorted(Spinner spinner);
 }

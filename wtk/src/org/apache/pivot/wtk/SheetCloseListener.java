@@ -23,7 +23,7 @@ public interface SheetCloseListener {
     /**
      * Called when a sheet has closed.
      *
-     * @param sheet
+     * @param sheet The sheet that is now closed.
      */
     public void sheetClosed(Sheet sheet);
 }

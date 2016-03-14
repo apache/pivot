@@ -88,7 +88,7 @@ public class ListView extends Component {
         /**
          * Converts a list item to a string representation.
          *
-         * @param item
+         * @param item The particular list item.
          * @return The item's string representation, or <tt>null</tt> if the item
          * does not have a string representation. <p> Note that this method may
          * be called often during keyboard navigation, so implementations should
@@ -104,8 +104,8 @@ public class ListView extends Component {
         /**
          * Called to begin editing a list item.
          *
-         * @param listView
-         * @param itemIndex
+         * @param listView  The list view being edited.
+         * @param itemIndex The index if the particular item being edited.
          */
         public void beginEdit(ListView listView, int itemIndex);
 
@@ -119,6 +119,8 @@ public class ListView extends Component {
 
         /**
          * Tests whether an edit is currently in progress.
+         *
+         * @return Whether an edit is in progress.
          */
         public boolean isEditing();
     }
@@ -142,7 +144,8 @@ public class ListView extends Component {
          * Converts a context value to list data during a
          * {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value fetched from the bound object.
+         * @return The value converted to a list of data.
          */
         public List<?> toListData(Object value);
 
@@ -150,7 +153,9 @@ public class ListView extends Component {
          * Converts list data to a context value during a
          * {@link Component#store(Object)} operation.
          *
-         * @param listData
+         * @param listData The current list data from the list view.
+         * @return That list data converted to an object suitable for
+         * persistence in the bound object.
          */
         public Object valueOf(List<?> listData);
     }
@@ -177,6 +182,7 @@ public class ListView extends Component {
          *
          * @param listData The source list data.
          * @param index The index of the value to retrieve.
+         * @return The item at the given index.
          */
         public Object get(List<?> listData, int index);
     }
@@ -711,12 +717,11 @@ public class ListView extends Component {
      * Sets the list data.
      *
      * @param listData The data to be presented by the list view.
+     * @throws IllegalArgumentException if the list data is {@code null}.
      */
     @SuppressWarnings("unchecked")
     public void setListData(List<?> listData) {
-        if (listData == null) {
-            throw new IllegalArgumentException("listData is null.");
-        }
+        Utils.checkNull(listData, "listData");
 
         List<?> previousListData = this.listData;
 
@@ -755,11 +760,11 @@ public class ListView extends Component {
      *
      * @param listData A JSON string (must begin with <tt>[</tt> and end with
      * <tt>]</tt>) denoting the data to be presented by the list view.
+     * @throws IllegalArgumentException if the list data argument is {@code null}
+     * or cannot be parsed into a list of items.
      */
     public final void setListData(String listData) {
-        if (listData == null) {
-            throw new IllegalArgumentException("listData is null.");
-        }
+        Utils.checkNull(listData, "listData");
 
         try {
             setListData(JSONSerializer.parseList(listData));
@@ -773,11 +778,12 @@ public class ListView extends Component {
      *
      * @param listData A URL referring to a JSON file containing the data to be
      * presented by the list view.
+     * @throws IllegalArgumentException if the list data URL is {@code null}
+     * or if there is any kind of error trying to retrieve the list data from
+     * that location.
      */
     public void setListData(URL listData) {
-        if (listData == null) {
-            throw new IllegalArgumentException("listData is null.");
-        }
+        Utils.checkNull(listData, "listData");
 
         JSONSerializer jsonSerializer = new JSONSerializer();
 
@@ -801,7 +807,7 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the item renderer used for items in this list.
+     * @return The item renderer used for items in this list.
      */
     public ItemRenderer getItemRenderer() {
         return itemRenderer;
@@ -811,11 +817,10 @@ public class ListView extends Component {
      * Sets the item renderer to be used for items in this list.
      *
      * @param itemRenderer The item renderer for the list.
+     * @throws IllegalArgumentException if the renderer given is {@code null}.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
-        if (itemRenderer == null) {
-            throw new IllegalArgumentException("itemRenderer is null.");
-        }
+        Utils.checkNull(itemRenderer, "itemRenderer");
 
         ItemRenderer previousItemRenderer = this.itemRenderer;
 
@@ -876,8 +881,8 @@ public class ListView extends Component {
     /**
      * Sets the selection to a single range.
      *
-     * @param start
-     * @param end
+     * @param start The beginning of the single selection.
+     * @param end   The end of the selection.
      */
     public void setSelectedRange(int start, int end) {
         ArrayList<Span> selectedRanges = new ArrayList<>();
@@ -903,13 +908,13 @@ public class ListView extends Component {
      * connecting ranges will be consolidated, and the resulting selection will
      * be sorted in ascending order.
      *
-     * @param selectedRanges
+     * @param selectedRanges The new set of selected ranges.
      * @return The ranges that were actually set.
+     * @throws IllegalArgumentException if the ranges argument is {@code null}
+     * or if any of the individual range elements is {@code null}.
      */
     public Sequence<Span> setSelectedRanges(Sequence<Span> selectedRanges) {
-        if (selectedRanges == null) {
-            throw new IllegalArgumentException("selectedRanges is null.");
-        }
+        Utils.checkNull(selectedRanges, "selectedRanges");
 
         // When we're in mode NONE, the only thing we can do is to clear the
         // selection
@@ -925,9 +930,7 @@ public class ListView extends Component {
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
             Span range = selectedRanges.get(i);
 
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             if (range.start < 0 || range.end >= listData.getLength()) {
                 throw new IndexOutOfBoundsException();
@@ -955,11 +958,11 @@ public class ListView extends Component {
      * select.
      * @return The ranges that were actually set.
      * @see #setSelectedRanges(Sequence)
+     * @throws IllegalArgumentException if the input string is {@code null}
+     * or if the value cannot be parsed correctly to a range specification.
      */
     public final Sequence<Span> setSelectedRanges(String selectedRanges) {
-        if (selectedRanges == null) {
-            throw new IllegalArgumentException("selectedRanges is null.");
-        }
+        Utils.checkNull(selectedRanges, "selectedRanges");
 
         try {
             setSelectedRanges(parseSelectedRanges(selectedRanges));
@@ -1052,9 +1055,7 @@ public class ListView extends Component {
      * @return The ranges that were added to the selection.
      */
     public Sequence<Span> addSelectedRange(Span range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        Utils.checkNull(range, "range");
 
         return addSelectedRange(range.start, range.end);
     }
@@ -1077,6 +1078,7 @@ public class ListView extends Component {
      * @param start The start of the range to remove.
      * @param end The end of the range to remove.
      * @return The ranges that were removed from the selection.
+     * @throws IllegalStateException if we are not in multi-select mode.
      */
     public Sequence<Span> removeSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
@@ -1110,9 +1112,7 @@ public class ListView extends Component {
      * @return The ranges that were removed from the selection.
      */
     public Sequence<Span> removeSelectedRange(Span range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        Utils.checkNull(range, "range");
 
         return removeSelectedRange(range.start, range.end);
     }
@@ -1178,17 +1178,13 @@ public class ListView extends Component {
 
     @SuppressWarnings("unchecked")
     public void setSelectedItems(Sequence<Object> items) {
-        if (items == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(items, "items");
 
         ArrayList<Span> selectedRanges = new ArrayList<>();
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
             Object item = items.get(i);
-            if (item == null) {
-                throw new IllegalArgumentException("item is null");
-            }
+            Utils.checkNull(item, "item");
 
             int index = ((List<Object>) listData).indexOf(item);
             if (index == -1) {
@@ -1202,7 +1198,7 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the current selection mode.
+     * @return The current selection mode.
      */
     public SelectMode getSelectMode() {
         return selectMode;
@@ -1215,9 +1211,7 @@ public class ListView extends Component {
      * @param selectMode The new selection mode.
      */
     public void setSelectMode(SelectMode selectMode) {
-        if (selectMode == null) {
-            throw new IllegalArgumentException("selectMode is null.");
-        }
+        Utils.checkNull(selectMode, "selectMode");
 
         SelectMode previousSelectMode = this.selectMode;
 
@@ -1234,17 +1228,17 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the current check mode.
+     * @return Whether or not checkmarks on each item are enabled.
      */
     public boolean getCheckmarksEnabled() {
         return checkmarksEnabled;
     }
 
     /**
-     * Enables or disabled checkmarks. Clears the check state if the check mode
+     * Enables or disables checkmarks. Clears the check state if the check mode
      * has changed (but does not fire any check state change events).
      *
-     * @param checkmarksEnabled
+     * @param checkmarksEnabled Whether or not to enable checkmarks for each item.
      */
     public void setCheckmarksEnabled(boolean checkmarksEnabled) {
         if (this.checkmarksEnabled != checkmarksEnabled) {
@@ -1265,7 +1259,8 @@ public class ListView extends Component {
      * <p> For a tri-state checkmark, if the {@link #checkmarksMixedAsChecked} flag
      * is set, this method returns <tt>true</tt> if the state is {@link Button.State#MIXED}.
      *
-     * @param index
+     * @param index The index of the item to test.
+     * @return Whether or not the given item is checked.
      */
     public boolean isItemChecked(int index) {
         if (allowTriStateCheckmarks && checkmarksMixedAsChecked) {
@@ -1279,8 +1274,9 @@ public class ListView extends Component {
     /**
      * Sets an item's checked state.
      *
-     * @param index
-     * @param checked
+     * @param index   Index of the item to change.
+     * @param checked The new value of that item's checked state.
+     * @throws IllegalStateException if checkmarks are not enabled.
      */
     public void setItemChecked(int index, boolean checked) {
         if (!checkmarksEnabled) {
@@ -1308,6 +1304,7 @@ public class ListView extends Component {
      * Returns the indexes of currently checked items.
      * <p> If the {@link #checkmarksMixedAsChecked} flag is set this method
      * will return all the checked and <tt>MIXED</tt> state items.
+     * @return The complete list of currently checked items.
      */
     public ImmutableList<Integer> getCheckedIndexes() {
         if (checkmarksMixedAsChecked) {
@@ -1364,6 +1361,7 @@ public class ListView extends Component {
 
     /**
      * Gets the state of all items' checkmarks (for the tri-state case).
+     * @return The complete list of all checkmark states.
      */
     public ImmutableList<Button.State> getCheckmarkStates() {
         List<Button.State> states = new ArrayList<>();
@@ -1390,6 +1388,8 @@ public class ListView extends Component {
      * Gets an item's checkmark state (for tri-state checkmarks).
      * <p> Note: this method returns the real state regardless of the
      * setting of the {@link #checkmarksMixedAsChecked} flag.
+     * @param index The index of the item in question.
+     * @return The checkmark state for that item.
      */
     public Button.State getItemCheckmarkState(int index) {
         // Find out where the item is stored currently (if at all)
@@ -1408,7 +1408,8 @@ public class ListView extends Component {
     /**
      * Sets an item's checkmark state (for tri-state checkmarks).
      *
-     * @param   state
+     * @param   index  The index of the item to change.
+     * @param   state  The new checkmark state for the item.
      */
     public void setItemCheckmarkState(int index, Button.State state) {
         if (!checkmarksEnabled) {
@@ -1514,6 +1515,7 @@ public class ListView extends Component {
      * this property enabled, then there are additional methods to set the mixed state, to get
      * the true state of all the items, and to decide if mixed state should be treated as checked
      * or not for all the other "checked" methods.
+     * @return Whether or not tri-state checkmarks are enabled.
      */
     public boolean getAllowTriStateCheckmarks() {
         return allowTriStateCheckmarks;
@@ -1528,7 +1530,7 @@ public class ListView extends Component {
      * <p> Clears the check state if the setting has changed (but does not fire any check
      * state change events).
      *
-     * @param   allow
+     * @param   allow	Whether or not to allow tri-state checkmarks.
      */
     public void setAllowTriStateCheckmarks(boolean allow) {
         if (allowTriStateCheckmarks != allow) {
@@ -1548,6 +1550,8 @@ public class ListView extends Component {
      * we get mouse clicks on the checkmark.  Set to <tt>false</tt> <code>UNSELECTED</code>
      *  will go to <code>MIXED</code>; while set to <tt>true</tt> <code>UNSELECTED</code> will
      * go to <code>SELECTED</code>.
+     *
+     * @return Whether or not to treat the mixed state as "checked".
      */
     public boolean getCheckmarksMixedAsChecked() {
         return checkmarksMixedAsChecked;
@@ -1557,7 +1561,7 @@ public class ListView extends Component {
      * Set the flag saying whether the mixed state of the tri-state checkmarks should be treated for
      * all other purposes as "checked" or not.
      *
-     * @param mixedAsChecked
+     * @param mixedAsChecked Whether or not to treat the mixed state as "checked".
      */
     public void setCheckmarksMixedAsChecked(boolean mixedAsChecked) {
         if (checkmarksMixedAsChecked != mixedAsChecked) {
@@ -1638,9 +1642,7 @@ public class ListView extends Component {
     }
 
     public void setListDataBindType(BindType listDataBindType) {
-        if (listDataBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(listDataBindType, "listDataBindType");
 
         BindType previousListDataBindType = this.listDataBindType;
 
@@ -1681,9 +1683,7 @@ public class ListView extends Component {
     }
 
     public void setSelectedItemBindType(BindType selectedItemBindType) {
-        if (selectedItemBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedItemBindType, "selectedItemBindType");
 
         BindType previousSelectedItemBindType = this.selectedItemBindType;
         if (previousSelectedItemBindType != selectedItemBindType) {
@@ -1724,9 +1724,7 @@ public class ListView extends Component {
     }
 
     public void setSelectedItemsBindType(BindType selectedItemsBindType) {
-        if (selectedItemsBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedItemsBindType, "selectedItemsBindType");
 
         BindType previousSelectedItemsBindType = this.selectedItemsBindType;
         if (previousSelectedItemsBindType != selectedItemsBindType) {
@@ -1768,9 +1766,7 @@ public class ListView extends Component {
     }
 
     public void setCheckedItemsBindType(BindType checkedItemsBindType) {
-        if (checkedItemsBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(checkedItemsBindType, "checkedItemsBindType");
 
         BindType previousCheckedItemsBindType = this.checkedItemsBindType;
         if (previousCheckedItemsBindType != checkedItemsBindType) {
@@ -1811,9 +1807,7 @@ public class ListView extends Component {
     }
 
     public void setItemsStateBindType(BindType itemsStateBindType) {
-        if (itemsStateBindType == null) {
-            throw new IllegalArgumentException("Bind type must not be null");
-        }
+        Utils.checkNull(itemsStateBindType, "itemsStateBindType");
 
         BindType previousItemsStateBindType = this.itemsStateBindType;
         if (previousItemsStateBindType != itemsStateBindType) {
@@ -1931,9 +1925,9 @@ public class ListView extends Component {
                         if (index != -1) {
                             Button.State state = Button.State.UNSELECTED;
                             if (itemsStateBindMapping == null) {
-                                state = itemsStateBindMapping.getState(item);
-                            } else {
                                 state = Button.State.SELECTED;
+                            } else {
+                                state = itemsStateBindMapping.getState(item);
                             }
                             setItemCheckmarkState(index, state);
                         }
@@ -2157,33 +2151,36 @@ public class ListView extends Component {
     }
 
     /**
-     * Returns the list view listener list.
+     * @return The list view listener list.
      */
     public ListenerList<ListViewListener> getListViewListeners() {
         return listViewListeners;
     }
 
     /**
-     * Returns the list view item listener list.
+     * @return The list view item listener list.
      */
     public ListenerList<ListViewItemListener> getListViewItemListeners() {
         return listViewItemListeners;
     }
 
     /**
-     * Returns the list view item state listener list.
+     * @return The list view item state listener list.
      */
     public ListenerList<ListViewItemStateListener> getListViewItemStateListeners() {
         return listViewItemStateListeners;
     }
 
     /**
-     * Returns the list view selection detail listener list.
+     * @return The list view selection listener list.
      */
     public ListenerList<ListViewSelectionListener> getListViewSelectionListeners() {
         return listViewSelectionListeners;
     }
 
+    /**
+     * @return The list view binding listener list.
+     */
     public ListenerList<ListViewBindingListener> getListViewBindingListeners() {
         return listViewBindingListeners;
     }

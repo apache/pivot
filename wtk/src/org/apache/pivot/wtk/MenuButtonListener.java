@@ -23,8 +23,8 @@ public interface MenuButtonListener {
     /**
      * Called when a menu button's menu has changed.
      *
-     * @param menuButton
-     * @param previousMenu
+     * @param menuButton The menu button that has changed.
+     * @param previousMenu The previous menu attached to the button.
      */
     public void menuChanged(MenuButton menuButton, Menu previousMenu);
 }

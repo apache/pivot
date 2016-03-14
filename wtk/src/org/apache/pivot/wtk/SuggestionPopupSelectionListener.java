@@ -39,8 +39,8 @@ public interface SuggestionPopupSelectionListener {
     /**
      * Called when a suggestion popup's selected index has changed.
      *
-     * @param suggestionPopup
-     * @param previousSelectedIndex
+     * @param suggestionPopup The source of this event.
+     * @param previousSelectedIndex What the selected index used to be.
      */
     public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex);
 

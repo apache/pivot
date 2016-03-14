@@ -45,16 +45,17 @@ public interface SheetStateListener extends SheetCloseListener {
     /**
      * Called to preview a sheet close event.
      *
-     * @param sheet
-     * @param result
+     * @param sheet The source of the event.
+     * @param result The proposed result of the close.
+     * @return What this listener wants to decide about this proposed close.
      */
     public Vote previewSheetClose(Sheet sheet, boolean result);
 
     /**
      * Called when a sheet close event has been vetoed.
      *
-     * @param sheet
-     * @param reason
+     * @param sheet The close event source.
+     * @param reason The accumulated vote that resulted in the veto.
      */
     public void sheetCloseVetoed(Sheet sheet, Vote reason);
 }
