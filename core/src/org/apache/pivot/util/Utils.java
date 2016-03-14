@@ -46,13 +46,13 @@ public class Utils {
      * @param value The argument value to check for {@code null}.
      * @param description A description for the value used to
      * construct a message like {@code "xxx must not be null."}. Can be
-     * {@code null} in which case a plain {@link IllegalArgumentException}
-     * is thrown without any detail message.
+     * {@code null} or an empty string, in which case a plain
+     * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is {@code null}.
      */
     public static void checkNull(Object value, String description) {
         if (value == null) {
-            if (description == null) {
+            if (description == null || description.isEmpty()) {
                 throw new IllegalArgumentException();
             } else {
                 throw new IllegalArgumentException(description + " must not be null.");
