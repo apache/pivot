@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing a range of integer values. The range includes all values
@@ -32,29 +33,50 @@ public final class Span {
     public static final String START_KEY = "start";
     public static final String END_KEY = "end";
 
+    /**
+     * Construct a new span of length 1 at the given location.
+     *
+     * @param index The start and end of this span (inclusive).
+     */
     public Span(int index) {
         start = index;
         end = index;
     }
 
+    /**
+     * Construct a new span with the given bounds.
+     * @param start The start of this span - inclusive.
+     * @param end The end of the span - inclusive.
+     */
     public Span(int start, int end) {
         this.start = start;
         this.end = end;
     }
 
+    /**
+     * Construct a new span from another one (a "copy
+     * constructor").
+     *
+     * @param span An existing span (which must not be {@code null}).
+     * @throws IllegalArgumentException if the given span is {@code null}.
+     */
     public Span(Span span) {
-        if (span == null) {
-            throw new IllegalArgumentException("span is null.");
-        }
+        Utils.checkNull(span, "span");
 
         start = span.start;
         end = span.end;
     }
 
+    /**
+     * Construct a new span from the given dictionary which must
+     * contain the {@link #START_KEY} and {@link #END_KEY} keys.
+     *
+     * @param span A dictionary containing start and end values.
+     * @throws IllegalArgumentException if the given span is {@code null}
+     * or if the dictionary does not contain the start and end keys.
+     */
     public Span(Dictionary<String, ?> span) {
-        if (span == null) {
-            throw new IllegalArgumentException("span is null.");
-        }
+    	Utils.checkNull(span, "span");
 
         if (!span.containsKey(START_KEY)) {
             throw new IllegalArgumentException(START_KEY + " is required.");
@@ -83,11 +105,10 @@ public final class Span {
      * @param span The span to test for containment.
      * @return <tt>true</tt> if this span contains <tt>span</tt>; <tt>false</tt>,
      * otherwise.
+     * @throws IllegalArgumentException if the given span is {@code null}.
      */
     public boolean contains(Span span) {
-        if (span == null) {
-            throw new IllegalArgumentException("span is null.");
-        }
+        Utils.checkNull(span, "span");
 
         Span normalizedSpan = span.normalize();
 
@@ -107,11 +128,10 @@ public final class Span {
      * @param span The span to test for intersection.
      * @return <tt>true</tt> if this span intersects with <tt>span</tt>;
      * <tt>false</tt>, otherwise.
+     * @throws IllegalArgumentException if the given span is {@code null}.
      */
     public boolean intersects(Span span) {
-        if (span == null) {
-            throw new IllegalArgumentException("span is null.");
-        }
+        Utils.checkNull(span, "span");
 
         Span normalizedSpan = span.normalize();
 
@@ -131,6 +151,7 @@ public final class Span {
      * @param span The span to intersect with this span.
      * @return A new Span instance representing the intersection of this span and
      * <tt>span</tt>, or null if the spans do not intersect.
+     * @throws IllegalArgumentException if the given span is {@code null}.
      */
     public Span intersect(Span span) {
         if (span == null) {
@@ -154,9 +175,7 @@ public final class Span {
      * <tt>span</tt>.
      */
     public Span union(Span span) {
-        if (span == null) {
-            throw new IllegalArgumentException("span is null.");
-        }
+        Utils.checkNull(span, "span");
 
         return new Span(Math.min(start, span.start), Math.max(end, span.end));
     }
@@ -167,6 +186,20 @@ public final class Span {
      */
     public Span normalize() {
         return new Span(Math.min(start, end), Math.max(start, end));
+    }
+
+    /**
+     * Returns a new {@link Span} with both values offset by the given value.
+     * <p> This is useful while moving through a {@link TextPane} document
+     * for instance, where you have to subtract off the starting offset for
+     * child nodes.
+     *
+     * @param offset The positive or negative amount by which to "move" this
+     * span (both start and end).
+     * @return A new {@link Span} with updated values.
+     */
+    public Span offset(int offset) {
+        return new Span(this.start + offset, this.end + offset);
     }
 
     @Override
@@ -191,10 +224,22 @@ public final class Span {
         return ("{start: " + start + ", end: " + end + "}");
     }
 
+    /**
+     * Convert a string into a span.
+     * <p> If the string value is a JSON map, then parse the map
+     * and construct using the {@link #Span(Dictionary)} method.
+     * <p> Otherwise the string should be a single integer value
+     * that will be used to construct the span using the {@link #Span(int)}
+     * constructor.
+     *
+     * @param value The string value to decode into a new span.
+     * @return The decoded span.
+     * @throws IllegalArgumentException if the value is {@code null} or
+     * if the string starts with <code>"{"</code> but it cannot be parsed as
+     * a JSON map.
+     */
     public static Span decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(value, "value");
 
         Span span;
         if (value.startsWith("{")) {
