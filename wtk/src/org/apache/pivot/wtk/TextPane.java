@@ -28,11 +28,14 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.text.Block;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.ComponentNodeListener;
 import org.apache.pivot.wtk.text.Document;
 import org.apache.pivot.wtk.text.Element;
+import org.apache.pivot.wtk.text.ImageNode;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.Paragraph;
@@ -178,6 +181,9 @@ public class TextPane extends Container {
 
     private static class TextPaneCharacterListenerList extends
         WTKListenerList<TextPaneCharacterListener> implements TextPaneCharacterListener {
+        /**
+         * @param index Index into the whole document.
+         */
         @Override
         public void charactersInserted(TextPane textPane, int index, int count) {
             for (TextPaneCharacterListener listener : this) {
@@ -185,6 +191,9 @@ public class TextPane extends Container {
             }
         }
 
+        /**
+         * @param index Index into the whole document.
+         */
         @Override
         public void charactersRemoved(TextPane textPane, int index, int count) {
             for (TextPaneCharacterListener listener : this) {
@@ -225,6 +234,9 @@ public class TextPane extends Container {
     };
 
     private NodeListener documentListener = new NodeListener.Adapter() {
+        /**
+         * @param offset Offset into the document.
+         */
         @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
             if (selectionStart + selectionLength > offset) {
@@ -244,9 +256,11 @@ public class TextPane extends Container {
             }
         }
 
+        /**
+         * @param offset Offset into the document.
+         */
         @Override
         public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
-
             for (int i = 0; i < removed.getLength(); i++) {
                 Node descendant = removed.get(i);
                 if (descendant instanceof ComponentNode) {
@@ -261,6 +275,9 @@ public class TextPane extends Container {
             }
         }
 
+        /**
+         * @param offset Offset into the document.
+         */
         @Override
         public void nodeInserted(Node node, int offset) {
             Node descendant = document.getDescendantAt(offset);
@@ -271,6 +288,9 @@ public class TextPane extends Container {
             }
         }
 
+        /**
+         * @param offset Offset into the document.
+         */
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
             // if the end of the selection is in or after the range removed
@@ -425,7 +445,7 @@ public class TextPane extends Container {
         }
 
         if (document == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null.");
         }
 
         if (document.getCharacterCount() == 0) {
@@ -478,7 +498,7 @@ public class TextPane extends Container {
         }
 
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         if (selectionLength > 0) {
@@ -486,8 +506,61 @@ public class TextPane extends Container {
         }
 
         // TODO If the caret is placed in the middle of a text node, split it;
-        // otherwise, insert an ImageNode immediately following the node
+        // otherwise, insert an ImageNode immediately following the block
         // containing the caret
+
+        // If the insertion is at the end of the document, then just add
+        if (selectionStart >= document.getCharacterCount() - 1) {
+            document.add(new ImageNode(image));
+        } else {
+            // Walk up the tree until we find a block
+            Node descendant = document.getDescendantAt(selectionStart);
+            while (!(descendant instanceof Block)) {
+                descendant = descendant.getParent();
+            }
+            Element parent = descendant.getParent();
+            if (parent != null) {
+                int index = parent.indexOf(descendant);
+                parent.insert(new ImageNode(image), index + 1);
+            }
+        }
+
+        // Set the selection start to the character following the insertion
+        setSelection(selectionStart + 1, selectionLength);
+    }
+
+    public void insertComponent(Component component) {
+        if (component == null) {
+            throw new IllegalArgumentException("component is null.");
+        }
+
+        if (document == null || document.getCharacterCount() == 0) {
+            throw new IllegalStateException("document is null or empty.");
+        }
+
+        if (selectionLength > 0) {
+            removeDocumentRange(selectionStart, selectionLength);
+        }
+
+        // TODO If the caret is placed in the middle of a text node, split it;
+        // otherwise, insert a ComponentNode immediately following the block
+        // containing the caret
+
+        // If the insertion is at the end of the document, then just add
+        if (selectionStart >= document.getCharacterCount() - 1) {
+            document.add(new ComponentNode(component));
+        } else {
+            // Walk up the tree until we find a block
+            Node descendant = document.getDescendantAt(selectionStart);
+            while (!(descendant instanceof Block)) {
+                descendant = descendant.getParent();
+            }
+            Element parent = descendant.getParent();
+            if (parent != null) {
+                int index = parent.indexOf(descendant);
+                parent.insert(new ComponentNode(component), index + 1);
+            }
+        }
 
         // Set the selection start to the character following the insertion
         setSelection(selectionStart + 1, selectionLength);
@@ -495,7 +568,7 @@ public class TextPane extends Container {
 
     public void insertParagraph() {
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         if (selectionLength > 0) {
@@ -547,7 +620,7 @@ public class TextPane extends Container {
 
     public void removeText(int offset, int characterCount) {
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         if (offset >= 0 && offset < document.getCharacterCount()) {
@@ -588,7 +661,7 @@ public class TextPane extends Container {
 
     public void cut() {
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         if (selectionLength > 0) {
@@ -617,7 +690,7 @@ public class TextPane extends Container {
 
     public void copy() {
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         String selectedText = getSelectedText();
@@ -631,7 +704,7 @@ public class TextPane extends Container {
 
     public void paste() {
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         Manifest clipboardContent = Clipboard.getContent();
@@ -701,19 +774,42 @@ public class TextPane extends Container {
         // TODO
     }
 
-    private void addToText(StringBuilder text, Element element) {
-        for (Node node : element) {
-            if (node instanceof TextNode) {
-                text.append(((TextNode) node).getCharacters());
-            } else if (node instanceof ComponentNode) {
-                text.append(((ComponentNode) node).getText());
-            } else if (node instanceof Element) {
-                addToText(text, (Element) node);
+    /**
+     * Add the text from the given element (and its children) to the given buffer,
+     * respecting the range of characters to be included.
+     * @param text The buffer we're building.
+     * @param element The current element in the document.
+     * @param includeSpan The range of text to be included (in document-relative
+     * coordinates).
+     */
+    private void addToText(StringBuilder text, Element element, Span includeSpan) {
+        Span elementSpan = element.getDocumentSpan();
+        Span elementIntersection = elementSpan.intersect(includeSpan);
+        if (elementIntersection != null) {
+            for (Node node : element) {
+                if (node instanceof Element) {
+                    addToText(text, (Element) node, includeSpan);
+                }
+                else {
+                    Span nodeSpan = node.getDocumentSpan();
+                    Span nodeIntersection = nodeSpan.intersect(includeSpan);
+                    if (nodeIntersection != null) {
+                        Span currentSpan = nodeIntersection.offset(-nodeSpan.start);
+                        if (node instanceof TextNode) {
+                            text.append(((TextNode) node).getCharacters(currentSpan));
+                        } else if (node instanceof ComponentNode) {
+                            text.append(((ComponentNode) node).getCharacters(currentSpan));
+                        }
+                        // TODO: anything more that could/should be handled?
+                        // lists for instance???
+                    }
+                }
             }
-            // TODO: anything more that could/should be handled?
-        }
-        if (element instanceof Paragraph) {
-            text.append('\n');
+            if (element instanceof Paragraph && elementIntersection.end == elementSpan.end) {
+                // TODO: unclear if this is included in the character count for a paragraph or not
+                // or what that means for the intersection range above
+                text.append('\n');
+            }
         }
     }
 
@@ -725,14 +821,44 @@ public class TextPane extends Container {
      */
     public String getText() {
         Document doc = getDocument();
-        if (doc != null && getCharacterCount() != 0) {
-            StringBuilder text = new StringBuilder(getCharacterCount());
-            addToText(text, doc);
+        int count;
+        if (doc != null && (count = getCharacterCount()) != 0) {
+            StringBuilder text = new StringBuilder(count);
+            addToText(text, doc, new Span(0, count - 1));
             return text.toString();
         }
         return null;
     }
 
+    /**
+     * Convenience method to get a portion of the document text into a single string.
+     *
+     * @param beginIndex The 0-based offset where to start retrieving text.
+     * @param endIndex The ending offset + 1 of the text to retrieve.
+     * @return The specified portion of the document text if there is any, or
+     * {@code null} if there is no document.
+     */
+    public String getText(int beginIndex, int endIndex) {
+        if (beginIndex > endIndex) {
+            throw new IllegalArgumentException();
+        }
+
+        if (beginIndex < 0 || endIndex > getCharacterCount()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        int count = endIndex - beginIndex;
+        if (count == 0) {
+            return "";
+        }
+        Document doc = getDocument();
+        if (doc != null) {
+            StringBuilder text = new StringBuilder(count);
+            addToText(text, doc, new Span(beginIndex, endIndex - 1));
+            return text.toString();
+        }
+        return null;
+    }
     /**
      * Convenience method to create a text-only document consisting of one
      * paragraph per line of the given text.
@@ -756,20 +882,14 @@ public class TextPane extends Container {
             throw new IllegalArgumentException();
         }
 
-        InputStream inputStream = null;
-        try {
-            inputStream = textURL.openStream();
+        try (InputStream inputStream = textURL.openStream()) {
             setText(new InputStreamReader(inputStream));
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
         }
     }
 
     public void setText(Reader textReader) throws IOException {
         if (textReader == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Reader is null");
         }
 
         int tabPosition = 0;
@@ -849,7 +969,7 @@ public class TextPane extends Container {
      */
     public void setSelection(int selectionStart, int selectionLength) {
         if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null or empty.");
         }
 
         if (selectionLength < 0) {
@@ -896,7 +1016,7 @@ public class TextPane extends Container {
      */
     public void selectAll() {
         if (document == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("document is null.");
         }
 
         setSelection(0, document.getCharacterCount());
