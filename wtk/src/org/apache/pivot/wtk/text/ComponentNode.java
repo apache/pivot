@@ -21,6 +21,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextPane;
@@ -101,19 +102,30 @@ public class ComponentNode extends Block {
         return "";
     }
 
+    public String getSubstring(Span range) {
+        return getText(this.component).substring(range.start, range.end + 1);
+    }
+
+    public String getSubstring(int start, int end) {
+        return getText(this.component).substring(start, end);
+    }
+
+    public CharSequence getCharacters(Span range) {
+        return getText(this.component).subSequence(range.start, range.end + 1);
+    }
+
+    public CharSequence getCharacters(int start, int end) {
+        return getText(this.component).subSequence(start, end);
+    }
+
     @Override
     public char getCharacterAt(int offset) {
-        String componentText = getText();
-        if (offset < 0 || offset >= componentText.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-        return componentText.charAt(offset);
+        return getText(this.component).charAt(offset);
     }
 
     @Override
     public int getCharacterCount() {
-        String componentText = getText();
-        return componentText.length();
+        return getText(this.component).length();
     }
 
     @Override

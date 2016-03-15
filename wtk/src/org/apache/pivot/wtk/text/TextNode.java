@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Span;
 
 /**
  * Node representing a sequence of characters.
@@ -24,6 +25,9 @@ import org.apache.pivot.util.ListenerList;
 public final class TextNode extends Node {
     private static class TextNodeListenerList extends ListenerList<TextNodeListener> implements
         TextNodeListener {
+        /**
+         * @param index Index into this node.
+         */
         @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
             for (TextNodeListener listener : this) {
@@ -31,6 +35,9 @@ public final class TextNode extends Node {
             }
         }
 
+        /**
+         * @param index Index into this node.
+         */
         @Override
         public void charactersRemoved(TextNode textNode, int index, int count) {
             for (TextNodeListener listener : this) {
@@ -75,13 +82,16 @@ public final class TextNode extends Node {
         insertText(text, 0);
     }
 
+    /**
+     * @param index Index into this node.
+     */
     public void insertText(CharSequence text, int index) {
         if (text == null) {
             throw new IllegalArgumentException("text is null.");
         }
 
         if (index < 0 || index > characters.length()) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index " + index + " outside of [0, " + characters.length() + "]");
         }
 
         int characterCount = text.length();
@@ -92,9 +102,14 @@ public final class TextNode extends Node {
         }
     }
 
+    /**
+     * @param index Index into this node.
+     */
     public void removeText(int index, int count) {
         if (index < 0 || index + count > characters.length()) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index " + index +
+                    " less than 0 or index+count " + count +
+                    " greater than length " + characters.length());
         }
 
         if (count > 0) {
@@ -105,6 +120,10 @@ public final class TextNode extends Node {
         }
     }
 
+    public String getSubstring(Span range) {
+        return characters.substring(range.start, range.end + 1);
+    }
+
     public String getSubstring(int start, int end) {
         return characters.substring(start, end);
     }
@@ -113,12 +132,16 @@ public final class TextNode extends Node {
         return characters;
     }
 
+    public CharSequence getCharacters(int start, int end) {
+        return characters.subSequence(start, end);
+    }
+
+    public CharSequence getCharacters(Span range) {
+        return characters.subSequence(range.start, range.end + 1);
+    }
+
     @Override
     public char getCharacterAt(int index) {
-        if (index < 0 || index >= characters.length()) {
-            throw new IndexOutOfBoundsException();
-        }
-
         return characters.charAt(index);
     }
 
@@ -127,6 +150,9 @@ public final class TextNode extends Node {
         return characters.length();
     }
 
+    /**
+     * @param offset Offset into this text node.
+     */
     @Override
     public void insertRange(Node range, int offset) {
         if (!(range instanceof TextNode)) {
