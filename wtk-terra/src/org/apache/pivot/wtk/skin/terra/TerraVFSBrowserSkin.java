@@ -683,18 +683,20 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     }
 
     public static class FullFileSelector implements FileSelector {
+        private FileFilter hiddenFileFilter;
         private Filter<FileObject> includeFileFilter;
         private Filter<FileObject> excludeFileFilter;
 
-        public FullFileSelector(Filter<FileObject> includeFileFilter,
+        public FullFileSelector(boolean showHiddenFiles, Filter<FileObject> includeFileFilter,
             Filter<FileObject> excludeFileFilter) {
+            this.hiddenFileFilter = showHiddenFiles ? null : HIDDEN_FILE_FILTER;
             this.includeFileFilter = includeFileFilter;
             this.excludeFileFilter = excludeFileFilter;
         }
 
         @Override
         public boolean includeFile(FileSelectInfo fileInfo) {
-            boolean include = HIDDEN_FILE_FILTER.accept(fileInfo);
+            boolean include = hiddenFileFilter == null ? true : hiddenFileFilter.accept(fileInfo);
             if (include && includeFileFilter != null) {
                 include = includeFileFilter.include(fileInfo.getFile());
             }
@@ -738,7 +740,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
             try {
                 FileObject[] files = rootDirectory.findFiles(new FullFileSelector(
-                    includeFileFilter, excludeFileFilter));
+                    showHiddenFiles, includeFileFilter, excludeFileFilter));
                 if (abort) {
                     throw new AbortException();
                 }
@@ -782,6 +784,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
     private boolean keyboardFolderTraversalEnabled = true;
     private boolean hideDisabledFiles = false;
+    private boolean showHiddenFiles = false;
 
     private boolean updatingSelection = false;
     private boolean refreshRoots = true;
@@ -1180,6 +1183,22 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
     public void setHideDisabledFiles(boolean hideDisabledFiles) {
         this.hideDisabledFiles = hideDisabledFiles;
+        refreshFileList();
+    }
+
+    /**
+     * @return Whether hidden files will be shown in the browser.
+     */
+    public boolean isShowHiddenFiles() {
+        return showHiddenFiles;
+    }
+
+    /**
+     * Set to determine if hidden files should be shown.
+     * @param showHiddenFiles Whether to show hidden files.
+     */
+    public void setShowHiddenFiles(boolean showHiddenFiles) {
+        this.showHiddenFiles = showHiddenFiles;
         refreshFileList();
     }
 

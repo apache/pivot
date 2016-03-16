@@ -313,6 +313,14 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         fileBrowser.getStyles().put("hideDisabledFiles", hideDisabledFiles);
     }
 
+    public boolean isShowHiddenFiles() {
+        return (Boolean) fileBrowser.getStyles().get("showHiddenFiles");
+    }
+
+    public void setShowHiddenFiles(boolean showHiddenFiles) {
+        fileBrowser.getStyles().put("showHiddenFiles", showHiddenFiles);
+    }
+
     public boolean getShowOKButtonFirst() {
         Container parent = okButton.getParent();
         return parent.indexOf(okButton) < parent.indexOf(cancelButton);
