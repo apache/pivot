@@ -315,7 +315,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 try {
                     FileType type = file.getType();
-                    hidden = file.isHidden();
+                    hidden = isFileHidden(file);
 
                     if (columnName.equals(NAME_KEY)) {
                         text = file.getName().getBaseName();
