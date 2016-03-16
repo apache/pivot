@@ -158,6 +158,20 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
             return icon;
         }
+
+	public boolean isFileHidden(FileObject file) {
+	    try {
+	        boolean hidden = false;
+	        if (file != null) {
+	            if (file.getName().getBaseName().length() != 0 && file.isHidden())
+	                hidden = true;
+	        }
+	        return hidden;
+	    }
+	    catch (FileSystemException fse) {
+	        throw new RuntimeException(fse);
+	    }
+	}
     }
 
     /**
@@ -172,10 +186,11 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         public void render(Object data, Button button, boolean highlight) {
             if (data != null) {
                 FileObject file = (FileObject) data;
+                boolean hidden = isFileHidden(file);
 
                 // Update the image view
                 imageView.setImage(getIcon(file));
-                imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+                imageView.getStyles().put("opacity", button.isEnabled() && !hidden ? 1.0f : 0.5f);
 
                 // Update the label
                 String text = file.getName().getBaseName();
@@ -184,6 +199,15 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 }
 
                 label.setText(text);
+
+                Object color = null;
+                if (button.isEnabled() && !hidden) {
+                    color = button.getStyles().get("color");
+                } else {
+                    color = button.getStyles().get("disabledColor");
+                }
+
+                label.getStyles().put("color", color);
             }
         }
 
@@ -211,10 +235,30 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         @Override
         public void render(Object item, int index, ListView listView, boolean selected,
             Button.State state, boolean highlighted, boolean disabled) {
+            boolean hidden = false;
+
             label.getStyles().put("font", listView.getStyles().get("font"));
 
+            if (item != null) {
+                FileObject file = (FileObject) item;
+                hidden = isFileHidden(file);
+
+                // Update the image view
+                imageView.setImage(getIcon(file));
+                imageView.getStyles().put("opacity",
+                    (listView.isEnabled() && !disabled && !hidden) ? 1.0f : 0.5f);
+
+                // Update the label
+                String text = file.getName().getBaseName();
+                if (text.length() == 0) {
+                    text = FileName.ROOT_PATH;
+                }
+
+                label.setText(text);
+            }
+
             Object color = null;
-            if (listView.isEnabled() && !disabled) {
+            if (listView.isEnabled() && !disabled && !hidden) {
                 if (selected) {
                     if (listView.isFocused()) {
                         color = listView.getStyles().get("selectionColor");
@@ -229,23 +273,6 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             }
 
             label.getStyles().put("color", color);
-
-            if (item != null) {
-                FileObject file = (FileObject) item;
-
-                // Update the image view
-                imageView.setImage(getIcon(file));
-                imageView.getStyles().put("opacity",
-                    (listView.isEnabled() && !disabled) ? 1.0f : 0.5f);
-
-                // Update the label
-                String text = file.getName().getBaseName();
-                if (text.length() == 0) {
-                    text = FileName.ROOT_PATH;
-                }
-
-                label.setText(text);
-            }
         }
 
         @Override
@@ -278,6 +305,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         @Override
         public void render(Object row, int rowIndex, int columnIndex, TableView tableView,
             String columnName, boolean selected, boolean highlighted, boolean disabled) {
+            boolean hidden = false;
+
             if (row != null) {
                 FileObject file = (FileObject) row;
 
@@ -286,6 +315,8 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 try {
                     FileType type = file.getType();
+                    hidden = file.isHidden();
+
                     if (columnName.equals(NAME_KEY)) {
                         text = file.getName().getBaseName();
                         icon = getIcon(file);
@@ -318,13 +349,15 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 label.setText(text);
                 imageView.setImage(icon);
+                imageView.getStyles().put("opacity",
+                    (tableView.isEnabled() && !disabled && !hidden) ? 1.0f : 0.5f);
             }
 
             Font font = (Font) tableView.getStyles().get("font");
             label.getStyles().put("font", font);
 
             Color color;
-            if (tableView.isEnabled() && !disabled) {
+            if (tableView.isEnabled() && !disabled && !hidden) {
                 if (selected) {
                     if (tableView.isFocused()) {
                         color = (Color) tableView.getStyles().get("selectionColor");
