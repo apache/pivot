@@ -153,18 +153,20 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     bindings.put(ARGUMENTS_KEY, args);
                     scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
                     scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
-                    scriptEngine.eval(script);
+                    result = scriptEngine.eval(script);
                 } catch (ScriptException exception) {
                     reportException(exception, script);
                 }
             }
 
             // If the function didn't return a value, return the default
-            Class<?> returnType = method.getReturnType();
-            if (returnType == Vote.class) {
-                result = Vote.APPROVE;
-            } else if (returnType == Boolean.TYPE) {
-                result = false;
+            if (result == null) {
+                Class<?> returnType = method.getReturnType();
+                if (returnType == Vote.class) {
+                    result = Vote.APPROVE;
+                } else if (returnType == Boolean.TYPE) {
+                    result = Boolean.FALSE;
+                }
             }
 
             return result;
