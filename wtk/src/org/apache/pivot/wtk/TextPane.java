@@ -62,8 +62,8 @@ public class TextPane extends Container {
         /**
          * Returns the insertion point for a given location.
          *
-         * @param x
-         * @param y
+         * @param x The X-coordinate of the location to check.
+         * @param y The Y-coordinate of the location.
          * @return The insertion point for the given location.
          */
         public int getInsertionPoint(int x, int y);
@@ -72,9 +72,9 @@ public class TextPane extends Container {
          * Returns the next insertion point given an x coordinate and a
          * character offset.
          *
-         * @param x
-         * @param from
-         * @param direction
+         * @param x The current X-coordinate to move from.
+         * @param from The current character offset to move from.
+         * @param direction The direction to move from the current location.
          * @return The next insertion point.
          */
         public int getNextInsertionPoint(int x, int from, ScrollDirection direction);
@@ -83,15 +83,13 @@ public class TextPane extends Container {
          * Returns the row index of the character at a given offset within the
          * document.
          *
-         * @param offset
+         * @param offset The character offset to check.
          * @return The row index of the character at the given offset.
          */
         public int getRowAt(int offset);
 
         /**
-         * Returns the total number of rows in the document.
-         *
-         * @return The number of rows in the document.
+         * @return The total number of rows in the document.
          */
         public int getRowCount();
 
@@ -99,13 +97,13 @@ public class TextPane extends Container {
          * Returns the bounds of the character at a given offset within the
          * document.
          *
-         * @param offset
+         * @param offset The index of the character we want the bounds for.
          * @return The bounds of the character at the given offset.
          */
         public Bounds getCharacterBounds(int offset);
 
         /**
-         * Returns the current setting of the "tabWidth" style (so "setText"
+         * @return The current setting of the "tabWidth" style (so "setText"
          * uses the same value as Ctrl-Tab from user).
          */
         public int getTabWidth();
@@ -338,7 +336,7 @@ public class TextPane extends Container {
     }
 
     /**
-     * Returns the document that backs the text pane.
+     * @return The document that backs the text pane.
      */
     public Document getDocument() {
         return document;
@@ -349,7 +347,7 @@ public class TextPane extends Container {
      * across multiple TextPanes; because a Document may contain Components, and
      * a Component may only be in one Container at a time.
      *
-     * @param document
+     * @param document The new document to be displayed by this text pane.
      */
     public void setDocument(Document document) {
         Document previousDocument = this.document;
@@ -414,6 +412,11 @@ public class TextPane extends Container {
     /**
      * Helper function to remove a range of characters from the document and
      * notify the listeners just once (instead of once per node).
+     *
+     * @param start The starting location (document offset) of the characters
+     * to be removed.
+     * @param count The number of characters to remove from that location.
+     * @return The document node where the characters were removed.
      */
     private Node removeDocumentRange(int start, int count) {
         bulkOperation = true;
@@ -777,6 +780,7 @@ public class TextPane extends Container {
     /**
      * Add the text from the given element (and its children) to the given buffer,
      * respecting the range of characters to be included.
+     *
      * @param text The buffer we're building.
      * @param element The current element in the document.
      * @param includeSpan The range of text to be included (in document-relative
@@ -817,6 +821,7 @@ public class TextPane extends Container {
      * Convenience method to get all the text from the current document into a
      * single string.
      *
+     * @return The complete text of the document as a string.
      * @see #setText
      */
     public String getText() {
@@ -863,7 +868,7 @@ public class TextPane extends Container {
      * Convenience method to create a text-only document consisting of one
      * paragraph per line of the given text.
      *
-     * @param text
+     * @param text The new complete text for the document.
      */
     public void setText(String text) {
         if (text == null) {
@@ -932,8 +937,6 @@ public class TextPane extends Container {
     }
 
     /**
-     * Returns the starting index of the selection.
-     *
      * @return The starting index of the selection.
      */
     public int getSelectionStart() {
@@ -941,8 +944,6 @@ public class TextPane extends Container {
     }
 
     /**
-     * Returns the length of the selection.
-     *
      * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
@@ -1000,7 +1001,7 @@ public class TextPane extends Container {
     /**
      * Sets the selection.
      *
-     * @param selection
+     * @param selection The new span describing the selection.
      * @see #setSelection(int, int)
      */
     public final void setSelection(Span selection) {
@@ -1055,7 +1056,7 @@ public class TextPane extends Container {
     }
 
     /**
-     * Returns the text pane's editable flag.
+     * @return The text pane's editable flag.
      */
     public boolean isEditable() {
         return editable;
@@ -1064,7 +1065,7 @@ public class TextPane extends Container {
     /**
      * Sets the text pane's editable flag.
      *
-     * @param editable
+     * @param editable Whether or not the text should be editable now.
      */
     public void setEditable(boolean editable) {
         if (this.editable != editable) {

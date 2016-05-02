@@ -122,7 +122,7 @@ public class TreeView extends Component {
         /**
          * Converts a tree node to a string representation.
          *
-         * @param node
+         * @param node The actual tree node data object.
          * @return The node's string representation, or <tt>null</tt> if the node
          * does not have a string representation. <p> Note that this method may
          * be called often during keyboard navigation, so implementations should
@@ -138,8 +138,8 @@ public class TreeView extends Component {
         /**
          * Called to begin editing a tree node.
          *
-         * @param treeView
-         * @param path
+         * @param treeView The source of this event.
+         * @param path     The path to the node being edited.
          */
         public void beginEdit(TreeView treeView, Path path);
 
@@ -152,7 +152,7 @@ public class TreeView extends Component {
         public void endEdit(boolean result);
 
         /**
-         * Tests whether an edit is currently in progress.
+         * @return Whether an edit is currently in progress.
          */
         public boolean isEditing();
     }
@@ -438,6 +438,9 @@ public class TreeView extends Component {
         /**
          * Creates a new <tt>BranchHandler</tt> tied to the specified parent and
          * listening to events from the specified branch data.
+         *
+         * @param parent The branch handler for our parent node.
+         * @param branchData The nodes for this branch that must be handled.
          */
         @SuppressWarnings("unchecked")
         public BranchHandler(BranchHandler parent, List<?> branchData) {
@@ -455,7 +458,7 @@ public class TreeView extends Component {
         }
 
         /**
-         * Gets the branch data that this handler is monitoring.
+         * @return The branch data that this handler is monitoring.
          */
         public List<?> getBranchData() {
             return branchData;
@@ -484,7 +487,7 @@ public class TreeView extends Component {
         }
 
         /**
-         * Gets the path that leads from the root of the tree data to this
+         * @return The path that leads from the root of the tree data to this
          * branch. Note: <tt>rootBranchHandler.getPath()</tt> will return an
          * empty sequence.
          */
@@ -669,6 +672,7 @@ public class TreeView extends Component {
          * "row order".
          * @param basePath The path to the parent of the inserted item.
          * @param index The index of the inserted item within its parent.
+         * @return The number of path elements that were updated.
          */
         private int incrementPaths(ArrayList<Path> paths, Path basePath, int index) {
             // Calculate the child's path
@@ -722,6 +726,7 @@ public class TreeView extends Component {
          * @param basePath The path to the parent of the removed items.
          * @param index The index of the first removed item within the base.
          * @param count The number of items removed.
+         * @return The number of path elements that were updated.
          */
         private int clearAndDecrementPaths(ArrayList<Path> paths, Path basePath, int index,
             int count) {
@@ -814,6 +819,7 @@ public class TreeView extends Component {
          * @param paths Sequence of paths guaranteed to be sorted by
          * "row order".
          * @param basePath The path whose children were sorted.
+         * @return The number of path elements that were updated.
          */
         private int clearPaths(ArrayList<Path> paths, Path basePath) {
             // Find first descendant in paths list, if it exists
@@ -1086,6 +1092,10 @@ public class TreeView extends Component {
     }
 
     /**
+     * Set the new selected nodes in the tree.
+     *
+     * @param selectedPaths The new set of paths to the selected nodes.
+     * @return The new set of selected paths (with duplicates eliminated).
      * @throws IllegalStateException If selection has been disabled (select mode
      * <tt>NONE</tt>).
      */
@@ -1162,6 +1172,9 @@ public class TreeView extends Component {
     }
 
     /**
+     * Set the single selected path.
+     *
+     * @param path The new path to select.
      */
     public void setSelectedPath(Path path) {
         if (path == null) {
@@ -1195,7 +1208,7 @@ public class TreeView extends Component {
     /**
      * Adds a path to the selection.
      *
-     * @param path
+     * @param path The path to the node to be added to the selection.
      * @return <tt>true</tt> if the path was added to the selection;
      * <tt>false</tt>, otherwise.
      * @throws IllegalStateException If multi-select is not enabled.
@@ -1232,8 +1245,8 @@ public class TreeView extends Component {
     /**
      * Removes a path from the selection.
      *
-     * @param path
-     * @return <tt>true</tt> if the path was added to the selection;
+     * @param path Path to the node to be removed from the selection.
+     * @return <tt>true</tt> if the path was removed from the selection;
      * <tt>false</tt>, otherwise.
      * @throws IllegalStateException If multi-select is not enabled.
      */
@@ -1302,6 +1315,9 @@ public class TreeView extends Component {
     }
 
     /**
+     * @return Whether or not the node at the given path is part of the
+     * current selection.
+     * @param path Path to the node to check.
      */
     public boolean isNodeSelected(Path path) {
         if (path == null) {
@@ -1367,6 +1383,7 @@ public class TreeView extends Component {
     }
 
     /**
+     * @return Whether or not the checkmarks on each node are enabled.
      */
     public boolean getCheckmarksEnabled() {
         return checkmarksEnabled;

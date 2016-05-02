@@ -210,7 +210,8 @@ public class TextArea extends Component {
      * Enum representing a scroll direction.
      */
     public enum ScrollDirection {
-        UP, DOWN
+        UP,
+        DOWN
     }
 
     /**
@@ -218,7 +219,7 @@ public class TextArea extends Component {
      */
     public interface Skin {
         /**
-         * Returns the insertion point for a given location.
+         * @return The insertion point for a given location.
          *
          * @param x The X-location to check (likely from the mouse location).
          * @param y The Y-location to check.
@@ -622,8 +623,8 @@ public class TextArea extends Component {
     /**
      * Returns a portion of the text content of the text area.
      *
-     * @param beginIndex
-     * @param endIndex
+     * @param beginIndex The beginning location (inclusive) to obtain text from.
+     * @param endIndex   The ending location (exclusive) of the text segment to fetch.
      * @return A string containing a copy of the text area's text content.
      */
     public String getText(int beginIndex, int endIndex) {
@@ -668,7 +669,7 @@ public class TextArea extends Component {
     /**
      * Sets the text content of the text area.
      *
-     * @param text
+     * @param text The new text for the control (cannot be {@code null}).
      */
     public void setText(String text) {
         if (text == null) {
@@ -868,16 +869,16 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the text area's paragraph sequence.
+     * @return The text area's paragraph sequence.
      */
     public ParagraphSequence getParagraphs() {
         return paragraphSequence;
     }
 
     /**
-     * Returns the index of the paragraph containing a given character index.
+     * @return The index of the paragraph containing a given character index.
      *
-     * @param index
+     * @param index The character index to check.
      */
     public int getParagraphAt(int index) {
         indexBoundsCheck("index", index, 0, characterCount);
@@ -893,9 +894,9 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the character at a given index.
+     * @return The character at a given index.
      *
-     * @param index
+     * @param index The index of the character to fetch.
      */
     public char getCharacterAt(int index) {
         indexBoundsCheck("index", index, 0, characterCount - 1);
@@ -910,7 +911,7 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the number of characters in the text area, including line break
+     * @return The number of characters in the text area, including line break
      * characters.
      */
     public int getCharacterCount() {
@@ -983,8 +984,6 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the starting index of the selection.
-     *
      * @return The starting index of the selection.
      */
     public int getSelectionStart() {
@@ -992,8 +991,6 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the length of the selection.
-     *
      * @return The length of the selection; may be <tt>0</tt>.
      */
     public int getSelectionLength() {
@@ -1042,7 +1039,7 @@ public class TextArea extends Component {
     /**
      * Sets the selection.
      *
-     * @param selection
+     * @param selection The new span of text to select.
      * @see #setSelection(int, int)
      */
     public final void setSelection(Span selection) {
@@ -1077,8 +1074,6 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the maximum length of the text area's text content.
-     *
      * @return The maximum length of the text area's text content.
      */
     public int getMaximumLength() {
@@ -1111,7 +1106,7 @@ public class TextArea extends Component {
     }
 
     /**
-     * Returns the text area's editable flag.
+     * @return The text area's editable flag.
      */
     public boolean isEditable() {
         return editable;
@@ -1120,7 +1115,7 @@ public class TextArea extends Component {
     /**
      * Sets the text area's editable flag.
      *
-     * @param editable
+     * @param editable Whether or not the text should now be editable.
      */
     public void setEditable(boolean editable) {
         if (this.editable != editable) {

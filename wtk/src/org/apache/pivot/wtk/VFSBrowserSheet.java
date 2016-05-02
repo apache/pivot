@@ -39,7 +39,10 @@ public class VFSBrowserSheet extends Sheet {
      * Enumeration defining supported modes.
      */
     public enum Mode {
-        OPEN, OPEN_MULTIPLE, SAVE_AS, SAVE_TO
+        OPEN,
+        OPEN_MULTIPLE,
+        SAVE_AS,
+        SAVE_TO
     }
 
     private static final String USER_HOME = System.getProperty("user.home");
@@ -107,16 +110,19 @@ public class VFSBrowserSheet extends Sheet {
     /**
      * Creates a new VFSBrowserSheet <p> Note that this version set by default
      * mode to open and user home as root folder.
+     *
+     * @throws FileSystemException if there are any problems.
      */
     public VFSBrowserSheet() throws FileSystemException {
         this(Mode.OPEN);
     }
 
     /**
-     * Creates a new VFSBrowserSheet <p> Note that this version set by default
-     * the user home as root folder.
+     * Creates a new VFSBrowserSheet <p> Note that this version sets by default
+     * the user home as root folder, which is probably not that useful.
      *
      * @param mode The mode for opening the sheet.
+     * @throws FileSystemException if there are any problems.
      * @see Mode
      */
     public VFSBrowserSheet(Mode mode) throws FileSystemException {
@@ -128,8 +134,9 @@ public class VFSBrowserSheet extends Sheet {
      * constructor must be used when a custom root folder has to be set.
      *
      * @param mode The mode for opening the sheet.
-     * @see Mode
      * @param rootFolder The root folder full name.
+     * @throws FileSystemException if there are any problems.
+     * @see Mode
      */
     public VFSBrowserSheet(Mode mode, String rootFolder) throws FileSystemException {
         this(null, mode, rootFolder);
@@ -142,8 +149,9 @@ public class VFSBrowserSheet extends Sheet {
      * @param manager The VFS FileSystemManager that we will be browsing. If
      * <tt>null</tt> the default (local) will be used.
      * @param mode The mode for opening the sheet.
-     * @see Mode
      * @param rootFolder The root folder full name.
+     * @throws FileSystemException if there are any problems.
+     * @see Mode
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder)
         throws FileSystemException {
@@ -151,23 +159,17 @@ public class VFSBrowserSheet extends Sheet {
     }
 
     /**
-     * Creates a new VFSBrowserSheet
-     * <p>
-     * Note that this version of the constructor must be used when a custom home folder has to be set.
+     * Creates a new VFSBrowserSheet.
+     * <p> Note that this version of the constructor must be used when a
+     * custom home folder has to be set.
      *
-     * @param manager
-     * The VFS FileSystemManager that we will be browsing.  If <tt>null</tt> the default (local) will
-     * be used.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * @param manager The VFS FileSystemManager that we will be browsing.
+     * If <tt>null</tt> the default (local) will be used.
+     * @param mode The mode for opening the sheet.
+     * @param rootFolder The root folder full name.
+     * @param homeFolder The default for the "home" folder (full name).
+     * @throws FileSystemException if there are any problems.
      * @see Mode
-     *
-     * @param rootFolder
-     * The root folder full name.
-     *
-     * @param homeFolder
-     * The default for the "home" folder (full name).
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder, String homeFolder)
             throws FileSystemException
@@ -193,23 +195,17 @@ public class VFSBrowserSheet extends Sheet {
     }
 
     /**
-     * Creates a new VFSBrowserSheet
-     * <p>
-     * Note that this version of the constructor must be used when a custom home folder has to be set.
+     * Creates a new VFSBrowserSheet.
+     * <p> Note that this version of the constructor must be used when a
+     * custom home folder has to be set.
      *
-     * @param manager
-     * The VFS FileSystemManager that we will be browsing.  If <tt>null</tt> the default (local) will
-     * be used.
-     *
-     * @param mode
-     * The mode for opening the sheet.
+     * @param manager The VFS FileSystemManager that we will be browsing.
+     * If <tt>null</tt> the default (local) will be used.
+     * @param mode The mode for opening the sheet.
+     * @param rootFolder The root folder object.
+     * @param homeFolder The default for the "home" folder.
+     * @throws FileSystemException if there are any problems.
      * @see Mode
-     *
-     * @param rootFolder
-     * The root folder object.
-     *
-     * @param homeFolder
-     * The default for the "home" folder object.
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, FileObject rootFolder, FileObject homeFolder)
             throws FileSystemException
@@ -366,7 +362,8 @@ public class VFSBrowserSheet extends Sheet {
     /**
      * Sets the selection to a single file.
      *
-     * @param file
+     * @param file The new file to be selected (or {@code null} to clear the selection).
+     * @throws FileSystemException if there are any problems.
      */
     public void setSelectedFile(FileObject file) throws FileSystemException {
         if (file == null) {
@@ -399,6 +396,7 @@ public class VFSBrowserSheet extends Sheet {
      *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
+     * @throws FileSystemException if there are any problems.
      */
     public Sequence<FileObject> setSelectedFiles(Sequence<FileObject> selectedFiles)
         throws FileSystemException {
@@ -445,6 +443,8 @@ public class VFSBrowserSheet extends Sheet {
 
     /**
      * Clears the selection.
+     *
+     * @throws FileSystemException if there are any problems.
      */
     public void clearSelection() throws FileSystemException {
         setSelectedFiles(new ArrayList<FileObject>());

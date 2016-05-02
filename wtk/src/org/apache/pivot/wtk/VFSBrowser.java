@@ -122,6 +122,8 @@ public class VFSBrowser extends Container {
     /**
      * Creates a new VFSBrowser <p> Note that this version sets, by default,
      * the mode to open.
+     *
+     * @throws FileSystemException if there are problems.
      */
     public VFSBrowser() throws FileSystemException {
         this(null, USER_HOME, null);
@@ -135,6 +137,7 @@ public class VFSBrowser extends Container {
      * @param manager The virtual file system we're going to manage.
      * @param rootFolder The root folder full name.
      * @param homeFolder The default home folder full name.
+     * @throws FileSystemException if there are problems.
      */
     public VFSBrowser(FileSystemManager manager, URI rootFolder, URI homeFolder) throws FileSystemException {
         this(manager,
@@ -149,6 +152,7 @@ public class VFSBrowser extends Container {
      * @param manager The virtual file system we're going to manage.
      * @param rootFolder The root folder full name.
      * @param homeFolder The home folder full name.
+     * @throws FileSystemException if there are problems.
      */
     public VFSBrowser(FileSystemManager manager, String rootFolder, String homeFolder) throws FileSystemException {
         if (rootFolder == null) {
@@ -166,8 +170,6 @@ public class VFSBrowser extends Container {
     }
 
     /**
-     * Returns the current file system manager.
-     *
      * @return The current file system manager.
      */
     public FileSystemManager getManager() {
@@ -193,8 +195,6 @@ public class VFSBrowser extends Container {
     }
 
     /**
-     * Returns the current root directory.
-     *
      * @return The current root directory.
      */
     public FileObject getRootDirectory() {
@@ -205,7 +205,8 @@ public class VFSBrowser extends Container {
      * Sets the root directory from a string. Clears any existing file
      * selection.
      *
-     * @param rootDirectory
+     * @param rootDirectory The new root directory string for this browser.
+     * @throws FileSystemException if there are any problems.
      */
     public void setRootDirectory(String rootDirectory) throws FileSystemException {
         setRootDirectory(manager.resolveFile(rootDirectory));
@@ -214,7 +215,8 @@ public class VFSBrowser extends Container {
     /**
      * Sets the root directory. Clears any existing file selection.
      *
-     * @param rootDirectory
+     * @param rootDirectory The new root directory for this browser.
+     * @throws FileSystemException if there are any problems.
      */
     public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
         if (rootDirectory == null) {
@@ -244,7 +246,7 @@ public class VFSBrowser extends Container {
     }
 
     /**
-     * Returns the current home directory.
+     * @return The current home directory.
      */
     public FileObject getHomeDirectory() {
         return homeDirectory;
@@ -253,7 +255,8 @@ public class VFSBrowser extends Container {
     /**
      * Sets the home directory from a string.
      *
-     * @param homeDirectory
+     * @param homeDirectory The new home directory string for this browser.
+     * @throws FileSystemException if there are any problems.
      */
     public void setHomeDirectory(String homeDirectory) throws FileSystemException {
         setHomeDirectory(manager.resolveFile(homeDirectory));
@@ -262,7 +265,8 @@ public class VFSBrowser extends Container {
     /**
      * Sets the home directory.
      *
-     * @param homeDirectory
+     * @param homeDirectory The new home directory for this browser.
+     * @throws FileSystemException if there are any problems.
      */
     public void setHomeDirectory(FileObject homeDirectory) throws FileSystemException {
         if (homeDirectory == null) {
@@ -293,9 +297,10 @@ public class VFSBrowser extends Container {
     /**
      * Adds a file to the file selection.
      *
-     * @param file
+     * @param file The new file to be selected.
      * @return <tt>true</tt> if the file was added; <tt>false</tt> if it was
      * already selected.
+     * @throws FileSystemException if there are any problems.
      */
     public boolean addSelectedFile(FileObject file) throws FileSystemException {
         if (file == null) {
@@ -323,7 +328,7 @@ public class VFSBrowser extends Container {
     /**
      * Removes a file from the file selection.
      *
-     * @param file
+     * @param file The file to be unselected.
      * @return <tt>true</tt> if the file was removed; <tt>false</tt> if it was
      * not already selected.
      */
@@ -356,7 +361,8 @@ public class VFSBrowser extends Container {
     /**
      * Sets the selection to a single file.
      *
-     * @param file
+     * @param file The new single file selection (or {@code null} to clear the selection).
+     * @throws FileSystemException if there are any problems.
      */
     public void setSelectedFile(FileObject file) throws FileSystemException {
         if (file == null) {
@@ -389,6 +395,7 @@ public class VFSBrowser extends Container {
      *
      * @param selectedFiles The files to select.
      * @return The files that were selected, with duplicates eliminated.
+     * @throws FileSystemException if there are any problems.
      */
     public Sequence<FileObject> setSelectedFiles(Sequence<FileObject> selectedFiles)
         throws FileSystemException {
@@ -435,6 +442,8 @@ public class VFSBrowser extends Container {
 
     /**
      * Clears the selection.
+     *
+     * @throws FileSystemException if there are any problems.
      */
     public void clearSelection() throws FileSystemException {
         setSelectedFiles(new ArrayList<FileObject>());
@@ -445,7 +454,7 @@ public class VFSBrowser extends Container {
     }
 
     /**
-     * Returns the file browser's multi-select state.
+     * @return The file browser's multi-select state.
      */
     public boolean isMultiSelect() {
         return multiSelect;
