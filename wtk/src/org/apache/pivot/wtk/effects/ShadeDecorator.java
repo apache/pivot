@@ -66,7 +66,7 @@ public class ShadeDecorator implements Decorator {
     }
 
     /**
-     * Returns the opacity of the decorator, in [0,1].
+     * @return The opacity of the decorator, in [0,1].
      */
     public float getOpacity() {
         return opacity;
@@ -95,14 +95,16 @@ public class ShadeDecorator implements Decorator {
     }
 
     /**
-     * Returns the color of the decorator
+     * @return The color of the decorator.
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Sets the color of the decorator
+     * Sets the color of the decorator.
+     *
+     * @param color The new color for the decorator.
      */
     public void setColor(Color color) {
         if (color == null) {
@@ -113,7 +115,7 @@ public class ShadeDecorator implements Decorator {
     }
 
     /**
-     * Sets the color of the decorator
+     * Sets the color of the decorator.
      *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.

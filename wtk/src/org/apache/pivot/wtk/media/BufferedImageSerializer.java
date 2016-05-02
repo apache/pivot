@@ -35,8 +35,11 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * Supported image formats.
      */
     public enum Format {
-        PNG("png", "image/png"), JPEG("jpeg", "image/jpeg"), BMP("bmp", "image/bmp"), WBMP("wbmp",
-            "image/vnd.wap.wbmp"), GIF("gif", "image/gif");
+        PNG ("png",  "image/png"),
+        JPEG("jpeg", "image/jpeg"),
+        BMP ("bmp",  "image/bmp"),
+        WBMP("wbmp", "image/vnd.wap.wbmp"),
+        GIF ("gif",  "image/gif");
 
         private String name;
         private String mimeType;
@@ -66,7 +69,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     }
 
     /**
-     * Gets the image format that this serializer is using for output.
+     * @return The image format that this serializer is using for output.
      */
     public Format getOutputFormat() {
         return outputFormat;
@@ -74,6 +77,8 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
 
     /**
      * Sets the image format that this serializer should use for output.
+     *
+     * @param outputFormat The new format to use for output.
      */
     public void setOutputFormat(Format outputFormat) {
         if (outputFormat == null) {
@@ -86,6 +91,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     /**
      * Reads a serialized image from an input stream.
      *
+     * @param inputStream The stream to read the image from.
      * @return A <tt>BufferedImage</tt> object
      */
     @Override
@@ -101,6 +107,9 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
 
     /**
      * Writes a buffered image to an output stream.
+     *
+     * @param bufferedImage The image to write out to the stream.
+     * @param outputStream The stream to write the image out to.
      */
     @Override
     public void writeObject(BufferedImage bufferedImage, OutputStream outputStream)

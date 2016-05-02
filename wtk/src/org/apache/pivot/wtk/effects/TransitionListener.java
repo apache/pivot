@@ -23,7 +23,7 @@ public interface TransitionListener {
     /**
      * Called when a transition has completed.
      *
-     * @param transition
+     * @param transition The transition that has finished.
      */
     public void transitionCompleted(Transition transition);
 }

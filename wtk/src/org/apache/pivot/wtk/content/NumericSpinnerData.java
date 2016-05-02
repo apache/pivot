@@ -89,6 +89,9 @@ public class NumericSpinnerData implements List<Integer> {
     /**
      * Creates a new <tt>NumericSpinnerData</tt> with the specified bounded
      * range and an increment of one.
+     *
+     * @param lowerBound The lower bound for the data.
+     * @param upperBound The upper bound for the data.
      */
     public NumericSpinnerData(int lowerBound, int upperBound) {
         this(lowerBound, upperBound, 1);
@@ -97,6 +100,10 @@ public class NumericSpinnerData implements List<Integer> {
     /**
      * Creates a new <tt>NumericSpinnerData</tt> with the specified bounded
      * range and increment.
+     *
+     * @param lowerBound The lower bound for the data.
+     * @param upperBound The upper bound for the data.
+     * @param increment  The increment between values.
      */
     public NumericSpinnerData(int lowerBound, int upperBound, int increment) {
         if (lowerBound >= upperBound) {

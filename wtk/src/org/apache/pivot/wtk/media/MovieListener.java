@@ -63,32 +63,32 @@ public interface MovieListener {
     /**
      * Called when a movie's size has changed.
      *
-     * @param movie
-     * @param previousWidth
-     * @param previousHeight
+     * @param movie          The movie that has been resized.
+     * @param previousWidth  The previous width of this movie.
+     * @param previousHeight The previous value of the height before resizing.
      */
     public void sizeChanged(Movie movie, int previousWidth, int previousHeight);
 
     /**
      * Called when a movie's baseline has changed.
      *
-     * @param movie
-     * @param previousBaseline
+     * @param movie            The movie that has changed.
+     * @param previousBaseline The previous baseline value of the movie.
      */
     public void baselineChanged(Movie movie, int previousBaseline);
 
     /**
      * Called when the movie's current frame changed.
      *
-     * @param movie
-     * @param previousFrame
+     * @param movie         The movie that has changed.
+     * @param previousFrame The previous frame index of the movie.
      */
     public void currentFrameChanged(Movie movie, int previousFrame);
 
     /**
      * Called when the movie's looping property changed.
      *
-     * @param movie
+     * @param movie The source of this event.
      */
     public void loopingChanged(Movie movie);
 
@@ -97,7 +97,7 @@ public interface MovieListener {
      * starting can be obtained via <tt>getCurrentFrame()</tt> (it is not
      * guaranteed to be positioned before the first frame when it is started).
      *
-     * @param movie
+     * @param movie The movie that has just started to play.
      */
     public void movieStarted(Movie movie);
 
@@ -106,18 +106,18 @@ public interface MovieListener {
      * can be obtained via <tt>getCurrentFrame()</tt> (it is not guaranteed to
      * have completed the last frame when it is stopped).
      *
-     * @param movie
+     * @param movie The movie that has just stopped playing.
      */
     public void movieStopped(Movie movie);
 
     /**
      * Called when a region within a movie needs to be repainted.
      *
-     * @param movie
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param movie  The movie that needs repainting.
+     * @param x      The upper left X-position of the region to repaint.
+     * @param y      The upper left Y-position for the repaint.
+     * @param width  The width of the image to repaint.
+     * @param height The height to repaint.
      */
     public void regionUpdated(Movie movie, int x, int y, int width, int height);
 }

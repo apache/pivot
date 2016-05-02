@@ -173,7 +173,7 @@ public abstract class Transition {
      * updates.
      *
      * @return The transition interval in milliseconds,
-     *         or a default minimum value if transitions has been disabled.
+     *         or a default minimum value if transitions have been disabled.
      */
     public int getInterval() {
         int interval;
@@ -206,7 +206,7 @@ public abstract class Transition {
     /**
      * Returns the elapsed time since the transition started.
      *
-     * @return Returns the amount of time that has passed since the transition
+     * @return The amount of time that has passed since the transition
      * was started. If the transition is reversed, this value reflects the
      * amount of time remaining.
      */
@@ -337,7 +337,7 @@ public abstract class Transition {
     /**
      * Sets the transition's reversed flag.
      *
-     * @param reversed
+     * @param reversed Whether the transition should be reversed.
      */
     public void setReversed(boolean reversed) {
         this.reversed = reversed;

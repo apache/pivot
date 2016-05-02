@@ -45,7 +45,7 @@ public class RotationDecorator implements Decorator {
     }
 
     /**
-     * Gets the rotation angle, in radians.
+     * @return The rotation angle, in radians.
      */
     public double getTheta() {
         return theta;
@@ -53,6 +53,8 @@ public class RotationDecorator implements Decorator {
 
     /**
      * Sets the rotation angle, in radians.
+     *
+     * @param theta The rotation angle, in radians.
      */
     public void setTheta(double theta) {
         this.theta = theta;

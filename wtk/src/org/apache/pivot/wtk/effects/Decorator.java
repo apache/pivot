@@ -50,8 +50,8 @@ public interface Decorator {
      * {@link Component#paint(Graphics2D)}; decorators are called in descending
      * order.
      *
-     * @param component
-     * @param graphics
+     * @param component The component the decorator is attached to.
+     * @param graphics  The graphics context to draw into.
      * @return The graphics context that should be used by the component or prior
      * decorators.
      */
@@ -68,7 +68,7 @@ public interface Decorator {
     /**
      * Returns the bounding area of the decorator.
      *
-     * @param component
+     * @param component The component that the decorator is attached to.
      * @return The decorator's bounds, relative to the component's origin.
      */
     public Bounds getBounds(Component component);
@@ -77,6 +77,7 @@ public interface Decorator {
      * Returns the transformation the decorator applies to the component's
      * coordinate space.
      *
+     * @param component The component the decorator is attached to.
      * @return The decorator's transform.
      */
     public AffineTransform getTransform(Component component);

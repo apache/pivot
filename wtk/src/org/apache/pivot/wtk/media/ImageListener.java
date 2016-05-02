@@ -23,28 +23,28 @@ public interface ImageListener {
     /**
      * Called when an image's size has changed.
      *
-     * @param image
-     * @param previousWidth
-     * @param previousHeight
+     * @param image          The image whose size has changed.
+     * @param previousWidth  The previous width of the image.
+     * @param previousHeight The previous height of the image.
      */
     public void sizeChanged(Image image, int previousWidth, int previousHeight);
 
     /**
      * Called when an image's baseline has changed.
      *
-     * @param image
-     * @param previousBaseline
+     * @param image            The image that has changed.
+     * @param previousBaseline The previous baseline value of the image.
      */
     public void baselineChanged(Image image, int previousBaseline);
 
     /**
      * Called when a region within an image needs to be repainted.
      *
-     * @param image
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param image  The image that needs repainting.
+     * @param x      The upper left X-coordinate for the repaint.
+     * @param y      The upper left Y-coordinate for the repaint.
+     * @param width  The width of the image to repaint.
+     * @param height The height of the area to repaint.
      */
     public void regionUpdated(Image image, int x, int y, int width, int height);
 }
