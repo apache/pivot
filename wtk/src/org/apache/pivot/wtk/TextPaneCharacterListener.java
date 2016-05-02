@@ -38,18 +38,18 @@ public interface TextPaneCharacterListener {
     /**
      * Called when characters have been inserted into a text pane.
      *
-     * @param textPane
-     * @param index
-     * @param count
+     * @param textPane The text pane whose text has changed.
+     * @param index    The starting point of the text insertion.
+     * @param count    The count of characters inserted there.
      */
     public void charactersInserted(TextPane textPane, int index, int count);
 
     /**
      * Called when characters have been removed from a text pane.
      *
-     * @param textPane
-     * @param index
-     * @param count
+     * @param textPane The text pane whose text has changed.
+     * @param index    The starting point where text was removed.
+     * @param count    Number of characters removed starting from there.
      */
     public void charactersRemoved(TextPane textPane, int index, int count);
 }

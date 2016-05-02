@@ -69,24 +69,24 @@ public interface VFSBrowserSheetListener {
      * Called when a file browser's file system manager has changed (as when
      * browsing into a new virtual file system).
      *
-     * @param fileBrowserSheet
-     * @param previousManager
+     * @param fileBrowserSheet The source of this event.
+     * @param previousManager  The previous file manager that was set.
      */
     public void managerChanged(VFSBrowserSheet fileBrowserSheet, FileSystemManager previousManager);
 
     /**
      * Called when a file browser sheet's mode has changed.
      *
-     * @param fileBrowserSheet
-     * @param previousMode
+     * @param fileBrowserSheet The source of this event.
+     * @param previousMode     The previous mode for this browser.
      */
     public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode);
 
     /**
      * Called when a file browser sheet's root directory has changed.
      *
-     * @param fileBrowserSheet
-     * @param previousRootDirectory
+     * @param fileBrowserSheet      The browser sheet that has changed.
+     * @param previousRootDirectory The previously set root directory for this browser.
      */
     public void rootDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
         FileObject previousRootDirectory);
@@ -95,8 +95,8 @@ public interface VFSBrowserSheetListener {
      * Called when a file browser sheet's home directory has changed.
      * <p> Usually this would only be when you browse to another file system.
      *
-     * @param fileBrowserSheet
-     * @param previousHomeDirectory
+     * @param fileBrowserSheet      The browser sheet that has changed.
+     * @param previousHomeDirectory The previously set home directory for this browser.
      */
     public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
         FileObject previousHomeDirectory);
@@ -104,8 +104,8 @@ public interface VFSBrowserSheetListener {
     /**
      * Called when a file browser sheet's selection state has been reset.
      *
-     * @param fileBrowserSheet
-     * @param previousSelectedFiles
+     * @param fileBrowserSheet      The source of this event.
+     * @param previousSelectedFiles The previous sequence of selected files.
      */
     public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
         Sequence<FileObject> previousSelectedFiles);
@@ -113,8 +113,8 @@ public interface VFSBrowserSheetListener {
     /**
      * Called when a file browser sheet's disabled file filter has changed.
      *
-     * @param fileBrowserSheet
-     * @param previousDisabledFileFilter
+     * @param fileBrowserSheet           The source of this event.
+     * @param previousDisabledFileFilter The previous filter for disabled files.
      */
     public void disabledFileFilterChanged(VFSBrowserSheet fileBrowserSheet,
         Filter<FileObject> previousDisabledFileFilter);

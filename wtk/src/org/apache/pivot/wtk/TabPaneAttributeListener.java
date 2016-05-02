@@ -48,8 +48,9 @@ public interface TabPaneAttributeListener {
     /**
      * Called when a tab's tooltipText attribute has changed.
      *
-     * @param tabPane
-     * @param component
+     * @param tabPane The source of this event.
+     * @param component The actual tab component whose tooltip was changed.
+     * @param previousTooltipText What the text used to be.
      */
     public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText);
 }

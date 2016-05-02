@@ -220,58 +220,58 @@ public class TextArea extends Component {
         /**
          * Returns the insertion point for a given location.
          *
-         * @param x
-         * @param y
+         * @param x The X-location to check (likely from the mouse location).
+         * @param y The Y-location to check.
          */
         public int getInsertionPoint(int x, int y);
 
         /**
-         * Returns the next insertion point given an x coordinate and a
+         * @return The next insertion point given an x coordinate and a
          * character index.
          *
-         * @param x
-         * @param from
-         * @param direction
+         * @param x         The current X-location.
+         * @param from      The current character index to move from.
+         * @param direction The direction we want to move.
          */
         public int getNextInsertionPoint(int x, int from, ScrollDirection direction);
 
         /**
-         * Returns the row index of the character at a given index.
+         * @return The row index of the character at a given index.
          *
-         * @param index
+         * @param index The character index to check.
          */
         public int getRowAt(int index);
 
         /**
-         * Returns the index of the first character in the row containing a
+         * @return The index of the first character in the row containing a
          * given character index.
          *
-         * @param index
+         * @param index The character index to check.
          */
         public int getRowOffset(int index);
 
         /**
-         * Returns the number of characters in the row containing a given
+         * @return The number of characters in the row containing a given
          * character index.
          *
-         * @param index
+         * @param index The character index to check.
          */
         public int getRowLength(int index);
 
         /**
-         * Returns the total number of rows in the text area.
+         * @return The total number of rows in the text area.
          */
         public int getRowCount();
 
         /**
-         * Returns the bounds of the character at a given index.
+         * @return The bounds of the character at a given index.
          *
-         * @param index
+         * @param index The index of the character to check.
          */
         public Bounds getCharacterBounds(int index);
 
         /**
-         * Returns the current setting of the "tabWidth" style (so "setText"
+         * @return The current setting of the "tabWidth" style (so "setText"
          * uses the same value as Ctrl-Tab from user).
          */
         public int getTabWidth();
@@ -285,7 +285,8 @@ public class TextArea extends Component {
          * Converts a value from the bind context to a text representation
          * during a {@link Component#load(Object)} operation.
          *
-         * @param value
+         * @param value The value from the bind context to convert to text.
+         * @return The string representation of the value to display.
          */
         public String toString(Object value);
 
@@ -293,7 +294,9 @@ public class TextArea extends Component {
          * Converts a text string to a value to be stored in the bind context
          * during a {@link Component#store(Object)} operation.
          *
-         * @param text
+         * @param text The current text from the control to convert to an object
+         * suitable for storage in the bind context.
+         * @return The text converted to an object suitable for the bind context.
          */
         public Object valueOf(String text);
     }

@@ -43,24 +43,24 @@ public interface ViewportListener {
     /**
      * Called when a viewport's scroll top has changed.
      *
-     * @param scrollPane
-     * @param previousScrollTop
+     * @param scrollPane        The viewport that has scrolled.
+     * @param previousScrollTop The previous top scroll position.
      */
     public void scrollTopChanged(Viewport scrollPane, int previousScrollTop);
 
     /**
      * Called when a viewport's scroll left has changed.
      *
-     * @param scrollPane
-     * @param previousScrollLeft
+     * @param scrollPane         The viewport that has been scrolled.
+     * @param previousScrollLeft The previous left scroll position.
      */
     public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft);
 
     /**
      * Called when a viewport's view component has changed.
      *
-     * @param scrollPane
-     * @param previousView
+     * @param scrollPane   The viewport whose view has changed.
+     * @param previousView What the view (or the scrollable component) used to be.
      */
     public void viewChanged(Viewport scrollPane, Component previousView);
 }

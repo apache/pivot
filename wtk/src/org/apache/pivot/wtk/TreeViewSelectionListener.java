@@ -51,32 +51,32 @@ public interface TreeViewSelectionListener {
     /**
      * Called when a selected path has been added to a tree view.
      *
-     * @param treeView
-     * @param path
+     * @param treeView The source of this event.
+     * @param path     The path that has been added to the selection.
      */
     public void selectedPathAdded(TreeView treeView, Path path);
 
     /**
      * Called when a selected path has been removed from a tree view.
      *
-     * @param treeView
-     * @param path
+     * @param treeView The source of this event.
+     * @param path     The path that was removed from the selection.
      */
     public void selectedPathRemoved(TreeView treeView, Path path);
 
     /**
      * Called when a tree view's selection state has been reset.
      *
-     * @param treeView
-     * @param previousSelectedPaths
+     * @param treeView              The source of this event.
+     * @param previousSelectedPaths The list of paths that were previously selected.
      */
     public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths);
 
     /**
      * Called when a tree view's selected node has changed.
      *
-     * @param treeView
-     * @param previousSelectedNode
+     * @param treeView             The source of this event.
+     * @param previousSelectedNode The node that used to be selected.
      */
     public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode);
 }

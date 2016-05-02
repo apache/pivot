@@ -485,7 +485,7 @@ public class TreeView extends Component {
 
         /**
          * Gets the path that leads from the root of the tree data to this
-         * branch. Note: <tt>rootBranchHandler.getPath()</tt> will return and
+         * branch. Note: <tt>rootBranchHandler.getPath()</tt> will return an
          * empty sequence.
          */
         @SuppressWarnings("unchecked")

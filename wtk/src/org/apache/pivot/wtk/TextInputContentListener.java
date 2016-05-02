@@ -68,6 +68,7 @@ public interface TextInputContentListener {
      * @param textInput The source of the event.
      * @param text The text that will be inserted.
      * @param index The index at which the text will be inserted.
+     * @return The accumulated vote as to whether to allow this insertion.
      */
     public Vote previewInsertText(TextInput textInput, CharSequence text, int index);
 
@@ -93,6 +94,8 @@ public interface TextInputContentListener {
      *
      * @param textInput The source of the event.
      * @param index The starting index from which the text will be removed.
+     * @param count The count of characters to be removed starting from that index.
+     * @return The accumulated vote as to whether to allow this removal.
      */
     public Vote previewRemoveText(TextInput textInput, int index, int count);
 

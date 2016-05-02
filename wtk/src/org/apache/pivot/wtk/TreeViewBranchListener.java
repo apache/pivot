@@ -71,6 +71,7 @@ public interface TreeViewBranchListener {
      *
      * @param treeView The source of the event.
      * @param path The path of the node about to be collapsed or expanded.
+     * @return The accumulated vote as to whether to allow this expansion or collapse.
      */
     public Vote previewBranchExpandedChange(TreeView treeView, Path path);
 

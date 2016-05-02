@@ -72,64 +72,65 @@ public interface TabPaneListener {
     /**
      * Called when a tab has been inserted into a tab pane's tab sequence.
      *
-     * @param tabPane
-     * @param index
+     * @param tabPane The source of this event.
+     * @param index Where the newly inserted tab was placed.
      */
     public void tabInserted(TabPane tabPane, int index);
 
     /**
      * Called to preview a tab removal.
      *
-     * @param tabPane
-     * @param index
-     * @param count
+     * @param tabPane The component that wants to change.
+     * @param index The proposed starting index of the tab or tabs to be removed.
+     * @param count The count of tabs to remove.
+     * @return Whether or not to accept this tab removal (or defer it).
      */
     public Vote previewRemoveTabs(TabPane tabPane, int index, int count);
 
     /**
      * Called when a tab removal has been vetoed.
      *
-     * @param tabPane
-     * @param reason
+     * @param tabPane The source of this event.
+     * @param reason The vote result that vetoed the tab removal.
      */
     public void removeTabsVetoed(TabPane tabPane, Vote reason);
 
     /**
      * Called when a tab has been removed from a tab pane's tab sequence.
      *
-     * @param tabPane
-     * @param index
-     * @param tabs
+     * @param tabPane The source of this event.
+     * @param index The starting location of the tabs that were removed.
+     * @param tabs The actual sequence of tab components that were removed.
      */
     public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs);
 
     /**
      * Called when a tab pane's corner component has changed.
      *
-     * @param tabPane
-     * @param previousCorner
+     * @param tabPane The component that changed.
+     * @param previousCorner What the corner component used to be.
      */
     public void cornerChanged(TabPane tabPane, Component previousCorner);
 
     /**
      * Called when a tab pane's tab data renderer has changed.
      *
-     * @param tabPane
-     * @param previousTabDataRenderer
+     * @param tabPane The source of this event.
+     * @param previousTabDataRenderer The previous renderer for the tab data.
      */
     public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer);
 
     /**
      * Called when a tab pane's closeable property has changed.
      *
-     * @param tabPane
+     * @param tabPane The component that changed.
      */
     public void closeableChanged(TabPane tabPane);
 
     /**
      * Called when a tab pane's collapsible property has changed.
      *
-     * @param tabPane
+     * @param tabPane The source of this event.
      */
     public void collapsibleChanged(TabPane tabPane);
 }

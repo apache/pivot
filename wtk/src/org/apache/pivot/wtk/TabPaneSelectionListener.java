@@ -47,6 +47,7 @@ public interface TabPaneSelectionListener {
      *
      * @param tabPane The source of the event.
      * @param selectedIndex The index that will be selected.
+     * @return The vote result as to whether to accept this selected index change.
      */
     public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex);
 

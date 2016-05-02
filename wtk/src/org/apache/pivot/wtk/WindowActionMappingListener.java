@@ -25,16 +25,16 @@ public interface WindowActionMappingListener {
     /**
      * Called when an action mapping has been added to a window.
      *
-     * @param window
+     * @param window The source of this event.
      */
     public void actionMappingAdded(Window window);
 
     /**
      * Called when action mappings have been removed from a window.
      *
-     * @param window
-     * @param index
-     * @param removed
+     * @param window  The window that is affected.
+     * @param index   Starting index of the action mappings that were removed.
+     * @param removed The sequence of action mappings that were removed.
      */
     public void actionMappingsRemoved(Window window, int index,
         Sequence<Window.ActionMapping> removed);
@@ -42,8 +42,8 @@ public interface WindowActionMappingListener {
     /**
      * Called when an action mapping's keystroke has changed.
      *
-     * @param actionMapping
-     * @param previousKeyStroke
+     * @param actionMapping     The action mapping that has changed.
+     * @param previousKeyStroke The previous keystroke (if any) associated with this mapping.
      */
     public void keyStrokeChanged(Window.ActionMapping actionMapping,
         Keyboard.KeyStroke previousKeyStroke);
@@ -51,8 +51,8 @@ public interface WindowActionMappingListener {
     /**
      * Called when an action mapping's action has changed.
      *
-     * @param actionMapping
-     * @param previousAction
+     * @param actionMapping  The action mapping that has changed.
+     * @param previousAction The action previously associated with this mapping.
      */
     public void actionChanged(Window.ActionMapping actionMapping, Action previousAction);
 }

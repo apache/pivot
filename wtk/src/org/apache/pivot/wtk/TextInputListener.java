@@ -70,60 +70,60 @@ public interface TextInputListener {
     /**
      * Called when a text input's text size has changed.
      *
-     * @param textInput
-     * @param previousTextSize
+     * @param textInput        The source of this event.
+     * @param previousTextSize The previous text size for the control
      */
     public void textSizeChanged(TextInput textInput, int previousTextSize);
 
     /**
      * Called when a text input's maximum length has changed.
      *
-     * @param textInput
-     * @param previousMaximumLength
+     * @param textInput             The source of this event.
+     * @param previousMaximumLength The previous maximum text length.
      */
     public void maximumLengthChanged(TextInput textInput, int previousMaximumLength);
 
     /**
      * Called when a text input's password flag has changed.
      *
-     * @param textInput
+     * @param textInput The source of this event.
      */
     public void passwordChanged(TextInput textInput);
 
     /**
      * Called when a text input's prompt has changed.
      *
-     * @param textInput
-     * @param previousPrompt
+     * @param textInput      The source of this event.
+     * @param previousPrompt The previous prompt string.
      */
     public void promptChanged(TextInput textInput, String previousPrompt);
 
     /**
      * Called when the validator changes.
      *
-     * @param textInput
-     * @param previousValidator
+     * @param textInput         The source of this event.
+     * @param previousValidator The previous validator for the text.
      */
     public void textValidatorChanged(TextInput textInput, Validator previousValidator);
 
     /**
      * Called when a text input's strict validation flag has changed.
      *
-     * @param textInput
+     * @param textInput The text input that has changed.
      */
     public void strictValidationChanged(TextInput textInput);
 
     /**
      * Called when the text changes validity.
      *
-     * @param textInput
+     * @param textInput The text input that has been changed.
      */
     public void textValidChanged(TextInput textInput);
 
     /**
      * Called when the editable state has changed.
      *
-     * @param textInput
+     * @param textInput The text input whose state has changed.
      */
     public void editableChanged(TextInput textInput);
 

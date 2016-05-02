@@ -25,9 +25,9 @@ public interface TreeViewNodeStateListener {
     /**
      * Called when a node's checked state has changed.
      *
-     * @param treeView
-     * @param path
-     * @param previousCheckState
+     * @param treeView           The source of this event.
+     * @param path               Path to the node whose state has changed.
+     * @param previousCheckState The previous check state of this node.
      */
     public void nodeCheckStateChanged(TreeView treeView, Path path,
         TreeView.NodeCheckState previousCheckState);

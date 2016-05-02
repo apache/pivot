@@ -44,24 +44,24 @@ public interface TextAreaBindingListener {
     /**
      * Called when a text area's text key has changed.
      *
-     * @param textArea
-     * @param previousTextKey
+     * @param textArea The component that has changed.
+     * @param previousTextKey What the text key used to be for this component.
      */
     public void textKeyChanged(TextArea textArea, String previousTextKey);
 
     /**
      * Called when a text area's text bind type has changed.
      *
-     * @param textArea
-     * @param previousTextBindType
+     * @param textArea The source of this event.
+     * @param previousTextBindType The previous bind type for this component.
      */
     public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType);
 
     /**
      * Called when a text area's text bind mapping has changed.
      *
-     * @param textArea
-     * @param previousTextBindMapping
+     * @param textArea The source of this event.
+     * @param previousTextBindMapping The previous bind mapping for this component.
      */
     public void textBindMappingChanged(TextArea textArea,
         TextArea.TextBindMapping previousTextBindMapping);

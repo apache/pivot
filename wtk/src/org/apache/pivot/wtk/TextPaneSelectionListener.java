@@ -23,9 +23,9 @@ public interface TextPaneSelectionListener {
     /**
      * Called when a text pane's selection state has changed.
      *
-     * @param textPane
-     * @param previousSelectionStart
-     * @param previousSelectionLength
+     * @param textPane                The source of this event.
+     * @param previousSelectionStart  The offset where the selection used to start.
+     * @param previousSelectionLength What the selection length was previously.
      */
     public void selectionChanged(TextPane textPane, int previousSelectionStart,
         int previousSelectionLength);

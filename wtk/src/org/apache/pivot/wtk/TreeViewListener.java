@@ -74,62 +74,62 @@ public interface TreeViewListener {
     /**
      * Called when a tree view's data has changed.
      *
-     * @param treeView
-     * @param previousTreeData
+     * @param treeView         The source of this event.
+     * @param previousTreeData The previous data for this tree.
      */
     public void treeDataChanged(TreeView treeView, List<?> previousTreeData);
 
     /**
      * Called when a tree view's node renderer has changed.
      *
-     * @param treeView
-     * @param previousNodeRenderer
+     * @param treeView             The source of this event.
+     * @param previousNodeRenderer The previous renderer for tree nodes.
      */
     public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer);
 
     /**
      * Called when a tree view's node editor has changed.
      *
-     * @param treeView
-     * @param previousNodeEditor
+     * @param treeView           The source of this event.
+     * @param previousNodeEditor The previous editor for tree nodes.
      */
     public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor);
 
     /**
      * Called when a tree view's select mode has changed.
      *
-     * @param treeView
-     * @param previousSelectMode
+     * @param treeView           The source of this event.
+     * @param previousSelectMode What the tree view's select mode was before the change.
      */
     public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode);
 
     /**
      * Called when a tree view's checkmarks enabled flag has changed.
      *
-     * @param treeView
+     * @param treeView The source of this event.
      */
     public void checkmarksEnabledChanged(TreeView treeView);
 
     /**
      * Called when a tree view's "show mixed checkmark state" flag has changed.
      *
-     * @param treeView
+     * @param treeView The tree view that has changed.
      */
     public void showMixedCheckmarkStateChanged(TreeView treeView);
 
     /**
      * Called when a tree view's disabled node filter has changed.
      *
-     * @param treeView
-     * @param previousDisabledNodeFilter
+     * @param treeView                   The tree view that has changed.
+     * @param previousDisabledNodeFilter The previous filter that determines the disabled nodes.
      */
     public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter);
 
     /**
      * Called when a tree view's disabled checkmark filter has changed.
      *
-     * @param treeView
-     * @param previousDisabledCheckmarkFilter
+     * @param treeView                        The source of this event.
+     * @param previousDisabledCheckmarkFilter The previous filter that determined the disabled checkmarks.
      */
     public void disabledCheckmarkFilterChanged(TreeView treeView,
         Filter<?> previousDisabledCheckmarkFilter);

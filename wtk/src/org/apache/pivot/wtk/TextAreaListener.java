@@ -38,15 +38,15 @@ public interface TextAreaListener {
     /**
      * Called when a text area's maximum length has changed.
      *
-     * @param textArea
-     * @param previousMaximumLength
+     * @param textArea The source of this event.
+     * @param previousMaximumLength What the maximum length used to be.
      */
     public void maximumLengthChanged(TextArea textArea, int previousMaximumLength);
 
     /**
      * Called when a text area's editable state has changed.
      *
-     * @param textArea
+     * @param textArea The source of this event.
      */
     public void editableChanged(TextArea textArea);
 }

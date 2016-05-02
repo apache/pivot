@@ -44,24 +44,24 @@ public interface TextInputBindingListener {
     /**
      * Called when a text input's text key has changed.
      *
-     * @param textInput
-     * @param previousTextKey
+     * @param textInput The source of this event.
+     * @param previousTextKey The previous text key for the component.
      */
     public void textKeyChanged(TextInput textInput, String previousTextKey);
 
     /**
      * Called when a text input's text bind type has changed.
      *
-     * @param textInput
-     * @param previousTextBindType
+     * @param textInput The source of this event.
+     * @param previousTextBindType The previous bind type for this component.
      */
     public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType);
 
     /**
      * Called when a text input's text bind mapping has changed.
      *
-     * @param textInput
-     * @param previousTextBindMapping
+     * @param textInput The source of this event.
+     * @param previousTextBindMapping The previous bind mapping for this component.
      */
     public void textBindMappingChanged(TextInput textInput,
         TextInput.TextBindMapping previousTextBindMapping);

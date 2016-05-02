@@ -55,19 +55,19 @@ public interface TreeViewNodeListener {
     /**
      * Called when a node has been inserted into the tree view.
      *
-     * @param treeView
-     * @param path
-     * @param index
+     * @param treeView The source of this event.
+     * @param path     The path to the branch where the node was inserted.
+     * @param index    The index of the newly inserted node within the branch.
      */
     public void nodeInserted(TreeView treeView, Path path, int index);
 
     /**
      * Called when nodes have been removed from the tree view.
      *
-     * @param treeView
-     * @param path
-     * @param index
-     * @param count The number of nodes that were removed, or <tt>-1</tt> if all
+     * @param treeView The source of this event.
+     * @param path     The path to the branch where the node(s) were removed.
+     * @param index    The index to the first removed node within the branch.
+     * @param count    The number of nodes that were removed, or <tt>-1</tt> if all
      * nodes were removed.
      */
     public void nodesRemoved(TreeView treeView, Path path, int index, int count);
@@ -75,24 +75,25 @@ public interface TreeViewNodeListener {
     /**
      * Called when a node in the tree view has been updated.
      *
-     * @param treeView
-     * @param path
-     * @param index
+     * @param treeView The source of this event.
+     * @param path     Path to the branch that is the parent of the updated node.
+     * @param index    Index of the updated node within the branch.
      */
     public void nodeUpdated(TreeView treeView, Path path, int index);
 
     /**
      * Called when the nodes in a branch have been cleared.
      *
-     * @param treeView
+     * @param treeView The source of this event.
+     * @param path     Path to the branch where the nodes were cleared.
      */
     public void nodesCleared(TreeView treeView, Path path);
 
     /**
      * Called when the nodes in a branch have been sorted.
      *
-     * @param treeView
-     * @param path
+     * @param treeView The source of this event.
+     * @param path     Path to the branch where the nodes were sorted.
      */
     public void nodesSorted(TreeView treeView, Path path);
 }

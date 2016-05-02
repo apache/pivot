@@ -36,7 +36,7 @@ public abstract class Viewport extends Container {
      */
     public interface Skin {
         /**
-         * The bounds of the Viewport within the container, for example, in
+         * @return The bounds of the Viewport within the container, for example, in
          * ScrollPaneSkin, this excludes the scrollbars.
          */
         public Bounds getViewportBounds();

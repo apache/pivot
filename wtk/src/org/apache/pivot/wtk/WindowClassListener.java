@@ -23,7 +23,7 @@ public interface WindowClassListener {
     /**
      * Called when the active window has changed.
      *
-     * @param previousActiveWindow
+     * @param previousActiveWindow The window that was previously the active window.
      */
     public void activeWindowChanged(Window previousActiveWindow);
 }

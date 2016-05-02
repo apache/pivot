@@ -23,9 +23,9 @@ public interface TextAreaSelectionListener {
     /**
      * Called when a text area's selection state has changed.
      *
-     * @param textArea
-     * @param previousSelectionStart
-     * @param previousSelectionLength
+     * @param textArea The source of this event.
+     * @param previousSelectionStart Where the selection used to start.
+     * @param previousSelectionLength The previous selection length.
      */
     public void selectionChanged(TextArea textArea, int previousSelectionStart,
         int previousSelectionLength);

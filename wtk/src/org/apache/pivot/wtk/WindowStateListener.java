@@ -60,46 +60,50 @@ public interface WindowStateListener {
     /**
      * Called when a window has opened.
      *
-     * @param window
+     * @param window The newly opened window.
      */
     public void windowOpened(Window window);
 
     /**
      * Called to preview a window close event.
      *
-     * @param window
+     * @param window The window that wants to close.
+     * @return The vote from each listener as to whether to allow the close.
      */
     public Vote previewWindowClose(Window window);
 
     /**
      * Called to preview a window open event.
      *
-     * @param window
+     * @param window The window that wants to open.
+     * @return The vote from the listener as to whether to allow the open.
      */
     public Vote previewWindowOpen(Window window);
 
     /**
      * Called when a window close event has been vetoed.
      *
-     * @param window
-     * @param reason
+     * @param window The window that was to close, but now will not.
+     * @param reason The accumulated vote from all the listeners that
+     *               vetoed this event.
      */
     public void windowCloseVetoed(Window window, Vote reason);
 
     /**
      * Called when a window open event has been vetoed.
      *
-     * @param window
-     * @param reason
+     * @param window The window that was to open, but now will not.
+     * @param reason The accumulated vote from all the listeners that
+     *               vetoed this event.
      */
     public void windowOpenVetoed(Window window, Vote reason);
 
     /**
      * Called when a window has closed.
      *
-     * @param window
-     * @param display
-     * @param owner
+     * @param window  The window that is now closed.
+     * @param display The display in which the window was shown.
+     * @param owner   The owner of this window (which could be {@code null}).
      */
     public void windowClosed(Window window, Display display, Window owner);
 }

@@ -76,48 +76,48 @@ public interface VFSBrowserListener {
      * Called when a file browser's FileSystemManager has changed, (such as when
      * a nested VirtualFileSystem is opened).
      *
-     * @param fileBrowser
-     * @param previousManager
+     * @param fileBrowser     The browser that has changed.
+     * @param previousManager The previous file manager for this browser.
      */
     public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager);
 
     /**
      * Called when a file browser's root directory has changed.
      *
-     * @param fileBrowser
-     * @param previousRootDirectory
+     * @param fileBrowser           The browser that has changed.
+     * @param previousRootDirectory The previous root directory that we were browsing.
      */
     public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory);
 
     /**
      * Called when a file browser's home directory has changed.
      *
-     * @param fileBrowser
-     * @param previousHomeDirectory
+     * @param fileBrowser           The browser that has changed.
+     * @param previousHomeDirectory The previous home directory.
      */
     public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory);
 
     /**
      * Called when a file has been added to a file browser's selection.
      *
-     * @param fileBrowser
-     * @param file
+     * @param fileBrowser The source of this event.
+     * @param file        The file newly added to the selection.
      */
     public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file);
 
     /**
      * Called when a file has been removed from a file browser's selection.
      *
-     * @param fileBrowser
-     * @param file
+     * @param fileBrowser The source of this event.
+     * @param file        The file just removed from the selection.
      */
     public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file);
 
     /**
      * Called when a file browser's selection state has been reset.
      *
-     * @param fileBrowser
-     * @param previousSelectedFiles
+     * @param fileBrowser           The source of this event.
+     * @param previousSelectedFiles The sequence of files that were previously selected.
      */
     public void selectedFilesChanged(VFSBrowser fileBrowser,
         Sequence<FileObject> previousSelectedFiles);
@@ -125,15 +125,15 @@ public interface VFSBrowserListener {
     /**
      * Called when a file browser's multi-select flag has changed.
      *
-     * @param fileBrowser
+     * @param fileBrowser The browser that has changed selection modes.
      */
     public void multiSelectChanged(VFSBrowser fileBrowser);
 
     /**
      * Called when a file browser's file filter has changed.
      *
-     * @param fileBrowser
-     * @param previousDisabledFileFilter
+     * @param fileBrowser                The source of this event.
+     * @param previousDisabledFileFilter The previous filter for disabled files (if any).
      */
     public void disabledFileFilterChanged(VFSBrowser fileBrowser,
         Filter<FileObject> previousDisabledFileFilter);

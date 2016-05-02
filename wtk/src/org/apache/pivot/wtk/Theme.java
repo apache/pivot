@@ -105,21 +105,21 @@ public abstract class Theme {
     }
 
     /**
-     * Gets the theme's font.
+     * @return The theme's font.
      */
     public abstract Font getFont();
 
     /**
      * Sets the theme's font.
      *
-     * @param font the font
+     * @param font The font.
      */
     public abstract void setFont(Font font);
 
     /**
-     * Gets a color from the theme's base color palette.
+     * @return A color from the theme's base color palette.
      *
-     * @param index the index of the color, starting from 0
+     * @param index The index of the color, starting from 0.
      */
     public abstract Color getBaseColor(int index);
 
@@ -132,10 +132,10 @@ public abstract class Theme {
     public abstract void setBaseColor(int index, Color baseColor);
 
     /**
-     * Gets a value from the theme's complete color palette (including derived
+     * @return A value from the theme's complete color palette (including derived
      * colors, if any).
      *
-     * @param index the index of the color, starting from 0
+     * @param index The index of the color, starting from 0.
      */
     public abstract Color getColor(int index);
 
@@ -151,14 +151,14 @@ public abstract class Theme {
     /**
      * Gets the number of Palette Colors.
      *
-     * @return the number
+     * @return The number of colors in the theme's palette.
      */
     public abstract int getNumberOfPaletteColors();
 
     /**
      * Gets the total number of Colors (including derived colors, if any).
      *
-     * @return the number
+     * @return The total number of colors.
      */
     public abstract int getNumberOfColors();
 
@@ -166,8 +166,9 @@ public abstract class Theme {
      * Tell if the theme is dark.<br> Usually this means that (if true) any
      * color will be transformed in the opposite way (brightening instead of
      * darkening, and darkening instead of brightening).
+     * <p>Note: this value is set in the theme properties file.
      *
-     * @return true if dark, false otherwise
+     * @return {@code true} if dark, {@code false} otherwise.
      */
     public abstract boolean isThemeDark();
 
@@ -175,7 +176,7 @@ public abstract class Theme {
      * Tell if the theme is flat.<br> Usually this means that (if true) any
      * border/shadow will not be drawn.
      *
-     * @return true if flat, false otherwise
+     * @return {@code true} if flat, {@code false} otherwise.
      */
     public abstract boolean isThemeFlat();
 
@@ -183,7 +184,7 @@ public abstract class Theme {
      * Tell if the theme has transitions enabled.<br> Usually this means that (if false) any
      * effect/transition will not be drawn.
      *
-     * @return true if enabled (default), false otherwise
+     * @return {@code true} if enabled (default), {@code false} otherwise.
      */
     public abstract boolean isTransitionEnabled();
 
@@ -237,7 +238,7 @@ public abstract class Theme {
     /**
      * Returns a safe (and general) default foreground color.
      *
-     * @return Black if the theme is not dark (default), or White.
+     * @return Black if the theme is not dark (default), or White otherwise.
      */
     public Color getDefaultForegroundColor() {
         if (!isThemeDark()) {
@@ -247,7 +248,7 @@ public abstract class Theme {
     }
 
     /**
-     * Gets the current theme, as determined by the {@linkplain #PROVIDER_NAME
+     * @return The current theme, as determined by the {@linkplain #PROVIDER_NAME
      * theme provider}.
      *
      * @throws IllegalStateException If a theme has not been installed.
@@ -261,7 +262,7 @@ public abstract class Theme {
     }
 
     /**
-     * Produce a font by describing it relative to the current theme's font
+     * Produce a font by describing it relative to the current theme's font.
      *
      * @param dictionary A dictionary with any of the following keys: <ul> <li>
      * {@value #NAME_KEY} - the family name of the font</li> <li>
@@ -269,6 +270,7 @@ public abstract class Theme {
      * relative size</li> <li>{@value #BOLD_KEY} - true/false</li> <li>
      * {@value #ITALIC_KEY} - true/false</li> </ul> Omitted values are taken
      * from the theme's font.
+     * @return The new font derived from the current font.
      */
     public static Font deriveFont(Dictionary<String, ?> dictionary) {
         Font font = theme.getFont();
