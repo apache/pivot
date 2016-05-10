@@ -434,7 +434,7 @@ public abstract class Query<V> extends IOTask<V> {
             message = connection.getResponseMessage();
 
             // Record the content length
-            bytesExpected = connection.getContentLength();
+            bytesExpected = connection.getContentLengthLong();
 
             // NOTE Header indexes start at 1, not 0
             int i = 1;
@@ -445,6 +445,7 @@ public abstract class Query<V> extends IOTask<V> {
             // If the response was anything other than 2xx, throw an exception
             int statusPrefix = status / 100;
             if (statusPrefix != 2) {
+                queryListeners.failed(this);
                 throw new QueryException(status, message);
             }
 
