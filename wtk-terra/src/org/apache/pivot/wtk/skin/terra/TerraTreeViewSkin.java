@@ -151,7 +151,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
         /**
          * This operation is not supported by this iterator.
          *
-         * @throws UnsupportedOperationException
+         * @throws UnsupportedOperationException always since this is unsupported.
          */
         @Override
         public void remove() {
@@ -1207,7 +1207,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     /**
-     * Gets the fixed node height of this skin.
+     * @return The fixed node height of this skin.
      */
     protected int getNodeHeight() {
         TreeView treeView = (TreeView) getComponent();
@@ -1225,8 +1225,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     /**
-     * Gets the metadata associated with the node found at the specified
+     * @return The metadata associated with the node found at the specified
      * y-coordinate, or <tt>null</tt> if there is no node at that location.
+     * @param y The current Y location.
      */
     protected final NodeInfo getNodeInfoAt(int y) {
         NodeInfo nodeInfo = null;
@@ -1242,9 +1243,10 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     /**
-     * Gets the metadata associated with the node at the specified path. The
+     * @return The metadata associated with the node at the specified path. The
      * path must be valid. The empty path is supported and represents the root
      * node info.
+     * @param path The path to query.
      */
     protected final NodeInfo getNodeInfoAt(Path path) {
         assert (path != null) : "Path is null";
@@ -1275,8 +1277,9 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     /**
-     * Gets the bounding box defined by the specified node, or <tt>null</tt> if
+     * @return The bounding box defined by the specified node, or <tt>null</tt> if
      * the node is not currently visible.
+     * @param nodeInfo The node information to search for.
      */
     protected final Bounds getNodeBounds(NodeInfo nodeInfo) {
         Bounds bounds = null;
@@ -1471,6 +1474,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
     /**
      * Repaints the region occupied by the specified node.
+     *
+     * @param nodeInfo The node to search for.
      */
     protected void repaintNode(NodeInfo nodeInfo) {
         Bounds bounds = getNodeBounds(nodeInfo);

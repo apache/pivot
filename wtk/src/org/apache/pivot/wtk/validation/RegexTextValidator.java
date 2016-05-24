@@ -44,7 +44,8 @@ public class RegexTextValidator implements Validator {
     }
 
     /**
-     * @throws PatternSyntaxException If the expression's syntax is invalid
+     * @param regexPattern The new pattern for this validator.
+     * @throws PatternSyntaxException If the expression's syntax is invalid.
      */
     public void setPattern(String regexPattern) {
         this.p = Pattern.compile(regexPattern);

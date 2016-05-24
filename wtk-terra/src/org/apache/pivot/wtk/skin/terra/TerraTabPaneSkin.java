@@ -1479,7 +1479,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
      * CommandModifier + {@link KeyCode#KEYPAD_1 KEYPAD_1} to
      * {@link KeyCode#KEYPAD_9 KEYPAD_9}<br>or CommandModifier +
      * {@link KeyCode#N1 1} to {@link KeyCode#N9 9} Select the (enabled) tab at
-     * index 0 to 8 respectively<p>
+     * index 0 to 8 respectively.
      *
      * @see Platform#getCommandModifier()
      */

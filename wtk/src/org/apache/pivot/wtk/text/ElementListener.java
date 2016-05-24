@@ -66,55 +66,55 @@ public interface ElementListener {
     /**
      * Called when a node has been inserted into an element.
      *
-     * @param element
-     * @param index
+     * @param element The element that has changed.
+     * @param index   Where in the element's node sequence the new one was inserted.
      */
     public void nodeInserted(Element element, int index);
 
     /**
      * Called when nodes have been removed from an element.
      *
-     * @param element
-     * @param index
-     * @param nodes
+     * @param element The element that changed.
+     * @param index   The starting index of where nodes were removed.
+     * @param nodes   The actual sequence of removed nodes.
      */
     public void nodesRemoved(Element element, int index, Sequence<Node> nodes);
 
     /**
      * Called when the font has changed.
      *
-     * @param element
-     * @param previousFont
+     * @param element      The element that changed.
+     * @param previousFont What the font used to be.
      */
     public void fontChanged(Element element, java.awt.Font previousFont);
 
     /**
      * Called when the background color has changed.
      *
-     * @param element
-     * @param previousBackgroundColor
+     * @param element                 The element that changed.
+     * @param previousBackgroundColor What the background color was before the change.
      */
     public void backgroundColorChanged(Element element, Color previousBackgroundColor);
 
     /**
      * Called when the foreground color has changed.
      *
-     * @param element
-     * @param previousForegroundColor
+     * @param element                 The element whose color changed.
+     * @param previousForegroundColor The old foreground color.
      */
     public void foregroundColorChanged(Element element, Color previousForegroundColor);
 
     /**
      * Called when underline style has changed.
      *
-     * @param element
+     * @param element The element that changed.
      */
     public void underlineChanged(Element element);
 
     /**
      * Called when strikethrough style has changed.
      *
-     * @param element
+     * @param element The element that changed.
      */
     public void strikethroughChanged(Element element);
 }

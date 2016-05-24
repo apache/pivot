@@ -58,51 +58,51 @@ public interface NodeListener {
      * Called when a node's parent has changed, either as a result of being
      * added to or removed from an element.
      *
-     * @param node
-     * @param previousParent
+     * @param node           The node that moved.
+     * @param previousParent What the node's parent used to be.
      */
     public void parentChanged(Node node, Element previousParent);
 
     /**
-     * Called when a node's offset has changed within it's parent element.
+     * Called when a node's offset has changed within its parent element.
      *
-     * @param node
-     * @param previousOffset
+     * @param node           The node that has been updated.
+     * @param previousOffset The previous offset of this node.
      */
     public void offsetChanged(Node node, int previousOffset);
 
     /**
      * Called when a child node has been inserted into a node.
      *
-     * @param node
-     * @param offset
+     * @param node   The parent node that changed.
+     * @param offset The offset where the child node was inserted.
      */
     public void nodeInserted(Node node, int offset);
 
     /**
      * Called when child nodes have been removed from a node.
      *
-     * @param node
-     * @param removed
-     * @param offset
+     * @param node    The parent node.
+     * @param removed The sequence of child nodes that were removed.
+     * @param offset  The starting offset of the removed nodes.
      */
     public void nodesRemoved(Node node, Sequence<Node> removed, int offset);
 
     /**
      * Called when a text range has been inserted into a node.
      *
-     * @param node
-     * @param offset
-     * @param span
+     * @param node   The node where text was inserted.
+     * @param offset The starting offset of the insertion.
+     * @param span   Count of characters inserted.
      */
     public void rangeInserted(Node node, int offset, int span);
 
     /**
      * Called when a text range has been removed from a node.
      *
-     * @param node
-     * @param offset
-     * @param characterCount
+     * @param node           The node where text was removed.
+     * @param offset         Starting offset of the text removal.
+     * @param characterCount Count of characters removed.
      */
     public void rangeRemoved(Node node, int offset, int characterCount);
 }

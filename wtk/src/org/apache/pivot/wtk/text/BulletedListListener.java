@@ -31,8 +31,8 @@ public interface BulletedListListener {
     /**
      * Called when the list style has changed.
      *
-     * @param bulletedList
-     * @param previousStyle
+     * @param bulletedList  The list whose style has changed.
+     * @param previousStyle The previous list style.
      */
     public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle);
 }

@@ -41,7 +41,13 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
         super(NumberFormat.getInstance(locale), locale);
     }
 
-    /** helper method that wraps the ParseException in a RuntimeException. */
+    /**
+     * Helper method that wraps the {@link ParseException} in a {@link RuntimeException}.
+     *
+     * @param text The text to parse.
+     * @return The number parsed from the text.
+     * @throws RuntimeException if there was a parsing error.
+     */
     protected final Number parseNumber(final String text) {
         String textToParse;
         try {
@@ -55,8 +61,12 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
     }
 
     /**
-     * helper method that returns the widest number real instance, and extract
+     * Helper method that returns the widest number real instance, and extract
      * later values depending on the precision needed.
+     *
+     * @param text The text to convert.
+     * @return The decimal equivalent of the text or {@code null} if the text
+     * cannot be converted.
      */
     protected final BigDecimal textToBigDecimal(final String text) {
         BigDecimal bd;
@@ -73,15 +83,20 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
         return bd;
     }
 
-    /** set the autoTrim mode, before parsing the text (default false) */
+    /**
+     * Set the autoTrim mode, before parsing the text (default false).
+     *
+     * @param autoTrim The new auto trim value ({@code true} to trim
+     * leading and trailing blanks before parsing text).
+     */
     public void setAutoTrim(boolean autoTrim) {
         this.autoTrim = autoTrim;
     }
 
     /**
-     * tell the autoTrim mode
+     * Tell the autoTrim mode.
      *
-     * @return true if autoTrim is enabled, otherwise false (default)
+     * @return {@code true} if autoTrim is enabled, otherwise {@code false} (default).
      */
     public boolean isAutoTrim() {
         return autoTrim;

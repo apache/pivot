@@ -75,8 +75,10 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     }
 
     /**
-     * Used by TextPaneSkinParagraphView when it breaks child nodes into
+     * Used by {@link TextPaneSkinParagraphView} when it breaks child nodes into
      * multiple views.
+     *
+     * @return The next text node view within the document.
      */
     public TextPaneSkinTextNodeView getNext() {
         if (getLength() == 0) {

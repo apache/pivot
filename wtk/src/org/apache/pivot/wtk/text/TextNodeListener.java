@@ -23,18 +23,18 @@ public interface TextNodeListener {
     /**
      * Called when characters have been inserted into a text node.
      *
-     * @param textNode
-     * @param index
-     * @param count
+     * @param textNode The text node that changed.
+     * @param index    Starting index of the insertion.
+     * @param count    Count of characters inserted.
      */
     public void charactersInserted(TextNode textNode, int index, int count);
 
     /**
      * Called when characters have been removed from a text node.
      *
-     * @param textNode
-     * @param index
-     * @param count
+     * @param textNode The text node that changed.
+     * @param index    Starting index of the text removed.
+     * @param count    Count of characters removed.
      */
     public void charactersRemoved(TextNode textNode, int index, int count);
 }

@@ -23,10 +23,10 @@ public interface DropTarget {
     /**
      * Called when the mouse first enters a drop target during a drag operation.
      *
-     * @param component
-     * @param dragContent
-     * @param supportedDropActions
-     * @param userDropAction
+     * @param component            The drop target component.
+     * @param dragContent          What is being dragged.
+     * @param supportedDropActions What drop actions should be considered.
+     * @param userDropAction       What drop action the user is requesting.
      * @return The drop action that would result if the user dropped the item at
      * this location, or <tt>null</tt> if the target cannot accept the drop.
      */
@@ -36,7 +36,7 @@ public interface DropTarget {
     /**
      * Called when the mouse leaves a drop target during a drag operation.
      *
-     * @param component
+     * @param component The drop target component.
      */
     public void dragExit(Component component);
 
@@ -44,12 +44,12 @@ public interface DropTarget {
      * Called when the mouse is moved while positioned over a drop target during
      * a drag operation.
      *
-     * @param component
-     * @param dragContent
-     * @param supportedDropActions
-     * @param x
-     * @param y
-     * @param userDropAction
+     * @param component            The drop target component.
+     * @param dragContent          What is being dragged.
+     * @param supportedDropActions The drop actions that are supported by the contents.
+     * @param x                    The current mouse X-location.
+     * @param y                    The current mouse Y-location.
+     * @param userDropAction       What drop action the user is requesting.
      * @return The drop action that would result if the user dropped the item at
      * this location, or <tt>null</tt> if the target cannot accept the drop.
      */
@@ -60,12 +60,12 @@ public interface DropTarget {
      * Called when the user drop action changes while the mouse is positioned
      * over a drop target during a drag operation.
      *
-     * @param component
-     * @param dragContent
-     * @param supportedDropActions
-     * @param x
-     * @param y
-     * @param userDropAction
+     * @param component            The drop target component.
+     * @param dragContent          What is being dragged.
+     * @param supportedDropActions The drop actions that are supported by the contents.
+     * @param x                    The current mouse X-location.
+     * @param y                    The current mouse Y-location.
+     * @param userDropAction       What drop action the user is requesting.
      * @return The drop action that would result if the user dropped the item at
      * this location, or <tt>null</tt> if the target cannot accept the drop.
      */
@@ -75,12 +75,12 @@ public interface DropTarget {
     /**
      * Called to drop the drag content.
      *
-     * @param component
-     * @param dragContent
-     * @param supportedDropActions
-     * @param x
-     * @param y
-     * @param userDropAction
+     * @param component            The drop target component.
+     * @param dragContent          What is being dragged.
+     * @param supportedDropActions The drop actions that are supported by the contents.
+     * @param x                    The current mouse X-location.
+     * @param y                    The current mouse Y-location.
+     * @param userDropAction       What drop action the user is requesting.
      * @return The drop action used to perform the drop, or <tt>null</tt> if the
      * target rejected the drop.
      */

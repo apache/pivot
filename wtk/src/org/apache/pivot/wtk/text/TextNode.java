@@ -26,7 +26,9 @@ public final class TextNode extends Node {
     private static class TextNodeListenerList extends ListenerList<TextNodeListener> implements
         TextNodeListener {
         /**
-         * @param index Index into this node.
+         * @param textNode The text node that changed.
+         * @param index    Index into this node.
+         * @param count    Count of characters inserted here.
          */
         @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
@@ -36,7 +38,9 @@ public final class TextNode extends Node {
         }
 
         /**
-         * @param index Index into this node.
+         * @param textNode The text node that changed.
+         * @param index    Index into this node.
+         * @param count    Count of characters removed here.
          */
         @Override
         public void charactersRemoved(TextNode textNode, int index, int count) {
@@ -83,7 +87,8 @@ public final class TextNode extends Node {
     }
 
     /**
-     * @param index Index into this node.
+     * @param text  The new text to insert into this node.
+     * @param index Starting index into this node for the insertion.
      */
     public void insertText(CharSequence text, int index) {
         if (text == null) {
@@ -104,6 +109,7 @@ public final class TextNode extends Node {
 
     /**
      * @param index Index into this node.
+     * @param count Count of characters to remove.
      */
     public void removeText(int index, int count) {
         if (index < 0 || index + count > characters.length()) {

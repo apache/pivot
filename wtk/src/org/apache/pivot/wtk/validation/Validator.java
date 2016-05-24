@@ -23,7 +23,7 @@ public interface Validator {
     /**
      * Determines if a text value is valid based on the rules of the validator.
      *
-     * @param text
+     * @param text The text to test.
      * @return <tt>true</tt> if the value is valid; <tt>false</tt>, otherwise.
      */
     public boolean isValid(String text);

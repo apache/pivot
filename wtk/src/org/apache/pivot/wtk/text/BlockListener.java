@@ -34,8 +34,8 @@ public interface BlockListener {
     /**
      * Called when the horizontal alignment has changed.
      *
-     * @param block
-     * @param previousHorizontalAlignment
+     * @param block                       The text block in question.
+     * @param previousHorizontalAlignment The previous alignment value.
      */
     public void horizontalAlignmentChanged(Block block,
         HorizontalAlignment previousHorizontalAlignment);

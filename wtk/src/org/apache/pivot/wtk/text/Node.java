@@ -117,6 +117,8 @@ public abstract class Node {
 
     /**
      * Set the offset of this node relative to its parent.
+     *
+     * @param offset The new offset for this node.
      */
     protected void setOffset(int offset) {
         int previousOffset = this.offset;
@@ -128,7 +130,7 @@ public abstract class Node {
     }
 
     /**
-     * Returns the node's offset within the document, which will be the
+     * @return The node's offset within the document, which will be the
      * offset of our parent (if any) added to our own offset.
      */
     public int getDocumentOffset() {
@@ -136,7 +138,7 @@ public abstract class Node {
     }
 
     /**
-     * Returns a {@link Span} that describes the content range of this node
+     * @return A {@link Span} that describes the content range of this node
      * relative to the whole document.
      */
     public Span getDocumentSpan() {
@@ -150,7 +152,7 @@ public abstract class Node {
      * Inserts a range into the node. Note that the contents of the range,
      * rather than the range itself, is added to the node.
      *
-     * @param range
+     * @param range The node containing the text to insert.
      * @param offsetArgument Offset relative to this node.
      */
     public abstract void insertRange(Node range, int offsetArgument);
@@ -159,7 +161,7 @@ public abstract class Node {
      * Removes a range from the node.
      *
      * @param offsetArgument Offset relative to this node.
-     * @param characterCount
+     * @param characterCount Count of characters to remove.
      * @return The removed range. This will be a copy of the node structure
      * relative to this node.
      */
@@ -169,8 +171,8 @@ public abstract class Node {
      * Replaces an existing range with a new range.
      *
      * @param offsetArgument Offset relative to this node.
-     * @param characterCount
-     * @param range
+     * @param characterCount Count of characters to replace.
+     * @param range The new range to insert.
      * @return The removed range. This will be a copy of the node structure
      * relative to this node.
      */
@@ -185,28 +187,29 @@ public abstract class Node {
      * Returns a range from the node.
      *
      * @param offsetArgument Offset relative to this node.
-     * @param characterCount
+     * @param characterCount Count of characters to get.
      * @return A node containing a copy of the node structure spanning the given
      * range, relative to this node.
      */
     public abstract Node getRange(int offsetArgument, int characterCount);
 
     /**
-     * Returns the character at the given offset.
+     * @return The character at the given offset.
      *
      * @param offsetArgument Offset relative to this node.
      */
     public abstract char getCharacterAt(int offsetArgument);
 
     /**
-     * Returns the number of characters in this node.
+     * @return The number of characters in this node.
      */
     public abstract int getCharacterCount();
 
     /**
      * Creates a copy of this node.
      *
-     * @param recursive
+     * @param recursive Whether to duplicate the children also.
+     * @return A copy of the current node.
      */
     public abstract Node duplicate(boolean recursive);
 
@@ -219,7 +222,7 @@ public abstract class Node {
      * Listeners for this node will just be given the offset relative to this node.
      *
      * @param offsetArgument Offset relative to this node.
-     * @param characterCount
+     * @param characterCount Count of characters inserted.
      */
     protected void rangeInserted(int offsetArgument, int characterCount) {
         if (parent != null) {
@@ -238,7 +241,7 @@ public abstract class Node {
      * Listeners for this node will just be given the offset relative to this node.
      *
      * @param offsetArgument Offset relative to this node.
-     * @param characterCount
+     * @param characterCount Count of characters removed.
      */
     protected void rangeRemoved(int offsetArgument, int characterCount) {
         if (parent != null) {
@@ -256,7 +259,7 @@ public abstract class Node {
      * Therefore the topmost node will be given the offset into the whole document.
      * Listeners for this node will just be given the offset relative to this node.
      *
-     * @param removed
+     * @param removed The actual sequence of nodes removed from here.
      * @param offsetArgument Offset relative to this node.
      */
     protected void nodesRemoved(Sequence<Node> removed, int offsetArgument) {
@@ -286,7 +289,7 @@ public abstract class Node {
     }
 
     /**
-     * Returns the node listener list.
+     * @return The node listener list.
      */
     public ListenerList<NodeListener> getNodeListeners() {
         return nodeListeners;

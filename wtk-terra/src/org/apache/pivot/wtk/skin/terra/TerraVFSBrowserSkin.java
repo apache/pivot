@@ -143,9 +143,9 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         }
 
         /**
-         * Obtains the icon to display for a given file.
+         * @return The icon to display for a given file.
          *
-         * @param file
+         * @param file The current file.
          */
         public Image getIcon(FileObject file) {
             Image icon;
@@ -661,7 +661,9 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     }
 
     /**
-     * FileObject comparator.
+     * @return A new {@link FileObject} comparator for the given column and sort order.
+     * @param columnName Name of the column to sort on.
+     * @param sortDirection The sort order.
      */
     public static FileComparator getFileComparator(String columnName, SortDirection sortDirection) {
         if (columnName.equals("name")) {

@@ -31,8 +31,8 @@ public interface NumberedListListener {
     /**
      * Called when the list style has changed.
      *
-     * @param numberedList
-     * @param previousStyle
+     * @param numberedList  The list whose style has changed.
+     * @param previousStyle The previous style for this list.
      */
     public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle);
 }

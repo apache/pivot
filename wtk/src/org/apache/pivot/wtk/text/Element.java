@@ -479,7 +479,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     /**
      * Determines the index of the child node at a given offset.
      *
-     * @param offset
+     * @param offset The text offset to search for.
      * @return The index of the child node at the given offset.
      */
     public int getNodeAt(int offset) {
@@ -501,7 +501,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     /**
      * Determines the path of the descendant node at a given offset.
      *
-     * @param offset
+     * @param offset The text offset to search for.
      * @return The path to the descendant node at the given offset.
      */
     public Sequence<Integer> getPathAt(int offset) {
@@ -525,7 +525,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     /**
      * Determines the descendant node at a given offset.
      *
-     * @param offset
+     * @param offset The text offset to search for.
      * @return The descendant node at the given offset.
      */
     public Node getDescendantAt(int offset) {
@@ -618,7 +618,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     /**
-     * Gets the currently foreground color, or <tt>null</tt> if no color is
+     * @return The current foreground color, or <tt>null</tt> if no color is
      * foreground.
      */
     public Color getForegroundColor() {
@@ -629,7 +629,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * Sets the currently foreground color.
      *
      * @param foregroundColor The foreground color, or <tt>null</tt> to specify
-     * no selection
+     * no selection.
      */
     public void setForegroundColor(Color foregroundColor) {
         Color previousForegroundColor = this.foregroundColor;
@@ -641,9 +641,9 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     /**
-     * Sets the currently foreground color.
+     * Sets the current foreground color.
      *
-     * @param foregroundColor The foreground color
+     * @param foregroundColor The foreground color.
      */
     public void setForegroundColor(String foregroundColor) {
         if (foregroundColor == null) {
@@ -654,7 +654,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     /**
-     * Gets the currently background color, or <tt>null</tt> if no color is
+     * @return The current background color, or <tt>null</tt> if no color is
      * background.
      */
     public Color getBackgroundColor() {
@@ -662,10 +662,10 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     /**
-     * Sets the currently background color.
+     * Sets the current background color.
      *
      * @param backgroundColor The background color, or <tt>null</tt> to specify
-     * no selection
+     * no selection.
      */
     public void setBackgroundColor(Color backgroundColor) {
         Color previousBackgroundColor = this.backgroundColor;
@@ -677,9 +677,9 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     /**
-     * Sets the currently background color.
+     * Sets the current background color.
      *
-     * @param backgroundColor The background color
+     * @param backgroundColor The background color.
      */
     public void setBackgroundColor(String backgroundColor) {
         if (backgroundColor == null) {

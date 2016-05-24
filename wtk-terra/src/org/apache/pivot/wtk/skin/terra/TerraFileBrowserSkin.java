@@ -133,9 +133,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         /**
-         * Obtains the icon to display for a given file.
+         * @return The icon to display for a given file.
          *
-         * @param file
+         * @param file The current file.
          */
         public static Image getIcon(File file) {
             Image icon;
@@ -564,7 +564,9 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     }
 
     /**
-     * File comparator.
+     * @return A new file comparator for the given column and direction.
+     * @param columnName The column name to sort on.
+     * @param sortDirection Ascending or Descending sort order.
      */
     public static FileComparator getFileComparator(String columnName, SortDirection sortDirection) {
         if (columnName.equals("name")) {

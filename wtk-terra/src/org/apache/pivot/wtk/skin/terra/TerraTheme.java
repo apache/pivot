@@ -482,7 +482,8 @@ public final class TerraTheme extends Theme {
      * Gets the image that this theme uses to represent messages of the
      * specified type.
      *
-     * @param messageType
+     * @param messageType The desired message type.
+     * @return The icon image for this message type.
      */
     public Image getMessageIcon(MessageType messageType) {
         return messageIcons.get(messageType);
@@ -492,8 +493,8 @@ public final class TerraTheme extends Theme {
      * Sets the image that this theme uses to represent messages of the
      * specified type.
      *
-     * @param messageType
-     * @param messageIcon
+     * @param messageType The message type to change.
+     * @param messageIcon The new icon image for this type.
      */
     public void setMessageIcon(MessageType messageType, Image messageIcon) {
         if (messageType == null || messageIcon == null) {
@@ -507,7 +508,8 @@ public final class TerraTheme extends Theme {
      * Gets the small image that this theme uses to represent messages of the
      * specified type.
      *
-     * @param messageType
+     * @param messageType The message type to query.
+     * @return The small image.
      */
     public Image getSmallMessageIcon(MessageType messageType) {
         return smallMessageIcons.get(messageType);
@@ -517,8 +519,8 @@ public final class TerraTheme extends Theme {
      * Sets the small image that this theme uses to represent messages of the
      * specified type.
      *
-     * @param messageType
-     * @param smallMessageIcon
+     * @param messageType      The message type to change.
+     * @param smallMessageIcon The new small icon for this type.
      */
     public void setSmallMessageIcon(MessageType messageType, Image smallMessageIcon) {
         if (messageType == null || smallMessageIcon == null) {
@@ -531,7 +533,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the theme's default background color.
      *
-     * @return the color if set, or White if the theme is not dark (default), or Black.
+     * @return The color if set, or White if the theme is not dark (default), or Black.
      */
     @Override
     public Color getDefaultBackgroundColor() {
@@ -541,7 +543,7 @@ public final class TerraTheme extends Theme {
     /**
      * Gets the theme's default foreground color.
      *
-     * @return the color if set, or Black if the theme is not dark (default), or White.
+     * @return The color if set, or Black if the theme is not dark (default), or White.
      */
     @Override
     public Color getDefaultForegroundColor() {
@@ -549,10 +551,11 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Returns a brighter version of the specified color. Specifically, it
+     * @return A brighter version of the specified color. Specifically, it
      * increases the brightness (in the HSB color model) by the
      * <tt>colorMultiplier</tt> factor and <tt>themeIsDark</tt> flag already
      * set.
+     * @param color The color to brighten.
      */
     public static Color brighten(Color color) {
         if (!themeIsDark) {
@@ -562,9 +565,10 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Returns a darker version of the specified color. Specifically, it
+     * @return A darker version of the specified color. Specifically, it
      * decreases the brightness (in the HSB color model) by the
      * <tt>colorMultiplier</tt> factor and <tt>themeDark</tt> flag already set.
+     * @param color The color to darken.
      */
     public static Color darken(Color color) {
         if (!themeIsDark) {

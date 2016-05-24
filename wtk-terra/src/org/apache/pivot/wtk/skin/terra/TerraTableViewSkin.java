@@ -1143,7 +1143,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     /**
-     * Is this {@link TableView} going into edit mode on a mouse down or
+     * @return Is this {@link TableView} going into edit mode on a mouse down or
      * on a mouse double click?
      */
     public boolean isEditOnMouseDown() {
@@ -1155,6 +1155,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * on a mouse double click (the default).
      * <p> Setting this to <tt>true</tt> can reduce the number of mouse clicks
      * necessary to rapidly edit a table view.
+     * @param editOnMouseDown The new setting.
      */
     public void setEditOnMouseDown(boolean editOnMouseDown) {
         this.editOnMouseDown = editOnMouseDown;

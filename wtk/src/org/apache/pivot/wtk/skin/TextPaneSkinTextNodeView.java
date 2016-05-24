@@ -325,8 +325,10 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     /**
-     * Used by TextPaneSkinParagraphView when it breaks child nodes into
+     * Used by {@link TextPaneSkinParagraphView} when it breaks child nodes into
      * multiple views.
+     *
+     * @return The next node view in the document.
      */
     public TextPaneSkinNodeView getNext() {
         return next;
