@@ -344,7 +344,7 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     /**
-     * Returns the amount of space between the edge of the FlowPane and its
+     * @return The amount of space between the edge of the FlowPane and its
      * components.
      */
     public Insets getPadding() {
@@ -354,6 +354,8 @@ public class FlowPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the FlowPane and
      * its components.
+     *
+     * @param padding The individual padding values for each edge.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -382,6 +384,8 @@ public class FlowPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the FlowPane and
      * its components, uniformly on all four edges.
+     *
+     * @param padding The single padding value for all four sides.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -390,6 +394,8 @@ public class FlowPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the FlowPane and
      * its components, uniformly on all four edges.
+     *
+     * @param padding The single padding value for all four sides.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {

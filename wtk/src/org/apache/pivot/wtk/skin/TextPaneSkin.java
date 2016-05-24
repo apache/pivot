@@ -438,14 +438,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Returns the font of the text
+     * @return The font of the text.
      */
     public Font getFont() {
         return font;
     }
 
     /**
-     * Sets the font of the text
+     * Sets the font of the text.
+     *
+     * @param font The new font for all the text.
      */
     public void setFont(Font font) {
         if (font == null) {
@@ -457,7 +459,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the font of the text
+     * Sets the font of the text.
      *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
@@ -470,7 +472,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the font of the text
+     * Sets the font of the text.
      *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
@@ -483,14 +485,16 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Returns the foreground color of the text
+     * @return The foreground color of the text.
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Sets the foreground color of the text
+     * Sets the foreground color of the text.
+     *
+     * @param color The new text color.
      */
     public void setColor(Color color) {
         if (color == null) {
@@ -502,7 +506,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the foreground color of the text
+     * Sets the foreground color of the text.
      *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
@@ -621,8 +625,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Returns the amount of space between the edge of the TextPane and its
-     * Document
+     * @return The amount of space between the edge of the TextPane and its
+     * Document.
      */
     public Insets getMargin() {
         return margin;
@@ -630,7 +634,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the amount of space between the edge of the TextPane and its
-     * Document
+     * Document.
+     *
+     * @param margin The new set of margin values.
      */
     public void setMargin(Insets margin) {
         if (margin == null) {
@@ -643,7 +649,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the amount of space between the edge of the TextPane and its
-     * Document
+     * Document.
      *
      * @param margin A dictionary with keys in the set {left, top, bottom,
      * right}.
@@ -658,7 +664,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the amount of space between the edge of the TextPane and its
-     * Document
+     * Document.
+     *
+     * @param margin The single margin value for all edges.
      */
     public final void setMargin(int margin) {
         setMargin(new Insets(margin));
@@ -666,7 +674,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the amount of space between the edge of the TextPane and its
-     * Document
+     * Document.
+     *
+     * @param margin The new single margin value for all the edges.
      */
     public final void setMargin(Number margin) {
         if (margin == null) {
@@ -678,7 +688,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     /**
      * Sets the amount of space between the edge of the TextPane and its
-     * Document
+     * Document.
      *
      * @param margin A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.

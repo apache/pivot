@@ -501,14 +501,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Returns the font of the text
+     * @return The font of the text.
      */
     public Font getFont() {
         return font;
     }
 
     /**
-     * Sets the font of the text
+     * Sets the font of the text.
+     *
+     * @param font The new font for the text.
      */
     public void setFont(Font font) {
         if (font == null) {
@@ -532,7 +534,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Sets the font of the text
+     * Sets the font of the text.
      *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
@@ -545,7 +547,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Sets the font of the text
+     * Sets the font of the text.
      *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
@@ -558,14 +560,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Returns the foreground color of the text
+     * @return The foreground color of the text.
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Sets the foreground color of the text
+     * Sets the foreground color of the text.
+     *
+     * @param color The new foreground text color.
      */
     public void setColor(Color color) {
         if (color == null) {
@@ -577,7 +581,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Sets the foreground color of the text
+     * Sets the foreground color of the text.
      *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
@@ -713,14 +717,16 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Returns the amount of space between the edge of the TextArea and its text
+     * @return The amount of space between the edge of the TextArea and its text.
      */
     public Insets getMargin() {
         return margin;
     }
 
     /**
-     * Sets the amount of space between the edge of the TextArea and its text
+     * Sets the amount of space between the edge of the TextArea and its text.
+     *
+     * @param margin The individual margin values for all edges.
      */
     public void setMargin(Insets margin) {
         if (margin == null) {
@@ -732,7 +738,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Sets the amount of space between the edge of the TextArea and its text
+     * Sets the amount of space between the edge of the TextArea and its text.
      *
      * @param margin A dictionary with keys in the set {left, top, bottom,
      * right}.
@@ -746,14 +752,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Sets the amount of space between the edge of the TextArea and its text
+     * Sets the amount of space between the edge of the TextArea and its text.
+     *
+     * @param margin The single value to use for all the margins.
      */
     public final void setMargin(int margin) {
         setMargin(new Insets(margin));
     }
 
     /**
-     * Sets the amount of space between the edge of the TextArea and its text
+     * Sets the amount of space between the edge of the TextArea and its text.
+     *
+     * @param margin The single value to use for all the margins.
      */
     public final void setMargin(Number margin) {
         if (margin == null) {
@@ -764,7 +774,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     /**
-     * Sets the amount of space between the edge of the TextArea and its text
+     * Sets the amount of space between the edge of the TextArea and its text.
      *
      * @param margin A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.

@@ -265,14 +265,16 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Returns the color that is painted behind the image
+     * @return The color that is painted behind the image.
      */
     public Color getBackgroundColor() {
         return backgroundColor;
     }
 
     /**
-     * Sets the color that is painted behind the image
+     * Sets the color that is painted behind the image.
+     *
+     * @param backgroundColor The new color for behind the image.
      */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -280,7 +282,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Sets the color that is painted behind the image
+     * Sets the color that is painted behind the image.
      *
      * @param backgroundColor Any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
@@ -295,7 +297,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Returns the opacity of the image, in [0,1].
+     * @return The opacity of the image, in [0,1].
      */
     public float getOpacity() {
         return opacity;
@@ -304,7 +306,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets the opacity of the image.
      *
-     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     * @param opacity A number between 0 (transparent) and 1 (opaque).
      */
     public void setOpacity(float opacity) {
         if (opacity < 0 || opacity > 1) {
@@ -318,7 +320,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets the opacity of the image.
      *
-     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     * @param opacity A number between 0 (transparent) and 1 (opaque).
      */
     public final void setOpacity(Number opacity) {
         if (opacity == null) {
@@ -329,7 +331,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Returns the horizontal alignment of the image.
+     * @return The horizontal alignment of the image.
      */
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
@@ -338,6 +340,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets the horizontal alignment of the image. Ignored if the
      * <code>fill</code> style is true.
+     *
+     * @param horizontalAlignment The new alignment value.
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
         if (horizontalAlignment == null) {
@@ -350,7 +354,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Returns the vertical alignment of the image.
+     * @return The vertical alignment of the image.
      */
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
@@ -359,6 +363,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets the vertical alignment of the image. Ignored if the
      * <code>fill</code> style is true.
+     *
+     * @param verticalAlignment The new alignment value.
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
@@ -371,7 +377,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Returns a boolean indicating whether the image will be scaled to fit the
+     * @return A boolean indicating whether the image will be scaled to fit the
      * space in which it is placed.
      */
     public boolean getFill() {
@@ -383,6 +389,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * space in which it is placed. Note that for scaling to occur, the
      * ImageView must specify a preferred size or be placed in a container that
      * constrains its size.
+     *
+     * @param fill The new fill flag value.
      */
     public void setFill(boolean fill) {
         this.fill = fill;
@@ -391,7 +399,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     /**
-     * Returns a boolean indicating whether, when the image is scaled, its
+     * @return A boolean indicating whether, when the image is scaled, its
      * aspect ratio is preserved.
      */
     public boolean getPreserveAspectRatio() {
@@ -401,6 +409,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets a boolean indicating whether, when the image is scaled, its aspect
      * ratio is preserved. Ignored if the <code>fill</code> style is false.
+     *
+     * @param preserveAspectRatio The new flag value.
      */
     public void setPreserveAspectRatio(boolean preserveAspectRatio) {
         this.preserveAspectRatio = preserveAspectRatio;

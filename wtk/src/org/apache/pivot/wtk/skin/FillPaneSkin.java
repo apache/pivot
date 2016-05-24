@@ -350,7 +350,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     }
 
     /**
-     * Returns the amount of space between the edge of the FillPane and its
+     * @return The amount of space between the edge of the FillPane and its
      * components.
      */
     public Insets getPadding() {
@@ -360,6 +360,8 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the FillPane and
      * its components.
+     *
+     * @param padding The new values for padding.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -388,6 +390,8 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the FillPane and
      * its components, uniformly on all four edges.
+     *
+     * @param padding The new value for padding on all sides.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -396,6 +400,8 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the FillPane and
      * its components, uniformly on all four edges.
+     *
+     * @param padding The new value for padding on all sides.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {

@@ -452,14 +452,16 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns the font used in rendering the Label's text
+     * @return The font used in rendering the Label's text.
      */
     public Font getFont() {
         return font;
     }
 
     /**
-     * Sets the font used in rendering the Label's text
+     * Sets the font used in rendering the Label's text.
+     *
+     * @param font The new font to use to render the text.
      */
     public void setFont(Font font) {
         if (font == null) {
@@ -473,7 +475,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the font used in rendering the Label's text
      *
-     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     * @param font A {@linkplain ComponentSkin#decodeFont(String) font specification}.
      */
     public final void setFont(String font) {
         if (font == null) {
@@ -486,7 +488,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the font used in rendering the Label's text
      *
-     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     * @param font A dictionary {@linkplain Theme#deriveFont describing a font}.
      */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
@@ -497,7 +499,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns the foreground color of the text of the label.
+     * @return The foreground color of the text of the label.
      */
     public Color getColor() {
         return color;
@@ -505,6 +507,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the foreground color of the text of the label.
+     *
+     * @param color The new foreground color for the label text.
      */
     public void setColor(Color color) {
         if (color == null) {
@@ -530,7 +534,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns the foreground color of the text of the label when disabled.
+     * @return The foreground color of the text of the label when disabled.
      */
     public Color getDisabledColor() {
         return disabledColor;
@@ -538,6 +542,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the foreground color of the text of the label when disabled.
+     *
+     * @param color The new disabled text color.
      */
     public void setDisabledColor(Color color) {
         if (color == null) {
@@ -563,7 +569,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns the background color of the label.
+     * @return The background color of the label.
      */
     public Color getBackgroundColor() {
         return backgroundColor;
@@ -571,6 +577,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
     /**
      * Sets the background color of the label.
+     *
+     * @param backgroundColor The new background color for the label.
      */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -628,7 +636,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns the amount of space to leave between the edge of the Label and
+     * @return The amount of space to leave between the edge of the Label and
      * its text.
      */
     public Insets getPadding() {
@@ -638,6 +646,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the amount of space to leave between the edge of the Label and its
      * text.
+     *
+     * @param padding The new value of the padding for each edge.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -666,6 +676,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the amount of space to leave between the edge of the Label and its
      * text, uniformly on all four edges.
+     *
+     * @param padding The new single padding value to use for all edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -674,6 +686,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the amount of space to leave between the edge of the Label and its
      * text, uniformly on all four edges.
+     *
+     * @param padding The new (integer) padding value to use for all edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -699,7 +713,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Returns true if the text of the label will be wrapped to fit the Label's
+     * @return {@code true} if the text of the label will be wrapped to fit the Label's
      * width.
      */
     public boolean getWrapText() {
@@ -710,8 +724,10 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Sets whether the text of the label will be wrapped to fit the Label's
      * width. Note that for wrapping to occur, the Label must specify a
      * preferred width or be placed in a container that constrains its width.
-     * Also note that newline characters (if wrapping is set true) will cause a
+     * <p>Also note that newline characters (if wrapping is set true) will cause a
      * hard line break.
+     *
+     * @param wrapText Whether or not to wrap the Label's text within its width.
      */
     public void setWrapText(boolean wrapText) {
         this.wrapText = wrapText;

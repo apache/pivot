@@ -176,14 +176,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Returns the font used in rendering the Separator's heading
+     * @return The font used in rendering the Separator's heading.
      */
     public Font getFont() {
         return font;
     }
 
     /**
-     * Sets the font used in rendering the Separator's heading
+     * Sets the font used in rendering the Separator's heading.
+     *
+     * @param font The new font for the heading.
      */
     public void setFont(Font font) {
         if (font == null) {
@@ -195,9 +197,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the font used in rendering the Separator's heading
+     * Sets the font used in rendering the Separator's heading.
      *
-     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     * @param font A {@linkplain ComponentSkin#decodeFont(String) font specification}.
      */
     public final void setFont(String font) {
         if (font == null) {
@@ -208,9 +210,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the font used in rendering the Separator's heading
+     * Sets the font used in rendering the Separator's heading.
      *
-     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     * @param font A dictionary {@link Theme#deriveFont describing a font}.
      */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
@@ -221,14 +223,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Returns the color of the Separator's horizontal rule
+     * @return The color of the Separator's horizontal rule.
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Sets the color of the Separator's horizontal rule
+     * Sets the color of the Separator's horizontal rule.
+     *
+     * @param color The new color for the horizontal rule.
      */
     public void setColor(Color color) {
         if (color == null) {
@@ -240,7 +244,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the color of the Separator's horizontal rule
+     * Sets the color of the Separator's horizontal rule.
      *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
@@ -254,14 +258,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Returns the color of the text in the heading
+     * @return The color of the text in the heading.
      */
     public Color getHeadingColor() {
         return headingColor;
     }
 
     /**
-     * Sets the color of the text in the heading
+     * Sets the color of the text in the heading.
+     *
+     * @param headingColor The new color for the heading text.
      */
     public void setHeadingColor(Color headingColor) {
         if (headingColor == null) {
@@ -273,7 +279,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the color of the text in the heading
+     * Sets the color of the text in the heading.
      *
      * @param headingColor Any of the {@linkplain GraphicsUtilities#decodeColor
      * color values recognized by Pivot}.
@@ -287,14 +293,16 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Returns the thickness of the Separator's horizontal rule
+     * @return The thickness of the Separator's horizontal rule.
      */
     public int getThickness() {
         return thickness;
     }
 
     /**
-     * Sets the thickness of the Separator's horizontal rule
+     * Sets the thickness of the Separator's horizontal rule.
+     *
+     * @param thickness The new rule thickness (in pixels).
      */
     public void setThickness(int thickness) {
         if (thickness < 0) {
@@ -305,7 +313,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Sets the thickness of the Separator's horizontal rule
+     * Sets the thickness of the Separator's horizontal rule.
+     *
+     * @param thickness The new integer value for the rule thickness (in pixels).
      */
     public final void setThickness(Number thickness) {
         if (thickness == null) {
@@ -316,7 +326,7 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     }
 
     /**
-     * Returns the amount of space surrounding (left/right) the Separator's
+     * @return The amount of space surrounding (left/right) the Separator's
      * heading, and above and below the entire component.
      */
     public Insets getPadding() {
@@ -326,6 +336,8 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     /**
      * Sets the amount of space to leave around the Separator's heading, and
      * above and below the entire component.
+     *
+     * @param padding The new padding values.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -354,6 +366,8 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     /**
      * Sets the amount of space to leave around the Separator's heading, and
      * above and below the entire component.
+     *
+     * @param padding The new single padding value for all areas.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -362,6 +376,8 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
     /**
      * Sets the amount of space to leave around the Separator's heading, and
      * above and below the entire component.
+     *
+     * @param padding The new integer value to use for padding in all areas.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {

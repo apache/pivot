@@ -316,14 +316,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns the font used in rendering the title
+     * @return The font used in rendering the title.
      */
     public Font getFont() {
         return font;
     }
 
     /**
-     * Sets the font used in rendering the title
+     * Sets the font used in rendering the title.
+     *
+     * @param font The new font to use for the border title.
      */
     public void setFont(Font font) {
         if (font == null) {
@@ -335,9 +337,9 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the font used in rendering the title
+     * Sets the font used in rendering the title.
      *
-     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     * @param font A {@linkplain ComponentSkin#decodeFont(String) font specification}.
      */
     public final void setFont(String font) {
         if (font == null) {
@@ -348,9 +350,9 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the font used in rendering the title
+     * Sets the font used in rendering the title.
      *
-     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     * @param font A dictionary {@linkplain Theme#deriveFont describing a font}.
      */
     public final void setFont(Dictionary<String, ?> font) {
         if (font == null) {
@@ -361,14 +363,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns the color of the border
+     * @return The color of the border.
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Sets the color of the border
+     * Sets the color of the border.
+     *
+     * @param color The new color for the border.
      */
     public void setColor(Color color) {
         if (color == null) {
@@ -380,7 +384,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the color of the border
+     * Sets the color of the border.
      *
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
@@ -415,14 +419,16 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns the thickness of the border
+     * @return The thickness of the border.
      */
     public int getThickness() {
         return thickness;
     }
 
     /**
-     * Sets the thickness of the border
+     * Sets the thickness of the border.
+     *
+     * @param thickness The border thickness (in pixels).
      */
     public void setThickness(int thickness) {
         if (thickness < 0) {
@@ -434,7 +440,9 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the thickness of the border
+     * Sets the thickness of the border.
+     *
+     * @param thickness The border thickness (integer value in pixels).
      */
     public void setThickness(Number thickness) {
         if (thickness == null) {
@@ -445,7 +453,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns the amount of space between the edge of the Border and its
+     * @return The amount of space between the edge of the Border and its
      * content.
      */
     public Insets getPadding() {
@@ -455,6 +463,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     /**
      * Sets the amount of space to leave between the edge of the Border and its
      * content.
+     *
+     * @param padding The set of padding values.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -483,6 +493,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     /**
      * Sets the amount of space to leave between the edge of the Border and its
      * content, uniformly on all four edges.
+     *
+     * @param padding The padding value (in pixels) to use for all four sides.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -491,6 +503,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     /**
      * Sets the amount of space to leave between the edge of the Border and its
      * content, uniformly on all four edges.
+     *
+     * @param padding The padding value (integer value in pixels) to use for all four sides.
      */
     public void setPadding(Number padding) {
         if (padding == null) {
@@ -516,7 +530,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Returns a {@link CornerRadii}, describing the radius of each of the
+     * @return A {@link CornerRadii}, describing the radius of each of the
      * Border's corners.
      */
     public CornerRadii getCornerRadii() {
@@ -524,7 +538,9 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the radii of the Border's corners
+     * Sets the radii of the Border's corners.
+     *
+     * @param cornerRadii The radii for each of the corners.
      */
     public void setCornerRadii(CornerRadii cornerRadii) {
         if (cornerRadii == null) {
@@ -536,10 +552,10 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the radii of the Border's corners
+     * Sets the radii of the Border's corners.
      *
      * @param cornerRadii A Dictionary
-     * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
+     * {@linkplain CornerRadii#CornerRadii(Dictionary) specifying the four corners}.
      */
     public final void setCornerRadii(Dictionary<String, ?> cornerRadii) {
         if (cornerRadii == null) {
@@ -550,14 +566,18 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the radii of the Border's four corners to the same value
+     * Sets the radii of the Border's four corners to the same value.
+     *
+     * @param cornerRadii The integer value to set all four corners' radii.
      */
     public final void setCornerRadii(int cornerRadii) {
         setCornerRadii(new CornerRadii(cornerRadii));
     }
 
     /**
-     * Sets the radii of the Border's four corners to the same value
+     * Sets the radii of the Border's four corners to the same value.
+     *
+     * @param cornerRadii The value for the radii (integer value in pixels).
      */
     public final void setCornerRadii(Number cornerRadii) {
         if (cornerRadii == null) {
@@ -571,7 +591,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
      * Sets the radii of the Border's corners
      *
      * @param cornerRadii A single integer value, or a JSON dictionary
-     * {@link CornerRadii#CornerRadii(Dictionary) specifying the four corners}
+     * {@linkplain CornerRadii#CornerRadii(Dictionary) specifying the four corners}.
      */
     public final void setCornerRadii(String cornerRadii) {
         if (cornerRadii == null) {

@@ -428,7 +428,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Gets the padding that will be reserved around the grid pane during
+     * @return The padding that will be reserved around the grid pane during
      * layout.
      */
     public Insets getPadding() {
@@ -438,6 +438,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the padding that will be reserved around the grid pane during
      * layout.
+     *
+     * @param padding The individual padding values for each side.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -451,6 +453,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the padding that will be reserved around the grid pane during
      * layout.
+     *
+     * @param padding The single value to use for all sides.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -459,6 +463,9 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the padding that will be reserved around the grid pane during
      * layout.
+     *
+     * @param padding The dictionary of padding values, containing {@code "top"},
+     * {@code "bottom"}, {@code "left}, and {@code "right"} entries.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         if (padding == null) {
@@ -471,6 +478,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the padding that will be reserved around the grid pane during
      * layout.
+     *
+     * @param padding The single value to use for all sides.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -483,6 +492,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the padding that will be reserved around the grid pane during
      * layout.
+     *
+     * @param padding A JSON-format string containing the padding values.
      */
     public final void setPadding(String padding) {
         if (padding == null) {
@@ -493,7 +504,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Gets the spacing that will be applied in between the grid pane's columns
+     * @return The spacing that will be applied in between the grid pane's columns
      * during layout.
      */
     public int getHorizontalSpacing() {
@@ -503,6 +514,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the spacing that will be applied in between the grid pane's columns
      * during layout.
+     *
+     * @param horizontalSpacing The non-negative spacing value between columns.
      */
     public void setHorizontalSpacing(int horizontalSpacing) {
         if (horizontalSpacing < 0) {
@@ -514,7 +527,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Gets the spacing that will be applied in between the grid pane's rows
+     * @return The spacing that will be applied in between the grid pane's rows
      * during layout.
      */
     public int getVerticalSpacing() {
@@ -524,6 +537,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets the spacing that will be applied in between the grid pane's rows
      * during layout.
+     *
+     * @param verticalSpacing The non-negative spacing value between rows.
      */
     public void setVerticalSpacing(int verticalSpacing) {
         if (verticalSpacing < 0) {
@@ -535,7 +550,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Tells whether or not horizontal grid lines will be painted in between the
+     * @return Whether or not horizontal grid lines will be painted in between the
      * grid pane's rows.
      */
     public boolean getShowHorizontalGridLines() {
@@ -545,6 +560,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets whether or not horizontal grid lines will be painted in between the
      * grid pane's rows.
+     *
+     * @param showHorizontalGridLines Whether to show horizontal grid lines.
      */
     public void setShowHorizontalGridLines(boolean showHorizontalGridLines) {
         this.showHorizontalGridLines = showHorizontalGridLines;
@@ -552,7 +569,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Tells whether or not vertical grid lines will be painted in between the
+     * @return Whether or not vertical grid lines will be painted in between the
      * grid pane's columns.
      */
     public boolean getShowVerticalGridLines() {
@@ -562,6 +579,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     /**
      * Sets whether or not vertical grid lines will be painted in between the
      * grid pane's columns.
+     *
+     * @param showVerticalGridLines Whether to show the vertical grid lines.
      */
     public void setShowVerticalGridLines(boolean showVerticalGridLines) {
         this.showVerticalGridLines = showVerticalGridLines;
@@ -569,7 +588,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Gets the color used to paint the grid pane's horizontal grid lines.
+     * @return The color used to paint the grid pane's horizontal grid lines.
      */
     public Color getHorizontalGridColor() {
         return horizontalGridColor;
@@ -577,6 +596,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     /**
      * Sets the color used to paint the grid pane's horizontal grid lines.
+     *
+     * @param horizontalGridColor The new color for the horizontal grid lines.
      */
     public void setHorizontalGridColor(Color horizontalGridColor) {
         if (horizontalGridColor == null) {
@@ -606,7 +627,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
     }
 
     /**
-     * Gets the color used to paint the grid pane's vertical grid lines.
+     * @return The color used to paint the grid pane's vertical grid lines.
      */
     public Color getVerticalGridColor() {
         return verticalGridColor;
@@ -614,6 +635,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
 
     /**
      * Sets the color used to paint the grid pane's vertical grid lines.
+     *
+     * @param verticalGridColor The new color for vertical grid lines.
      */
     public void setVerticalGridColor(Color verticalGridColor) {
         if (verticalGridColor == null) {

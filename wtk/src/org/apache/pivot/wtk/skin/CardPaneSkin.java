@@ -41,7 +41,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * Defines the supported selection change effects.
      */
     public enum SelectionChangeEffect {
-        CROSSFADE, HORIZONTAL_SLIDE, VERTICAL_SLIDE, HORIZONTAL_FLIP, VERTICAL_FLIP, ZOOM
+        CROSSFADE,
+        HORIZONTAL_SLIDE,
+        VERTICAL_SLIDE,
+        HORIZONTAL_FLIP,
+        VERTICAL_FLIP,
+        ZOOM
     }
 
     /**
@@ -488,7 +493,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Returns the amount of space between the edge of the CardPane and its
+     * @return The amount of space between the edge of the CardPane and its
      * content.
      */
     public Insets getPadding() {
@@ -498,6 +503,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the CardPane and
      * its content.
+     *
+     * @param padding The new padding values for all edges.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -526,6 +533,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the CardPane and
      * its content, uniformly on all four edges.
+     *
+     * @param padding The new single padding value to use for all edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -534,6 +543,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the CardPane and
      * its content, uniformly on all four edges.
+     *
+     * @param padding The new integer value to use for the padding on all edges.
      */
     public void setPadding(Number padding) {
         if (padding == null) {
@@ -600,7 +611,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     /**
-     * Sets the circular style, which controls the direction of certain
+     * Returns the circular style, which controls the direction of certain
      * transitions (transitions for which a direction makes sense) when looping
      * from the first index of a card pane to the last, or vice versa. When this
      * style is <tt>false</tt> (the default), directional transitions will

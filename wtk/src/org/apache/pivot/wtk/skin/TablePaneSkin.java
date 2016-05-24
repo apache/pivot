@@ -754,7 +754,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Returns the amount of space that will be reserved around the inside edges
+     * @return The amount of space that will be reserved around the inside edges
      * of the table pane.
      */
     public Insets getPadding() {
@@ -764,6 +764,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the amount of space that will be reserved around the inside edges of
      * the table pane.
+     *
+     * @param padding The individual padding amounts for each edge.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -777,6 +779,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the amount of space that will be reserved around the inside edges of
      * the table pane.
+     *
+     * @param padding The single padding value to use for all the edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -800,6 +804,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the amount of space that will be reserved around the inside edges of
      * the table pane.
+     *
+     * @param padding The single padding value to use for all the edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -825,7 +831,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Gets the spacing that will be applied between the table pane's columns
+     * @return The spacing that will be applied between the table pane's columns
      * during layout.
      */
     public int getHorizontalSpacing() {
@@ -835,6 +841,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the spacing that will be applied between the table pane's columns
      * during layout.
+     *
+     * @param horizontalSpacing The new spacing value.
      */
     public void setHorizontalSpacing(int horizontalSpacing) {
         if (horizontalSpacing < 0) {
@@ -846,7 +854,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Gets the spacing that will be applied in between the table pane's rows
+     * @return The spacing that will be applied in between the table pane's rows
      * during layout.
      */
     public int getVerticalSpacing() {
@@ -856,6 +864,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets the spacing that will be applied in between the table pane's rows
      * during layout.
+     *
+     * @param verticalSpacing The new spacing value.
      */
     public void setVerticalSpacing(int verticalSpacing) {
         if (verticalSpacing < 0) {
@@ -867,7 +877,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Tells whether or not horizontal grid lines will be painted in between the
+     * @return Whether or not horizontal grid lines will be painted in between the
      * table pane's rows.
      */
     public boolean getShowHorizontalGridLines() {
@@ -877,6 +887,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets whether or not horizontal grid lines will be painted in between the
      * table pane's rows.
+     *
+     * @param showHorizontalGridLines Whether to show the horizontal lines.
      */
     public void setShowHorizontalGridLines(boolean showHorizontalGridLines) {
         this.showHorizontalGridLines = showHorizontalGridLines;
@@ -884,7 +896,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Tells whether or not vertical grid lines will be painted in between the
+     * @return Whether or not vertical grid lines will be painted in between the
      * table pane's columns.
      */
     public boolean getShowVerticalGridLines() {
@@ -894,6 +906,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     /**
      * Sets whether or not vertical grid lines will be painted in between the
      * table pane's columns.
+     *
+     * @param showVerticalGridLines Whether to show the vertical lines.
      */
     public void setShowVerticalGridLines(boolean showVerticalGridLines) {
         this.showVerticalGridLines = showVerticalGridLines;
@@ -901,7 +915,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Gets the color used to paint the table pane's horizontal grid lines.
+     * @return The color used to paint the table pane's horizontal grid lines.
      */
     public Color getHorizontalGridColor() {
         return horizontalGridColor;
@@ -909,6 +923,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
 
     /**
      * Sets the color used to paint the table pane's horizontal grid lines.
+     *
+     * @param horizontalGridColor The new grid line color.
      */
     public void setHorizontalGridColor(Color horizontalGridColor) {
         if (horizontalGridColor == null) {
@@ -938,7 +954,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Gets the color used to paint the table pane's vertical grid lines.
+     * @return The color used to paint the table pane's vertical grid lines.
      */
     public Color getVerticalGridColor() {
         return verticalGridColor;
@@ -946,6 +962,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
 
     /**
      * Sets the color used to paint the table pane's vertical grid lines.
+     *
+     * @param verticalGridColor The new grid line color.
      */
     public void setVerticalGridColor(Color verticalGridColor) {
         if (verticalGridColor == null) {
@@ -975,7 +993,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
     }
 
     /**
-     * Gets the background color used to paint the highlighted rows and columns.
+     * @return The background color used to paint the highlighted rows and columns.
      */
     public Color getHighlightBackgroundColor() {
         return highlightBackgroundColor;
@@ -983,6 +1001,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
 
     /**
      * Sets the background color used to paint the highlighted rows and columns.
+     *
+     * @param highlightBackgroundColor The new highlight color.
      */
     public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
         if (highlightBackgroundColor == null) {

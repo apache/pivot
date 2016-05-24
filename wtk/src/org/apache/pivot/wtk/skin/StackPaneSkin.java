@@ -98,7 +98,7 @@ public class StackPaneSkin extends ContainerSkin {
     }
 
     /**
-     * Returns the amount of space between the edge of the StackPane and its
+     * @return The amount of space between the edge of the StackPane and its
      * components.
      */
     public Insets getPadding() {
@@ -108,6 +108,8 @@ public class StackPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the StackPane and
      * its components.
+     *
+     * @param padding The individual padding amounts for each edge.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -136,6 +138,8 @@ public class StackPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the StackPane and
      * its components, uniformly on all four edges.
+     *
+     * @param padding The single padding value for all four edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -144,6 +148,8 @@ public class StackPaneSkin extends ContainerSkin {
     /**
      * Sets the amount of space to leave between the edge of the StackPane and
      * its components, uniformly on all four edges.
+     *
+     * @param padding The single padding value for all four edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {

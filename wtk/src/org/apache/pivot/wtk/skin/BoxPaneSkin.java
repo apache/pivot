@@ -486,7 +486,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * Returns the horizontal alignment of the BoxPane's components within the
+     * @return The horizontal alignment of the BoxPane's components within the
      * pane.
      */
     public HorizontalAlignment getHorizontalAlignment() {
@@ -501,6 +501,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * style. <p>If the orientation of the pane is VERTICAL, this means the
      * alignment of each individual component within the pane. It has no effect
      * if the <code>fill</code> style is true.
+     *
+     * @param horizontalAlignment The new horizontal alignment for our children.
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
         if (horizontalAlignment == null) {
@@ -512,7 +514,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * Returns the vertical alignment of the BoxPane's components within the
+     * @return The vertical alignment of the BoxPane's components within the
      * pane.
      */
     public VerticalAlignment getVerticalAlignment() {
@@ -527,6 +529,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * the orientation of the pane is HORIZONTAL, this means the alignment of
      * each individual component within the pane. It has no effect if the
      * <code>fill</code> style is true.
+     *
+     * @param verticalAlignment The new horizontal alignment for our children.
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (verticalAlignment == null) {
@@ -538,7 +542,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * Returns the amount of space between the edge of the BoxPane and its
+     * @return The amount of space between the edge of the BoxPane and its
      * components.
      */
     public Insets getPadding() {
@@ -548,6 +552,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the BoxPane and its
      * components.
+     *
+     * @param padding The new padding values for all edges.
      */
     public void setPadding(Insets padding) {
         if (padding == null) {
@@ -576,6 +582,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the BoxPane and its
      * components, uniformly on all four edges.
+     *
+     * @param padding The new padding value for all edges.
      */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
@@ -584,6 +592,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     /**
      * Sets the amount of space to leave between the edge of the BoxPane and its
      * components, uniformly on all four edges.
+     *
+     * @param padding The integer value to use for padding on all edges.
      */
     public final void setPadding(Number padding) {
         if (padding == null) {
@@ -609,7 +619,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * Returns the amount of space between the BoxPane's components.
+     * @return The amount of space between the BoxPane's components.
      */
     public int getSpacing() {
         return spacing;
@@ -617,6 +627,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
     /**
      * Sets the amount of space to leave between the BoxPane's components.
+     *
+     * @param spacing The new amount of spacing between components.
      */
     public void setSpacing(int spacing) {
         if (spacing < 0) {
@@ -628,6 +640,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
     /**
      * Sets the amount of space to leave between the BoxPane's components.
+     *
+     * @param spacing The new amount of spacing to use between components.
      */
     public final void setSpacing(Number spacing) {
         if (spacing == null) {
@@ -638,7 +652,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * Returns a value indicating whether the BoxPane's components fill the
+     * @return A value indicating whether the BoxPane's components fill the
      * available space in the pane in the dimension orthogonal to its
      * orientation.
      */

@@ -174,8 +174,8 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
     }
 
     /**
-     * Returns the {@link Paint} object used to paint the background of the
-     * container
+     * @return The {@link Paint} object used to paint the background of the
+     * container.
      */
     public Paint getBackgroundPaint() {
         return backgroundPaint;
@@ -184,7 +184,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
     /**
      * Sets the object used to paint the background of the container.
      *
-     * @param backgroundPaint The {@link Paint} object
+     * @param backgroundPaint The new {@link Paint} object to paint the background.
      */
     public void setBackgroundPaint(Paint backgroundPaint) {
         this.backgroundPaint = backgroundPaint;
@@ -220,8 +220,8 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
     }
 
     /**
-     * Returns the color of the container's background if a solid color has been
-     * set as the background; otherwise null.
+     * @return The color of the container's background if a solid color has been
+     * set as the background; otherwise {@code null}.
      */
     public Color getBackgroundColor() {
         return (backgroundPaint instanceof Color) ? (Color) backgroundPaint : null;
@@ -229,6 +229,8 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
 
     /**
      * Sets the background of the container to a solid color.
+     *
+     * @param backgroundColor The new background color for the container.
      */
     public void setBackgroundColor(Color backgroundColor) {
         setBackgroundPaint(backgroundColor);
