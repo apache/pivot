@@ -24,7 +24,9 @@ import java.awt.Paint;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
@@ -61,6 +63,145 @@ public final class GraphicsUtilities {
 
     public static final String STOPS_KEY = "stops";
     public static final String OFFSET_KEY = "offset";
+
+    public static Map<String, Color> CSS3ColorMap = new HashMap<>();
+    
+    static {
+        // Initialize the table of CSS3/X11 color names and values
+        // from here: http://www.w3.org/TR/css3-color/
+        // but with the Java names (such as "black", "blue", etc.) omitted
+        CSS3ColorMap.put("aliceblue",            new Color(240,248,255));
+        CSS3ColorMap.put("antiquewhite",         new Color(250,235,215));
+        CSS3ColorMap.put("aqua",                 new Color(  0,255,255));
+        CSS3ColorMap.put("aquamarine",           new Color(127,255,212));
+        CSS3ColorMap.put("azure",                new Color(240,255,255));
+        CSS3ColorMap.put("beige",                new Color(245,245,220));
+        CSS3ColorMap.put("bisque",               new Color(255,228,196));
+        CSS3ColorMap.put("blanchedalmond",       new Color(255,235,205));
+        CSS3ColorMap.put("blueviolet",           new Color(138, 43,226));
+        CSS3ColorMap.put("brown",                new Color(165, 42, 42));
+        CSS3ColorMap.put("burlywood",            new Color(222,184,135));
+        CSS3ColorMap.put("cadetblue",            new Color( 95,158,160));
+        CSS3ColorMap.put("chartreuse",           new Color(127,255,  0));
+        CSS3ColorMap.put("chocolate",            new Color(210,105, 30));
+        CSS3ColorMap.put("coral",                new Color(255,127, 80));
+        CSS3ColorMap.put("cornflowerblue",       new Color(100,149,237));
+        CSS3ColorMap.put("cornsilk",             new Color(255,248,220));
+        CSS3ColorMap.put("crimson",              new Color(220, 20, 60));
+        CSS3ColorMap.put("darkblue",             new Color(  0,  0,139));
+        CSS3ColorMap.put("darkcyan",             new Color(  0,139,139));
+        CSS3ColorMap.put("darkgoldenrod",        new Color(184,134, 11));
+        CSS3ColorMap.put("darkgreen",            new Color(  0,100,  0));
+        CSS3ColorMap.put("darkkhaki",            new Color(189,183,107));
+        CSS3ColorMap.put("darkmagenta",          new Color(139,  0,139));
+        CSS3ColorMap.put("darkolivegreen",       new Color( 85,107, 47));
+        CSS3ColorMap.put("darkorange",           new Color(255,140,  0));
+        CSS3ColorMap.put("darkorchid",           new Color(153, 50,204));
+        CSS3ColorMap.put("darkred",              new Color(139,  0,  0));
+        CSS3ColorMap.put("darksalmon",           new Color(233,150,122));
+        CSS3ColorMap.put("darkseagreen",         new Color(143,188,143));
+        CSS3ColorMap.put("darkslateblue",        new Color( 72, 61,139));
+        CSS3ColorMap.put("darkslategray",        new Color( 47, 79, 79));
+        CSS3ColorMap.put("darkslategrey",        new Color( 47, 79, 79));
+        CSS3ColorMap.put("darkturquoise",        new Color(  0,206,209));
+        CSS3ColorMap.put("darkviolet",           new Color(148,  0,211));
+        CSS3ColorMap.put("deeppink",             new Color(255, 20,147));
+        CSS3ColorMap.put("deepskyblue",          new Color(  0,191,255));
+        CSS3ColorMap.put("dimgray",              new Color(105,105,105));
+        CSS3ColorMap.put("dimgrey",              new Color(105,105,105));
+        CSS3ColorMap.put("dodgerblue",           new Color( 30,144,255));
+        CSS3ColorMap.put("firebrick",            new Color(178, 34, 34));
+        CSS3ColorMap.put("floralwhite",          new Color(255,250,240));
+        CSS3ColorMap.put("forestgreen",          new Color( 34,139, 34));
+        CSS3ColorMap.put("fuchsia",              new Color(255,  0,255));
+        CSS3ColorMap.put("gainsboro",            new Color(220,220,220));
+        CSS3ColorMap.put("ghostwhite",           new Color(248,248,255));
+        CSS3ColorMap.put("gold",                 new Color(255,215,  0));
+        CSS3ColorMap.put("goldenrod",            new Color(218,165, 32));
+        CSS3ColorMap.put("greenyellow",          new Color(173,255, 47));
+        CSS3ColorMap.put("honeydew",             new Color(240,255,240));
+        CSS3ColorMap.put("hotpink",              new Color(255,105,180));
+        CSS3ColorMap.put("indianred",            new Color(205, 92, 92));
+        CSS3ColorMap.put("indigo",               new Color( 75,  0,130));
+        CSS3ColorMap.put("ivory",                new Color(255,255,240));
+        CSS3ColorMap.put("khaki",                new Color(240,230,140));
+        CSS3ColorMap.put("lavender",             new Color(230,230,250));
+        CSS3ColorMap.put("lavenderblush",        new Color(255,240,245));
+        CSS3ColorMap.put("lawngreen",            new Color(124,252,  0));
+        CSS3ColorMap.put("lemonchiffon",         new Color(255,250,205));
+        CSS3ColorMap.put("lightblue",            new Color(173,216,230));
+        CSS3ColorMap.put("lightcoral",           new Color(240,128,128));
+        CSS3ColorMap.put("lightcyan",            new Color(224,255,255));
+        CSS3ColorMap.put("lightgoldenrodyellow", new Color(250,250,210));
+        CSS3ColorMap.put("lightgreen",           new Color(144,238,144));
+        CSS3ColorMap.put("lightpink",            new Color(255,182,193));
+        CSS3ColorMap.put("lightsalmon",          new Color(255,160,122));
+        CSS3ColorMap.put("lightseagreen",        new Color( 32,178,170));
+        CSS3ColorMap.put("lightskyblue",         new Color(135,206,250));
+        CSS3ColorMap.put("lightslategray",       new Color(119,136,153));
+        CSS3ColorMap.put("lightslategrey",       new Color(119,136,153));
+        CSS3ColorMap.put("lightsteelblue",       new Color(176,196,222));
+        CSS3ColorMap.put("lightyellow",          new Color(255,255,224));
+        CSS3ColorMap.put("lime",                 new Color(  0,255,  0));
+        CSS3ColorMap.put("limegreen",            new Color( 50,205, 50));
+        CSS3ColorMap.put("linen",                new Color(250,240,230));
+        CSS3ColorMap.put("maroon",               new Color(128,  0,  0));
+        CSS3ColorMap.put("mediumaquamarine",     new Color(102,205,170));
+        CSS3ColorMap.put("mediumblue",           new Color(  0,  0,205));
+        CSS3ColorMap.put("mediumorchid",         new Color(186, 85,211));
+        CSS3ColorMap.put("mediumpurple",         new Color(147,112,219));
+        CSS3ColorMap.put("mediumseagreen",       new Color( 60,179,113));
+        CSS3ColorMap.put("mediumslateblue",      new Color(123,104,238));
+        CSS3ColorMap.put("mediumspringgreen",    new Color(  0,250,154));
+        CSS3ColorMap.put("mediumturquoise",      new Color( 72,209,204));
+        CSS3ColorMap.put("mediumvioletred",      new Color(199, 21,133));
+        CSS3ColorMap.put("midnightblue",         new Color( 25, 25,112));
+        CSS3ColorMap.put("mintcream",            new Color(245,255,250));
+        CSS3ColorMap.put("mistyrose",            new Color(255,228,225));
+        CSS3ColorMap.put("moccasin",             new Color(255,228,181));
+        CSS3ColorMap.put("navajowhite",          new Color(255,222,173));
+        CSS3ColorMap.put("navy",                 new Color(  0,  0,128));
+        CSS3ColorMap.put("oldlace",              new Color(253,245,230));
+        CSS3ColorMap.put("olive",                new Color(128,128,  0));
+        CSS3ColorMap.put("olivedrab",            new Color(107,142, 35));
+        CSS3ColorMap.put("orangered",            new Color(255, 69,  0));
+        CSS3ColorMap.put("orchid",               new Color(218,112,214));
+        CSS3ColorMap.put("palegoldenrod",        new Color(238,232,170));
+        CSS3ColorMap.put("palegreen",            new Color(152,251,152));
+        CSS3ColorMap.put("paleturquoise",        new Color(175,238,238));
+        CSS3ColorMap.put("palevioletred",        new Color(219,112,147));
+        CSS3ColorMap.put("papayawhip",           new Color(255,239,213));
+        CSS3ColorMap.put("peachpuff",            new Color(255,218,185));
+        CSS3ColorMap.put("peru",                 new Color(205,133, 63));
+        CSS3ColorMap.put("plum",                 new Color(221,160,221));
+        CSS3ColorMap.put("powderblue",           new Color(176,224,230));
+        CSS3ColorMap.put("purple",               new Color(128,  0,128));
+        CSS3ColorMap.put("rosybrown",            new Color(188,143,143));
+        CSS3ColorMap.put("royalblue",            new Color( 65,105,225));
+        CSS3ColorMap.put("saddlebrown",          new Color(139, 69, 19));
+        CSS3ColorMap.put("salmon",               new Color(250,128,114));
+        CSS3ColorMap.put("sandybrown",           new Color(244,164, 96));
+        CSS3ColorMap.put("seagreen",             new Color( 46,139, 87));
+        CSS3ColorMap.put("seashell",             new Color(255,245,238));
+        CSS3ColorMap.put("sienna",               new Color(160, 82, 45));
+        CSS3ColorMap.put("silver",               new Color(192,192,192));
+        CSS3ColorMap.put("skyblue",              new Color(135,206,235));
+        CSS3ColorMap.put("slateblue",            new Color(106, 90,205));
+        CSS3ColorMap.put("slategray",            new Color(112,128,144));
+        CSS3ColorMap.put("slategrey",            new Color(112,128,144));
+        CSS3ColorMap.put("snow",                 new Color(255,250,250));
+        CSS3ColorMap.put("springgreen",          new Color(  0,255,127));
+        CSS3ColorMap.put("steelblue",            new Color( 70,130,180));
+        CSS3ColorMap.put("tan",                  new Color(210,180,140));
+        CSS3ColorMap.put("teal",                 new Color(  0,128,128));
+        CSS3ColorMap.put("thistle",              new Color(216,191,216));
+        CSS3ColorMap.put("tomato",               new Color(255, 99, 71));
+        CSS3ColorMap.put("turquoise",            new Color( 64,224,208));
+        CSS3ColorMap.put("violet",               new Color(238,130,238));
+        CSS3ColorMap.put("wheat",                new Color(245,222,179));
+        CSS3ColorMap.put("whitesmoke",           new Color(245,245,245));
+        CSS3ColorMap.put("yellowgreen",          new Color(154,205, 50));
+    }
 
     private GraphicsUtilities() {
     }
@@ -164,7 +305,9 @@ public final class GraphicsUtilities {
      * hexadecimal digits, specifying 8 bits each of red, green, and blue,
      * followed by 8 bits of alpha.</li> <li>#dddddd - 6 hexadecimal digits,
      * specifying 8 bits each of red, green, and blue. <li>Any of the names of
-     * the static colors in the Java {@link Color} class. </ul>
+     * the static colors in the Java {@link Color} class.</li>
+     * <li>Any of the CSS3/X11 color names from here: http://www.w3.org/TR/css3-color/
+     * (except the Java color names will be accepted first if there is a conflict).</li></ul>
      * @return A {@link Color} on successful decoding
      * @throws NumberFormatException if the value in the first two cases
      * contains illegal hexadecimal digits.
@@ -207,7 +350,7 @@ public final class GraphicsUtilities {
             } catch (Exception exception) {
                 // PIVOT-985: special case for two values (plus spelling variants)
                 // that don't work with just a pure lower case name lookup, plus the
-                // British spelling variant of the standard "gray".
+                // British spelling variants of the standard "gray".
                 if (valueLowercase.equals("darkgray") || valueLowercase.equals("darkgrey")) {
                     color = Color.darkGray;
                 } else if (valueLowercase.equals("lightgray") || valueLowercase.equals("lightgrey")) {
@@ -215,6 +358,10 @@ public final class GraphicsUtilities {
                 } else if (valueLowercase.equals("grey")) {
                     color = Color.gray;
                 } else {
+                    // Otherwise try to decode an X11/CSS3 color name
+                    if ((color = CSS3ColorMap.get(valueLowercase)) != null) {
+                        return color;
+                    }
                     throw new IllegalArgumentException("\"" + valueLowercase
                         + "\" is not a valid color constant.");
                 }
