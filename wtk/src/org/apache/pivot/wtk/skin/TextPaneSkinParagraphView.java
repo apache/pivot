@@ -471,7 +471,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
                 if (offset >= firstNodeSegment.offset
                     && offset < lastNodeSegment.offset
-                        + firstNodeSegment.nodeView.getCharacterCount()) {
+                        + lastNodeSegment.nodeView.getCharacterCount()) {
                     rowIndex = i;
                     break;
                 }
@@ -501,8 +501,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                         int characterCount = segment.nodeView.getCharacterCount();
 
                         if (offset >= nodeViewOffset && offset < nodeViewOffset + characterCount) {
-                            characterBounds = segment.nodeView.getCharacterBounds(offset
-                                - nodeViewOffset);
+                            characterBounds = segment.nodeView.getCharacterBounds(offset - nodeViewOffset);
 
                             if (characterBounds != null) {
                                 characterBounds = characterBounds.translate(
