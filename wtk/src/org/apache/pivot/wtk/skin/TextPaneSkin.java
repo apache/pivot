@@ -86,8 +86,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     int offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
 
                     if (offset != -1) {
-                        // If the next character is a paragraph terminator and
-                        // is not the
+                        // If the next character is a paragraph terminator and is not the
                         // final terminator character, increment the selection
                         Document document = textPane.getDocument();
                         if (document.getCharacterAt(offset) == '\n'
@@ -625,16 +624,14 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * @return The amount of space between the edge of the TextPane and its
-     * Document.
+     * @return The amount of space between the edge of the TextPane and its Document.
      */
     public Insets getMargin() {
         return margin;
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its
-     * Document.
+     * Sets the amount of space between the edge of the TextPane and its Document.
      *
      * @param margin The new set of margin values.
      */
@@ -648,11 +645,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its
-     * Document.
+     * Sets the amount of space between the edge of the TextPane and its Document.
      *
-     * @param margin A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param margin A dictionary with keys in the set {left, top, bottom, right}.
      */
     public final void setMargin(Dictionary<String, ?> margin) {
         if (margin == null) {
@@ -663,8 +658,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its
-     * Document.
+     * Sets the amount of space between the edge of the TextPane and its Document.
      *
      * @param margin The single margin value for all edges.
      */
@@ -673,8 +667,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its
-     * Document.
+     * Sets the amount of space between the edge of the TextPane and its Document.
      *
      * @param margin The new single margin value for all the edges.
      */
@@ -687,8 +680,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     /**
-     * Sets the amount of space between the edge of the TextPane and its
-     * Document.
+     * Sets the amount of space between the edge of the TextPane and its Document.
      *
      * @param margin A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
@@ -752,8 +744,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     scheduledScrollSelectionCallback = ApplicationContext.scheduleRecurringCallback(
                         scrollSelectionCallback, SCROLL_RATE);
 
-                    // Run the callback once now to scroll the selection
-                    // immediately
+                    // Run the callback once now to scroll the selection immediately
                     scrollSelectionCallback.run();
                 }
             }
@@ -989,8 +980,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                         selectionLength = 0;
                     }
                 } else {
-                    // Clear the selection and move the caret back by one
-                    // character
+                    // Clear the selection and move the caret back by one character
                     if (selectionLength == 0 && selectionStart > 0) {
                         selectionStart--;
                     }
@@ -1033,8 +1023,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                         caretX = caret.x;
                     }
                 } else {
-                    // Clear the selection and move the caret forward by one
-                    // character
+                    // Clear the selection and move the caret forward by one character
                     if (selectionLength > 0) {
                         selectionStart += selectionLength - 1;
                     }
@@ -1074,14 +1063,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     int from;
                     int x;
                     if (selectionLength == 0) {
-                        // Get next insertion point from leading selection
-                        // character
+                        // Get next insertion point from leading selection character
                         from = selectionStart;
                         x = caretX;
                     } else {
                         // Get next insertion point from right edge of trailing
-                        // selection
-                        // character
+                        // selection character
                         from = selectionStart + selectionLength - 1;
 
                         Bounds trailingSelectionBounds = getCharacterBounds(from);
@@ -1093,8 +1080,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     if (offset == -1) {
                         offset = documentView.getCharacterCount() - 1;
                     } else {
-                        // If the next character is a paragraph terminator and
-                        // is not the
+                        // If the next character is a paragraph terminator and is not the
                         // final terminator character, increment the selection
                         if (document.getCharacterAt(offset) == '\n'
                             && offset < documentView.getCharacterCount() - 1) {
@@ -1107,8 +1093,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                 } else {
                     int from;
                     if (selectionLength == 0) {
-                        // Get next insertion point from leading selection
-                        // character
+                        // Get next insertion point from leading selection character
                         from = selectionStart;
                     } else {
                         // Get next insertion point from trailing selection
@@ -1228,8 +1213,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     public void selectionChanged(TextPane textPane, int previousSelectionStart,
         int previousSelectionLength) {
         // If the document view is valid, repaint the selection state;
-        // otherwise,
-        // the selection will be updated in layout()
+        // otherwise, the selection will be updated in layout()
         if (documentView != null && documentView.isValid()) {
             if (selection == null) {
                 // Repaint previous caret bounds
