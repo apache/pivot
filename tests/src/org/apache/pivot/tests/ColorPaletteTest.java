@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.StackPane;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
@@ -90,11 +91,19 @@ public class ColorPaletteTest extends Application.Adapter {
         label.getStyles().put("backgroundColor", Color.WHITE);
         label.getStyles().put("padding", 2);
 
-        BoxPane boxPane = new BoxPane();
+        Color themeColor = (Color)border.getStyles().get("backgroundColor");
+        Label colorLabel = new Label();
+        colorLabel.setText(String.format("R:%1$d,G:%2$d,B:%3$d",
+             themeColor.getRed(), themeColor.getGreen(), themeColor.getBlue()));
+        colorLabel.getStyles().put("backgroundColor", Color.WHITE);
+        colorLabel.getStyles().put("padding", 2);
+
+        BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
         boxPane.add(new Border(label));
+        boxPane.add(new Border(colorLabel));
         stackPane.add(boxPane);
 
         return stackPane;
