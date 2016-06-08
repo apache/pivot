@@ -33,25 +33,16 @@ abstract class TextPaneSkinVerticalElementView extends TextPaneSkinElementView {
 
     @Override
     protected void childLayout(int breakWidth) {
-        // TODO At some point, we may want to optimize this method by deferring
-        // layout of
-        // non-visible views. If so, we should not recycle views but rather
-        // recreate them
-        // (as is done in ParagraphView). This way, we avoid thread contention
-        // over the
-        // existing views (e.g. trying to paint one while modifying its
-        // size/location, etc.).
-        // Any invalid node views are simply replaced (in the queued callback,
-        // when the
-        // thread has finished processing the new ones). This allows the
-        // definition of
-        // validate() to remain as-is. Of course, if we redefine NodeView to
-        // implement
+        // TODO At some point, we may want to optimize this method by deferring layout of
+        // non-visible views. If so, we should not recycle views but rather recreate them
+        // (as is done in ParagraphView). This way, we avoid thread contention over the
+        // existing views (e.g. trying to paint one while modifying its size/location, etc.).
+        // Any invalid node views are simply replaced (in the queued callback, when the
+        // thread has finished processing the new ones). This allows the definition of
+        // validate() to remain as-is. Of course, if we redefine NodeView to implement
         // ConstrainedVisual, this may no longer be an issue.
-        // Note that, if anything happens to invalidate the existence of the new
-        // views before
-        // they are added to the document view, we need to make sure they are
-        // disposed (i.e.
+        // Note that, if anything happens to invalidate the existence of the new views before
+        // they are added to the document view, we need to make sure they are disposed (i.e.
         // detached).
 
         int width = 0;
