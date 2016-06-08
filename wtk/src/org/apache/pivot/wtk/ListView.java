@@ -957,6 +957,10 @@ public class ListView extends Component {
      * @param selectedRanges A JSON-formatted string containing the ranges to
      * select.
      * @return The ranges that were actually set.
+     * @throws
+     * IllegalArgumentException if the range string is {@code null} or
+     * if it can't be parsed as a JSON list.
+     *
      * @see #setSelectedRanges(Sequence)
      * @throws IllegalArgumentException if the input string is {@code null}
      * or if the value cannot be parsed correctly to a range specification.
@@ -1023,6 +1027,9 @@ public class ListView extends Component {
      * @param start The first index in the range.
      * @param end The last index in the range.
      * @return The ranges that were added to the selection.
+     *
+     * @throws
+     * IllegalStateException if the {@code ListView} is not in multi-selection mode.
      */
     public Sequence<Span> addSelectedRange(int start, int end) {
         if (selectMode != SelectMode.MULTI) {
@@ -1053,6 +1060,9 @@ public class ListView extends Component {
      *
      * @param range The range to add.
      * @return The ranges that were added to the selection.
+     *
+     * @throws
+     * IllegalArgumentException if the range is {@code null}.
      */
     public Sequence<Span> addSelectedRange(Span range) {
         Utils.checkNull(range, "range");
@@ -1340,12 +1350,13 @@ public class ListView extends Component {
     }
 
     /**
-     * Tells whether or not an item's checkmark is disabled.
+     * Tells whether or not an item's checkmark is disabled.  Queries the
+     * current disabled checkmark filter (if any).
      *
      * @param index The index of the item whose disabled checkmark state is to
      * be tested.
      * @return <tt>true</tt> if the item's checkmark is disabled; <tt>false</tt>
-     * otherwise.
+     * otherwise (such as if no disabled checkmark filter is set).
      */
     @SuppressWarnings("unchecked")
     public boolean isCheckmarkDisabled(int index) {
@@ -1477,9 +1488,10 @@ public class ListView extends Component {
      * are interactive and which are not. Note that this filter only affects
      * user interaction; items may still be checked programatically despite
      * their inclusion in this filter. If this filter is set to <tt>null</tt>,
-     * all checkboxes will be interactive. <p> <b>Note:</b> this filter is only
-     * relavent if {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is
-     * set to true.
+     * all checkboxes will be interactive.
+     * <p>
+     * <b>Note:</b> this filter is only relevant if
+     * {@link #setCheckmarksEnabled(boolean) checkmarksEnabled} is set to true.
      *
      * @return The disabled checkmark filter, or <tt>null</tt> if no disabled
      * checkmark filter is set
