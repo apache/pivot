@@ -23,21 +23,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from and
- * writes data to Java Strings.
+ * writes data to Java Strings.  The text data is interpreted using either the
+ * default <code>UTF-8</code> {@link Charset} or a <code>Charset</code> supplied
+ * in the constructor.
+ * <p> Instances of this class are reusable (and thread-safe) because no mutable
+ * instance data is used in the {@link #readObject} and {@link #writeObject}
+ * methods.
  */
 public class StringSerializer implements Serializer<String> {
     private final Charset charset;
 
-    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final String TEXT_EXTENSION = "txt";
     public static final String MIME_TYPE = "text/plain";
     public static final int BUFFER_SIZE = 2048;
 
     public StringSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME));
+        this(StandardCharsets.UTF_8);
     }
 
     public StringSerializer(Charset charset) {
@@ -53,11 +58,12 @@ public class StringSerializer implements Serializer<String> {
     }
 
     /**
-     * Reads plain text data from an input stream.
+     * Reads plain text data from an input stream, interpreted by the given {@link Charset}.
      *
      * @param inputStream The input stream from which data will be read.
      * @return An instance of {@link String} containing the text read from the
      * input stream.
+     * @see #getCharset
      */
     @Override
     public String readObject(InputStream inputStream) throws IOException, SerializationException {
@@ -88,10 +94,11 @@ public class StringSerializer implements Serializer<String> {
     }
 
     /**
-     * Writes plain text data to an output stream.
+     * Writes plain text data to an output stream, encoded in the given {@link Charset}.
      *
      * @param text The text to be written to the output stream.
      * @param outputStream The output stream to which data will be written.
+     * @see #getCharset
      */
     @Override
     public void writeObject(String text, OutputStream outputStream) throws IOException,
@@ -106,7 +113,7 @@ public class StringSerializer implements Serializer<String> {
 
         try {
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-            bufferedOutputStream.write(text.getBytes());
+            bufferedOutputStream.write(text.getBytes(charset));
             bufferedOutputStream.flush();
         } catch (IOException exception) {
             throw new SerializationException(exception);
