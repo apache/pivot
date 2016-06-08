@@ -83,6 +83,7 @@ public abstract class Node {
 
     private Element parent = null;
     private int offset = 0;
+    private Object userData = null;
 
     private NodeListenerList nodeListeners = new NodeListenerList();
 
@@ -294,4 +295,25 @@ public abstract class Node {
     public ListenerList<NodeListener> getNodeListeners() {
         return nodeListeners;
     }
+
+    /**
+     * @return The user data associated with this node.
+     */
+    public Object getUserData() {
+        return this.userData;
+    }
+
+    /**
+     * Set the user data associated with this node.  This can be any
+     * piece of data that has meaning to the application, and is meant
+     * to link any underlying data structure used to build the document
+     * with the document itself.
+     *
+     * @param userData Any piece of data that has meaning to the user
+     * application (can be {@code null}).
+     */
+    public void setUserData(Object userData) {
+        this.userData = userData;
+    }
+
 }
