@@ -28,6 +28,7 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.text.Block;
@@ -342,6 +343,12 @@ public class TextPane extends Container {
         return document;
     }
 
+    private void checkDocumentExists() {
+        if (document == null || document.getCharacterCount() == 0) {
+            throw new IllegalStateException("document is null or empty.");
+        }
+    }
+
     /**
      * Sets the document that backs the text pane. Documents are not shareable
      * across multiple TextPanes; because a Document may contain Components, and
@@ -443,9 +450,7 @@ public class TextPane extends Container {
     }
 
     public void insertText(String text, int index) {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
+        Utils.checkNull(text, "text");
 
         if (document == null) {
             throw new IllegalStateException("document is null.");
@@ -453,9 +458,7 @@ public class TextPane extends Container {
 
         if (document.getCharacterCount() == 0) {
             // the document is currently empty
-            Paragraph paragraph = new Paragraph();
-            paragraph.add(text);
-            document.insert(paragraph, 0);
+            document.insert(new Paragraph(text), 0);
         } else {
             Node descendant = document.getDescendantAt(index);
             int offset = index - descendant.getDocumentOffset();
@@ -496,13 +499,8 @@ public class TextPane extends Container {
     }
 
     public void insertImage(Image image) {
-        if (image == null) {
-            throw new IllegalArgumentException("image is null.");
-        }
-
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        Utils.checkNull(image, "image");
+        checkDocumentExists();
 
         if (selectionLength > 0) {
             removeDocumentRange(selectionStart, selectionLength);
@@ -533,13 +531,8 @@ public class TextPane extends Container {
     }
 
     public void insertComponent(Component component) {
-        if (component == null) {
-            throw new IllegalArgumentException("component is null.");
-        }
-
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        Utils.checkNull(component, "component");
+        checkDocumentExists();
 
         if (selectionLength > 0) {
             removeDocumentRange(selectionStart, selectionLength);
@@ -570,9 +563,7 @@ public class TextPane extends Container {
     }
 
     public void insertParagraph() {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        checkDocumentExists();
 
         if (selectionLength > 0) {
             removeDocumentRange(selectionStart, selectionLength);
@@ -622,9 +613,7 @@ public class TextPane extends Container {
     }
 
     public void removeText(int offset, int characterCount) {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        checkDocumentExists();
 
         if (offset >= 0 && offset < document.getCharacterCount()) {
             Node descendant = document.getDescendantAt(offset);
@@ -663,9 +652,7 @@ public class TextPane extends Container {
     }
 
     public void cut() {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        checkDocumentExists();
 
         if (selectionLength > 0) {
             // Copy selection to clipboard
@@ -692,9 +679,7 @@ public class TextPane extends Container {
     }
 
     public void copy() {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        checkDocumentExists();
 
         String selectedText = getSelectedText();
 
@@ -706,8 +691,8 @@ public class TextPane extends Container {
     }
 
     public void paste() {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
+        if (document == null) {
+            setDocument(new Document());
         }
 
         Manifest clipboardContent = Clipboard.getContent();
@@ -825,8 +810,8 @@ public class TextPane extends Container {
      * @see #setText
      */
     public String getText() {
-        Document doc = getDocument();
         int count;
+        Document doc = getDocument();
         if (doc != null && (count = getCharacterCount()) != 0) {
             StringBuilder text = new StringBuilder(count);
             addToText(text, doc, new Span(0, count - 1));
@@ -845,11 +830,14 @@ public class TextPane extends Container {
      */
     public String getText(int beginIndex, int endIndex) {
         if (beginIndex > endIndex) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Beginning index " + beginIndex +
+                " is greater than ending index " + endIndex + ".");
         }
 
         if (beginIndex < 0 || endIndex > getCharacterCount()) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Beginning index = " + beginIndex +
+                ", ending index = " + endIndex + ", document.characterCount = " +
+                getCharacterCount() + ".");
         }
 
         int count = endIndex - beginIndex;
@@ -864,6 +852,7 @@ public class TextPane extends Container {
         }
         return null;
     }
+
     /**
      * Convenience method to create a text-only document consisting of one
      * paragraph per line of the given text.
@@ -871,9 +860,7 @@ public class TextPane extends Container {
      * @param text The new complete text for the document.
      */
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "text");
 
         try {
             setText(new StringReader(text));
@@ -883,9 +870,7 @@ public class TextPane extends Container {
     }
 
     public void setText(URL textURL) throws IOException {
-        if (textURL == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(textURL, "text URL");
 
         try (InputStream inputStream = textURL.openStream()) {
             setText(new InputStreamReader(inputStream));
@@ -893,9 +878,7 @@ public class TextPane extends Container {
     }
 
     public void setText(Reader textReader) throws IOException {
-        if (textReader == null) {
-            throw new IllegalArgumentException("Reader is null");
-        }
+        Utils.checkNull(textReader, "Reader");
 
         int tabPosition = 0;
         int tabWidth = ((TextPane.Skin) getSkin()).getTabWidth();
@@ -905,6 +888,25 @@ public class TextPane extends Container {
 
         int c = textReader.read();
         while (c != -1) {
+            // Deal with the various forms of line endings:  CR only, LF only or CR,LF
+            if (c == '\r') {
+                int c2 = textReader.read();
+                if (c2 == -1) {
+                    break;
+                } else if (c2 == '\n') {
+                    // Only add the \n (the paragraph separator)
+                    c = c2;
+                } else {
+                    // Change the paragraph separator to \n instead
+                    // but push back the last character read
+                    Paragraph paragraph = new Paragraph(text.toString());
+                    doc.add(paragraph);
+                    text.setLength(0);
+                    tabPosition = 0;
+                    c = c2;
+                    continue;
+                }
+            }
             if (c == '\n') {
                 Paragraph paragraph = new Paragraph(text.toString());
                 doc.add(paragraph);
@@ -969,9 +971,7 @@ public class TextPane extends Container {
      * @param selectionLength The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (document == null || document.getCharacterCount() == 0) {
-            throw new IllegalStateException("document is null or empty.");
-        }
+        checkDocumentExists();
 
         if (selectionLength < 0) {
             throw new IllegalArgumentException("selectionLength is negative, selectionLength="
@@ -1005,9 +1005,7 @@ public class TextPane extends Container {
      * @see #setSelection(int, int)
      */
     public final void setSelection(Span selection) {
-        if (selection == null) {
-            throw new IllegalArgumentException("selection is null.");
-        }
+        Utils.checkNull(selection, "selection");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
     }
