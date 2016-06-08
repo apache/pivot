@@ -334,6 +334,29 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         return characterCount;
     }
 
+    private void addText(StringBuilder buf, Element element) {
+        for (Node child : element.nodes) {
+            if (child instanceof TextNode) {
+                TextNode textNode = (TextNode)child;
+                buf.append(textNode.getText());
+            } else if (child instanceof ComponentNode) {
+                ComponentNode compNode = (ComponentNode)child;
+                buf.append(compNode.getText());
+            } else if (child instanceof Paragraph) {
+                addText(buf, (Element)child);
+                buf.append('\n');
+            } else if (child instanceof Element) {
+                addText(buf, (Element)child);
+            }
+        }
+    }
+
+    public String getText() {
+        StringBuilder buf = new StringBuilder(characterCount);
+        addText(buf, this);
+        return buf.toString();
+    }
+
     @Override
     public int add(Node node) {
         int index = nodes.getLength();
