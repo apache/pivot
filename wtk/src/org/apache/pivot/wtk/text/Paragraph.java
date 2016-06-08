@@ -21,6 +21,9 @@ import org.apache.pivot.collections.Sequence;
 
 /**
  * Element representing a paragraph. <p> TODO Add indent property.
+ * <p> Every paragraph has a trailing newline ('\n') character, which is
+ * not actually present in any of its child text nodes.  Therefore all the
+ * logic in here must account for this extra phantom character.
  */
 public class Paragraph extends Block {
     public Paragraph() {
@@ -36,6 +39,12 @@ public class Paragraph extends Block {
         super(paragraph, recursive);
     }
 
+    /**
+     * Remove a range of characters from this paragraph.
+     * @param offset Offset into this paragraph.
+     * @param characterCount How many characters to remove.
+     * @return A new {@link Node} containing the removed characters.
+     */
     @Override
     public Node removeRange(int offset, int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
@@ -45,6 +54,13 @@ public class Paragraph extends Block {
         return super.removeRange(offset, characterCount);
     }
 
+    /**
+     * Get a new {@link Paragraph} containing the given range
+     * of characters from this paragraph.
+     * @param offset Offset into this paragraph.
+     * @param characterCount How many characters to get.
+     * @return New {@link Paragraph} with these characters.
+     */
     @Override
     public Paragraph getRange(int offset, int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
@@ -54,6 +70,11 @@ public class Paragraph extends Block {
         return (Paragraph) super.getRange(offset, characterCount);
     }
 
+    /**
+     * Retrieve the character at the given offset in this paragraph.
+     * @param offset Offset into this paragraph.
+     * @return The character at that position.
+     */
     @Override
     public char getCharacterAt(int offset) {
         char c;
@@ -66,6 +87,11 @@ public class Paragraph extends Block {
         return c;
     }
 
+    /**
+     * @return The count of characters in this paragraph, which is one more
+     * than the number of characters in all child nodes (because of the
+     * trailing newline implicitly present).
+     */
     @Override
     public int getCharacterCount() {
         return super.getCharacterCount() + 1;
@@ -85,6 +111,13 @@ public class Paragraph extends Block {
         super.insert(node, index);
     }
 
+    /**
+     * Get the path through our descendants for the given
+     * offset into this paragraph.
+     * @param offset Offset into this paragraph.
+     * @return The path to that offset, which will be empty
+     * for the trailing newline character.
+     */
     @Override
     public Sequence<Integer> getPathAt(int offset) {
         Sequence<Integer> path;
@@ -98,6 +131,14 @@ public class Paragraph extends Block {
         return path;
     }
 
+    /**
+     * Get the descendant node at the given offset.  If the offset
+     * is the last character in this paragraph (namely the phantom
+     * newline) then return ourselves, otherwise the normal descendant
+     * at that offset.
+     * @param offset Offset into this paragraph.
+     * @return The descendant node at that offset.
+     */
     @Override
     public Node getDescendantAt(int offset) {
         Node descendant;
