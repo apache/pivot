@@ -235,7 +235,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
             int nodeViewOffset = nodeView.getOffset();
             int characterCount = nodeView.getCharacterCount();
 
-            if (offset >= nodeViewOffset && offset <= nodeViewOffset + characterCount) {
+            if (offset >= nodeViewOffset && offset < nodeViewOffset + characterCount) {
                 characterBounds = nodeView.getCharacterBounds(offset - nodeViewOffset);
 
                 if (characterBounds != null) {
