@@ -95,8 +95,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             offset += nodeView.getCharacterCount();
             row.width += nodeViewWidth;
 
-            // If the view was split into multiple views, add them to
-            // their own rows
+            // If the view was split into multiple views, add them to their own rows
             nodeView = getNext(nodeView);
             while (nodeView != null) {
                 rows.add(row);
@@ -178,8 +177,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             offset += nodeView.getCharacterCount();
             row.width += nodeViewWidth;
 
-            // If the view was split into multiple views, add them to
-            // their own rows
+            // If the view was split into multiple views, add them to their own rows
             nodeView = getNext(nodeView);
             while (nodeView != null) {
                 rowsLocal.add(row);
@@ -231,8 +229,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     }
 
     private static TextPaneSkinNodeView getNext(TextPaneSkinNodeView child) {
-        // Using instanceof checks because there is no nice place in the
-        // hierarchy
+        // Using instanceof checks because there is no nice place in the hierarchy
         // to put an abstract method
         if (child instanceof TextPaneSkinSpanView) {
             return ((TextPaneSkinSpanView) child).getNext();
@@ -328,8 +325,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
 
     @Override
     public void paint(Graphics2D graphics) {
-        // The default paint() method paints the document children, but because
-        // of row-splitting,
+        // The default paint() method paints the document children, but because of row-splitting,
         // the children we want to paint are not the same.
 
         // Determine the paint bounds
@@ -434,8 +430,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
             }
 
             if (i >= 0 && i < n) {
-                // Find the node view that contains x and get the insertion
-                // point from it
+                // Find the node view that contains x and get the insertion point from it
                 Row row = rows.get(i);
 
                 for (RowSegment segment : row.rowSegments) {
@@ -448,8 +443,7 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
                 }
 
                 if (offset == -1) {
-                    // No node view contained the x position; move to the end of
-                    // the row
+                    // No node view contained the x position; move to the end of the row
                     RowSegment lastNodeSegment = row.rowSegments.get(row.rowSegments.getLength() - 1);
                     offset = lastNodeSegment.offset + lastNodeSegment.nodeView.getCharacterCount();
 
