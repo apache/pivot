@@ -942,11 +942,6 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     selectionLength += end - index;
                 } else {
                     selectionStart = end;
-                    if (selectionStart < textPane.getCharacterCount()
-                        && document.getCharacterAt(selectionStart) == '\n') {
-                        selectionStart--;
-                    }
-
                     selectionLength = 0;
                 }
 
