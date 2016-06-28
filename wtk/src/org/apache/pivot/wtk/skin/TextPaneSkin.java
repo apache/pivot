@@ -765,6 +765,80 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         return consumed;
     }
 
+    private void selectSpan(TextPane textPane, Document document, int start) {
+        int rowStart = getRowOffset(document, start);
+        int rowLength = getRowLength(document, start);
+        if (start - rowStart >= rowLength) {
+            start = rowStart + rowLength - 1;
+            if (start < 0) {
+                return;
+            }
+            char ch = document.getCharacterAt(start);
+            if (ch == '\r' || ch == '\n') {
+                start--;
+            }
+        }
+        if (start < 0) {
+            return;
+        }
+        char ch = document.getCharacterAt(start);
+        int selectionStart = start;
+        int selectionLength = 1;
+        if (Character.isWhitespace(ch)) {
+            // Move backward to beginning of whitespace block
+            // but not before the beginning of the line.
+            do {
+                selectionStart--;
+            } while (selectionStart >= rowStart
+                && Character.isWhitespace(document.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of whitespace block
+            // but not past the end of the text or the end of line
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength - rowStart < rowLength
+                && Character.isWhitespace(document.getCharacterAt(selectionStart + selectionLength)));
+        } else if (Character.isJavaIdentifierPart(ch)) {
+            // Move backward to beginning of identifier block
+            do {
+                selectionStart--;
+            } while (selectionStart >= rowStart
+                && Character.isJavaIdentifierPart(document.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of identifier block
+            // but not past end of text
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength - rowStart < rowLength
+                && Character.isJavaIdentifierPart(document.getCharacterAt(selectionStart
+                    + selectionLength)));
+        } else {
+            return;
+        }
+        textPane.setSelection(selectionStart, selectionLength);
+    }
+
+    @Override
+    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        boolean consumed = super.mouseClick(component, button, x, y, count);
+
+        TextPane textPane = (TextPane) component;
+        Document document = textPane.getDocument();
+
+        if (button == Mouse.Button.LEFT) {
+            int index = getInsertionPoint(x, y);
+            if (index != -1) {
+                if (count == 2) {
+                    selectSpan(textPane, document, index);
+                } else if (count == 3) {
+                    textPane.setSelection(getRowOffset(document, index), getRowLength(document, index));
+                }
+            }
+        }
+        return consumed;
+    }
 
     @Override
     public boolean keyTyped(final Component component, char character) {
@@ -788,6 +862,35 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         }
 
         return consumed;
+    }
+
+    private int getRowOffset(Document document, int index) {
+        if (document != null) {
+            Node node = document.getDescendantAt(index);
+            while (node != null && !(node instanceof Paragraph)) {
+                node = node.getParent();
+            }
+            // TODO: doesn't take into account the line wrapping within a paragraph
+            if (node != null) {
+                return node.getDocumentOffset();
+            }
+        }
+        return 0;
+    }
+
+    private int getRowLength(Document document, int index) {
+        if (document != null) {
+            Node node = document.getDescendantAt(index);
+            while (node != null && !(node instanceof Paragraph)) {
+                node = node.getParent();
+            }
+            // TODO: doesn't take into account the line wrapping within a paragraph
+            // Assuming the node is a Paragraph, the count includes the trailing \n, so discount it
+            if (node != null) {
+                return node.getCharacterCount() - 1;
+            }
+        }
+        return 0;
     }
 
     @Override
