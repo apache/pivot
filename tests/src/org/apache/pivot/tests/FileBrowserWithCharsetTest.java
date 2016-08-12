@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FileBrowserSheet;
@@ -82,12 +83,15 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
     public void startup(Display display, Map<String, String> properties) throws Exception
     {
         BoxPane windowContent = new BoxPane();
+        final Checkbox showHiddenCheckbox = new Checkbox("Show hidden files");
+        windowContent.add(showHiddenCheckbox);
         PushButton button = new PushButton("Open Sheet");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button buttonArgument) {
                 final Window window = Window.getActiveWindow();
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserWithCharsetTest(FileBrowserSheet.Mode.OPEN);
+                fileBrowserSheet.getStyles().put("showHiddenFiles", showHiddenCheckbox.isSelected());
 
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
