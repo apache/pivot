@@ -58,12 +58,20 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
             Dimensions size = menuPopup.getSize();
 
             int x = location.x;
-            if (x + size.width > display.getWidth()) {
+            int displayWidth = display.getWidth();
+            if (size.width > displayWidth) {
+                border.setPreferredWidth(displayWidth);
+                x = 0;
+            } else if (x + size.width > displayWidth) {
                 x -= size.width;
             }
 
             int y = location.y;
-            if (y + size.height > display.getHeight()) {
+            int displayHeight = display.getHeight();
+            if (size.height > displayHeight) {
+                border.setPreferredHeight(displayHeight);
+                y = 0;
+            } else if (y + size.height > displayHeight) {
                 y-= size.height;
             }
 
