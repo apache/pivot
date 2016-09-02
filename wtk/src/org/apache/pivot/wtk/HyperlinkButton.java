@@ -24,6 +24,7 @@ import java.net.URL;
 import java.net.URISyntaxException;
 
 import org.apache.pivot.beans.DefaultProperty;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.content.LinkButtonDataRenderer;
 
@@ -65,6 +66,9 @@ public class HyperlinkButton extends LinkButton {
             try {
                 if (Desktop.isDesktopSupported()) {
                     Desktop desktop = Desktop.getDesktop();
+                    // TODO: Should there be an exception here instead of silent failure?
+                    // Maybe an exception at constructor time (basically the whole idea
+                    // is unsupported)
                     if (desktop.isSupported(Desktop.Action.BROWSE)) {
                         desktop.browse(uri);
                     }
@@ -160,8 +164,7 @@ public class HyperlinkButton extends LinkButton {
         // If the user has already set the button data in BXML,
         // then don't set the data to this new URI string
         Object buttonData = getButtonData();
-        if (buttonData == null ||
-            ((buttonData instanceof String) && ((String)buttonData).isEmpty())) {
+        if (Utils.isNullOrEmpty(buttonData)) {
             String uriString = uri == null ? "" : uri.toString();
             setButtonData(uriString);
         }
@@ -183,12 +186,7 @@ public class HyperlinkButton extends LinkButton {
     public void setUri(String uriString)
         throws URISyntaxException
     {
-        if (uriString == null) {
-            throw new IllegalArgumentException("URI string must not be null.");
-        }
-        if (uriString.isEmpty()) {
-            throw new IllegalArgumentException("URI string must not be empty.");
-        }
+        Utils.checkNullOrEmpty(uriString, "URI string");
         setUri(new URI(uriString));
     }
 
@@ -215,12 +213,7 @@ public class HyperlinkButton extends LinkButton {
     public void setUrl(String urlString)
         throws MalformedURLException, URISyntaxException
     {
-        if (urlString == null) {
-            throw new IllegalArgumentException("URL string must not be null.");
-        }
-        if (urlString.isEmpty()) {
-            throw new IllegalArgumentException("URL string must not be empty.");
-        }
+        Utils.checkNullOrEmpty(urlString, "URL string");
         setUrl(new URL(urlString));
     }
 

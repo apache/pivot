@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 
 /**
@@ -102,25 +103,19 @@ public class MenuPopup extends Window {
     }
 
     public final void open(Display display, Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
+        Utils.checkNull(location, "location");
 
         open(display, null, location.x, location.y);
     }
 
     public final void open(Window owner, int x, int y) {
-        if (owner == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(owner, "owner");
 
         open(owner.getDisplay(), owner, x, y);
     }
 
     public final void open(Window owner, Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
+        Utils.checkNull(location, "location");
 
         open(owner, location.x, location.y);
     }

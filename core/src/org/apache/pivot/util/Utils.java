@@ -52,7 +52,7 @@ public class Utils {
      */
     public static void checkNull(Object value, String description) {
         if (value == null) {
-            if (description == null || description.isEmpty()) {
+            if (isNullOrEmpty(description)) {
                 throw new IllegalArgumentException();
             } else {
                 throw new IllegalArgumentException(description + " must not be null.");
@@ -60,4 +60,55 @@ public class Utils {
         }
     }
 
+    /**
+     * Check if the input string is {@code null} or empty (or all whitespace).
+     *
+     * @param value The string to check.
+     * @return {@code true} if the input is {@code null} or empty, {@code false}
+     * otherwise.
+     */
+    public static boolean isNullOrEmpty(String value) {
+        if (value == null) {
+            return true;
+        }
+        return value.trim().isEmpty();
+    }
+
+    /**
+     * Check if the input value is {@code null} or if it is a string and is empty
+     * (or all whitespace).
+     *
+     * @param value The object to check.
+     * @return {@code true} if the input is {@code null} or an empty string,
+     * {@code false} otherwise (which would include a non-null object other
+     * than a string).
+     */
+    public static boolean isNullOrEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        return (value instanceof String) && ((String)value).trim().isEmpty();
+    }
+
+    /**
+     * Check if the input argument is {@code null} and if it is a string
+     * if it is empty, and throw an {@link IllegalArgumentException} if so,
+     * with an optional message derived from the given string.
+     *
+     * @param value The argument value to check for {@code null} or empty.
+     * @param description A description for the value used to
+     * construct a message like {@code "xxx must not be null or empty."}.
+     * Can be {@code null} or an empty string, in which case a plain
+     * {@link IllegalArgumentException} is thrown without any detail message.
+     * @throws IllegalArgumentException if the value is {@code null}.
+     */
+    public static void checkNullOrEmpty(Object value, String description) {
+        if (value == null || (value instanceof String && isNullOrEmpty((String)value))) {
+            if (isNullOrEmpty(description)) {
+                throw new IllegalArgumentException();
+            } else {
+                throw new IllegalArgumentException(description + " must not be null or empty.");
+            }
+        }
+    }
 }
