@@ -213,23 +213,23 @@ public class Alert extends Dialog {
         setBody(body);
 
         if (messageType == null) {
-            setTitle((String) resources.get("defaultTitle"));
+            setTitle(resources.getString("defaultTitle"));
         } else {
             switch (messageType) {
                 case ERROR:
-                    setTitle((String) resources.get("defaultErrorTitle"));
+                    setTitle(resources.getString("defaultErrorTitle"));
                     break;
                 case WARNING:
-                    setTitle((String) resources.get("defaultWarningTitle"));
+                    setTitle(resources.getString("defaultWarningTitle"));
                     break;
                 case QUESTION:
-                    setTitle((String) resources.get("defaultQuestionTitle"));
+                    setTitle(resources.getString("defaultQuestionTitle"));
                     break;
                 case INFO:
-                    setTitle((String) resources.get("defaultInfoTitle"));
+                    setTitle(resources.getString("defaultInfoTitle"));
                     break;
                 default:
-                    setTitle((String) resources.get("defaultTitle"));
+                    setTitle(resources.getString("defaultTitle"));
                     break;
             }
         }

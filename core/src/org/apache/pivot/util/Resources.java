@@ -85,17 +85,9 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
      */
     public Resources(Resources parent, String baseName, Locale locale, Charset charset)
         throws IOException, SerializationException {
-        if (baseName == null) {
-            throw new IllegalArgumentException("baseName is null");
-        }
-
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null");
-        }
-
-        if (charset == null) {
-            throw new IllegalArgumentException("charset is null.");
-        }
+        Utils.checkNull(baseName, "Base name");
+        Utils.checkNull(locale, "Locale");
+        Utils.checkNull(charset, "Charset");
 
         this.parent = parent;
         this.baseName = baseName;
@@ -147,6 +139,26 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public Charset getCharset() {
         return this.charset;
+    }
+
+    /**
+     * Convenience method for the common case that the resource is a string (to avoid
+     * using casts).
+     *
+     * @param    key    The key for the string resource.
+     * @return   The string value for that key, if any, or {@code null} if the key/value
+     *           pair doesn't exist.  If the resource object is not a {@link String}
+     *           then the {@link Object#toString} method will be called to return the value.
+     */
+    public String getString(String key) {
+        Object value = get(key);
+        if (value == null) {
+            return null;
+        } else if (value instanceof String) {
+            return (String)value;
+        } else {
+            return value.toString();
+        }
     }
 
     @Override
