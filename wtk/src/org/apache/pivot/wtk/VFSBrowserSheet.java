@@ -28,6 +28,7 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileObjectList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * A file browser sheet that uses the Apache Commons VFS (Virtual File System)
@@ -174,13 +175,8 @@ public class VFSBrowserSheet extends Sheet {
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder, String homeFolder)
             throws FileSystemException
     {
-        if (mode == null) {
-            throw new IllegalArgumentException("Mode is null.");
-        }
-
-        if (rootFolder == null) {
-            throw new IllegalArgumentException("Root folder is null.");
-        }
+        Utils.checkNull(mode, "Mode");
+        Utils.checkNull(rootFolder, "Root folder");
 
         this.mode = mode;
 
@@ -210,13 +206,8 @@ public class VFSBrowserSheet extends Sheet {
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, FileObject rootFolder, FileObject homeFolder)
             throws FileSystemException
     {
-        if (mode == null) {
-            throw new IllegalArgumentException("Mode is null.");
-        }
-
-        if (rootFolder == null) {
-            throw new IllegalArgumentException("Root folder is null.");
-        }
+        Utils.checkNull(mode, "Mode");
+        Utils.checkNull(rootFolder, "Root folder");
 
         this.mode = mode;
 
@@ -261,9 +252,7 @@ public class VFSBrowserSheet extends Sheet {
     }
 
     public void setMode(Mode mode) {
-        if (mode == null) {
-            throw new IllegalArgumentException("Mode is null.");
-        }
+        Utils.checkNull(mode, "Mode");
 
         Mode previousMode = this.mode;
 
@@ -282,9 +271,7 @@ public class VFSBrowserSheet extends Sheet {
     }
 
     public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
-        if (rootDirectory == null) {
-            throw new IllegalArgumentException("Root directory is null.");
-        }
+        Utils.checkNull(rootDirectory, "Root directory");
 
         // Give some grace to set the root folder to an actual file and
         // have it work (by using the parent folder instead)
@@ -321,16 +308,14 @@ public class VFSBrowserSheet extends Sheet {
     public void setHomeDirectory(FileObject homeDirectory)
             throws FileSystemException
     {
-        if (homeDirectory == null) {
-            throw new IllegalArgumentException("Home file is null.");
-        }
+        Utils.checkNull(homeDirectory, "Home directory");
 
         // Give some grace to set the home folder to an actual file and
         // have it work (by using the parent folder instead)
         if (homeDirectory.getType() != FileType.FOLDER) {
             homeDirectory = homeDirectory.getParent();
             if (homeDirectory == null || homeDirectory.getType() != FileType.FOLDER) {
-                throw new IllegalArgumentException("Root file is not a directory.");
+                throw new IllegalArgumentException("Home file is not a directory.");
             }
         }
 
@@ -400,9 +385,7 @@ public class VFSBrowserSheet extends Sheet {
      */
     public Sequence<FileObject> setSelectedFiles(Sequence<FileObject> selectedFiles)
         throws FileSystemException {
-        if (selectedFiles == null) {
-            throw new IllegalArgumentException("selectedFiles is null.");
-        }
+        Utils.checkNull(selectedFiles, "Selected files");
 
         if (mode != Mode.OPEN_MULTIPLE && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
@@ -415,9 +398,7 @@ public class VFSBrowserSheet extends Sheet {
         for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
             FileObject file = selectedFiles.get(i);
 
-            if (file == null) {
-                throw new IllegalArgumentException("Selected file is null.");
-            }
+            Utils.checkNull(file, "Selected file");
 
             // TODO: is this correct?
             // if (!file.isAbsolute()) {

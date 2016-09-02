@@ -31,6 +31,7 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileObjectList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * A file browser that uses the Apache Commons VFS (Virtual File System) to be
@@ -155,9 +156,7 @@ public class VFSBrowser extends Container {
      * @throws FileSystemException if there are problems.
      */
     public VFSBrowser(FileSystemManager manager, String rootFolder, String homeFolder) throws FileSystemException {
-        if (rootFolder == null) {
-            throw new IllegalArgumentException("Root folder is null.");
-        }
+        Utils.checkNull(rootFolder, "Root folder");
 
         // Note: these methods all could trigger events, but since we're
         // in the constructor and the skin isn't set yet, there will not
@@ -219,9 +218,7 @@ public class VFSBrowser extends Container {
      * @throws FileSystemException if there are any problems.
      */
     public void setRootDirectory(FileObject rootDirectory) throws FileSystemException {
-        if (rootDirectory == null) {
-            throw new IllegalArgumentException("Root directory is null.");
-        }
+        Utils.checkNull(rootDirectory, "Root directory");
 
         // Give some grace to set the root folder to an actual file and
         // have it work (by using the parent folder instead)
@@ -269,9 +266,7 @@ public class VFSBrowser extends Container {
      * @throws FileSystemException if there are any problems.
      */
     public void setHomeDirectory(FileObject homeDirectory) throws FileSystemException {
-        if (homeDirectory == null) {
-            throw new IllegalArgumentException("Home directory is null.");
-        }
+        Utils.checkNull(homeDirectory, "Home directory");
 
         // Give some grace to set the home folder to an actual file and
         // have it work (by using the parent folder instead)
@@ -303,15 +298,13 @@ public class VFSBrowser extends Container {
      * @throws FileSystemException if there are any problems.
      */
     public boolean addSelectedFile(FileObject file) throws FileSystemException {
-        if (file == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(file, "Selected file");
 
         // TODO: is this a good way to do this?
         // if (file.isAbsolute()) {
         if (baseFileName != null && baseFileName.isAncestor(file.getName())) {
             if (!file.getParent().equals(rootDirectory)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Selected file is not in the root directory");
             }
         } else {
             file = manager.resolveFile(rootDirectory, file.getName().getBaseName());
@@ -333,9 +326,7 @@ public class VFSBrowser extends Container {
      * not already selected.
      */
     public boolean removeSelectedFile(FileObject file) {
-        if (file == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(file, "Selected file");
 
         int index = selectedFiles.remove(file);
         if (index != -1) {
@@ -399,9 +390,7 @@ public class VFSBrowser extends Container {
      */
     public Sequence<FileObject> setSelectedFiles(Sequence<FileObject> selectedFiles)
         throws FileSystemException {
-        if (selectedFiles == null) {
-            throw new IllegalArgumentException("selectedFiles is null.");
-        }
+        Utils.checkNull(selectedFiles, "Selected files");
 
         if (!multiSelect && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
@@ -414,9 +403,7 @@ public class VFSBrowser extends Container {
         for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
             FileObject file = selectedFiles.get(i);
 
-            if (file == null) {
-                throw new IllegalArgumentException("file is null.");
-            }
+            Utils.checkNull(file, "Selected file");
 
             // TODO: is this correct?
             // if (!file.isAbsolute()) {

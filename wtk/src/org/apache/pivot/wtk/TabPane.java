@@ -23,6 +23,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 import org.apache.pivot.wtk.skin.TabPaneSkin;
@@ -50,9 +51,7 @@ public class TabPane extends Container {
 
         @Override
         public void insert(Component tab, int index) {
-            if (tab == null) {
-                throw new IllegalArgumentException("tab is null.");
-            }
+            Utils.checkNull(tab, "Tab component");
 
             // Add the tab to the component sequence
             TabPane.this.add(tab);
@@ -355,7 +354,7 @@ public class TabPane extends Container {
         } else {
             int index = tabs.indexOf(comp);
             if (index < 0) {
-                throw new IllegalArgumentException("component is not a child of the TabPane");
+                throw new IllegalArgumentException("Component is not a child of the TabPane");
             }
             setSelectedIndex(index);
         }
@@ -366,9 +365,7 @@ public class TabPane extends Container {
     }
 
     public void setTabDataRenderer(Button.DataRenderer tabDataRenderer) {
-        if (tabDataRenderer == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(tabDataRenderer, "Tab data renderer");
 
         Button.DataRenderer previousTabDataRenderer = this.tabDataRenderer;
         if (previousTabDataRenderer != tabDataRenderer) {

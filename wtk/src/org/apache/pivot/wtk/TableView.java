@@ -36,6 +36,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.content.TableViewCellRenderer;
 import org.apache.pivot.wtk.content.TableViewHeaderDataRenderer;
@@ -224,9 +225,7 @@ public class TableView extends Component {
          * @param headerDataRenderer The new renderer for the header data.
          */
         public void setHeaderDataRenderer(HeaderDataRenderer headerDataRenderer) {
-            if (headerDataRenderer == null) {
-                throw new IllegalArgumentException("headerDataRenderer is null.");
-            }
+            Utils.checkNull(headerDataRenderer, "Header data renderer");
 
             HeaderDataRenderer previousHeaderDataRenderer = this.headerDataRenderer;
             if (previousHeaderDataRenderer != headerDataRenderer) {
@@ -438,9 +437,7 @@ public class TableView extends Component {
          * contents of this column.
          */
         public void setCellRenderer(CellRenderer cellRenderer) {
-            if (cellRenderer == null) {
-                throw new IllegalArgumentException("cellRenderer is null.");
-            }
+            Utils.checkNull(cellRenderer, "Cell renderer");
 
             CellRenderer previousCellRenderer = this.cellRenderer;
 
@@ -643,13 +640,11 @@ public class TableView extends Component {
 
         @Override
         public void insert(Column column, int index) {
-            if (column == null) {
-                throw new IllegalArgumentException("column is null.");
-            }
+            Utils.checkNull(column, "Column");
 
             if (column.tableView != null) {
                 throw new IllegalArgumentException(
-                    "column is already in use by another table view.");
+                    "Column is already in use by another table view.");
             }
 
             columns.insert(column, index);
@@ -1242,9 +1237,7 @@ public class TableView extends Component {
      */
     @SuppressWarnings("unchecked")
     public void setTableData(List<?> tableData) {
-        if (tableData == null) {
-            throw new IllegalArgumentException("tableData is null.");
-        }
+        Utils.checkNull(tableData, "Table data");
 
         List<?> previousTableData = this.tableData;
 
@@ -1283,9 +1276,7 @@ public class TableView extends Component {
      * <tt>]</tt>) denoting the data to be presented by the table view.
      */
     public final void setTableData(String tableData) {
-        if (tableData == null) {
-            throw new IllegalArgumentException("tableData is null.");
-        }
+        Utils.checkNull(tableData, "Table data");
 
         try {
             setTableData(JSONSerializer.parseList(tableData));
@@ -1301,9 +1292,7 @@ public class TableView extends Component {
      * presented by the table view.
      */
     public void setTableData(URL tableData) {
-        if (tableData == null) {
-            throw new IllegalArgumentException("tableData is null.");
-        }
+        Utils.checkNull(tableData, "URL for table data");
 
         JSONSerializer jsonSerializer = new JSONSerializer();
 
@@ -1411,9 +1400,7 @@ public class TableView extends Component {
      * @return The ranges that were actually set.
      */
     public Sequence<Span> setSelectedRanges(Sequence<Span> selectedRanges) {
-        if (selectedRanges == null) {
-            throw new IllegalArgumentException("selectedRanges is null.");
-        }
+        Utils.checkNull(selectedRanges, "Selected ranges");
 
         // When we're in mode NONE, the only thing we can do is to clear the
         // selection
@@ -1429,9 +1416,7 @@ public class TableView extends Component {
         for (int i = 0, n = selectedRanges.getLength(); i < n; i++) {
             Span range = selectedRanges.get(i);
 
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "Selected range");
 
             if (range.start < 0) {
                 throw new IndexOutOfBoundsException("range.start < 0, " + range.start);
@@ -1465,9 +1450,7 @@ public class TableView extends Component {
      * @see #setSelectedRanges(Sequence)
      */
     public final Sequence<Span> setSelectedRanges(String selectedRanges) {
-        if (selectedRanges == null) {
-            throw new IllegalArgumentException("selectedRanges is null.");
-        }
+        Utils.checkNull(selectedRanges, "Selected ranges");
 
         try {
             setSelectedRanges(parseSelectedRanges(selectedRanges));
@@ -1564,9 +1547,7 @@ public class TableView extends Component {
      * @return The ranges that were added to the selection.
      */
     public Sequence<Span> addSelectedRange(Span range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        Utils.checkNull(range, "Range");
 
         return addSelectedRange(range.start, range.end);
     }
@@ -1626,9 +1607,7 @@ public class TableView extends Component {
      * @return The ranges that were removed from the selection.
      */
     public Sequence<Span> removeSelectedRange(Span range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        Utils.checkNull(range, "Range");
 
         return removeSelectedRange(range.start, range.end);
     }
@@ -1694,17 +1673,13 @@ public class TableView extends Component {
 
     @SuppressWarnings("unchecked")
     public void setSelectedRows(Sequence<Object> rows) {
-        if (rows == null) {
-            throw new IllegalArgumentException("rows is null");
-        }
+        Utils.checkNull(rows, "Selected rows");
 
         ArrayList<Span> selectedRanges = new ArrayList<>();
 
         for (int i = 0, n = rows.getLength(); i < n; i++) {
             Object row = rows.get(i);
-            if (row == null) {
-                throw new IllegalArgumentException("item is null");
-            }
+            Utils.checkNull(row, "Selected row");
 
             int index = ((List<Object>) tableData).indexOf(row);
             if (index == -1) {
@@ -1730,9 +1705,7 @@ public class TableView extends Component {
      * @param selectMode The new selection mode.
      */
     public void setSelectMode(SelectMode selectMode) {
-        if (selectMode == null) {
-            throw new IllegalArgumentException("selectMode is null.");
-        }
+        Utils.checkNull(selectMode, "Select mode");
 
         SelectMode previousSelectMode = this.selectMode;
 
@@ -1782,9 +1755,7 @@ public class TableView extends Component {
      */
     public Dictionary<String, SortDirection> setSort(
         Sequence<Dictionary.Pair<String, SortDirection>> sort) {
-        if (sort == null) {
-            throw new IllegalArgumentException("sort is null");
-        }
+        Utils.checkNull(sort, "Sort");
 
         sortMap.clear();
         sortList.clear();
@@ -1813,9 +1784,7 @@ public class TableView extends Component {
      * or can't be parsed from the JSON input.
      */
     public final Dictionary<String, SortDirection> setSort(String sort) {
-        if (sort == null) {
-            throw new IllegalArgumentException("sort is null");
-        }
+        Utils.checkNull(sort, "Sort");
 
         try {
             setSort(parseSort(sort));
@@ -1916,9 +1885,7 @@ public class TableView extends Component {
     }
 
     public void setTableDataBindType(BindType tableDataBindType) {
-        if (tableDataBindType == null) {
-            throw new IllegalArgumentException("tableDataBindType is null");
-        }
+        Utils.checkNull(tableDataBindType, "Table data bind type");
 
         BindType previousTableDataBindType = this.tableDataBindType;
 
@@ -1960,9 +1927,7 @@ public class TableView extends Component {
     }
 
     public void setSelectedRowBindType(BindType selectedRowBindType) {
-        if (selectedRowBindType == null) {
-            throw new IllegalArgumentException("selectedRowBindType is null");
-        }
+        Utils.checkNull(selectedRowBindType, "Selected row bind type");
 
         BindType previousSelectedRowBindType = this.selectedRowBindType;
         if (previousSelectedRowBindType != selectedRowBindType) {
@@ -2003,9 +1968,7 @@ public class TableView extends Component {
     }
 
     public void setSelectedRowsBindType(BindType selectedRowsBindType) {
-        if (selectedRowsBindType == null) {
-            throw new IllegalArgumentException("selectedRowsBindType is null");
-        }
+        Utils.checkNull(selectedRowsBindType, "Selected rows bind type");
 
         BindType previousSelectedRowsBindType = this.selectedRowsBindType;
         if (previousSelectedRowsBindType != selectedRowsBindType) {

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 
@@ -68,9 +69,7 @@ public class TaskAdapter<T> implements TaskListener<T> {
      * thread
      */
     public TaskAdapter(TaskListener<T> taskListener) {
-        if (taskListener == null) {
-            throw new IllegalArgumentException("taskListener cannot be null");
-        }
+        Utils.checkNull(taskListener, "Task listener");
 
         this.taskListener = taskListener;
     }

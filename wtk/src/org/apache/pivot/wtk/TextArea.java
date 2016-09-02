@@ -31,6 +31,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * A component that allows a user to enter multiple lines of unformatted text.
@@ -88,9 +89,7 @@ public class TextArea extends Component {
         }
 
         public void insertText(CharSequence text, int index) {
-            if (text == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNull(text, "Text to insert");
 
             indexBoundsCheck("index", index, 0, characters.length());
 
@@ -316,13 +315,11 @@ public class TextArea extends Component {
 
         @Override
         public void insert(Paragraph paragraph, int index) {
-            if (paragraph == null) {
-                throw new IllegalArgumentException("paragraph is null.");
-            }
+            Utils.checkNull(paragraph, "Paragraph");
 
             if (paragraph.textArea != null) {
                 throw new IllegalArgumentException(
-                    "paragraph is already in use by another text area.");
+                    "Paragraph is already in use by another text area.");
             }
 
             // Determine insertion count, including terminator character
@@ -672,9 +669,7 @@ public class TextArea extends Component {
      * @param text The new text for the control (cannot be {@code null}).
      */
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "Text");
 
         if (text.length() > maximumLength) {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
@@ -690,9 +685,7 @@ public class TextArea extends Component {
     }
 
     public void setText(URL textURL) throws IOException {
-        if (textURL == null) {
-            throw new IllegalArgumentException("URL for text is null.");
-        }
+        Utils.checkNull(textURL, "URL for text");
 
         try (InputStream inputStream = textURL.openStream()) {
             setText(new InputStreamReader(inputStream));
@@ -700,9 +693,7 @@ public class TextArea extends Component {
     }
 
     public void setText(Reader textReader) throws IOException {
-        if (textReader == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(textReader, "Text reader");
 
         // Construct the paragraph list
         ArrayList<Paragraph> paragraphsLocal = new ArrayList<>();
@@ -758,9 +749,7 @@ public class TextArea extends Component {
     }
 
     private void insertText(CharSequence text, int index, boolean addToEditHistory) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "Text to insert");
 
         indexBoundsCheck("index", index, 0, characterCount);
 
@@ -1043,9 +1032,7 @@ public class TextArea extends Component {
      * @see #setSelection(int, int)
      */
     public final void setSelection(Span selection) {
-        if (selection == null) {
-            throw new IllegalArgumentException("selection is null.");
-        }
+        Utils.checkNull(selection, "Selection span");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
     }
@@ -1159,9 +1146,7 @@ public class TextArea extends Component {
     }
 
     public void setTextBindType(BindType textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(textBindType, "Text bind type");
 
         BindType previousTextBindType = this.textBindType;
 

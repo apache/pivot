@@ -22,6 +22,7 @@ import java.awt.Font;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.Service;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.skin.BorderSkin;
 import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
@@ -197,9 +198,7 @@ public abstract class Theme {
      * the component class.
      */
     public Class<? extends Skin> get(Class<? extends Component> componentClass) {
-        if (componentClass == null) {
-            throw new IllegalArgumentException("Component class is null.");
-        }
+        Utils.checkNull(componentClass, "Component class");
 
         return componentSkinMap.get(componentClass);
     }
@@ -212,13 +211,8 @@ public abstract class Theme {
      * @param skinClass The skin class.
      */
     public void set(Class<? extends Component> componentClass, Class<? extends Skin> skinClass) {
-        if (componentClass == null) {
-            throw new IllegalArgumentException("Component class is null.");
-        }
-
-        if (skinClass == null) {
-            throw new IllegalArgumentException("Skin class is null.");
-        }
+        Utils.checkNull(componentClass, "Component class");
+        Utils.checkNull(skinClass, "Skin class");
 
         componentSkinMap.put(componentClass, skinClass);
     }

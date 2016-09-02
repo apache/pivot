@@ -30,6 +30,7 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
@@ -931,6 +932,14 @@ public class TreeView extends Component {
         return treeData;
     }
 
+    private void checkNullOrEmpty(Path path) {
+        Utils.checkNull(path, "Path");
+
+        if (path.getLength() == 0) {
+            throw new IllegalArgumentException("Path is empty.");
+        }
+    }
+
     /**
      * Sets the tree data. Note that it is the responsibility of the caller to
      * ensure that the current tree node renderer is capable of displaying the
@@ -945,9 +954,7 @@ public class TreeView extends Component {
      * @param treeData The data to be presented by the tree.
      */
     public void setTreeData(List<?> treeData) {
-        if (treeData == null) {
-            throw new IllegalArgumentException("treeData is null.");
-        }
+        Utils.checkNull(treeData, "Tree data");
 
         List<?> previousTreeData = this.treeData;
 
@@ -1005,9 +1012,7 @@ public class TreeView extends Component {
      * @param nodeRenderer The new node renderer.
      */
     public void setNodeRenderer(NodeRenderer nodeRenderer) {
-        if (nodeRenderer == null) {
-            throw new IllegalArgumentException("nodeRenderer is null.");
-        }
+        Utils.checkNull(nodeRenderer, "Node renderer");
 
         NodeRenderer previousNodeRenderer = this.nodeRenderer;
 
@@ -1061,9 +1066,7 @@ public class TreeView extends Component {
      * @see TreeViewSelectionListener
      */
     public void setSelectMode(SelectMode selectMode) {
-        if (selectMode == null) {
-            throw new IllegalArgumentException("selectMode is null");
-        }
+        Utils.checkNull(selectMode, "Select mode");
 
         SelectMode previousSelectMode = this.selectMode;
 
@@ -1100,9 +1103,7 @@ public class TreeView extends Component {
      * <tt>NONE</tt>).
      */
     public Sequence<Path> setSelectedPaths(Sequence<Path> selectedPaths) {
-        if (selectedPaths == null) {
-            throw new IllegalArgumentException("selectedPaths is null.");
-        }
+        Utils.checkNull(selectedPaths, "Selected paths");
 
         if (selectMode == SelectMode.NONE) {
             throw new IllegalStateException("Selection is not enabled.");
@@ -1177,13 +1178,7 @@ public class TreeView extends Component {
      * @param path The new path to select.
      */
     public void setSelectedPath(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.getLength() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        checkNullOrEmpty(path);
 
         setSelectedPaths(new ArrayList<Path>(path));
     }
@@ -1214,13 +1209,7 @@ public class TreeView extends Component {
      * @throws IllegalStateException If multi-select is not enabled.
      */
     public boolean addSelectedPath(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.getLength() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        checkNullOrEmpty(path);
 
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("Tree view is not in multi-select mode.");
@@ -1251,13 +1240,7 @@ public class TreeView extends Component {
      * @throws IllegalStateException If multi-select is not enabled.
      */
     public boolean removeSelectedPath(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.getLength() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        checkNullOrEmpty(path);
 
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("Tree view is not in multi-select mode.");
@@ -1320,9 +1303,7 @@ public class TreeView extends Component {
      * @param path Path to the node to check.
      */
     public boolean isNodeSelected(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
+        Utils.checkNull(path, "Path");
 
         return (selectedPaths.indexOf(path) >= 0);
     }
@@ -1335,9 +1316,7 @@ public class TreeView extends Component {
      */
     @SuppressWarnings("unchecked")
     public boolean isNodeDisabled(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
+        Utils.checkNull(path, "Path");
 
         boolean disabled = false;
 
@@ -1464,9 +1443,7 @@ public class TreeView extends Component {
      * @see #getCheckmarksEnabled()
      */
     public boolean isNodeChecked(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
+        Utils.checkNull(path, "Path");
 
         return (checkedPaths.indexOf(path) >= 0);
     }
@@ -1485,9 +1462,7 @@ public class TreeView extends Component {
      * @see #setShowMixedCheckmarkState(boolean)
      */
     public NodeCheckState getNodeCheckState(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
+        Utils.checkNull(path, "Path");
 
         NodeCheckState checkState = NodeCheckState.UNCHECKED;
 
@@ -1528,13 +1503,7 @@ public class TreeView extends Component {
      * @see NodeCheckState#MIXED
      */
     public void setNodeChecked(Path path, boolean checked) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.getLength() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        checkNullOrEmpty(path);
 
         if (!checkmarksEnabled) {
             throw new IllegalStateException("Checkmarks are not enabled.");
@@ -1657,13 +1626,7 @@ public class TreeView extends Component {
      * collapse it.
      */
     public void setBranchExpanded(Path path, boolean expanded) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.getLength() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        checkNullOrEmpty(path);
 
         // Give listeners a chance to veto the operation
         Vote vote = treeViewBranchListeners.previewBranchExpandedChange(this, path);
@@ -1698,9 +1661,7 @@ public class TreeView extends Component {
      * @return <tt>true</tt> if the branch is expanded; <tt>false</tt> otherwise.
      */
     public boolean isBranchExpanded(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
+        checkNullOrEmpty(path);
 
         return (expandedPaths.indexOf(path) >= 0);
     }
@@ -1822,13 +1783,7 @@ public class TreeView extends Component {
      * @return The bounds, or <tt>null</tt> if the node is not currently visible.
      */
     public Bounds getNodeBounds(Path path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.getLength() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        checkNullOrEmpty(path);
 
         TreeView.Skin treeViewSkin = (TreeView.Skin) getSkin();
         return treeViewSkin.getNodeBounds(path);
