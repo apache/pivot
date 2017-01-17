@@ -106,19 +106,19 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
 /*    private static void printBindings(java.util.Map<String,Object> bindings) {
-	System.out.format("=== Bindings %1$s ===%n", bindings);
-	for (String key : bindings.keySet()) {
-	    Object value = bindings.get(key);
-	    System.out.format("key: %1$s, value: %2$s [%3$s]%n", key, value, Integer.toHexString(System.identityHashCode(value)));
-	    if (key.equals(NASHORN_GLOBAL)) {
-		Bindings globalBindings = (Bindings)value;
-		for (String globalKey : globalBindings.keySet()) {
-		    Object globalValue = globalBindings.get(globalKey);
-		    System.out.format("    global key: %1$s, value: %2$s [%3$s]%n", globalKey, globalValue, Integer.toHexString(System.identityHashCode(globalValue)));
-		}
-	    }
-	}
-	System.out.println("=====================");
+        System.out.format("=== Bindings %1$s ===%n", bindings);
+        for (String key : bindings.keySet()) {
+            Object value = bindings.get(key);
+            System.out.format("key: %1$s, value: %2$s [%3$s]%n", key, value, Integer.toHexString(System.identityHashCode(value)));
+            if (key.equals(NASHORN_GLOBAL)) {
+                Bindings globalBindings = (Bindings)value;
+                for (String globalKey : globalBindings.keySet()) {
+                    Object globalValue = globalBindings.get(globalKey);
+                    System.out.format("    global key: %1$s, value: %2$s [%3$s]%n", globalKey, globalValue, Integer.toHexString(System.identityHashCode(globalValue)));
+                }
+            }
+        }
+        System.out.println("=====================");
     }
 */
     private class AttributeInvocationHandler implements InvocationHandler {
@@ -253,6 +253,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private Element element = null;
 
     private Object root = null;
+    private String defaultLanguage = DEFAULT_LANGUAGE;
     private String language = null;
     private int nextID = 0;
 
@@ -740,7 +741,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         // Initialize the page language
         if (language == null) {
-            language = DEFAULT_LANGUAGE;
+            language = getDefaultLanguage();
         }
 
         // Get element properties
@@ -1855,4 +1856,24 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             throw new SerializationException(exception);
         }
     }
+
+    /**
+     * Set the default script language to use for all scripts.
+     *
+     * @param defaultLanguage Name of the new default script language,
+     * or {@code null} to set the default, default value.
+     * @see #DEFAULT_LANGUAGE
+     */
+    protected void setDefaultLanguage(String defaultLanguage) {
+        if (defaultLanguage == null) {
+            this.defaultLanguage = DEFAULT_LANGUAGE;
+        } else {
+            this.defaultLanguage = defaultLanguage;
+        }
+    }
+
+    protected String getDefaultLanguage() {
+        return this.defaultLanguage;
+    }
+
 }
