@@ -51,6 +51,7 @@ import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.adapter.MapAdapter;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.BinarySerializer;
@@ -105,8 +106,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-/*    private static void printBindings(java.util.Map<String,Object> bindings) {
-        System.out.format("=== Bindings %1$s ===%n", bindings);
+/*    private static void printBindings(String message, java.util.Map<String,Object> bindings) {
+        System.out.format("===== %1$s =====%n", message);
+        System.out.format("--- Bindings %1$s [%2$s] ---%n", bindings, bindings.getClass().getName());
         for (String key : bindings.keySet()) {
             Object value = bindings.get(key);
             System.out.format("key: %1$s, value: %2$s [%3$s]%n", key, value, Integer.toHexString(System.identityHashCode(value)));
@@ -119,8 +121,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
         }
         System.out.println("=====================");
-    }
-*/
+    } */
+
     private class AttributeInvocationHandler implements InvocationHandler {
         private ScriptEngine scriptEngine;
         private String event;
@@ -141,11 +143,10 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             String methodName = method.getName();
             if (methodName.equals(event)) {
                 try {
-                    SimpleBindings bindings = new SimpleBindings();
+                    Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
                     bindings.put(ARGUMENTS_KEY, args);
-                    scriptEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
-                    scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                     result = scriptEngine.eval(script);
+		    bindings.remove(ARGUMENTS_KEY);
                 } catch (ScriptException exception) {
                     reportException(exception, script);
                 }
@@ -172,22 +173,40 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             this.scriptEngine = scriptEngine;
         }
 
+        private Object invokeMethod(String methodName, Object[] args) throws Throwable {
+            Invocable invocable;
+            try {
+                invocable = (Invocable) scriptEngine;
+            } catch (ClassCastException exception) {
+                throw new SerializationException(exception);
+            }
+
+            return invocable.invokeFunction(methodName, args);
+	}
+
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Object result = null;
 
             String methodName = method.getName();
             Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
-            bindings = substituteGlobals(scriptEngine, bindings);
             if (bindings.containsKey(methodName)) {
-                Invocable invocable;
-                try {
-                    invocable = (Invocable) scriptEngine;
-                } catch (ClassCastException exception) {
-                    throw new SerializationException(exception);
+                result = invokeMethod(methodName, args);
+            } else if (bindings.containsKey(NASHORN_GLOBAL)) {
+                Bindings globalBindings = (Bindings)bindings.get(NASHORN_GLOBAL);
+                if (globalBindings.containsKey(methodName)) {
+                    result = invokeMethod(methodName, args);
+                } else {
+                    bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+                    if (bindings.containsKey(methodName)) {
+                        result = invokeMethod(methodName, args);
+                    }
                 }
-
-                result = invocable.invokeFunction(methodName, args);
+            } else {
+                bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+                if (bindings.containsKey(methodName)) {
+                    result = invokeMethod(methodName, args);
+                }
             }
 
             // If the function didn't return a value, return the default
@@ -217,7 +236,6 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         public Object evaluate(final Object value) {
             Object result = value;
             Bindings bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
-            bindings = substituteGlobals(scriptEngine, bindings);
             if (bindings.containsKey(functionName)) {
                 Invocable invocable;
                 try {
@@ -245,7 +263,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private XMLInputFactory xmlInputFactory;
     private ScriptEngineManager scriptEngineManager;
 
-    private Map<String, Object> namespace = new HashMap<>();
+    private Bindings bindings = new SimpleBindings();
+    private Map<String, Object> namespace = new MapAdapter<String, Object>(bindings);
     private URL location = null;
     private Resources resources = null;
 
@@ -261,6 +280,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     private static HashMap<String, String> fileExtensions = new HashMap<>();
     private static HashMap<String, Class<? extends Serializer<?>>> mimeTypes = new HashMap<>();
+    private static HashMap<String, ScriptEngine> scriptEngines = new HashMap<>();
+    private static HashMap<String, ScriptEngine> scriptEnginesExts = new HashMap<>();
 
     public static final char URL_PREFIX = '@';
     public static final char RESOURCE_KEY_PREFIX = '%';
@@ -316,123 +337,121 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             PropertiesSerializer.MIME_TYPE);
     }
 
+    /**
+     * Get a script engine instance for the given script language (typically "JavaScript").
+     * <p> Two things happen for a new script engine:  set the global bindings to our
+     * {@link #namespace} so that any existing global definitions get set, and the
+     * {@link #NASHORN_COMPAT_SCRIPT} is run to ensure compatibility with the "Rhino"
+     * script engine (pre-Java-8).
+     * <p> Note: an engine found by this method will also be added to the {@link #scriptEnginesExts}
+     * map indexed by all its supported extensions.
+     *
+     * @param scriptLanguage Any script language name supported by the current JVM.
+     * @return Either an existing engine for that name, or a new one found by the
+     * {@link #scriptEngineManager} and then cached (in the {@link #scriptEngines} map).
+     */
+    private ScriptEngine getEngineByName(String scriptLanguage)
+        throws SerializationException
+    {
+        String languageKey = scriptLanguage.toLowerCase();
+        ScriptEngine engine = scriptEngines.get(languageKey);
+        if (engine != null) {
+            return engine;
+        }
+
+        engine = scriptEngineManager.getEngineByName(scriptLanguage);
+
+        if (engine == null) {
+            throw new SerializationException("Unable to find scripting engine for"
+                + " language \"" + scriptLanguage + "\".");
+        }
+
+        // NOTE: this might not be right for Rhino engine, but works for Nashorn
+        engine.setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
+        if (engine.getFactory().getNames().contains("javascript")) {
+            try {
+                engine.eval(NASHORN_COMPAT_SCRIPT);
+            } catch (ScriptException se) {
+                throw new SerializationException("Unable to execute Nashorn compatibility script:",
+                    se);
+            }
+        }
+
+        scriptEngines.put(languageKey, engine);
+
+        // Also put this engine into the "extensions" map by the extension(s) it supports
+        for (String ext : engine.getFactory().getExtensions()) {
+            String extKey = ext.toLowerCase();
+            if (!scriptEnginesExts.containsKey(extKey)) {
+                scriptEnginesExts.put(extKey, engine);
+            }
+        }
+
+        return engine;
+    }
+
+    /**
+     * Get a script engine instance for the given (file) extension.
+     * <p> Two things happen for a new script engine:  set the global bindings to our
+     * {@link #namespace} so that any existing global definitions get set, and the
+     * {@link #NASHORN_COMPAT_SCRIPT} is run to ensure compatibility with the "Rhino"
+     * script engine (pre-Java-8).
+     * <p> Note: an engine found by this method will also be added to the {@link #scriptEngines}
+     * map indexed by all its supported language names.
+     *
+     * @param extension Any script language extension supported by the current JVM.
+     * @return Either an existing engine for that extension, or a new one found by the
+     * {@link #scriptEngineManager} and then cached (in the {@link #scriptEnginesExts} map).
+     */
+    private ScriptEngine getEngineByExtension(String extension)
+        throws SerializationException
+    {
+        String extensionKey = extension.toLowerCase();
+        ScriptEngine engine = scriptEnginesExts.get(extensionKey);
+        if (engine != null) {
+            return engine;
+        }
+
+        engine = scriptEngineManager.getEngineByExtension(extension);
+
+        if (engine == null) {
+            throw new SerializationException("Unable to find scripting engine for"
+                + " extension " + extension + ".");
+        }
+
+        // NOTE: this might not be right for Rhino engine, but works for Nashorn
+        engine.setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
+        if (engine.getFactory().getNames().contains("javascript")) {
+            try {
+                engine.eval(NASHORN_COMPAT_SCRIPT);
+            } catch (ScriptException se) {
+                throw new SerializationException("Unable to execute Nashorn compatibility script:",
+                    se);
+            }
+        }
+
+        scriptEnginesExts.put(extensionKey, engine);
+
+        // Also put this engine into the "languages" map by the language(s) it supports
+        for (String language : engine.getFactory().getNames()) {
+            String languageKey = language.toLowerCase();
+            if (!scriptEngines.containsKey(languageKey)) {
+                scriptEngines.put(languageKey, engine);
+            }
+        }
+
+        return engine;
+    }
+
+
+
     public BXMLSerializer() {
         xmlInputFactory = XMLInputFactory.newInstance();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", Boolean.TRUE);
 
-        scriptEngineManager = new javax.script.ScriptEngineManager();
-        scriptEngineManager.setBindings(new Bindings() {
-            @Override
-            public Object get(Object key) {
-                return namespace.get(key.toString());
-            }
-
-            @Override
-            public Object put(String key, Object value) {
-                // Okay, this is a hack that seems to fix problems with included scripts
-                // under Java 8 (Nashorn) where a new global object gets setup that
-                // doesn't include any of the old values.
-                // TODO: do we need to do this if "inline" is not true on the INCLUDE?
-                if (key.equals(NASHORN_GLOBAL)) {
-                    Object oldGlobal = namespace.put(key, value);
-                    // We have to copy the old global values into the new one
-                    if (oldGlobal != null && oldGlobal instanceof Bindings &&
-                        value != null && value instanceof Bindings) {
-                        Bindings oldGlobalBindings = (Bindings)oldGlobal;
-                        Bindings newBindings = (Bindings)value;
-                        newBindings.putAll(oldGlobalBindings);
-                    }
-                    return oldGlobal;
-                }
-                return namespace.put(key, value);
-            }
-
-            @Override
-            public void putAll(java.util.Map<? extends String, ? extends Object> map) {
-                for (String key : map.keySet()) {
-                    put(key, map.get(key));
-                }
-            }
-
-            @Override
-            public Object remove(Object key) {
-                return namespace.remove(key.toString());
-            }
-
-            @Override
-            public void clear() {
-                namespace.clear();
-            }
-
-            @Override
-            public boolean containsKey(Object key) {
-                return namespace.containsKey(key.toString());
-            }
-
-            @Override
-            public boolean containsValue(Object value) {
-                boolean contains = false;
-                for (String key : namespace) {
-                    if (namespace.get(key).equals(value)) {
-                        contains = true;
-                        break;
-                    }
-                }
-
-                return contains;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return namespace.isEmpty();
-            }
-
-            @Override
-            public java.util.Set<String> keySet() {
-                java.util.HashSet<String> keySet = new java.util.HashSet<>();
-                for (String key : namespace) {
-                    keySet.add(key);
-                }
-
-                return keySet;
-            }
-
-            @Override
-            public java.util.Set<Entry<String, Object>> entrySet() {
-                java.util.HashMap<String, Object> hashMap = new java.util.HashMap<>();
-                for (String key : namespace) {
-                    hashMap.put(key, namespace.get(key));
-                }
-
-                return hashMap.entrySet();
-            }
-
-            @Override
-            public int size() {
-                return namespace.getCount();
-            }
-
-            @Override
-            public Collection<Object> values() {
-                java.util.ArrayList<Object> values = new java.util.ArrayList<>();
-                for (String key : namespace) {
-                    values.add(namespace.get(key));
-                }
-
-                return values;
-            }
-        });
+        scriptEngineManager = new ScriptEngineManager();
     }
 
-    private static Bindings substituteGlobals(ScriptEngine scriptEngine, final Bindings bindings) {
-        Bindings newBindings = bindings;
-        Object nashornGlobals = newBindings.get(NASHORN_GLOBAL);
-        if (nashornGlobals != null && nashornGlobals instanceof Bindings) {
-            newBindings = (Bindings)nashornGlobals;
-            scriptEngine.setBindings(newBindings, ScriptContext.ENGINE_SCOPE);
-        }
-        return newBindings;
-    }
 
     /**
      * Deserializes an object hierarchy from a BXML resource. <p> This is the
@@ -516,8 +535,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             } else {
                 String bindFunction = sourcePath.substring(0, i);
                 sourcePath = sourcePath.substring(i + 1);
-                bindMapping = new ScriptBindMapping(scriptEngineManager.getEngineByName(language),
-                    bindFunction);
+                bindMapping = new ScriptBindMapping(getEngineByName(language), bindFunction);
             }
 
             switch (elementLocal.type) {
@@ -1126,7 +1144,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                             if (JSON.containsKey(namespace, value)) {
                                                 attribute.value = JSON.get(namespace, value);
                                             } else {
-                                                Object nashornGlobal = namespace.get(NASHORN_GLOBAL);
+                                                Object nashornGlobal = scriptEngineManager.getBindings().get(NASHORN_GLOBAL);
                                                 if (nashornGlobal == null) {
                                                     throw new SerializationException("Value \"" + value
                                                         + "\" is not defined.");
@@ -1209,9 +1227,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             }
 
                             // Create an invocation handler for this listener
-                            ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
                             AttributeInvocationHandler handler = new AttributeInvocationHandler(
-                                scriptEngine, attribute.name, (String) attribute.value);
+                                getEngineByName(language), attribute.name, (String) attribute.value);
 
                             Object listener = Proxy.newProxyInstance(classLoader,
                                 new Class<?>[] { attribute.propertyClass }, handler);
@@ -1333,17 +1350,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             case LISTENER_LIST_PROPERTY: {
                 // Evaluate the script
                 String script = (String) element.value;
-                ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-                if (scriptEngine == null) {
-                    throw new SerializationException("Script engine for \"" + language
-                        + "\" not found.");
-                }
+                ScriptEngine scriptEngine = getEngineByName(language);
 
-                // Don't pollute the engine namespace with the listener functions
-                scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
+                // ORIGINAL COMMENT: Don't pollute the engine namespace with the listener functions
+                // Removed for Java 1.8+ because Nashorn handles globals differently
+                //scriptEngine.setBindings(new SimpleBindings(), ScriptContext.ENGINE_SCOPE);
 
                 try {
-                    scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                     scriptEngine.eval(script);
                 } catch (ScriptException exception) {
                     reportException(exception, script);
@@ -1406,12 +1419,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
 
                     String extension = src.substring(i + 1);
-                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension(extension);
-
-                    if (scriptEngine == null) {
-                        throw new SerializationException("Unable to find scripting engine for"
-                            + " extension " + extension + ".");
-                    }
+                    ScriptEngine scriptEngine = getEngineByExtension(extension);
 
                     scriptEngine.setBindings(scriptEngineManager.getBindings(),
                         ScriptContext.ENGINE_SCOPE);
@@ -1448,24 +1456,17 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 if (element.value != null) {
                     // Evaluate the script
                     String script = (String) element.value;
-                    ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(language);
-
-                    if (scriptEngine == null) {
-                        throw new SerializationException("Unable to find scripting engine for"
-                            + " language \"" + language + "\".");
-                    }
+                    ScriptEngine scriptEngine = getEngineByName(language);
 
                     scriptEngine.setBindings(scriptEngineManager.getBindings(),
                         ScriptContext.ENGINE_SCOPE);
 
                     try {
-                        scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                         scriptEngine.eval(script);
                     } catch (ScriptException exception) {
                         reportException(exception, script);
                     }
                 }
-
                 break;
             }
 
