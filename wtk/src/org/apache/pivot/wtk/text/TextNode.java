@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Span;
 
 /**
  * Node representing a sequence of characters.
@@ -107,12 +108,24 @@ public final class TextNode extends Node {
         }
     }
 
+    public String getSubstring(Span range) {
+        return characters.substring(range.start, range.end + 1);
+    }
+
     public String getSubstring(int start, int end) {
         return characters.substring(start, end);
     }
 
     public CharSequence getCharacters() {
         return characters;
+    }
+
+    public CharSequence getCharacters(int start, int end) {
+        return characters.subSequence(start, end);
+    }
+
+    public CharSequence getCharacters(Span range) {
+        return characters.subSequence(range.start, range.end + 1);
     }
 
     @Override

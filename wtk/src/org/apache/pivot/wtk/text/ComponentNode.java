@@ -17,7 +17,15 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Span;
+import org.apache.pivot.wtk.TextArea;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.TextPane;
+import org.apache.pivot.wtk.content.ButtonData;
 
 /**
  * Node representing a live pivot component.
@@ -62,14 +70,62 @@ public class ComponentNode extends Node {
         }
     }
 
+    public String getText() {
+        return getText(this.component);
+    }
+
+    private String getText(Component comp) {
+        if (comp instanceof TextInput) {
+            return ((TextInput)comp).getText();
+        } else if (comp instanceof TextArea) {
+            return ((TextArea)comp).getText();
+        } else if (comp instanceof TextPane) {
+            return ((TextPane)comp).getText();
+        } else if (comp instanceof Label) {
+            return ((Label)comp).getText();
+        } else if (comp instanceof Button) {
+            Object buttonData = ((Button)comp).getButtonData();
+            if (buttonData instanceof ButtonData) {
+                return ((ButtonData)buttonData).getText();
+            } else if (buttonData instanceof String) {
+                return (String)buttonData;
+            } else {
+                return buttonData.toString();
+            }
+        } else if (comp instanceof Container) {
+            StringBuilder buf = new StringBuilder();
+            for (Component child : (Container)comp) {
+                buf.append(getText(child));
+            }
+            return buf.toString();
+        }
+        return "";
+    }
+
+    public String getSubstring(Span range) {
+        return getText(this.component).substring(range.start, range.end + 1);
+    }
+
+    public String getSubstring(int start, int end) {
+        return getText(this.component).substring(start, end);
+    }
+
+    public CharSequence getCharacters(Span range) {
+        return getText(this.component).subSequence(range.start, range.end + 1);
+    }
+
+    public CharSequence getCharacters(int start, int end) {
+        return getText(this.component).subSequence(start, end);
+    }
+
     @Override
     public char getCharacterAt(int offset) {
-        return 0x00;
+        return getText(this.component).charAt(offset);
     }
 
     @Override
     public int getCharacterCount() {
-        return 1;
+        return getText(this.component).length();
     }
 
     @Override
@@ -84,7 +140,9 @@ public class ComponentNode extends Node {
 
     @Override
     public Node getRange(int offset, int characterCount) {
-        if (offset < 0 || offset > 1) {
+        // Note: only supports getting the complete range of text
+        String componentText = getText();
+        if (offset < 0 || offset >= componentText.length()) {
             throw new IndexOutOfBoundsException();
         }
 

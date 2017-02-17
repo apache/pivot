@@ -189,6 +189,20 @@ public final class Span {
         return new Span(Math.min(start, end), Math.max(start, end));
     }
 
+    /**
+     * Returns a new {@link Span} with both values offset by the given value.
+     * <p> This is useful while moving through a {@link TextPane} document
+     * for instance, where you have to subtract off the starting offset for
+     * child nodes.
+     *
+     * @param offset The positive or negative amount by which to "move" this
+     * span (both start and end).
+     * @return A new {@link Span} with updated values.
+     */
+    public Span offset(int offset) {
+        return new Span(this.start + offset, this.end + offset);
+    }
+
     @Override
     public boolean equals(Object o) {
         boolean equal = false;

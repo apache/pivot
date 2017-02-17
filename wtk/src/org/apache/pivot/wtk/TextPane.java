@@ -24,6 +24,7 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.text.ComponentNode;
 import org.apache.pivot.wtk.text.ComponentNodeListener;
@@ -702,31 +703,92 @@ public class TextPane extends Container {
         // TODO
     }
 
-    private void addToText(StringBuilder text, Element element) {
-        for (Node node : element) {
-            if (node instanceof TextNode) {
-                text.append(((TextNode)node).getCharacters());
+    /**
+     * Add the text from the given element (and its children) to the given buffer,
+     * respecting the range of characters to be included.
+     *
+     * @param text The buffer we're building.
+     * @param element The current element in the document.
+     * @param includeSpan The range of text to be included (in document-relative
+     * coordinates).
+     */
+    private void addToText(StringBuilder text, Element element, Span includeSpan) {
+        Span elementSpan = element.getDocumentSpan();
+        Span elementIntersection = elementSpan.intersect(includeSpan);
+        if (elementIntersection != null) {
+            for (Node node : element) {
+                if (node instanceof Element) {
+                    addToText(text, (Element) node, includeSpan);
+                }
+                else {
+                    Span nodeSpan = node.getDocumentSpan();
+                    Span nodeIntersection = nodeSpan.intersect(includeSpan);
+                    if (nodeIntersection != null) {
+                        Span currentSpan = nodeIntersection.offset(-nodeSpan.start);
+                        if (node instanceof TextNode) {
+                            text.append(((TextNode) node).getCharacters(currentSpan));
+                        } else if (node instanceof ComponentNode) {
+                            text.append(((ComponentNode) node).getCharacters(currentSpan));
+                        }
+                        // TODO: anything more that could/should be handled?
+                        // lists for instance???
+                    }
+                }
             }
-            else if (node instanceof Element) {
-                addToText(text, (Element)node);
+            if (element instanceof Paragraph && elementIntersection.end == elementSpan.end) {
+                // TODO: unclear if this is included in the character count for a paragraph or not
+                // or what that means for the intersection range above
+                text.append('\n');
             }
-            // TODO: anything more that could/should be handled?
-        }
-        if (element instanceof Paragraph) {
-            text.append('\n');
         }
     }
 
     /**
-     * Convenience method to get all the text from the current document
-     * into a single string.
+     * Convenience method to get all the text from the current document into a
+     * single string.
+     *
+     * @return The complete text of the document as a string.
      * @see #setText
      */
     public String getText() {
+        int count;
         Document doc = getDocument();
-        if (doc != null && getCharacterCount() != 0) {
-            StringBuilder text = new StringBuilder(getCharacterCount());
-            addToText(text, doc);
+        if (doc != null && (count = getCharacterCount()) != 0) {
+            StringBuilder text = new StringBuilder(count);
+            addToText(text, doc, new Span(0, count - 1));
+            return text.toString();
+        }
+        return null;
+    }
+
+    /**
+     * Convenience method to get a portion of the document text into a single string.
+     *
+     * @param beginIndex The 0-based offset where to start retrieving text.
+     * @param endIndex The ending offset + 1 of the text to retrieve.
+     * @return The specified portion of the document text if there is any, or
+     * {@code null} if there is no document.
+     */
+    public String getText(int beginIndex, int endIndex) {
+        if (beginIndex > endIndex) {
+            throw new IllegalArgumentException("Beginning index " + beginIndex +
+                " is greater than ending index " + endIndex + ".");
+        }
+
+        if (beginIndex < 0 || endIndex > getCharacterCount()) {
+            throw new IndexOutOfBoundsException("Beginning index = " + beginIndex +
+                ", ending index = " + endIndex + ", document.characterCount = " +
+                getCharacterCount() + ".");
+        }
+
+        int count = endIndex - beginIndex;
+        if (count == 0) {
+            return "";
+        }
+        Document doc = getDocument();
+        if (doc != null) {
+            StringBuilder text = new StringBuilder(count);
+            addToText(text, doc, new Span(beginIndex, endIndex - 1));
             return text.toString();
         }
         return null;

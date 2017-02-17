@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.wtk.Span;
 
 /**
  * Abstract base class for document nodes.
@@ -117,6 +118,17 @@ public abstract class Node {
      */
     public int getDocumentOffset() {
         return (parent == null) ? 0 : parent.getDocumentOffset() + offset;
+    }
+
+    /**
+     * @return A {@link Span} that describes the content range of this node
+     * relative to the whole document.
+     */
+    public Span getDocumentSpan() {
+        int docOffset = getDocumentOffset();
+        int nodeLength = getCharacterCount();
+        // The "end" of a Span is inclusive, so subtract one here
+        return new Span(docOffset, docOffset + nodeLength - 1);
     }
 
     /**
