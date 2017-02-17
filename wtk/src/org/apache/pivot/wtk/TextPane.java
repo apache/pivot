@@ -1035,22 +1035,7 @@ public class TextPane extends Container {
      * or <tt>null</tt> if nothing is selected.
      */
     public String getSelectedText() {
-        String selectedText = null;
-
-        if (selectionLength > 0) {
-            Document selection = (Document) document.getRange(selectionStart, selectionLength);
-
-            try {
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                StringWriter writer = new StringWriter();
-                serializer.writeObject(selection, writer);
-                selectedText = writer.toString();
-            } catch (IOException exception) {
-                throw new RuntimeException(exception);
-            }
-        }
-
-        return selectedText;
+        return selectionLength > 0 ? getText(selectionStart, selectionStart + selectionLength) : null;
     }
 
     /**
