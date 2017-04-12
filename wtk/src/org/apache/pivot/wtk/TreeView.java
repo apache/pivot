@@ -1677,6 +1677,21 @@ public class TreeView extends Component {
     }
 
     /**
+     * Expand "to" the given branch, which means opening up all the parents so that
+     * this branch is exposed.
+     *
+     * @param path The path to the branch to expose.
+     */
+    public final void expandToBranch(Path path) {
+        checkNullOrEmpty(path);
+
+        for (int i = 0; i < path.getLength(); i++) {
+            Sequence.Tree.Path incrementalPath = new Sequence.Tree.Path(path, i + 1);
+            expandBranch(incrementalPath);
+        }
+    }
+
+    /**
      * Expands all branches in the tree view.
      */
     @SuppressWarnings("unchecked")
