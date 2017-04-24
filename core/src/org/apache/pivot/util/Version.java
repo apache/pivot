@@ -26,10 +26,10 @@ import java.io.Serializable;
 public class Version implements Comparable<Version>, Serializable {
     private static final long serialVersionUID = -3677773163272115116L;
 
-    private byte majorRevision = 0;
-    private byte minorRevision = 0;
-    private byte maintenanceRevision = 0;
-    private byte updateRevision = 0;
+    private short majorRevision = 0;
+    private short minorRevision = 0;
+    private short maintenanceRevision = 0;
+    private short updateRevision = 0;
     private String build = null;
 
     public Version(int majorRevision, int minorRevision, int maintenanceRevision, int updateRevision) {
@@ -38,58 +38,61 @@ public class Version implements Comparable<Version>, Serializable {
 
     public Version(int majorRevision, int minorRevision, int maintenanceRevision,
         int updateRevision, String build) {
-        if (majorRevision > 0x7f) {
-            throw new IllegalArgumentException("majorRevision must be less than " + 0x7f + ".");
+        if (majorRevision > 0x7fff) {
+            throw new IllegalArgumentException("majorRevision must be less than "
+                + 0x7fff + ".");
         }
 
-        if (minorRevision > 0xff) {
-            throw new IllegalArgumentException("minorRevision must be less than " + 0xff + ".");
+        if (minorRevision > 0x7fff) {
+            throw new IllegalArgumentException("minorRevision must be less than "
+                + 0x7fff + ".");
         }
 
-        if (maintenanceRevision > 0xff) {
-            throw new IllegalArgumentException("maintenanceRevision must be less than " + 0xff
-                + ".");
+        if (maintenanceRevision > 0x7fff) {
+            throw new IllegalArgumentException("maintenanceRevision must be less than "
+                + 0x7fff + ".");
         }
 
-        if (updateRevision > 0xff) {
-            throw new IllegalArgumentException("updateRevision must be less than " + 0xff + ".");
+        if (updateRevision > 0x7fff) {
+            throw new IllegalArgumentException("updateRevision must be less than "
+                + 0x7fff + ".");
         }
 
-        this.majorRevision = (byte) majorRevision;
-        this.minorRevision = (byte) minorRevision;
-        this.maintenanceRevision = (byte) maintenanceRevision;
-        this.updateRevision = (byte) updateRevision;
+        this.majorRevision = (short)majorRevision;
+        this.minorRevision = (short)minorRevision;
+        this.maintenanceRevision = (short)maintenanceRevision;
+        this.updateRevision = (short)updateRevision;
         this.build = build;
     }
 
-    public byte getMajorRevision() {
-        return this.majorRevision;
+    public short getMajorRevision() {
+        return majorRevision;
     }
 
-    public byte getMinorRevision() {
-        return this.minorRevision;
+    public short getMinorRevision() {
+        return minorRevision;
     }
 
-    public byte getMaintenanceRevision() {
-        return this.maintenanceRevision;
+    public short getMaintenanceRevision() {
+        return maintenanceRevision;
     }
 
-    public byte getUpdateRevision() {
-        return this.updateRevision;
+    public short getUpdateRevision() {
+        return updateRevision;
     }
 
-    public int getNumber() {
-        int number = ((this.majorRevision) & 0xff) << (8 * 3)
-            | ((this.minorRevision) & 0xff) << (8 * 2)
-            | ((this.maintenanceRevision) & 0xff) << (8 * 1)
-            | ((this.updateRevision) & 0xff) << (8 * 0);
+    public long getNumber() {
+        long number = ((majorRevision) & 0xffff) << (16 * 3)
+            | ((minorRevision) & 0xffff) << (16 * 2)
+            | ((maintenanceRevision) & 0xffff) << (16 * 1)
+            | ((updateRevision) & 0xffff) << (16 * 0);
 
         return number;
     }
 
     @Override
     public int compareTo(Version version) {
-        return (getNumber() - version.getNumber());
+        return new Long(getNumber()).compareTo(version.getNumber());
     }
 
     @Override
@@ -99,13 +102,15 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public int hashCode() {
-        return getNumber();
+        return new Long(getNumber()).hashCode();
     }
 
     @Override
     public String toString() {
-        String string = this.majorRevision + "." + this.minorRevision + "."
-            + this.maintenanceRevision + "_" + String.format("%02d", Byte.valueOf(this.updateRevision));
+        String string = this.majorRevision
+            + "." + this.minorRevision
+            + "." + this.maintenanceRevision
+            + "_" + String.format("%02d", this.updateRevision);
 
         if (this.build != null) {
             string += "-" + this.build;
@@ -117,10 +122,10 @@ public class Version implements Comparable<Version>, Serializable {
     public static Version decode(String string) {
         Version version = null;
 
-        byte majorRevision = 0;
-        byte minorRevision = 0;
-        byte maintenanceRevision = 0;
-        byte updateRevision = 0;
+        short majorRevision = 0;
+        short minorRevision = 0;
+        short maintenanceRevision = 0;
+        short updateRevision = 0;
         String build = null;
 
         String revision;
@@ -135,19 +140,19 @@ public class Version implements Comparable<Version>, Serializable {
         String[] revisionNumbers = revision.split("\\.");
 
         if (revisionNumbers.length > 0) {
-            majorRevision = Byte.parseByte(revisionNumbers[0]);
+            majorRevision = Short.parseShort(revisionNumbers[0]);
 
             if (revisionNumbers.length > 1) {
-                minorRevision = Byte.parseByte(revisionNumbers[1]);
+                minorRevision = Short.parseShort(revisionNumbers[1]);
 
                 if (revisionNumbers.length > 2) {
                     String[] maintenanceRevisionNumbers = revisionNumbers[2].split("_");
 
                     if (maintenanceRevisionNumbers.length > 0) {
-                        maintenanceRevision = Byte.parseByte(maintenanceRevisionNumbers[0]);
+                        maintenanceRevision = Short.parseShort(maintenanceRevisionNumbers[0]);
 
                         if (maintenanceRevisionNumbers.length > 1) {
-                            updateRevision = Byte.parseByte(maintenanceRevisionNumbers[1]);
+                            updateRevision = Short.parseShort(maintenanceRevisionNumbers[1]);
                         }
                     }
                 }
