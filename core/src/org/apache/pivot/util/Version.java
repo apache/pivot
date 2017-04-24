@@ -42,22 +42,22 @@ public class Version implements Comparable<Version>, Serializable {
     public Version(int majorRevision, int minorRevision, int maintenanceRevision,
         int updateRevision, String build) {
         if (majorRevision > 0x7fff) {
-            throw new IllegalArgumentException("majorRevision must be less than "
+            throw new IllegalArgumentException("majorRevision must be less than or equal "
                 + 0x7fff + ".");
         }
 
         if (minorRevision > 0x7fff) {
-            throw new IllegalArgumentException("minorRevision must be less than "
+            throw new IllegalArgumentException("minorRevision must be less than or equal "
                 + 0x7fff + ".");
         }
 
         if (maintenanceRevision > 0x7fff) {
-            throw new IllegalArgumentException("maintenanceRevision must be less than "
+            throw new IllegalArgumentException("maintenanceRevision must be less than or equal "
                 + 0x7fff + ".");
         }
 
         if (updateRevision > 0x7fff) {
-            throw new IllegalArgumentException("updateRevision must be less than "
+            throw new IllegalArgumentException("updateRevision must be less than or equal "
                 + 0x7fff + ".");
         }
 
@@ -85,10 +85,10 @@ public class Version implements Comparable<Version>, Serializable {
     }
 
     public long getNumber() {
-        long number = ((majorRevision) & 0xffff) << (16 * 3)
-            | ((minorRevision) & 0xffff) << (16 * 2)
-            | ((maintenanceRevision) & 0xffff) << (16 * 1)
-            | ((updateRevision) & 0xffff) << (16 * 0);
+        long number = (long)((majorRevision) & 0xffff) << (16 * 3)
+            | (long)((minorRevision) & 0xffff) << (16 * 2)
+            | (long)((maintenanceRevision) & 0xffff) << (16 * 1)
+            | (long)((updateRevision) & 0xffff) << (16 * 0);
 
         return number;
     }
