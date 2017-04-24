@@ -184,7 +184,7 @@ public class Alert extends Dialog {
     }
 
     public Alert() {
-        this(null, null, null);
+        this(null, "", null);
     }
 
     public Alert(String message) {
