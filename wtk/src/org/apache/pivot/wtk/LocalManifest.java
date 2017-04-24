@@ -16,16 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.File;
-
-import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.wtk.media.Image;
-import org.apache.pivot.wtk.media.Picture;
 
 /**
  * Manifest class that serves as data source for a clipboard or drag/drop

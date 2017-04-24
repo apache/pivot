@@ -50,7 +50,7 @@ public class StringSerializerTest {
         for (int i = 0; i < b.length; i++) {
             if (i > 0)
                 buf.append(',');
-            int ib = ((int)b[i]) & 0xFF;
+            int ib = b[i] & 0xFF;
             String hex = Integer.toHexString(ib).toUpperCase();
             if (hex.length() < 2)
                 buf.append('0');
@@ -84,7 +84,7 @@ public class StringSerializerTest {
     @Test
     public void writeValues() throws IOException, SerializationException {
         log("writeValues()");
-log("test string = \"" + testString + "\"");
+        log("test string = \"" + testString + "\"");
         // Note: assume the default Charset for StringSerializer is UTF-8, which we are using here
         Serializer<String> serializer = new StringSerializer();
 
