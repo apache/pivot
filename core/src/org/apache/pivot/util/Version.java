@@ -114,7 +114,7 @@ public class Version implements Comparable<Version>, Serializable {
         String string = this.majorRevision
             + "." + this.minorRevision
             + "." + this.maintenanceRevision
-            + "_" + String.format("%02d", this.updateRevision);
+            + "_" + String.format("%03d", this.updateRevision);
 
         if (this.build != null) {
             string += "-" + this.build;
