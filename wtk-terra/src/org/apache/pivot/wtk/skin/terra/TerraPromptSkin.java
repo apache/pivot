@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin.terra;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -164,6 +165,19 @@ public class TerraPromptSkin extends TerraSheetSkin
             && index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
         }
+    }
+
+    @Override
+    public Vote previewWindowOpen(Window window) {
+        Vote vote = super.previewWindowOpen(window);
+        switch (vote) {
+            case APPROVE:
+                // If this is the second or subsequent open, then the
+                // image view has been cleared, so set it up again
+                messageTypeChanged((Prompt)window, null);
+                break;
+        }
+        return vote;
     }
 
     @Override
