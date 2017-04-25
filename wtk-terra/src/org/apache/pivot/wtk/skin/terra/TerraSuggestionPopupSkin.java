@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
@@ -223,17 +224,13 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font name");
 
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font dictionary");
 
         setFont(Theme.deriveFont(font));
     }
@@ -247,9 +244,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color name");
 
         setColor(GraphicsUtilities.decodeColor(color));
     }
@@ -263,9 +258,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "border color name");
 
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }

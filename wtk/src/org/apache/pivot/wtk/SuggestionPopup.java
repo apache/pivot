@@ -23,6 +23,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 
@@ -274,9 +275,7 @@ public class SuggestionPopup extends Window {
      */
     @SuppressWarnings("unchecked")
     public void setSuggestionData(List<?> suggestionData) {
-        if (suggestionData == null) {
-            throw new IllegalArgumentException("suggestionData is null.");
-        }
+        Utils.checkNull(suggestionData, "suggestion data");
 
         List<?> previousSuggestionData = this.suggestionData;
 
@@ -404,9 +403,7 @@ public class SuggestionPopup extends Window {
 
     @Override
     public final void open(Display display, Window owner) {
-        if (textInput == null) {
-            throw new IllegalStateException("textInput is null.");
-        }
+        Utils.checkNull(textInput, "textInput");
 
         setSelectedIndex(-1);
 
@@ -433,9 +430,7 @@ public class SuggestionPopup extends Window {
      */
     public void open(TextInput textInputArgument,
         SuggestionPopupCloseListener suggestionPopupCloseListenerArgument) {
-        if (textInputArgument == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(textInputArgument, "textInput argument");
 
         this.textInput = textInputArgument;
         this.suggestionPopupCloseListener = suggestionPopupCloseListenerArgument;
