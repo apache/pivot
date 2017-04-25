@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.AlertListener;
 import org.apache.pivot.wtk.Border;
@@ -181,6 +182,19 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
         if (alert.isOpen() && index >= 0) {
             optionButtonBoxPane.get(index).requestFocus();
         }
+    }
+
+    @Override
+    public Vote previewWindowOpen(Window window) {
+        Vote vote = super.previewWindowOpen(window);
+        switch (vote) {
+            case APPROVE:
+                // If this is the second or subsequent open, then the
+                // image view has been cleared, so set it up again
+                messageTypeChanged((Alert)window, null);
+                break;
+        }
+        return vote;
     }
 
     @Override
