@@ -56,16 +56,11 @@ import org.apache.pivot.xml.XMLSerializer;
 public class XMLViewer extends Application.Adapter {
     private Window window = null;
 
-    @BXML
-    private TreeView treeView = null;
-    @BXML
-    private CardPane propertiesCardPane = null;
-    @BXML
-    private TableView namespacesTableView = null;
-    @BXML
-    private TableView attributesTableView = null;
-    @BXML
-    private TextArea textArea = null;
+    @BXML private TreeView treeView = null;
+    @BXML private CardPane propertiesCardPane = null;
+    @BXML private TableView namespacesTableView = null;
+    @BXML private TableView attributesTableView = null;
+    @BXML private TextArea textArea = null;
 
     private OverlayDecorator promptDecorator = new OverlayDecorator();
 
@@ -154,7 +149,7 @@ public class XMLViewer extends Application.Adapter {
 
                 dropAction = DropAction.COPY;
             } else {
-                Prompt.prompt("Multiple files not supported.", window);
+                Prompt.prompt("Drop of multiple files is not supported.", window);
             }
         } catch (IOException exception) {
             Prompt.prompt(exception.getMessage(), window);
@@ -217,7 +212,7 @@ public class XMLViewer extends Application.Adapter {
     }
 
     private void setDocument(Element document) {
-        // Remove prompt decorator
+        // Remove prompt decorator now that we have real data to show
         if (promptDecorator != null) {
             treeView.getDecorators().remove(promptDecorator);
             promptDecorator = null;
