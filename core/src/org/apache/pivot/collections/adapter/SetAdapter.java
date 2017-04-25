@@ -26,6 +26,7 @@ import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Set} interface that is backed by an instance of
@@ -38,9 +39,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     private transient SetListenerList<E> setListeners = new SetListenerList<>();
 
     public SetAdapter(java.util.Set<E> set) {
-        if (set == null) {
-            throw new IllegalArgumentException("set is null.");
-        }
+        Utils.checkNull(set, "set");
 
         this.set = set;
     }
@@ -123,17 +122,8 @@ public class SetAdapter<E> implements Set<E>, Serializable {
                     setLocal.addAll(this.set);
                     this.set = setLocal;
                 }
-            } catch (SecurityException exception) {
-                throw new RuntimeException(exception);
-            } catch (NoSuchMethodException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalArgumentException exception) {
-                throw new RuntimeException(exception);
-            } catch (InstantiationException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalAccessException exception) {
-                throw new RuntimeException(exception);
-            } catch (InvocationTargetException exception) {
+            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | 
+	             InstantiationException | IllegalAccessException | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }

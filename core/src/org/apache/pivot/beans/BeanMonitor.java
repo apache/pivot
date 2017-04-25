@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 
 /**
@@ -36,11 +37,8 @@ public class BeanMonitor {
     private class BeanInvocationHandler implements InvocationHandler {
         @Override
         public Object invoke(Object proxy, Method event, Object[] arguments) throws Throwable {
-            String eventName = event.getName();
-            if (eventName.endsWith(PROPERTY_CHANGE_SUFFIX)) {
-                String propertyName = eventName.substring(0, eventName.length()
-                    - PROPERTY_CHANGE_SUFFIX.length());
-
+            String propertyName;
+            if ((propertyName = getPropertyChangeName(event.getName())) != null) {
                 if (notifyingProperties.contains(propertyName)) {
                     propertyChangeListeners.propertyChanged(bean, propertyName);
                 }
@@ -97,19 +95,21 @@ public class BeanMonitor {
     public static final String LISTENERS_SUFFIX = "Listeners";
     public static final String PROPERTY_CHANGE_SUFFIX = "Changed";
 
-    public BeanMonitor(Object bean) {
-        if (bean == null) {
-            throw new IllegalArgumentException();
+    private static String getPropertyChangeName(String name) {
+        if (name.endsWith(PROPERTY_CHANGE_SUFFIX)) {
+            return name.substring(0, name.length() - PROPERTY_CHANGE_SUFFIX.length());
         }
+        return null;
+    }
+
+    public BeanMonitor(Object bean) {
+        Utils.checkNull(bean, "bean object");
 
         this.bean = bean;
 
         BeanAdapter beanAdapter = new BeanAdapter(bean);
-        Method[] methods = bean.getClass().getMethods();
 
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-
+        for (Method method : bean.getClass().getMethods()) {
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
                 ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
@@ -119,19 +119,12 @@ public class BeanMonitor {
                     Class<?> listenerInterface = (Class<?>) typeArguments[0];
 
                     if (!listenerInterface.isInterface()) {
-                        throw new RuntimeException(listenerInterface.getName()
-                            + " is not an interface.");
+                        throw new RuntimeException(listenerInterface.getName() + " is not an interface.");
                     }
 
-                    Method[] interfaceMethods = listenerInterface.getMethods();
-                    for (int j = 0; j < interfaceMethods.length; j++) {
-                        Method interfaceMethod = interfaceMethods[j];
-                        String interfaceMethodName = interfaceMethod.getName();
-
-                        if (interfaceMethodName.endsWith(PROPERTY_CHANGE_SUFFIX)) {
-                            String propertyName = interfaceMethodName.substring(0,
-                                interfaceMethodName.length() - PROPERTY_CHANGE_SUFFIX.length());
-
+                    for (Method interfaceMethod : listenerInterface.getMethods()) {
+                        String propertyName;
+                        if ((propertyName = getPropertyChangeName(interfaceMethod.getName())) != null) {
                             if (beanAdapter.containsKey(propertyName)) {
                                 notifyingProperties.add(propertyName);
                             }
@@ -162,17 +155,8 @@ public class BeanMonitor {
         return notifyingProperties.contains(key);
     }
 
-    /**
-     * Registers event listeners on the bean so that the dictionary can fire
-     * property change events and report which properties can fire change
-     * events.
-     */
-    private void registerBeanListeners() {
-        Method[] methods = bean.getClass().getMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-
+    private void invoke(String methodName, boolean addProxy) {
+        for (Method method : bean.getClass().getMethods()) {
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
                 ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
@@ -185,96 +169,57 @@ public class BeanMonitor {
                     Object listenerList;
                     try {
                         listenerList = method.invoke(bean);
-                    } catch (InvocationTargetException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (IllegalAccessException exception) {
+                    } catch (IllegalAccessException | InvocationTargetException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     // Get the listener for this interface
                     Object listener = beanListenerProxies.get(listenerInterface);
                     if (listener == null) {
-                        listener = Proxy.newProxyInstance(
-                            Thread.currentThread().getContextClassLoader(),
-                            new Class<?>[] { listenerInterface }, invocationHandler);
-                        beanListenerProxies.put(listenerInterface, listener);
+                        if (addProxy) {
+                            listener = Proxy.newProxyInstance(
+                                Thread.currentThread().getContextClassLoader(),
+                                new Class<?>[] { listenerInterface }, invocationHandler);
+                            beanListenerProxies.put(listenerInterface, listener);
+                        } else {
+                            throw new IllegalStateException("Listener proxy is null.");
+                        }
                     }
 
-                    // Add the listener
                     Class<?> listenerListClass = listenerList.getClass();
-                    Method addMethod;
+                    Method classMethod;
                     try {
-                        addMethod = listenerListClass.getMethod("add",
-                            new Class<?>[] { Object.class });
+                        classMethod = listenerListClass.getMethod(methodName, new Class<?>[] { Object.class });
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     try {
-                        addMethod.invoke(listenerList, new Object[] { listener });
-                    } catch (IllegalAccessException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (InvocationTargetException exception) {
+                        classMethod.invoke(listenerList, new Object[] { listener });
+                    } catch (IllegalAccessException | InvocationTargetException exception) {
                         throw new RuntimeException(exception);
                     }
+
+                    break;
                 }
             }
         }
     }
 
     /**
+     * Registers event listeners on the bean so that the dictionary can fire
+     * property change events and report which properties can fire change
+     * events.
+     */
+    private void registerBeanListeners() {
+        invoke("add", true);
+    }
+
+    /**
      * Un-registers event listeners on the bean.
      */
     private void unregisterBeanListeners() {
-        Method[] methods = bean.getClass().getMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-
-            if (ListenerList.class.isAssignableFrom(method.getReturnType())
-                && (method.getModifiers() & Modifier.STATIC) == 0) {
-                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
-                Type[] typeArguments = genericType.getActualTypeArguments();
-
-                if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
-
-                    // Get the listener list
-                    Object listenerList;
-                    try {
-                        listenerList = method.invoke(bean);
-                    } catch (InvocationTargetException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (IllegalAccessException exception) {
-                        throw new RuntimeException(exception);
-                    }
-
-                    // Get the listener for this interface
-                    Object listener = beanListenerProxies.get(listenerInterface);
-                    if (listener == null) {
-                        throw new IllegalStateException("Listener proxy is null.");
-                    }
-
-                    // Remove the listener
-                    Class<?> listenerListClass = listenerList.getClass();
-                    Method removeMethod;
-                    try {
-                        removeMethod = listenerListClass.getMethod("remove",
-                            new Class<?>[] { Object.class });
-                    } catch (NoSuchMethodException exception) {
-                        throw new RuntimeException(exception);
-                    }
-
-                    try {
-                        removeMethod.invoke(listenerList, new Object[] { listener });
-                    } catch (IllegalAccessException exception) {
-                        throw new RuntimeException(exception);
-                    } catch (InvocationTargetException exception) {
-                        throw new RuntimeException(exception);
-                    }
-                }
-            }
-        }
+        invoke("remove", false);
     }
 
     public ListenerList<PropertyChangeListener> getPropertyChangeListeners() {

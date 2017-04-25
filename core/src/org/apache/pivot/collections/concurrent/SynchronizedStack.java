@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Stack;
 import org.apache.pivot.collections.StackListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Synchronized implementation of the {@link Stack} interface.
@@ -54,9 +55,7 @@ public class SynchronizedStack<T> implements Stack<T> {
     private SynchronizedStackListenerList<T> stackListeners = new SynchronizedStackListenerList<>();
 
     public SynchronizedStack(Stack<T> stack) {
-        if (stack == null) {
-            throw new IllegalArgumentException("stack cannot be null.");
-        }
+        Utils.checkNull(stack, "stack");
 
         this.stack = stack;
     }

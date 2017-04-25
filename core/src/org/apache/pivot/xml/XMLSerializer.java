@@ -37,6 +37,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Reads and writes XML data.
@@ -82,9 +83,7 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     public XMLSerializer(Charset charset) {
-        if (charset == null) {
-            throw new IllegalArgumentException("charset is null.");
-        }
+        Utils.checkNull(charset, "charset");
 
         this.charset = charset;
     }
@@ -95,9 +94,7 @@ public class XMLSerializer implements Serializer<Element> {
 
     @Override
     public Element readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         Element element = readObject(reader);
@@ -106,9 +103,7 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     public Element readObject(Reader reader) throws SerializationException {
-        if (reader == null) {
-            throw new IllegalArgumentException("reader is null.");
-        }
+        Utils.checkNull(reader, "reader");
 
         // Parse the XML stream
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -225,9 +220,7 @@ public class XMLSerializer implements Serializer<Element> {
     @Override
     public void writeObject(Element element, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
@@ -236,13 +229,8 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     public void writeObject(Element element, Writer writer) throws SerializationException {
-        if (writer == null) {
-            throw new IllegalArgumentException("writer is null.");
-        }
-
-        if (element == null) {
-            throw new IllegalArgumentException("element is null.");
-        }
+        Utils.checkNull(writer, "writer");
+        Utils.checkNull(element, "element");
 
         XMLOutputFactory output = XMLOutputFactory.newInstance();
 

@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link List} interface that is backed by an enum.
@@ -104,9 +105,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
     @Override
     public int indexOf(E item) {
-        if (item == null) {
-            throw new IllegalArgumentException("item cannot be null.");
-        }
+        Utils.checkNull(item, "item");
 
         return item.ordinal();
     }

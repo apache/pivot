@@ -29,6 +29,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link List} interface that is backed by an instance of
@@ -43,9 +44,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     private transient ListListenerList<T> listListeners = new ListListenerList<>();
 
     public ListAdapter(java.util.List<T> list) {
-        if (list == null) {
-            throw new IllegalArgumentException("list is null.");
-        }
+        Utils.checkNull(list, "list");
 
         this.list = list;
     }

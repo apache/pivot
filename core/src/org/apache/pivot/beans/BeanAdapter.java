@@ -32,6 +32,7 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Exposes Java bean properties of an object via the {@link Map} interface. A
@@ -155,7 +156,7 @@ public class BeanAdapter implements Map<String, Object> {
     private static final String ENUM_VALUE_OF_METHOD_NAME = "valueOf";
 
     private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT = "Unable to access property \"%s\" for type %s.";
-    private static final String ENUM_COERCION_EXECPTION_MESSAGE = "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s";
+    private static final String ENUM_COERCION_EXCEPTION_MESSAGE = "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s";
 
     /**
      * Creates a new bean dictionary.
@@ -176,9 +177,7 @@ public class BeanAdapter implements Map<String, Object> {
      * fields should be excluded from the dictionary, <tt>false</tt> to include all fields.
      */
     public BeanAdapter(Object bean, boolean ignoreReadOnlyProperties) {
-        if (bean == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(bean, "bean object");
 
         this.bean = bean;
         this.ignoreReadOnlyProperties = ignoreReadOnlyProperties;
@@ -202,13 +201,7 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public Object get(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNullOrEmpty(key, "key");
 
         Object value = null;
 
@@ -257,13 +250,7 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public Object put(final String key, final Object value) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNullOrEmpty(key, "key");
 
         Method setterMethod = null;
         Object valueUpdated = value;
@@ -396,13 +383,7 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @Override
     public boolean containsKey(String key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNullOrEmpty(key, "key");
 
         boolean containsKey = (getGetterMethod(key) != null);
 
@@ -519,9 +500,7 @@ public class BeanAdapter implements Map<String, Object> {
      * non-public or static
      */
     private Field getField(String fieldName) {
-        if (fieldName == null) {
-            throw new IllegalArgumentException("fieldName is null.");
-        }
+        Utils.checkNull(fieldName, "fieldName");
 
         return getField(bean.getClass(), fieldName);
     }
@@ -537,17 +516,8 @@ public class BeanAdapter implements Map<String, Object> {
      * otherwise.
      */
     public static boolean isReadOnly(Class<?> beanClass, String key) {
-        if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNull(beanClass, "beanClass");
+        Utils.checkNullOrEmpty(key, "key");
 
         boolean isReadOnly = true;
 
@@ -574,17 +544,8 @@ public class BeanAdapter implements Map<String, Object> {
      * property exists.
      */
     public static Class<?> getType(Class<?> beanClass, String key) {
-        if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNull(beanClass, "beanClass");
+        Utils.checkNullOrEmpty(key, "key");
 
         Class<?> type = null;
 
@@ -614,17 +575,8 @@ public class BeanAdapter implements Map<String, Object> {
      * an instance of {@link java.lang.Class} will be returned.
      */
     public static Type getGenericType(Class<?> beanClass, String key) {
-        if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNull(beanClass, "beanClass");
+        Utils.checkNullOrEmpty(key, "key");
 
         Type genericType = null;
 
@@ -653,17 +605,8 @@ public class BeanAdapter implements Map<String, Object> {
      * non-public or static.
      */
     public static Field getField(Class<?> beanClass, String key) {
-        if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNull(beanClass, "beanClass");
+        Utils.checkNullOrEmpty(key, "key");
 
         Field field = null;
 
@@ -691,17 +634,8 @@ public class BeanAdapter implements Map<String, Object> {
      * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
     public static Method getGetterMethod(final Class<?> beanClass, final String key) {
-        if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+        Utils.checkNull(beanClass, "beanClass");
+        Utils.checkNullOrEmpty(key, "key");
 
         // Upper-case the first letter
         String keyUpdated = Character.toUpperCase(key.charAt(0)) + key.substring(1);
@@ -732,19 +666,9 @@ public class BeanAdapter implements Map<String, Object> {
      * @param valueType The type of the property.
      * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
-    public static Method getSetterMethod(final Class<?> beanClass, final String key,
-        final Class<?> valueType) {
-        if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
-        }
-
-        if (key == null) {
-            throw new IllegalArgumentException("key is null.");
-        }
-
-        if (key.length() == 0) {
-            throw new IllegalArgumentException("key is empty.");
-        }
+    public static Method getSetterMethod(final Class<?> beanClass, final String key, final Class<?> valueType) {
+        Utils.checkNull(beanClass, "beanClass");
+        Utils.checkNullOrEmpty(key, "key");
 
         Method setterMethod = null;
 
@@ -763,7 +687,7 @@ public class BeanAdapter implements Map<String, Object> {
             if (setterMethod == null) {
                 // Look for a match on the value's super type
                 Class<?> superType = valueType.getSuperclass();
-                setterMethod = getSetterMethod(beanClass, keyUpdated, superType);
+                setterMethod = getSetterMethod(beanClass, key, superType);
             }
 
             if (setterMethod == null) {
@@ -794,7 +718,7 @@ public class BeanAdapter implements Map<String, Object> {
                 int i = 0, n = interfaces.length;
                 while (setterMethod == null && i < n) {
                     Class<?> interfaceType = interfaces[i++];
-                    setterMethod = getSetterMethod(beanClass, keyUpdated, interfaceType);
+                    setterMethod = getSetterMethod(beanClass, key, interfaceType);
                 }
             }
         }
@@ -813,9 +737,7 @@ public class BeanAdapter implements Map<String, Object> {
      */
     @SuppressWarnings("unchecked")
     public static <T> T coerce(Object value, Class<? extends T> type) {
-        if (type == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(type, "type");
 
         Object coercedValue;
 
@@ -834,23 +756,11 @@ public class BeanAdapter implements Map<String, Object> {
                     Method valueOfMethod = type.getMethod(ENUM_VALUE_OF_METHOD_NAME, String.class);
                     coercedValue = valueOfMethod.invoke(null, valueString);
                 }
-                // Nothing to be gained by handling the getMethod() & invoke()
-                // Exceptions separately
-                catch (IllegalAccessException e) {
+                // Nothing to be gained by handling the getMethod() & invoke() exceptions separately
+                catch (IllegalAccessException | InvocationTargetException |
+                       SecurityException | NoSuchMethodException e) {
                     throw new IllegalArgumentException(String.format(
-                        ENUM_COERCION_EXECPTION_MESSAGE, value.getClass().getName(), value, type,
-                        Arrays.toString(type.getEnumConstants())), e);
-                } catch (InvocationTargetException e) {
-                    throw new IllegalArgumentException(String.format(
-                        ENUM_COERCION_EXECPTION_MESSAGE, value.getClass().getName(), value, type,
-                        Arrays.toString(type.getEnumConstants())), e);
-                } catch (SecurityException e) {
-                    throw new IllegalArgumentException(String.format(
-                        ENUM_COERCION_EXECPTION_MESSAGE, value.getClass().getName(), value, type,
-                        Arrays.toString(type.getEnumConstants())), e);
-                } catch (NoSuchMethodException e) {
-                    throw new IllegalArgumentException(String.format(
-                        ENUM_COERCION_EXECPTION_MESSAGE, value.getClass().getName(), value, type,
+                        ENUM_COERCION_EXCEPTION_MESSAGE, value.getClass().getName(), value, type,
                         Arrays.toString(type.getEnumConstants())), e);
                 }
             } else {

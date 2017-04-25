@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Unmodifiable implementation of the {@link Set} interface.
@@ -33,9 +34,7 @@ public class ImmutableSet<E> implements Set<E> {
     private SetListenerList<E> setListeners = new SetListenerList<>();
 
     public ImmutableSet(Set<E> set) {
-        if (set == null) {
-            throw new IllegalArgumentException("set is null.");
-        }
+        Utils.checkNull(set, "set");
 
         this.set = set;
     }

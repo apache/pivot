@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Synchronized implementation of the {@link Map} interface.
@@ -69,9 +70,7 @@ public class SynchronizedMap<K, V> implements Map<K, V> {
     private SynchronizedMapListenerList<K, V> mapListeners = new SynchronizedMapListenerList<>();
 
     public SynchronizedMap(Map<K, V> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("map cannot be null.");
-        }
+        Utils.checkNull(map, "map");
 
         this.map = map;
     }

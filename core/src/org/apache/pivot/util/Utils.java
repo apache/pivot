@@ -96,19 +96,92 @@ public class Utils {
      * with an optional message derived from the given string.
      *
      * @param value The argument value to check for {@code null} or empty.
-     * @param description A description for the value used to
+     * @param argument A description for the argument, used to
      * construct a message like {@code "xxx must not be null or empty."}.
      * Can be {@code null} or an empty string, in which case a plain
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is {@code null}.
      */
-    public static void checkNullOrEmpty(Object value, String description) {
+    public static void checkNullOrEmpty(Object value, String argument) {
         if (value == null || (value instanceof String && isNullOrEmpty((String)value))) {
-            if (isNullOrEmpty(description)) {
+            if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
             } else {
-                throw new IllegalArgumentException(description + " must not be null or empty.");
+                throw new IllegalArgumentException(argument + " must not be null or empty.");
             }
+        }
+    }
+
+    /**
+     * Check if the input argument is negative (less than zero), and throw an
+     * {@link IllegalArgumentException} with or without a descriptive message,
+     * depending on the {@code argument} supplied.
+     *
+     * @param value The value to check.
+     * @param argument A description for the argument, used to
+     * construct a message like {@code "xxx cannot be negative."}.
+     * Can be {@code null} or an empty string, in which case a plain
+     * {@link IllegalArgumentException} is thrown without any detail message.
+     * @throws IllegalArgumentException if the value is negative.
+     */
+    public static void checkNonNegative(int value, String argument) {
+        if (value < 0) {
+            if (isNullOrEmpty(argument)) {
+                throw new IllegalArgumentException();
+            } else {
+                throw new IllegalArgumentException(argument + " cannot be negative.");
+            }
+        }
+    }
+
+    /**
+     * Check that the given {@code index} is between the values of {@code start} and {@code end}.
+     *
+     * @param index  The candidate index into the range.
+     * @param start  The start of the acceptable range (inclusive).
+     * @param end    The end of the acceptable range (inclusive).
+     *
+     * @throws IllegalArgumentException if {@code end} is &lt; {@code start}.
+     * @throws IndexOutOfBoundsException if {@code index} is &lt; {@code start} or &gt; {@code end}.
+     */
+    public static void checkIndexBounds(int index, int start, int end) {
+        if (end < start) {
+            throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
+        }
+        if (index < start || index > end) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + ","
+                + end + "].");
+        }
+    }
+
+    /**
+     * Check that the given {@code index} plus {@code count} are between the values of {@code start} and {@code end}.
+     *
+     * @param index  The candidate index into the range.
+     * @param count  The number of elements in the indexed selection.
+     * @param start  The start of the acceptable range (inclusive).
+     * @param end    The end of the acceptable range (inclusive).
+     *
+     * @throws IllegalArgumentException if {@code end} is &lt; {@code start}, or if {@code count} or {@code start}
+     * are &lt; zero.
+     * @throws IndexOutOfBoundsException if {@code index} is &lt; {@code start} or {@code index + start} is &gt; {@code end}.
+     */
+    public static void checkIndexBounds(int index, int count, int start, int end) {
+        if (end < start) {
+            throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
+        }
+        if (count < 0 || start < 0) {
+            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start
+                + ") < 0");
+        }
+        if (index < start) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + ","
+                + end + "].");
+        }
+
+        if (index + count > end) {
+            throw new IndexOutOfBoundsException("index + count " + index + "," + count
+                + " out of bounds [" + start + "," + end + "].");
         }
     }
 }

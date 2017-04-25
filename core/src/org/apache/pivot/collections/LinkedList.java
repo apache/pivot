@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link List} interface that is backed by a linked list.
@@ -255,9 +256,7 @@ public class LinkedList<T> implements List<T>, Serializable {
     }
 
     public LinkedList(Sequence<T> items) {
-        if (items == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(items, "items");
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
             add(items.get(i));

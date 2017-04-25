@@ -62,6 +62,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 
 /**
@@ -333,8 +334,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         fileExtensions.put(CSVSerializer.CSV_EXTENSION, CSVSerializer.MIME_TYPE);
         fileExtensions.put(JSONSerializer.JSON_EXTENSION, JSONSerializer.MIME_TYPE);
-        fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION,
-            PropertiesSerializer.MIME_TYPE);
+        fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
     }
 
     /**
@@ -466,9 +466,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      */
     @Override
     public Object readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         root = null;
         language = null;
@@ -607,8 +605,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(Class, String, boolean)
      */
-    public final Object readObject(Class<?> baseType, String resourceName) throws IOException,
-        SerializationException {
+    public final Object readObject(Class<?> baseType, String resourceName)
+        throws IOException, SerializationException {
         return readObject(baseType, resourceName, false);
     }
 
@@ -634,18 +632,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      */
     public final Object readObject(Class<?> baseType, String resourceName, boolean localize)
         throws IOException, SerializationException {
-        if (baseType == null) {
-            throw new IllegalArgumentException("baseType is null.");
-        }
-
-        if (resourceName == null) {
-            throw new IllegalArgumentException("resourceName is null.");
-        }
+        Utils.checkNull(baseType, "baseType");
+        Utils.checkNull(resourceName, "resourceName");
 
         // throw a nice error so the user knows which resource did not load
         URL locationLocal = baseType.getResource(resourceName);
         if (locationLocal == null) {
-            throw new IllegalArgumentException("could not find resource \"" + resourceName + "\".");
+            throw new IllegalArgumentException("Could not find resource \"" + resourceName + "\".");
         }
         return readObject(locationLocal, localize ? new Resources(baseType.getName()) : null);
     }
@@ -663,7 +656,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(URL, Resources)
      */
-    public final Object readObject(URL locationArgument) throws IOException, SerializationException {
+    public final Object readObject(URL locationArgument)
+        throws IOException, SerializationException {
         return readObject(locationArgument, null);
     }
 
@@ -680,9 +674,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      */
     public final Object readObject(URL locationArgument, Resources resourcesArgument)
         throws IOException, SerializationException {
-        if (locationArgument == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
+        Utils.checkNull(locationArgument, "location");
 
         this.location = locationArgument;
         this.resources = resourcesArgument;
@@ -1062,7 +1054,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         name = localName.substring(j + 1);
 
                         String namespaceURI = xmlStreamReader.getAttributeNamespace(i);
-                        if (namespaceURI == null || namespaceURI.isEmpty()) {
+                        if (Utils.isNullOrEmpty(namespaceURI)) {
                             namespaceURI = xmlStreamReader.getNamespaceURI("");
                         }
 
@@ -1100,8 +1092,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                         attribute.value = value;
                                     } else {
                                         if (location == null) {
-                                            throw new IllegalStateException(
-                                                "Base location is undefined.");
+                                            throw new IllegalStateException("Base location is undefined.");
                                         }
 
                                         try {
@@ -1128,8 +1119,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                         }
                                     }
                                 } else {
-                                    throw new SerializationException(
-                                        "Invalid resource resolution argument.");
+                                    throw new SerializationException("Invalid resource resolution argument.");
                                 }
                             } else if (value.charAt(0) == OBJECT_REFERENCE_PREFIX) {
                                 value = value.substring(1);
@@ -1166,8 +1156,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                         }
                                     }
                                 } else {
-                                    throw new SerializationException(
-                                        "Invalid object resolution argument.");
+                                    throw new SerializationException("Invalid object resolution argument.");
                                 }
                             }
                         }
@@ -1414,15 +1403,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 if (src != null) {
                     int i = src.lastIndexOf(".");
                     if (i == -1) {
-                        throw new SerializationException("Cannot determine type of script \"" + src
-                            + "\".");
+                        throw new SerializationException("Cannot determine type of script \"" + src + "\".");
                     }
 
                     String extension = src.substring(i + 1);
                     ScriptEngine scriptEngine = getEngineByExtension(extension);
 
-                    scriptEngine.setBindings(scriptEngineManager.getBindings(),
-                        ScriptContext.ENGINE_SCOPE);
+                    scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
                     try {
                         URL scriptLocation;
@@ -1458,8 +1445,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     String script = (String) element.value;
                     ScriptEngine scriptEngine = getEngineByName(language);
 
-                    scriptEngine.setBindings(scriptEngineManager.getBindings(),
-                        ScriptContext.ENGINE_SCOPE);
+                    scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
                     try {
                         scriptEngine.eval(script);
@@ -1524,7 +1510,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      */
     protected void reportException(Throwable exception) {
         String message = exception.getLocalizedMessage();
-        if (message == null || message.isEmpty()) {
+        if (Utils.isNullOrEmpty(message)) {
             message = exception.getClass().getSimpleName();
         }
         System.err.println("Exception: " + message);
@@ -1560,9 +1546,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     @Override
     public void setNamespace(Map<String, Object> namespace) {
-        if (namespace == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(namespace, "namespace");
 
         this.namespace = namespace;
     }
@@ -1595,9 +1579,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @see #bind(Object, Class)
      */
     public void bind(Object object) {
-        if (object == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(object, "bind object");
 
         bind(object, object.getClass());
     }
@@ -1612,12 +1594,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws BindException If an error occurs during binding.
      */
     public void bind(Object object, Class<?> type) throws BindException {
-        if (object == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(object, "bind object");
+        Utils.checkNull(type, "bind type");
 
         if (!type.isAssignableFrom(object.getClass())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bind object is not assignable to class " + type.getTypeName() + ".");
         }
 
         Field[] fields = type.getDeclaredFields();
@@ -1693,8 +1674,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws IllegalAccessException if the class cannot be accessed in the
      * current security environment.
      */
-    protected Object newTypedObject(Class<?> type) throws InstantiationException,
-        IllegalAccessException {
+    protected Object newTypedObject(Class<?> type)
+        throws InstantiationException, IllegalAccessException {
         return type.newInstance();
     }
 
@@ -1759,8 +1740,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
             if (method == null) {
                 try {
-                    method = propertyClass.getMethod(BeanAdapter.IS_PREFIX + propertyName,
-                        objectType);
+                    method = propertyClass.getMethod(BeanAdapter.IS_PREFIX + propertyName, objectType);
                 } catch (NoSuchMethodException exception) {
                     // No-op
                 }

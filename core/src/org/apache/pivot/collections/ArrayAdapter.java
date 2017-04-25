@@ -18,6 +18,8 @@ package org.apache.pivot.collections;
 
 import java.io.Serializable;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Implementation of the {@link Sequence} interface that wraps an array.
  */
@@ -28,9 +30,7 @@ public class ArrayAdapter<T> implements Sequence<T>, Serializable {
 
     @SuppressWarnings({ "unchecked" })
     public ArrayAdapter(T... array) {
-        if (array == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(array, "array");
 
         this.array = array;
     }
@@ -67,27 +67,13 @@ public class ArrayAdapter<T> implements Sequence<T>, Serializable {
 
     @Override
     public int indexOf(T item) {
-        int index = 0;
-
-        while (index < array.length) {
-            if (item == null) {
-                if (array[index] == null) {
-                    break;
-                }
-            } else {
-                if (item.equals(array[index])) {
-                    break;
-                }
+        for (int index = 0; index < array.length; index++) {
+            if ((item == null && array[index] == null) || item.equals(array[index])) {
+                return index;
             }
-
-            index++;
         }
 
-        if (index == array.length) {
-            index = -1;
-        }
-
-        return index;
+        return -1;
     }
 
     @Override

@@ -24,6 +24,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Synchronized implementation of the {@link List} interface.
@@ -70,9 +71,7 @@ public class SynchronizedList<T> implements List<T> {
     private SynchronizedListListenerList<T> listListeners = new SynchronizedListListenerList<>();
 
     public SynchronizedList(List<T> list) {
-        if (list == null) {
-            throw new IllegalArgumentException("list cannot be null.");
-        }
+        Utils.checkNull(list, "list");
 
         this.list = list;
     }

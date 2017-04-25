@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Synchronized implementation of the {@link Set} interface.
@@ -64,9 +65,7 @@ public class SynchronizedSet<E> implements Set<E> {
     private SynchronizedSetListenerList<E> setListeners = new SynchronizedSetListenerList<>();
 
     public SynchronizedSet(Set<E> set) {
-        if (set == null) {
-            throw new IllegalArgumentException("set cannot be null.");
-        }
+        Utils.checkNull(set, "set");
 
         this.set = set;
     }

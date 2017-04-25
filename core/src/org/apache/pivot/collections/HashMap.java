@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.util.EmptyIterator;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Map} interface that is backed by a hash table.
@@ -159,9 +160,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
      */
     @Override
     public V get(K key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key cannot be null.");
-        }
+        Utils.checkNull(key, "key");
 
         V value = null;
 
@@ -192,9 +191,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     }
 
     private V put(K key, V value, boolean notifyListeners) {
-        if (key == null) {
-            throw new IllegalArgumentException("key cannot be null.");
-        }
+        Utils.checkNull(key, "key");
 
         V previousValue = null;
 
@@ -252,9 +249,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
      */
     @Override
     public V remove(K key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key cannot be null.");
-        }
+        Utils.checkNull(key, "key");
 
         V value = null;
 
@@ -318,9 +313,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
      */
     @Override
     public boolean containsKey(K key) {
-        if (key == null) {
-            throw new IllegalArgumentException("key cannot be null.");
-        }
+        Utils.checkNull(key, "key");
 
         // Locate the entry
         LinkedList<Pair<K, V>> bucket = getBucket(key);

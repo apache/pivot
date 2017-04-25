@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Set} interface whose keys are backed by a set of
@@ -44,7 +45,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V get(E key) {
-        verifyNotNull("key", key);
+        Utils.checkNull(key, "key");
 
         return (V) values[key.ordinal()];
     }
@@ -52,7 +53,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V put(E key, V value) {
-        verifyNotNull("key", key);
+        Utils.checkNull(key, "key");
 
         int ordinal = key.ordinal();
         V previousValue = (V) values[ordinal];
@@ -71,7 +72,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public V remove(E key) {
-        verifyNotNull("key", key);
+        Utils.checkNull(key, "key");
 
         V value = null;
         if (keySet.contains(key)) {
@@ -127,11 +128,5 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     @Override
     public ListenerList<MapListener<E, V>> getMapListeners() {
         return mapListeners;
-    }
-
-    private static void verifyNotNull(String argument, Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException(argument + " cannot be null.");
-        }
     }
 }

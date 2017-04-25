@@ -21,6 +21,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.util.Utils;
 
 /**
  * Represents a binding relationship between a source property and a target
@@ -86,17 +87,9 @@ public class NamespaceBinding {
     @SuppressWarnings("unchecked")
     public NamespaceBinding(Map<String, Object> namespace, String sourcePath, String targetPath,
         BindMapping bindMapping) {
-        if (namespace == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (sourcePath == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (targetPath == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(namespace, "namespace");
+        Utils.checkNull(sourcePath, "sourcePath");
+        Utils.checkNull(targetPath, "targetPath");
 
         // Set the namespace
         this.namespace = namespace;
@@ -117,8 +110,7 @@ public class NamespaceBinding {
         }
 
         if (!sourceMap.containsKey(sourceKey)) {
-            throw new IllegalArgumentException("Source property \"" + sourcePath
-                + "\" does not exist.");
+            throw new IllegalArgumentException("Source property \"" + sourcePath + "\" does not exist.");
         }
 
         if (sourceMonitor != null && !sourceMonitor.isNotifying(sourceKey)) {
@@ -139,8 +131,7 @@ public class NamespaceBinding {
         }
 
         if (!targetDictionary.containsKey(targetKey)) {
-            throw new IllegalArgumentException("Target property \"" + targetPath
-                + "\" does not exist.");
+            throw new IllegalArgumentException("Target property \"" + targetPath + "\" does not exist.");
         }
 
         // Set the bind mapping

@@ -18,6 +18,8 @@ package org.apache.pivot.collections;
 
 import java.io.Serializable;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Interface representing a set of key/value pairs.
  */
@@ -32,9 +34,7 @@ public interface Dictionary<K, V> {
         public final V value;
 
         public Pair(K key, V value) {
-            if (key == null) {
-                throw new IllegalArgumentException("key cannot be null.");
-            }
+            Utils.checkNull(key, "key");
 
             this.key = key;
             this.value = value;

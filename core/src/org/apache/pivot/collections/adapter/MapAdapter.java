@@ -27,6 +27,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Map} interface that is backed by an instance of
@@ -39,9 +40,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private transient MapListenerList<K, V> mapListeners = new MapListenerList<>();
 
     public MapAdapter(java.util.Map<K, V> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("map is null.");
-        }
+        Utils.checkNull(map, "map");
 
         this.map = map;
     }
@@ -127,17 +126,8 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
                     mapLocal.putAll(this.map);
                     this.map = mapLocal;
                 }
-            } catch (SecurityException exception) {
-                throw new RuntimeException(exception);
-            } catch (NoSuchMethodException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalArgumentException exception) {
-                throw new RuntimeException(exception);
-            } catch (InstantiationException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalAccessException exception) {
-                throw new RuntimeException(exception);
-            } catch (InvocationTargetException exception) {
+            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | 
+	             InstantiationException | IllegalAccessException | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }
