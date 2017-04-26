@@ -1724,11 +1724,13 @@ public abstract class ApplicationContext {
     private static ResourceCacheDictionary resourceCacheDictionary = new ResourceCacheDictionary();
 
     private static Version jvmVersion = null;
+    private static Version javaVersion = null;
     private static Version pivotVersion = null;
 
     static {
         // Get the JVM version
         jvmVersion = Version.decode(System.getProperty("java.vm.version"));
+        javaVersion = Version.decode(System.getProperty("java.runtime.version"));
 
         // Get the Pivot version
         String version = ApplicationContext.class.getPackage().getImplementationVersion();
@@ -1813,7 +1815,8 @@ public abstract class ApplicationContext {
     }
 
     /**
-     * Returns the current JVM version.
+     * Returns the current JVM version, parsed from the "java.vm.version" system
+     * property.
      *
      * @return
      * The current JVM version, or <tt>null</tt> if the version can't be
@@ -1821,6 +1824,17 @@ public abstract class ApplicationContext {
      */
     public static Version getJVMVersion() {
         return jvmVersion;
+    }
+
+    /**
+     * Returns the current Java Runtime version, parsed from the "java.runtime.version"
+     * system property.
+     *
+     * @return The current Java version, or <tt>null</tt> if the version can't be
+     * determined.
+     */
+    public static Version getJavaVersion() {
+        return javaVersion;
     }
 
     /**
