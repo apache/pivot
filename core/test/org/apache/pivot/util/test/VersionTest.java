@@ -89,4 +89,20 @@ public class VersionTest {
         System.out.format("test getNumber(): %1$s -> %2$d%n", vNum, num);
         assertEquals("long number", num, 562954248454244L);
     }
+
+    @Test
+    public void testOtherVersions() {
+        // Taken from PIVOT-996 test case
+        final String PIVOT_996_SUFFIX = "25.51-b14";
+        final String PIVOT_996_INPUT  = "8.1.028 " + PIVOT_996_SUFFIX;
+        final String PIVOT_996_OUTPUT = "8.1.28_00-" + PIVOT_996_SUFFIX;
+
+        Version jvmVersionParsed = Version.decode(PIVOT_996_INPUT);
+        Version jvmVersionExplicit = new Version(8, 1, 28, 0, PIVOT_996_SUFFIX);
+        String parsedToString = jvmVersionParsed.toString();
+
+        assertEquals("PIVOT-996 test case", jvmVersionParsed, jvmVersionExplicit);
+        System.out.format("PIVOT-996 parsed/toString: %1$s, expected: %2$s%n", parsedToString, PIVOT_996_OUTPUT);
+        assertEquals("PIVOT-996 toString", parsedToString, PIVOT_996_OUTPUT);
+    }
 }
