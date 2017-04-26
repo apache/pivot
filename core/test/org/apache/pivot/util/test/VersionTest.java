@@ -104,5 +104,11 @@ public class VersionTest {
         assertEquals("PIVOT-996 test case", jvmVersionParsed, jvmVersionExplicit);
         System.out.format("PIVOT-996 parsed/toString: %1$s, expected: %2$s%n", parsedToString, PIVOT_996_OUTPUT);
         assertEquals("PIVOT-996 toString", parsedToString, PIVOT_996_OUTPUT);
+
+        String sysJavaVersion = System.getProperty("java.runtime.version");
+        Version javaVersion = Version.decode(sysJavaVersion);
+        String formattedJavaVersion = javaVersion.toString();
+        System.out.format("Java Runtime version (parsed and formatted): %1$s, raw: %2$s%n", formattedJavaVersion, sysJavaVersion);
+        assertEquals("Java Runtime version", sysJavaVersion, formattedJavaVersion);
     }
 }
