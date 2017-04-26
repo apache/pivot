@@ -129,7 +129,11 @@ public class Version implements Comparable<Version>, Serializable {
         String build = null;
 
         String revision;
-        int i = string.indexOf("-");
+        // Some "version" strings separate fields with a space
+        int i = string.indexOf(" ");
+        if (i == -1) {
+            i = string.indexOf("-");
+        }
         if (i == -1) {
             revision = string;
         } else {
