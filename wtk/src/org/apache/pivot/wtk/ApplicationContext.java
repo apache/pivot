@@ -64,6 +64,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Version;
 import org.apache.pivot.wtk.Component.DecoratorSequence;
 import org.apache.pivot.wtk.effects.Decorator;
@@ -1712,6 +1713,27 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         }
     }
 
+    /**
+     * Added so that any unexpected version string formats that might cause an error
+     * will not also cause the application to fail to start.
+     *
+     * @param versionString A potential version string to parse/decode.
+     * @return The parsed version information (if possible), or an empty version
+     * (that will look like: "0.0.0_00") if there was a parsing problem of any kind.
+     */
+    private static Version safelyDecodeVersion(String versionString) {
+        if (!Utils.isNullOrEmpty(versionString)) {
+            try {
+                return Version.decode(versionString);
+            } catch (Throwable ex) {
+                String exMsg = Utils.isNullOrEmpty(ex.getMessage()) ? ex.getClass().getSimpleName() : ex.getMessage();
+                System.err.println("Error decoding version string \"" + versionString + "\": " + exMsg);
+            }
+        }
+        return new Version(0, 0, 0, 0);
+    }
+
+
     protected static URL origin = null;
     protected static ArrayList<Display> displays = new ArrayList<>();
     protected static ArrayList<Application> applications = new ArrayList<>();
@@ -1727,17 +1749,12 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
     private static Version pivotVersion = null;
 
     static {
-        // Get the JVM version
-        jvmVersion = Version.decode(System.getProperty("java.vm.version"));
-        javaVersion = Version.decode(System.getProperty("java.runtime.version"));
+        // Get the JVM & Java runtime versions
+        jvmVersion = safelyDecodeVersion(System.getProperty("java.vm.version"));
+        javaVersion = safelyDecodeVersion(System.getProperty("java.runtime.version"));
 
         // Get the Pivot version
-        String version = CURRENT_PACKAGE.getImplementationVersion();
-        if (version == null) {
-            pivotVersion = new Version(0, 0, 0, 0);
-        } else {
-            pivotVersion = Version.decode(version);
-        }
+        pivotVersion = safelyDecodeVersion(CURRENT_PACKAGE.getImplementationVersion());
     }
 
     /**
@@ -1811,8 +1828,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * Returns the current JVM version, parsed from the "java.vm.version" system
      * property.
      *
-     * @return The current JVM version, or <tt>null</tt> if the version can't be
-     * determined.
+     * @return The current JVM version, or an "empty" version if it can't be
+     * determined (that is, "0.0.0_00").
      */
     public static Version getJVMVersion() {
         return jvmVersion;
@@ -1822,8 +1839,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * Returns the current Java Runtime version, parsed from the "java.runtime.version"
      * system property.
      *
-     * @return The current Java version, or <tt>null</tt> if the version can't be
-     * determined.
+     * @return The current Java version, or an "empty" version if it can't be
+     * determined (that is, "0.0.0_00").
      */
     public static Version getJavaVersion() {
         return javaVersion;
@@ -1833,7 +1850,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
      * Returns the current Pivot version.
      *
      * @return The current Pivot version (determined at build time), or
-     * <tt>null</tt> if the version can't be determined.
+     * an "empty" version if it can't be determined (that is, "0.0.0_00").
      */
     public static Version getPivotVersion() {
         return pivotVersion;
