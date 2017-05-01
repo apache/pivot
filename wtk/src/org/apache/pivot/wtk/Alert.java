@@ -332,6 +332,32 @@ public class Alert extends Dialog {
         alert(MessageType.INFO, message, null, null, owner, null);
     }
 
+    /**
+     * An alert with a type of {@link MessageType#INFO}.
+     *
+     * @param message The main message of this alert.
+     * @param owner   The owner window.
+     * @param width   The preferred width of the alert.
+     */
+    public static void alert(String message, Window owner, int width) {
+        alert(MessageType.INFO, message, null, null, owner, width, null);
+    }
+
+    public static void error(String message, Window owner) {
+        alert(MessageType.ERROR, message, null, null, owner, null);
+    }
+
+    /**
+     * An alert with a type of {@link MessageType#ERROR}.
+     *
+     * @param message The main message of this error.
+     * @param owner   The owner window.
+     * @param width   The preferred width of the alert.
+     */
+    public static void error(String message, Window owner, int width) {
+        alert(MessageType.ERROR, message, null, null, owner, width, null);
+    }
+
     public static void alert(MessageType messageType, String message, Window owner) {
         alert(messageType, message, null, null, owner, null);
     }
@@ -346,17 +372,32 @@ public class Alert extends Dialog {
     }
 
     public static void alert(MessageType messageType, String message, Component body, Window owner,
+        int width) {
+        alert(messageType, message, null, body, owner, width, null);
+    }
+
+    public static void alert(MessageType messageType, String message, Component body, Window owner,
         DialogCloseListener dialogCloseListener) {
         alert(messageType, message, null, body, owner, dialogCloseListener);
     }
 
     public static void alert(MessageType messageType, String message, String title, Component body,
         Window owner, DialogCloseListener dialogCloseListener) {
+        alert(messageType, message, title, body, owner, -1, dialogCloseListener);
+    }
+
+    public static void alert(MessageType messageType, String message, String title, Component body,
+        Window owner, int width, DialogCloseListener dialogCloseListener) {
         Alert alert = new Alert(messageType, message, null, body);
+
         if (title != null) {
             alert.setTitle(title);
+        }
+        if (width > 0) {
+            alert.setPreferredWidth(width);
         }
 
         alert.open(owner.getDisplay(), owner, dialogCloseListener);
     }
+
 }
