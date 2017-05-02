@@ -1598,7 +1598,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         Utils.checkNull(type, "bind type");
 
         if (!type.isAssignableFrom(object.getClass())) {
-            throw new IllegalArgumentException("Bind object is not assignable to class " + type.getTypeName() + ".");
+            throw new IllegalArgumentException("Bind object is not assignable to class " + type.getName() + ".");
         }
 
         Field[] fields = type.getDeclaredFields();
