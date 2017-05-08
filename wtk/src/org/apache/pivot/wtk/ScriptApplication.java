@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.pivot.beans.BXMLSerializer;
@@ -43,6 +45,16 @@ public class ScriptApplication implements Application {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL location = classLoader.getResource(src.substring(1));
 
+        if (location == null) {
+            // If the source file isn't in the resources, try finding it as a local file
+            File localFile = new File(src);
+            if (localFile.exists() && localFile.isFile() && localFile.canRead()) {
+                try {
+                    location = localFile.toURI().toURL();
+                } catch (MalformedURLException mue) {
+                }
+            }
+        }
         if (location == null) {
             throw new IllegalArgumentException("Cannot find source file \"" + src + "\".");
         }
