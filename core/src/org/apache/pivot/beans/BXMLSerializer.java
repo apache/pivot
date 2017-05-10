@@ -147,7 +147,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
                     bindings.put(ARGUMENTS_KEY, args);
                     result = scriptEngine.eval(script);
-		    bindings.remove(ARGUMENTS_KEY);
+                    bindings.remove(ARGUMENTS_KEY);
                 } catch (ScriptException exception) {
                     reportException(exception, script);
                 }
@@ -183,7 +183,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             return invocable.invokeFunction(methodName, args);
-	}
+        }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -233,28 +233,52 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             this.functionName = functionName;
         }
 
+        private Object invokeFunction(String functionName, Object value) {
+            Invocable invocable;
+            try {
+                invocable = (Invocable) scriptEngine;
+            } catch (ClassCastException exception) {
+                throw new RuntimeException(exception);
+            }
+
+            Object result = value;
+            try {
+               result = invocable.invokeFunction(functionName, value);
+            } catch (NoSuchMethodException exception) {
+                throw new RuntimeException(exception);
+            } catch (ScriptException exception) {
+                throw new RuntimeException(exception);
+            }
+            return result;
+        }
+
         @Override
         public Object evaluate(final Object value) {
             Object result = value;
-            Bindings bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+            Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
             if (bindings.containsKey(functionName)) {
-                Invocable invocable;
-                try {
-                    invocable = (Invocable) scriptEngine;
-                } catch (ClassCastException exception) {
-                    throw new RuntimeException(exception);
-                }
-
-                try {
-                    result = invocable.invokeFunction(functionName, result);
-                } catch (NoSuchMethodException exception) {
-                    throw new RuntimeException(exception);
-                } catch (ScriptException exception) {
-                    throw new RuntimeException(exception);
+                result = invokeFunction(functionName, result);
+            } else if (bindings.containsKey(NASHORN_GLOBAL)) {
+                Bindings globalBindings = (Bindings)bindings.get(NASHORN_GLOBAL);
+                if (globalBindings.containsKey(functionName)) {
+                    result = invokeFunction(functionName, result);
+                } else {
+                    bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+                    if (bindings.containsKey(functionName)) {
+                        result = invokeFunction(functionName, result);
+                    } else {
+                        throw new RuntimeException("Mapping function \"" + functionName
+                            + "\" is not defined.");
+                    }
                 }
             } else {
-                throw new RuntimeException("Mapping function \"" + functionName
-                    + "\" is not defined.");
+                bindings = scriptEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
+                if (bindings.containsKey(functionName)) {
+                    result = invokeFunction(functionName, result);
+                } else {
+                    throw new RuntimeException("Mapping function \"" + functionName
+                        + "\" is not defined.");
+                }
             }
 
             return result;
@@ -1448,6 +1472,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
                     try {
+                        scriptEngine.eval(NASHORN_COMPAT_SCRIPT);
                         scriptEngine.eval(script);
                     } catch (ScriptException exception) {
                         reportException(exception, script);
