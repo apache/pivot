@@ -1153,35 +1153,38 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         boolean consumed = false;
 
         TextInput textInput = (TextInput) getComponent();
+        boolean isEditable = textInput.isEditable();
+
+        int start = textInput.getSelectionStart();
+        int length = textInput.getSelectionLength();
+
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
+        boolean isMetaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
+        boolean isShiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
 
-        if (keyCode == Keyboard.KeyCode.DELETE && textInput.isEditable()) {
-            int index = textInput.getSelectionStart();
-
-            if (index < textInput.getCharacterCount()) {
-                int count = Math.max(textInput.getSelectionLength(), 1);
-                textInput.removeText(index, count);
+        if (keyCode == Keyboard.KeyCode.DELETE && isEditable) {
+            if (start < textInput.getCharacterCount()) {
+                int count = Math.max(length, 1);
+                textInput.removeText(start, count);
 
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.BACKSPACE && textInput.isEditable()) {
-            int index = textInput.getSelectionStart();
-            int count = textInput.getSelectionLength();
-
-            if (count == 0 && index > 0) {
-                textInput.removeText(index - 1, 1);
+        } else if (keyCode == Keyboard.KeyCode.BACKSPACE && isEditable) {
+            if (length == 0 && start > 0) {
+                textInput.removeText(start - 1, 1);
                 consumed = true;
             } else {
-                textInput.removeText(index, count);
+                textInput.removeText(start, length);
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.HOME
-            || (keyCode == Keyboard.KeyCode.LEFT && Keyboard.isPressed(Keyboard.Modifier.META))) {
-            // Move the caret to the beginning of the text
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                textInput.setSelection(0, textInput.getSelectionStart());
+            || (keyCode == Keyboard.KeyCode.LEFT && isMetaPressed)) {
+            if (isShiftPressed) {
+                // Select from the beginning of the text to the current position
+                textInput.setSelection(0, start);
             } else {
+                // Move the caret to the beginning of the text
                 textInput.setSelection(0, 0);
             }
 
@@ -1189,14 +1192,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.END
-            || (keyCode == Keyboard.KeyCode.RIGHT && Keyboard.isPressed(Keyboard.Modifier.META))) {
-            // Move the caret to the end of the text
+            || (keyCode == Keyboard.KeyCode.RIGHT && isMetaPressed)) {
             int n = textInput.getCharacterCount();
 
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                int selectionStart = textInput.getSelectionStart();
-                textInput.setSelection(selectionStart, n - selectionStart);
+            if (isShiftPressed) {
+                // Select from current position to the end of the text
+                textInput.setSelection(start, n - start);
             } else {
+                // Move the caret to the end of the text
                 textInput.setSelection(n, 0);
             }
 
@@ -1204,14 +1207,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
-            int selectionStart = textInput.getSelectionStart();
-            int selectionLength = textInput.getSelectionLength();
-
             if (Keyboard.isPressed(wordNavigationModifier)) {
                 // Move the caret to the start of the next word to the left
-                if (selectionStart > 0) {
+                if (start > 0) {
                     // Skip over any space immediately to the left
-                    int index = selectionStart;
+                    int index = start;
                     while (index > 0 && Character.isWhitespace(textInput.getCharacterAt(index - 1))) {
                         index--;
                     }
@@ -1222,44 +1222,41 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                         index--;
                     }
 
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        selectionLength += selectionStart - index;
+                    if (isShiftPressed) {
+                        length += start - index;
                     } else {
-                        selectionLength = 0;
+                        length = 0;
                     }
 
-                    selectionStart = index;
+                    start = index;
                 }
-            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+            } else if (isShiftPressed) {
                 // Add the previous character to the selection
-                if (selectionStart > 0) {
-                    selectionStart--;
-                    selectionLength++;
+                if (start > 0) {
+                    start--;
+                    length++;
                 }
             } else {
                 // Move the caret back by one character
-                if (selectionLength == 0 && selectionStart > 0) {
-                    selectionStart--;
+                if (length == 0 && start > 0) {
+                    start--;
                 }
 
                 // Clear the selection
-                selectionLength = 0;
+                length = 0;
             }
 
-            if (selectionStart >= 0) {
-                textInput.setSelection(selectionStart, selectionLength);
-                scrollCharacterToVisible(selectionStart);
+            if (start >= 0) {
+                textInput.setSelection(start, length);
+                scrollCharacterToVisible(start);
 
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
-            int selectionStart = textInput.getSelectionStart();
-            int selectionLength = textInput.getSelectionLength();
-
             if (Keyboard.isPressed(wordNavigationModifier)) {
                 // Move the caret to the start of the next word to the right
-                if (selectionStart < textInput.getCharacterCount()) {
-                    int index = selectionStart + selectionLength;
+                if (start < textInput.getCharacterCount()) {
+                    int index = start + length;
 
                     // Skip over any space immediately to the right
                     while (index < textInput.getCharacterCount()
@@ -1273,31 +1270,31 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                         index++;
                     }
 
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        selectionLength = index - selectionStart;
+                    if (isShiftPressed) {
+                        length = index - start;
                     } else {
-                        selectionStart = index;
-                        selectionLength = 0;
+                        start = index;
+                        length = 0;
                     }
                 }
-            } else if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+            } else if (isShiftPressed) {
                 // Add the next character to the selection
-                selectionLength++;
+                length++;
             } else {
                 // Move the caret forward by one character
-                if (selectionLength == 0) {
-                    selectionStart++;
+                if (length == 0) {
+                    start++;
                 } else {
-                    selectionStart += selectionLength;
+                    start += length;
                 }
 
                 // Clear the selection
-                selectionLength = 0;
+                length = 0;
             }
 
-            if (selectionStart + selectionLength <= textInput.getCharacterCount()) {
-                textInput.setSelection(selectionStart, selectionLength);
-                scrollCharacterToVisible(selectionStart + selectionLength);
+            if (start + length <= textInput.getCharacterCount()) {
+                textInput.setSelection(start, length);
+                scrollCharacterToVisible(start + length);
 
                 consumed = true;
             }
@@ -1305,7 +1302,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (keyCode == Keyboard.KeyCode.A) {
                 textInput.setSelection(0, textInput.getCharacterCount());
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.X && textInput.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.X && isEditable) {
                 if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
@@ -1321,18 +1318,18 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.V && textInput.isEditable()) {
+            } else if (keyCode == Keyboard.KeyCode.V && isEditable) {
                 textInput.paste();
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.Z && textInput.isEditable()) {
-                if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+            } else if (keyCode == Keyboard.KeyCode.Z && isEditable) {
+                if (!isShiftPressed) {
                     textInput.undo();
                 }
 
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.INSERT) {
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT) && textInput.isEditable()) {
+            if (isShiftPressed && isEditable) {
                 textInput.paste();
                 consumed = true;
             }
@@ -1359,8 +1356,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         Window window = textInput.getWindow();
 
         if (component.isFocused()) {
-            // If focus was permanently transferred within this window,
-            // select all
+            // If focus was permanently transferred within this window, select all
             if (obverseComponent == null || obverseComponent.getWindow() == window) {
                 if (Mouse.getCapturer() != component) {
                     textInput.selectAll();
@@ -1578,12 +1574,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         caret.width = 1;
 
         if (selectionLength > 0) {
-            Bounds trailingSelectionBounds = getCharacterBounds(selectionStart + selectionLength
-                - 1);
+            Bounds trailingSelectionBounds = getCharacterBounds(selectionStart + selectionLength - 1);
             selection = new Rectangle(leadingSelectionBounds.x, leadingSelectionBounds.y,
-                trailingSelectionBounds.x + trailingSelectionBounds.width
-                    - leadingSelectionBounds.x, trailingSelectionBounds.y
-                    + trailingSelectionBounds.height - leadingSelectionBounds.y);
+                trailingSelectionBounds.x + trailingSelectionBounds.width - leadingSelectionBounds.x,
+                trailingSelectionBounds.y + trailingSelectionBounds.height - leadingSelectionBounds.y);
         } else {
             selection = null;
         }
