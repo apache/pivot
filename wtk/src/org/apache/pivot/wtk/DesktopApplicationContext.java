@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import java.awt.AWTEvent;
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -194,8 +195,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
     }
 
-    // The AWT Window class does not define a title property; this interface
-    // allows
+    // The AWT Window class does not define a title property; this interface allows
     // the HostFrame and HostDialog titles to be handled polymorphically
     private interface TitledWindow {
         public String getTitle();
@@ -430,7 +430,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 Preferences preferences = Preferences.userNodeForPackage(DesktopApplicationContext.class);
                 preferences = preferences.node(applicationClassName);
 
-                boolean maximized = (windowedHostFrame.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH) == java.awt.Frame.MAXIMIZED_BOTH;
+                boolean maximized = (windowedHostFrame.getExtendedState() & MAXIMIZED_BOTH) == MAXIMIZED_BOTH;
                 if (!maximized) {
                     preferences.putInt(X_ARGUMENT, windowedHostFrame.getX());
                     preferences.putInt(Y_ARGUMENT, windowedHostFrame.getY());
@@ -606,7 +606,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         }
 
         if (maximized) {
-            windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+            windowedHostFrame.setExtendedState(MAXIMIZED_BOTH);
         }
 
         // Create the full-screen host frame
@@ -658,7 +658,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             // TODO This is a workaround for Java bug #6365898 on Linux (fixed only in Java 7),
             // revisit / remove later when we'll require Java 7
             if (maximized && visible) {
-                windowedHostFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+                windowedHostFrame.setExtendedState(MAXIMIZED_BOTH);
             }
 
             // Start the application in a callback to allow the host window to
@@ -726,8 +726,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     DesktopApplicationContext.class.getClassLoader(),
                     new Class<?>[] { eawtApplicationListenerClass }, handler);
 
-                // Invoke the addApplicationListener() method with the proxy
-                // listener
+                // Invoke the addApplicationListener() method with the proxy listener
                 addApplicationListenerMethod.invoke(eawtApplication,
                     new Object[] { eawtApplicationListener });
             } catch (Throwable throwable) {
