@@ -26,6 +26,11 @@ import org.apache.pivot.util.Resources;
 
 /**
  * Script application loader.
+ * <p> This application will load a BXML file containing a Pivot component
+ * and its content hierarchy and display it.  If the outermost component is
+ * a {@link Window} (or subclass of it) then the window will be displayed
+ * directly.  Otherwise a default {@code Window} will be created and the
+ * component made its content.
  */
 public class ScriptApplication implements Application {
     private Window window = null;
@@ -79,7 +84,13 @@ public class ScriptApplication implements Application {
 
         // Load the file and open the window
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        this.window = (Window) bxmlSerializer.readObject(location, resources);
+        Component component = (Component) bxmlSerializer.readObject(location, resources);
+        if (component instanceof Window) {
+            this.window = (Window)component;
+        } else {
+            this.window = new Window();
+            this.window.setContent(component);
+        }
         this.window.open(display);
     }
 
