@@ -180,7 +180,7 @@ limitations under the License.
                 <istrue value="${test.verbose}"/>
             </condition>
 
-            <junit fork="true" haltonfailure="true" failureproperty="unit.tests.failed">
+            <junit fork="true" failureproperty="unit.tests.failed">
                 <classpath>
                     <path refid="classpath.general"/>
                     <dirset dir="${basedir}" includes="**/${folder.bin}"/>
