@@ -108,9 +108,8 @@ public abstract class ListenerList<T> implements Iterable<T> {
     }
 
     private int indexOf(T listener) {
-        if (listener == null) {
-            throw new IllegalArgumentException("listener is null.");
-        }
+        Utils.checkNull(listener, "listener");
+
         for (int i = 0; i < last; i++) {
             if (list[i] == listener) {
                 return i;
@@ -157,9 +156,7 @@ public abstract class ListenerList<T> implements Iterable<T> {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public T get(int index) {
-        if (index < 0 || index >= last) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds [0," + last + "].");
-        }
+        Utils.checkZeroBasedIndex(index, last);
         return list[index];
     }
 

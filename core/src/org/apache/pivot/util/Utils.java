@@ -155,6 +155,20 @@ public class Utils {
     }
 
     /**
+     * Special case of {@link #checkIndexBounds(int, int, int)} for the case that start is zero and therefore
+     * the end case is usually size - 1.
+     *
+     * @param index   The candidate index into the zero-based range.
+     * @param size    The size of the array/list/etc. (so the proper range is {@code 0 .. size - 1}).
+     * @throws IndexOutOfBoundsException if the {@code index} is &lt; 0 or &gt;= {@code size}.
+     */
+    public static void checkZeroBasedIndex(int index, int size) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("index " + index + " out of bounds [0," + (size-1) + "].");
+        }
+    }
+
+    /**
      * Check that the given {@code index} plus {@code count} are between the values of {@code start} and {@code end}.
      *
      * @param index  The candidate index into the range.
