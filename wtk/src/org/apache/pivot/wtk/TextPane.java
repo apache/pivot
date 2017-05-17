@@ -161,7 +161,7 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneListenerList extends WTKListenerList<TextPaneListener> implements
+    private static class TextPaneListenerList extends ListenerList<TextPaneListener> implements
         TextPaneListener {
         @Override
         public void documentChanged(TextPane textPane, Document previousText) {
@@ -179,7 +179,7 @@ public class TextPane extends Container {
     }
 
     private static class TextPaneCharacterListenerList extends
-        WTKListenerList<TextPaneCharacterListener> implements TextPaneCharacterListener {
+        ListenerList<TextPaneCharacterListener> implements TextPaneCharacterListener {
         /**
          * @param index Index into the whole document.
          */
@@ -202,7 +202,7 @@ public class TextPane extends Container {
     }
 
     private static class TextPaneSelectionListenerList extends
-        WTKListenerList<TextPaneSelectionListener> implements TextPaneSelectionListener {
+        ListenerList<TextPaneSelectionListener> implements TextPaneSelectionListener {
         @Override
         public void selectionChanged(TextPane textPane, int previousSelectionStart,
             int previousSelectionLength) {

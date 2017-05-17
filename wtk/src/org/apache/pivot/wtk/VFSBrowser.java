@@ -49,7 +49,7 @@ public class VFSBrowser extends Container {
 
     private static final URI USER_HOME = new File(System.getProperty("user.home")).toURI();
 
-    private static class FileBrowserListenerList extends WTKListenerList<VFSBrowserListener>
+    private static class FileBrowserListenerList extends ListenerList<VFSBrowserListener>
         implements VFSBrowserListener {
         @Override
         public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {

@@ -209,7 +209,7 @@ public class TreeView extends Component {
     /**
      * Tree view listener list.
      */
-    private static class TreeViewListenerList extends WTKListenerList<TreeViewListener> implements
+    private static class TreeViewListenerList extends ListenerList<TreeViewListener> implements
         TreeViewListener {
 
         @Override
@@ -274,7 +274,7 @@ public class TreeView extends Component {
     /**
      * Tree view branch listener list.
      */
-    private static class TreeViewBranchListenerList extends WTKListenerList<TreeViewBranchListener>
+    private static class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
         implements TreeViewBranchListener {
         @Override
         public void branchExpanded(TreeView treeView, Path path) {
@@ -312,7 +312,7 @@ public class TreeView extends Component {
     /**
      * Tree view node listener list.
      */
-    private static class TreeViewNodeListenerList extends WTKListenerList<TreeViewNodeListener>
+    private static class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
         implements TreeViewNodeListener {
         @Override
         public void nodeInserted(TreeView treeView, Path path, int index) {
@@ -354,7 +354,7 @@ public class TreeView extends Component {
      * Tree view node state listener list.
      */
     private static class TreeViewNodeStateListenerList extends
-        WTKListenerList<TreeViewNodeStateListener> implements TreeViewNodeStateListener {
+        ListenerList<TreeViewNodeStateListener> implements TreeViewNodeStateListener {
         @Override
         public void nodeCheckStateChanged(TreeView treeView, Path path,
             TreeView.NodeCheckState previousCheckState) {
@@ -368,7 +368,7 @@ public class TreeView extends Component {
      * Tree view selection listener list.
      */
     private static class TreeViewSelectionListenerList extends
-        WTKListenerList<TreeViewSelectionListener> implements TreeViewSelectionListener {
+        ListenerList<TreeViewSelectionListener> implements TreeViewSelectionListener {
         @Override
         public void selectedPathAdded(TreeView treeView, Path path) {
             for (TreeViewSelectionListener listener : this) {

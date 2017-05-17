@@ -23,7 +23,6 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
-import org.apache.pivot.wtk.WTKListenerList;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.Window.IconImageSequence;
 import org.apache.pivot.wtk.WindowListener;
@@ -36,7 +35,7 @@ import org.apache.pivot.wtk.media.Image;
 @DefaultProperty("content")
 public class FakeWindow extends Container {
 
-    private static class FakeWindowListenerList extends WTKListenerList<FakeWindowListener>
+    private static class FakeWindowListenerList extends ListenerList<FakeWindowListener>
         implements FakeWindowListener {
         @Override
         public void titleChanged(FakeWindow window, String previousTitle) {

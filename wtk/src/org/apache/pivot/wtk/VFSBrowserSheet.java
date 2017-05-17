@@ -49,7 +49,7 @@ public class VFSBrowserSheet extends Sheet {
     private static final String USER_HOME = System.getProperty("user.home");
 
     private static class FileBrowserSheetListenerList extends
-        WTKListenerList<VFSBrowserSheetListener> implements VFSBrowserSheetListener {
+        ListenerList<VFSBrowserSheetListener> implements VFSBrowserSheetListener {
         @Override
         public void managerChanged(VFSBrowserSheet fileBrowserSheet,
             FileSystemManager previousManager) {

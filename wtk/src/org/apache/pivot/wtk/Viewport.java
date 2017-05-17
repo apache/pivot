@@ -42,7 +42,7 @@ public abstract class Viewport extends Container {
         public Bounds getViewportBounds();
     }
 
-    private static class ViewportListenerList extends WTKListenerList<ViewportListener> implements
+    private static class ViewportListenerList extends ListenerList<ViewportListener> implements
         ViewportListener {
 
         @Override
