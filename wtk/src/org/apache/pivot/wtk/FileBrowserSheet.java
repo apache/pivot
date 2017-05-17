@@ -39,7 +39,7 @@ public class FileBrowserSheet extends Sheet {
     private static final String USER_HOME = System.getProperty("user.home");
 
     private static class FileBrowserSheetListenerList extends
-        WTKListenerList<FileBrowserSheetListener> implements FileBrowserSheetListener {
+        ListenerList<FileBrowserSheetListener> implements FileBrowserSheetListener {
         @Override
         public void modeChanged(FileBrowserSheet fileBrowserSheet,
             FileBrowserSheet.Mode previousMode) {

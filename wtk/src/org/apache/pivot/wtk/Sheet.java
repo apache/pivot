@@ -24,7 +24,7 @@ import org.apache.pivot.util.Vote;
  * modal only over a window's content component.
  */
 public class Sheet extends Window {
-    private static class SheetStateListenerList extends WTKListenerList<SheetStateListener>
+    private static class SheetStateListenerList extends ListenerList<SheetStateListener>
         implements SheetStateListener {
         @Override
         public Vote previewSheetClose(Sheet sheet, boolean result) {

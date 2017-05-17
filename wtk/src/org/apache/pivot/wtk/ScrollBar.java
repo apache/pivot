@@ -87,7 +87,7 @@ public class ScrollBar extends Container {
         }
     }
 
-    private static class ScrollBarListenerList extends WTKListenerList<ScrollBarListener> implements
+    private static class ScrollBarListenerList extends ListenerList<ScrollBarListener> implements
         ScrollBarListener {
         @Override
         public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
@@ -119,7 +119,7 @@ public class ScrollBar extends Container {
         }
     }
 
-    private static class ScrollBarValueListenerList extends WTKListenerList<ScrollBarValueListener>
+    private static class ScrollBarValueListenerList extends ListenerList<ScrollBarValueListener>
         implements ScrollBarValueListener {
         @Override
         public void valueChanged(ScrollBar scrollBar, int previousValue) {

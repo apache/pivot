@@ -29,7 +29,7 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("content")
 public class Rollup extends Container {
-    private static class RollupListenerList extends WTKListenerList<RollupListener> implements
+    private static class RollupListenerList extends ListenerList<RollupListener> implements
         RollupListener {
         @Override
         public void headingChanged(Rollup rollup, Component previousHeading) {
@@ -53,7 +53,7 @@ public class Rollup extends Container {
         }
     }
 
-    private static class RollupStateListenerList extends WTKListenerList<RollupStateListener>
+    private static class RollupStateListenerList extends ListenerList<RollupStateListener>
         implements RollupStateListener {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {

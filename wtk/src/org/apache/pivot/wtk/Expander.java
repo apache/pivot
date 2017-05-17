@@ -27,7 +27,7 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("content")
 public class Expander extends Container {
-    private static class ExpanderListenerList extends WTKListenerList<ExpanderListener> implements
+    private static class ExpanderListenerList extends ListenerList<ExpanderListener> implements
         ExpanderListener {
         @Override
         public void titleChanged(Expander expander, String previousTitle) {

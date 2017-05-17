@@ -41,7 +41,7 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  */
 @DefaultProperty("listData")
 public class ListButton extends Button {
-    private static class ListButtonListenerList extends WTKListenerList<ListButtonListener>
+    private static class ListButtonListenerList extends ListenerList<ListButtonListener>
         implements ListButtonListener {
         @Override
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
@@ -81,7 +81,7 @@ public class ListButton extends Button {
         }
     }
 
-    private static class ListButtonItemListenerList extends WTKListenerList<ListButtonItemListener>
+    private static class ListButtonItemListenerList extends ListenerList<ListButtonItemListener>
         implements ListButtonItemListener {
         @Override
         public void itemInserted(ListButton listButton, int index) {
@@ -120,7 +120,7 @@ public class ListButton extends Button {
     }
 
     private static class ListButtonSelectionListenerList extends
-        WTKListenerList<ListButtonSelectionListener> implements ListButtonSelectionListener {
+        ListenerList<ListButtonSelectionListener> implements ListButtonSelectionListener {
         @Override
         public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
             for (ListButtonSelectionListener listener : this) {
@@ -137,7 +137,7 @@ public class ListButton extends Button {
     }
 
     private static class ListButtonBindingListenerList extends
-        WTKListenerList<ListButtonBindingListener> implements ListButtonBindingListener {
+        ListenerList<ListButtonBindingListener> implements ListButtonBindingListener {
         @Override
         public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
             for (ListButtonBindingListener listener : this) {

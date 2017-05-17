@@ -24,7 +24,7 @@ import org.apache.pivot.util.Vote;
  * application and a user.
  */
 public class Dialog extends Frame {
-    private static class DialogListenerList extends WTKListenerList<DialogListener> implements
+    private static class DialogListenerList extends ListenerList<DialogListener> implements
         DialogListener {
         @Override
         public void modalChanged(Dialog dialog) {
@@ -34,7 +34,7 @@ public class Dialog extends Frame {
         }
     }
 
-    private static class DialogStateListenerList extends WTKListenerList<DialogStateListener>
+    private static class DialogStateListenerList extends ListenerList<DialogStateListener>
         implements DialogStateListener {
         @Override
         public Vote previewDialogClose(Dialog dialog, boolean result) {

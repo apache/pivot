@@ -211,7 +211,7 @@ public class ListView extends Component {
         public void setState(Object item, Button.State state);
     }
 
-    private static class ListViewListenerList extends WTKListenerList<ListViewListener> implements
+    private static class ListViewListenerList extends ListenerList<ListViewListener> implements
         ListViewListener {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
@@ -280,7 +280,7 @@ public class ListView extends Component {
         }
     }
 
-    private static class ListViewItemListenerList extends WTKListenerList<ListViewItemListener>
+    private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
         implements ListViewItemListener {
         @Override
         public void itemInserted(ListView listView, int index) {
@@ -319,7 +319,7 @@ public class ListView extends Component {
     }
 
     private static class ListViewItemStateListenerList extends
-        WTKListenerList<ListViewItemStateListener> implements ListViewItemStateListener {
+        ListenerList<ListViewItemStateListener> implements ListViewItemStateListener {
         @Override
         public void itemCheckedChanged(ListView listView, int index) {
             for (ListViewItemStateListener listener : this) {
@@ -336,7 +336,7 @@ public class ListView extends Component {
     }
 
     private static class ListViewSelectionListenerList extends
-        WTKListenerList<ListViewSelectionListener> implements ListViewSelectionListener {
+        ListenerList<ListViewSelectionListener> implements ListViewSelectionListener {
         @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
             for (ListViewSelectionListener listener : this) {
@@ -367,7 +367,7 @@ public class ListView extends Component {
     }
 
     private static class ListViewBindingListenerList extends
-        WTKListenerList<ListViewBindingListener> implements ListViewBindingListener {
+        ListenerList<ListViewBindingListener> implements ListViewBindingListener {
         @Override
         public void listDataKeyChanged(ListView listView, String previousListDataKey) {
             for (ListViewBindingListener listener : this) {

@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  */
 public class SuggestionPopup extends Window {
     private static class SuggestionPopupListenerList extends
-        WTKListenerList<SuggestionPopupListener> implements SuggestionPopupListener {
+        ListenerList<SuggestionPopupListener> implements SuggestionPopupListener {
         @Override
         public void suggestionDataChanged(SuggestionPopup suggestionPopup,
             List<?> previousSuggestionData) {
@@ -58,7 +58,7 @@ public class SuggestionPopup extends Window {
     }
 
     private static class SuggestionPopupItemListenerList extends
-        WTKListenerList<SuggestionPopupItemListener> implements SuggestionPopupItemListener {
+        ListenerList<SuggestionPopupItemListener> implements SuggestionPopupItemListener {
         @Override
         public void itemInserted(SuggestionPopup suggestionPopup, int index) {
             for (SuggestionPopupItemListener listener : this) {
@@ -96,7 +96,7 @@ public class SuggestionPopup extends Window {
     }
 
     private static class SuggestionPopupSelectionListenerList extends
-        WTKListenerList<SuggestionPopupSelectionListener> implements
+        ListenerList<SuggestionPopupSelectionListener> implements
         SuggestionPopupSelectionListener {
         @Override
         public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
@@ -115,7 +115,7 @@ public class SuggestionPopup extends Window {
     }
 
     private static class SuggestionPopupStateListenerList extends
-        WTKListenerList<SuggestionPopupStateListener> implements SuggestionPopupStateListener {
+        ListenerList<SuggestionPopupStateListener> implements SuggestionPopupStateListener {
         @Override
         public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
             Vote vote = Vote.APPROVE;

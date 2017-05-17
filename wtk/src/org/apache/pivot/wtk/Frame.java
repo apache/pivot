@@ -24,7 +24,7 @@ import org.apache.pivot.util.ListenerList;
  * Container class representing a decorated frame window.
  */
 public class Frame extends Window {
-    private static class FrameListenerList extends WTKListenerList<FrameListener> implements
+    private static class FrameListenerList extends ListenerList<FrameListener> implements
         FrameListener {
         @Override
         public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {

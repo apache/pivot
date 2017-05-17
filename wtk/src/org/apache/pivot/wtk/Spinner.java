@@ -119,7 +119,7 @@ public class Spinner extends Container {
         public Object get(List<?> spinnerData, int index);
     }
 
-    private static class SpinnerListenerList extends WTKListenerList<SpinnerListener> implements
+    private static class SpinnerListenerList extends ListenerList<SpinnerListener> implements
         SpinnerListener {
         @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
@@ -143,7 +143,7 @@ public class Spinner extends Container {
         }
     }
 
-    private static class SpinnerItemListenerList extends WTKListenerList<SpinnerItemListener>
+    private static class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
         implements SpinnerItemListener {
         @Override
         public void itemInserted(Spinner spinner, int index) {
@@ -182,7 +182,7 @@ public class Spinner extends Container {
     }
 
     private static class SpinnerSelectionListenerList extends
-        WTKListenerList<SpinnerSelectionListener> implements SpinnerSelectionListener {
+        ListenerList<SpinnerSelectionListener> implements SpinnerSelectionListener {
         @Override
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
             for (SpinnerSelectionListener listener : this) {
@@ -198,7 +198,7 @@ public class Spinner extends Container {
         }
     }
 
-    private static class SpinnerBindingListenerList extends WTKListenerList<SpinnerBindingListener>
+    private static class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
         implements SpinnerBindingListener {
         @Override
         public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {

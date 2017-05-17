@@ -22,7 +22,7 @@ import org.apache.pivot.util.ListenerList;
  * Component that displays progress information.
  */
 public class Meter extends Component {
-    private static class MeterListenerList extends WTKListenerList<MeterListener> implements
+    private static class MeterListenerList extends ListenerList<MeterListener> implements
         MeterListener {
         @Override
         public void orientationChanged(Meter meter) {

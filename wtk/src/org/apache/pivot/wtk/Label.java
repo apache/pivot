@@ -48,7 +48,7 @@ public class Label extends Component {
         public Object valueOf(String text);
     }
 
-    private static class LabelListenerList extends WTKListenerList<LabelListener> implements
+    private static class LabelListenerList extends ListenerList<LabelListener> implements
         LabelListener {
         @Override
         public void textChanged(Label label, String previousText) {
@@ -66,7 +66,7 @@ public class Label extends Component {
 
     }
 
-    private static class LabelBindingListenerList extends WTKListenerList<LabelBindingListener>
+    private static class LabelBindingListenerList extends ListenerList<LabelBindingListener>
         implements LabelBindingListener {
         @Override
         public void textKeyChanged(Label label, String previousTextKey) {

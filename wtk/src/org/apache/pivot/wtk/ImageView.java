@@ -92,7 +92,7 @@ public class ImageView extends Component {
         public Object valueOf(Image image);
     }
 
-    private static class ImageViewListenerList extends WTKListenerList<ImageViewListener> implements
+    private static class ImageViewListenerList extends ListenerList<ImageViewListener> implements
         ImageViewListener {
         @Override
         public void imageChanged(ImageView imageView, Image previousImage) {
@@ -110,7 +110,7 @@ public class ImageView extends Component {
     }
 
     private static class ImageViewBindingListenerList extends
-        WTKListenerList<ImageViewBindingListener> implements ImageViewBindingListener {
+        ListenerList<ImageViewBindingListener> implements ImageViewBindingListener {
         @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
             for (ImageViewBindingListener listener : this) {

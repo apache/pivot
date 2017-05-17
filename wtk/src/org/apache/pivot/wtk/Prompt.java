@@ -118,7 +118,7 @@ public class Prompt extends Sheet {
         }
     }
 
-    private static class PromptListenerList extends WTKListenerList<PromptListener> implements
+    private static class PromptListenerList extends ListenerList<PromptListener> implements
         PromptListener {
         @Override
         public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {

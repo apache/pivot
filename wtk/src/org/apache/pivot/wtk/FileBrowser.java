@@ -38,7 +38,7 @@ public class FileBrowser extends Container {
 
     private static final String USER_HOME = System.getProperty("user.home");
 
-    private static class FileBrowserListenerList extends WTKListenerList<FileBrowserListener>
+    private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
         implements FileBrowserListener {
         @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {

@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  */
 @DefaultProperty("menu")
 public class MenuButton extends Button {
-    private static class MenuButtonListenerList extends WTKListenerList<MenuButtonListener>
+    private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>
         implements MenuButtonListener {
         @Override
         public void menuChanged(MenuButton menuButton, Menu previousMenu) {

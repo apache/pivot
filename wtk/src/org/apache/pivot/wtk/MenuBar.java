@@ -35,7 +35,7 @@ public class MenuBar extends Container {
      */
     @DefaultProperty("menu")
     public static class Item extends Button {
-        private static class ItemListenerList extends WTKListenerList<ItemListener> implements
+        private static class ItemListenerList extends ListenerList<ItemListener> implements
             ItemListener {
             @Override
             public void menuChanged(Item item, Menu previousMenu) {
@@ -253,7 +253,7 @@ public class MenuBar extends Container {
         }
     }
 
-    private static class MenuBarListenerList extends WTKListenerList<MenuBarListener> implements
+    private static class MenuBarListenerList extends ListenerList<MenuBarListener> implements
         MenuBarListener {
         @Override
         public void itemInserted(MenuBar menuBar, int index) {

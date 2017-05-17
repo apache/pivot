@@ -63,7 +63,7 @@ import org.apache.pivot.util.ListenerList;
  * +--------------------------------------------------+</pre>
  */
 public class FillPane extends Container {
-    private static class FillPaneListenerList extends WTKListenerList<FillPaneListener> implements
+    private static class FillPaneListenerList extends ListenerList<FillPaneListener> implements
         FillPaneListener {
         @Override
         public void orientationChanged(FillPane fillPane) {
