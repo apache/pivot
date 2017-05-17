@@ -27,7 +27,7 @@ import org.apache.pivot.util.ListenerList;
  * Class representing a toggle button group.
  */
 public class ButtonGroup implements Group<Button>, Iterable<Button> {
-    private static class ButtonGroupListenerList extends WTKListenerList<ButtonGroupListener>
+    private static class ButtonGroupListenerList extends ListenerList<ButtonGroupListener>
         implements ButtonGroupListener {
         @Override
         public void buttonAdded(ButtonGroup buttonGroup, Button button) {

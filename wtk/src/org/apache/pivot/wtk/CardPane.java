@@ -25,7 +25,7 @@ import org.apache.pivot.util.Vote;
  * at a time.
  */
 public class CardPane extends Container {
-    private static class CardPaneListenerList extends WTKListenerList<CardPaneListener> implements
+    private static class CardPaneListenerList extends ListenerList<CardPaneListener> implements
         CardPaneListener {
         @Override
         public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {

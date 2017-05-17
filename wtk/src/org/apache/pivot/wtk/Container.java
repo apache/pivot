@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.effects.Decorator;
  */
 public abstract class Container extends Component implements Sequence<Component>,
     Iterable<Component> {
-    private static class ContainerListenerList extends WTKListenerList<ContainerListener> implements
+    private static class ContainerListenerList extends ListenerList<ContainerListener> implements
         ContainerListener {
         @Override
         public void componentInserted(Container container, int index) {
@@ -65,7 +65,7 @@ public abstract class Container extends Component implements Sequence<Component>
         }
     }
 
-    private static class ContainerMouseListenerList extends WTKListenerList<ContainerMouseListener>
+    private static class ContainerMouseListenerList extends ListenerList<ContainerMouseListener>
         implements ContainerMouseListener {
         @Override
         public boolean mouseMove(Container container, int x, int y) {

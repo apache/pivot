@@ -118,7 +118,7 @@ public class Alert extends Dialog {
         }
     }
 
-    private static class AlertListenerList extends WTKListenerList<AlertListener> implements
+    private static class AlertListenerList extends ListenerList<AlertListener> implements
         AlertListener {
         @Override
         public void messageTypeChanged(Alert alert, MessageType previousMessageType) {

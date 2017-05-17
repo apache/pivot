@@ -82,7 +82,7 @@ public abstract class Action {
         }
     }
 
-    private static class ActionListenerList extends WTKListenerList<ActionListener> implements
+    private static class ActionListenerList extends ListenerList<ActionListener> implements
         ActionListener {
         @Override
         public void enabledChanged(Action action) {
@@ -92,7 +92,7 @@ public abstract class Action {
         }
     }
 
-    private static class ActionClassListenerList extends WTKListenerList<ActionClassListener>
+    private static class ActionClassListenerList extends ListenerList<ActionClassListener>
         implements ActionClassListener {
         @Override
         public void actionAdded(String id) {

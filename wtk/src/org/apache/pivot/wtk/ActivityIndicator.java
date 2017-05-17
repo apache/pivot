@@ -23,7 +23,7 @@ import org.apache.pivot.util.ListenerList;
  */
 public class ActivityIndicator extends Component {
     private static class ActivityIndicatorListenerList extends
-        WTKListenerList<ActivityIndicatorListener> implements ActivityIndicatorListener {
+        ListenerList<ActivityIndicatorListener> implements ActivityIndicatorListener {
         @Override
         public void activeChanged(ActivityIndicator activityIndicator) {
             for (ActivityIndicatorListener listener : this) {

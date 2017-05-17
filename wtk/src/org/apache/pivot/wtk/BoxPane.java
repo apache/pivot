@@ -47,7 +47,7 @@ import org.apache.pivot.util.ListenerList;
  * have their heights set accordingly.
  */
 public class BoxPane extends Container {
-    private static class BoxPaneListenerList extends WTKListenerList<BoxPaneListener> implements
+    private static class BoxPaneListenerList extends ListenerList<BoxPaneListener> implements
         BoxPaneListener {
         @Override
         public void orientationChanged(BoxPane boxPane) {

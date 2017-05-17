@@ -32,7 +32,7 @@ public class ColorChooserButton extends Button {
      * ColorChooser button selection listener list.
      */
     private static class ColorChooserButtonSelectionListenerList extends
-        WTKListenerList<ColorChooserButtonSelectionListener> implements
+        ListenerList<ColorChooserButtonSelectionListener> implements
         ColorChooserButtonSelectionListener {
 
         @Override
@@ -48,7 +48,7 @@ public class ColorChooserButton extends Button {
      * Color chooser button binding listener list.
      */
     private static class ColorChooserButtonBindingListenerList extends
-        WTKListenerList<ColorChooserButtonBindingListener> implements
+        ListenerList<ColorChooserButtonBindingListener> implements
         ColorChooserButtonBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,

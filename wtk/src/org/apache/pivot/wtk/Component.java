@@ -37,6 +37,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.effects.Decorator;
+import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
  * Top level abstract base class for all components. In MVC terminology, a
@@ -274,7 +275,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentListenerList extends WTKListenerList<ComponentListener> implements
+    private static class ComponentListenerList extends ListenerList<ComponentListener> implements
         ComponentListener {
         @Override
         public void parentChanged(Component component, Container previousParent) {
@@ -380,7 +381,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentStateListenerList extends WTKListenerList<ComponentStateListener>
+    private static class ComponentStateListenerList extends ListenerList<ComponentStateListener>
         implements ComponentStateListener {
         @Override
         public void enabledChanged(Component component) {
@@ -398,7 +399,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentDecoratorListenerList extends
-        WTKListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
+        ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
         @Override
         public void decoratorInserted(Component component, int index) {
             for (ComponentDecoratorListener listener : this) {
@@ -421,7 +422,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentStyleListenerList extends WTKListenerList<ComponentStyleListener>
+    private static class ComponentStyleListenerList extends ListenerList<ComponentStyleListener>
         implements ComponentStyleListener {
         @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
@@ -431,7 +432,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentMouseListenerList extends WTKListenerList<ComponentMouseListener>
+    private static class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
         implements ComponentMouseListener {
         @Override
         public boolean mouseMove(Component component, int x, int y) {
@@ -460,7 +461,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentMouseButtonListenerList extends
-        WTKListenerList<ComponentMouseButtonListener> implements ComponentMouseButtonListener {
+        ListenerList<ComponentMouseButtonListener> implements ComponentMouseButtonListener {
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
             boolean consumed = false;
@@ -496,7 +497,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentMouseWheelListenerList extends
-        WTKListenerList<ComponentMouseWheelListener> implements ComponentMouseWheelListener {
+        ListenerList<ComponentMouseWheelListener> implements ComponentMouseWheelListener {
         @Override
         public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
@@ -511,7 +512,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentKeyListenerList extends WTKListenerList<ComponentKeyListener>
+    private static class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
         implements ComponentKeyListener {
         @Override
         public boolean keyTyped(Component component, char character) {
@@ -549,7 +550,7 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     private static class ComponentTooltipListenerList extends
-        WTKListenerList<ComponentTooltipListener> implements ComponentTooltipListener {
+        ListenerList<ComponentTooltipListener> implements ComponentTooltipListener {
         @Override
         public void tooltipTriggered(Component component, int x, int y) {
             for (ComponentTooltipListener listener : this) {
@@ -558,7 +559,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentDataListenerList extends WTKListenerList<ComponentDataListener>
+    private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
         implements ComponentDataListener {
         @Override
         public void valueAdded(Component component, String key) {
@@ -582,7 +583,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentClassListenerList extends WTKListenerList<ComponentClassListener>
+    private static class ComponentClassListenerList extends ListenerList<ComponentClassListener>
         implements ComponentClassListener {
         @Override
         public void focusedComponentChanged(Component previousFocusedComponent) {
@@ -2771,12 +2772,26 @@ public abstract class Component implements ConstrainedVisual {
         return consumed;
     }
 
+    /**
+     * Returns the input method listener for this component,
+     * which will reside in the skin, so defer to the skin class.
+     *
+     * @return The input method listener (if any) for this
+     * component.
+     */
+    public TextInputMethodListener getTextInputMethodListener() {
+System.out.println("Component.getTextInputMethodListener() called");
+        return ((ComponentSkin)getSkin()).getTextInputMethodListener();
+    }
+
     @Override
     public String toString() {
-        String s = this.getClass().getName();
+        String s;
 
         if (automationID != null) {
-            s += "#" + automationID;
+            s = this.getClass().getName() + "#" + automationID;
+        } else {
+            s = super.toString();
         }
 
         return s;
