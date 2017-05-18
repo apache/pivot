@@ -31,6 +31,7 @@ import java.awt.geom.Rectangle2D;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -513,22 +514,11 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param font The new font for the text.
      */
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
 
-        int missingGlyphCode = font.getMissingGlyphCode();
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-
-        GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
-            new int[] { missingGlyphCode });
-        Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
-
-        Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
-        averageCharacterSize = new Dimensions((int) Math.ceil(textBounds.getWidth()),
-            (int) Math.ceil(maxCharBounds.getHeight()));
+        averageCharacterSize = GraphicsUtilities.getAverageCharacterSize(font);
 
         invalidateComponent();
     }
@@ -539,9 +529,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(decodeFont(font));
     }
@@ -552,9 +540,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(Theme.deriveFont(font));
     }

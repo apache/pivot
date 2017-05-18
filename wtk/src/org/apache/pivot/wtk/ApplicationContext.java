@@ -22,6 +22,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.PrintGraphics;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
@@ -39,9 +40,12 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.font.TextHitInfo;
+import java.awt.im.InputMethodRequests;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.awt.print.PrinterGraphics;
@@ -52,6 +56,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.AttributedCharacterIterator;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
@@ -298,10 +303,108 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             }
         };
 
+        private transient TextInputMethodListener textInputMethodListener = new TextInputMethodListener() {
+
+            private TextInputMethodListener getCurrentListener() {
+                Component focusedComponent = Component.getFocusedComponent();
+                if (focusedComponent != null) {
+                    return focusedComponent.getTextInputMethodListener();
+                }
+                return null;
+            }
+
+            @Override
+            public AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.cancelLatestCommittedText(attributes);
+                }
+                return null;
+            }
+
+            @Override
+            public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.getCommittedText(beginIndex, endIndex, attributes);
+                }
+                return null;
+            }
+
+            @Override
+            public int getCommittedTextLength() {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.getCommittedTextLength();
+                }
+                return 0;
+            }
+
+            @Override
+            public int getInsertPositionOffset() {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.getInsertPositionOffset();
+                }
+                return 0;
+            }
+
+            @Override
+            public TextHitInfo getLocationOffset(int x, int y) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.getLocationOffset(x, y);
+                }
+                return null;
+            }
+
+            @Override
+            public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.getSelectedText(attributes);
+                }
+                return null;
+            }
+
+            @Override
+            public Rectangle getTextLocation(TextHitInfo offset) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    return listener.getTextLocation(offset);
+                }
+                return new Rectangle();
+            }
+
+            @Override
+            public void inputMethodTextChanged(InputMethodEvent event) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    listener.inputMethodTextChanged(event);
+                }
+            }
+
+            @Override
+            public void caretPositionChanged(InputMethodEvent event) {
+                TextInputMethodListener listener = getCurrentListener();
+                if (listener != null) {
+                    listener.caretPositionChanged(event);
+                }
+            }
+
+        };
+
+        @Override
+        public InputMethodRequests getInputMethodRequests() {
+            return textInputMethodListener;
+        }
+
         public DisplayHost() {
             enableEvents(AWTEvent.COMPONENT_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK
                 | AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK
                 | AWTEvent.MOUSE_WHEEL_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
+            enableInputMethods(true);
+            addInputMethodListener(textInputMethodListener);
 
             try {
                 System.setProperty("sun.awt.noerasebackground", "true");
@@ -893,6 +996,11 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                     break;
                 }
             }
+        }
+
+        @Override
+        protected void processInputMethodEvent(InputMethodEvent event) {
+            super.processInputMethodEvent(event);
         }
 
         @Override
@@ -1922,6 +2030,54 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         } catch (Throwable throwable) {
             System.err.println("Unable to schedule callback: " + throwable);
         }
+
+        return scheduledCallback;
+    }
+
+    /**
+     * Runs a task and then schedules it for repeated execution.
+     * The task will be executed on the UI thread and will begin
+     * executing immediately.
+     *
+     * @param callback The task to execute.
+     * @param period The interval at which the task will be repeated (in
+     * milliseconds).
+     * @return The callback object.
+     */
+    public static ScheduledCallback runAndScheduleRecurringCallback(Runnable callback, long period) {
+        return runAndScheduleRecurringCallback(callback, 0, period);
+    }
+
+    /**
+     * Runs a task and then schedules it for repeated execution. The task will be executed on the
+     * UI thread.
+     *
+     * @param callback The task to execute.
+     * @param delay The length of time to wait before the first execution of the
+     * task (milliseconds).
+     * @param period The interval at which the task will be repeated (also in
+     * milliseconds).
+     * @return The callback object.
+     */
+    public static ScheduledCallback runAndScheduleRecurringCallback(Runnable callback, long delay,
+        long period) {
+
+        ScheduledCallback scheduledCallback = new ScheduledCallback(callback);
+
+        // TODO This is a workaround for a potential OS X bug; revisit
+        try {
+            try {
+                timer.schedule(scheduledCallback, delay, period);
+            } catch (IllegalStateException exception) {
+                createTimer();
+                timer.schedule(scheduledCallback, delay, period);
+            }
+        } catch (Throwable throwable) {
+            System.err.println("Unable to schedule callback: " + throwable);
+        }
+
+        // Before returning, run the task once to start things off
+        callback.run();
 
         return scheduledCallback;
     }

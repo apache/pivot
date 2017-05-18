@@ -24,14 +24,20 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.event.InputMethodEvent;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
+import java.awt.font.TextLayout;
 import java.awt.font.LineMetrics;
+import java.awt.font.TextHitInfo;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.text.CharSequenceCharacterIterator;
+import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CompositeIterator;
+import org.apache.pivot.util.StringUtils;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
@@ -51,6 +57,7 @@ import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.TextInputListener;
+import org.apache.pivot.wtk.TextInputMethodListener;
 import org.apache.pivot.wtk.TextInputSelectionListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
@@ -62,6 +69,7 @@ import org.apache.pivot.wtk.validation.Validator;
  */
 public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin, TextInputListener,
     TextInputContentListener, TextInputSelectionListener {
+
     private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
@@ -110,7 +118,105 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
     }
 
-    private GlyphVector glyphVector = null;
+    /**
+     * Private class that handles interaction with the Input Method Editor,
+     * including requests and events.
+     */
+    private class TextInputMethodHandler extends TextInputMethodListener.Adapter {
+
+        @Override
+        public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+            TextInput textInput = (TextInput)getComponent();
+            return new AttributedStringCharacterIterator(textInput.getText(), beginIndex, endIndex, attributes);
+        }
+
+        @Override
+        public int getCommittedTextLength() {
+            TextInput textInput = (TextInput)getComponent();
+            return textInput.getCharacterCount();
+        }
+
+        @Override
+        public int getInsertPositionOffset() {
+            TextInput textInput = (TextInput)getComponent();
+            return textInput.getSelectionStart();
+        }
+
+        @Override
+        public TextHitInfo getLocationOffset(int x, int y) {
+System.out.println("TextInputSkin.getLocationOffset called");
+            return null;
+        }
+
+        @Override
+        public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+            TextInput textInput = (TextInput)getComponent();
+            return new AttributedStringCharacterIterator(textInput.getSelectedText(), attributes);
+        }
+
+        @Override
+        public Rectangle getTextLocation(TextHitInfo offset) {
+            if (composedText == null) {
+                return caret;
+            } else {
+                // The offset should be into the composed text, not the whole text
+                if (composedText.getEndIndex() == 0) {
+                    return new Rectangle();
+                } else {
+                    FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+                    TextLayout layout = new TextLayout(composedText, fontRenderContext);
+                    Shape caretShape = layout.getCaretShape(offset);
+                    return caretShape.getBounds();
+                }
+            }
+        }
+
+        private String getCommittedText(AttributedCharacterIterator fullTextIter, int count) {
+            StringBuilder buf = new StringBuilder(count);
+            buf.setLength(count);
+            if (fullTextIter != null) {
+                char ch = fullTextIter.first();
+                for (int i = 0; i < count; i++) {
+                    buf.setCharAt(i, ch);
+                    ch = fullTextIter.next();
+                }
+            }
+            return buf.toString();
+        }
+
+        private AttributedStringCharacterIterator getComposedText(AttributedCharacterIterator fullTextIter, int start) {
+            return fullTextIter != null ?
+                new AttributedStringCharacterIterator(fullTextIter, start, fullTextIter.getEndIndex()) :
+                null;
+        }
+
+        @Override
+        public void inputMethodTextChanged(InputMethodEvent event) {
+            TextInput textInput = (TextInput)getComponent();
+            AttributedCharacterIterator iter = event.getText();
+            // TODO: IS THIS RIGHT??  Just ignore empty text changes
+            if (iter != null) {
+                int endOfCommittedText = event.getCommittedCharacterCount();
+                textInput.insertText(getCommittedText(iter, endOfCommittedText), textInput.getSelectionStart());
+                composedText = getComposedText(iter, endOfCommittedText);
+                // TODO: do we need to do this? should this be the total length?
+                //textInput.setSelection(endOfCommittedText, 0);
+                layout();
+                repaintComponent();
+            }
+        }
+
+        @Override
+        public void caretPositionChanged(InputMethodEvent event) {
+System.out.format("TextInputSkin.caretPositionChanged called: event=%1$s%n", event);
+            TextInput textInput = (TextInput)getComponent();
+System.out.format("\tCARET_POSITION_CHANGED%n");
+            // TODO:  so far I have not seen this called, so ??? 
+        }
+
+    }
+
+    private TextLayout textLayout = null;
 
     private int anchor = -1;
     private Rectangle caret = new Rectangle();
@@ -152,6 +258,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private HorizontalAlignment horizontalAlignment;
 
     private Dimensions averageCharacterSize;
+
+    private TextInputMethodHandler textInputMethodHandler = new TextInputMethodHandler();
+    private AttributedStringCharacterIterator composedText = null;
+
 
     private static final int SCROLL_RATE = 50;
     private static final char BULLET = 0x2022;
@@ -226,47 +336,70 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return baseline;
     }
 
+    private AttributedCharacterIterator getCharIterator(TextInput textInput, int start, int end) {
+        CharSequence characters;
+        int num = end - start;
+        if (textInput.isPassword()) {
+            characters = StringUtils.fromNChars(BULLET, num);
+        } else {
+            if (num == textInput.getCharacterCount()) {
+                characters = textInput.getCharacters();
+            } else {
+                characters = textInput.getCharacters(start, end);
+            }
+        }
+        return new AttributedStringCharacterIterator(characters, font);
+    }
+
     @Override
     public void layout() {
         TextInput textInput = (TextInput) getComponent();
 
-        glyphVector = null;
+        textLayout = null;
 
         int n = textInput.getCharacterCount();
-        if (n > 0) {
-            CharSequence characters;
-            if (textInput.isPassword()) {
-                StringBuilder passwordBuilder = new StringBuilder(n);
-                for (int i = 0; i < n; i++) {
-                    passwordBuilder.append(BULLET);
-                }
+        if (n > 0 || composedText != null) {
+            AttributedCharacterIterator text = null;
 
-                characters = passwordBuilder;
+            if (n > 0) {
+                int insertPos = textInput.getSelectionStart();
+                if (composedText == null) {
+                    text = getCharIterator(textInput, 0, n);
+                } else if (insertPos == n) {
+                    // The composed text position is the end of the committed text
+                    text = new CompositeIterator(getCharIterator(textInput, 0, n), composedText);
+                } else if (insertPos == 0) {
+                    text = new CompositeIterator(composedText, getCharIterator(textInput, 0, n));
+                } else {
+                    // The composed text is somewhere in the middle of the text
+                    text = new CompositeIterator(
+                            getCharIterator(textInput, 0, insertPos),
+                            composedText,
+                            getCharIterator(textInput, insertPos, n));
+                }
             } else {
-                characters = textInput.getCharacters();
+                text = composedText;
             }
 
-            CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(characters);
-
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            glyphVector = font.createGlyphVector(fontRenderContext, ci);
-
-            Rectangle2D textBounds = glyphVector.getLogicalBounds();
+            textLayout = new TextLayout(text, fontRenderContext);
+            Rectangle2D textBounds = textLayout.getBounds();
             int textWidth = (int) textBounds.getWidth();
             int width = getWidth();
 
             if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
                 // The right edge of the text is less than the right inset;
-                // align
-                // the text's right edge with the inset
+                // align the text's right edge with the inset
                 scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
             } else {
-                // Scroll lead selection to visible
+                // Scroll selection start to visible
                 int selectionStart = textInput.getSelectionStart();
                 if (selectionStart <= n && textInput.isFocused()) {
                     scrollCharacterToVisible(selectionStart);
                 }
             }
+        } else {
+            scrollLeft = 0;
         }
 
         updateSelection();
@@ -280,16 +413,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 break;
             case CENTER: {
                 TextInput textInput = (TextInput) getComponent();
-                double txtWidth = glyphVector == null ? 0
-                    : glyphVector.getLogicalBounds().getWidth();
+                double txtWidth = textLayout == null ? 0
+                    : textLayout.getBounds().getWidth();
                 int availWidth = textInput.getWidth() - (padding.left + padding.right + 2);
                 alignmentDeltaX = (int) (availWidth - txtWidth) / 2;
                 break;
             }
             case RIGHT: {
                 TextInput textInput = (TextInput) getComponent();
-                double txtWidth = glyphVector == null ? 0
-                    : glyphVector.getLogicalBounds().getWidth();
+                double txtWidth = textLayout == null ? 0
+                    : textLayout.getBounds().getWidth();
                 int availWidth = textInput.getWidth()
                     - (padding.left + padding.right + 2 + caret.width);
                 alignmentDeltaX = (int) (availWidth - txtWidth);
@@ -355,13 +488,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int alignmentDeltaX = getAlignmentDeltaX();
         int xpos = padding.left - scrollLeft + 1 + alignmentDeltaX;
 
-        if (glyphVector == null && prompt != null) {
-            graphics.setFont(font);
-            graphics.setColor(promptColor);
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                fontRenderContext.getAntiAliasingHint());
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                fontRenderContext.getFractionalMetricsHint());
+        if (textLayout == null && prompt != null) {
+            GraphicsUtilities.prepareForText(graphics, fontRenderContext, font, promptColor);
             graphics.drawString(prompt, xpos, (height - textHeight) / 2 + ascent);
 
             caretColor = color;
@@ -381,13 +509,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             caretColor = colorLocal;
 
-            if (glyphVector != null) {
+            if (textLayout != null) {
                 graphics.setFont(font);
+
+                float ypos = (height - textHeight) / 2 + ascent;
 
                 if (selection == null) {
                     // Paint the text
                     graphics.setColor(colorLocal);
-                    graphics.drawGlyphVector(glyphVector, xpos, (height - textHeight) / 2 + ascent);
+                    textLayout.draw(graphics, xpos, ypos);
                 } else {
                     // Paint the unselected text
                     Area unselectedArea = new Area();
@@ -397,8 +527,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Graphics2D textGraphics = (Graphics2D) graphics.create();
                     textGraphics.setColor(colorLocal);
                     textGraphics.clip(unselectedArea);
-                    textGraphics.drawGlyphVector(glyphVector, xpos, (height - textHeight) / 2
-                        + ascent);
+                    textLayout.draw(textGraphics, xpos, ypos);
                     textGraphics.dispose();
 
                     // Paint the selection
@@ -419,8 +548,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     Graphics2D selectedTextGraphics = (Graphics2D) graphics.create();
                     selectedTextGraphics.setColor(selectionColorLocal);
                     selectedTextGraphics.clip(selection.getBounds());
-                    selectedTextGraphics.drawGlyphVector(glyphVector, xpos, (height - textHeight)
-                        / 2 + ascent);
+                    textLayout.draw(selectedTextGraphics, xpos, ypos);
                     selectedTextGraphics.dispose();
                 }
             }
@@ -439,68 +567,59 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
     }
 
+    /**
+     * Calculate the text insertion point given the mouse X-position relative
+     * to the component's X-position.
+     * <p> Note: if the given X-position is on the right-hand side of a glyph
+     * then the insertion point will be after that character, while an X-position
+     * within the left half of a glyph will position the insert before that
+     * character.
+     *
+     * @param x The relative X-position.
+     * @return The offset into the text determined by the X-position.
+     */
     @Override
     public int getInsertionPoint(int x) {
         int offset = -1;
 
-        if (glyphVector == null) {
+        if (textLayout == null) {
             offset = 0;
         } else {
             // Translate to glyph coordinates
-            int xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
+            float xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
 
-            Rectangle2D textBounds = glyphVector.getLogicalBounds();
-
-            if (xt < 0) {
-                offset = 0;
-            } else if (xt > textBounds.getWidth()) {
-                offset = glyphVector.getNumGlyphs();
-            } else {
-                int n = glyphVector.getNumGlyphs();
-                int i = 0;
-                while (i < n) {
-                    Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
-                    Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-
-                    float glyphX = (float) glyphBounds2D.getX();
-                    float glyphWidth = (float) glyphBounds2D.getWidth();
-                    if (xt >= glyphX && xt < glyphX + glyphWidth) {
-
-                        if (xt - glyphX > glyphWidth / 2) {
-                            // The user clicked on the right half of the
-                            // character; select
-                            // the next character
-                            i++;
-                        }
-
-                        offset = i;
-                        break;
-                    }
-
-                    i++;
-                }
-            }
+            TextHitInfo hitInfo = textLayout.hitTestChar(xt, 0);
+            offset = hitInfo.getInsertionIndex();
         }
 
         return offset;
     }
 
+    /**
+     * Determine the bounding box of the character at the given index
+     * in the text in coordinates relative to the entire component (that is,
+     * adding in the insets and padding, etc.).
+     *
+     * @param index The 0-based index of the character to inquire about.
+     * @return The bounding box within the component where that character
+     * will be displayed, or {@code null} if there is no text.
+     */
     @Override
     public Bounds getCharacterBounds(int index) {
         Bounds characterBounds = null;
 
-        if (glyphVector != null) {
+        if (textLayout != null) {
             int x, width;
-            if (index < glyphVector.getNumGlyphs()) {
-                Shape glyphBounds = glyphVector.getGlyphLogicalBounds(index);
-                Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
+            if (index < textLayout.getCharacterCount()) {
+                Shape glyphShape = textLayout.getLogicalHighlightShape(index, index + 1);
+                Rectangle2D glyphBounds2D = glyphShape.getBounds2D();
 
                 x = (int) Math.floor(glyphBounds2D.getX());
                 width = (int) Math.ceil(glyphBounds2D.getWidth());
             } else {
                 // This is the terminator character
-                Rectangle2D glyphVectorBounds = glyphVector.getLogicalBounds();
-                x = (int) Math.floor(glyphVectorBounds.getWidth());
+                Rectangle2D textLayoutBounds = textLayout.getBounds();
+                x = (int) Math.floor(textLayoutBounds.getWidth());
                 width = 0;
             }
 
@@ -527,8 +646,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (characterBounds.x < padding.left + 1) {
                 setScrollLeft(glyphX);
             } else if (characterBounds.x + characterBounds.width > width - (padding.right + 1)) {
-                setScrollLeft(glyphX + (padding.left + padding.right + 2) + characterBounds.width
-                    - width);
+                setScrollLeft(glyphX + (padding.left + padding.right + 2) + characterBounds.width - width);
             }
         }
     }
@@ -537,39 +655,33 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return font;
     }
 
+    /**
+     * Set the new font to use to render the text in this component.
+     * <p> Also calculate the {@link #averageCharacterSize} value based
+     * on this font, which will be the width of the "missing glyph code"
+     * and the maximum height of any character in the font.
+     *
+     * @param font The new font to use.
+     * @throws IllegalArgumentException if the <tt>font</tt> argument is <tt>null</tt>.
+     */
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
 
-        int missingGlyphCode = font.getMissingGlyphCode();
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-
-        GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
-            new int[] { missingGlyphCode });
-        Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
-
-        Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
-        averageCharacterSize = new Dimensions((int) Math.ceil(textBounds.getWidth()),
-            (int) Math.ceil(maxCharBounds.getHeight()));
+        averageCharacterSize = GraphicsUtilities.getAverageCharacterSize(font);
 
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(Theme.deriveFont(font));
     }
@@ -579,18 +691,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
+
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         setColor(GraphicsUtilities.decodeColor(color));
     }
@@ -605,18 +714,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setPromptColor(Color promptColor) {
-        if (promptColor == null) {
-            throw new IllegalArgumentException("promptColor is null.");
-        }
+        Utils.checkNull(promptColor, "promptColor");
 
         this.promptColor = promptColor;
+
         repaintComponent();
     }
 
     public final void setPromptColor(String promptColor) {
-        if (promptColor == null) {
-            throw new IllegalArgumentException("promptColor is null.");
-        }
+        Utils.checkNull(promptColor, "promptColor");
 
         setPromptColor(GraphicsUtilities.decodeColor(promptColor));
     }
@@ -631,18 +737,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
+
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
@@ -657,19 +760,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.darken(backgroundColor);
+
         repaintComponent();
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
@@ -684,18 +784,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setInvalidColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "invalidColor");
 
         this.invalidColor = color;
+
         repaintComponent();
     }
 
     public final void setInvalidColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "invalidColor");
 
         setInvalidColor(GraphicsUtilities.decodeColor(color));
     }
@@ -710,19 +807,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setInvalidBackgroundColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "invalidBackgroundColor");
 
         this.invalidBackgroundColor = color;
         invalidBevelColor = TerraTheme.darken(color);
+
         repaintComponent();
     }
 
     public final void setInvalidBackgroundColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("invalidBackgroundColor is null.");
-        }
+        Utils.checkNull(color, "invalidBackgroundColor");
 
         setInvalidBackgroundColor(GraphicsUtilities.decodeColor(color));
     }
@@ -737,19 +831,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
         disabledBevelColor = disabledBackgroundColor;
+
         repaintComponent();
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
@@ -764,18 +855,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
+
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
@@ -790,18 +878,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setDisabledBorderColor(Color disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
+
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
@@ -816,18 +901,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
+
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
@@ -842,18 +924,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
+
         repaintComponent();
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
@@ -868,18 +947,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setInactiveSelectionColor(Color inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
+
         repaintComponent();
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
     }
@@ -894,18 +970,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
+
         repaintComponent();
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
@@ -920,18 +993,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
+
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(new Insets(padding));
     }
@@ -941,17 +1011,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(padding.intValue());
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(Insets.decode(padding));
     }
@@ -961,11 +1027,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setHorizontalAlignment(HorizontalAlignment alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(alignment, "horizontalAlignment");
 
         this.horizontalAlignment = alignment;
+
         invalidateComponent();
     }
 
@@ -1001,12 +1066,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     scrollDirection = (x < 0) ? FocusTraversalDirection.BACKWARD
                         : FocusTraversalDirection.FORWARD;
 
-                    scheduledScrollSelectionCallback = ApplicationContext.scheduleRecurringCallback(
+                    // Run the callback once now to scroll the selection immediately
+                    scheduledScrollSelectionCallback = ApplicationContext.runAndScheduleRecurringCallback(
                         scrollSelectionCallback, SCROLL_RATE);
-
-                    // Run the callback once now to scroll the selection
-                    // immediately
-                    scrollSelectionCallback.run();
                 }
             }
         } else {
@@ -1028,6 +1090,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             anchor = getInsertionPoint(x);
 
+            // TODO: this logic won't work in the presence of composed (but not yet committed) text...
             if (anchor != -1) {
                 if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                     // Select the range
@@ -1074,6 +1137,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         if (button == Mouse.Button.LEFT && count > 1) {
+            // TODO: double click to select the current word, triple click to select all
+            // (like TextArea and TextPane now)
             TextInput textInput = (TextInput) getComponent();
             textInput.selectAll();
         }
@@ -1096,8 +1161,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 if (textInput.getCharacterCount() - selectionLength + 1 > textInput.getMaximumLength()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    // NOTE We explicitly call getSelectionStart() twice here in
-                    // case the remove
+                    // NOTE We explicitly call getSelectionStart() twice here in case the remove
                     // event is vetoed
                     textInput.removeText(textInput.getSelectionStart(), selectionLength);
                     textInput.insertText(Character.toString(character),
@@ -1110,41 +1174,52 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     /**
-     * {@link KeyCode#DELETE DELETE} Delete the character after the caret or the
-     * entire selection if there is one.<br> {@link KeyCode#BACKSPACE BACKSPACE}
-     * Delete the character before the caret or the entire selection if there is
-     * one.<p> {@link KeyCode#HOME HOME} Move the caret to the beginning of the
-     * text. <br> {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} Move
-     * the caret to the beginning of the text.<p> {@link KeyCode#HOME HOME} +
-     * {@link Modifier#SHIFT SHIFT} Select from the caret to the beginning of
-     * the text.<br> {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} +
-     * {@link Modifier#SHIFT SHIFT} Select from the caret to the beginning of
-     * the text.<p> {@link KeyCode#END END} Move the caret to the end of the
-     * text.<br> {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} Move
-     * the caret to the end of the text.<p> {@link KeyCode#END END} +
-     * {@link Modifier#SHIFT SHIFT} Select from the caret to the end of the
-     * text.<br> {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} +
-     * {@link Modifier#SHIFT SHIFT} Select from the caret to the end of the
-     * text.<p> {@link KeyCode#LEFT LEFT} Clear the selection and move the caret
-     * back by one character.<br> {@link KeyCode#LEFT LEFT} +
-     * {@link Modifier#SHIFT SHIFT} Add the previous character to the
-     * selection.<br> {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL}
+     * {@link KeyCode#DELETE DELETE}
+     * Delete the character after the caret or the entire selection if there is one.<br>
+     * {@link KeyCode#BACKSPACE BACKSPACE}
+     * Delete the character before the caret or the entire selection if there is one.
+     * <p> {@link KeyCode#HOME HOME}
+     * Move the caret to the beginning of the text. <br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META}
+     * Move the caret to the beginning of the text.
+     * <p> {@link KeyCode#HOME HOME} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the beginning of the text.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the beginning of the text.
+     * <p> {@link KeyCode#END END}
+     * Move the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META}
+     * Move the caret to the end of the text.
+     * <p> {@link KeyCode#END END} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the end of the text.
+     * <p> {@link KeyCode#LEFT LEFT}
+     * Clear the selection and move the caret back by one character.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#SHIFT SHIFT}
+     * Add the previous character to the selection.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL}
      * Clear the selection and move the caret to the beginning of the text.<br>
-     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL} +
-     * {@link Modifier#SHIFT SHIFT} Add all preceding text to the selection. <p>
-     * {@link KeyCode#RIGHT RIGHT} Clear the selection and move the caret
-     * forward by one character.<br> {@link KeyCode#RIGHT RIGHT} +
-     * {@link Modifier#SHIFT SHIFT} Add the next character to the selection.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} Clear the
-     * selection and move the caret to the end of the text.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} +
-     * {@link Modifier#SHIFT SHIFT} Add all subsequent text to the selection.
-     * <p> CommandModifier + {@link KeyCode#A A} Select all.<br> CommandModifier
-     * + {@link KeyCode#X X} Cut selection to clipboard (if not a password
-     * TextInput).<br> CommandModifier + {@link KeyCode#C C} Copy selection to
-     * clipboard (if not a password TextInput).<br> CommandModifier +
-     * {@link KeyCode#V V} Paste from clipboard.<br> CommandModifier +
-     * {@link KeyCode#Z Z} Undo.
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL} + {@link Modifier#SHIFT SHIFT}
+     * Add all preceding text to the selection.
+     * <p> {@link KeyCode#RIGHT RIGHT}
+     * Clear the selection and move the caret forward by one character.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#SHIFT SHIFT}
+     * Add the next character to the selection.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL}
+     * Clear the selection and move the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} + {@link Modifier#SHIFT SHIFT}
+     * Add all subsequent text to the selection.
+     * <p> CommandModifier + {@link KeyCode#A A}
+     * Select all.<br>
+     * CommandModifier + {@link KeyCode#X X}
+     * Cut selection to clipboard (if not a password TextInput).<br>
+     * CommandModifier + {@link KeyCode#C C}
+     * Copy selection to clipboard (if not a password TextInput).<br>
+     * CommandModifier + {@link KeyCode#V V}
+     * Paste from clipboard.<br>
+     * CommandModifier + {@link KeyCode#Z Z}
+     * Undo.
      *
      * @see Platform#getCommandModifier()
      */
@@ -1559,7 +1634,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (n == 0) {
                 x = padding.left - scrollLeft + 1 + getAlignmentDeltaX();
             } else {
-                Rectangle2D textBounds = glyphVector.getLogicalBounds();
+                Rectangle2D textBounds = textLayout.getBounds();
                 x = (int) Math.ceil(textBounds.getWidth())
                     + (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
             }
@@ -1590,14 +1665,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         if (show) {
             caretOn = true;
-            scheduledBlinkCaretCallback = ApplicationContext.scheduleRecurringCallback(
-                blinkCaretCallback, Platform.getCursorBlinkRate());
-
             // Run the callback once now to show the cursor immediately
-            blinkCaretCallback.run();
+            scheduledBlinkCaretCallback = ApplicationContext.runAndScheduleRecurringCallback(
+                blinkCaretCallback, Platform.getCursorBlinkRate());
         } else {
             scheduledBlinkCaretCallback = null;
         }
+    }
+
+    @Override
+    public TextInputMethodListener getTextInputMethodListener() {
+        return textInputMethodHandler;
     }
 
 }

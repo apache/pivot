@@ -2772,6 +2772,17 @@ public abstract class Component implements ConstrainedVisual {
         return consumed;
     }
 
+    /**
+     * Returns the input method listener for this component,
+     * which will reside in the skin, so defer to the skin class.
+     *
+     * @return The input method listener (if any) for this
+     * component.
+     */
+    public TextInputMethodListener getTextInputMethodListener() {
+        return ((ComponentSkin)getSkin()).getTextInputMethodListener();
+    }
+
     @Override
     public String toString() {
         String s;

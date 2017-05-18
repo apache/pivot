@@ -22,6 +22,7 @@ import java.io.IOException;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.validation.Validator;
 
@@ -327,9 +328,7 @@ public class TextInput extends Component {
     }
 
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "text");
 
         if (text.length() > maximumLength) {
             throw new IllegalArgumentException("Text length is greater than maximum length.");
@@ -367,9 +366,7 @@ public class TextInput extends Component {
     }
 
     private void insertText(CharSequence text, int index, boolean addToEditHistory) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "text");
 
         if (characters.length() + text.length() > maximumLength) {
             throw new IllegalArgumentException("Insertion of text would exceed maximum length.");
@@ -467,6 +464,16 @@ public class TextInput extends Component {
      */
     public CharSequence getCharacters() {
         return characters;
+    }
+
+    /**
+     * @return A (sub) character sequence representing the contents between
+     * the given indices.
+     * @param start The start of the sequence (inclusive).
+     * @param end The end of the sequence (exclusive).
+     */
+    public CharSequence getCharacters(int start, int end) {
+        return characters.subSequence(start, end);
     }
 
     /**
@@ -612,9 +619,7 @@ public class TextInput extends Component {
      * @throws IllegalArgumentException if the selection span is {@code null}.
      */
     public final void setSelection(Span selection) {
-        if (selection == null) {
-            throw new IllegalArgumentException("selection is null.");
-        }
+        Utils.checkNull(selection, "selection");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
     }
@@ -783,9 +788,7 @@ public class TextInput extends Component {
     }
 
     public void setTextBindType(BindType textBindType) {
-        if (textBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(textBindType, "textBindType");
 
         BindType previousTextBindType = this.textBindType;
 

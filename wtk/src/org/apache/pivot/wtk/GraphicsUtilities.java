@@ -17,13 +17,17 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -286,10 +290,8 @@ public final class GraphicsUtilities {
 
         if (width > 0 && height > 0 && thickness > 0) {
             drawLine(rectGraphics, x, y, width, Orientation.HORIZONTAL, thickness);
-            drawLine(rectGraphics, x + width - thickness, y, height, Orientation.VERTICAL,
-                thickness);
-            drawLine(rectGraphics, x, y + height - thickness, width, Orientation.HORIZONTAL,
-                thickness);
+            drawLine(rectGraphics, x + width - thickness, y, height, Orientation.VERTICAL, thickness);
+            drawLine(rectGraphics, x, y + height - thickness, width, Orientation.HORIZONTAL, thickness);
             drawLine(rectGraphics, x, y, height, Orientation.VERTICAL, thickness);
         }
 
@@ -301,13 +303,17 @@ public final class GraphicsUtilities {
     /**
      * Interprets a string as a color value.
      *
-     * @param value One of the following forms: <ul> <li>0xdddddddd - 8
-     * hexadecimal digits, specifying 8 bits each of red, green, and blue,
-     * followed by 8 bits of alpha.</li> <li>#dddddd - 6 hexadecimal digits,
-     * specifying 8 bits each of red, green, and blue. <li>Any of the names of
-     * the static colors in the Java {@link Color} class.</li>
-     * <li>Any of the CSS3/X11 color names from here: http://www.w3.org/TR/css3-color/
-     * (except the Java color names will be accepted first if there is a conflict).</li></ul>
+     * @param value One of the following forms:
+     * <ul>
+     * <li>0xdddddddd - 8 hexadecimal digits, specifying 8 bits each of red,
+     * green, and blue, followed by 8 bits of alpha.</li>
+     * <li>#dddddd - 6 hexadecimal digits, specifying 8 bits each of red,
+     * green, and blue.</li>
+     * <li>Any of the names of the static colors in the Java {@link Color} class.</li>
+     * <li>Any of the CSS3/X11 color names from here:
+     * <a href="http://www.w3.org/TR/css3-color/">http://www.w3.org/TR/css3-color/</a>
+     * (except the Java color names will be accepted first if there is a conflict).</li>
+     * </ul>
      * @return A {@link Color} on successful decoding
      * @throws NumberFormatException if the value in the first two cases
      * contains illegal hexadecimal digits.
@@ -371,6 +377,14 @@ public final class GraphicsUtilities {
         return color;
     }
 
+    /**
+     * Generate a full color value given the RGB value along with the alpha
+     * (opacity) value.
+     *
+     * @param rgb The 24-bit red, green, and blue value.
+     * @param alpha The opacity value (0.0 - 1.0).
+     * @return The full color value from these two parts.
+     */
     public static Color getColor(int rgb, float alpha) {
         float red = ((rgb >> 16) & 0xff) / 255f;
         float green = ((rgb >> 8) & 0xff) / 255f;
@@ -516,4 +530,45 @@ public final class GraphicsUtilities {
 
         return paint;
     }
+
+    /**
+     * Set the context in the given graphics environment for subsequent font drawing.
+     *
+     * @param graphics          The graphics context.
+     * @param fontRenderContext The font rendering context used to get the font drawing hints.
+     * @param font              The font to use.
+     * @param color             The foreground color for the text.
+     */
+    public static void prepareForText(Graphics2D graphics, FontRenderContext fontRenderContext, Font font, Color color) {
+        graphics.setFont(font);
+        graphics.setColor(color);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, fontRenderContext.getAntiAliasingHint());
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, fontRenderContext.getFractionalMetricsHint());
+    }
+
+    /**
+     * Calculate the average character bounds for the given font.
+     * <p> This bounds is the width of the "missing glyph code" and
+     * the maximum character height of any glyph in the font.
+     *
+     * @param font The font in question.
+     * @return The bounding rectangle to use for the average character size.
+     * @see Platform#getFontRenderContext
+     */
+    public static Dimensions getAverageCharacterSize(Font font) {
+        int missingGlyphCode = font.getMissingGlyphCode();
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+        GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
+            new int[] { missingGlyphCode });
+        Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
+
+        Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
+        return new Dimensions(
+            (int) Math.ceil(textBounds.getWidth()),
+            (int) Math.ceil(maxCharBounds.getHeight())
+          );
+    }
+
 }
+

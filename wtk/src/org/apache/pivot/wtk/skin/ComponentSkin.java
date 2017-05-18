@@ -45,6 +45,7 @@ import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
+import org.apache.pivot.wtk.TextInputMethodListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
 
@@ -462,6 +463,18 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
      */
     protected Color defaultForegroundColor() {
         return currentTheme().getDefaultForegroundColor();
+    }
+
+    /**
+     * Returns the input method listener for this component.
+     * <p> Should be overridden by any component's skin that wants
+     * to handle Input Method events (such as <tt>TextInput</tt>).
+     *
+     * @return The input method listener (if any) for this
+     * component.
+     */
+    public TextInputMethodListener getTextInputMethodListener() {
+        return null;
     }
 
 }
