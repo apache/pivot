@@ -25,8 +25,8 @@ import org.apache.pivot.wtk.ListView;
  * the index itself instead of the selected item.  This is a convenience
  * class for users where the data stored is just the index of the item.
  */
-public class ListViewIndexBindMapping implements ListView.ItemBindMapping
-{
+public class ListViewIndexBindMapping implements ListView.ItemBindMapping {
+
 	/**
 	 * Called during <tt>load</tt>, and <tt>value</tt> is what is
 	 * stored in our data object (which is the <tt>Integer</tt>
