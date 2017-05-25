@@ -31,6 +31,7 @@ import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -464,9 +465,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param font The new font to use to render the text.
      */
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
@@ -478,9 +477,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param font A {@linkplain ComponentSkin#decodeFont(String) font specification}.
      */
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(decodeFont(font));
     }
@@ -491,9 +488,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param font A dictionary {@linkplain Theme#deriveFont describing a font}.
      */
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(Theme.deriveFont(font));
     }
@@ -511,9 +506,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param color The new foreground color for the label text.
      */
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
@@ -526,9 +519,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * values recognized by Pivot}.
      */
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         setColor(GraphicsUtilities.decodeColor(color));
     }
@@ -546,9 +537,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param color The new disabled text color.
      */
     public void setDisabledColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "disabledColor");
 
         this.disabledColor = color;
         repaintComponent();
@@ -561,9 +550,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * values recognized by Pivot}.
      */
     public final void setDisabledColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "disabledColor");
 
         setDisabledColor(GraphicsUtilities.decodeColor(color));
     }
@@ -593,9 +580,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
@@ -614,9 +599,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
         repaintComponent();
@@ -627,9 +610,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
         repaintComponent();
@@ -650,9 +631,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param padding The new value of the padding for each edge.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -666,9 +645,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(new Insets(padding));
     }
@@ -690,9 +667,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param padding The new (integer) padding value to use for all edges.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(padding.intValue());
     }
@@ -705,9 +680,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(Insets.decode(padding));
     }
