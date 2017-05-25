@@ -144,7 +144,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         @Override
         public TextHitInfo getLocationOffset(int x, int y) {
-System.out.println("TextInputSkin.getLocationOffset called");
+System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, y);
             return null;
         }
 
@@ -154,19 +154,32 @@ System.out.println("TextInputSkin.getLocationOffset called");
             return new AttributedStringCharacterIterator(textInput.getSelectedText(), attributes);
         }
 
+        private Rectangle offsetToScreen(Rectangle clientRectangle) {
+            TextInput textInput = (TextInput)getComponent();
+            Bounds screenBounds = textInput.getScreenBounds();
+            Rectangle screenRect = new Rectangle(clientRectangle);
+            screenRect.translate(screenBounds.x, screenBounds.y);
+            return screenRect;
+        }
+
         @Override
         public Rectangle getTextLocation(TextHitInfo offset) {
             if (composedText == null) {
-                return caret;
+                return offsetToScreen(caret);
             } else {
                 // The offset should be into the composed text, not the whole text
                 if (composedText.getEndIndex() == 0) {
-                    return new Rectangle();
+                    // TODO: there should be a composed text offset along with the input method event that can be added here....
+                    Rectangle clientRect = new Rectangle(padding.left + 1, padding.top + 1, 0, 0);
+                    return offsetToScreen(clientRect);
                 } else {
                     FontRenderContext fontRenderContext = Platform.getFontRenderContext();
                     TextLayout layout = new TextLayout(composedText, fontRenderContext);
                     Shape caretShape = layout.getCaretShape(offset);
-                    return caretShape.getBounds();
+                    Rectangle caretRect = caretShape.getBounds();
+                    caretRect.translate(padding.left + 1,
+                               padding.top + 1 + (int)Math.ceil(layout.getAscent() + layout.getDescent()));
+                    return offsetToScreen(caretRect);
                 }
             }
         }

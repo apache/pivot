@@ -762,10 +762,10 @@ public abstract class Component implements ConstrainedVisual {
         }
 
         for (Class<?> styleType : styleTypes) {
-            Map<String, ?> stylesLocal = typedStyles.get((Class<? extends Component>) styleType);
+            Map<String, ?> stylesMap = typedStyles.get((Class<? extends Component>) styleType);
 
-            if (stylesLocal != null) {
-                setStyles(stylesLocal);
+            if (stylesMap != null) {
+                setStyles(stylesMap);
             }
         }
 
@@ -1455,8 +1455,28 @@ public abstract class Component implements ConstrainedVisual {
             decoratedBounds = decoratedBounds.union(decorator.getBounds(this));
         }
 
-        return new Bounds(decoratedBounds.x + x, decoratedBounds.y + y, decoratedBounds.width,
-            decoratedBounds.height);
+        return new Bounds(decoratedBounds.x + x, decoratedBounds.y + y,
+                          decoratedBounds.width, decoratedBounds.height);
+    }
+
+    /**
+     * Returns the component's bounding area in screen coordinates.
+     * <p> The result is the result of {@link #getBounds} offset by all the
+     * parent containers of this component, and offset by the application's
+     * {@link Display} on the screen.
+     *
+     * @return The component's bounding area relative to the entire screen.
+     */
+    public Bounds getScreenBounds() {
+        Display display = getDisplay();
+
+        Point displayLocation = mapPointToAncestor(display, 0, 0);
+        ApplicationContext.DisplayHost displayHost = display.getDisplayHost();
+        java.awt.Point hostLocation = display.getHostWindow().getLocationOnScreen();
+
+        return new Bounds(displayLocation.x + displayHost.getX() + hostLocation.x,
+                          displayLocation.y + displayHost.getY() + hostLocation.y,
+                          getWidth(), getHeight());
     }
 
     /**
@@ -1554,21 +1574,18 @@ public abstract class Component implements ConstrainedVisual {
     public Point mapPointToAncestor(final Container ancestor, int xArgument, int yArgument) {
         Utils.checkNull(ancestor, "ancestor");
 
-        int xArgumentMutable = xArgument;
-        int yArgumentMutable = yArgument;
+        int xLocation = xArgument;
+        int yLocation = yArgument;
 
         Point coordinates = null;
 
-        Component component = this;
-
-        while (component != null && coordinates == null) {
+        for (Component component = this; component != null; component = component.getParent()) {
             if (component == ancestor) {
-                coordinates = new Point(xArgumentMutable, yArgumentMutable);
+                coordinates = new Point(xLocation, yLocation);
+                break;
             } else {
-                xArgumentMutable += component.x;
-                yArgumentMutable += component.y;
-
-                component = component.getParent();
+                xLocation += component.x;
+                yLocation += component.y;
             }
         }
 
@@ -1603,20 +1620,18 @@ public abstract class Component implements ConstrainedVisual {
     public Point mapPointFromAncestor(final Container ancestor, int xArgument, int yArgument) {
         Utils.checkNull(ancestor, "ancestor");
 
-        int xArgumentMutable = xArgument;
-        int yArgumentMutable = yArgument;
+        int xLocation = xArgument;
+        int yLocation = yArgument;
 
         Point coordinates = null;
-        Component component = this;
 
-        while (component != null && coordinates == null) {
+        for (Component component = this; component != null; component = component.getParent()) {
             if (component == ancestor) {
-                coordinates = new Point(xArgumentMutable, yArgumentMutable);
+                coordinates = new Point(xLocation, yLocation);
+                break;
             } else {
-                xArgumentMutable -= component.x;
-                yArgumentMutable -= component.y;
-
-                component = component.getParent();
+                xLocation -= component.x;
+                yLocation -= component.y;
             }
         }
 
@@ -1725,8 +1740,8 @@ public abstract class Component implements ConstrainedVisual {
             yOffset += component.y;
 
             if (component instanceof Display) {
-                visibleArea = new Bounds(left - xOffset, top - yOffset, right - left + 1, bottom
-                    - top + 1);
+                visibleArea = new Bounds(left - xOffset, top - yOffset,
+                    right - left + 1, bottom - top + 1);
             }
 
             component = component.getParent();
@@ -1757,10 +1772,10 @@ public abstract class Component implements ConstrainedVisual {
      * @param height The height of the area.
      */
     public void scrollAreaToVisible(int xArgument, int yArgument, int width, int height) {
-        int xArgumentMutable = xArgument;
-        int yArgumentMutable = yArgument;
-        int widthMutable = width;
-        int heightMutable = height;
+        int xLocation = xArgument;
+        int yLocation = yArgument;
+        int widthValue = width;
+        int heightValue = height;
 
         Component component = this;
 
@@ -1774,8 +1789,8 @@ public abstract class Component implements ConstrainedVisual {
 
                     int deltaX = 0;
 
-                    int leftDisplacement = xArgumentMutable - viewportBounds.x;
-                    int rightDisplacement = (xArgumentMutable + widthMutable)
+                    int leftDisplacement = xLocation - viewportBounds.x;
+                    int rightDisplacement = (xLocation + widthValue)
                         - (viewportBounds.x + viewportBounds.width);
 
                     if ((leftDisplacement & rightDisplacement) < 0) {
@@ -1797,17 +1812,17 @@ public abstract class Component implements ConstrainedVisual {
                             Math.max(viewWidth - viewportBounds.width, 0));
                         viewport.setScrollLeft(scrollLeft);
 
-                        xArgumentMutable -= deltaX;
+                        xLocation -= deltaX;
                     }
 
-                    xArgumentMutable = Math.max(xArgumentMutable, viewportBounds.x);
-                    widthMutable = Math.min(widthMutable,
-                        Math.max(viewportBounds.width - (xArgumentMutable - viewportBounds.x), 0));
+                    xLocation = Math.max(xLocation, viewportBounds.x);
+                    widthValue = Math.min(widthValue,
+                        Math.max(viewportBounds.width - (xLocation - viewportBounds.x), 0));
 
                     int deltaY = 0;
 
-                    int topDisplacement = yArgumentMutable - viewportBounds.y;
-                    int bottomDisplacement = (yArgumentMutable + heightMutable)
+                    int topDisplacement = yLocation - viewportBounds.y;
+                    int bottomDisplacement = (yLocation + heightValue)
                         - (viewportBounds.y + viewportBounds.height);
 
                     if ((topDisplacement & bottomDisplacement) < 0) {
@@ -1827,12 +1842,12 @@ public abstract class Component implements ConstrainedVisual {
                             Math.max(viewHeight - viewportBounds.height, 0));
                         viewport.setScrollTop(scrollTop);
 
-                        yArgumentMutable -= deltaY;
+                        yLocation -= deltaY;
                     }
 
-                    yArgumentMutable = Math.max(yArgumentMutable, viewportBounds.y);
-                    heightMutable = Math.min(heightMutable,
-                        Math.max(viewportBounds.height - (yArgumentMutable - viewportBounds.y), 0));
+                    yLocation = Math.max(yLocation, viewportBounds.y);
+                    heightValue = Math.min(heightValue,
+                        Math.max(viewportBounds.height - (yLocation - viewportBounds.y), 0));
                 } catch (UnsupportedOperationException ex) {
                     // If the viewport doesn't support getting the viewport
                     // bounds, we simply act as we would have had the viewport
@@ -1841,8 +1856,8 @@ public abstract class Component implements ConstrainedVisual {
                 }
             }
 
-            xArgumentMutable += component.x;
-            yArgumentMutable += component.y;
+            xLocation += component.x;
+            yLocation += component.y;
 
             component = component.getParent();
         }
@@ -1952,26 +1967,26 @@ public abstract class Component implements ConstrainedVisual {
     public void repaint(int xArgument, int yArgument, int width, int height, boolean immediate) {
         Container.assertEventDispatchThread(this);
         if (parent != null) {
-            int xArgumentMutable = xArgument;
-            int yArgumentMutable = yArgument;
-            int widthMutable = width;
-            int heightMutable = height;
+            int xLocation = xArgument;
+            int yLocation = yArgument;
+            int widthValue = width;
+            int heightValue = height;
 
             // Constrain the repaint area to this component's bounds
-            int top = yArgumentMutable;
-            int left = xArgumentMutable;
-            int bottom = top + heightMutable - 1;
-            int right = left + widthMutable - 1;
+            int top = yLocation;
+            int left = xLocation;
+            int bottom = top + heightValue - 1;
+            int right = left + widthValue - 1;
 
-            xArgumentMutable = Math.max(left, 0);
-            yArgumentMutable = Math.max(top, 0);
-            widthMutable = Math.min(right, getWidth() - 1) - xArgumentMutable + 1;
-            heightMutable = Math.min(bottom, getHeight() - 1) - yArgumentMutable + 1;
+            xLocation = Math.max(left, 0);
+            yLocation = Math.max(top, 0);
+            widthValue = Math.min(right, getWidth() - 1) - xLocation + 1;
+            heightValue = Math.min(bottom, getHeight() - 1) - yLocation + 1;
 
-            if (widthMutable > 0 && heightMutable > 0) {
+            if (widthValue > 0 && heightValue > 0) {
                 // Notify the parent that the region needs updating
-                parent.repaint(xArgumentMutable + this.x, yArgumentMutable + this.y, widthMutable,
-                    heightMutable, immediate);
+                parent.repaint(xLocation + this.x, yLocation + this.y,
+                    widthValue, heightValue, immediate);
 
                 // Repaint any affected decorators
                 for (Decorator decorator : decorators) {
@@ -1979,8 +1994,8 @@ public abstract class Component implements ConstrainedVisual {
 
                     if (!transform.isIdentity()) {
                         // Apply the decorator's transform to the repaint area
-                        Rectangle area = new Rectangle(xArgumentMutable, yArgumentMutable,
-                            widthMutable, heightMutable);
+                        Rectangle area = new Rectangle(xLocation, yLocation,
+                            widthValue, heightValue);
                         Shape transformedShape = transform.createTransformedShape(area);
                         Bounds tranformedBounds = new Bounds(transformedShape.getBounds());
 
@@ -2525,12 +2540,12 @@ public abstract class Component implements ConstrainedVisual {
     public void setStyleName(String styleName) {
         Utils.checkNull(styleName, "styleName");
 
-        Map<String, ?> stylesLocal = namedStyles.get(styleName);
+        Map<String, ?> stylesMap = namedStyles.get(styleName);
 
-        if (stylesLocal == null) {
+        if (stylesMap == null) {
             System.err.println("Named style \"" + styleName + "\" does not exist.");
         } else {
-            setStyles(stylesLocal);
+            setStyles(stylesMap);
         }
     }
 
