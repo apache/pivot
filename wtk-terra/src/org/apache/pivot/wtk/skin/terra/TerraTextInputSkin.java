@@ -156,10 +156,7 @@ System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, 
 
         private Rectangle offsetToScreen(Rectangle clientRectangle) {
             TextInput textInput = (TextInput)getComponent();
-            Bounds screenBounds = textInput.getScreenBounds();
-            Rectangle screenRect = new Rectangle(clientRectangle);
-            screenRect.translate(screenBounds.x, screenBounds.y);
-            return screenRect;
+            return textInput.offsetToScreen(clientRectangle);
         }
 
         @Override
@@ -207,7 +204,6 @@ System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, 
         public void inputMethodTextChanged(InputMethodEvent event) {
             TextInput textInput = (TextInput)getComponent();
             AttributedCharacterIterator iter = event.getText();
-            // TODO: IS THIS RIGHT??  Just ignore empty text changes
             if (iter != null) {
                 int endOfCommittedText = event.getCommittedCharacterCount();
                 textInput.insertText(getCommittedText(iter, endOfCommittedText), textInput.getSelectionStart());
@@ -216,6 +212,8 @@ System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, 
                 //textInput.setSelection(endOfCommittedText, 0);
                 layout();
                 repaintComponent();
+            } else {
+                composedText = null;
             }
         }
 

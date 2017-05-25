@@ -1480,6 +1480,21 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Convert and return a new {@link Rectangle} from component-relative
+     * coordinates to screen-relative.  Uses the {@link #getScreenBounds}
+     * method to accomplish the mapping.
+     *
+     * @param clientRectangle A rectangle in component-relative coordinates.
+     * @return A new object in screen-relative coordinates.
+     */
+    public Rectangle offsetToScreen(Rectangle clientRectangle) {
+        Bounds screenBounds = getScreenBounds();
+        return new Rectangle(clientRectangle.x + screenBounds.x,
+                             clientRectangle.y + screenBounds.y,
+                             clientRectangle.width, clientRectangle.height);
+    }
+
+    /**
      * Determines if the component contains a given location. This method
      * facilitates mouse interaction with non-rectangular components.
      *
