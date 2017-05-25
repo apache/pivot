@@ -61,6 +61,17 @@ public class Utils {
     }
 
     /**
+     * Check if the input argument is {@code null} and throw an
+     * {@link IllegalArgumentException} with an empty message if so.
+     *
+     * @param value The argument value to check for {@code null}.
+     * @throws IllegalArgumentException if the value is {@code null}.
+     */
+    public static void checkNull(Object value) {
+        checkNull(value, null);
+    }
+
+    /**
      * Check if the input string is {@code null} or empty (or all whitespace).
      *
      * @param value The string to check.
