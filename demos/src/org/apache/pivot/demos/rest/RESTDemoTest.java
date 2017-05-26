@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.demos.rest;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -66,7 +67,7 @@ public class RESTDemoTest {
         GetQuery getQuery = new GetQuery(hostname, port, path, secure);
 
         Object result = getQuery.execute();
-        assertEquals(JSON.get(contact, "address.street"), JSON.get(result, "address.street"));
+        assertArrayEquals((Object[])JSON.get(contact, "address.street"), (Object[])JSON.get(result, "address.street"));
         assertEquals(contact, result);
 
         // Update

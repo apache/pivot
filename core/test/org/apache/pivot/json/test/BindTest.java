@@ -71,7 +71,7 @@ public class BindTest {
 
         Object item0 = typedList.get(0);
         assertTrue(item0 instanceof SampleBean2);
-        assertEquals(typedList.get(0).getA(), JSON.get(list, "[0].a"));
+        assertEquals((Integer)typedList.get(0).getA(), (Integer)JSON.get(list, "[0].a"));
     }
 
     /**
@@ -94,7 +94,7 @@ public class BindTest {
 
         Object item0 = typedList.get(0);
         assertTrue(item0 instanceof SampleBean2);
-        assertEquals(typedList.get(0).getA(), JSON.get(list, "[0].a"));
+        assertEquals((Integer)typedList.get(0).getA(), (Integer)JSON.get(list, "[0].a"));
     }
 
     /**
@@ -118,7 +118,7 @@ public class BindTest {
         Object item0 = sequence.get(0);
         assertNotNull(item0);
         // assertTrue(item0 instanceof SampleBean2); // true but superfluous
-        assertEquals(sequence.get(0).getA(), JSON.get(list, "[0].a"));
+        assertEquals((Integer)sequence.get(0).getA(), (Integer)JSON.get(list, "[0].a"));
     }
 
     /**
@@ -212,15 +212,15 @@ public class BindTest {
         SampleBean1 typedMap = (SampleBean1) beanSerializer.readObject(getClass().getResourceAsStream(
             "map.json"));
 
-        assertEquals(typedMap.getA(), JSON.get(map, "a"));
+        assertEquals((Integer)typedMap.getA(), (Integer)JSON.get(map, "a"));
         assertEquals(typedMap.getB(), JSON.get(map, "b"));
         assertEquals(typedMap.getC(), JSON.get(map, "c"));
         assertEquals(typedMap.getD(), JSON.get(map, "d"));
         assertEquals(typedMap.getE(), JSON.get(map, "e"));
-        assertEquals(typedMap.getI().getA(), JSON.get(map, "i.a"));
+        assertEquals((Integer)typedMap.getI().getA(), (Integer)JSON.get(map, "i.a"));
 
         Object k0 = typedMap.getK().get(0);
         assertTrue(k0 instanceof SampleBean2);
-        assertEquals(typedMap.getK().get(0).getA(), JSON.get(map, "k[0].a"));
+        assertEquals((Integer)typedMap.getK().get(0).getA(), (Integer)JSON.get(map, "k[0].a"));
     }
 }
