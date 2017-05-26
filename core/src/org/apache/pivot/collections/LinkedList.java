@@ -301,7 +301,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public void insert(T item, int index) {
-        verifyIndexBounds(index, 0, length);
+        Utils.checkIndexBounds(index, 0, length);
 
         Node<T> next = null;
         Node<T> previous = null;
@@ -341,7 +341,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public T update(int index, T item) {
-        verifyIndexBounds(index, 0, length - 1);
+        Utils.checkIndexBounds(index, 0, length - 1);
 
         // Get the previous item at index
         Node<T> node = getNode(index);
@@ -397,7 +397,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public Sequence<T> remove(int index, int count) {
-        verifyIndexBounds(index, count, 0, length);
+        Utils.checkIndexBounds(index, count, 0, length);
 
         LinkedList<T> removed = new LinkedList<>();
 
@@ -464,7 +464,7 @@ public class LinkedList<T> implements List<T>, Serializable {
 
     @Override
     public T get(int index) {
-        verifyIndexBounds(index, 0, length - 1);
+        Utils.checkIndexBounds(index, 0, length - 1);
 
         Node<T> node = getNode(index);
         return node.item;
@@ -651,29 +651,4 @@ public class LinkedList<T> implements List<T>, Serializable {
         return sb.toString();
     }
 
-    private static void verifyIndexBounds(int index, int start, int end) {
-        if (end < start) {
-            throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
-        }
-        if (index < start || index > end) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
-        }
-    }
-
-    private static void verifyIndexBounds(int index, int count, int start, int end) {
-        if (end < start) {
-            throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
-        }
-        if (count < 0 || start < 0) {
-            throw new IllegalArgumentException("count (" + count + ") < 0 or start (" + start
-                + ") < 0");
-        }
-        if (index < start) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds.");
-        }
-        if (index + count > end) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count
-                + " out of range.");
-        }
-    }
 }

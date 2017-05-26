@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.Utils;
 
 /**
  * Interface representing an ordered sequence of items.
@@ -309,13 +310,8 @@ public interface Sequence<T> {
          */
         @SuppressWarnings("unchecked")
         public static <T> T update(final Sequence<T> sequence, final Path path, final T item) {
-            if (sequence == null) {
-                throw new IllegalArgumentException("sequence is null.");
-            }
-
-            if (path == null) {
-                throw new IllegalArgumentException("path is null.");
-            }
+            Utils.checkNull(sequence, "sequence");
+            Utils.checkNull(path, "path");
 
             int i = 0, n = path.getLength() - 1;
             Sequence<T> sequenceUpdated = sequence;
@@ -356,13 +352,8 @@ public interface Sequence<T> {
          */
         @SuppressWarnings("unchecked")
         public static <T> Sequence<T> remove(final Sequence<T> sequence, final Path path, int count) {
-            if (sequence == null) {
-                throw new IllegalArgumentException("sequence is null.");
-            }
-
-            if (path == null) {
-                throw new IllegalArgumentException("path is null.");
-            }
+            Utils.checkNull(sequence, "sequence");
+            Utils.checkNull(path, "path");
 
             int i = 0, n = path.getLength() - 1;
             Sequence<T> sequenceUpdated = sequence;
@@ -384,13 +375,8 @@ public interface Sequence<T> {
          */
         @SuppressWarnings("unchecked")
         public static <T> T get(final Sequence<T> sequence, final Path path) {
-            if (sequence == null) {
-                throw new IllegalArgumentException("sequence is null.");
-            }
-
-            if (path == null) {
-                throw new IllegalArgumentException("path is null.");
-            }
+            Utils.checkNull(sequence, "sequence");
+            Utils.checkNull(path, "path");
 
             T item;
             if (path.getLength() == 0) {
@@ -419,13 +405,8 @@ public interface Sequence<T> {
          */
         @SuppressWarnings("unchecked")
         public static <T> Path pathOf(final Sequence<T> sequence, final T item) {
-            if (sequence == null) {
-                throw new IllegalArgumentException("sequence is null.");
-            }
-
-            if (item == null) {
-                throw new IllegalArgumentException("item is null.");
-            }
+            Utils.checkNull(sequence, "sequence");
+            Utils.checkNull(item, "item");
 
             Path path = null;
 
@@ -498,7 +479,7 @@ public interface Sequence<T> {
      * @return The index at which the item was added, or <tt>-1</tt> if the item
      * was not added to the sequence.
      */
-    public int add(T item);
+    int add(T item);
 
     /**
      * Inserts an item into the sequence at a specific index.
@@ -507,7 +488,7 @@ public interface Sequence<T> {
      * @param index The index at which the item should be inserted. Must be a
      * value between <tt>0</tt> and <tt>getLength()</tt>.
      */
-    public void insert(T item, int index);
+    void insert(T item, int index);
 
     /**
      * Updates the item at the given index.
@@ -517,7 +498,7 @@ public interface Sequence<T> {
      * index.
      * @return The item that was previously stored at the given index.
      */
-    public T update(int index, T item);
+    T update(int index, T item);
 
     /**
      * Removes the first occurrence of the given item from the sequence.
@@ -527,7 +508,7 @@ public interface Sequence<T> {
      * could not be found.
      * @see #remove(int, int)
      */
-    public int remove(T item);
+    int remove(T item);
 
     /**
      * Removes one or more items from the sequence.
@@ -536,7 +517,7 @@ public interface Sequence<T> {
      * @param count The number of items to remove, beginning with <tt>index</tt>.
      * @return A sequence containing the items that were removed.
      */
-    public Sequence<T> remove(int index, int count);
+    Sequence<T> remove(int index, int count);
 
     /**
      * Retrieves the item at the given index.
@@ -544,7 +525,7 @@ public interface Sequence<T> {
      * @param index The index of the item to retrieve.
      * @return The item at this index in the sequence.
      */
-    public T get(int index);
+    T get(int index);
 
     /**
      * Returns the index of an item in the sequence.
@@ -553,12 +534,13 @@ public interface Sequence<T> {
      * @return The index of first occurrence of the item if it exists in the
      * sequence; <tt>-1</tt>, otherwise.
      */
-    public int indexOf(T item);
+    int indexOf(T item);
 
     /**
      * Returns the length of the sequence.
      *
      * @return The number of items in the sequence.
      */
-    public int getLength();
+    int getLength();
+
 }

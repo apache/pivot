@@ -26,6 +26,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Service;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 
 /**
@@ -64,9 +65,7 @@ public abstract class ChartView extends Component {
         }
 
         public void setKey(String key) {
-            if (key == null) {
-                throw new IllegalArgumentException("key is null.");
-            }
+            Utils.checkNull(key, "key");
 
             String previousKey = this.key;
 
@@ -85,9 +84,7 @@ public abstract class ChartView extends Component {
         }
 
         public void setLabel(String label) {
-            if (label == null) {
-                throw new IllegalArgumentException("label is null.");
-            }
+            Utils.checkNull(label, "label");
 
             String previousLabel = this.label;
 
@@ -163,9 +160,7 @@ public abstract class ChartView extends Component {
 
         @Override
         public void insert(Category category, int index) {
-            if (category == null) {
-                throw new IllegalArgumentException("category is null.");
-            }
+            Utils.checkNull(category, "category");
 
             if (category.getChartView() != null) {
                 throw new IllegalArgumentException(
@@ -478,9 +473,7 @@ public abstract class ChartView extends Component {
 
     @SuppressWarnings("unchecked")
     public void setChartData(List<?> chartData) {
-        if (chartData == null) {
-            throw new IllegalArgumentException("chartData is null.");
-        }
+        Utils.checkNull(chartData, "chartData");
 
         List<?> previousChartData = this.chartData;
 
@@ -501,9 +494,7 @@ public abstract class ChartView extends Component {
     }
 
     public void setSeriesNameKey(String seriesNameKey) {
-        if (seriesNameKey == null) {
-            throw new IllegalArgumentException("seriesNameKey is null.");
-        }
+        Utils.checkNull(seriesNameKey, "seriesNameKey");
 
         String previousSeriesNameKey = this.seriesNameKey;
 

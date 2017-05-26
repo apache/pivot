@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Set} interface that is backed by a hash table.
@@ -35,9 +36,7 @@ public class HashSet<E> implements Set<E>, Serializable {
         private E element = null;
 
         public ElementIterator(Iterator<E> iterator) {
-            if (iterator == null) {
-                throw new IllegalArgumentException("iterator is null.");
-            }
+            Utils.checkNull(iterator, "iterator");
 
             this.iterator = iterator;
         }
