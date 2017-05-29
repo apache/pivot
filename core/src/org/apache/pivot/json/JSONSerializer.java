@@ -47,6 +47,7 @@ import org.apache.pivot.serialization.MacroReader;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from and
@@ -149,13 +150,8 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     public JSONSerializer(Charset charset, Type type) {
-        if (charset == null) {
-            throw new IllegalArgumentException("charset is null.");
-        }
-
-        if (type == null) {
-            throw new IllegalArgumentException("type is null.");
-        }
+        Utils.checkNull(charset, "charset");
+        Utils.checkNull(type, "type");
 
         this.charset = charset;
         this.type = type;
@@ -227,9 +223,7 @@ public class JSONSerializer implements Serializer<Object> {
     @SuppressWarnings("resource")
     @Override
     public Object readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         if (verbose) {
@@ -253,9 +247,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @throws SerializationException for any formatting errors in the data.
      */
     public Object readObject(Reader reader) throws IOException, SerializationException {
-        if (reader == null) {
-            throw new IllegalArgumentException("reader is null.");
-        }
+        Utils.checkNull(reader, "reader");
 
         // Move to the first character
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
@@ -839,9 +831,7 @@ public class JSONSerializer implements Serializer<Object> {
     @Override
     public void writeObject(Object object, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
@@ -867,9 +857,7 @@ public class JSONSerializer implements Serializer<Object> {
     @SuppressWarnings("unchecked")
     public void writeObject(Object object, Writer writer) throws IOException,
         SerializationException {
-        if (writer == null) {
-            throw new IllegalArgumentException("writer is null.");
-        }
+        Utils.checkNull(writer, "writer");
 
         if (object == null) {
             writer.append("null");
