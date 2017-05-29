@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
@@ -353,26 +354,20 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         setFont(Theme.deriveFont(font));
     }
@@ -382,18 +377,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         setColor(GraphicsUtilities.decodeColor(color));
     }
@@ -408,18 +399,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
@@ -434,9 +421,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -445,9 +430,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
@@ -462,9 +445,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
         disabledBevelColor = disabledBackgroundColor;
@@ -472,9 +453,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
@@ -489,9 +468,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         menuPopup.getStyles().put("borderColor", borderColor);
@@ -499,9 +476,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
@@ -516,18 +491,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setDisabledBorderColor(Color disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
@@ -542,18 +513,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(new Insets(padding));
     }
@@ -563,17 +530,13 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(padding.intValue());
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(Insets.decode(padding));
     }
@@ -591,9 +554,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
     }
@@ -613,9 +574,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setMinimumAspectRatio(Number minumumAspectRatio) {
-        if (minumumAspectRatio == null) {
-            throw new IllegalArgumentException("minumumAspectRatio is null.");
-        }
+        Utils.checkNull(minumumAspectRatio, "minumumAspectRatio");
 
         setMinimumAspectRatio(minumumAspectRatio.floatValue());
     }
@@ -635,9 +594,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setMaximumAspectRatio(Number maximumAspectRatio) {
-        if (maximumAspectRatio == null) {
-            throw new IllegalArgumentException("maximumAspectRatio is null.");
-        }
+        Utils.checkNull(maximumAspectRatio, "maximumAspectRatio");
 
         setMaximumAspectRatio(maximumAspectRatio.floatValue());
     }
@@ -657,19 +614,19 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public int getCloseTransitionDuration() {
-        return ((Integer) menuPopup.getStyles().get("closeTransitionDuration")).intValue();
+        return menuPopup.getStyles().getIntValue("closeTransitionDuration");
     }
 
     public void setCloseTransitionDuration(int closeTransitionDuration) {
-        menuPopup.getStyles().put("closeTransitionDuration", Integer.valueOf(closeTransitionDuration));
+        menuPopup.getStyles().putIntValue("closeTransitionDuration", closeTransitionDuration);
     }
 
     public int getCloseTransitionRate() {
-        return ((Integer) menuPopup.getStyles().get("closeTransitionRate")).intValue();
+        return menuPopup.getStyles().getIntValue("closeTransitionRate");
     }
 
     public void setCloseTransitionRate(int closeTransitionRate) {
-        menuPopup.getStyles().put("closeTransitionRate", Integer.valueOf(closeTransitionRate));
+        menuPopup.getStyles().putIntValue("closeTransitionRate", closeTransitionRate);
     }
 
     @Override

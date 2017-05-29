@@ -27,6 +27,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
@@ -604,7 +605,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         tabButtonBoxPane.getStyles().put("fill", new Boolean(true));
 
         tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        tabButtonPanorama.getStyles().put("buttonPadding", Integer.valueOf(6));
+        tabButtonPanorama.getStyles().putIntValue("buttonPadding", 6);
         tabButtonPanorama.setView(tabButtonBoxPane);
 
         tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
@@ -1155,9 +1156,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setActiveTabColor(Color activeTabColor) {
-        if (activeTabColor == null) {
-            throw new IllegalArgumentException("activeTabColor is null.");
-        }
+        Utils.checkNull(activeTabColor, "activeTabColor");
 
         this.activeTabColor = activeTabColor;
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
@@ -1165,11 +1164,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setActiveTabColor(String activeTabColor) {
-        if (activeTabColor == null) {
-            throw new IllegalArgumentException("activeTabColor is null.");
-        }
-
-        setActiveTabColor(GraphicsUtilities.decodeColor(activeTabColor));
+        setActiveTabColor(GraphicsUtilities.decodeColor(activeTabColor, "activeTabColor"));
     }
 
     public final void setActiveTabColor(int activeTabColor) {
@@ -1182,9 +1177,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setInactiveTabColor(Color inactiveTabColor) {
-        if (inactiveTabColor == null) {
-            throw new IllegalArgumentException("inactiveTabColor is null.");
-        }
+        Utils.checkNull(inactiveTabColor, "inactiveTabColor");
 
         this.inactiveTabColor = inactiveTabColor;
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
@@ -1192,11 +1185,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setInactiveTabColor(String inactiveTabColor) {
-        if (inactiveTabColor == null) {
-            throw new IllegalArgumentException("inactiveTabColor is null.");
-        }
-
-        setInactiveTabColor(GraphicsUtilities.decodeColor(inactiveTabColor));
+        setInactiveTabColor(GraphicsUtilities.decodeColor(inactiveTabColor, "inactiveTabColor"));
     }
 
     public final void setInactiveTabColor(int inactiveTabColor) {
@@ -1209,9 +1198,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
@@ -1219,11 +1206,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -1236,20 +1219,14 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setInactiveBorderColor(Color inactiveBorderColor) {
-        if (inactiveBorderColor == null) {
-            throw new IllegalArgumentException("inactiveBorderColor is null.");
-        }
+        Utils.checkNull(inactiveBorderColor, "inactiveBorderColor");
 
         this.inactiveBorderColor = inactiveBorderColor;
         repaintComponent();
     }
 
     public final void setInactiveBorderColor(String inactiveBorderColor) {
-        if (inactiveBorderColor == null) {
-            throw new IllegalArgumentException("inactiveBorderColor is null.");
-        }
-
-        setInactiveBorderColor(GraphicsUtilities.decodeColor(inactiveBorderColor));
+        setInactiveBorderColor(GraphicsUtilities.decodeColor(inactiveBorderColor, "inactiveBorderColor"));
     }
 
     public final void setInactiveBorderColor(int inactiveBorderColor) {
@@ -1262,19 +1239,13 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -1283,18 +1254,12 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(padding.intValue());
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -1303,27 +1268,17 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setButtonFont(Font buttonFont) {
-        if (buttonFont == null) {
-            throw new IllegalArgumentException("buttonFont is null.");
-        }
+        Utils.checkNull(buttonFont, "buttonFont");
 
         this.buttonFont = buttonFont;
         invalidateComponent();
     }
 
     public final void setButtonFont(String buttonFont) {
-        if (buttonFont == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setButtonFont(decodeFont(buttonFont));
     }
 
     public final void setButtonFont(Dictionary<String, ?> buttonFont) {
-        if (buttonFont == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setButtonFont(Theme.deriveFont(buttonFont));
     }
 
@@ -1332,20 +1287,14 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setButtonColor(Color buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
+        Utils.checkNull(buttonColor, "buttonColor");
 
         this.buttonColor = buttonColor;
         repaintComponent();
     }
 
     public final void setButtonColor(String buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
-
-        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
     }
 
     public final void setButtonColor(int buttonColor) {
@@ -1358,9 +1307,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setButtonPadding(Insets buttonPadding) {
-        if (buttonPadding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
+        Utils.checkNull(buttonPadding, "buttonPadding");
 
         this.buttonPadding = buttonPadding;
         invalidateComponent();
@@ -1370,10 +1317,6 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setButtonPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
-
         setButtonPadding(new Insets(padding));
     }
 
@@ -1382,27 +1325,21 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setButtonPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setButtonPadding(padding.intValue());
     }
 
     public final void setButtonPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
-
         setButtonPadding(Insets.decode(padding));
     }
 
     public int getButtonSpacing() {
-        return ((Integer) tabButtonBoxPane.getStyles().get("spacing")).intValue();
+        return tabButtonBoxPane.getStyles().getIntValue("spacing");
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        tabButtonBoxPane.getStyles().put("spacing", Integer.valueOf(buttonSpacing));
+        tabButtonBoxPane.getStyles().putIntValue("spacing", buttonSpacing);
     }
 
     public final void setButtonCornerRadius(int buttonCornerRadius) {
@@ -1410,17 +1347,13 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setButtonCornerRadius(Number radius) {
-        if (radius == null) {
-            throw new IllegalArgumentException("buttonCornerRadius is null.");
-        }
+        Utils.checkNull(radius, "buttonCornerRadius");
 
         setButtonCornerRadius(radius.intValue());
     }
 
     public final void setButtonCornerRadius(String radius) {
-        if (radius == null) {
-            throw new IllegalArgumentException("buttonCornerRadius is null.");
-        }
+        Utils.checkNullOrEmpty(radius, "buttonCornerRadius");
 
         setButtonCornerRadius(Integer.valueOf(radius));
     }
@@ -1430,9 +1363,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setTabOrientation(Orientation tabOrientation) {
-        if (tabOrientation == null) {
-            throw new IllegalArgumentException("tabOrientation is null.");
-        }
+        Utils.checkNull(tabOrientation, "tabOrientation");
 
         this.tabOrientation = tabOrientation;
 

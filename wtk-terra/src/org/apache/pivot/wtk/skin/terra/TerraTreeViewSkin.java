@@ -33,6 +33,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
@@ -772,27 +773,17 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -801,19 +792,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -827,20 +812,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -853,16 +832,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        Utils.checkNull(backgroundColor, "backgroundColor");
+
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -875,20 +852,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
     public void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
-
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
     public final void setSelectionColor(int selectionColor) {
@@ -901,20 +872,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
     public void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
-
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
@@ -927,20 +892,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setInactiveSelectionColor(Color inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
     public void setInactiveSelectionColor(String inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
-
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor, "inactiveSelectionColor"));
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
@@ -953,20 +912,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
     public void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
-
-        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(
+            GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor"));
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
@@ -979,20 +933,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setHighlightColor(Color highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
+        Utils.checkNull(highlightColor, "highlightColor");
 
         this.highlightColor = highlightColor;
         repaintComponent();
     }
 
     public void setHighlightColor(String highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
-
-        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
+        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor, "highlightColor"));
     }
 
     public final void setHighlightColor(int highlightColor) {
@@ -1005,20 +953,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
+        Utils.checkNull(highlightBackgroundColor, "highlightBackgroundColor");
 
         this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
     }
 
     public void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
@@ -1031,17 +973,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
+
         this.spacing = spacing;
         invalidateComponent();
     }
 
     public void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
     }
@@ -1051,17 +990,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setIndent(int indent) {
-        if (indent < 0) {
-            throw new IllegalArgumentException("indent is negative.");
-        }
+        Utils.checkNonNegative(indent, "indent");
+
         this.indent = indent;
         invalidateComponent();
     }
 
     public void setIndent(Number indent) {
-        if (indent == null) {
-            throw new IllegalArgumentException("indent is null.");
-        }
+        Utils.checkNull(indent, "indent");
 
         setIndent(indent.intValue());
     }
@@ -1098,20 +1034,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setBranchControlColor(Color branchControlColor) {
-        if (branchControlColor == null) {
-            throw new IllegalArgumentException("branchControlColor is null.");
-        }
+        Utils.checkNull(branchControlColor, "branchControlColor");
 
         this.branchControlColor = branchControlColor;
         repaintComponent();
     }
 
     public void setBranchControlColor(String branchControlColor) {
-        if (branchControlColor == null) {
-            throw new IllegalArgumentException("branchControlColor is null.");
-        }
-
-        setBranchControlColor(GraphicsUtilities.decodeColor(branchControlColor));
+        setBranchControlColor(GraphicsUtilities.decodeColor(branchControlColor, "branchControlColor"));
     }
 
     public final void setBranchControlColor(int branchControlColor) {
@@ -1124,20 +1054,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setBranchControlSelectionColor(Color branchControlSelectionColor) {
-        if (branchControlSelectionColor == null) {
-            throw new IllegalArgumentException("branchControlSelectionColor is null.");
-        }
+        Utils.checkNull(branchControlSelectionColor, "branchControlSelectionColor");
 
         this.branchControlSelectionColor = branchControlSelectionColor;
         repaintComponent();
     }
 
     public void setBranchControlSelectionColor(String branchControlSelectionColor) {
-        if (branchControlSelectionColor == null) {
-            throw new IllegalArgumentException("branchControlSelectionColor is null.");
-        }
-
-        setBranchControlSelectionColor(GraphicsUtilities.decodeColor(branchControlSelectionColor));
+        setBranchControlSelectionColor(
+            GraphicsUtilities.decodeColor(branchControlSelectionColor, "branchControlSelectionColor"));
     }
 
     public final void setBranchControlSelectionColor(int branchControlSelectionColor) {
@@ -1150,20 +1075,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setBranchControlInactiveSelectionColor(Color branchControlInactiveSelectionColor) {
-        if (branchControlInactiveSelectionColor == null) {
-            throw new IllegalArgumentException("branchControlInactiveSelectionColor is null.");
-        }
+        Utils.checkNull(branchControlInactiveSelectionColor, "branchControlInactiveSelectionColor");
 
         this.branchControlInactiveSelectionColor = branchControlInactiveSelectionColor;
         repaintComponent();
     }
 
     public void setBranchControlInactiveSelectionColor(String branchControlInactiveSelectionColor) {
-        if (branchControlInactiveSelectionColor == null) {
-            throw new IllegalArgumentException("branchControlInactiveSelectionColor is null.");
-        }
-
-        setBranchControlInactiveSelectionColor(GraphicsUtilities.decodeColor(branchControlInactiveSelectionColor));
+        setBranchControlInactiveSelectionColor(
+            GraphicsUtilities.decodeColor(branchControlInactiveSelectionColor, "branchControlInactiveSelectionColor"));
     }
 
     public final void setBranchControlInactiveSelectionColor(int branchControlInactiveSelectionColor) {
@@ -1176,20 +1096,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setGridColor(Color gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
-        }
+        Utils.checkNull(gridColor, "gridColor");
 
         this.gridColor = gridColor;
         repaintComponent();
     }
 
     public void setGridColor(String gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
-        }
-
-        setGridColor(GraphicsUtilities.decodeColor(gridColor));
+        setGridColor(GraphicsUtilities.decodeColor(gridColor, "gridColor"));
     }
 
     public final void setGridColor(int gridColor) {

@@ -676,7 +676,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             return sortDirection == SortDirection.ASCENDING ? new FileDateAscendingComparator()
                 : new FileDateDescendingComparator();
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid column name for file comparator.");
         }
     }
 

@@ -27,6 +27,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -163,8 +164,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
             }
         }
 
-        // Include space for vertical gridlines; even if we are not painting
-        // them,
+        // Include space for vertical gridlines; even if we are not painting them,
         // the header does
         preferredWidth += (n - 1);
 
@@ -571,9 +571,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     // Table view skin methods
     @Override
     public int getRowAt(int y) {
-        if (y < 0) {
-            throw new IllegalArgumentException("y is negative");
-        }
+        Utils.checkNonNegative(y, "y");
 
         TableView tableView = (TableView) getComponent();
 
@@ -602,9 +600,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     @Override
     public int getColumnAt(int x) {
-        if (x < 0) {
-            throw new IllegalArgumentException("x is negative");
-        }
+        Utils.checkNonNegative(x, "x");
 
         TableView tableView = (TableView) getComponent();
 
@@ -646,9 +642,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         @SuppressWarnings("unchecked")
         List<Object> tableData = (List<Object>) tableView.getTableData();
 
-        if (rowIndex < 0 || rowIndex >= tableData.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkZeroBasedIndex(rowIndex, tableData.getLength());
 
         int cellX = 0;
         for (int i = 0; i < columnIndex; i++) {
@@ -735,27 +729,17 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -764,19 +748,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -790,20 +768,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -816,16 +788,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        Utils.checkNull(backgroundColor, "backgroundColor");
+
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -838,20 +808,14 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
-
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
     public final void setSelectionColor(int selectionColor) {
@@ -864,20 +828,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
-
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(
+            GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
@@ -890,20 +849,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setInactiveSelectionColor(Color inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
-
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(
+            GraphicsUtilities.decodeColor(inactiveSelectionColor, "inactiveSelectionColor"));
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
@@ -925,11 +879,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
-
-        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(
+            GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor"));
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
@@ -942,20 +893,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
+        Utils.checkNull(highlightBackgroundColor, "highlightBackgroundColor");
 
         this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
     }
 
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(
+            GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
@@ -973,11 +919,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setAlternateRowBackgroundColor(String alternateRowBackgroundColor) {
-        if (alternateRowBackgroundColor == null) {
-            throw new IllegalArgumentException("alternateRowBackgroundColor is null.");
-        }
-
-        setAlternateRowBackgroundColor(GraphicsUtilities.decodeColor(alternateRowBackgroundColor));
+        setAlternateRowBackgroundColor(
+            GraphicsUtilities.decodeColor(alternateRowBackgroundColor, "alternateRowBackgroundColor"));
     }
 
     public final void setAlternateRowBackgroundColor(int alternateRowBackgroundColor) {
@@ -995,11 +938,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColumnSelectionColor(String columnSelectionColor) {
-        if (columnSelectionColor == null) {
-            throw new IllegalArgumentException("columnSelectionColor is null.");
-        }
-
-        setColumnSelectionColor(GraphicsUtilities.decodeColor(columnSelectionColor));
+        setColumnSelectionColor(GraphicsUtilities.decodeColor(columnSelectionColor, "columnSelectionColor"));
     }
 
     public final void setColumnSelectionColor(int columnSelectionColor) {
@@ -1022,11 +961,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     public final void setColumnSelectionHorizontalGridColor(
         String columnSelectionHorizontalGridColor) {
-        if (columnSelectionHorizontalGridColor == null) {
-            throw new IllegalArgumentException("columnSelectionHorizontalGridColor is null.");
-        }
-
-        setColumnSelectionHorizontalGridColor(GraphicsUtilities.decodeColor(columnSelectionHorizontalGridColor));
+        setColumnSelectionHorizontalGridColor(
+            GraphicsUtilities.decodeColor(columnSelectionHorizontalGridColor, "columnSelectionHorizontalGridColor"));
     }
 
     public final void setColumnSelectionHorizontalGridColor(int columnSelectionHorizontalGridColor) {
@@ -1048,11 +984,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setHorizontalGridColor(String horizontalGridColor) {
-        if (horizontalGridColor == null) {
-            throw new IllegalArgumentException("horizontalGridColor is null.");
-        }
-
-        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor));
+        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor, "horizontalGridColor"));
     }
 
     public final void setHorizontalGridColor(int horizontalGridColor) {
@@ -1074,11 +1006,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setVerticalGridColor(String verticalGridColor) {
-        if (verticalGridColor == null) {
-            throw new IllegalArgumentException("verticalGridColor is null.");
-        }
-
-        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor));
+        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor, "verticalGridColor"));
     }
 
     public final void setVerticalGridColor(int verticalGridColor) {

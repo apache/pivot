@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
@@ -234,7 +235,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     private static final int DEFAULT_EXPAND_DURATION = 250;
     private static final int DEFAULT_EXPAND_RATE = 30;
 
-    @SuppressWarnings("unused")
+    //@SuppressWarnings("unused")
     public TerraExpanderSkin() {
         TerraTheme theme = (TerraTheme) Theme.getTheme();
         setBackgroundColor(theme.getColor(4));
@@ -481,18 +482,10 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setTitleBarFont(String titleBarFont) {
-        if (titleBarFont == null) {
-            throw new IllegalArgumentException("titleBarFont is null.");
-        }
-
         setTitleBarFont(decodeFont(titleBarFont));
     }
 
     public final void setTitleBarFont(Dictionary<String, ?> titleBarFont) {
-        if (titleBarFont == null) {
-            throw new IllegalArgumentException("titleBarFont is null.");
-        }
-
         setTitleBarFont(Theme.deriveFont(titleBarFont));
     }
 
@@ -506,11 +499,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setTitleBarColor(String titleBarColor) {
-        if (titleBarColor == null) {
-            throw new IllegalArgumentException("titleBarColor is null.");
-        }
-
-        setTitleBarColor(GraphicsUtilities.decodeColor(titleBarColor));
+        setTitleBarColor(GraphicsUtilities.decodeColor(titleBarColor, "titleBarColor"));
     }
 
     public Color getTitleBarBackgroundColor() {
@@ -524,11 +513,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setTitleBarBackgroundColor(String titleBarBackgroundColor) {
-        if (titleBarBackgroundColor == null) {
-            throw new IllegalArgumentException("titleBarBackgroundColor is null.");
-        }
-
-        setTitleBarBackgroundColor(GraphicsUtilities.decodeColor(titleBarBackgroundColor));
+        setTitleBarBackgroundColor(GraphicsUtilities.decodeColor(titleBarBackgroundColor, "titleBarBackgroundColor"));
     }
 
     public Color getTitleBarBorderColor() {
@@ -541,11 +526,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setTitleBarBorderColor(String titleBarBorderColor) {
-        if (titleBarBorderColor == null) {
-            throw new IllegalArgumentException("titleBarBorderColor is null.");
-        }
-
-        setTitleBarBorderColor(GraphicsUtilities.decodeColor(titleBarBorderColor));
+        setTitleBarBorderColor(GraphicsUtilities.decodeColor(titleBarBorderColor, "titleBarBorderColor"));
     }
 
     public Color getShadeButtonColor() {
@@ -558,11 +539,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setShadeButtonColor(String shadeButtonColor) {
-        if (shadeButtonColor == null) {
-            throw new IllegalArgumentException("shadeButtonColor is null.");
-        }
-
-        setShadeButtonColor(GraphicsUtilities.decodeColor(shadeButtonColor));
+        setShadeButtonColor(GraphicsUtilities.decodeColor(shadeButtonColor, "shadeButtonColor"));
     }
 
     public Color getDisabledShadeButtonColor() {
@@ -579,11 +556,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public Insets getPadding() {
@@ -596,10 +569,6 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -608,18 +577,12 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(padding.intValue());
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -726,7 +689,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     public void expandedChangeVetoed(Expander expander, Vote reason) {
         if (reason == Vote.DENY && expandTransition != null) {
             // NOTE We stop, rather than end, the transition so the completion
-            // event isn't fired; if the event fires, the listener will set
+            // event isn't fired; because if the event fires, the listener will set
             // the expanded state
             expandTransition.stop();
             expandTransition = null;
@@ -757,4 +720,5 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
         invalidateComponent();
     }
+
 }
