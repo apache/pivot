@@ -29,6 +29,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.ActivityIndicator;
@@ -346,11 +347,19 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("Font is null.");
-        }
+        Utils.checkNull(font, "Font");
 
         this.font = font;
+    }
+
+    private void checkColorIndex(int index, int numberOfColors) {
+        if (index < 0 || index >= numberOfColors) {
+            throw new IllegalArgumentException("Color index out of range of [0 .. " + (numberOfColors - 1) + "].");
+        }
+    }
+
+    private void checkColorIndex(int index) {
+        checkColorIndex(index, getNumberOfColors());
     }
 
     /**
@@ -361,9 +370,7 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public Color getColor(int index) {
-        if (index < 0 || index > getNumberOfColors()) {
-            throw new IllegalArgumentException("Wrong Color index.");
-        }
+        checkColorIndex(index);
 
         return colors.get(index);
     }
@@ -377,13 +384,8 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public void setColor(int index, Color color) {
-        if (index < 0 || index > getNumberOfColors()) {
-            throw new IllegalArgumentException("Wrong Color index.");
-        }
-
-        if (color == null) {
-            throw new IllegalArgumentException("Color is null.");
-        }
+        checkColorIndex(index);
+        Utils.checkNull(color, "Color");
 
         colors.update(index, color);
     }
@@ -395,9 +397,7 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public Color getBaseColor(int index) {
-        if (index < 0 || index > numberOfPaletteColors) {
-            throw new IllegalArgumentException("Wrong Color index.");
-        }
+        checkColorIndex(index, numberOfPaletteColors);
 
         return colors.get(index * 3 + 1);
     }
@@ -410,13 +410,8 @@ public final class TerraTheme extends Theme {
      */
     @Override
     public void setBaseColor(int index, Color baseColor) {
-        if (index < 0 || index > numberOfPaletteColors) {
-            throw new IllegalArgumentException("Wrong Color index.");
-        }
-
-        if (baseColor == null) {
-            throw new IllegalArgumentException("Base color is null.");
-        }
+        checkColorIndex(index, numberOfPaletteColors);
+        Utils.checkNull(baseColor, "Base color");
 
         int offset = index * 3;
         colors.update(offset, darken(baseColor));
@@ -497,9 +492,8 @@ public final class TerraTheme extends Theme {
      * @param messageIcon The new icon image for this type.
      */
     public void setMessageIcon(MessageType messageType, Image messageIcon) {
-        if (messageType == null || messageIcon == null) {
-            throw new IllegalArgumentException("Argument is null.");
-        }
+        Utils.checkNull(messageType, "Message type");
+        Utils.checkNull(messageIcon, "Message icon");
 
         messageIcons.put(messageType, messageIcon);
     }
@@ -523,9 +517,8 @@ public final class TerraTheme extends Theme {
      * @param smallMessageIcon The new small icon for this type.
      */
     public void setSmallMessageIcon(MessageType messageType, Image smallMessageIcon) {
-        if (messageType == null || smallMessageIcon == null) {
-            throw new IllegalArgumentException("Argument is null.");
-        }
+        Utils.checkNull(messageType, "Message type");
+        Utils.checkNull(smallMessageIcon, "Small message icon");
 
         smallMessageIcons.put(messageType, smallMessageIcon);
     }
