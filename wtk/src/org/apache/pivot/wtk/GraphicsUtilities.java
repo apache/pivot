@@ -37,6 +37,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
  * Contains utility methods dealing with the Java2D API.
@@ -314,16 +315,15 @@ public final class GraphicsUtilities {
      * <a href="http://www.w3.org/TR/css3-color/">http://www.w3.org/TR/css3-color/</a>
      * (except the Java color names will be accepted first if there is a conflict).</li>
      * </ul>
+     * @param argument A name for this color value (for the exception if it can't be decoded).
      * @return A {@link Color} on successful decoding
      * @throws NumberFormatException if the value in the first two cases
      * contains illegal hexadecimal digits.
      * @throws IllegalArgumentException if the value is not in one of the
      * formats listed above.
      */
-    public static Color decodeColor(final String value) throws NumberFormatException {
-        if (value == null) {
-            throw new IllegalArgumentException("Cannot decode a null String.");
-        }
+    public static Color decodeColor(final String value, String argument) throws NumberFormatException {
+        Utils.checkNullOrEmpty(value, argument == null ? "color" : argument);
 
         String valueLowercase = value.toLowerCase(Locale.ENGLISH);
 
@@ -375,6 +375,31 @@ public final class GraphicsUtilities {
         }
 
         return color;
+    }
+
+    /**
+     * Interprets a string as a color value.
+     *
+     * @param value One of the following forms:
+     * <ul>
+     * <li>0xdddddddd - 8 hexadecimal digits, specifying 8 bits each of red,
+     * green, and blue, followed by 8 bits of alpha.</li>
+     * <li>#dddddd - 6 hexadecimal digits, specifying 8 bits each of red,
+     * green, and blue.</li>
+     * <li>Any of the names of the static colors in the Java {@link Color} class.</li>
+     * <li>Any of the CSS3/X11 color names from here:
+     * <a href="http://www.w3.org/TR/css3-color/">http://www.w3.org/TR/css3-color/</a>
+     * (except the Java color names will be accepted first if there is a conflict).</li>
+     * </ul>
+     * @return A {@link Color} on successful decoding
+     * @throws NumberFormatException if the value in the first two cases
+     * contains illegal hexadecimal digits.
+     * @throws IllegalArgumentException if the value is not in one of the
+     * formats listed above.
+     * @see #decodeColor(String, String)
+     */
+    public static Color decodeColor(final String value) throws NumberFormatException {
+        return decodeColor(value, null);
     }
 
     /**
