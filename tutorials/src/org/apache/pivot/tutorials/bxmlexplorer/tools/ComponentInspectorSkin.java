@@ -247,7 +247,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addIntControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        int value = (Integer) dictionary.get(key);
+        int value = dictionary.getIntValue(key);
 
         TextInput textInput = new TextInput();
         textInput.setTextSize(10);
@@ -267,7 +267,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
                         dictionary.put(key, Integer.parseInt(textInputLocal.getText()));
                     } catch (Exception exception) {
                         displayErrorMessage(exception, component.getWindow());
-                        int valueLocal = (Integer) dictionary.get(key);
+                        int valueLocal = dictionary.getIntValue(key);
                         textInputLocal.setText(String.valueOf(valueLocal));
                     }
                 }
@@ -281,7 +281,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         TextInput textInput = (TextInput) controls.get(key);
 
         if (textInput != null) {
-            int value = (Integer) dictionary.get(key);
+            int value = dictionary.getIntValue(key);
             textInput.setText(String.valueOf(value));
         }
     }
