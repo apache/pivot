@@ -19,11 +19,14 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
- * Class representing the insets of an object.
+ * Class representing the insets of an object, also called "padding"
+ * (or in some classes, "margin").
  */
 public final class Insets implements Serializable {
     private static final long serialVersionUID = -8528862892185591370L;
@@ -58,9 +61,7 @@ public final class Insets implements Serializable {
     }
 
     public Insets(Insets insets) {
-        if (insets == null) {
-            throw new IllegalArgumentException("insets is null.");
-        }
+        Utils.checkNull(insets, "padding/margin");
 
         this.top = insets.top;
         this.left = insets.left;
@@ -69,33 +70,13 @@ public final class Insets implements Serializable {
     }
 
     public Insets(Dictionary<String, ?> insets) {
-        if (insets == null) {
-            throw new IllegalArgumentException("insets is null.");
-        }
+        Utils.checkNull(insets, "padding/margin");
 
-        if (insets.containsKey(TOP_KEY)) {
-            top = ((Number) insets.get(TOP_KEY)).intValue();
-        } else {
-            top = 0;
-        }
+        top = insets.getIntValue(TOP_KEY);
+        left = insets.getIntValue(LEFT_KEY);
+        bottom = insets.getIntValue(BOTTOM_KEY);
+        right = insets.getIntValue(RIGHT_KEY);
 
-        if (insets.containsKey(LEFT_KEY)) {
-            left = ((Number) insets.get(LEFT_KEY)).intValue();
-        } else {
-            left = 0;
-        }
-
-        if (insets.containsKey(BOTTOM_KEY)) {
-            bottom = ((Number) insets.get(BOTTOM_KEY)).intValue();
-        } else {
-            bottom = 0;
-        }
-
-        if (insets.containsKey(RIGHT_KEY)) {
-            right = ((Number) insets.get(RIGHT_KEY)).intValue();
-        } else {
-            right = 0;
-        }
     }
 
     @Override
@@ -104,7 +85,8 @@ public final class Insets implements Serializable {
 
         if (object instanceof Insets) {
             Insets insets = (Insets) object;
-            equals = (top == insets.top && left == insets.left && bottom == insets.bottom && right == insets.right);
+            equals = (top == insets.top && left == insets.left &&
+                      bottom == insets.bottom && right == insets.right);
         }
 
         return equals;
@@ -123,13 +105,28 @@ public final class Insets implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + " [" + top + ", " + left + ", " + bottom + ", " + right + "]";
+        return getClass().getSimpleName() + " [" + top + ", " + left + ", " + bottom + ", " + right + "]";
     }
 
+    /**
+     * Decode a possible Insets value, which can be in one of the
+     * following forms:
+     * <ul>
+     * <li><pre>{ "top": nnn, "left": nnn, "bottom": nnn, "right": nnn }</pre>
+     * <li><pre>[ top, left, bottom, right ]</pre>
+     * <li>nnnn
+     * </ul>
+     *
+     * @param value The string value of the Insets to decode.
+     * @return The parsed <tt>Insets</tt> value.
+     * @throws IllegalArgumentException if the input is not in one of these
+     * formats.
+     * @see #Insets(Dictionary)
+     * @see #Insets(int, int, int, int)
+     * @see #Insets(int)
+     */
     public static Insets decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNullOrEmpty(value, "padding/margin");
 
         Insets insets;
         if (value.startsWith("{")) {
@@ -138,10 +135,23 @@ public final class Insets implements Serializable {
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }
+        } else if (value.startsWith("[")) {
+            try {
+                @SuppressWarnings("unchecked")
+                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
+                insets = new Insets(values.get(0), values.get(1), values.get(2), values.get(3));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
         } else {
-            insets = new Insets(Integer.parseInt(value));
+            try {
+                insets = new Insets(Integer.parseInt(value));
+            } catch (NumberFormatException nfe) {
+                throw new IllegalArgumentException(nfe);
+            }
         }
 
         return insets;
     }
+
 }

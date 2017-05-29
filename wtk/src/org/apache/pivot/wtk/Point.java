@@ -21,9 +21,13 @@ import java.io.Serializable;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
- * Class representing the location of an object.
+ * An immutable class representing the location of an object.
+ * <p> This class is immutable (unlike a {@link java.awt.Point}), so that
+ * the {@link #translate} method returns a new object, rather than
+ * modifying the original (for instance).
  */
 public final class Point implements Serializable {
     private static final long serialVersionUID = 5193175754909343769L;
@@ -40,32 +44,32 @@ public final class Point implements Serializable {
     }
 
     public Point(Point point) {
-        if (point == null) {
-            throw new IllegalArgumentException("point is null.");
-        }
+        Utils.checkNull(point, "point");
 
         this.x = point.x;
         this.y = point.y;
     }
 
     public Point(Dictionary<String, ?> point) {
-        if (point == null) {
-            throw new IllegalArgumentException("point is null.");
-        }
+        Utils.checkNull(point, "point");
 
-        if (point.containsKey(X_KEY)) {
-            x = ((Integer) point.get(X_KEY)).intValue();
-        } else {
-            x = 0;
-        }
-
-        if (point.containsKey(Y_KEY)) {
-            y = ((Integer) point.get(Y_KEY)).intValue();
-        } else {
-            y = 0;
-        }
+        this.x = point.getIntValue(X_KEY);
+        this.y = point.getIntValue(Y_KEY);
     }
 
+    /**
+     * Return a new <tt>Point</tt> object which represents
+     * this point moved to a new location, <tt>dx</tt> and
+     * <tt>dy</tt> away from the original.
+     *
+     * @param dx The distance to move in the horizontal
+     * direction (positive or negative).
+     * @param dy The distance to move in the vertical
+     * direction (positive moves downward on the screen,
+     * and negative to move upward).
+     * @return A new object represented the translated
+     * location.
+     */
     public Point translate(int dx, int dy) {
         return new Point(x + dx, y + dy);
     }
@@ -93,9 +97,7 @@ public final class Point implements Serializable {
     }
 
     public static Point decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(value);
 
         Point point;
         try {
@@ -106,4 +108,5 @@ public final class Point implements Serializable {
 
         return point;
     }
+
 }
