@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -97,34 +98,14 @@ public final class Bounds implements Serializable {
     public Bounds(Dictionary<String, ?> bounds) {
         Utils.checkNull(bounds, "bounds");
 
-        if (bounds.containsKey(X_KEY)) {
-            x = ((Integer) bounds.get(X_KEY)).intValue();
-        } else {
-            x = 0;
-        }
-
-        if (bounds.containsKey(Y_KEY)) {
-            y = ((Integer) bounds.get(Y_KEY)).intValue();
-        } else {
-            y = 0;
-        }
-
-        if (bounds.containsKey(WIDTH_KEY)) {
-            width = ((Integer) bounds.get(WIDTH_KEY)).intValue();
-        } else {
-            width = 0;
-        }
-
-        if (bounds.containsKey(HEIGHT_KEY)) {
-            height = ((Integer) bounds.get(HEIGHT_KEY)).intValue();
-        } else {
-            height = 0;
-        }
+        x = bounds.getIntValue(X_KEY);
+        y = bounds.getIntValue(Y_KEY);
+        width = bounds.getIntValue(WIDTH_KEY);
+        height = bounds.getIntValue(HEIGHT_KEY);
     }
 
     /**
-     * Convert a {@link java.awt.Rectangle} to one of our bounds
-     * objects.
+     * Convert a {@link java.awt.Rectangle} to one of our bounds objects.
      * @param rectangle The existing rectangle to convert (cannot
      * be {@code null}).
      * @throws IllegalArgumentException if the rectangle is {@code null}.
@@ -357,7 +338,8 @@ public final class Bounds implements Serializable {
 
         if (object instanceof Bounds) {
             Bounds bounds = (Bounds) object;
-            equals = (x == bounds.x && y == bounds.y && width == bounds.width && height == bounds.height);
+            equals = (x == bounds.x && y == bounds.y &&
+                      width == bounds.width && height == bounds.height);
         }
 
         return equals;
@@ -383,33 +365,52 @@ public final class Bounds implements Serializable {
 
     /**
      * @return A more-or-less human-readable representation of this object, which looks like:
-     * <pre>org.apache.pivot.wtk.Bounds [X,Y;WxH]</pre>
+     * <pre>Bounds [X,Y;WxH]</pre>
      */
     @Override
     public String toString() {
-        return getClass().getName() + " [" + x + "," + y + ";" + width + "x" + height + "]";
+        return getClass().getSimpleName() + " [" + x + "," + y + ";" + width + "x" + height + "]";
     }
 
     /**
-     * Decode a JSON-encoded string (map) that contains the values for a new
+     * Decode a JSON-encoded string (map or list) that contains the values for a new
      * bounded area.
-     * @param boundsValue The JSON string containing the map of bounds values
+     * <p> The format of a JSON map format will be:
+     * <pre>{ "x": nnn, "y": nnn, "width": nnn, "height": nnn }</pre>
+     * <p> The format of a JSON list format will be:
+     * <pre>[ x, y, width, height ]</pre>
+     *
+     * @param boundsValue The JSON string containing the map or list of bounds values
      * (must not be {@code null}).
      * @return The new bounds object if the string can be successfully decoded.
      * @throws IllegalArgumentException if the given string is {@code null} or
-     * the string could not be parsed as a JSON map.
+     * empty or the string could not be parsed as a JSON map or list.
      * @see #Bounds(Dictionary)
+     * @see #Bounds(int, int, int, int)
      */
     public static Bounds decode(String boundsValue) {
-        Utils.checkNull(boundsValue, "boundsValue");
+        Utils.checkNullOrEmpty(boundsValue, "boundsValue");
 
         Bounds bounds;
-        try {
-            bounds = new Bounds(JSONSerializer.parseMap(boundsValue));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (boundsValue.startsWith("{")) {
+            try {
+                bounds = new Bounds(JSONSerializer.parseMap(boundsValue));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else if (boundsValue.startsWith("[")) {
+            try {
+                @SuppressWarnings("unchecked")
+                List<Integer> values = (List<Integer>)JSONSerializer.parseList(boundsValue);
+                bounds = new Bounds(values.get(0), values.get(1), values.get(2), values.get(3));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid format for Bounds.");
         }
 
         return bounds;
     }
+
 }

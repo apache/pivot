@@ -72,7 +72,7 @@ public interface Dictionary<K, V> {
      * not exist. Will also return null if the key refers to a null value. Use
      * <tt>containsKey()</tt> to distinguish between these two cases.
      */
-    public V get(K key);
+    V get(K key);
 
     /**
      * Sets the value of the given key, creating a new entry or replacing the
@@ -82,7 +82,7 @@ public interface Dictionary<K, V> {
      * @param value The value to be associated with the given key.
      * @return The value previously associated with the key.
      */
-    public V put(K key, V value);
+    V put(K key, V value);
 
     /**
      * Removes a key/value pair from the map.
@@ -90,7 +90,7 @@ public interface Dictionary<K, V> {
      * @param key The key whose mapping is to be removed.
      * @return The value that was removed.
      */
-    public V remove(K key);
+    V remove(K key);
 
     /**
      * Tests the existence of a key in the dictionary.
@@ -99,5 +99,35 @@ public interface Dictionary<K, V> {
      * @return <tt>true</tt> if the key exists in the dictionary; <tt>false</tt>,
      * otherwise.
      */
-    public boolean containsKey(K key);
+    boolean containsKey(K key);
+
+    /**
+     * Using the other methods in this interface, retrieve an integer value
+     * from this dictionary; returning 0 if the key does not exist.
+     *
+     * @param key The key for the (supposed) <tt>Integer</tt>
+     * value to retrieve (actually any {@link Number} will work).
+     * @return The integer value, or 0 if the key is not present.
+     */
+    default int getIntValue(K key) {
+        if (containsKey(key)) {
+            return ((Number)get(key)).intValue();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Using the other methods in this interface, put an integer value
+     * into this dictionary.
+     *
+     * @param key The key for the <tt>Integer</tt> value to save.
+     * @param value The int value to be saved.
+     * @return The previous value for this key.
+     */
+    @SuppressWarnings("unchecked")
+    default V putIntValue(K key, int value) {
+        return put(key, (V)Integer.valueOf(value));
+    }
+
 }
