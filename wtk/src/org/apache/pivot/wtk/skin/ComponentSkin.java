@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
@@ -389,8 +390,12 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
      * a font relative to the current theme}, or one of the
      * {@link Font#decode(String) standard Java font specifications}.
      * @return The font corresponding to the specification.
+     * @throws IllegalArgumentException if the given string is <tt>null</tt>
+     * or empty or the font specification cannot be decoded.
      */
     public static Font decodeFont(String value) {
+        Utils.checkNullOrEmpty(value, "font");
+
         Font font;
         if (value.startsWith("{")) {
             try {
