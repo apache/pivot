@@ -67,7 +67,7 @@ public abstract class Theme {
     /**
      * The service provider name (see {@link Service#getProvider(String)}).
      */
-    public static final String PROVIDER_NAME = "org.apache.pivot.wtk.Theme";
+    public static final String PROVIDER_NAME = Theme.class.getName();
 
     static {
         theme = (Theme) Service.getProvider(PROVIDER_NAME);
@@ -265,8 +265,11 @@ public abstract class Theme {
      * {@value #ITALIC_KEY} - true/false</li> </ul> Omitted values are taken
      * from the theme's font.
      * @return The new font derived from the current font.
+     * @throws IllegalArgumentException if the supplied dictionary is <tt>null</tt>.
      */
     public static Font deriveFont(Dictionary<String, ?> dictionary) {
+        Utils.checkNull(dictionary, "dictionary");
+
         Font font = theme.getFont();
 
         String name = font.getName();
