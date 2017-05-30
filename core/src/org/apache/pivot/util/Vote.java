@@ -37,31 +37,42 @@ public enum Vote {
      */
     DEFER;
 
+    /**
+     * Tally a new vote against the previous tally result.
+     * For a vote tally to work correctly the initial value must be {@link #APPROVE}.
+     * <p>The tallying algorithm is as follows:
+     * <ul>
+     * <li>New vote is {@link #APPROVE} -&gt; result is previous result.
+     * <li>New vote is {@link #DENY} -&gt; result is new vote (that is, <tt>DENY</tt>).
+     * <li>New vote is {@link #DEFER} -&gt; result is <tt>DENY</tt> if previous was
+     * <tt>DENY</tt>, otherwise <tt>DEFER</tt>.
+     * </ul>
+     *
+     * @param vote The new vote to tally.
+     * @return The result of tallying this new vote against this
+     * previously accumulated result.
+     * @throws IllegalArgumentException if the new vote is {@code null}.
+     */
     public Vote tally(Vote vote) {
-        if (vote == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(vote, "vote");
 
         Vote tally;
 
         switch (vote) {
-            case APPROVE: {
+            case APPROVE:
                 tally = this;
                 break;
-            }
 
-            case DENY: {
+            case DENY:
                 tally = vote;
                 break;
-            }
 
-            case DEFER: {
+            case DEFER:
                 tally = (this == DENY) ? this : vote;
                 break;
-            }
 
             default: {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unknown Vote value to tally.");
             }
         }
 
