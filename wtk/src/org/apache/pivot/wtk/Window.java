@@ -27,6 +27,7 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -126,13 +127,13 @@ public class Window extends Container {
         public void setAction(String actionID) {
             Utils.checkNull(actionID, "actionID");
 
-            Action actionLocal = Action.getNamedActions().get(actionID);
-            if (actionLocal == null) {
+            Action actionValue = Action.getNamedActions().get(actionID);
+            if (actionValue == null) {
                 throw new IllegalArgumentException("An action with ID " + actionID
                     + " does not exist.");
             }
 
-            setAction(actionLocal);
+            setAction(actionValue);
         }
     }
 
@@ -285,51 +286,37 @@ public class Window extends Container {
         WindowListener {
         @Override
         public void titleChanged(Window window, String previousTitle) {
-            for (WindowListener listener : this) {
-                listener.titleChanged(window, previousTitle);
-            }
+            forEach(listener -> listener.titleChanged(window, previousTitle));
         }
 
         @Override
         public void iconAdded(Window window, Image addedIcon) {
-            for (WindowListener listener : this) {
-                listener.iconAdded(window, addedIcon);
-            }
+            forEach(listener -> listener.iconAdded(window, addedIcon));
         }
 
         @Override
         public void iconInserted(Window window, Image addedIcon, int index) {
-            for (WindowListener listener : this) {
-                listener.iconInserted(window, addedIcon, index);
-            }
+            forEach(listener -> listener.iconInserted(window, addedIcon, index));
         }
 
         @Override
         public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
-            for (WindowListener listener : this) {
-                listener.iconsRemoved(window, index, removed);
-            }
+            forEach(listener -> listener.iconsRemoved(window, index, removed));
         }
 
         @Override
         public void contentChanged(Window window, Component previousContent) {
-            for (WindowListener listener : this) {
-                listener.contentChanged(window, previousContent);
-            }
+            forEach(listener -> listener.contentChanged(window, previousContent));
         }
 
         @Override
         public void activeChanged(Window window, Window obverseWindow) {
-            for (WindowListener listener : this) {
-                listener.activeChanged(window, obverseWindow);
-            }
+            forEach(listener -> listener.activeChanged(window, obverseWindow));
         }
 
         @Override
         public void maximizedChanged(Window window) {
-            for (WindowListener listener : this) {
-                listener.maximizedChanged(window);
-            }
+            forEach(listener -> listener.maximizedChanged(window));
         }
     }
 
@@ -337,52 +324,40 @@ public class Window extends Container {
         implements WindowStateListener {
         @Override
         public void windowOpened(Window window) {
-            for (WindowStateListener listener : this) {
-                listener.windowOpened(window);
-            }
+            forEach(listener -> listener.windowOpened(window));
         }
 
         @Override
         public Vote previewWindowClose(Window window) {
-            Vote vote = Vote.APPROVE;
+            VoteResult result = new VoteResult();
 
-            for (WindowStateListener listener : this) {
-                vote = vote.tally(listener.previewWindowClose(window));
-            }
+            forEach(listener -> result.tally(listener.previewWindowClose(window)));
 
-            return vote;
+            return result.get();
         }
 
         @Override
         public void windowCloseVetoed(Window window, Vote reason) {
-            for (WindowStateListener listener : this) {
-                listener.windowCloseVetoed(window, reason);
-            }
+            forEach(listener -> listener.windowCloseVetoed(window, reason));
         }
 
         @Override
         public Vote previewWindowOpen(Window window) {
-            Vote vote = Vote.APPROVE;
+            VoteResult result = new VoteResult();
 
-            for (WindowStateListener listener : this) {
-                vote = vote.tally(listener.previewWindowOpen(window));
-            }
+            forEach(listener -> result.tally(listener.previewWindowOpen(window)));
 
-            return vote;
+            return result.get();
         }
 
         @Override
         public void windowOpenVetoed(Window window, Vote reason) {
-            for (WindowStateListener listener : this) {
-                listener.windowOpenVetoed(window, reason);
-            }
+            forEach(listener -> listener.windowOpenVetoed(window, reason));
         }
 
         @Override
         public void windowClosed(Window window, Display display, Window owner) {
-            for (WindowStateListener listener : this) {
-                listener.windowClosed(window, display, owner);
-            }
+            forEach(listener -> listener.windowClosed(window, display, owner));
         }
     }
 
@@ -390,32 +365,24 @@ public class Window extends Container {
         ListenerList<WindowActionMappingListener> implements WindowActionMappingListener {
         @Override
         public void actionMappingAdded(Window window) {
-            for (WindowActionMappingListener listener : this) {
-                listener.actionMappingAdded(window);
-            }
+            forEach(listener -> listener.actionMappingAdded(window));
         }
 
         @Override
         public void actionMappingsRemoved(Window window, int index,
             Sequence<Window.ActionMapping> removed) {
-            for (WindowActionMappingListener listener : this) {
-                listener.actionMappingsRemoved(window, index, removed);
-            }
+            forEach(listener -> listener.actionMappingsRemoved(window, index, removed));
         }
 
         @Override
         public void keyStrokeChanged(Window.ActionMapping actionMapping,
             Keyboard.KeyStroke previousKeyStroke) {
-            for (WindowActionMappingListener listener : this) {
-                listener.keyStrokeChanged(actionMapping, previousKeyStroke);
-            }
+            forEach(listener -> listener.keyStrokeChanged(actionMapping, previousKeyStroke));
         }
 
         @Override
         public void actionChanged(Window.ActionMapping actionMapping, Action previousAction) {
-            for (WindowActionMappingListener listener : this) {
-                listener.actionChanged(actionMapping, previousAction);
-            }
+            forEach(listener -> listener.actionChanged(actionMapping, previousAction));
         }
     }
 
@@ -423,9 +390,7 @@ public class Window extends Container {
         implements WindowClassListener {
         @Override
         public void activeWindowChanged(Window previousActiveWindow) {
-            for (WindowClassListener listener : this) {
-                listener.activeWindowChanged(previousActiveWindow);
-            }
+            forEach(listener -> listener.activeWindowChanged(previousActiveWindow));
         }
     }
 
@@ -545,13 +510,13 @@ public class Window extends Container {
     public boolean isOwner(Window window) {
         Utils.checkNull(window, "window");
 
-        Window ownerLocal = window.getOwner();
+        Window ownerValue = window.getOwner();
 
-        while (ownerLocal != null && ownerLocal != this) {
-            ownerLocal = ownerLocal.getOwner();
+        while (ownerValue != null && ownerValue != this) {
+            ownerValue = ownerValue.getOwner();
         }
 
-        return (ownerLocal == this);
+        return (ownerValue == this);
     }
 
     /**
@@ -709,19 +674,18 @@ public class Window extends Container {
                     Display display = getDisplay();
                     display.remove(this);
 
-                    // Clear the owner and remove from the owner's owned window
-                    // list
-                    Window ownerLocal = this.owner;
+                    // Clear the owner and remove from the owner's owned window list
+                    Window ownerValue = this.owner;
                     this.owner = null;
 
-                    if (ownerLocal != null) {
-                        ownerLocal.ownedWindows.remove(this);
+                    if (ownerValue != null) {
+                        ownerValue.ownedWindows.remove(this);
                     }
 
                     // Notify listeners
                     closing = false;
 
-                    windowStateListeners.windowClosed(this, display, ownerLocal);
+                    windowStateListeners.windowClosed(this, display, ownerValue);
                 } else {
                     if (vote == Vote.DENY) {
                         closing = false;
@@ -1000,8 +964,7 @@ public class Window extends Container {
             }
         } else {
             // Move all open owned windows to the front of this window,
-            // preserving the
-            // current z-order
+            // preserving the current z-order
             ArrayList<Integer> ownedWindowIndexes = new ArrayList<>(ownedWindowCount);
 
             for (Window ownedWindow : ownedWindows) {
@@ -1088,26 +1051,34 @@ public class Window extends Container {
 
         Dimensions size = getSize();
 
-        if (horizontalAlignment == HorizontalAlignment.LEFT) {
-            x = bounds.x - size.width;
-        } else if (horizontalAlignment == HorizontalAlignment.RIGHT) {
-            x = bounds.x + bounds.width - size.width;
-        } else if (horizontalAlignment == HorizontalAlignment.CENTER) {
-            x = bounds.x + (int) Math.round((double) (bounds.width - size.width) / 2);
-        } else {
-            throw new IllegalArgumentException("Unsupported horizontal alignment.");
+        switch (horizontalAlignment) {
+            case LEFT:
+                x = bounds.x - size.width;
+                break;
+            case RIGHT:
+                x = bounds.x + bounds.width - size.width;
+                break;
+            case CENTER:
+                x = bounds.x + (int) Math.round((double) (bounds.width - size.width) / 2);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported horizontal alignment.");
         }
 
         x += horizontalOffset;
 
-        if (verticalAlignment == VerticalAlignment.TOP) {
-            y = bounds.y - size.height;
-        } else if (verticalAlignment == VerticalAlignment.BOTTOM) {
-            y = bounds.y + bounds.height;
-        } else if (verticalAlignment == VerticalAlignment.CENTER) {
-            y = bounds.y + (int) Math.round((double) (bounds.height - size.height) / 2);
-        } else {
-            throw new IllegalArgumentException("Unsupported vertical alignment.");
+        switch (verticalAlignment) {
+            case TOP:
+                y = bounds.y - size.height;
+                break;
+            case BOTTOM:
+                y = bounds.y + bounds.height;
+                break;
+            case CENTER:
+                y = bounds.y + (int) Math.round((double) (bounds.height - size.height) / 2);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported vertical alignment.");
         }
 
         y += verticalOffset;
@@ -1118,7 +1089,7 @@ public class Window extends Container {
     @Override
     public boolean keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
         /*
-         * Use keyPressed rather than keyReleased other this sequence: Press
+         * Use keyPressed rather than keyReleased else this sequence: Press
          * Ctrl, Press C, Release Ctrl, Release C will not trigger the Ctrl-C
          * action.
          */
@@ -1151,4 +1122,5 @@ public class Window extends Container {
     public static ListenerList<WindowClassListener> getWindowClassListeners() {
         return windowClassListeners;
     }
+
 }
