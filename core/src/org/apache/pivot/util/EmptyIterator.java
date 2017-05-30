@@ -20,7 +20,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A no-op iterator.
+ * A no-op iterator, for which {@link #hasNext} always returns <tt>false</tt>
+ * and {@link #next} throws {@link NoSuchElementException}.
+ * <p> This is used (for instance) for {@link org.apache.pivot.collections.HashMap}
+ * when a hash bucket list is empty, so that iteration through the bucket list
+ * doesn't have to be special-cased.
+ * <p>Note: for Java 8 we have taken out the implementation of the <tt>remove()</tt>
+ * method because the interface now implements it as we need it as a default method.
  */
 public class EmptyIterator<T> implements Iterator<T> {
     @Override
@@ -33,8 +39,4 @@ public class EmptyIterator<T> implements Iterator<T> {
         throw new NoSuchElementException();
     }
 
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
 }
