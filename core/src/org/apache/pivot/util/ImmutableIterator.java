@@ -20,14 +20,26 @@ import java.util.Iterator;
 
 /**
  * Immutable implementation of the {@link Iterator} interface.
+ * <p>The only methods that have actual implementations (that just
+ * defer to the underlying <tt>Iterator</tt>) are:  {@link #hasNext}
+ * and {@link #next}.
+ * <p>Note: the <tt>remove()</tt> method implementation here has
+ * been taken out because there is now a default implementation
+ * in the {@link Iterator} interface itself in Java 8.
  */
 public class ImmutableIterator<T> implements Iterator<T> {
     private Iterator<T> iterator;
 
+    /**
+     * Construct an immutable iterator over the base iterator
+     * given here.
+     *
+     * @param iterator The base iterator we want to protect
+     * from change.
+     * @throws IllegalArgumentException if the iterator is <tt>null</tt>.
+     */
     public ImmutableIterator(Iterator<T> iterator) {
-        if (iterator == null) {
-            throw new IllegalArgumentException("iterator is null.");
-        }
+        Utils.checkNull(iterator, "iterator");
 
         this.iterator = iterator;
     }
@@ -42,8 +54,4 @@ public class ImmutableIterator<T> implements Iterator<T> {
         return this.iterator.next();
     }
 
-    @Override
-    public final void remove() {
-        throw new UnsupportedOperationException();
-    }
 }
