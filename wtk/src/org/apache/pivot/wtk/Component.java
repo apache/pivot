@@ -33,6 +33,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.BooleanResult;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -279,105 +280,77 @@ public abstract class Component implements ConstrainedVisual {
         ComponentListener {
         @Override
         public void parentChanged(Component component, Container previousParent) {
-            for (ComponentListener listener : this) {
-                listener.parentChanged(component, previousParent);
-            }
+            forEach(listener -> listener.parentChanged(component, previousParent));
         }
 
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            for (ComponentListener listener : this) {
-                listener.sizeChanged(component, previousWidth, previousHeight);
-            }
+            forEach(listener -> listener.sizeChanged(component, previousWidth, previousHeight));
         }
 
         @Override
         public void preferredSizeChanged(Component component, int previousPreferredWidth,
             int previousPreferredHeight) {
-            for (ComponentListener listener : this) {
-                listener.preferredSizeChanged(component, previousPreferredWidth,
-                    previousPreferredHeight);
-            }
+            forEach(listener -> listener.preferredSizeChanged(component, previousPreferredWidth,
+                    previousPreferredHeight));
         }
 
         @Override
         public void widthLimitsChanged(Component component, int previousMinimumWidth,
             int previousMaximumWidth) {
-            for (ComponentListener listener : this) {
-                listener.widthLimitsChanged(component, previousMinimumWidth, previousMaximumWidth);
-            }
+            forEach(listener -> listener.widthLimitsChanged(component, previousMinimumWidth, previousMaximumWidth));
         }
 
         @Override
         public void heightLimitsChanged(Component component, int previousMinimumHeight,
             int previousMaximumHeight) {
-            for (ComponentListener listener : this) {
-                listener.heightLimitsChanged(component, previousMinimumHeight,
-                    previousMaximumHeight);
-            }
+            forEach(listener -> listener.heightLimitsChanged(component, previousMinimumHeight,
+                    previousMaximumHeight));
         }
 
         @Override
         public void locationChanged(Component component, int previousX, int previousY) {
-            for (ComponentListener listener : this) {
-                listener.locationChanged(component, previousX, previousY);
-            }
+            forEach(listener -> listener.locationChanged(component, previousX, previousY));
         }
 
         @Override
         public void visibleChanged(Component component) {
-            for (ComponentListener listener : this) {
-                listener.visibleChanged(component);
-            }
+            forEach(listener -> listener.visibleChanged(component));
         }
 
         @Override
         public void cursorChanged(Component component, Cursor previousCursor) {
-            for (ComponentListener listener : this) {
-                listener.cursorChanged(component, previousCursor);
-            }
+            forEach(listener -> listener.cursorChanged(component, previousCursor));
         }
 
         @Override
         public void tooltipTextChanged(Component component, String previousTooltipText) {
-            for (ComponentListener listener : this) {
-                listener.tooltipTextChanged(component, previousTooltipText);
-            }
+            forEach(listener -> listener.tooltipTextChanged(component, previousTooltipText));
         }
 
         @Override
         public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
-            for (ComponentListener listener : this) {
-                listener.tooltipDelayChanged(component, previousTooltipDelay);
-            }
+            forEach(listener -> listener.tooltipDelayChanged(component, previousTooltipDelay));
         }
 
         @Override
         public void dragSourceChanged(Component component, DragSource previousDragSource) {
-            for (ComponentListener listener : this) {
-                listener.dragSourceChanged(component, previousDragSource);
-            }
+            forEach(listener -> listener.dragSourceChanged(component, previousDragSource));
         }
 
         @Override
         public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
-            for (ComponentListener listener : this) {
-                listener.dropTargetChanged(component, previousDropTarget);
-            }
+            forEach(listener -> listener.dropTargetChanged(component, previousDropTarget));
         }
 
         @Override
         public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
-            for (ComponentListener listener : this) {
-                listener.menuHandlerChanged(component, previousMenuHandler);
-            }
+            forEach(listener -> listener.menuHandlerChanged(component, previousMenuHandler));
         }
 
         @Override
         public void nameChanged(Component component, String previousName) {
-            for (ComponentListener listener : this) {
-                listener.nameChanged(component, previousName);
-            }
+            forEach(listener -> listener.nameChanged(component, previousName));
         }
     }
 
@@ -385,16 +358,12 @@ public abstract class Component implements ConstrainedVisual {
         implements ComponentStateListener {
         @Override
         public void enabledChanged(Component component) {
-            for (ComponentStateListener listener : this) {
-                listener.enabledChanged(component);
-            }
+            forEach(listener -> listener.enabledChanged(component));
         }
 
         @Override
         public void focusedChanged(Component component, Component obverseComponent) {
-            for (ComponentStateListener listener : this) {
-                listener.focusedChanged(component, obverseComponent);
-            }
+            forEach(listener -> listener.focusedChanged(component, obverseComponent));
         }
     }
 
@@ -402,23 +371,17 @@ public abstract class Component implements ConstrainedVisual {
         ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
         @Override
         public void decoratorInserted(Component component, int index) {
-            for (ComponentDecoratorListener listener : this) {
-                listener.decoratorInserted(component, index);
-            }
+            forEach(listener -> listener.decoratorInserted(component, index));
         }
 
         @Override
         public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
-            for (ComponentDecoratorListener listener : this) {
-                listener.decoratorUpdated(component, index, previousDecorator);
-            }
+            forEach(listener -> listener.decoratorUpdated(component, index, previousDecorator));
         }
 
         @Override
         public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
-            for (ComponentDecoratorListener listener : this) {
-                listener.decoratorsRemoved(component, index, decorators);
-            }
+            forEach(listener -> listener.decoratorsRemoved(component, index, decorators));
         }
     }
 
@@ -426,9 +389,7 @@ public abstract class Component implements ConstrainedVisual {
         implements ComponentStyleListener {
         @Override
         public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            for (ComponentStyleListener listener : this) {
-                listener.styleUpdated(component, styleKey, previousValue);
-            }
+            forEach(listener -> listener.styleUpdated(component, styleKey, previousValue));
         }
     }
 
@@ -436,27 +397,21 @@ public abstract class Component implements ConstrainedVisual {
         implements ComponentMouseListener {
         @Override
         public boolean mouseMove(Component component, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentMouseListener listener : this) {
-                consumed |= listener.mouseMove(component, x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseMove(component, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public void mouseOver(Component component) {
-            for (ComponentMouseListener listener : this) {
-                listener.mouseOver(component);
-            }
+            forEach(listener -> listener.mouseOver(component));
         }
 
         @Override
         public void mouseOut(Component component) {
-            for (ComponentMouseListener listener : this) {
-                listener.mouseOut(component);
-            }
+            forEach(listener -> listener.mouseOut(component));
         }
     }
 
@@ -464,35 +419,29 @@ public abstract class Component implements ConstrainedVisual {
         ListenerList<ComponentMouseButtonListener> implements ComponentMouseButtonListener {
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentMouseButtonListener listener : this) {
-                consumed |= listener.mouseDown(component, button, x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseDown(component, button, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentMouseButtonListener listener : this) {
-                consumed |= listener.mouseUp(component, button, x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseUp(component, button, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentMouseButtonListener listener : this) {
-                consumed |= listener.mouseClick(component, button, x, y, count);
-            }
+            forEach(listener -> consumed.or(listener.mouseClick(component, button, x, y, count)));
 
-            return consumed;
+            return consumed.get();
         }
     }
 
@@ -501,14 +450,12 @@ public abstract class Component implements ConstrainedVisual {
         @Override
         public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentMouseWheelListener listener : this) {
-                consumed |= listener.mouseWheel(component, scrollType, scrollAmount, wheelRotation,
-                    x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseWheel(component, scrollType, scrollAmount, wheelRotation,
+                    x, y)));
 
-            return consumed;
+            return consumed.get();
         }
     }
 
@@ -516,36 +463,29 @@ public abstract class Component implements ConstrainedVisual {
         implements ComponentKeyListener {
         @Override
         public boolean keyTyped(Component component, char character) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentKeyListener listener : this) {
-                consumed |= listener.keyTyped(component, character);
-            }
+            forEach(listener -> consumed.or(listener.keyTyped(component, character)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentKeyListener listener : this) {
-                consumed |= listener.keyPressed(component, keyCode, keyLocation);
-            }
+            forEach(listener -> consumed.or(listener.keyPressed(component, keyCode, keyLocation)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
-        public boolean keyReleased(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
-            boolean consumed = false;
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            BooleanResult consumed = new BooleanResult();
 
-            for (ComponentKeyListener listener : this) {
-                consumed |= listener.keyReleased(component, keyCode, keyLocation);
-            }
+            forEach(listener -> consumed.or(listener.keyReleased(component, keyCode, keyLocation)));
 
-            return consumed;
+            return consumed.get();
         }
     }
 
@@ -553,9 +493,7 @@ public abstract class Component implements ConstrainedVisual {
         ListenerList<ComponentTooltipListener> implements ComponentTooltipListener {
         @Override
         public void tooltipTriggered(Component component, int x, int y) {
-            for (ComponentTooltipListener listener : this) {
-                listener.tooltipTriggered(component, x, y);
-            }
+            forEach(listener -> listener.tooltipTriggered(component, x, y));
         }
     }
 
@@ -563,23 +501,17 @@ public abstract class Component implements ConstrainedVisual {
         implements ComponentDataListener {
         @Override
         public void valueAdded(Component component, String key) {
-            for (ComponentDataListener listener : this) {
-                listener.valueAdded(component, key);
-            }
+            forEach(listener -> listener.valueAdded(component, key));
         }
 
         @Override
         public void valueUpdated(Component component, String key, Object previousValue) {
-            for (ComponentDataListener listener : this) {
-                listener.valueUpdated(component, key, previousValue);
-            }
+            forEach(listener -> listener.valueUpdated(component, key, previousValue));
         }
 
         @Override
         public void valueRemoved(Component component, String key, Object value) {
-            for (ComponentDataListener listener : this) {
-                listener.valueRemoved(component, key, value);
-            }
+            forEach(listener -> listener.valueRemoved(component, key, value));
         }
     }
 
@@ -587,9 +519,7 @@ public abstract class Component implements ConstrainedVisual {
         implements ComponentClassListener {
         @Override
         public void focusedComponentChanged(Component previousFocusedComponent) {
-            for (ComponentClassListener listener : this) {
-                listener.focusedComponentChanged(previousFocusedComponent);
-            }
+            forEach(listener -> listener.focusedComponentChanged(previousFocusedComponent));
         }
     }
 
