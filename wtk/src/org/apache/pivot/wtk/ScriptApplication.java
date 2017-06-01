@@ -92,6 +92,11 @@ public class ScriptApplication implements Application {
             this.window.setContent(component);
         }
         this.window.open(display);
+
+        Component content = this.window.getContent();
+        if (content != null) {
+            content.requestFocus();
+        }
     }
 
     @Override

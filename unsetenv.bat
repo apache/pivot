@@ -1,0 +1,3 @@
+@echo off
+if not "%CLASSPATH_OLD%"=="" (set CLASSPATH=%CLASSPATH_OLD%) && (set CLASSPATH_OLD=)
+echo CLASSPATH=%CLASSPATH%
