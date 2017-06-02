@@ -118,6 +118,18 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
     }
 
+    private Rectangle getCaretRectangle(TextHitInfo caret) {
+        TextInput textInput = (TextInput)getComponent();
+        AttributedStringCharacterIterator composedText = textInput.getComposedText();
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        TextLayout layout = new TextLayout(composedText, fontRenderContext);
+        Shape caretShape = layout.getCaretShape(caret);
+        Rectangle caretRect = caretShape.getBounds();
+        caretRect.translate(padding.left + 1,
+                   padding.top + 1 + (int)Math.ceil(layout.getAscent() + layout.getDescent()));
+        return caretRect;
+    }
+
     /**
      * Private class that handles interaction with the Input Method Editor,
      * including requests and events.
@@ -144,7 +156,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         @Override
         public TextHitInfo getLocationOffset(int x, int y) {
-System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, y);
             return null;
         }
 
@@ -161,23 +172,15 @@ System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, 
 
         @Override
         public Rectangle getTextLocation(TextHitInfo offset) {
+            TextInput textInput = (TextInput)getComponent();
+            AttributedStringCharacterIterator composedText = textInput.getComposedText();
+
             if (composedText == null) {
                 return offsetToScreen(caret);
             } else {
                 // The offset should be into the composed text, not the whole text
-                if (composedText.getEndIndex() == 0) {
-                    // TODO: there should be a composed text offset along with the input method event that can be added here....
-                    Rectangle clientRect = new Rectangle(padding.left + 1, padding.top + 1, 0, 0);
-                    return offsetToScreen(clientRect);
-                } else {
-                    FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-                    TextLayout layout = new TextLayout(composedText, fontRenderContext);
-                    Shape caretShape = layout.getCaretShape(offset);
-                    Rectangle caretRect = caretShape.getBounds();
-                    caretRect.translate(padding.left + 1,
-                               padding.top + 1 + (int)Math.ceil(layout.getAscent() + layout.getDescent()));
-                    return offsetToScreen(caretRect);
-                }
+                Rectangle caretRect = getCaretRectangle(composedTextCaret != null ? composedTextCaret : offset);
+                return offsetToScreen(caretRect);
             }
         }
 
@@ -195,9 +198,12 @@ System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, 
         }
 
         private AttributedStringCharacterIterator getComposedText(AttributedCharacterIterator fullTextIter, int start) {
-            return fullTextIter != null ?
-                new AttributedStringCharacterIterator(fullTextIter, start, fullTextIter.getEndIndex()) :
-                null;
+            if (fullTextIter != null) {
+                if (start < fullTextIter.getEndIndex()) {
+                    return new AttributedStringCharacterIterator(fullTextIter, start, fullTextIter.getEndIndex());
+                }
+            }
+            return null;
         }
 
         @Override
@@ -207,21 +213,30 @@ System.out.format("TextInputSkin.getLocationOffset(x=%1$d,y=%2$d) called%n", x, 
             if (iter != null) {
                 int endOfCommittedText = event.getCommittedCharacterCount();
                 textInput.insertText(getCommittedText(iter, endOfCommittedText), textInput.getSelectionStart());
-                composedText = getComposedText(iter, endOfCommittedText);
+                AttributedStringCharacterIterator composedIter = getComposedText(iter, endOfCommittedText);
+                textInput.setComposedText(composedIter);
                 // TODO: do we need to do this? should this be the total length?
                 //textInput.setSelection(endOfCommittedText, 0);
-                layout();
-                repaintComponent();
+                if (composedIter != null) {
+                    composedTextCaret = event.getCaret();
+                } else {
+                    textInput.setComposedText(null);
+                    composedTextCaret = null;
+                }
             } else {
-                composedText = null;
+                textInput.setComposedText(null);
+                composedTextCaret = null;
             }
+            layout();
+            repaintComponent();
+
+            selectionChanged(textInput, textInput.getSelectionStart(), textInput.getSelectionLength());
+            showCaret(textInput.isFocused() && textInput.getSelectionLength() == 0);
         }
 
         @Override
         public void caretPositionChanged(InputMethodEvent event) {
-System.out.format("TextInputSkin.caretPositionChanged called: event=%1$s%n", event);
             TextInput textInput = (TextInput)getComponent();
-System.out.format("\tCARET_POSITION_CHANGED%n");
             // TODO:  so far I have not seen this called, so ??? 
         }
 
@@ -232,6 +247,8 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
     private int anchor = -1;
     private Rectangle caret = new Rectangle();
     private Rectangle selection = null;
+
+    private TextHitInfo composedTextCaret = null;
 
     private int scrollLeft = 0;
 
@@ -271,7 +288,6 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
     private Dimensions averageCharacterSize;
 
     private TextInputMethodHandler textInputMethodHandler = new TextInputMethodHandler();
-    private AttributedStringCharacterIterator composedText = null;
 
 
     private static final int SCROLL_RATE = 50;
@@ -362,6 +378,18 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         return new AttributedStringCharacterIterator(characters, font);
     }
 
+    /**
+     * @return The width of the text in pixel amounts, or 0 if
+     * there is no text currently.
+     */
+    private int getTextWidth() {
+        if (textLayout != null) {
+            Rectangle pixelBounds = textLayout.getPixelBounds(null, 0f, 0f);
+            return pixelBounds.width;
+        }
+        return 0;
+    }
+
     @Override
     public void layout() {
         TextInput textInput = (TextInput) getComponent();
@@ -369,6 +397,8 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         textLayout = null;
 
         int n = textInput.getCharacterCount();
+        AttributedStringCharacterIterator composedText = textInput.getComposedText();
+
         if (n > 0 || composedText != null) {
             AttributedCharacterIterator text = null;
 
@@ -394,8 +424,7 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             textLayout = new TextLayout(text, fontRenderContext);
-            Rectangle2D textBounds = textLayout.getBounds();
-            int textWidth = (int) textBounds.getWidth();
+            int textWidth = getTextWidth();
             int width = getWidth();
 
             if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
@@ -424,19 +453,17 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
                 break;
             case CENTER: {
                 TextInput textInput = (TextInput) getComponent();
-                double txtWidth = textLayout == null ? 0
-                    : textLayout.getBounds().getWidth();
+                int txtWidth = getTextWidth();
                 int availWidth = textInput.getWidth() - (padding.left + padding.right + 2);
-                alignmentDeltaX = (int) (availWidth - txtWidth) / 2;
+                alignmentDeltaX = (availWidth - txtWidth) / 2;
                 break;
             }
             case RIGHT: {
                 TextInput textInput = (TextInput) getComponent();
-                double txtWidth = textLayout == null ? 0
-                    : textLayout.getBounds().getWidth();
+                int txtWidth = getTextWidth();
                 int availWidth = textInput.getWidth()
                     - (padding.left + padding.right + 2 + caret.width);
-                alignmentDeltaX = (int) (availWidth - txtWidth);
+                alignmentDeltaX = (availWidth - txtWidth);
                 break;
             }
             default: {
@@ -629,8 +656,7 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
                 width = (int) Math.ceil(glyphBounds2D.getWidth());
             } else {
                 // This is the terminator character
-                Rectangle2D textLayoutBounds = textLayout.getBounds();
-                x = (int) Math.floor(textLayoutBounds.getWidth());
+                x = getTextWidth();
                 width = 0;
             }
 
@@ -705,13 +731,10 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(color, "color");
 
         this.color = color;
-
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        Utils.checkNull(color, "color");
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -728,14 +751,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(promptColor, "promptColor");
 
         this.promptColor = promptColor;
-
         repaintComponent();
     }
 
     public final void setPromptColor(String promptColor) {
-        Utils.checkNull(promptColor, "promptColor");
-
-        setPromptColor(GraphicsUtilities.decodeColor(promptColor));
+        setPromptColor(GraphicsUtilities.decodeColor(promptColor, "promptColor"));
     }
 
     public final void setPromptColor(int promptColor) {
@@ -751,14 +771,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
-
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        Utils.checkNull(disabledColor, "disabledColor");
-
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -780,9 +797,7 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        Utils.checkNull(backgroundColor, "backgroundColor");
-
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int color) {
@@ -798,14 +813,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(color, "invalidColor");
 
         this.invalidColor = color;
-
         repaintComponent();
     }
 
     public final void setInvalidColor(String color) {
-        Utils.checkNull(color, "invalidColor");
-
-        setInvalidColor(GraphicsUtilities.decodeColor(color));
+        setInvalidColor(GraphicsUtilities.decodeColor(color, "invalidColor"));
     }
 
     public final void setInvalidColor(int color) {
@@ -827,9 +839,7 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
     }
 
     public final void setInvalidBackgroundColor(String color) {
-        Utils.checkNull(color, "invalidBackgroundColor");
-
-        setInvalidBackgroundColor(GraphicsUtilities.decodeColor(color));
+        setInvalidBackgroundColor(GraphicsUtilities.decodeColor(color, "invalidBackgroundColor"));
     }
 
     public final void setInvalidBackgroundColor(int color) {
@@ -851,9 +861,8 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
-
-        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(
+            GraphicsUtilities.decodeColor(disabledBackgroundColor, "disabledBackgroundColor"));
     }
 
     public final void setDisabledBackgroundColor(int color) {
@@ -869,14 +878,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        Utils.checkNull(borderColor, "borderColor");
-
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int color) {
@@ -892,14 +898,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
-
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
-
-        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor, "disabledBorderColor"));
     }
 
     public final void setDisabledBorderColor(int color) {
@@ -915,14 +918,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
-
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        Utils.checkNull(selectionColor, "selectionColor");
-
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
     public final void setSelectionColor(int color) {
@@ -938,14 +938,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
-
         repaintComponent();
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
-
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
     }
 
     public final void setSelectionBackgroundColor(int color) {
@@ -961,14 +958,11 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
-
         repaintComponent();
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
-
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor, "inactiveSelectionColor"));
     }
 
     public final void setInactiveSelectionColor(int color) {
@@ -984,14 +978,12 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
-
         repaintComponent();
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
-
-        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(
+            GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor"));
     }
 
     public final void setInactiveSelectionBackgroundColor(int color) {
@@ -1007,13 +999,10 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
-
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        Utils.checkNull(padding, "padding");
-
         setPadding(new Insets(padding));
     }
 
@@ -1028,8 +1017,6 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
     }
 
     public final void setPadding(String padding) {
-        Utils.checkNull(padding, "padding");
-
         setPadding(Insets.decode(padding));
     }
 
@@ -1041,7 +1028,6 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
         Utils.checkNull(alignment, "horizontalAlignment");
 
         this.horizontalAlignment = alignment;
-
         invalidateComponent();
     }
 
@@ -1641,13 +1627,9 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
             leadingSelectionBounds = getCharacterBounds(selectionStart);
         } else {
             // The insertion point is after the last character
-            int x;
-            if (n == 0) {
-                x = padding.left - scrollLeft + 1 + getAlignmentDeltaX();
-            } else {
-                Rectangle2D textBounds = textLayout.getBounds();
-                x = (int) Math.ceil(textBounds.getWidth())
-                    + (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
+            int x = padding.left + 1 - scrollLeft + getAlignmentDeltaX();
+            if (n > 0) {
+                x += getTextWidth();
             }
 
             int y = padding.top + 1;
@@ -1656,7 +1638,17 @@ System.out.format("\tCARET_POSITION_CHANGED%n");
                 - (padding.top + padding.bottom + 2));
         }
 
-        caret = leadingSelectionBounds.toRectangle();
+        if (composedTextCaret != null) {
+            caret = getCaretRectangle(composedTextCaret);
+            Bounds selectionStartBounds = leadingSelectionBounds;
+            if (selectionStart >= n) {
+                selectionStartBounds = getCharacterBounds(selectionStart);
+            }
+            int offsetToComposedTextStart = selectionStartBounds.x - padding.left - 1;
+            caret.translate(offsetToComposedTextStart, 0);
+        } else {
+            caret = leadingSelectionBounds.toRectangle();
+        }
         caret.width = 1;
 
         if (selectionLength > 0) {

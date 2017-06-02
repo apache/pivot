@@ -21,9 +21,11 @@ import java.io.IOException;
 
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
@@ -31,8 +33,7 @@ import org.apache.pivot.wtk.validation.Validator;
  */
 public class TextInput extends Component {
     /**
-     * Text input skin interface. Text input skins are required to implement
-     * this.
+     * Text input skin interface. Text input skins are required to implement this.
      */
     public interface Skin {
         /**
@@ -111,58 +112,42 @@ public class TextInput extends Component {
         TextInputListener {
         @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
-            for (TextInputListener listener : this) {
-                listener.textSizeChanged(textInput, previousTextSize);
-            }
+            forEach(listener -> listener.textSizeChanged(textInput, previousTextSize));
         }
 
         @Override
         public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
-            for (TextInputListener listener : this) {
-                listener.maximumLengthChanged(textInput, previousMaximumLength);
-            }
+            forEach(listener -> listener.maximumLengthChanged(textInput, previousMaximumLength));
         }
 
         @Override
         public void passwordChanged(TextInput textInput) {
-            for (TextInputListener listener : this) {
-                listener.passwordChanged(textInput);
-            }
+            forEach(listener -> listener.passwordChanged(textInput));
         }
 
         @Override
         public void promptChanged(TextInput textInput, String previousPrompt) {
-            for (TextInputListener listener : this) {
-                listener.promptChanged(textInput, previousPrompt);
-            }
+            forEach(listener -> listener.promptChanged(textInput, previousPrompt));
         }
 
         @Override
         public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
-            for (TextInputListener listener : this) {
-                listener.textValidatorChanged(textInput, previousValidator);
-            }
+            forEach(listener -> listener.textValidatorChanged(textInput, previousValidator));
         }
 
         @Override
         public void strictValidationChanged(TextInput textInput) {
-            for (TextInputListener listener : this) {
-                listener.strictValidationChanged(textInput);
-            }
+            forEach(listener -> listener.strictValidationChanged(textInput));
         }
 
         @Override
         public void textValidChanged(TextInput textInput) {
-            for (TextInputListener listener : this) {
-                listener.textValidChanged(textInput);
-            }
+            forEach(listener -> listener.textValidChanged(textInput));
         }
 
         @Override
         public void editableChanged(TextInput textInput) {
-            for (TextInputListener listener : this) {
-                listener.editableChanged(textInput);
-            }
+            forEach(listener -> listener.editableChanged(textInput));
         }
     }
 
@@ -170,59 +155,45 @@ public class TextInput extends Component {
         ListenerList<TextInputContentListener> implements TextInputContentListener {
         @Override
         public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
-            Vote vote = Vote.APPROVE;
+            VoteResult result = new VoteResult();
 
-            for (TextInputContentListener listener : this) {
-                vote = vote.tally(listener.previewInsertText(textInput, text, index));
-            }
+            forEach(listener -> result.tally(listener.previewInsertText(textInput, text, index)));
 
-            return vote;
+            return result.get();
         }
 
         @Override
         public void insertTextVetoed(TextInput textInput, Vote reason) {
-            for (TextInputContentListener listener : this) {
-                listener.insertTextVetoed(textInput, reason);
-            }
+            forEach(listener -> listener.insertTextVetoed(textInput, reason));
         }
 
         @Override
         public void textInserted(TextInput textInput, int index, int count) {
-            for (TextInputContentListener listener : this) {
-                listener.textInserted(textInput, index, count);
-            }
+            forEach(listener -> listener.textInserted(textInput, index, count));
         }
 
         @Override
         public Vote previewRemoveText(TextInput textInput, int index, int count) {
-            Vote vote = Vote.APPROVE;
+            VoteResult result = new VoteResult();
 
-            for (TextInputContentListener listener : this) {
-                vote = vote.tally(listener.previewRemoveText(textInput, index, count));
-            }
+            forEach(listener -> result.tally(listener.previewRemoveText(textInput, index, count)));
 
-            return vote;
+            return result.get();
         }
 
         @Override
         public void removeTextVetoed(TextInput textInput, Vote reason) {
-            for (TextInputContentListener listener : this) {
-                listener.removeTextVetoed(textInput, reason);
-            }
+            forEach(listener -> listener.removeTextVetoed(textInput, reason));
         }
 
         @Override
         public void textRemoved(TextInput textInput, int index, int count) {
-            for (TextInputContentListener listener : this) {
-                listener.textRemoved(textInput, index, count);
-            }
+            forEach(listener -> listener.textRemoved(textInput, index, count));
         }
 
         @Override
         public void textChanged(TextInput textInput) {
-            for (TextInputContentListener listener : this) {
-                listener.textChanged(textInput);
-            }
+            forEach(listener -> listener.textChanged(textInput));
         }
     }
 
@@ -231,10 +202,8 @@ public class TextInput extends Component {
         @Override
         public void selectionChanged(TextInput textInput, int previousSelectionStart,
             int previousSelectionLength) {
-            for (TextInputSelectionListener listener : this) {
-                listener.selectionChanged(textInput, previousSelectionStart,
-                    previousSelectionLength);
-            }
+            forEach(listener -> listener.selectionChanged(textInput, previousSelectionStart,
+                    previousSelectionLength));
         }
     }
 
@@ -242,28 +211,23 @@ public class TextInput extends Component {
         ListenerList<TextInputBindingListener> implements TextInputBindingListener {
         @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
-            for (TextInputBindingListener listener : this) {
-                listener.textKeyChanged(textInput, previousTextKey);
-            }
+            forEach(listener -> listener.textKeyChanged(textInput, previousTextKey));
         }
 
         @Override
         public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
-            for (TextInputBindingListener listener : this) {
-                listener.textBindTypeChanged(textInput, previousTextBindType);
-            }
+            forEach(listener -> listener.textBindTypeChanged(textInput, previousTextBindType));
         }
 
         @Override
         public void textBindMappingChanged(TextInput textInput,
             TextBindMapping previousTextBindMapping) {
-            for (TextInputBindingListener listener : this) {
-                listener.textBindMappingChanged(textInput, previousTextBindMapping);
-            }
+            forEach(listener -> listener.textBindMappingChanged(textInput, previousTextBindMapping));
         }
     }
 
     private StringBuilder characters = new StringBuilder();
+    private AttributedStringCharacterIterator composedText = null;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -313,7 +277,7 @@ public class TextInput extends Component {
      * @return A string containing a copy of the text input's text content.
      */
     public String getText() {
-        return getText(0, getCharacterCount());
+        return characters.toString();
     }
 
     /**
@@ -363,6 +327,14 @@ public class TextInput extends Component {
 
     public void insertText(CharSequence text, int index) {
         insertText(text, index, true);
+    }
+
+    public AttributedStringCharacterIterator getComposedText() {
+        return composedText;
+    }
+
+    public void setComposedText(AttributedStringCharacterIterator composedText) {
+        this.composedText = composedText;
     }
 
     private void insertText(CharSequence text, int index, boolean addToEditHistory) {
@@ -493,8 +465,7 @@ public class TextInput extends Component {
     }
 
     /**
-     * Places any selected text on the clipboard and deletes it from the text
-     * input.
+     * Places any selected text on the clipboard and deletes it from the text input.
      */
     public void cut() {
         copy();
@@ -579,8 +550,8 @@ public class TextInput extends Component {
      * <tt>0</tt>.
      */
     public Span getSelection() {
-        return (selectionLength == 0) ? null : new Span(selectionStart, selectionStart
-            + selectionLength - 1);
+        return (selectionLength == 0) ? null :
+            new Span(selectionStart, selectionStart + selectionLength - 1);
     }
 
     /**
@@ -591,12 +562,12 @@ public class TextInput extends Component {
      * @param selectionLength The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative.");
-        }
+        Utils.checkNonNegative(selectionLength, "selectionLength");
 
-        if (selectionStart < 0 || selectionStart + selectionLength > characters.length()) {
-            throw new IndexOutOfBoundsException();
+        // TODO: take composed text into account here
+        int composedTextLength = composedText != null ? (composedText.getEndIndex() - composedText.getBeginIndex()) : 0;
+        if (selectionStart < 0 || selectionStart + selectionLength > characters.length() + composedTextLength) {
+            throw new IndexOutOfBoundsException("Selection value is out of bounds.");
         }
 
         int previousSelectionStart = this.selectionStart;
@@ -663,9 +634,7 @@ public class TextInput extends Component {
      * @throws IllegalArgumentException if the size value is negative.
      */
     public void setTextSize(int textSize) {
-        if (textSize < 0) {
-            throw new IllegalArgumentException("textSize is negative.");
-        }
+        Utils.checkNonNegative(textSize, "textSize");
 
         int previousTextSize = this.textSize;
 
@@ -691,9 +660,7 @@ public class TextInput extends Component {
      * @throws IllegalArgumentException if the length value is negative.
      */
     public void setMaximumLength(int maximumLength) {
-        if (maximumLength < 0) {
-            throw new IllegalArgumentException("maximumLength is negative.");
-        }
+        Utils.checkNonNegative(maximumLength, "maximumLength");
 
         int previousMaximumLength = this.maximumLength;
 
@@ -970,4 +937,5 @@ public class TextInput extends Component {
     public ListenerList<TextInputBindingListener> getTextInputBindingListeners() {
         return textInputBindingListeners;
     }
+
 }
