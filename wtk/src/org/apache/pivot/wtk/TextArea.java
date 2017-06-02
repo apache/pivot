@@ -45,16 +45,12 @@ public class TextArea extends Component {
             implements ParagraphListener {
             @Override
             public void textInserted(Paragraph paragraph, int index, int count) {
-                for (ParagraphListener listener : this) {
-                    listener.textInserted(paragraph, index, count);
-                }
+                forEach(listener -> listener.textInserted(paragraph, index, count));
             }
 
             @Override
             public void textRemoved(Paragraph paragraph, int index, int count) {
-                for (ParagraphListener listener : this) {
-                    listener.textRemoved(paragraph, index, count);
-                }
+                forEach(listener -> listener.textRemoved(paragraph, index, count));
             }
         }
 
@@ -398,8 +394,7 @@ public class TextArea extends Component {
                     characterCountLocal += paragraph.characters.length() + 1;
                 }
 
-                // Don't include the implicit final terminator in the character
-                // count
+                // Don't include the implicit final terminator in the character count
                 if (getLength() == 0) {
                     characterCountLocal--;
                 }
@@ -488,16 +483,12 @@ public class TextArea extends Component {
         TextAreaListener {
         @Override
         public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
-            for (TextAreaListener listener : this) {
-                listener.maximumLengthChanged(textArea, previousMaximumLength);
-            }
+            forEach(listener -> listener.maximumLengthChanged(textArea, previousMaximumLength));
         }
 
         @Override
         public void editableChanged(TextArea textArea) {
-            for (TextAreaListener listener : this) {
-                listener.editableChanged(textArea);
-            }
+            forEach(listener -> listener.editableChanged(textArea));
         }
     }
 
@@ -505,24 +496,18 @@ public class TextArea extends Component {
         ListenerList<TextAreaContentListener> implements TextAreaContentListener {
         @Override
         public void paragraphInserted(TextArea textArea, int index) {
-            for (TextAreaContentListener listener : this) {
-                listener.paragraphInserted(textArea, index);
-            }
+            forEach(listener -> listener.paragraphInserted(textArea, index));
         }
 
         @Override
         public void paragraphsRemoved(TextArea textArea, int index,
             Sequence<TextArea.Paragraph> removed) {
-            for (TextAreaContentListener listener : this) {
-                listener.paragraphsRemoved(textArea, index, removed);
-            }
+            forEach(listener -> listener.paragraphsRemoved(textArea, index, removed));
         }
 
         @Override
         public void textChanged(TextArea textArea) {
-            for (TextAreaContentListener listener : this) {
-                listener.textChanged(textArea);
-            }
+            forEach(listener -> listener.textChanged(textArea));
         }
     }
 
@@ -531,9 +516,7 @@ public class TextArea extends Component {
         @Override
         public void selectionChanged(TextArea textArea, int previousSelectionStart,
             int previousSelectionLength) {
-            for (TextAreaSelectionListener listener : this) {
-                listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength);
-            }
+            forEach(listener -> listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength));
         }
     }
 
@@ -541,24 +524,17 @@ public class TextArea extends Component {
         ListenerList<TextAreaBindingListener> implements TextAreaBindingListener {
         @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
-            for (TextAreaBindingListener listener : this) {
-                listener.textKeyChanged(textArea, previousTextKey);
-            }
+            forEach(listener -> listener.textKeyChanged(textArea, previousTextKey));
         }
 
         @Override
         public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
-            for (TextAreaBindingListener listener : this) {
-                listener.textBindTypeChanged(textArea, previousTextBindType);
-            }
+            forEach(listener -> listener.textBindTypeChanged(textArea, previousTextBindType));
         }
 
         @Override
-        public void textBindMappingChanged(TextArea textArea,
-            TextBindMapping previousTextBindMapping) {
-            for (TextAreaBindingListener listener : this) {
-                listener.textBindMappingChanged(textArea, previousTextBindMapping);
-            }
+        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
+            forEach(listener -> listener.textBindMappingChanged(textArea, previousTextBindMapping));
         }
     }
 

@@ -165,16 +165,12 @@ public class TextPane extends Container {
         TextPaneListener {
         @Override
         public void documentChanged(TextPane textPane, Document previousText) {
-            for (TextPaneListener listener : this) {
-                listener.documentChanged(textPane, previousText);
-            }
+            forEach(listener -> listener.documentChanged(textPane, previousText));
         }
 
         @Override
         public void editableChanged(TextPane textPane) {
-            for (TextPaneListener listener : this) {
-                listener.editableChanged(textPane);
-            }
+            forEach(listener -> listener.editableChanged(textPane));
         }
     }
 
@@ -185,9 +181,7 @@ public class TextPane extends Container {
          */
         @Override
         public void charactersInserted(TextPane textPane, int index, int count) {
-            for (TextPaneCharacterListener listener : this) {
-                listener.charactersInserted(textPane, index, count);
-            }
+            forEach(listener -> listener.charactersInserted(textPane, index, count));
         }
 
         /**
@@ -195,9 +189,7 @@ public class TextPane extends Container {
          */
         @Override
         public void charactersRemoved(TextPane textPane, int index, int count) {
-            for (TextPaneCharacterListener listener : this) {
-                listener.charactersRemoved(textPane, index, count);
-            }
+            forEach(listener -> listener.charactersRemoved(textPane, index, count));
         }
     }
 
@@ -206,9 +198,7 @@ public class TextPane extends Container {
         @Override
         public void selectionChanged(TextPane textPane, int previousSelectionStart,
             int previousSelectionLength) {
-            for (TextPaneSelectionListener listener : this) {
-                listener.selectionChanged(textPane, previousSelectionStart, previousSelectionLength);
-            }
+            forEach(listener -> listener.selectionChanged(textPane, previousSelectionStart, previousSelectionLength));
         }
     }
 
@@ -1107,8 +1097,7 @@ public class TextPane extends Container {
 
     public Bounds getCharacterBounds(int offset) {
         // We need to validate in case we get called from user-code after
-        // a user-code initiated modification, but before another layout has
-        // run.
+        // a user-code initiated modification, but before another layout has run.
         validate();
         TextPane.Skin textPaneSkin = (TextPane.Skin) getSkin();
         return textPaneSkin.getCharacterBounds(offset);
