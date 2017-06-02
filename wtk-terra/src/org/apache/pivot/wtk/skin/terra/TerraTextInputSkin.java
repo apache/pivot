@@ -210,23 +210,25 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         public void inputMethodTextChanged(InputMethodEvent event) {
             TextInput textInput = (TextInput)getComponent();
             AttributedCharacterIterator iter = event.getText();
+            AttributedStringCharacterIterator composedIter = null;
+
             if (iter != null) {
                 int endOfCommittedText = event.getCommittedCharacterCount();
-                textInput.insertText(getCommittedText(iter, endOfCommittedText), textInput.getSelectionStart());
-                AttributedStringCharacterIterator composedIter = getComposedText(iter, endOfCommittedText);
-                textInput.setComposedText(composedIter);
-                // TODO: do we need to do this? should this be the total length?
-                //textInput.setSelection(endOfCommittedText, 0);
-                if (composedIter != null) {
-                    composedTextCaret = event.getCaret();
-                } else {
-                    textInput.setComposedText(null);
-                    composedTextCaret = null;
+                if (deleteSelectionDuringTyping(textInput, endOfCommittedText)) {
+                    textInput.insertText(getCommittedText(iter, endOfCommittedText), textInput.getSelectionStart());
+                    composedIter = getComposedText(iter, endOfCommittedText);
                 }
-            } else {
-                textInput.setComposedText(null);
-                composedTextCaret = null;
             }
+
+            textInput.setComposedText(composedIter);
+            if (composedIter != null) {
+                composedTextCaret = event.getCaret();
+                composedVisiblePosition = event.getVisiblePosition();
+            } else {
+                composedTextCaret = null;
+                composedVisiblePosition = null;
+            }
+
             layout();
             repaintComponent();
 
@@ -249,6 +251,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private Rectangle selection = null;
 
     private TextHitInfo composedTextCaret = null;
+    private TextHitInfo composedVisiblePosition = null;
 
     private int scrollLeft = 0;
 
@@ -395,10 +398,6 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             Rectangle2D textBounds = textLayout.getBounds();
             int textWidth = (int)Math.ceil(textBounds.getWidth());
             Rectangle pixelBounds = textLayout.getPixelBounds(null, 0f, 0f);
-System.out.format("textWidth(ceil)=%1$d, pixelBounds=%2$d%n", textWidth, pixelBounds.width);
-            // A bit of explanation here:  these two values usually differ, sometimes by as
-            // much as 4 pixels or more.  This is nearly 1/2 a character at default sizes,
-            // so try our best to find a reasonable compromise.
             return (textWidth + pixelBounds.width + 1) / 2;
         }
         return 0;
@@ -448,8 +447,14 @@ System.out.format("textWidth(ceil)=%1$d, pixelBounds=%2$d%n", textWidth, pixelBo
             } else {
                 // Scroll selection start to visible
                 int selectionStart = textInput.getSelectionStart();
-                if (selectionStart <= n && textInput.isFocused()) {
-                    scrollCharacterToVisible(selectionStart);
+                if (textInput.isFocused()) {
+                    if (composedVisiblePosition != null) {
+                        scrollCharacterToVisible(selectionStart + composedVisiblePosition.getInsertionIndex());
+                    } else {
+                        if (selectionStart <= n) {
+                            scrollCharacterToVisible(selectionStart);
+                        }
+                    }
                 }
             }
         } else {
@@ -1163,6 +1168,18 @@ System.out.format("textWidth(ceil)=%1$d, pixelBounds=%2$d%n", textWidth, pixelBo
         return super.mouseClick(component, button, x, y, count);
     }
 
+    private boolean deleteSelectionDuringTyping(TextInput textInput, int count) {
+        int selectionLength = textInput.getSelectionLength();
+
+        if (textInput.getCharacterCount() - selectionLength + count > textInput.getMaximumLength()) {
+            Toolkit.getDefaultToolkit().beep();
+        } else {
+            textInput.removeText(textInput.getSelectionStart(), selectionLength);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean keyTyped(Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
@@ -1173,14 +1190,9 @@ System.out.format("textWidth(ceil)=%1$d, pixelBounds=%2$d%n", textWidth, pixelBo
             // character as well as meta key presses
             if (character > 0x1F && character != 0x7F
                 && !Keyboard.isPressed(Keyboard.Modifier.META)) {
-                int selectionLength = textInput.getSelectionLength();
-
-                if (textInput.getCharacterCount() - selectionLength + 1 > textInput.getMaximumLength()) {
-                    Toolkit.getDefaultToolkit().beep();
-                } else {
-                    // NOTE We explicitly call getSelectionStart() twice here in case the remove
-                    // event is vetoed
-                    textInput.removeText(textInput.getSelectionStart(), selectionLength);
+                if (deleteSelectionDuringTyping(textInput, 1)) {
+                    // NOTE We explicitly call getSelectionStart() a second time
+                    // here in case the remove event is vetoed
                     textInput.insertText(Character.toString(character),
                         textInput.getSelectionStart());
                 }
@@ -1698,7 +1710,8 @@ System.out.format("textWidth(ceil)=%1$d, pixelBounds=%2$d%n", textWidth, pixelBo
 
     @Override
     public TextInputMethodListener getTextInputMethodListener() {
-        return textInputMethodHandler;
+        TextInput textInput = (TextInput) getComponent();
+        return textInput.isEditable() ? textInputMethodHandler : null;
     }
 
 }
