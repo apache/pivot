@@ -25,5 +25,7 @@ limitations under the License.
         <TextInput prompt="Type something!"/>
         <TextInput password="true" prompt="[Password]"/>
         <TextInput/>
+        <TextInput prompt="-- centered --" styles="{horizontalAlignment:'center'}" />
+        <TextInput prompt="right --" styles="{horizontalAlignment:'right'}" />
     </BoxPane>
 </Window>

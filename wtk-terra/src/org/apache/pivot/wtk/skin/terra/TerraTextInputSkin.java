@@ -379,13 +379,27 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     /**
+     * Do the heavy lifting to figure out the width of the text that is
+     * being displayed.  This could be the user text, or the prompt text
+     * if there is no user text.
+     * <p> With {@link TextLayout} this is kind of tricky, so currently
+     * we are calculating the average of the "bounds" and the "pixel bounds"
+     * (which we see can differ by 1/2 character width sometimes).
+     *
+     * @param textLayout The text to measure.
      * @return The width of the text in pixel amounts, or 0 if
      * there is no text currently.
      */
-    private int getTextWidth() {
+    private int getTextWidth(TextLayout textLayout) {
         if (textLayout != null) {
+            Rectangle2D textBounds = textLayout.getBounds();
+            int textWidth = (int)Math.ceil(textBounds.getWidth());
             Rectangle pixelBounds = textLayout.getPixelBounds(null, 0f, 0f);
-            return pixelBounds.width;
+System.out.format("textWidth(ceil)=%1$d, pixelBounds=%2$d%n", textWidth, pixelBounds.width);
+            // A bit of explanation here:  these two values usually differ, sometimes by as
+            // much as 4 pixels or more.  This is nearly 1/2 a character at default sizes,
+            // so try our best to find a reasonable compromise.
+            return (textWidth + pixelBounds.width + 1) / 2;
         }
         return 0;
     }
@@ -424,7 +438,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             textLayout = new TextLayout(text, fontRenderContext);
-            int textWidth = getTextWidth();
+            int textWidth = getTextWidth(textLayout);
             int width = getWidth();
 
             if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
@@ -446,21 +460,21 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         showCaret(textInput.isFocused() && textInput.getSelectionLength() == 0);
     }
 
-    private int getAlignmentDeltaX() {
+    private int getAlignmentDeltaX(TextLayout textLayout) {
         int alignmentDeltaX = 0;
         switch (horizontalAlignment) {
             case LEFT:
                 break;
             case CENTER: {
                 TextInput textInput = (TextInput) getComponent();
-                int txtWidth = getTextWidth();
+                int txtWidth = getTextWidth(textLayout);
                 int availWidth = textInput.getWidth() - (padding.left + padding.right + 2);
                 alignmentDeltaX = (availWidth - txtWidth) / 2;
                 break;
             }
             case RIGHT: {
                 TextInput textInput = (TextInput) getComponent();
-                int txtWidth = getTextWidth();
+                int txtWidth = getTextWidth(textLayout);
                 int availWidth = textInput.getWidth()
                     - (padding.left + padding.right + 2 + caret.width);
                 alignmentDeltaX = (availWidth - txtWidth);
@@ -523,7 +537,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
         Color caretColor;
 
-        int alignmentDeltaX = getAlignmentDeltaX();
+        TextLayout drawingTextLayout = textLayout;
+        if (textLayout == null && prompt != null) {
+            AttributedStringCharacterIterator promptText = new AttributedStringCharacterIterator(prompt);
+            drawingTextLayout = new TextLayout(promptText, fontRenderContext);
+        }
+
+        int alignmentDeltaX = getAlignmentDeltaX(drawingTextLayout);
         int xpos = padding.left - scrollLeft + 1 + alignmentDeltaX;
 
         if (textLayout == null && prompt != null) {
@@ -624,7 +644,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             offset = 0;
         } else {
             // Translate to glyph coordinates
-            float xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX());
+            float xt = x - (padding.left - scrollLeft + 1 + getAlignmentDeltaX(textLayout));
 
             TextHitInfo hitInfo = textLayout.hitTestChar(xt, 0);
             offset = hitInfo.getInsertionIndex();
@@ -656,11 +676,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 width = (int) Math.ceil(glyphBounds2D.getWidth());
             } else {
                 // This is the terminator character
-                x = getTextWidth();
+                x = getTextWidth(textLayout);
                 width = 0;
             }
 
-            characterBounds = new Bounds(x + padding.left - scrollLeft + 1 + getAlignmentDeltaX(),
+            characterBounds = new Bounds(x + padding.left - scrollLeft + 1 + getAlignmentDeltaX(textLayout),
                 padding.top + 1, width, getHeight() - (padding.top + padding.bottom + 2));
         }
 
@@ -1627,9 +1647,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             leadingSelectionBounds = getCharacterBounds(selectionStart);
         } else {
             // The insertion point is after the last character
-            int x = padding.left + 1 - scrollLeft + getAlignmentDeltaX();
+            int x = padding.left + 1 - scrollLeft + getAlignmentDeltaX(textLayout);
             if (n > 0) {
-                x += getTextWidth();
+                x += getTextWidth(textLayout);
             }
 
             int y = padding.top + 1;
