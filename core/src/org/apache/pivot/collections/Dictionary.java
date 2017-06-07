@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.collections;
 
+import java.awt.Color;
 import java.io.Serializable;
 
 import org.apache.pivot.util.Utils;
@@ -128,6 +129,22 @@ public interface Dictionary<K, V> {
     @SuppressWarnings("unchecked")
     default V putIntValue(K key, int value) {
         return put(key, (V)Integer.valueOf(value));
+    }
+
+    /**
+     * Using the other methods in this interface, retrieve a {@link Color} value
+     * from this dictionary; returning <tt>null</tt> if the key does not exist.
+     *
+     * @param key The key for the (supposed) <tt>Color</tt>
+     * value to retrieve.
+     * @return The color value, or <tt>null</tt> if the key is not present.
+     */
+    default Color getColorValue(K key) {
+        if (containsKey(key)) {
+            return (Color)get(key);
+        } else {
+            return (Color)null;
+        }
     }
 
 }
