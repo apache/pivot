@@ -21,6 +21,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk">
     <windowStateListeners>
     function windowOpened(window) {
+        textArea.text = "ABC\nDEF\nGHI\nJKL\nMNO\nPQ";
         textArea.setSelection(0, 0);
         textArea.requestFocus();
     }
@@ -28,17 +29,19 @@ limitations under the License.
 
     <BoxPane orientation="vertical" styles="{padding:8}">
         <Border>
-            <TextArea bxml:id="textArea" text="ABC&#x000A;DEF&#x000A;GHI&#x000A;JKL&#x000A;MNO&#x000A;PQ" preferredWidth="320"
+            <TextArea bxml:id="textArea" text="" preferredWidth="320"
                 styles="{margin:8, backgroundColor:'#eeeeee', wrapText:true}">
                 <textAreaContentListeners>
                 function textChanged(textArea) {
-                    // java.lang.System.out.println("length = " + textArea.characterCount);
+                    if (typeof length !== 'undefined')
+                        length.text="length = " + textArea.characterCount;
                 }
                 </textAreaContentListeners>
 
                 <textAreaSelectionListeners>
                 function selectionChanged(textArea, previousSelectionStart, previousSelectionLength) {
-                    // java.lang.System.out.println("selection = " + textArea.selectionStart + ", " + textArea.selectionLength);
+                    if (typeof selection !== 'undefined')
+                        selection.text = "selection = " + textArea.selectionStart + ", " + textArea.selectionLength;
                 }
                 </textAreaSelectionListeners>
             </TextArea>
@@ -51,5 +54,12 @@ limitations under the License.
             }
             </buttonPressListeners>
         </PushButton>
+
+        <BoxPane orientation="horizontal">
+            <Label bxml:id="length" text=""/>
+            <Label text=";"/>
+            <Label bxml:id="selection" text=""/>
+        </BoxPane>
+
     </BoxPane>
 </Window>
