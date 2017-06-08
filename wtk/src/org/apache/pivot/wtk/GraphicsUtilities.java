@@ -23,11 +23,16 @@ import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;
 import java.awt.RadialGradientPaint;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.font.TextHitInfo;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedCharacterIterator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -593,6 +598,24 @@ public final class GraphicsUtilities {
             (int) Math.ceil(textBounds.getWidth()),
             (int) Math.ceil(maxCharBounds.getHeight())
           );
+    }
+
+    /**
+     * Get a caret rectangle from the given attributed text.
+     *
+     * @param caret The location within the text where the caret should be located.
+     * @param text  The attributed text iterator.
+     * @param leftOffset Horizontal offset within the control of the text (to add into the position).
+     * @param topOffset Same for vertical offset.
+     */
+    public static Rectangle getCaretRectangle(TextHitInfo caret, AttributedCharacterIterator text,
+            int leftOffset, int topOffset) {
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        TextLayout layout = new TextLayout(text, fontRenderContext);
+        Shape caretShape = layout.getCaretShape(caret);
+        Rectangle caretRect = caretShape.getBounds();
+        caretRect.translate(leftOffset, topOffset + (int)Math.ceil(layout.getAscent() + layout.getDescent()));
+        return caretRect;
     }
 
 }

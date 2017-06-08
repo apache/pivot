@@ -121,13 +121,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private Rectangle getCaretRectangle(TextHitInfo caret) {
         TextInput textInput = (TextInput)getComponent();
         AttributedStringCharacterIterator composedText = textInput.getComposedText();
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        TextLayout layout = new TextLayout(composedText, fontRenderContext);
-        Shape caretShape = layout.getCaretShape(caret);
-        Rectangle caretRect = caretShape.getBounds();
-        caretRect.translate(padding.left + 1,
-                   padding.top + 1 + (int)Math.ceil(layout.getAscent() + layout.getDescent()));
-        return caretRect;
+        return GraphicsUtilities.getCaretRectangle(caret, composedText, padding.left + 1, padding.top + 1);
     }
 
     /**
