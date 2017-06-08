@@ -607,6 +607,7 @@ public final class GraphicsUtilities {
      * @param text  The attributed text iterator.
      * @param leftOffset Horizontal offset within the control of the text (to add into the position).
      * @param topOffset Same for vertical offset.
+     * @return The resulting rectangle for the caret.
      */
     public static Rectangle getCaretRectangle(TextHitInfo caret, AttributedCharacterIterator text,
             int leftOffset, int topOffset) {
