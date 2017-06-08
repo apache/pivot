@@ -72,10 +72,10 @@ public final class Insets implements Serializable {
     public Insets(Dictionary<String, ?> insets) {
         Utils.checkNull(insets, "padding/margin");
 
-        top = insets.getIntValue(TOP_KEY);
-        left = insets.getIntValue(LEFT_KEY);
-        bottom = insets.getIntValue(BOTTOM_KEY);
-        right = insets.getIntValue(RIGHT_KEY);
+        top = insets.getInt(TOP_KEY);
+        left = insets.getInt(LEFT_KEY);
+        bottom = insets.getInt(BOTTOM_KEY);
+        right = insets.getInt(RIGHT_KEY);
 
     }
 

@@ -605,7 +605,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         tabButtonBoxPane.getStyles().put("fill", new Boolean(true));
 
         tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        tabButtonPanorama.getStyles().putIntValue("buttonPadding", 6);
+        tabButtonPanorama.getStyles().putInt("buttonPadding", 6);
         tabButtonPanorama.setView(tabButtonBoxPane);
 
         tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
@@ -1335,11 +1335,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public int getButtonSpacing() {
-        return tabButtonBoxPane.getStyles().getIntValue("spacing");
+        return tabButtonBoxPane.getStyles().getInt("spacing");
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        tabButtonBoxPane.getStyles().putIntValue("spacing", buttonSpacing);
+        tabButtonBoxPane.getStyles().putInt("spacing", buttonSpacing);
     }
 
     public final void setButtonCornerRadius(int buttonCornerRadius) {

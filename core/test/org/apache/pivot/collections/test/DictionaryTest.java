@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import java.awt.Color;
 import org.apache.pivot.collections.HashMap;
 
 
@@ -27,12 +28,30 @@ public class DictionaryTest {
     @Test
     public void test() {
         HashMap<String, Integer> map = new HashMap<>();
-        map.putIntValue("one", 1);
-        map.putIntValue("two", 2);
-        map.putIntValue("three", 300);
-        assertEquals(map.getIntValue("one"), 1);
-        assertEquals(map.getIntValue("two"), 2);
-        assertEquals(map.getIntValue("three"), 300);
+        map.putInt("one", 1);
+        map.putInt("two", 2);
+        map.putInt("three", 300);
+        assertEquals(map.getInt("one"), 1);
+        assertEquals(map.getInt("two"), 2);
+        assertEquals(map.getInt("three"), 300);
+    }
+
+    @Test
+    public void boolTest() {
+        HashMap<String, Boolean> map = new HashMap<>();
+        map.putBoolean("true", false);
+        map.putBoolean("false", true);
+        map.putBoolean("other", true);
+        assertEquals(map.getBoolean("true"), false);
+        assertEquals(map.getBoolean("false"), true);
+        assertEquals(map.getBoolean("other"), true);
+    }
+
+    @Test
+    public void colorTest() {
+        HashMap<String, Color> map = new HashMap<>();
+        map.put("black", Color.BLACK);
+        assertEquals(map.getColor("black"), Color.BLACK);
     }
 
 }

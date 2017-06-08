@@ -110,7 +110,7 @@ public interface Dictionary<K, V> {
      * value to retrieve (actually any {@link Number} will work).
      * @return The integer value, or 0 if the key is not present.
      */
-    default int getIntValue(K key) {
+    default int getInt(K key) {
         if (containsKey(key)) {
             return ((Number)get(key)).intValue();
         } else {
@@ -127,8 +127,37 @@ public interface Dictionary<K, V> {
      * @return The previous value for this key.
      */
     @SuppressWarnings("unchecked")
-    default V putIntValue(K key, int value) {
+    default V putInt(K key, int value) {
         return put(key, (V)Integer.valueOf(value));
+    }
+
+    /**
+     * Using the other methods in this interface, retrieve a boolean value
+     * from this dictionary; returning false if the key does not exist.
+     *
+     * @param key The key for the (supposed) <tt>Boolean</tt>
+     * value to retrieve.
+     * @return The boolean value, or false if the key is not present.
+     */
+    default boolean getBoolean(K key) {
+        if (containsKey(key)) {
+            return ((Boolean)get(key)).booleanValue();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Using the other methods in this interface, put a boolean value
+     * into this dictionary.
+     *
+     * @param key The key for the <tt>Boolean</tt> value to save.
+     * @param value The value to be saved.
+     * @return The previous value for this key.
+     */
+    @SuppressWarnings("unchecked")
+    default V putBoolean(K key, boolean value) {
+        return put(key, (V)Boolean.valueOf(value));
     }
 
     /**
@@ -139,7 +168,7 @@ public interface Dictionary<K, V> {
      * value to retrieve.
      * @return The color value, or <tt>null</tt> if the key is not present.
      */
-    default Color getColorValue(K key) {
+    default Color getColor(K key) {
         if (containsKey(key)) {
             return (Color)get(key);
         } else {

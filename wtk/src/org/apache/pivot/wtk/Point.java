@@ -53,8 +53,8 @@ public final class Point implements Serializable {
     public Point(Dictionary<String, ?> point) {
         Utils.checkNull(point, "point");
 
-        this.x = point.getIntValue(X_KEY);
-        this.y = point.getIntValue(Y_KEY);
+        this.x = point.getInt(X_KEY);
+        this.y = point.getInt(Y_KEY);
     }
 
     /**

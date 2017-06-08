@@ -98,10 +98,10 @@ public final class Bounds implements Serializable {
     public Bounds(Dictionary<String, ?> bounds) {
         Utils.checkNull(bounds, "bounds");
 
-        x = bounds.getIntValue(X_KEY);
-        y = bounds.getIntValue(Y_KEY);
-        width = bounds.getIntValue(WIDTH_KEY);
-        height = bounds.getIntValue(HEIGHT_KEY);
+        x = bounds.getInt(X_KEY);
+        y = bounds.getInt(Y_KEY);
+        width = bounds.getInt(WIDTH_KEY);
+        height = bounds.getInt(HEIGHT_KEY);
     }
 
     /**

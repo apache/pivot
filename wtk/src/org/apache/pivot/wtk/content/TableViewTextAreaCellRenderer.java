@@ -67,15 +67,15 @@ public class TableViewTextAreaCellRenderer extends TextArea implements TableView
         if (tableView.isEnabled() && !rowDisabled) {
             if (rowSelected) {
                 if (tableView.isFocused()) {
-                    color = tableViewStyles.getColorValue("selectionColor");
+                    color = tableViewStyles.getColor("selectionColor");
                 } else {
-                    color = tableViewStyles.getColorValue("inactiveSelectionColor");
+                    color = tableViewStyles.getColor("inactiveSelectionColor");
                 }
             } else {
-                color = tableViewStyles.getColorValue("color");
+                color = tableViewStyles.getColor("color");
             }
         } else {
-            color = tableViewStyles.getColorValue("disabledColor");
+            color = tableViewStyles.getColor("disabledColor");
         }
 
         styles.put("color", color);
