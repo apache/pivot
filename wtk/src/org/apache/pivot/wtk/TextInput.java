@@ -329,14 +329,6 @@ public class TextInput extends Component {
         insertText(text, index, true);
     }
 
-    public AttributedStringCharacterIterator getComposedText() {
-        return composedText;
-    }
-
-    public void setComposedText(AttributedStringCharacterIterator composedText) {
-        this.composedText = composedText;
-    }
-
     private void insertText(CharSequence text, int index, boolean addToEditHistory) {
         Utils.checkNull(text, "text");
 
@@ -429,6 +421,32 @@ public class TextInput extends Component {
                 textInputContentListeners.removeTextVetoed(this, vote);
             }
         }
+    }
+
+    /**
+     * Return the current text that is in process of being composed
+     * using the Input Method Editor.  This is temporary text that
+     * must be displayed, scrolled, etc. but is not a permanent
+     * part of what would be returned from {@link #getText} for instance.
+     *
+     * @return The current composed text or {@code null} if we're not
+     * using an IME or we're in English input mode, or user just
+     * committed or deleted the composed text.
+     */
+    public AttributedStringCharacterIterator getComposedText() {
+        return composedText;
+    }
+
+    /**
+     * Called from the Input Method Editor callbacks to set the current
+     * composed text (that is, the text currently being composed into something
+     * meaningful).
+     *
+     * @param composedText The current composed text (which can be {@code null}
+     * for many different reasons).
+     */
+    public void setComposedText(AttributedStringCharacterIterator composedText) {
+        this.composedText = composedText;
     }
 
     /**
@@ -564,7 +582,6 @@ public class TextInput extends Component {
     public void setSelection(int selectionStart, int selectionLength) {
         Utils.checkNonNegative(selectionLength, "selectionLength");
 
-        // TODO: take composed text into account here
         int composedTextLength = composedText != null ? (composedText.getEndIndex() - composedText.getBeginIndex()) : 0;
         if (selectionStart < 0 || selectionStart + selectionLength > characters.length() + composedTextLength) {
             throw new IndexOutOfBoundsException("Selection value is out of bounds.");
