@@ -376,23 +376,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     /**
-     * Do the heavy lifting to figure out the width of the text that is
-     * being displayed.  This could be the user text, or the prompt text
-     * if there is no user text.
-     * <p> With {@link TextLayout} this is kind of tricky, so currently
-     * we are calculating the average of the "bounds" and the "pixel bounds"
-     * (which we see can differ by 1/2 character width sometimes).
+     * The text width is the just the "advance" value of the {@link TextLayout}
+     * (if any) or 0 if {@code null}.
      *
-     * @param textLayout The text to measure.
-     * @return The width of the text in pixel amounts, or 0 if
-     * there is no text currently.
+     * @param textLayout The existing text (if any).
+     * @return The "advance" value or 0 if there is no text.
      */
     private int getTextWidth(TextLayout textLayout) {
         if (textLayout != null) {
-            Rectangle2D textBounds = textLayout.getBounds();
-            int textWidth = (int)Math.ceil(textBounds.getWidth());
-            Rectangle pixelBounds = textLayout.getPixelBounds(null, 0f, 0f);
-            return (textWidth + pixelBounds.width + 1) / 2;
+            return (int)Math.ceil(textLayout.getAdvance());
         }
         return 0;
     }
