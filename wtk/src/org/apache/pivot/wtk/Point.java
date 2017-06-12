@@ -93,7 +93,7 @@ public final class Point implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + " [" + x + "," + y + "]";
+        return getClass().getSimpleName() + " [" + x + "," + y + "]";
     }
 
     public static Point decode(String value) {
