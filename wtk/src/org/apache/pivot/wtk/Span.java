@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -86,8 +87,8 @@ public final class Span {
             throw new IllegalArgumentException(END_KEY + " is required.");
         }
 
-        start = ((Integer) span.get(START_KEY)).intValue();
-        end = ((Integer) span.get(END_KEY)).intValue();
+        start = span.getInt(START_KEY);
+        end = span.getInt(END_KEY);
     }
 
     /**
@@ -154,9 +155,7 @@ public final class Span {
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
     public Span intersect(Span span) {
-        if (span == null) {
-            throw new IllegalArgumentException("span is null.");
-        }
+        Utils.checkNull(span, "span");
 
         Span intersection = null;
 
@@ -221,13 +220,16 @@ public final class Span {
 
     @Override
     public String toString() {
-        return ("{start: " + start + ", end: " + end + "}");
+        return getClass().getSimpleName() + " {start: " + start + ", end: " + end + "}";
     }
 
     /**
      * Convert a string into a span.
      * <p> If the string value is a JSON map, then parse the map
      * and construct using the {@link #Span(Dictionary)} method.
+     * <p> If the string value is a JSON list, then parse the list
+     * and construct using the first two values as start and end
+     * respectively, using the {@link #Span(int, int)} constructor.
      * <p> Otherwise the string should be a single integer value
      * that will be used to construct the span using the {@link #Span(int)}
      * constructor.
@@ -236,7 +238,8 @@ public final class Span {
      * @return The decoded span.
      * @throws IllegalArgumentException if the value is {@code null} or
      * if the string starts with <code>"{"</code> but it cannot be parsed as
-     * a JSON map.
+     * a JSON map, or if it starts with <code>"["</code> but cannot be parsed
+     * as a JSON list.
      */
     public static Span decode(String value) {
         Utils.checkNull(value, "value");
@@ -245,6 +248,14 @@ public final class Span {
         if (value.startsWith("{")) {
             try {
                 span = new Span(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else if (value.startsWith("[")) {
+            try {
+                @SuppressWarnings("unchecked")
+                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
+                span = new Span(values.get(0), values.get(1));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }
