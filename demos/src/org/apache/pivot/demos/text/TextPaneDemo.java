@@ -33,6 +33,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Alert;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Checkbox;
@@ -66,36 +67,21 @@ import org.apache.pivot.wtk.text.TextSpan;
  */
 public class TextPaneDemo extends Application.Adapter {
     private Window window = null;
-    @BXML
-    private TextPane textPane = null;
-    @BXML
-    private PushButton openFileButton = null;
-    @BXML
-    private PushButton saveFileButton = null;
-    @BXML
-    private PushButton boldButton = null;
-    @BXML
-    private PushButton italicButton = null;
-    @BXML
-    private PushButton underlineButton = null;
-    @BXML
-    private PushButton strikethroughButton = null;
-    @BXML
-    private ColorChooserButton foregroundColorChooserButton = null;
-    @BXML
-    private ColorChooserButton backgroundColorChooserButton = null;
-    @BXML
-    private ListButton fontFamilyListButton = null;
-    @BXML
-    private ListButton fontSizeListButton = null;
-    @BXML
-    private Checkbox wrapTextCheckbox = null;
-    @BXML
-    private PushButton alignLeftButton = null;
-    @BXML
-    private PushButton alignCentreButton = null;
-    @BXML
-    private PushButton alignRightButton = null;
+    @BXML private TextPane textPane = null;
+    @BXML private PushButton openFileButton = null;
+    @BXML private PushButton saveFileButton = null;
+    @BXML private PushButton boldButton = null;
+    @BXML private PushButton italicButton = null;
+    @BXML private PushButton underlineButton = null;
+    @BXML private PushButton strikethroughButton = null;
+    @BXML private ColorChooserButton foregroundColorChooserButton = null;
+    @BXML private ColorChooserButton backgroundColorChooserButton = null;
+    @BXML private ListButton fontFamilyListButton = null;
+    @BXML private ListButton fontSizeListButton = null;
+    @BXML private Checkbox wrapTextCheckbox = null;
+    @BXML private PushButton alignLeftButton = null;
+    @BXML private PushButton alignCentreButton = null;
+    @BXML private PushButton alignRightButton = null;
 
     private File loadedFile = null;
 
@@ -237,6 +223,7 @@ public class TextPaneDemo extends Application.Adapter {
                         }
                     }
                 });
+                requestTextPaneFocus();
             }
         });
 
@@ -262,6 +249,7 @@ public class TextPaneDemo extends Application.Adapter {
                         }
                     }
                 });
+                requestTextPaneFocus();
             }
         });
 
@@ -274,6 +262,7 @@ public class TextPaneDemo extends Application.Adapter {
                         span.setUnderline(!span.isUnderline());
                     }
                 });
+                requestTextPaneFocus();
             }
         });
 
@@ -286,6 +275,7 @@ public class TextPaneDemo extends Application.Adapter {
                         span.setStrikethrough(!span.isStrikethrough());
                     }
                 });
+                requestTextPaneFocus();
             }
         });
 
@@ -300,6 +290,7 @@ public class TextPaneDemo extends Application.Adapter {
                             span.setForegroundColor(foregroundColorChooserButton.getSelectedColor());
                         }
                     });
+                    requestTextPaneFocus();
                 }
             });
 
@@ -314,6 +305,7 @@ public class TextPaneDemo extends Application.Adapter {
                             span.setBackgroundColor(backgroundColorChooserButton.getSelectedColor());
                         }
                     });
+                    requestTextPaneFocus();
                 }
             });
 
@@ -330,6 +322,7 @@ public class TextPaneDemo extends Application.Adapter {
                         span.setFont(derivedFont);
                     }
                 });
+                requestTextPaneFocus();
             }
         };
         fontFamilyListButton.getListButtonSelectionListeners().add(fontButtonPressListener);
@@ -339,6 +332,7 @@ public class TextPaneDemo extends Application.Adapter {
             @Override
             public void buttonPressed(Button button) {
                 textPane.getStyles().put("wrapText", new Boolean(wrapTextCheckbox.isSelected()));
+                requestTextPaneFocus();
             }
         });
 
@@ -346,6 +340,7 @@ public class TextPaneDemo extends Application.Adapter {
             @Override
             public void buttonPressed(Button button) {
                 applyAlignmentStyle(HorizontalAlignment.LEFT);
+                requestTextPaneFocus();
             }
         });
 
@@ -353,6 +348,7 @@ public class TextPaneDemo extends Application.Adapter {
             @Override
             public void buttonPressed(Button button) {
                 applyAlignmentStyle(HorizontalAlignment.CENTER);
+                requestTextPaneFocus();
             }
         });
 
@@ -360,6 +356,7 @@ public class TextPaneDemo extends Application.Adapter {
             @Override
             public void buttonPressed(Button button) {
                 applyAlignmentStyle(HorizontalAlignment.RIGHT);
+                requestTextPaneFocus();
             }
         });
 
@@ -375,7 +372,7 @@ public class TextPaneDemo extends Application.Adapter {
             }
         }
         window.open(display);
-        textPane.requestFocus();
+        requestTextPaneFocus();
     }
 
     private interface StyleApplicator {
@@ -391,6 +388,15 @@ public class TextPaneDemo extends Application.Adapter {
             Paragraph paragraph = (Paragraph) node;
             paragraph.setHorizontalAlignment(horizontalAlignment);
         }
+    }
+
+    private void requestTextPaneFocus() {
+        ApplicationContext.scheduleCallback(new Runnable() {
+            @Override
+            public void run() {
+                textPane.requestFocus();
+            }
+        }, 200L);
     }
 
     /** debugging tools */
@@ -456,7 +462,7 @@ public class TextPaneDemo extends Application.Adapter {
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
                 org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
-                    documentOffset + characterCount);
+                    documentOffset + characterCount - 1);
                 if (selectionSpan.intersects(textSpan)) {
                     applyStyleToSpanNode(selectionSpan, styleApplicator, span, characterCount,
                         textSpan);
@@ -467,7 +473,7 @@ public class TextPaneDemo extends Application.Adapter {
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
                 org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
-                    documentOffset + characterCount);
+                    documentOffset + characterCount - 1);
                 if (selectionSpan.intersects(textSpan)) {
                     applyStyleToTextNode(selectionSpan, styleApplicator, textNode, characterCount,
                         textSpan);
@@ -494,7 +500,7 @@ public class TextPaneDemo extends Application.Adapter {
         } else if (selectionSpan.start <= textSpan.start) {
             // if the selection covers the first part of the text-node, split
             // off the first part of the text-node, and apply the style to it
-            int intersectionLength = selectionSpan.end - textSpan.start;
+            int intersectionLength = selectionSpan.end - textSpan.start + 1;
             String part1 = textNode.getSubstring(0, intersectionLength);
             String part2 = textNode.getSubstring(intersectionLength, characterCount);
 
@@ -508,8 +514,7 @@ public class TextPaneDemo extends Application.Adapter {
             parent.insert(new TextNode(part2), index + 1);
         } else if (selectionSpan.end >= textSpan.end) {
             // if the selection covers the last part of the text-node, split off
-            // the last part of the text-node, and apply the style to
-            // it
+            // the last part of the text-node, and apply the style to it
             int intersectionStart = selectionSpan.start - textSpan.start;
             String part1 = textNode.getSubstring(0, intersectionStart);
             String part2 = textNode.getSubstring(intersectionStart, characterCount);
@@ -523,8 +528,7 @@ public class TextPaneDemo extends Application.Adapter {
             parent.insert(new TextNode(part1), index);
             parent.insert(newSpanNode, index + 1);
         } else {
-            // if the selection covers an internal part of the text-node, split
-            // the
+            // if the selection covers an internal part of the text-node, split the
             // text-node into 3 parts, and apply the style to the second part
             int part2Start = selectionSpan.start - textSpan.start;
             int part2End = selectionSpan.end - textSpan.start + 1;
@@ -554,7 +558,7 @@ public class TextPaneDemo extends Application.Adapter {
         } else if (selectionSpan.start <= textSpan.start) {
             // if the selection covers the first part of the span-node, split
             // off the first part of the span-node, and apply the style to it
-            int intersectionLength = selectionSpan.end - textSpan.start;
+            int intersectionLength = selectionSpan.end - textSpan.start + 1;
             TextSpan node1 = spanNode.getRange(0, intersectionLength);
             styleApplicator.apply(node1);
             Node node2 = spanNode.getRange(intersectionLength, characterCount - intersectionLength);
@@ -577,11 +581,10 @@ public class TextPaneDemo extends Application.Adapter {
             parent.insert(part1, index);
             parent.insert(part2, index + 1);
         } else {
-            // if the selection covers an internal part of the span-node, split
-            // the
+            // if the selection covers an internal part of the span-node, split the
             // span-node into 3 parts, and apply the style to the second part
             int part2Start = selectionSpan.start - textSpan.start;
-            int part2End = selectionSpan.end - textSpan.start;
+            int part2End = selectionSpan.end - textSpan.start + 1;
             TextSpan part1 = spanNode.getRange(0, part2Start);
             TextSpan part2 = spanNode.getRange(part2Start, part2End - part2Start);
             TextSpan part3 = spanNode.getRange(part2End, characterCount - part2End);

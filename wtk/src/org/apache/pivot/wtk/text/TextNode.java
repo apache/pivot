@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Span;
 
 /**
@@ -62,9 +63,7 @@ public final class TextNode extends Node {
     }
 
     public TextNode(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
+        Utils.checkNull(text, "text");
 
         characters = new StringBuilder(text);
     }
@@ -78,9 +77,7 @@ public final class TextNode extends Node {
     }
 
     public void setText(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
+        Utils.checkNull(text, "text");
 
         removeText(0, getCharacterCount());
         insertText(text, 0);
@@ -91,9 +88,7 @@ public final class TextNode extends Node {
      * @param index Starting index into this node for the insertion.
      */
     public void insertText(CharSequence text, int index) {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
+        Utils.checkNull(text, "text");
 
         if (index < 0 || index > characters.length()) {
             throw new IndexOutOfBoundsException("Index " + index + " outside of [0, " + characters.length() + "]");
@@ -171,9 +166,7 @@ public final class TextNode extends Node {
 
     @Override
     public Node removeRange(int offset, int characterCount) {
-        if (characterCount < 0) {
-            throw new IllegalArgumentException("characterCount is negative.");
-        }
+        Utils.checkNonNegative(characterCount, "characterCount");
 
         String removed = characters.substring(offset, offset + characterCount);
         removeText(offset, characterCount);
@@ -184,9 +177,7 @@ public final class TextNode extends Node {
 
     @Override
     public Node getRange(int offset, int characterCount) {
-        if (characterCount < 0) {
-            throw new IllegalArgumentException("characterCount is negative.");
-        }
+        Utils.checkNonNegative(characterCount, "characterCount");
 
         if (offset < 0 || offset + characterCount > characters.length()) {
             throw new IndexOutOfBoundsException();

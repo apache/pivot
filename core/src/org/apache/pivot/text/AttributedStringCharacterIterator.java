@@ -33,42 +33,79 @@ import org.apache.pivot.util.Utils;
  */
 public class AttributedStringCharacterIterator implements AttributedCharacterIterator {
     private AttributedString storage = null;
+    private int length = 0;
     private AttributedCharacterIterator.Attribute[] attributes = null;
     private AttributedCharacterIterator iterator = null;
 
+    public AttributedStringCharacterIterator() {
+        this.storage = new AttributedString("");
+        this.length = 0;
+    }
+
     public AttributedStringCharacterIterator(String text) {
+        Utils.checkNull(text, "text");
         this.storage = new AttributedString(text);
+    }
+
+    private void addAttribute(AttributedCharacterIterator.Attribute attribute, Object value) {
+        if (this.length != 0) {
+            this.storage.addAttribute(attribute, value);
+        }
     }
 
     public AttributedStringCharacterIterator(CharSequence charSequence, Font font) {
         this.storage = new AttributedString(charSequence.toString());
-        this.storage.addAttribute(TextAttribute.FONT, font);
+        this.length = charSequence.length();
+        addAttribute(TextAttribute.FONT, font);
+    }
+
+    public AttributedStringCharacterIterator(CharSequence charSequence, int beginIndex, Font font) {
+        this.storage = new AttributedString(charSequence.subSequence(beginIndex, charSequence.length()).toString());
+        this.length = charSequence.length() - beginIndex;
+        addAttribute(TextAttribute.FONT, font);
     }
 
     public AttributedStringCharacterIterator(String text, int beginIndex, int endIndex) {
+        Utils.checkNull(text, "text");
         this.storage = new AttributedString(text.substring(beginIndex, endIndex));
+        this.length = endIndex - beginIndex;
     }
 
     public AttributedStringCharacterIterator(AttributedCharacterIterator iter, int beginIndex, int endIndex) {
         this.storage = new AttributedString(iter, beginIndex, endIndex);
+        this.length = endIndex - beginIndex;
     }
 
     public AttributedStringCharacterIterator(String text, AttributedCharacterIterator.Attribute[] attributes) {
+        Utils.checkNull(text, "text");
         this.storage = new AttributedString(text);
+        this.length = text.length();
         this.attributes = attributes;
     }
 
     public AttributedStringCharacterIterator(String text, int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+        Utils.checkNull(text, "text");
         this.storage = new AttributedString(text.substring(beginIndex, endIndex));
+        this.length = endIndex - beginIndex;
         this.attributes = attributes;
     }
 
-    public AttributedStringCharacterIterator(AttributedString attributedString) {
+    private AttributedStringCharacterIterator(AttributedString attributedString) {
         // TODO: maybe we should make a copy? instead of adding the reference???
         this.storage = attributedString;
     }
 
     // TODO: many more constructors needed, esp. those with attributes already in place
+
+    public void addUnderlineAttribute(boolean underline) {
+        addAttribute(TextAttribute.UNDERLINE,
+            underline ? TextAttribute.UNDERLINE_ON : Integer.valueOf(-1));
+    }
+
+    public void addStrikethroughAttribute(boolean strikethrough) {
+        addAttribute(TextAttribute.STRIKETHROUGH,
+            strikethrough ? TextAttribute.STRIKETHROUGH_ON : Boolean.FALSE);
+    }
 
     // TODO: do we need more parameters here?  for start position or anything else?
     private AttributedCharacterIterator getIter() {
@@ -184,7 +221,11 @@ public class AttributedStringCharacterIterator implements AttributedCharacterIte
 
     @Override
     public Object clone() {
-        return new AttributedStringCharacterIterator(this.storage);
+        AttributedStringCharacterIterator obj = new AttributedStringCharacterIterator(this.storage);
+        // Copy over the other fields
+        obj.length = this.length;
+        obj.attributes = this.attributes;
+        return obj;
     }
 
     @Override

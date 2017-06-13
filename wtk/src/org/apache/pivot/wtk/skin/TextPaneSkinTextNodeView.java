@@ -22,15 +22,19 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
+import java.awt.font.LineBreakMeasurer;
 import java.awt.font.LineMetrics;
+import java.awt.font.TextHitInfo;
+import java.awt.font.TextLayout;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.text.CharacterIterator;
+import java.text.AttributedCharacterIterator;
 
-import org.apache.pivot.text.CharSequenceCharacterIterator;
+import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CompositeIterator;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextPane;
@@ -44,7 +48,7 @@ import org.apache.pivot.wtk.text.TextNodeListener;
 class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeListener {
     private int start;
     private int length = 0;
-    private GlyphVector glyphVector = null;
+    private TextLayout textLayout = null;
     private TextPaneSkinTextNodeView next = null;
 
     public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode) {
@@ -76,131 +80,195 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     public void invalidateUpTree() {
         length = 0;
         next = null;
-        glyphVector = null;
+        textLayout = null;
 
         super.invalidateUpTree();
+    }
+
+    /**
+     * Do the heavy lifting to figure out the size of the text that is
+     * being displayed.  This could be a combination of composed and committed
+     * text, so we need a {@link TextLayout} which is derived from the combined
+     * attributed text.
+     * <p> With {@link TextLayout} this is kind of tricky, so currently
+     * we are calculating the average of the "bounds" and the "pixel bounds"
+     * (which we see can differ by 1/2 character width sometimes).
+     *
+     * @param textLayout The text to measure.
+     * @return The dimensions of the text in pixel amounts, or 0,0 if
+     * there is no text currently.
+     */
+    private static Dimensions getTextSize(TextLayout textLayout) {
+        if (textLayout != null) {
+            int lineHeight = (int)Math.ceil(textLayout.getAscent() + textLayout.getDescent() + textLayout.getLeading());
+            return new Dimensions((int)Math.ceil(textLayout.getAdvance()), lineHeight);
+        }
+        // TODO: should this be 0 height?  Maybe use average character height
+        Dimensions zero = new Dimensions(0, 0);
+//System.out.format("*************** getTextSize: returning %1$s%n", zero);
+        return zero;
+    }
+
+    private AttributedStringCharacterIterator getCharIterator(TextNode textNode, int start, int end, Font font) {
+        CharSequence characters;
+        int num = end - start;
+        if (num == textNode.getCharacterCount()) {
+            characters = textNode.getCharacters();
+        } else {
+            characters = textNode.getCharacters(start, end);
+        }
+        return new AttributedStringCharacterIterator(characters, font);
     }
 
     @Override
     protected void childLayout(int breakWidth) {
         TextNode textNode = (TextNode) getNode();
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+//System.out.format("childLayout of TextNodeView: char count=%1$d%n", textNode.getCharacterCount());
 
-        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(
-            textNode.getCharacters(), start);
-
-        float lineWidth = 0;
-        int lastWhitespaceIndex = -1;
+        textLayout = null;
 
         Font effectiveFont = getEffectiveFont();
-        char c = ci.first();
-        while (c != CharacterIterator.DONE && lineWidth < breakWidth) {
-            if (Character.isWhitespace(c)) {
-                lastWhitespaceIndex = ci.getIndex();
-            }
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
-            int i = ci.getIndex();
-            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1,
-                fontRenderContext);
-            lineWidth += characterBounds.getWidth();
+        TextPane textPane = (TextPane) getTextPaneSkin().getComponent();
+        AttributedStringCharacterIterator composedText = textPane.getComposedText();
 
-            c = ci.current();
-        }
+        int selectionStart = textPane.getSelectionStart();
+        int selectionLength = textPane.getSelectionLength();
+        int documentOffset = textNode.getDocumentOffset() + start;
+        int charCount = textNode.getCharacterCount();
+        int composedTextBegin = composedText == null ? 0 : composedText.getBeginIndex();
+        int composedTextEnd = composedText == null ? 0 : composedText.getEndIndex();
+        int composedTextLength = composedTextEnd - composedTextBegin; /* exclusive - inclusive, so no +1 needed */
+        // We want to tentatively include the composed length here for "span" checking, for the case of insertion at end of an empty node
+        Span ourSpan = new Span(documentOffset, documentOffset + charCount + composedTextLength - 1);
+        Span composedSpan = new Span(selectionStart + composedTextBegin, selectionStart + composedTextLength - 1);
+        boolean composedImpinges = composedSpan.intersects(ourSpan);
+        Element parent = textNode.getParent();
+        String parentClass = parent == null ? "<<<null>>>" : parent.getClass().getSimpleName();
+        int parentCount = parent == null ? 0 : parent.getCharacterCount();
+//System.out.format("childLayout of TextNodeView: doc offset=%1$d, start=%2$d, char count=%3$d, selStart=%4$d, selLength=%5$d, parent=%6$s, parent count=%7$d%n", documentOffset, start, charCount, selectionStart, selectionLength, parentClass, parentCount);
+//System.out.format("     composedSpan=%1$s, ourSpan=%2$s, impinges=%3$s%n", composedSpan, ourSpan, composedImpinges);
 
-        int end;
-        if (getTextPaneSkin().getWrapText()) {
-            if (textNode.getCharacterCount() == 0) {
-                end = start;
-            } else {
-                if (lineWidth < breakWidth) {
-                    end = ci.getEndIndex();
-                } else {
-                    if (lastWhitespaceIndex == -1) {
-                        end = ci.getIndex() - 1;
-                        if (end <= start) {
-                            end = start + 1;
-                        }
-                    } else {
-                        end = lastWhitespaceIndex + 1;
-                    }
-                }
-            }
-        } else {
-            end = ci.getEndIndex();
-        }
-
-        glyphVector = getEffectiveFont().createGlyphVector(fontRenderContext,
-            new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
-
-        if (end < ci.getEndIndex()) {
-            length = end - start;
-            next = new TextPaneSkinTextNodeView(getTextPaneSkin(), textNode, end);
-            next.setParent(getParent());
-        } else {
-            length = ci.getEndIndex() - start;
-            // set to null in case this node used to be broken across multiple,
-            // but is no longer
+        if (charCount == 0 && (composedText == null || !composedImpinges)) {
+            Dimensions charSize = GraphicsUtilities.getAverageCharacterSize(effectiveFont);
+            setSize(0, charSize.height);
+            length = 0;
             next = null;
-        }
+        } else {
+//System.out.format("composed text=%1$s, begin=%2$d, end=%3$d, length=%4$d%n", composedText, composedTextBegin, composedTextEnd, composedTextLength);
+            AttributedCharacterIterator text = null;
+            boolean underlined = getEffectiveUnderline();
+            boolean struckthrough = getEffectiveStrikethrough();
 
-        Rectangle2D textBounds = glyphVector.getLogicalBounds();
-        setSize((int) Math.ceil(textBounds.getWidth()), (int) Math.ceil(textBounds.getHeight()));
+            if (composedText != null && composedImpinges) {
+                int composedPos = selectionStart - documentOffset + start;
+//System.out.format("****** starting choices: composedPos=%1$d, start=%2$d, charCount=%3$d, selStart=%4$d%n", composedPos, start, charCount, selectionStart);
+                if (composedPos == 0) {
+                    if (charCount - start == 0) {
+                        text = composedText;
+//System.out.format("start=%1$d, count=%2$d; using only composed text%n", start, charCount);
+                    } else {
+                        AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
+//System.out.format("composedPos=0, using composed text + text from start=%1$d to count=%2$d%n", start, charCount);
+                        // Note: only apply the underline and strikethrough to our text, not the composed text
+                        fullText.addUnderlineAttribute(underlined);
+                        fullText.addStrikethroughAttribute(struckthrough);
+                        text = new CompositeIterator(composedText, fullText);
+                    }
+                } else if (composedPos == charCount) {
+                    // Composed text is at the end
+                    AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
+//System.out.format("composedPos=count, using text from start=%1$d to count=%2$d + composed text%n", start, charCount);
+                    // Note: only apply the underline and strikethrough to our text, not the composed text
+                    fullText.addUnderlineAttribute(underlined);
+                    fullText.addStrikethroughAttribute(struckthrough);
+                    text = new CompositeIterator(fullText, composedText);
+                } else {
+                    // Composed text is somewhere in the middle
+//System.out.format("composedPos=%1$d, start=%2$d, count=%3$d; using 3 part text%n", composedPos, start, charCount);
+                    AttributedStringCharacterIterator leadingText = getCharIterator(textNode, start, composedPos, effectiveFont);
+                    leadingText.addUnderlineAttribute(underlined);
+                    leadingText.addStrikethroughAttribute(struckthrough);
+                    AttributedStringCharacterIterator trailingText = getCharIterator(textNode, composedPos, charCount, effectiveFont);
+                    trailingText.addUnderlineAttribute(underlined);
+                    trailingText.addStrikethroughAttribute(struckthrough);
+                    text = new CompositeIterator(leadingText, composedText, trailingText);
+                }
+            } else {
+                AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
+                fullText.addUnderlineAttribute(underlined);
+                fullText.addStrikethroughAttribute(struckthrough);
+                text = fullText;
+            }
+
+            if (getTextPaneSkin().getWrapText()) {
+//System.out.format("TextNodeView.childLayout (wrap): text node count=%1$d, text length=%2$d%n", textNode.getCharacterCount(), text.getEndIndex() - text.getBeginIndex());
+                LineBreakMeasurer measurer = new LineBreakMeasurer(text, fontRenderContext);
+                float wrappingWidth = (float)breakWidth;
+                textLayout = measurer.nextLayout(wrappingWidth);
+                length = textLayout.getCharacterCount();
+                Dimensions size = getTextSize(textLayout);
+                float advance = textLayout.getAdvance();
+//System.out.format("TextNodeView.childLayout (wrap): text layout length=%1$d, text size=%2$s, advance=%3$f%n", length, size, advance);
+                setSize(size);
+//System.out.format("any more?  start=%1$d, getPos=%2$d, count=%3$d%n", start, measurer.getPosition(), textNode.getCharacterCount());
+                if (start + measurer.getPosition() < textNode.getCharacterCount()) {
+                    next = new TextPaneSkinTextNodeView(getTextPaneSkin(), textNode, start + measurer.getPosition());
+                    next.setParent(getParent());
+                } else {
+                    next = null;
+                }
+            } else {
+                // Not wrapping the text, then the width is of the whole thing
+                textLayout = new TextLayout(text, fontRenderContext);
+                length = textLayout.getCharacterCount();
+                Dimensions size = getTextSize(textLayout);
+                float advance = textLayout.getAdvance();
+//System.out.format("TextNodeView.childLayout (no wrap): text layout length=%1$d, text size=%2$s, advance=%3$f%n", length, size, advance);
+                setSize(size);
+                // set to null in case this node used to be broken across multiple,
+                // but is no longer
+                next = null;
+            }
+        }
+//System.out.format("===========end of childLayout of TextNodeView: textLayout=%1$s, length=%2$d, size=%3$s%n", textLayout, length, getSize());
     }
 
     @Override
     public Dimensions getPreferredSize(int breakWidth) {
         TextNode textNode = (TextNode) getNode();
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-
-        CharSequenceCharacterIterator ci = new CharSequenceCharacterIterator(
-            textNode.getCharacters(), start);
-
-        float lineWidth = 0;
-        int lastWhitespaceIndex = -1;
 
         Font effectiveFont = getEffectiveFont();
-        char c = ci.first();
-        while (c != CharacterIterator.DONE && lineWidth < breakWidth) {
-            if (Character.isWhitespace(c)) {
-                lastWhitespaceIndex = ci.getIndex();
-            }
 
-            int i = ci.getIndex();
-            Rectangle2D characterBounds = effectiveFont.getStringBounds(ci, i, i + 1,
-                fontRenderContext);
-            lineWidth += characterBounds.getWidth();
-
-            c = ci.current();
-        }
-
-        int end;
-        if (getTextPaneSkin().getWrapText()) {
-            if (textNode.getCharacterCount() == 0) {
-                end = start;
-            } else {
-                if (lineWidth < breakWidth) {
-                    end = ci.getEndIndex();
-                } else {
-                    if (lastWhitespaceIndex == -1) {
-                        end = ci.getIndex() - 1;
-                        if (end <= start) {
-                            end = start + 1;
-                        }
-                    } else {
-                        end = lastWhitespaceIndex + 1;
-                    }
-                }
-            }
+        // TODO: figure out if the composedText impinges on this node or not
+        // and construct an iterator based on that
+        // For now, just get the committed text
+        if (textNode.getCharacterCount() == 0 /* && composedText == null || composedText doesn't impinge on this node */) {
+            Dimensions charSize = GraphicsUtilities.getAverageCharacterSize(effectiveFont);
+            return new Dimensions(0, charSize.height);
         } else {
-            end = ci.getEndIndex();
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+            // TODO: deal with composed text here
+            AttributedCharacterIterator text = new AttributedStringCharacterIterator(
+                textNode.getCharacters(), start, effectiveFont);
+
+            // Note: we don't add the underline/strikethrough attributes here because
+            // they shouldn't affect the sizing...
+
+            TextLayout currentTextLayout;
+            if (getTextPaneSkin().getWrapText()) {
+                LineBreakMeasurer measurer = new LineBreakMeasurer(text, fontRenderContext);
+                float wrappingWidth = (float)breakWidth;
+                currentTextLayout = measurer.nextLayout(wrappingWidth);
+            } else {
+                // Not wrapping the text, then the width is of the whole thing
+                currentTextLayout = new TextLayout(text, fontRenderContext);
+            }
+            return getTextSize(currentTextLayout);
         }
 
-        GlyphVector glyphVectorLocal = getEffectiveFont().createGlyphVector(fontRenderContext,
-            new CharSequenceCharacterIterator(textNode.getCharacters(), start, end));
-
-        Rectangle2D textBounds = glyphVectorLocal.getLogicalBounds();
-        return new Dimensions((int) Math.ceil(textBounds.getWidth()),
-            (int) Math.ceil(textBounds.getHeight()));
     }
 
     @Override
@@ -218,18 +286,15 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     public void paint(Graphics2D graphics) {
-        if (glyphVector != null) {
+        if (textLayout != null) {
             TextPane textPane = (TextPane) getTextPaneSkin().getComponent();
 
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
+            Font effectiveFont = getEffectiveFont();
+            LineMetrics lm = effectiveFont.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
-            int strikethroughX = Math.round(lm.getAscent() + lm.getStrikethroughOffset());
-            int underlineX = Math.round(lm.getAscent() + lm.getUnderlineOffset());
-            boolean underline = getEffectiveUnderline();
-            boolean strikethrough = getEffectiveStrikethrough();
 
-            graphics.setFont(getEffectiveFont());
+            graphics.setFont(effectiveFont);
 
             int selectionStart = textPane.getSelectionStart();
             int selectionLength = textPane.getSelectionLength();
@@ -261,7 +326,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                     x1 = width;
                 }
 
-                Rectangle selection = new Rectangle(x0, 0, x1 - x0, height);
+                int selectionWidth = x1 - x0;
+                Rectangle selection = new Rectangle(x0, 0, selectionWidth, height);
 
                 // Paint the unselected text
                 Area unselectedArea = new Area();
@@ -271,13 +337,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 Graphics2D textGraphics = (Graphics2D) graphics.create();
                 textGraphics.setColor(getEffectiveForegroundColor());
                 textGraphics.clip(unselectedArea);
-                textGraphics.drawGlyphVector(glyphVector, 0, ascent);
-                if (underline) {
-                    textGraphics.drawLine(x0, underlineX, x1 - x0, underlineX);
-                }
-                if (strikethrough) {
-                    textGraphics.drawLine(x0, strikethroughX, x1 - x0, strikethroughX);
-                }
+                textLayout.draw(textGraphics, 0, ascent);
                 textGraphics.dispose();
 
                 // Paint the selection
@@ -292,24 +352,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 selectedTextGraphics.setColor(textPane.isFocused() && textPane.isEditable() ? selectionColor
                     : getTextPaneSkin().getInactiveSelectionColor());
                 selectedTextGraphics.clip(selection.getBounds());
-                selectedTextGraphics.drawGlyphVector(glyphVector, 0, ascent);
-                if (underline) {
-                    selectedTextGraphics.drawLine(0, underlineX, width, underlineX);
-                }
-                if (strikethrough) {
-                    selectedTextGraphics.drawLine(0, strikethroughX, width, strikethroughX);
-                }
+                textLayout.draw(selectedTextGraphics, 0, ascent);
                 selectedTextGraphics.dispose();
             } else {
                 // Draw the text
                 graphics.setColor(getEffectiveForegroundColor());
-                graphics.drawGlyphVector(glyphVector, 0, ascent);
-                if (underline) {
-                    graphics.drawLine(0, underlineX, width, underlineX);
-                }
-                if (strikethrough) {
-                    graphics.drawLine(0, strikethroughX, width, strikethroughX);
-                }
+                textLayout.draw(graphics, 0, ascent);
             }
         }
     }
@@ -334,99 +382,75 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         return next;
     }
 
-    @Override
-    public int getInsertionPoint(int x, int y) {
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
-        float ascent = lm.getAscent();
-
-        int n = glyphVector.getNumGlyphs();
-        int i = 0;
-
-        while (i < n) {
-            Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
-
-            if (glyphBounds.contains(x, y - ascent)) {
-                Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-
-                if (x - glyphBounds2D.getX() > glyphBounds2D.getWidth() / 2 && i < n - 1) {
-                    // The user clicked on the right half of the character;
-                    // select
-                    // the next character
-                    i++;
-                }
-
-                break;
-            }
-
-            i++;
-        }
-
-        return i;
-    }
-
     private Font getEffectiveFont() {
-        Font font = null;
-        // run up the tree until we find an element's style to apply
-        Element element = getNode().getParent();
-        while (element != null) {
-            font = element.getFont();
+        // Run up the tree until we find an element's style to apply
+        for (Element element = getNode().getParent();
+             element != null;
+             element = element.getParent()) {
+            Font font = element.getFont();
             if (font != null) {
-                break;
+                return font;
             }
-
-            element = element.getParent();
         }
         // if we find nothing, use the default font
-        if (element == null) {
-            font = getTextPaneSkin().getFont();
-        }
-        return font;
+        return getTextPaneSkin().getFont();
     }
 
     private Color getEffectiveForegroundColor() {
-        Color foregroundColor = null;
-        // run up the tree until we find an element's style to apply
-        Element element = getNode().getParent();
-        while (element != null) {
-            foregroundColor = element.getForegroundColor();
+        // Run up the tree until we find an element's style to apply
+        for (Element element = getNode().getParent();
+             element != null;
+             element = element.getParent()) {
+            Color foregroundColor = element.getForegroundColor();
             if (foregroundColor != null) {
-                break;
+                return foregroundColor;
             }
-
-            element = element.getParent();
         }
-        // if we find nothing, use the default color
-        if (element == null) {
-            foregroundColor = getTextPaneSkin().getColor();
-        }
-        return foregroundColor;
+        return getTextPaneSkin().getColor();
     }
 
     private boolean getEffectiveUnderline() {
-        // run up the tree until we find an element's style to apply
-        Element element = getNode().getParent();
-        while (element != null) {
+        // Run up the tree until we find an element's style to apply
+        for (Element element = getNode().getParent();
+             element != null;
+             element = element.getParent()) {
             if (element.isUnderline()) {
                 return true;
             }
-
-            element = element.getParent();
         }
         return false;
     }
 
     private boolean getEffectiveStrikethrough() {
-        // run up the tree until we find an element's style to apply
-        Element element = getNode().getParent();
-        while (element != null) {
+        // Run up the tree until we find an element's style to apply
+        for (Element element = getNode().getParent();
+             element != null;
+             element = element.getParent()) {
             if (element.isStrikethrough()) {
                 return true;
             }
-
-            element = element.getParent();
         }
         return false;
+    }
+
+    @Override
+    public int getInsertionPoint(int x, int y) {
+        int offset = 0;
+
+        if (textLayout != null) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = getEffectiveFont().getLineMetrics("", fontRenderContext);
+            float ascent = lm.getAscent();
+
+            // Translate to glyph coordinates
+            float fx = (float)x;
+            float fy = (float)y - ascent;
+
+            TextHitInfo hitInfo = textLayout.hitTestChar(fx, fy);
+            offset = hitInfo.getInsertionIndex();
+        }
+
+        return offset;
     }
 
     @Override
@@ -434,29 +458,13 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         int offset = -1;
 
         if (from == -1) {
-            int n = glyphVector.getNumGlyphs();
-            int i = 0;
-
-            while (i < n) {
-                Shape glyphBounds = glyphVector.getGlyphLogicalBounds(i);
-                Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
-
-                float glyphX = (float) glyphBounds2D.getX();
-                float glyphWidth = (float) glyphBounds2D.getWidth();
-
-                if (x >= glyphX && x < glyphX + glyphWidth) {
-                    if (x - glyphX > glyphWidth / 2 && i < n - 1) {
-                        // The x position falls within the right half of the
-                        // character;
-                        // select the next character
-                        i++;
-                    }
-
-                    offset = i;
-                    break;
-                }
-
-                i++;
+            // TODO: do we need to check for textLayout != null?  previous code did not test glyphVector here
+            Rectangle2D textBounds = textLayout.getBounds();
+            // "hitTestChar" will map out-of-bounds points to the beginning or end of the text
+            // but we need to know if the given x is inside or not, so test that first.
+            if (textBounds.contains(x, 0)) {
+                TextHitInfo hitInfo = textLayout.hitTestChar((float)x, 0f);
+                offset = hitInfo.getInsertionIndex();
             }
         }
 
@@ -475,18 +483,26 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
     @Override
     public Bounds getCharacterBounds(int offset) {
-        // If the offest == length, then use the right hand edge of the previous
-        // offset instead -- this is for positioning the caret at the end of the text
-        Shape glyphBounds = glyphVector.getGlyphLogicalBounds(offset == length ? offset - 1 : offset);
-        Rectangle2D glyphBounds2D = glyphBounds.getBounds2D();
+        Bounds characterBounds = null;
+        if (textLayout != null) {
+            // If the offest == length, then use the right hand edge of the previous
+            // offset instead -- this is for positioning the caret at the end of the text
+            int length = textLayout.getCharacterCount();
+            int ix = (offset == length) ? offset - 1 : offset;
+            Shape glyphShape = textLayout.getLogicalHighlightShape(ix, ix + 1);
+            Rectangle2D glyphBounds2D = glyphShape.getBounds2D();
 
-        if (offset == length) {
-            return new Bounds((int) Math.ceil(glyphBounds2D.getX() + glyphBounds2D.getWidth()), 0,
-                1, getHeight());
+            if (offset == length) {
+                characterBounds = new Bounds((int) Math.ceil(glyphBounds2D.getX() + glyphBounds2D.getWidth()), 0,
+                    1, getHeight());
+            } else {
+                characterBounds = new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
+                    (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
+            }
         }
+//System.out.format("getCharacterBounds of TextNodeView(offset=%1$d): textLayout=%2$s -> %3$s%n", offset, textLayout, characterBounds);
 
-        return new Bounds((int) Math.floor(glyphBounds2D.getX()), 0,
-            (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
+        return characterBounds;
     }
 
     @Override
@@ -503,6 +519,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     public String toString() {
         TextNode textNode = (TextNode) getNode();
         String text = textNode.getText();
-        return "[" + text.substring(start, start + length) + "]";
+        return "TextNodeView start=" + start + ",length=" + length + " [" + text.substring(start, start + length) + "]";
     }
+
 }

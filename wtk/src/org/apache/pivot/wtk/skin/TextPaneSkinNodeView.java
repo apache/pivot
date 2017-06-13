@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Point;
@@ -98,6 +99,11 @@ abstract class TextPaneSkinNodeView implements NodeListener {
 
     public Dimensions getSize() {
         return new Dimensions(width, height);
+    }
+
+    protected void setSize(Dimensions size) {
+        Utils.checkNull(size, "size");
+        setSize(size.width, size.height);
     }
 
     protected void setSize(int width, int height) {
@@ -246,41 +252,89 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         // No-op
     }
 
-    private static HashMap<Class<? extends Node>, Class<? extends TextPaneSkinNodeView>>
-            nodeViewSkinMap = new HashMap<>();
-    static {
-        nodeViewSkinMap.put(Document.class, TextPaneSkinDocumentView.class);
-        nodeViewSkinMap.put(Paragraph.class, TextPaneSkinParagraphView.class);
-        nodeViewSkinMap.put(TextNode.class, TextPaneSkinTextNodeView.class);
-        nodeViewSkinMap.put(ImageNode.class, TextPaneSkinImageNodeView.class);
-        nodeViewSkinMap.put(ComponentNode.class, TextPaneSkinComponentNodeView.class);
-        nodeViewSkinMap.put(TextSpan.class, TextPaneSkinSpanView.class);
-        nodeViewSkinMap.put(NumberedList.class, TextPaneSkinNumberedListView.class);
-        nodeViewSkinMap.put(BulletedList.class, TextPaneSkinBulletedListView.class);
-        nodeViewSkinMap.put(List.Item.class, TextPaneSkinListItemView.class);
+    /**
+     * In order to avoid the overhead of reflection to create the node view
+     * objects given the node model objects, we will implement this interface
+     * for each node type, which will just create the appropriate view object.
+     */
+    private interface NodeCreator {
+        TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node);
     }
 
+    private static HashMap<Class<? extends Node>, NodeCreator> nodeViewCreatorMap = new HashMap<>();
+    static {
+        nodeViewCreatorMap.put(Document.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinDocumentView(textPaneSkin, (Document)node);
+            }
+        });
+        nodeViewCreatorMap.put(Paragraph.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinParagraphView(textPaneSkin, (Paragraph)node);
+            }
+        });
+        nodeViewCreatorMap.put(TextNode.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)node);
+            }
+        });
+        nodeViewCreatorMap.put(ImageNode.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinImageNodeView(textPaneSkin, (ImageNode)node);
+            }
+        });
+        nodeViewCreatorMap.put(ComponentNode.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinComponentNodeView(textPaneSkin, (ComponentNode)node);
+            }
+        });
+        nodeViewCreatorMap.put(TextSpan.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinSpanView(textPaneSkin, (TextSpan)node);
+            }
+        });
+        nodeViewCreatorMap.put(NumberedList.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinNumberedListView(textPaneSkin, (NumberedList)node);
+            }
+        });
+        nodeViewCreatorMap.put(BulletedList.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinBulletedListView(textPaneSkin, (BulletedList)node);
+            }
+        });
+        nodeViewCreatorMap.put(List.Item.class, new NodeCreator() {
+            @Override
+            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
+                return new TextPaneSkinListItemView(textPaneSkin, (List.Item)node);
+            }
+        });
+    }
+
+    /**
+     * Create a node view for the given model node attached to this <tt>TextPaneSkin</tt>.
+     *
+     * @param textPaneSkin The overall skin of this <tt>TextPane</tt>.
+     * @param node The data node we are creating the view for.
+     * @return The corresponding view node.
+     */
     public static TextPaneSkinNodeView createNodeView(TextPaneSkin textPaneSkin, Node node) {
         TextPaneSkinNodeView nodeView = null;
 
-        Class<? extends Node> nodeClass = node.getClass();
-        Class<? extends TextPaneSkinNodeView> skinClass = nodeViewSkinMap.get(nodeClass);
-        if (skinClass != null) {
-            try {
-                Constructor<?> constructor = skinClass.getConstructor(TextPaneSkin.class, nodeClass);
-                nodeView = (TextPaneSkinNodeView)constructor.newInstance(textPaneSkin, node);
-            } catch (NoSuchMethodException | InstantiationException
-                     | IllegalAccessException | InvocationTargetException ex) {
-                throw new RuntimeException("Error instantiating node view for "
-                    + nodeClass.getName(), ex);
-            }
+        NodeCreator creator = nodeViewCreatorMap.get(node.getClass());
+        if (creator != null) {
+            return creator.create(textPaneSkin, node);
+        } else {
+            throw new IllegalArgumentException("Unsupported node type: " + node.getClass().getName());
         }
-        if (nodeView == null) {
-            throw new IllegalArgumentException("Unsupported node type: "
-                + nodeClass.getName());
-        }
-
-        return nodeView;
     }
 
 }

@@ -20,11 +20,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.InputMethodEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
+import java.awt.font.TextHitInfo;
+import java.awt.font.TextLayout;
 import java.awt.geom.Area;
+import java.text.AttributedCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CompositeIterator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -35,6 +41,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.TextInputMethodListener;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TextPaneListener;
 import org.apache.pivot.wtk.TextPaneSelectionListener;
@@ -48,6 +55,11 @@ import org.apache.pivot.wtk.text.Paragraph;
  */
 public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPaneListener,
     TextPaneSelectionListener {
+
+    /**
+     * A class used for blinking the caret as a recurring callback on the
+     * application context queue.
+     */
     private class BlinkCaretCallback implements Runnable {
         @Override
         public void run() {
@@ -60,6 +72,9 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         }
     }
 
+    /**
+     * Callback to implement scrolling during mouse selection.
+     */
     private class ScrollSelectionCallback implements Runnable {
         @Override
         public void run() {
@@ -108,11 +123,147 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         }
     }
 
+    private Rectangle getCaretRectangle(TextHitInfo textCaret) {
+        TextPane textPane = (TextPane)getComponent();
+        AttributedStringCharacterIterator composedText = textPane.getComposedText();
+        // TODO: this offset isn't right b/c the selection start bounds at end of paragraph
+        // is the terminator bounds which turns out to be the width including the composed text,
+        // so we get "double booked" as it were.  But getting "selectionStart-1" is problematic
+        // as well, since at beginning of line it would be a totally wrong value.
+        Bounds selectionStartBounds = getCharacterBounds(textPane.getSelectionStart());
+        Rectangle rect = GraphicsUtilities.getCaretRectangle(textCaret, composedText,
+            selectionStartBounds.x, selectionStartBounds.y);
+//System.out.format("getCaretRectangle: textCaret=%1$s, selection start=%2$d, bounds=%3$s => caret rect=%4$s%n", textCaret, textPane.getSelectionStart(), selectionStartBounds, rect);
+        return rect;
+    }
+
+    /**
+     * Private class that handles interaction with the Input Method Editor,
+     * including requests and events.
+     */
+    private class TextInputMethodHandler extends TextInputMethodListener.Adapter {
+
+        @Override
+        public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+            TextPane textPane = (TextPane)getComponent();
+            return new AttributedStringCharacterIterator(textPane.getText(), beginIndex, endIndex, attributes);
+        }
+
+        @Override
+        public int getCommittedTextLength() {
+            TextPane textPane = (TextPane)getComponent();
+            return textPane.getCharacterCount();
+        }
+
+        @Override
+        public int getInsertPositionOffset() {
+            TextPane textPane = (TextPane)getComponent();
+            return textPane.getSelectionStart();
+        }
+
+        @Override
+        public TextHitInfo getLocationOffset(int x, int y) {
+            return null;
+        }
+
+        @Override
+        public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+            TextPane textPane = (TextPane)getComponent();
+            return new AttributedStringCharacterIterator(textPane.getSelectedText(), attributes);
+        }
+
+        private Rectangle offsetToScreen(Rectangle clientRectangle) {
+            TextPane textPane = (TextPane)getComponent();
+            return textPane.offsetToScreen(clientRectangle);
+        }
+
+        @Override
+        public Rectangle getTextLocation(TextHitInfo offset) {
+            TextPane textPane = (TextPane)getComponent();
+            AttributedStringCharacterIterator composedText = textPane.getComposedText();
+
+            if (composedText == null) {
+                return offsetToScreen(caret);
+            } else {
+                // The offset should be into the composed text, not the whole text
+                Rectangle caretRect = getCaretRectangle(composedTextCaret != null ? composedTextCaret : offset);
+                return offsetToScreen(caretRect);
+            }
+        }
+
+        private String getCommittedText(AttributedCharacterIterator fullTextIter, int count) {
+            StringBuilder buf = new StringBuilder(count);
+            buf.setLength(count);
+            if (fullTextIter != null) {
+                char ch = fullTextIter.first();
+                for (int i = 0; i < count; i++) {
+                    buf.setCharAt(i, ch);
+                    ch = fullTextIter.next();
+                }
+            }
+            return buf.toString();
+        }
+
+        private AttributedStringCharacterIterator getComposedText(AttributedCharacterIterator fullTextIter, int start) {
+            if (fullTextIter != null) {
+                if (start < fullTextIter.getEndIndex()) {
+                    return new AttributedStringCharacterIterator(fullTextIter, start, fullTextIter.getEndIndex());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void inputMethodTextChanged(InputMethodEvent event) {
+            TextPane textPane = (TextPane)getComponent();
+            AttributedCharacterIterator iter = event.getText();
+            AttributedStringCharacterIterator composedIter = null;
+
+            if (iter != null) {
+                int endOfCommittedText = event.getCommittedCharacterCount();
+//System.out.format("inputMethodTextChanged: endOfCommittedText=%1$d%n", endOfCommittedText);
+                if (endOfCommittedText > 0) {
+                    String committedText = getCommittedText(iter, endOfCommittedText);
+                    textPane.insertText(committedText, textPane.getSelectionStart());
+//System.out.format("inputMethodTextChanged: insert committed text: \"%1$s\" at selStart=%2$d%n", committedText, textPane.getSelectionStart());
+                }
+                composedIter = getComposedText(iter, endOfCommittedText);
+            }
+
+            textPane.setComposedText(composedIter);
+//System.out.format("setComposedText: \"%1$s\"%n", composedIter);
+            if (composedIter != null) {
+                composedTextCaret = event.getCaret();
+                composedVisiblePosition = event.getVisiblePosition();
+            } else {
+                composedTextCaret = null;
+                composedVisiblePosition = null;
+            }
+
+            invalidateNodeViewTree();
+            layout();
+            repaintComponent();
+
+            selectionChanged(textPane, textPane.getSelectionStart(), textPane.getSelectionLength());
+            showCaret(textPane.isFocused() && textPane.getSelectionLength() == 0);
+        }
+
+        @Override
+        public void caretPositionChanged(InputMethodEvent event) {
+            TextPane textPane = (TextPane)getComponent();
+            // TODO:  so far I have not seen this called, so ??? 
+        }
+
+    }
+
     private TextPaneSkinDocumentView documentView = null;
 
     private int caretX = 0;
     private Rectangle caret = new Rectangle();
     private Area selection = null;
+
+    private TextHitInfo composedTextCaret = null;
+    private TextHitInfo composedVisiblePosition = null;
 
     private boolean caretOn = false;
 
@@ -125,6 +276,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
     private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
     private ApplicationContext.ScheduledCallback scheduledScrollSelectionCallback = null;
+
+    private TextInputMethodHandler textInputMethodHandler = new TextInputMethodHandler();
 
     private Font font;
     private Color color;
@@ -741,11 +894,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                     scrollDirection = (y < visibleArea.y) ? TextPane.ScrollDirection.UP
                         : TextPane.ScrollDirection.DOWN;
 
-                    scheduledScrollSelectionCallback = ApplicationContext.scheduleRecurringCallback(
+                    scheduledScrollSelectionCallback = ApplicationContext.runAndScheduleRecurringCallback(
                         scrollSelectionCallback, SCROLL_RATE);
-
-                    // Run the callback once now to scroll the selection immediately
-                    scrollSelectionCallback.run();
                 }
             }
 
@@ -1320,7 +1470,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             if (leadingSelectionBounds == null) {
                 throw new IllegalStateException("no bounds for selection " + selectionStart);
             }
-            caret = leadingSelectionBounds.toRectangle();
+
+            if (composedTextCaret != null) {
+                caret = getCaretRectangle(composedTextCaret);
+            } else {
+                caret = leadingSelectionBounds.toRectangle();
+            }
             caret.width = 1;
 
             // Update the selection
@@ -1375,11 +1530,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         if (show) {
             caretOn = true;
-            scheduledBlinkCaretCallback = ApplicationContext.scheduleRecurringCallback(
+            scheduledBlinkCaretCallback = ApplicationContext.runAndScheduleRecurringCallback(
                 blinkCaretCallback, Platform.getCursorBlinkRate());
-
-            // Run the callback once now to show the cursor immediately
-            blinkCaretCallback.run();
         } else {
             scheduledBlinkCaretCallback = null;
         }
@@ -1393,4 +1545,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         this.documentView.invalidateDownTree();
         invalidateComponent();
     }
+
+    @Override
+    public TextInputMethodListener getTextInputMethodListener() {
+        TextPane textPane = (TextPane) getComponent();
+        return textPane.isEditable() ? textInputMethodHandler : null;
+    }
+
+
 }

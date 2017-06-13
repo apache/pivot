@@ -27,6 +27,7 @@ import java.net.URL;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Span;
@@ -203,6 +204,7 @@ public class TextPane extends Container {
     }
 
     private Document document = null;
+    private AttributedStringCharacterIterator composedText = null;
 
     private int selectionStart = 0;
     private int selectionLength = 0;
@@ -339,6 +341,12 @@ public class TextPane extends Container {
         }
     }
 
+    private void checkDocumentNull() {
+        if (document == null) {
+            throw new IllegalStateException("document is null.");
+        }
+    }
+
     /**
      * Sets the document that backs the text pane. Documents are not shareable
      * across multiple TextPanes; because a Document may contain Components, and
@@ -432,18 +440,15 @@ public class TextPane extends Container {
     }
 
     public void insert(String text) {
-        if (selectionLength > 0) {
-            delete(false);
-        }
-
         insertText(text, selectionStart);
     }
 
     public void insertText(String text, int index) {
         Utils.checkNull(text, "text");
+        checkDocumentNull();
 
-        if (document == null) {
-            throw new IllegalStateException("document is null.");
+        if (selectionLength > 0) {
+            delete(false);
         }
 
         if (document.getCharacterCount() == 0) {
@@ -699,8 +704,7 @@ public class TextPane extends Container {
             if (text != null && text.length() > 0) {
                 // Remove any existing selection
                 if (selectionLength > 0) {
-                    // TODO Make this part of the undoable action (for all such
-                    // actions)
+                    // TODO Make this part of the undoable action (for all such actions)
                     delete(true);
                 }
 
@@ -929,6 +933,32 @@ public class TextPane extends Container {
     }
 
     /**
+     * Return the current text that is in process of being composed
+     * using the Input Method Editor.  This is temporary text that
+     * must be displayed, scrolled, etc. but is not a permanent
+     * part of what would be returned from {@link #getText} for instance.
+     *
+     * @return The current composed text or {@code null} if we're not
+     * using an IME or we're in English input mode, or user just
+     * committed or deleted the composed text.
+     */
+    public AttributedStringCharacterIterator getComposedText() {
+        return composedText;
+    }
+
+    /**
+     * Called from the Input Method Editor callbacks to set the current
+     * composed text (that is, the text currently being composed into something
+     * meaningful).
+     *
+     * @param composedText The current composed text (which can be {@code null}
+     * for many different reasons).
+     */
+    public void setComposedText(AttributedStringCharacterIterator composedText) {
+        this.composedText = composedText;
+    }
+
+    /**
      * @return The starting index of the selection.
      */
     public int getSelectionStart() {
@@ -968,12 +998,13 @@ public class TextPane extends Container {
                 + selectionLength);
         }
 
-        indexBoundsCheck("selectionStart", selectionStart, 0, document.getCharacterCount() - 1);
+        int composedTextLength = composedText != null ? (composedText.getEndIndex() - composedText.getBeginIndex()) : 0;
+        indexBoundsCheck("selectionStart", selectionStart, 0, document.getCharacterCount() - 1 + composedTextLength);
 
-        if (selectionStart + selectionLength > document.getCharacterCount()) {
+        if (selectionStart + selectionLength > document.getCharacterCount() + composedTextLength) {
             throw new IndexOutOfBoundsException("selectionStart=" + selectionStart
                 + ", selectionLength=" + selectionLength + ", document.characterCount="
-                + document.getCharacterCount());
+                + document.getCharacterCount() + ", composedTextLength=" + composedTextLength);
         }
 
         int previousSelectionStart = this.selectionStart;
@@ -983,8 +1014,7 @@ public class TextPane extends Container {
             this.selectionStart = selectionStart;
             this.selectionLength = selectionLength;
 
-            textPaneSelectionListeners.selectionChanged(this, previousSelectionStart,
-                previousSelectionLength);
+            textPaneSelectionListeners.selectionChanged(this, previousSelectionStart, previousSelectionLength);
         }
     }
 
@@ -1004,9 +1034,7 @@ public class TextPane extends Container {
      * Selects all text.
      */
     public void selectAll() {
-        if (document == null) {
-            throw new IllegalStateException("document is null.");
-        }
+        checkDocumentNull();
 
         setSelection(0, document.getCharacterCount());
     }

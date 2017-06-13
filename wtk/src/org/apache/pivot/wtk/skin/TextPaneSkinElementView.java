@@ -211,19 +211,16 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
     }
 
     private Color getStyledBackgroundColor() {
-        Color backgroundColor = null;
-        Node node = getNode();
-        // run up the tree until we find a Element's style to apply
-        while (node != null) {
+        // Run up the tree until we find a Element's style to apply
+        for (Node node = getNode(); node != null; node = node.getParent()) {
             if (node instanceof Element) {
-                backgroundColor = ((Element) node).getBackgroundColor();
+                Color backgroundColor = ((Element) node).getBackgroundColor();
                 if (backgroundColor != null) {
-                    break;
+                    return backgroundColor;
                 }
             }
-            node = node.getParent();
         }
-        return backgroundColor;
+        return null;
     }
 
     @Override
