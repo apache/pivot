@@ -28,6 +28,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Serializer} interface that reads and writes a
@@ -37,10 +38,13 @@ public class PlainTextSerializer implements Serializer<Document> {
     private Charset charset = null;
 
     public static final String MIME_TYPE = "text/plain";
-    public static final int BUFFER_SIZE = 2048;
+    public static final int BUFFER_SIZE = 16_384;
 
     private boolean expandTabs = false;
     private int tabWidth = 4;
+
+    private int bufferSize = BUFFER_SIZE;
+
 
     public PlainTextSerializer() {
         this(Charset.defaultCharset());
@@ -51,9 +55,7 @@ public class PlainTextSerializer implements Serializer<Document> {
     }
 
     public PlainTextSerializer(Charset charset) {
-        if (charset == null) {
-            throw new IllegalArgumentException("charset is null.");
-        }
+        Utils.checkNull(charset, "charset");
 
         this.charset = charset;
     }
@@ -63,9 +65,7 @@ public class PlainTextSerializer implements Serializer<Document> {
     }
 
     public void setTabWidth(int tabWidth) {
-        if (tabWidth < 0) {
-            throw new IllegalArgumentException("tabWidth is negative.");
-        }
+        Utils.checkNonNegative(tabWidth, "tabWidth");
 
         this.tabWidth = tabWidth;
     }
@@ -86,9 +86,29 @@ public class PlainTextSerializer implements Serializer<Document> {
         this.expandTabs = expandTabs;
     }
 
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    /**
+     * Sets the buffer size used internally for reading and writing.  The
+     * default value is {@link #BUFFER_SIZE}.  A value of <tt>0</tt> will
+     * use the default value in the {@link BufferedReader} and {@link BufferedWriter}
+     * classes (probably 8192).
+     *
+     * @param bufferSize The new buffer size to use (or 0 to use the system default).
+     */
+    public void setBufferSize(int bufferSize) {
+        Utils.checkNonNegative(bufferSize, "bufferSize");
+
+        this.bufferSize = bufferSize;
+    }
+
 
     @Override
     public Document readObject(InputStream inputStream) throws IOException {
+        Utils.checkNull(inputStream, "inputStream");
+
         Reader reader = new InputStreamReader(inputStream, charset);
         Document document = readObject(reader);
 
@@ -96,12 +116,16 @@ public class PlainTextSerializer implements Serializer<Document> {
     }
 
     public Document readObject(Reader reader) throws IOException {
+        Utils.checkNull(reader, "reader");
+
         Document document = new Document();
 
-        BufferedReader bufferedReader = new BufferedReader(reader, BUFFER_SIZE);
+        BufferedReader bufferedReader =
+            bufferSize == 0 ? new BufferedReader(reader)
+                            : new BufferedReader(reader, bufferSize);
 
-        String line = bufferedReader.readLine();
-        while (line != null) {
+        String line;
+        while ((line  = bufferedReader.readLine()) != null) {
             if (expandTabs) {
                 int ix = 0;
                 StringBuilder buf = new StringBuilder(line);
@@ -115,7 +139,6 @@ public class PlainTextSerializer implements Serializer<Document> {
                 line = buf.toString();
             }
             document.add(new Paragraph(line));
-            line = bufferedReader.readLine();
         }
 
         return document;
@@ -123,20 +146,24 @@ public class PlainTextSerializer implements Serializer<Document> {
 
     @Override
     public void writeObject(Document document, OutputStream outputStream) throws IOException {
+        Utils.checkNull(document, "document");
+        Utils.checkNull(outputStream, "outputStream");
+
         Writer writer = new OutputStreamWriter(outputStream, charset);
         writeObject(document, writer);
     }
 
     public void writeObject(Document document, Writer writer) throws IOException {
+        Utils.checkNull(document, "document");
+        Utils.checkNull(writer, "writer");
+
         writeValue(document, writer);
     }
 
     private void writeValue(Object object, Writer writer) throws IOException {
-        if (writer == null) {
-            throw new IllegalArgumentException("writer is null.");
-        }
-
-        BufferedWriter bufferedWriter = new BufferedWriter(writer, BUFFER_SIZE);
+        BufferedWriter bufferedWriter =
+            bufferSize == 0 ? new BufferedWriter(writer)
+                            : new BufferedWriter(writer, bufferSize);
 
         if (object instanceof ComponentNode) {
             ComponentNode compNode = (ComponentNode) object;
@@ -172,4 +199,5 @@ public class PlainTextSerializer implements Serializer<Document> {
     public String getMIMEType(Document document) {
         return MIME_TYPE + "; charset=" + charset.name();
     }
+
 }
