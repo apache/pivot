@@ -118,10 +118,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
     }
 
-    private Rectangle getCaretRectangle(TextHitInfo caret) {
+    private Rectangle getCaretRectangle(TextHitInfo textCaret) {
         TextInput textInput = (TextInput)getComponent();
         AttributedStringCharacterIterator composedText = textInput.getComposedText();
-        return GraphicsUtilities.getCaretRectangle(caret, composedText, padding.left + 1, padding.top + 1);
+        Bounds selectionStartBounds = getCharacterBounds(textInput.getSelectionStart());
+        return GraphicsUtilities.getCaretRectangle(textCaret, composedText, selectionStartBounds.x, padding.top + 1);
     }
 
     /**
@@ -1652,18 +1653,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             int y = padding.top + 1;
 
-            leadingSelectionBounds = new Bounds(x, y, 0, height
-                - (padding.top + padding.bottom + 2));
+            leadingSelectionBounds = new Bounds(x, y,
+                0, height - (padding.top + padding.bottom + 2));
         }
 
         if (composedTextCaret != null) {
             caret = getCaretRectangle(composedTextCaret);
-            Bounds selectionStartBounds = leadingSelectionBounds;
-            if (selectionStart >= n) {
-                selectionStartBounds = getCharacterBounds(selectionStart);
-            }
-            int offsetToComposedTextStart = selectionStartBounds.x - padding.left - 1;
-            caret.translate(offsetToComposedTextStart, 0);
         } else {
             caret = leadingSelectionBounds.toRectangle();
         }
