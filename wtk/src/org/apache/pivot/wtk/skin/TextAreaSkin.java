@@ -878,12 +878,10 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
                     scrollDirection = (y < visibleArea.y) ? TextArea.ScrollDirection.UP
                         : TextArea.ScrollDirection.DOWN;
 
-                    scheduledScrollSelectionCallback = ApplicationContext.scheduleRecurringCallback(
-                        scrollSelectionCallback, SCROLL_RATE);
-
                     // Run the callback once now to scroll the selection
-                    // immediately
-                    scrollSelectionCallback.run();
+                    // immediately, then scroll repeatedly
+                    scheduledScrollSelectionCallback = ApplicationContext.runAndScheduleRecurringCallback(
+                        scrollSelectionCallback, SCROLL_RATE);
                 }
             }
 
@@ -1672,11 +1670,9 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
         if (show) {
             caretOn = true;
-            scheduledBlinkCaretCallback = ApplicationContext.scheduleRecurringCallback(
+            // Run the callback once now to show the cursor immediately, then blink at the given rate
+            scheduledBlinkCaretCallback = ApplicationContext.runAndScheduleRecurringCallback(
                 blinkCaretCallback, Platform.getCursorBlinkRate());
-
-            // Run the callback once now to show the cursor immediately
-            blinkCaretCallback.run();
         } else {
             scheduledBlinkCaretCallback = null;
         }

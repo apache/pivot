@@ -77,16 +77,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
             this.spinner = spinnerArgument;
             this.direction = directionArgument;
 
-            // Wait a timeout period, then begin rapidly spinning
-            scheduledSpinnerCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
+            // Run once to register we've started, then wait a timeout period and begin rapidly spinning
+            scheduledSpinnerCallback = ApplicationContext.runAndScheduleRecurringCallback(new Runnable() {
                 @Override
                 public void run() {
                     spin();
                 }
             }, 400, 30);
-
-            // We initially spin once to register that we've started
-            spin();
         }
 
         private void spin() {

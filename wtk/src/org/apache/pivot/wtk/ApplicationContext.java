@@ -2049,11 +2049,12 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
     }
 
     /**
-     * Runs a task and then schedules it for repeated execution. The task will be executed on the
-     * UI thread.
+     * Runs a task once and then schedules it for repeated execution. The task will be executed on the
+     * UI thread.  This is a common pattern for caret blink, scrolling, etc. to have an immediate
+     * effect, with recurring execution after that.
      *
      * @param callback The task to execute.
-     * @param delay The length of time to wait before the first execution of the
+     * @param delay The length of time to wait before the next execution of the
      * task (milliseconds).
      * @param period The interval at which the task will be repeated (also in
      * milliseconds).
