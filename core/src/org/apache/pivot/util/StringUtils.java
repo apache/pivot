@@ -50,5 +50,22 @@ public class StringUtils {
         return builder.toString();
     }
 
+    /**
+     * Convert a string of characters into a hex value string.
+     *
+     * @param charSequence The string of characters to represent.
+     * @return A string in the form of <tt>"[xx,xx,xx...]"</tt>
+     * where the "xx" are the hex representations of each character.
+    */
+    public static String toHexString(CharSequence charSequence) {
+        StringBuilder builder = new StringBuilder(charSequence.length()*3+1);
+        for (int i = 0; i < charSequence.length(); i++) {
+            builder.append((i == 0) ? '[' : ',');
+            builder.append(Integer.toHexString((int)charSequence.charAt(i)));
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
 }
 
