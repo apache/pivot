@@ -169,7 +169,11 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         @Override
         public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
             TextPane textPane = (TextPane)getComponent();
-            return new AttributedStringCharacterIterator(textPane.getSelectedText(), attributes);
+            String selectedText = textPane.getSelectedText();
+            if (selectedText != null) {
+                return new AttributedStringCharacterIterator(selectedText, attributes);
+            }
+            return null;
         }
 
         private Rectangle offsetToScreen(Rectangle clientRectangle) {
