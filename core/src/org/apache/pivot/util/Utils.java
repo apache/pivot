@@ -209,4 +209,32 @@ public class Utils {
                 + " out of bounds [" + start + "," + end + "].");
         }
     }
+
+    /**
+     * Get the default value of {@link Object#toString} for any given object.
+     *
+     * @param obj Any object.
+     * @return The result of what {@link Object#toString} would return without
+     * any alternative implementation of <tt>toString()</tt> that may be implemented
+     * in the class or any intervening superclass.
+     */
+    public static String defaultToString(Object obj) {
+        return obj.getClass().getName() + "@" +
+            Integer.toHexString(System.identityHashCode(obj));
+    }
+
+    /**
+     * Get the (simple) default value of {@link Object#toString} for any given object.
+     *
+     * @param obj Any object.
+     * @return The result of what {@link Object#toString} would return without
+     * any alternative implementation of <tt>toString()</tt> that may be implemented
+     * in the class or any intervening superclass, except that the simple name
+     * of the class is used (without any package designation).
+     */
+    public static String simpleDefaultToString(Object obj) {
+        return obj.getClass().getSimpleName() + "@" +
+            Integer.toHexString(System.identityHashCode(obj));
+    }
+
 }
