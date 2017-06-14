@@ -111,16 +111,75 @@ public final class Span {
     public boolean contains(Span span) {
         Utils.checkNull(span, "span");
 
-        Span normalizedSpan = span.normalize();
+        int otherNormalStart = span.normalStart();
+        int otherNormalEnd = span.normalEnd();
 
         boolean contains;
         if (start < end) {
-            contains = (start <= normalizedSpan.start && end >= normalizedSpan.end);
+            contains = (start <= otherNormalStart && end >= otherNormalEnd);
         } else {
-            contains = (end <= normalizedSpan.start && start >= normalizedSpan.end);
+            contains = (end <= otherNormalStart && start >= otherNormalEnd);
         }
 
         return contains;
+    }
+
+    /**
+     * Determines whether this span is adjacent to another span.
+     * <p>Adjacency means that one end of this span is +/-1 from
+     * either end of the other span (since start and end are inclusive).
+     *
+     * @param span The span to test for adjacency.
+     * @return <tt>true</tt> if this span is adjacent <tt>span</tt>; <tt>false</tt>,
+     * otherwise.
+     * @throws IllegalArgumentException if the given span is {@code null}.
+     */
+    public boolean adjacentTo(Span span) {
+        Utils.checkNull(span, "span");
+
+        int otherNormalStart = span.normalStart();
+        int otherNormalEnd = span.normalEnd();
+
+        boolean adjacentTo;
+        if (start < end) {
+            adjacentTo = (end + 1 == otherNormalStart || start - 1 == otherNormalEnd);
+        } else {
+            adjacentTo = (start + 1 == otherNormalStart || end - 1 == otherNormalEnd);
+        }
+
+        return adjacentTo;
+    }
+
+    /**
+     * Determines whether this span is "before" another span.
+     * <p>"Before" means that the normalized end of this span is &lt; the
+     * normalized start of the other span.
+    *
+     * @param span The span to test.
+     * @return <tt>true</tt> if this span is "before" <tt>span</tt>; <tt>false</tt>,
+     * otherwise.
+     * @throws IllegalArgumentException if the given span is {@code null}.
+     */
+    public boolean before(Span span) {
+        Utils.checkNull(span, "span");
+
+        return normalEnd() < span.normalStart();
+    }
+
+    /**
+     * Determines whether this span is "after" another span.
+     * <p>"After" means that the normalized start of this span is &gt; the
+     * normalized end of the other span.
+    *
+     * @param span The span to test.
+     * @return <tt>true</tt> if this span is "after" <tt>span</tt>; <tt>false</tt>,
+     * otherwise.
+     * @throws IllegalArgumentException if the given span is {@code null}.
+     */
+    public boolean after(Span span) {
+        Utils.checkNull(span, "span");
+
+        return normalStart() > span.normalEnd();
     }
 
     /**
@@ -134,13 +193,14 @@ public final class Span {
     public boolean intersects(Span span) {
         Utils.checkNull(span, "span");
 
-        Span normalizedSpan = span.normalize();
+        int otherNormalStart = span.normalStart();
+        int otherNormalEnd = span.normalEnd();
 
         boolean intersects;
         if (start < end) {
-            intersects = (start <= normalizedSpan.end && end >= normalizedSpan.start);
+            intersects = (start <= otherNormalEnd && end >= otherNormalStart);
         } else {
-            intersects = (end <= normalizedSpan.end && start >= normalizedSpan.start);
+            intersects = (end <= otherNormalEnd && start >= otherNormalStart);
         }
 
         return intersects;
@@ -151,7 +211,7 @@ public final class Span {
      *
      * @param span The span to intersect with this span.
      * @return A new Span instance representing the intersection of this span and
-     * <tt>span</tt>, or null if the spans do not intersect.
+     * <tt>span</tt>, or <tt>null</tt> if the spans do not intersect.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
     public Span intersect(Span span) {
@@ -180,11 +240,27 @@ public final class Span {
     }
 
     /**
+     * @return The normalized start of this span, which is the lesser of the
+     * current start and end.
+     */
+    public int normalStart() {
+        return Math.min(start, end);
+    }
+
+    /**
+     * @return The normalized end of this span, which is the greater of the
+     * current start and end.
+     */
+    public int normalEnd() {
+        return Math.max(start, end);
+    }
+
+    /**
      * @return A normalized equivalent of the span in which <tt>start</tt> is
      * guaranteed to be less than <tt>end</tt>.
      */
     public Span normalize() {
-        return new Span(Math.min(start, end), Math.max(start, end));
+        return new Span(normalStart(), normalEnd());
     }
 
     /**
@@ -199,6 +275,22 @@ public final class Span {
      */
     public Span offset(int offset) {
         return new Span(this.start + offset, this.end + offset);
+    }
+
+    /**
+     * Decides whether the normalized version of this span is equal the
+     * normalized version of the other span.  Saves the overhead of making
+     * a new object (with {@link #normalize}).
+     *
+     * @param span The span to test against this span.
+     * @return Whether or not the normalized values of both spans are the same.
+     * @throws IllegalArgumentException if the other span is {@code null}.
+     */
+    public boolean normalEquals(Span span) {
+        Utils.checkNull(span, "span");
+
+        return (normalStart() == span.normalStart()) &&
+               (normalEnd() == span.normalEnd());
     }
 
     @Override
