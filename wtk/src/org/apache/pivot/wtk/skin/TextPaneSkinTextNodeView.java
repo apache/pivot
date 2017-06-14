@@ -32,6 +32,7 @@ import java.text.AttributedCharacterIterator;
 
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.text.CompositeIterator;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -39,6 +40,7 @@ import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.Element;
+import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.TextNodeListener;
 
@@ -105,7 +107,6 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         }
         // TODO: should this be 0 height?  Maybe use average character height
         Dimensions zero = new Dimensions(0, 0);
-//System.out.format("*************** getTextSize: returning %1$s%n", zero);
         return zero;
     }
 
@@ -123,7 +124,6 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     @Override
     protected void childLayout(int breakWidth) {
         TextNode textNode = (TextNode) getNode();
-//System.out.format("childLayout of TextNodeView: char count=%1$d%n", textNode.getCharacterCount());
 
         textLayout = null;
 
@@ -133,44 +133,49 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         TextPane textPane = (TextPane) getTextPaneSkin().getComponent();
         AttributedStringCharacterIterator composedText = textPane.getComposedText();
 
-        int selectionStart = textPane.getSelectionStart();
-        int selectionLength = textPane.getSelectionLength();
-        int documentOffset = textNode.getDocumentOffset() + start;
-        int charCount = textNode.getCharacterCount();
-        int composedTextBegin = composedText == null ? 0 : composedText.getBeginIndex();
-        int composedTextEnd = composedText == null ? 0 : composedText.getEndIndex();
-        int composedTextLength = composedTextEnd - composedTextBegin; /* exclusive - inclusive, so no +1 needed */
-        // We want to tentatively include the composed length here for "span" checking, for the case of insertion at end of an empty node
-        Span ourSpan = new Span(documentOffset, documentOffset + charCount + composedTextLength - 1);
-        Span composedSpan = new Span(selectionStart + composedTextBegin, selectionStart + composedTextLength - 1);
-        boolean composedImpinges = composedSpan.intersects(ourSpan);
         Element parent = textNode.getParent();
         String parentClass = parent == null ? "<<<null>>>" : parent.getClass().getSimpleName();
         int parentCount = parent == null ? 0 : parent.getCharacterCount();
-//System.out.format("childLayout of TextNodeView: doc offset=%1$d, start=%2$d, char count=%3$d, selStart=%4$d, selLength=%5$d, parent=%6$s, parent count=%7$d%n", documentOffset, start, charCount, selectionStart, selectionLength, parentClass, parentCount);
-//System.out.format("     composedSpan=%1$s, ourSpan=%2$s, impinges=%3$s%n", composedSpan, ourSpan, composedImpinges);
 
-        if (charCount == 0 && (composedText == null || !composedImpinges)) {
+        int selectionStart = textPane.getSelectionStart();
+        int selectionLength = textPane.getSelectionLength();
+        int documentOffset = textNode.getDocumentOffset();
+        int charCount = textNode.getCharacterCount();
+        boolean composedIntersects = false;
+
+        if (composedText != null) {
+            int composedTextBegin = composedText.getBeginIndex();
+            int composedTextEnd = composedText.getEndIndex();
+            int composedTextLength = composedTextEnd - composedTextBegin; /* exclusive - inclusive, so no +1 needed */
+            // If this text node is at the end of a paragraph, increase the span by 1 for the newline
+            Span ourSpan;
+            if (parent instanceof Paragraph && charCount == parentCount - 1) {
+                ourSpan = new Span(documentOffset + start, documentOffset + charCount);
+            } else {
+                ourSpan = new Span(documentOffset + start, documentOffset + charCount - 1);
+            }
+            // The "composed span" just encompasses the start position, because this is "phantom" text, so it exists between any two other "real" text positions.
+            Span composedSpan = new Span(selectionStart + composedTextBegin);
+            composedIntersects = composedSpan.intersects(ourSpan);
+        }
+
+        if (charCount == 0 && !composedIntersects) {
             Dimensions charSize = GraphicsUtilities.getAverageCharacterSize(effectiveFont);
             setSize(0, charSize.height);
             length = 0;
             next = null;
         } else {
-//System.out.format("composed text=%1$s, begin=%2$d, end=%3$d, length=%4$d%n", composedText, composedTextBegin, composedTextEnd, composedTextLength);
             AttributedCharacterIterator text = null;
             boolean underlined = getEffectiveUnderline();
             boolean struckthrough = getEffectiveStrikethrough();
 
-            if (composedText != null && composedImpinges) {
-                int composedPos = selectionStart - documentOffset + start;
-//System.out.format("****** starting choices: composedPos=%1$d, start=%2$d, charCount=%3$d, selStart=%4$d%n", composedPos, start, charCount, selectionStart);
+            if (composedText != null && composedIntersects) {
+                int composedPos = selectionStart - documentOffset;
                 if (composedPos == 0) {
                     if (charCount - start == 0) {
                         text = composedText;
-//System.out.format("start=%1$d, count=%2$d; using only composed text%n", start, charCount);
                     } else {
                         AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
-//System.out.format("composedPos=0, using composed text + text from start=%1$d to count=%2$d%n", start, charCount);
                         // Note: only apply the underline and strikethrough to our text, not the composed text
                         fullText.addUnderlineAttribute(underlined);
                         fullText.addStrikethroughAttribute(struckthrough);
@@ -179,14 +184,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 } else if (composedPos == charCount) {
                     // Composed text is at the end
                     AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
-//System.out.format("composedPos=count, using text from start=%1$d to count=%2$d + composed text%n", start, charCount);
                     // Note: only apply the underline and strikethrough to our text, not the composed text
                     fullText.addUnderlineAttribute(underlined);
                     fullText.addStrikethroughAttribute(struckthrough);
                     text = new CompositeIterator(fullText, composedText);
                 } else {
                     // Composed text is somewhere in the middle
-//System.out.format("composedPos=%1$d, start=%2$d, count=%3$d; using 3 part text%n", composedPos, start, charCount);
                     AttributedStringCharacterIterator leadingText = getCharIterator(textNode, start, composedPos, effectiveFont);
                     leadingText.addUnderlineAttribute(underlined);
                     leadingText.addStrikethroughAttribute(struckthrough);
@@ -203,16 +206,13 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             }
 
             if (getTextPaneSkin().getWrapText()) {
-//System.out.format("TextNodeView.childLayout (wrap): text node count=%1$d, text length=%2$d%n", textNode.getCharacterCount(), text.getEndIndex() - text.getBeginIndex());
                 LineBreakMeasurer measurer = new LineBreakMeasurer(text, fontRenderContext);
                 float wrappingWidth = (float)breakWidth;
                 textLayout = measurer.nextLayout(wrappingWidth);
                 length = textLayout.getCharacterCount();
                 Dimensions size = getTextSize(textLayout);
                 float advance = textLayout.getAdvance();
-//System.out.format("TextNodeView.childLayout (wrap): text layout length=%1$d, text size=%2$s, advance=%3$f%n", length, size, advance);
                 setSize(size);
-//System.out.format("any more?  start=%1$d, getPos=%2$d, count=%3$d%n", start, measurer.getPosition(), textNode.getCharacterCount());
                 if (start + measurer.getPosition() < textNode.getCharacterCount()) {
                     next = new TextPaneSkinTextNodeView(getTextPaneSkin(), textNode, start + measurer.getPosition());
                     next.setParent(getParent());
@@ -225,14 +225,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 length = textLayout.getCharacterCount();
                 Dimensions size = getTextSize(textLayout);
                 float advance = textLayout.getAdvance();
-//System.out.format("TextNodeView.childLayout (no wrap): text layout length=%1$d, text size=%2$s, advance=%3$f%n", length, size, advance);
                 setSize(size);
                 // set to null in case this node used to be broken across multiple,
                 // but is no longer
                 next = null;
             }
         }
-//System.out.format("===========end of childLayout of TextNodeView: textLayout=%1$s, length=%2$d, size=%3$s%n", textLayout, length, getSize());
     }
 
     @Override
@@ -500,7 +498,6 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                     (int) Math.ceil(glyphBounds2D.getWidth()), getHeight());
             }
         }
-//System.out.format("getCharacterBounds of TextNodeView(offset=%1$d): textLayout=%2$s -> %3$s%n", offset, textLayout, characterBounds);
 
         return characterBounds;
     }
@@ -519,7 +516,15 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     public String toString() {
         TextNode textNode = (TextNode) getNode();
         String text = textNode.getText();
-        return "TextNodeView start=" + start + ",length=" + length + " [" + text.substring(start, start + length) + "]";
+        // Sometimes the length may not be correct yet (i.e., during layout) so check before using
+        String textSubString = "";
+        if (length < 0 || start + length > text.length()) {
+            textSubString = text.substring(start);
+        } else {
+            textSubString = text.substring(start, start + length);
+        }
+        return Utils.simpleDefaultToString(this) +
+            " start=" + start + ",length=" + length + " [" + textSubString + "]";
     }
 
 }

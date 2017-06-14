@@ -126,15 +126,15 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     private Rectangle getCaretRectangle(TextHitInfo textCaret) {
         TextPane textPane = (TextPane)getComponent();
         AttributedStringCharacterIterator composedText = textPane.getComposedText();
-        // TODO: this offset isn't right b/c the selection start bounds at end of paragraph
-        // is the terminator bounds which turns out to be the width including the composed text,
-        // so we get "double booked" as it were.  But getting "selectionStart-1" is problematic
-        // as well, since at beginning of line it would be a totally wrong value.
+
+        // Special case that tweaks the bounds at the end of line so that the entire
+        // composed text width isn't added in here.... (yeah, I know it's ugly...)
+        this.doingCaretCalculations = true;
         Bounds selectionStartBounds = getCharacterBounds(textPane.getSelectionStart());
-        Rectangle rect = GraphicsUtilities.getCaretRectangle(textCaret, composedText,
+        this.doingCaretCalculations = false;
+
+        return GraphicsUtilities.getCaretRectangle(textCaret, composedText,
             selectionStartBounds.x, selectionStartBounds.y);
-//System.out.format("getCaretRectangle: textCaret=%1$s, selection start=%2$d, bounds=%3$s => caret rect=%4$s%n", textCaret, textPane.getSelectionStart(), selectionStartBounds, rect);
-        return rect;
     }
 
     /**
@@ -221,17 +221,14 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
             if (iter != null) {
                 int endOfCommittedText = event.getCommittedCharacterCount();
-//System.out.format("inputMethodTextChanged: endOfCommittedText=%1$d%n", endOfCommittedText);
                 if (endOfCommittedText > 0) {
                     String committedText = getCommittedText(iter, endOfCommittedText);
                     textPane.insertText(committedText, textPane.getSelectionStart());
-//System.out.format("inputMethodTextChanged: insert committed text: \"%1$s\" at selStart=%2$d%n", committedText, textPane.getSelectionStart());
                 }
                 composedIter = getComposedText(iter, endOfCommittedText);
             }
 
             textPane.setComposedText(composedIter);
-//System.out.format("setComposedText: \"%1$s\"%n", composedIter);
             if (composedIter != null) {
                 composedTextCaret = event.getCaret();
                 composedVisiblePosition = event.getVisiblePosition();
@@ -266,6 +263,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     private TextHitInfo composedVisiblePosition = null;
 
     private boolean caretOn = false;
+
+    protected boolean doingCaretCalculations = false;
 
     private int anchor = -1;
     private TextPane.ScrollDirection scrollDirection = null;

@@ -28,15 +28,19 @@ import org.apache.pivot.collections.Sequence;
 public class Paragraph extends Block {
     public Paragraph() {
         super();
+        add(new TextNode());
     }
 
     public Paragraph(String text) {
         super();
-        add(new TextNode(text));
+        add(text);
     }
 
     public Paragraph(Paragraph paragraph, boolean recursive) {
         super(paragraph, recursive);
+        if (!recursive) {
+            add(new TextNode());
+        }
     }
 
     /**
@@ -97,7 +101,29 @@ public class Paragraph extends Block {
         return super.getCharacterCount() + 1;
     }
 
+    /**
+     * Add a piece of text to this paragraph (at the end, but
+     * before the trailing newline).  If the paragraph had
+     * no text previously then a new {@link TextNode} child is
+     * created containing this text.  Otherwise, if the last
+     * child node contains text, then just append this new text
+     * to the existing node.
+     *
+     * @param text The text to add.
+     * @return The index of the (new or existing) text node where
+     * the text was added.
+     */
     public int add(String text) {
+        int length = getLength();
+        if (length > 0) {
+            // Add to the last node if it is a text node already
+            Node node = get(length - 1);
+            if (node instanceof TextNode) {
+                ((TextNode)node).appendText(text);
+                return length - 1;
+            }
+        }
+        // Default is to just create a new node with the text
         return add(new TextNode(text));
     }
 

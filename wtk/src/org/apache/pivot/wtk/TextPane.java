@@ -637,7 +637,7 @@ public class TextPane extends Container {
 
         // Ensure that the document remains editable
         if (document.getCharacterCount() == 0) {
-            document.add(new Paragraph(""));
+            document.add(new Paragraph());
         }
 
         // Move the caret to the merge point

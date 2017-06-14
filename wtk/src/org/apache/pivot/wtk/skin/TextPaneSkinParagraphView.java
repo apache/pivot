@@ -489,8 +489,10 @@ class TextPaneSkinParagraphView extends TextPaneSkinBlockView {
     @Override
     public Bounds getCharacterBounds(int offset) {
         Bounds characterBounds = null;
-
-        if (offset >= getCharacterCount() - 1) {
+        // This is really ugly, but *sometimes* during caret calculations we don't
+        // want the terminator size here because it includes the composed text width.
+        TextPaneSkin textPaneSkin = getTextPaneSkin();
+        if (offset >= getCharacterCount() - 1 && (!textPaneSkin.doingCaretCalculations || rows.getLength() == 0)) {
             characterBounds = terminatorBounds;
         } else {
             if (rows != null) {

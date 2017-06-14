@@ -49,6 +49,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
@@ -438,14 +439,14 @@ public class TextPaneDemo extends Application.Adapter {
     }
 
     private void applyStyleToSelection(StyleApplicator styleApplicator) {
-        org.apache.pivot.wtk.Span span = textPane.getSelection();
+        Span span = textPane.getSelection();
         if (span == null) {
             return;
         }
         applyStyle(textPane.getDocument(), span, styleApplicator);
     }
 
-    private void applyStyle(Document document, org.apache.pivot.wtk.Span selectionSpan,
+    private void applyStyle(Document document, Span selectionSpan,
         StyleApplicator styleApplicator) {
         // I can't apply the styles while iterating over the tree, because I
         // need to update the tree.
@@ -461,8 +462,7 @@ public class TextPaneDemo extends Application.Adapter {
                 TextSpan span = (TextSpan) node;
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
-                org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
-                    documentOffset + characterCount - 1);
+                Span textSpan = new Span(documentOffset, documentOffset + characterCount - 1);
                 if (selectionSpan.intersects(textSpan)) {
                     applyStyleToSpanNode(selectionSpan, styleApplicator, span, characterCount,
                         textSpan);
@@ -472,8 +472,7 @@ public class TextPaneDemo extends Application.Adapter {
                 org.apache.pivot.wtk.text.TextNode textNode = (org.apache.pivot.wtk.text.TextNode) node;
                 int documentOffset = node.getDocumentOffset();
                 int characterCount = node.getCharacterCount();
-                org.apache.pivot.wtk.Span textSpan = new org.apache.pivot.wtk.Span(documentOffset,
-                    documentOffset + characterCount - 1);
+                Span textSpan = new Span(documentOffset, documentOffset + characterCount - 1);
                 if (selectionSpan.intersects(textSpan)) {
                     applyStyleToTextNode(selectionSpan, styleApplicator, textNode, characterCount,
                         textSpan);
@@ -485,9 +484,9 @@ public class TextPaneDemo extends Application.Adapter {
         textPane.setSelection(selectionStart, selectionLength);
     }
 
-    private static void applyStyleToTextNode(org.apache.pivot.wtk.Span selectionSpan,
+    private static void applyStyleToTextNode(Span selectionSpan,
         StyleApplicator styleApplicator, org.apache.pivot.wtk.text.TextNode textNode,
-        int characterCount, org.apache.pivot.wtk.Span textSpan) {
+        int characterCount, Span textSpan) {
         if (selectionSpan.contains(textSpan)) {
             // if the text-node is contained wholly inside the selection, remove
             // the text-node, replace it with a Span, and apply the style
@@ -548,9 +547,9 @@ public class TextPaneDemo extends Application.Adapter {
         }
     }
 
-    private static void applyStyleToSpanNode(org.apache.pivot.wtk.Span selectionSpan,
+    private static void applyStyleToSpanNode(Span selectionSpan,
         StyleApplicator styleApplicator, TextSpan spanNode, int characterCount,
-        org.apache.pivot.wtk.Span textSpan) {
+        Span textSpan) {
         if (selectionSpan.contains(textSpan)) {
             // if the span-node is contained wholly inside the
             // selection, apply the style

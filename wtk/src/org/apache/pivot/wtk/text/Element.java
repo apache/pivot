@@ -26,6 +26,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Theme;
 
@@ -164,23 +165,21 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Node removeRange(int offset, int characterCountArgument) {
-        if (characterCountArgument < 0) {
-            throw new IllegalArgumentException("characterCount is negative.");
-        }
+    public Node removeRange(int offset, int charCount) {
+        Utils.checkNonNegative(charCount, "characterCount");
 
-        if (offset < 0 || offset + characterCountArgument > this.characterCount) {
+        if (offset < 0 || offset + charCount > this.characterCount) {
             throw new IndexOutOfBoundsException();
         }
 
         // Create a copy of this element
         Node range = duplicate(false);
 
-        if (characterCountArgument > 0) {
+        if (charCount > 0) {
             Element element = (Element) range;
 
             int start = getNodeAt(offset);
-            int end = getNodeAt(offset + characterCountArgument - 1);
+            int end = getNodeAt(offset + charCount - 1);
 
             if (start == end) {
                 // The range is entirely contained by one child node
@@ -189,13 +188,22 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 int nodeCharacterCount = node.getCharacterCount();
 
                 Node segment;
-                if (offset == nodeOffset && characterCountArgument == nodeCharacterCount) {
-                    // Remove the entire node
-                    segment = node;
-                    remove(start, 1);
+                if (offset == nodeOffset && charCount == nodeCharacterCount) {
+                    // Special case:  we need to leave at least one text node
+                    // underneath a paragraph to allow for composed text on an
+                    // empty line, so check that condition and don't remove the
+                    // entire node.
+                    if (node instanceof TextNode && node.getParent() instanceof Paragraph &&
+                        node.getParent().getLength() == 1) {
+                        segment = node.removeRange(0, charCount);
+                    } else {
+                        // Remove the entire node
+                        segment = node;
+                        remove(start, 1);
+                    }
                 } else {
                     // Remove a segment of the node
-                    segment = node.removeRange(offset - node.getOffset(), characterCountArgument);
+                    segment = node.removeRange(offset - node.getOffset(), charCount);
                 }
 
                 element.add(segment);
@@ -205,7 +213,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 int leadingSegmentOffset = offset - startNode.getOffset();
 
                 Node endNode = get(end);
-                int trailingSegmentCharacterCount = (offset + characterCountArgument)
+                int trailingSegmentCharacterCount = (offset + charCount)
                     - endNode.getOffset();
 
                 // Extract the leading segment
@@ -246,32 +254,30 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Element getRange(int offset, int characterCountArgument) {
-        if (characterCountArgument < 0) {
-            throw new IllegalArgumentException("characterCount is negative.");
-        }
+    public Element getRange(int offset, int charCount) {
+        Utils.checkNonNegative(charCount, "charCount");
 
         if (offset < 0) {
             throw new IndexOutOfBoundsException("offset < 0, offset=" + offset);
         }
-        if (offset + characterCountArgument > this.characterCount) {
-            throw new IndexOutOfBoundsException("offset+characterCount>this.characterCount offset="
-                + offset + " characterCount=" + characterCountArgument + " this.characterCount="
-                + this.characterCount);
+        if (offset + charCount > this.characterCount) {
+            throw new IndexOutOfBoundsException("offset+characterCount > this.characterCount (offset="
+                + offset + " charCount=" + charCount + " this.characterCount="
+                + this.characterCount + ")");
         }
 
         // Create a copy of this element
         Element range = duplicate(false);
 
-        if (characterCountArgument > 0) {
+        if (charCount > 0) {
 
             int start = getNodeAt(offset);
-            int end = getNodeAt(offset + characterCountArgument - 1);
+            int end = getNodeAt(offset + charCount - 1);
 
             if (start == end) {
                 // The range is entirely contained by one child node
                 Node node = get(start);
-                Node segment = node.getRange(offset - node.getOffset(), characterCountArgument);
+                Node segment = node.getRange(offset - node.getOffset(), charCount);
                 range.add(segment);
             } else {
                 // The range spans multiple child nodes
@@ -294,7 +300,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 } else {
                     Node endNode = get(end);
 
-                    int trailingSegmentCharacterCount = (offset + characterCountArgument)
+                    int trailingSegmentCharacterCount = (offset + charCount)
                         - endNode.getOffset();
                     trailingSegment = endNode.getRange(0, trailingSegmentCharacterCount);
                 }
@@ -367,12 +373,10 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     public void insert(Node node, int index) {
+        Utils.checkNull(node, "node");
+
         if (index < 0 || index > nodes.getLength()) {
             throw new IndexOutOfBoundsException();
-        }
-
-        if (node == null) {
-            throw new IllegalArgumentException("node is null.");
         }
 
         if (node.getParent() != null) {
@@ -487,9 +491,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     public int indexOf(Node node) {
-        if (node == null) {
-            throw new IllegalArgumentException("node is null.");
-        }
+        Utils.checkNull(node, "node");
 
         return nodes.indexOf(node);
     }
@@ -506,10 +508,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @return The index of the child node at the given offset.
      */
     public int getNodeAt(int offset) {
-        if (offset < 0 || offset >= characterCount) {
-            throw new IndexOutOfBoundsException("offset " + offset + " out of range [0,"
-                + characterCount + "]");
-        }
+        Utils.checkZeroBasedIndex(offset, characterCount);
 
         int i = nodes.getLength() - 1;
         Node node = nodes.get(i);
@@ -563,23 +562,23 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    protected void rangeInserted(int offset, int characterCountArgument) {
-        this.characterCount += characterCountArgument;
+    protected void rangeInserted(int offset, int charCount) {
+        this.characterCount += charCount;
 
         // Update the offsets of consecutive nodes
         int index = getNodeAt(offset);
 
         for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
             Node node = nodes.get(i);
-            node.setOffset(node.getOffset() + characterCountArgument);
+            node.setOffset(node.getOffset() + charCount);
         }
 
-        super.rangeInserted(offset, characterCountArgument);
+        super.rangeInserted(offset, charCount);
     }
 
     @Override
-    protected void rangeRemoved(int offset, int characterCountArgument) {
-        this.characterCount -= characterCountArgument;
+    protected void rangeRemoved(int offset, int charCount) {
+        this.characterCount -= charCount;
 
         // Update the offsets of consecutive nodes, if any
         if (offset < this.characterCount) {
@@ -587,11 +586,11 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
             for (int i = index + 1, n = nodes.getLength(); i < n; i++) {
                 Node node = nodes.get(i);
-                node.setOffset(node.getOffset() - characterCountArgument);
+                node.setOffset(node.getOffset() - charCount);
             }
         }
 
-        super.rangeRemoved(offset, characterCountArgument);
+        super.rangeRemoved(offset, charCount);
     }
 
     @Override

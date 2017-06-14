@@ -83,6 +83,10 @@ public final class TextNode extends Node {
         insertText(text, 0);
     }
 
+    public void appendText(CharSequence text) {
+        insertText(text, characters.length());
+    }
+
     /**
      * @param text  The new text to insert into this node.
      * @param index Starting index into this node for the insertion.
