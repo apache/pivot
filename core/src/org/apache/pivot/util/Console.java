@@ -46,4 +46,34 @@ public class Console {
         System.err.println(message != null ? message : "");
     }
 
+    /**
+     * Log a message along with the calling method's name to the system console.
+     *
+     * @param message The message to be logged to {@link System#out},
+     * or a format string using the remaining args (can be {@code null}).
+     * @param args The optional arguments used to format the final message.
+     */
+    public static final void logMethod(String message, Object... args) {
+        logOutput(ClassUtils.getCallingMethod(1) + ": " +
+            (message == null ? "" : String.format(message, args)));
+    }
+
+    /**
+     * Log a message with an identifying prefix, along with the calling
+     * method's name to the system console.
+     *
+     * @param prefix Any kind of "marker" prefix to the message (can be {@code null}).
+     * @param message The message to be logged to {@link System#out},
+     * or a format string using the remaining args (can be {@code null}).
+     * @param args The optional arguments used to format the final message.
+     */
+    public static final void logMethod(String prefix, String message, Object... args) {
+        logOutput(
+            (prefix == null ? "" : prefix + " ") +
+            ClassUtils.getCallingMethod(1) +
+            ": " +
+            (message == null ? "" : String.format(message, args))
+        );
+    }
+
 }
