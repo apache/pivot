@@ -523,32 +523,46 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     String value = property[1];
 
                     try {
-                        if (key.equals(X_ARGUMENT)) {
-                            x = Integer.parseInt(value);
-                        } else if (key.equals(Y_ARGUMENT)) {
-                            y = Integer.parseInt(value);
-                        } else if (key.equals(WIDTH_ARGUMENT)) {
-                            width = Integer.parseInt(value);
-                        } else if (key.equals(HEIGHT_ARGUMENT)) {
-                            height = Integer.parseInt(value);
-                        } else if (key.equals(CENTER_ARGUMENT)) {
-                            center = Boolean.parseBoolean(value);
-                        } else if (key.equals(RESIZABLE_ARGUMENT)) {
-                            resizable = Boolean.parseBoolean(value);
-                        } else if (key.equals(MAXIMIZED_ARGUMENT)) {
-                            maximized = Boolean.parseBoolean(value);
-                        } else if (key.equals(UNDECORATED_ARGUMENT)) {
-                            undecorated = Boolean.parseBoolean(value);
-                        } else if (key.equals(FULL_SCREEN_ARGUMENT)) {
-                            fullScreen = Boolean.parseBoolean(value);
-                        } else if (key.equals(PRESERVE_SPLASH_SCREEN_ARGUMENT)) {
-                            preserveSplashScreen = Boolean.parseBoolean(value);
-                        } else if (key.equals(ORIGIN_ARGUMENT)) {
-                            origin = new URL(value);
-                        } else if (key.equals(USE_APPLICATION_INSTANCE_ARGUMENT)) {
-                            useApplicationInstance = Boolean.parseBoolean(value);
-                        } else {
-                            properties.put(key, value);
+                        switch (key) {
+                            case X_ARGUMENT:
+                                x = Integer.parseInt(value);
+                                break;
+                            case Y_ARGUMENT:
+                                y = Integer.parseInt(value);
+                                break;
+                            case WIDTH_ARGUMENT:
+                                width = Integer.parseInt(value);
+                                break;
+                            case HEIGHT_ARGUMENT:
+                                height = Integer.parseInt(value);
+                                break;
+                            case CENTER_ARGUMENT:
+                                center = Boolean.parseBoolean(value);
+                                break;
+                            case RESIZABLE_ARGUMENT:
+                                resizable = Boolean.parseBoolean(value);
+                                break;
+                            case MAXIMIZED_ARGUMENT:
+                                maximized = Boolean.parseBoolean(value);
+                                break;
+                            case UNDECORATED_ARGUMENT:
+                                undecorated = Boolean.parseBoolean(value);
+                                break;
+                            case FULL_SCREEN_ARGUMENT:
+                                fullScreen = Boolean.parseBoolean(value);
+                                break;
+                            case PRESERVE_SPLASH_SCREEN_ARGUMENT:
+                                preserveSplashScreen = Boolean.parseBoolean(value);
+                                break;
+                            case ORIGIN_ARGUMENT:
+                                origin = new URL(value);
+                                break;
+                            case USE_APPLICATION_INSTANCE_ARGUMENT:
+                                useApplicationInstance = Boolean.parseBoolean(value);
+                                break;
+                            default:
+                                properties.put(key, value);
+                                break;
                         }
                     } catch (Exception exception) {
                         System.err.println(String.format(INVALID_PROPERTY_VALUE_MESSAGE, value, key));
