@@ -129,9 +129,17 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
         // Special case that tweaks the bounds at the end of line so that the entire
         // composed text width isn't added in here.... (yeah, I know it's ugly...)
+        int selectionStart = textPane.getSelectionStart();
         this.doingCaretCalculations = true;
-        Bounds selectionStartBounds = getCharacterBounds(textPane.getSelectionStart());
+        Bounds selectionStartBounds = getCharacterBounds(selectionStart);
         this.doingCaretCalculations = false;
+
+        // Sometimes (maybe timing-related) we get back null, so just retry the calculation
+        // without the "doingCaretCalculations" flag to get back something non-null
+        if (selectionStartBounds == null) {
+            selectionStartBounds = getCharacterBounds(selectionStart);
+org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectionStart=%1$d, updated bounds=%2$s", selectionStart, selectionStartBounds);
+        }
 
         return GraphicsUtilities.getCaretRectangle(textCaret, composedText,
             selectionStartBounds.x, selectionStartBounds.y);
