@@ -3,7 +3,7 @@ System Requirements
 
 * JDK 1.6 or greater (http://java.sun.com/)
 * Ant 1.7 or greater (http://ant.apache.org/)
-* JUnit 4.3 or greater (http://www.junit.org/)
+* JUnit 4.8.2 or greater (http://www.junit.org/)
 * Maven Ant Tasks 2.0.10 or greater (http://maven.apache.org/) (optional)
 
 Project Set-Up
@@ -59,3 +59,4 @@ Building Pivot
 
   $ ant maven-install
 
+----
