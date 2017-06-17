@@ -1,8 +1,8 @@
 System Requirements
 ===================
 
-* JDK 1.7 or greater (http://java.sun.com/)
-* Ant 1.8 or greater (http://ant.apache.org/)
+* JDK 1.8 or greater (http://java.sun.com/)
+* Ant 1.9 or greater (http://ant.apache.org/)
 * JUnit 4.8.2 or greater (http://www.junit.org/)
 * Maven Ant Tasks 2.1.3 or greater (http://maven.apache.org/) (optional)
 
@@ -26,7 +26,7 @@ Project Set-Up
   IMPORTANT This document has not been updated for Java on Mac OS X.
 
 
-  Using Java 7, ensure to have jfxrt.jar file excluded from compile classpath
+  Since Java 7, ensure to have jfxrt.jar file excluded from compile classpath
   (build files are already setup for this), or build errors will happen
   (due to duplicate class in classpath).
 
@@ -61,3 +61,4 @@ Building Pivot
 
   $ ant maven-install
 
+----
