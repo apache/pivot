@@ -372,6 +372,7 @@ limitations under the License.
         depends=""
     >
         <echo message=""/>
+        <echo message="${ant.version}"/>
         <echo message="Compile environment for ${ant.project.name}-${version} is:"/>
         <echo message="show deprecation ${compiler.deprecation}"/>
         <echo message="debug ${compiler.debug}"/>
@@ -498,8 +499,8 @@ limitations under the License.
             <packageset dir="wtk/src" includes="**/*"/>
             <packageset dir="wtk-terra/src" includes="**/*"/>
 
-            <link href="http://download.oracle.com/javase/7/docs/api"/>
-            <link href="http://download.oracle.com/javaee/1.4/api/"/>
+            <link href="http://download.oracle.com/javase/8/docs/api"/>
+            <link href="http://download.oracle.com/javaee/7/api/"/>
         </javadoc>
     </target>
 
