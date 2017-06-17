@@ -66,7 +66,7 @@ public interface FileBrowserListener {
      * Called when a file browser's root directory has changed.
      *
      * @param fileBrowser           The file browser that has changed.
-     * @param previousRootDirectory The previous root directory of the browser. 
+     * @param previousRootDirectory The previous root directory of the browser.
      */
     public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory);
 

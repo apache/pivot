@@ -234,7 +234,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         @Override
         public void caretPositionChanged(InputMethodEvent event) {
             TextInput textInput = (TextInput)getComponent();
-            // TODO:  so far I have not seen this called, so ??? 
+            // TODO:  so far I have not seen this called, so ???
         }
 
     }

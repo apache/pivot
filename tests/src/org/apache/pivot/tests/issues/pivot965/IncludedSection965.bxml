@@ -20,7 +20,7 @@ limitations under the License.
     xmlns="org.apache.pivot.wtk"
     xmlns:bxml="http://pivot.apache.org/bxml"
     heading="Included Section">
- 
+
     <bxml:script>
         function concateText(value) {
             return value+value;

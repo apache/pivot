@@ -1542,7 +1542,7 @@ public class ListView extends Component {
      * <p> Clears the check state if the setting has changed (but does not fire any check
      * state change events).
      *
-     * @param   allow	Whether or not to allow tri-state checkmarks.
+     * @param   allow    Whether or not to allow tri-state checkmarks.
      */
     public void setAllowTriStateCheckmarks(boolean allow) {
         if (allowTriStateCheckmarks != allow) {

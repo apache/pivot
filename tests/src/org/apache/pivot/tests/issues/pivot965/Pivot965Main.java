@@ -37,9 +37,9 @@ public class Pivot965Main extends Application.Adapter
         TextInput textInput = (TextInput)bxmlSerializer.getNamespace().get("textInput");
         textInput.requestFocus();
     }
-    
+
     public static String myMappingFunction(String value) {
-    	return value.toUpperCase();
+        return value.toUpperCase();
     }
 
     @Override

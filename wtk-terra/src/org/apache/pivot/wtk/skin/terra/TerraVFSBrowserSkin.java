@@ -159,19 +159,19 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             return icon;
         }
 
-	public boolean isFileHidden(FileObject file) {
-	    try {
-	        boolean hidden = false;
-	        if (file != null) {
-	            if (file.getName().getBaseName().length() != 0 && file.isHidden())
-	                hidden = true;
-	        }
-	        return hidden;
-	    }
-	    catch (FileSystemException fse) {
-	        throw new RuntimeException(fse);
-	    }
-	}
+    public boolean isFileHidden(FileObject file) {
+        try {
+            boolean hidden = false;
+            if (file != null) {
+                if (file.getName().getBaseName().length() != 0 && file.isHidden())
+                    hidden = true;
+            }
+            return hidden;
+        }
+        catch (FileSystemException fse) {
+            throw new RuntimeException(fse);
+        }
+    }
     }
 
     /**

@@ -75,7 +75,7 @@ public final class GraphicsUtilities {
     public static final String OFFSET_KEY = "offset";
 
     public static Map<String, Color> CSS3ColorMap = new HashMap<>();
-    
+
     static {
         // Initialize the table of CSS3/X11 color names and values
         // from here: http://www.w3.org/TR/css3-color/
@@ -473,7 +473,7 @@ public final class GraphicsUtilities {
      * {@value #STOPS_KEY} (a list of dictionaries with keys
      * {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li> </ul>
      * @return The fully decoded paint value.
-     * @throws IllegalArgumentException if there is no paint type key found. 
+     * @throws IllegalArgumentException if there is no paint type key found.
      */
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);

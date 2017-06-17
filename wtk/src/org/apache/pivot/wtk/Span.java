@@ -77,7 +77,7 @@ public final class Span {
      * or if the dictionary does not contain the start and end keys.
      */
     public Span(Dictionary<String, ?> span) {
-    	Utils.checkNull(span, "span");
+        Utils.checkNull(span, "span");
 
         if (!span.containsKey(START_KEY)) {
             throw new IllegalArgumentException(START_KEY + " is required.");

@@ -122,8 +122,8 @@ public class SetAdapter<E> implements Set<E>, Serializable {
                     setLocal.addAll(this.set);
                     this.set = setLocal;
                 }
-            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | 
-	             InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException |
+                 InstantiationException | IllegalAccessException | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }

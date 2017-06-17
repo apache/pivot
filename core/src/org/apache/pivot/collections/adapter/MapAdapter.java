@@ -126,8 +126,8 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
                     mapLocal.putAll(this.map);
                     this.map = mapLocal;
                 }
-            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | 
-	             InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException |
+                 InstantiationException | IllegalAccessException | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }

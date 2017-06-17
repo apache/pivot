@@ -27,40 +27,40 @@ import org.apache.pivot.wtk.ListView;
  */
 public class ListViewIndexBindMapping implements ListView.ItemBindMapping {
 
-	/**
-	 * Called during <tt>load</tt>, and <tt>value</tt> is what is
-	 * stored in our data object (which is the <tt>Integer</tt>
-	 * index value).
-	 *
-	 * @param listData The <tt>ListView</tt>'s data list.
-	 * @param value The object value to map to an index in this list
-	 * (which is an <tt>Integer</tt> value).
-	 * @return The value converted to an integer, or <tt>-1</tt>
-	 * if the value is out of range of the list size.
-	 */
-	@Override
-	public int indexOf(List<?> listData, Object value) {
-	    if (value instanceof Integer) {
-		int iValue = ((Integer)value).intValue();
-		if (iValue >= -1 && iValue < listData.getLength()) {
-		    return iValue;
-		}
-	    }
-	    return -1;
-	}
+    /**
+     * Called during <tt>load</tt>, and <tt>value</tt> is what is
+     * stored in our data object (which is the <tt>Integer</tt>
+     * index value).
+     *
+     * @param listData The <tt>ListView</tt>'s data list.
+     * @param value The object value to map to an index in this list
+     * (which is an <tt>Integer</tt> value).
+     * @return The value converted to an integer, or <tt>-1</tt>
+     * if the value is out of range of the list size.
+     */
+    @Override
+    public int indexOf(List<?> listData, Object value) {
+        if (value instanceof Integer) {
+        int iValue = ((Integer)value).intValue();
+        if (iValue >= -1 && iValue < listData.getLength()) {
+            return iValue;
+        }
+        }
+        return -1;
+    }
 
-	/**
-	 * Called during <tt>store</tt>, and <tt>index</tt> is the
-	 * selected item index.  We are going to just return an
-	 * <tt>Integer</tt> representing the index itself.
-	 *
-	 * @param listData The underlying data for the <tt>ListView</tt>.
-	 * @param index The index value to convert to a "storable" value.
-	 * @return The <tt>Integer</tt> value of the index.
-	 */
-	@Override
-	public Object get(List<?> listData, int index) {
-	    return Integer.valueOf(index);
-	}
+    /**
+     * Called during <tt>store</tt>, and <tt>index</tt> is the
+     * selected item index.  We are going to just return an
+     * <tt>Integer</tt> representing the index itself.
+     *
+     * @param listData The underlying data for the <tt>ListView</tt>.
+     * @param index The index value to convert to a "storable" value.
+     * @return The <tt>Integer</tt> value of the index.
+     */
+    @Override
+    public Object get(List<?> listData, int index) {
+        return Integer.valueOf(index);
+    }
 
 }

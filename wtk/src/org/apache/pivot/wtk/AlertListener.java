@@ -94,7 +94,7 @@ public interface AlertListener {
      *
      * @param alert    The alert that has changed.
      * @param index    The starting index where the options were removed.
-     * @param removed  The actual sequence of the options that were removed. 
+     * @param removed  The actual sequence of the options that were removed.
      */
     public void optionsRemoved(Alert alert, int index, Sequence<?> removed);
 

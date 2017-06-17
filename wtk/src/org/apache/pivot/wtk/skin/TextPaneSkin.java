@@ -260,7 +260,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         @Override
         public void caretPositionChanged(InputMethodEvent event) {
             TextPane textPane = (TextPane)getComponent();
-            // TODO:  so far I have not seen this called, so ??? 
+            // TODO:  so far I have not seen this called, so ???
         }
 
     }
