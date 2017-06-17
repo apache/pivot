@@ -331,7 +331,7 @@ limitations under the License.
                 <packageset dir="@{project}/src" includes="**/*"/>
 
                 <link href="http://download.oracle.com/javase/6/docs/api"/>
-                <link href="http://download.oracle.com/javaee/1.4/api/"/>
+                <link href="http://download.oracle.com/javaee/5/api/"/>
             </javadoc>
 
             <package-maven-source-or-javadoc-jar
@@ -366,6 +366,7 @@ limitations under the License.
         depends=""
     >
         <echo message=""/>
+        <echo message="${ant.version}"/>
         <echo message="Compile environment for ${ant.project.name}-${version} is:"/>
         <echo message="show deprecation ${compiler.deprecation}"/>
         <echo message="debug ${compiler.debug}"/>
