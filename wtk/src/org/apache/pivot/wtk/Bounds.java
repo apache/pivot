@@ -141,18 +141,18 @@ public final class Bounds implements Serializable {
      * bounds specified by the arguments (X- and Y-position will be the minimum of either
      * and width and height will be the maximum).
      *
-     * @param xArgument      The X-position of the bounded area to union with this one.
-     * @param yArgument      The Y-position of the other bounded area.
-     * @param widthArgument  The width of the other area to union with this one.
-     * @param heightArgument The other area's height.
+     * @param xValue      The X-position of the bounded area to union with this one.
+     * @param yValue      The Y-position of the other bounded area.
+     * @param widthValue  The width of the other area to union with this one.
+     * @param heightValue The other area's height.
      * @return A new bounds that is the union of this one with the bounds specified by
      * the given arguments.
      */
-    public Bounds union(int xArgument, int yArgument, int widthArgument, int heightArgument) {
-        int x1 = Math.min(this.x, xArgument);
-        int y1 = Math.min(this.y, yArgument);
-        int x2 = Math.max(this.x + this.width, xArgument + widthArgument);
-        int y2 = Math.max(this.y + this.height, yArgument + heightArgument);
+    public Bounds union(int xValue, int yValue, int widthValue, int heightValue) {
+        int x1 = Math.min(this.x, xValue);
+        int y1 = Math.min(this.y, yValue);
+        int x2 = Math.max(this.x + this.width, xValue + widthValue);
+        int y2 = Math.max(this.y + this.height, yValue + heightValue);
 
         return new Bounds(x1, y1, x2 - x1, y2 - y1);
 
@@ -176,17 +176,17 @@ public final class Bounds implements Serializable {
      * <p> "Intersection" means the new bounds will include only the area that is common to
      * both areas (X- and Y-position will be the maximum of either, while width and height will
      * be the minimum of the two).
-     * @param xArgument      The X-position of the other area to intersect with.
-     * @param yArgument      The Y-position of the other area.
-     * @param widthArgument  The width of the other bounded area.
-     * @param heightArgument The height of the other area.
+     * @param xValue      The X-position of the other area to intersect with.
+     * @param yValue      The Y-position of the other area.
+     * @param widthValue  The width of the other bounded area.
+     * @param heightValue The height of the other area.
      * @return The new bounds that is the intersection of this one and the given area.
      */
-    public Bounds intersect(int xArgument, int yArgument, int widthArgument, int heightArgument) {
-        int x1 = Math.max(this.x, xArgument);
-        int y1 = Math.max(this.y, yArgument);
-        int x2 = Math.min(this.x + this.width, xArgument + widthArgument);
-        int y2 = Math.min(this.y + this.height, yArgument + heightArgument);
+    public Bounds intersect(int xValue, int yValue, int widthValue, int heightValue) {
+        int x1 = Math.max(this.x, xValue);
+        int y1 = Math.max(this.y, yValue);
+        int x2 = Math.min(this.x + this.width, xValue + widthValue);
+        int y2 = Math.min(this.y + this.height, yValue + heightValue);
 
         return new Bounds(x1, y1, x2 - x1, y2 - y1);
     }
@@ -230,6 +230,18 @@ public final class Bounds implements Serializable {
     }
 
     /**
+     * Create a new bounds object that represents this bounds expanded/contracted by
+     * the given width/height values (negative represent contraction).
+     * <p> The new bounds have the same x- and y-origin values as the original.
+     * @param dw The amount of expansion(contraction) in the width.
+     * @param dh The amount of expansion(contraction) in the height.
+     * @return A new bounds expanded by this amount.
+     */
+    public Bounds expand(int dw, int dh) {
+        return new Bounds(x, y, width + dw, height + dh);
+    }
+
+    /**
      * @return A new bounds offset by the amounts given by the point.
      * @param offset X- and Y-values which are used to offset this bounds
      * to a new position (must not be {@code null}).
@@ -256,15 +268,15 @@ public final class Bounds implements Serializable {
 
     /**
      * Does this bounded area contain the point defined by the given arguments?
-     * @param xArgument The X-position of the other point to test.
-     * @param yArgument The Y-position of the other point to test.
+     * @param xValue The X-position of the other point to test.
+     * @param yValue The Y-position of the other point to test.
      * @return Whether this bounds contains the given point.
      */
-    public boolean contains(int xArgument, int yArgument) {
-        return (xArgument >= this.x &&
-                yArgument >= this.y &&
-                xArgument < this.x + width &&
-                yArgument < this.y + height);
+    public boolean contains(int xValue, int yValue) {
+        return (xValue >= this.x &&
+                yValue >= this.y &&
+                xValue < this.x + width &&
+                yValue < this.y + height);
     }
 
     /**
@@ -283,17 +295,17 @@ public final class Bounds implements Serializable {
     /**
      * @return Does this bounded area completely contain (could be coincident with) the bounded area
      * specified by the given arguments?
-     * @param xArgument      The X-position of the area to test.
-     * @param yArgument      The Y-position of the other area.
-     * @param widthArgument  The width of the other area.
-     * @param heightArgument The height of the area to test.
+     * @param xValue      The X-position of the area to test.
+     * @param yValue      The Y-position of the other area.
+     * @param widthValue  The width of the other area.
+     * @param heightValue The height of the area to test.
      */
-    public boolean contains(int xArgument, int yArgument, int widthArgument, int heightArgument) {
+    public boolean contains(int xValue, int yValue, int widthValue, int heightValue) {
         return (!isEmpty() &&
-                xArgument >= this.x &&
-                yArgument >= this.y &&
-                xArgument + widthArgument <= this.x + this.width &&
-                yArgument + heightArgument <= this.y + this.height);
+                xValue >= this.x &&
+                yValue >= this.y &&
+                xValue + widthValue <= this.x + this.width &&
+                yValue + heightValue <= this.y + this.height);
     }
 
     /**
@@ -310,17 +322,17 @@ public final class Bounds implements Serializable {
 
     /**
      * @return Does this bounded area intersect with the bounded area given by the arguments?
-     * @param xArgument      The X-position of the other area to check.
-     * @param yArgument      The Y-position of the other area.
-     * @param widthArgument  The width of the other bounded area.
-     * @param heightArgument The height of the other area.
+     * @param xValue      The X-position of the other area to check.
+     * @param yValue      The Y-position of the other area.
+     * @param widthValue  The width of the other bounded area.
+     * @param heightValue The height of the other area.
      */
-    public boolean intersects(int xArgument, int yArgument, int widthArgument, int heightArgument) {
+    public boolean intersects(int xValue, int yValue, int widthValue, int heightValue) {
         return (!isEmpty() &&
-                xArgument + widthArgument > this.x &&
-                yArgument + heightArgument > this.y &&
-                xArgument < this.x + this.width &&
-                yArgument < this.y + this.height);
+                xValue + widthValue > this.x &&
+                yValue + heightValue > this.y &&
+                xValue < this.x + this.width &&
+                yValue < this.y + this.height);
     }
 
     /**
