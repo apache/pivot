@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -96,14 +97,41 @@ public final class Point implements Serializable {
         return getClass().getSimpleName() + " [" + x + "," + y + "]";
     }
 
+    /**
+     * Decode a JSON-formatted string (map or list) that contains the two
+     * values for a new point.
+     * <p> The format of a JSON map would be:
+     * <pre>{ "x":nnn, "y":nnn }</pre>
+     * <p> The format for a JSON list would be:
+     * <pre>[ x, y ]</pre>
+     *
+     * @param value The JSON string to be interpreted (must not be {@code null}).
+     * @return The new Point object if the string can be decoded successfully.
+     * @throws IllegalArgumentException if the input is {@code null} or if the
+     * value could not be successfully decoded as either a JSON map or list.
+     * @see #Point(Dictionary)
+     * @see #Point(int, int)
+     */
     public static Point decode(String value) {
         Utils.checkNull(value);
 
         Point point;
-        try {
-            point = new Point(JSONSerializer.parseMap(value));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (value.startsWith("{")) {
+            try {
+                point = new Point(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else if (value.startsWith("[")) {
+            try {
+                @SuppressWarnings("unchecked")
+                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
+                point = new Point(values.get(0), values.get(1));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid format for Point.");
         }
 
         return point;
