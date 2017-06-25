@@ -18,10 +18,38 @@
 Release Notes for Pivot 2.0.5:
 
 ** New Feature
+    * [PIVOT-920] - Update Pivot to New security requirements for RIAs in 7u51
 
 ** Improvement
+    * [PIVOT-689] - Finishing touches on Skin Colors
+    * [PIVOT-916] - Replace DesktopApplicationContext.displayException calls with ApplicationContext.handleUncaughtException
+    * [PIVOT-963] - Add Manifest key for applet permissions with Java 7 and higher
+    * [PIVOT-972] - Add another small tutorial (calculator app)
+    * [PIVOT-986] - Provide ability to see hidden files in the file browsers
 
 ** Bug
+    * [PIVOT-923] - ScrollBar not displayed correctly if start is greater than 0
+    * [PIVOT-948] - Allow selected key bindings to work with unselected items
+    * [PIVOT-949] - bxml:script using js file (absolute path) doesn't work
+    * [PIVOT-951] - Only first click is received by container listeners
+    * [PIVOT-953] - If screen configuration changes, a desktop app could end up completely offscreen
+    * [PIVOT-954] - Double click in empty TextArea causes exception
+    * [PIVOT-959] - TerraTextInputSkin may process the same key press twice
+    * [PIVOT-964] - Changes in SVG viewBox attribute causes SVG not to render.
+    * [PIVOT-966] - UI zooming and buttons detection in Apache Pivot at program start
+    * [PIVOT-967] - JSONSerializer doesn't correctly handle CR characters
+    * [PIVOT-974] - Use of "importClass" or "importPackage" function in Javascript within BXML files won't work under Java 8 Nashorn script engine
+    * [PIVOT-975] - Build problems with Java 1.8.0_45
+    * [PIVOT-978] - Possible to get calendar dates in year 10000 and beyond
+    * [PIVOT-983] - IllegalArgumentException in FileBrowserSheet
+    * [PIVOT-985] - Dark Gray and Light Gray standard colors are not supported
+    * [PIVOT-987] - Different handling of script return values in BXMLSerializer
+    * [PIVOT-989] - StringSerializer does not use the correct Charset in "writeObject" method
+    * [PIVOT-990] - MenuPopup can overflow off the top of the window
+    * [PIVOT-992] - "getSelectedText" in TextPane always gets a trailing newline regardless of whether the end of line is selected or not
+    * [PIVOT-993] - Apache Pivot does not work with Oracle JDK8u131
+    * [PIVOT-995] - Second "open" of Prompt or Alert will not display the message type icon.
+    * [PIVOT-996] - Unable to run with SAP JVM
 
 ** Task
 
