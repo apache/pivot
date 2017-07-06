@@ -530,7 +530,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         Color caretColor;
 
         TextLayout drawingTextLayout = textLayout;
-        if (textLayout == null && prompt != null) {
+        if (textLayout == null && prompt != null && !prompt.isEmpty()) {
             AttributedStringCharacterIterator promptText = new AttributedStringCharacterIterator(prompt);
             drawingTextLayout = new TextLayout(promptText, fontRenderContext);
         }
@@ -538,7 +538,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int alignmentDeltaX = getAlignmentDeltaX(drawingTextLayout);
         int xpos = padding.left - scrollLeft + 1 + alignmentDeltaX;
 
-        if (textLayout == null && prompt != null) {
+        if (textLayout == null && prompt != null && !prompt.isEmpty()) {
             GraphicsUtilities.prepareForText(graphics, fontRenderContext, font, promptColor);
             graphics.drawString(prompt, xpos, (height - textHeight) / 2 + ascent);
 
