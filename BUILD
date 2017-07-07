@@ -3,7 +3,8 @@ System Requirements
 
 * JDK 1.8 or greater (http://java.sun.com/)
 * Ant 1.9 or greater (http://ant.apache.org/)
-* JUnit 4.8.2 or greater (http://www.junit.org/)
+* JUnit 4.11 or greater (http://www.junit.org/) (which needs the separate
+  "hamcrest-core" .jar file)
 * Maven Ant Tasks 2.1.3 or greater (http://maven.apache.org/) (optional)
 
 Project Set-Up

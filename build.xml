@@ -128,15 +128,20 @@ limitations under the License.
             <fail>
                 <condition>
                     <not>
-                        <available classname="org.junit.Test">
-                            <classpath refid="classpath.general" />
-                        </available>
+                        <and>
+                            <available classname="org.junit.Test">
+                                <classpath refid="classpath.general" />
+                            </available>
+                            <hasmethod classname="org.junit.Assert" method="assertNotEquals">
+                                <classpath refid="classpath.general" />
+                            </hasmethod>
+                        </and>
                     </not>
                 </condition>
                 <![CDATA[
                 Error:
 
-                JUnit 4 was not found on your classpath. Please see the BUILD
+                JUnit 4.11 (or greater) must be on your classpath. Please see the BUILD
                 file for more information.
                 ]]>
             </fail>
@@ -149,6 +154,7 @@ limitations under the License.
                 debug="${compiler.debug}"
                 source="${compiler.source}"
                 target="${compiler.target}"
+                bootclasspath="${compiler.bootstrap.path}"
                 encoding="${compiler.encoding}"
                 failonerror="true"
             >
