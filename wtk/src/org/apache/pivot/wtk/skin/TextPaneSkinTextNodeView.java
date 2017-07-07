@@ -92,9 +92,6 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
      * being displayed.  This could be a combination of composed and committed
      * text, so we need a {@link TextLayout} which is derived from the combined
      * attributed text.
-     * <p> With {@link TextLayout} this is kind of tricky, so currently
-     * we are calculating the average of the "bounds" and the "pixel bounds"
-     * (which we see can differ by 1/2 character width sometimes).
      *
      * @param textLayout The text to measure.
      * @return The dimensions of the text in pixel amounts, or 0,0 if
