@@ -493,7 +493,7 @@ limitations under the License.
             <packageset dir="wtk-terra/src" includes="**/*"/>
 
             <link href="http://download.oracle.com/javase/6/docs/api"/>
-            <link href="http://download.oracle.com/javaee/1.4/api/"/>
+            <link href="http://download.oracle.com/javaee/5/api/"/>
         </javadoc>
     </target>
 
