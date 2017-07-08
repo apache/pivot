@@ -342,8 +342,8 @@ limitations under the License.
 
                 <packageset dir="@{project}/src" includes="**/*"/>
 
-                <link href="http://download.oracle.com/javase/7/docs/api"/>
-                <link href="http://download.oracle.com/javaee/1.4/api/"/>
+                <link href="http://download.oracle.com/javase/8/docs/api"/>
+                <link href="http://download.oracle.com/javaee/7/api/"/>
             </javadoc>
 
             <package-maven-source-or-javadoc-jar
