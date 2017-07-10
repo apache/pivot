@@ -87,7 +87,7 @@ limitations under the License.
 
     <!-- Conditions that change for Jenkins build jobs -->
     <condition property="is.jenkins" value="true" else="false">
-        <isset property="jenkins.job"/>
+        <isset property="running.on.jenkins"/>
     </condition>
 
     <!-- Ant version check -->
