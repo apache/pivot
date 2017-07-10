@@ -85,6 +85,11 @@ limitations under the License.
     <!-- Base package, required by Maven Javadoc -->
     <property name="src.package.base" value="org.apache.pivot" />
 
+    <!-- Conditions that change for Jenkins build jobs -->
+    <condition property="is.jenkins" value="true" else="false">
+        <isset property="jenkins.job"/>
+    </condition>
+
     <!-- Ant version check -->
     <fail>
         <condition>
@@ -129,8 +134,8 @@ limitations under the License.
                 <condition>
                     <not>
                         <and>
-                            <available classname="org.junit.Test" ignoreSystemClasses="true" classpath="${classpath}" />
-                            <hasmethod classname="org.junit.Assert" method="assertNotEquals" ignoreSystemClasses="true" classpath="${classpath}" />
+                            <available classname="org.junit.Test" ignoreSystemClasses="${is.jenkins}" classpath="${classpath}" />
+                            <hasmethod classname="org.junit.Assert" method="assertNotEquals" ignoreSystemClasses="${is.jenkins}" classpath="${classpath}" />
                         </and>
                     </not>
                 </condition>
