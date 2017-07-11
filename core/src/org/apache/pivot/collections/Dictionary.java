@@ -111,10 +111,23 @@ public interface Dictionary<K, V> {
      * @return The integer value, or 0 if the key is not present.
      */
     default int getInt(K key) {
+        return getInt(key, 0);
+    }
+
+    /**
+     * Using the other methods in this interface, retrieve an integer value
+     * from this dictionary; returning the given default if the key does not exist.
+     *
+     * @param key The key for the (supposed) <tt>Integer</tt>
+     * value to retrieve (actually any {@link Number} will work).
+     * @param defaultValue The value to return if the key is not present.
+     * @return The integer value, or the default value if the key is not present.
+     */
+    default int getInt(K key, int defaultValue) {
         if (containsKey(key)) {
             return ((Number)get(key)).intValue();
         } else {
-            return 0;
+            return defaultValue;
         }
     }
 
@@ -140,10 +153,23 @@ public interface Dictionary<K, V> {
      * @return The boolean value, or false if the key is not present.
      */
     default boolean getBoolean(K key) {
+        return getBoolean(key, false);
+    }
+
+    /**
+     * Using the other methods in this interface, retrieve a boolean value
+     * from this dictionary; returning a default value if the key does not exist.
+     *
+     * @param key The key for the (supposed) <tt>Boolean</tt>
+     * value to retrieve.
+     * @param defaultValue What to return if the key is not present.
+     * @return The boolean value, or the default if the key is not present.
+     */
+    default boolean getBoolean(K key, boolean defaultValue) {
         if (containsKey(key)) {
             return ((Boolean)get(key)).booleanValue();
         } else {
-            return false;
+            return defaultValue;
         }
     }
 

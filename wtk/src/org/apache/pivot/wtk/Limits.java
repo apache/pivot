@@ -19,11 +19,19 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
- * Class representing minimum and maximum values.
+ * Immutable object representing minimum and maximum values.
+ * <p> Note: these values are inclusive, and so the minimum can be
+ * equal to the maximum, implying a range of one value.
+ * <p> Also note that minimum must be less than or equal the maximum
+ * at construction or decode time.
+ * @see #contains
+ * @see #constrain
  */
 public final class Limits implements Serializable {
     private static final long serialVersionUID = -1420266625812552298L;
@@ -34,6 +42,10 @@ public final class Limits implements Serializable {
     public static final String MINIMUM_KEY = "minimum";
     public static final String MAXIMUM_KEY = "maximum";
 
+    public Limits() {
+        this(Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
     public Limits(int minimum, int maximum) {
         if (minimum > maximum) {
             throw new IllegalArgumentException("minimum is greater than maximum.");
@@ -43,35 +55,51 @@ public final class Limits implements Serializable {
         this.maximum = maximum;
     }
 
+    /**
+     * Construct a new limits of a single value, setting both
+     * the minimum and maximum to this value.
+     *
+     * @param value The single value range for this limits.
+     */
+    public Limits(int value) {
+        this(value, value);
+    }
+
     public Limits(Limits limits) {
-        if (limits == null) {
-            throw new IllegalArgumentException("limits is null.");
-        }
+        Utils.checkNull(limits, "limits");
 
         minimum = limits.minimum;
         maximum = limits.maximum;
     }
 
+    /**
+     * Construct a new Limits based on the given Dictionary or Map.
+     * <p> The map keys for the values are {@link #MINIMUM_KEY} and
+     * {@link #MAXIMUM_KEY}.  Missing minimum value will set {@link Integer#MIN_VALUE}
+     * as the min, and missing maximum will set {@link Integer#MAX_VALUE} as the max.
+     *
+     * @param limits The JSON-formatted dictionary containing the desired limits values.
+     * @throws IllegalArgumentException if the min is greater than the max.
+     */
     public Limits(Dictionary<String, ?> limits) {
-        if (limits == null) {
-            throw new IllegalArgumentException("limits is null.");
-        }
+        Utils.checkNull(limits, "limits");
 
-        if (limits.containsKey(MINIMUM_KEY)) {
-            minimum = ((Integer) limits.get(MINIMUM_KEY)).intValue();
-        } else {
-            minimum = Integer.MIN_VALUE;
-        }
-
-        if (limits.containsKey(MAXIMUM_KEY)) {
-            maximum = ((Integer) limits.get(MAXIMUM_KEY)).intValue();
-        } else {
-            maximum = Integer.MAX_VALUE;
-        }
+        minimum = limits.getInt(MINIMUM_KEY, Integer.MIN_VALUE);
+        maximum = limits.getInt(MAXIMUM_KEY, Integer.MAX_VALUE);
 
         if (minimum > maximum) {
             throw new IllegalArgumentException("minimum is greater than maximum.");
         }
+    }
+
+    /**
+     * @return The range of this limits, that is, the maximum less the minimum
+     * plus one (since the limits are inclusive). Returns a long value because
+     * the default min and max are the maximum range of the integers, so that
+     * the range in this case cannot be represented by an integer.
+     */
+    public long range() {
+        return ((long)maximum - (long)minimum + 1L);
     }
 
     /**
@@ -89,6 +117,17 @@ public final class Limits implements Serializable {
         }
 
         return value;
+    }
+
+    /**
+     * Determines whether the given value is contained by this Limits, that is,
+     * whether the value is &gt;= the minimum and &lt;= the maximum.
+     *
+     * @param value The value to test.
+     * @return Whether the value is contained within the limits.
+     */
+    public boolean contains(int value) {
+        return (value >= minimum) && (value <= maximum);
     }
 
     @Override
@@ -134,16 +173,41 @@ public final class Limits implements Serializable {
         return buf.toString();
     }
 
+    /**
+     * Decode a JSON-encoded string (map or list) that contains the values for a new limits.
+     * <p> The format of a JSON map format will be:
+     * <pre>{ "minimum": nnn, "maximum": nnn }</pre>
+     * <p> The format of a JSON list format will be:
+     * <pre>[ minimum, maximum ]</pre>
+     *
+     * @param value The JSON string containing the map or list of limits values
+     * (must not be {@code null}).
+     * @return The new limits object if the string can be successfully decoded.
+     * @throws IllegalArgumentException if the given string is {@code null} or
+     * empty or the string could not be parsed as a JSON map or list.
+     * @see #Limits(Dictionary)
+     * @see #Limits(int, int)
+     */
     public static Limits decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(value, "value");
 
         Limits limits;
-        try {
-            limits = new Limits(JSONSerializer.parseMap(value));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (value.startsWith("{")) {
+            try {
+                limits = new Limits(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else if (value.startsWith("[")) {
+            try {
+                @SuppressWarnings("unchecked")
+                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
+                limits = new Limits(values.get(0), values.get(1));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid format for Limits.");
         }
 
         return limits;
