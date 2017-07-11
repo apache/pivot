@@ -1428,14 +1428,14 @@ public abstract class Component implements ConstrainedVisual {
      * Determines if the component contains a given location. This method
      * facilitates mouse interaction with non-rectangular components.
      *
-     * @param xArgument Horizontal location to check.
-     * @param yArgument Vertical location to check.
+     * @param xValue Horizontal location to check.
+     * @param yValue Vertical location to check.
      * @return <tt>true</tt> if the component's shape contains the given
      * location; <tt>false</tt>, otherwise.
      * @throws UnsupportedOperationException This method is not currently
      * implemented.
      */
-    public boolean contains(int xArgument, int yArgument) {
+    public boolean contains(int xValue, int yValue) {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -1511,16 +1511,16 @@ public abstract class Component implements ConstrainedVisual {
      * ancestor's coordinate space.
      *
      * @param ancestor The ancestor container of this component.
-     * @param xArgument The x-coordinate in this component's coordinate space.
-     * @param yArgument The y-coordinate in this component's coordinate space.
+     * @param xValue The x-coordinate in this component's coordinate space.
+     * @param yValue The y-coordinate in this component's coordinate space.
      * @return A point containing the translated coordinates, or <tt>null</tt> if
      * the component is not a descendant of the specified ancestor.
      */
-    public Point mapPointToAncestor(final Container ancestor, int xArgument, int yArgument) {
+    public Point mapPointToAncestor(final Container ancestor, int xValue, int yValue) {
         Utils.checkNull(ancestor, "ancestor");
 
-        int xLocation = xArgument;
-        int yLocation = yArgument;
+        int xLocation = xValue;
+        int yLocation = yValue;
 
         Point coordinates = null;
 
@@ -1557,16 +1557,16 @@ public abstract class Component implements ConstrainedVisual {
      * component's coordinate system.
      *
      * @param ancestor The ancestor container of this component.
-     * @param xArgument The x-coordinate in the ancestors's coordinate space.
-     * @param yArgument The y-coordinate in the ancestor's coordinate space.
+     * @param xValue The x-coordinate in the ancestors's coordinate space.
+     * @param yValue The y-coordinate in the ancestor's coordinate space.
      * @return A point containing the translated coordinates, or <tt>null</tt> if
      * the component is not a descendant of the specified ancestor.
      */
-    public Point mapPointFromAncestor(final Container ancestor, int xArgument, int yArgument) {
+    public Point mapPointFromAncestor(final Container ancestor, int xValue, int yValue) {
         Utils.checkNull(ancestor, "ancestor");
 
-        int xLocation = xArgument;
-        int yLocation = yArgument;
+        int xLocation = xValue;
+        int yLocation = yValue;
 
         Point coordinates = null;
 
@@ -1640,23 +1640,23 @@ public abstract class Component implements ConstrainedVisual {
      * as the intersection of the component's area with the visible area of its
      * ancestors, or, in the case of a Viewport, the viewport bounds.
      *
-     * @param xArgument The x-coordinate of the area.
-     * @param yArgument The y-coordinate of the area.
+     * @param xValue The x-coordinate of the area.
+     * @param yValue The y-coordinate of the area.
      * @param width The width of the area.
      * @param height The height of the area.
      * @return The visible part of the given area in the component's coordinate
      * space, or <tt>null</tt> if the component is either not showing or not
      * part of the component hierarchy.
      */
-    public Bounds getVisibleArea(int xArgument, int yArgument, int width, int height) {
+    public Bounds getVisibleArea(int xValue, int yValue, int width, int height) {
         Bounds visibleArea = null;
 
         Component component = this;
 
-        int top = yArgument;
-        int left = xArgument;
-        int bottom = yArgument + height - 1;
-        int right = xArgument + width - 1;
+        int top = yValue;
+        int left = xValue;
+        int bottom = yValue + height - 1;
+        int right = xValue + width - 1;
 
         int xOffset = 0;
         int yOffset = 0;
@@ -1711,14 +1711,14 @@ public abstract class Component implements ConstrainedVisual {
      * Ensures that the given area of a component is visible within the
      * viewports of all applicable ancestors.
      *
-     * @param xArgument The x-coordinate of the area to be made visible.
-     * @param yArgument The y-coordinate of the area.
+     * @param xValue The x-coordinate of the area to be made visible.
+     * @param yValue The y-coordinate of the area.
      * @param width The width of the area to be shown.
      * @param height The height of the area.
      */
-    public void scrollAreaToVisible(int xArgument, int yArgument, int width, int height) {
-        int xLocation = xArgument;
-        int yLocation = yArgument;
+    public void scrollAreaToVisible(int xValue, int yValue, int width, int height) {
+        int xLocation = xValue;
+        int yLocation = yValue;
         int widthValue = width;
         int heightValue = height;
 
@@ -1891,29 +1891,29 @@ public abstract class Component implements ConstrainedVisual {
     /**
      * Flags an area as needing to be repainted.
      *
-     * @param xArgument Starting x-coordinate of area to paint.
-     * @param yArgument Starting y-coordinate.
+     * @param xValue Starting x-coordinate of area to paint.
+     * @param yValue Starting y-coordinate.
      * @param width Width of area to repaint.
      * @param height Height of the area.
      */
-    public final void repaint(int xArgument, int yArgument, int width, int height) {
-        repaint(xArgument, yArgument, width, height, false);
+    public final void repaint(int xValue, int yValue, int width, int height) {
+        repaint(xValue, yValue, width, height, false);
     }
 
     /**
      * Flags an area as needing to be repainted.
      *
-     * @param xArgument Starting x-coordinate of area to repaint.
-     * @param yArgument Starting y-coordinate.
+     * @param xValue Starting x-coordinate of area to repaint.
+     * @param yValue Starting y-coordinate.
      * @param width Width of area to repaint.
      * @param height Height of area.
      * @param immediate Whether repaint should be done immediately.
      */
-    public void repaint(int xArgument, int yArgument, int width, int height, boolean immediate) {
+    public void repaint(int xValue, int yValue, int width, int height, boolean immediate) {
         Container.assertEventDispatchThread(this);
         if (parent != null) {
-            int xLocation = xArgument;
-            int yLocation = yArgument;
+            int xLocation = xValue;
+            int yLocation = yValue;
             int widthValue = width;
             int heightValue = height;
 
@@ -1977,14 +1977,14 @@ public abstract class Component implements ConstrainedVisual {
     public Graphics2D getGraphics() {
         Graphics2D graphics = null;
 
-        int xLocal = 0;
-        int yLocal = 0;
+        int xValue = 0;
+        int yValue = 0;
 
         Component component = this;
 
         while (component != null && component.isVisible() && !(component instanceof Display)) {
-            xLocal += component.x;
-            yLocal += component.y;
+            xValue += component.x;
+            yValue += component.y;
 
             component = component.getParent();
         }
@@ -1998,7 +1998,7 @@ public abstract class Component implements ConstrainedVisual {
                 graphics.scale(scale, scale);
             }
 
-            graphics.translate(xLocal, yLocal);
+            graphics.translate(xValue, yValue);
             graphics.clipRect(0, 0, getWidth(), getHeight());
         }
 
@@ -2288,9 +2288,9 @@ public abstract class Component implements ConstrainedVisual {
     public Component transferFocus(FocusTraversalDirection direction) {
         Component component = null;
 
-        Container parentLocal = getParent();
-        if (parentLocal != null) {
-            component = parentLocal.transferFocus(this, direction);
+        Container parentValue = getParent();
+        if (parentValue != null) {
+            component = parentValue.transferFocus(this, direction);
         }
 
         return component;
@@ -2593,11 +2593,11 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    protected boolean mouseMove(int xArgument, int yArgument) {
+    protected boolean mouseMove(int xValue, int yValue) {
         boolean consumed = false;
 
         if (isEnabled()) {
-            mouseLocation = new Point(xArgument, yArgument);
+            mouseLocation = new Point(xValue, yValue);
 
             if (triggerTooltipCallback != null) {
                 triggerTooltipCallback.cancel();
@@ -2607,15 +2607,15 @@ public abstract class Component implements ConstrainedVisual {
             triggerTooltipCallback = ApplicationContext.scheduleCallback(new Runnable() {
                 @Override
                 public void run() {
-                    Point mouseLocationLocal = getMouseLocation();
-                    if (mouseLocationLocal != null) {
+                    Point mouseLocationValue = getMouseLocation();
+                    if (mouseLocationValue != null) {
                         componentTooltipListeners.tooltipTriggered(Component.this,
-                            mouseLocationLocal.x, mouseLocationLocal.y);
+                            mouseLocationValue.x, mouseLocationValue.y);
                     }
                 }
             }, tooltipDelay);
 
-            consumed = componentMouseListeners.mouseMove(this, xArgument, yArgument);
+            consumed = componentMouseListeners.mouseMove(this, xValue, yValue);
         }
 
         return consumed;
@@ -2642,7 +2642,7 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    protected boolean mouseDown(Mouse.Button button, int xArgument, int yArgument) {
+    protected boolean mouseDown(Mouse.Button button, int xValue, int yValue) {
         boolean consumed = false;
 
         if (isEnabled()) {
@@ -2651,27 +2651,27 @@ public abstract class Component implements ConstrainedVisual {
                 triggerTooltipCallback = null;
             }
 
-            consumed = componentMouseButtonListeners.mouseDown(this, button, xArgument, yArgument);
+            consumed = componentMouseButtonListeners.mouseDown(this, button, xValue, yValue);
         }
 
         return consumed;
     }
 
-    protected boolean mouseUp(Mouse.Button button, int xArgument, int yArgument) {
+    protected boolean mouseUp(Mouse.Button button, int xValue, int yValue) {
         boolean consumed = false;
 
         if (isEnabled()) {
-            consumed = componentMouseButtonListeners.mouseUp(this, button, xArgument, yArgument);
+            consumed = componentMouseButtonListeners.mouseUp(this, button, xValue, yValue);
         }
 
         return consumed;
     }
 
-    protected boolean mouseClick(Mouse.Button button, int xArgument, int yArgument, int count) {
+    protected boolean mouseClick(Mouse.Button button, int xValue, int yValue, int count) {
         boolean consumed = false;
 
         if (isEnabled()) {
-            consumed = componentMouseButtonListeners.mouseClick(this, button, xArgument, yArgument,
+            consumed = componentMouseButtonListeners.mouseClick(this, button, xValue, yValue,
                 count);
         }
 
@@ -2679,12 +2679,12 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     protected boolean mouseWheel(Mouse.ScrollType scrollType, int scrollAmount, int wheelRotation,
-        int xArgument, int yArgument) {
+        int xValue, int yValue) {
         boolean consumed = false;
 
         if (isEnabled()) {
             consumed = componentMouseWheelListeners.mouseWheel(this, scrollType, scrollAmount,
-                wheelRotation, xArgument, yArgument);
+                wheelRotation, xValue, yValue);
         }
 
         return consumed;
