@@ -432,12 +432,10 @@ public final class GraphicsUtilities {
      * JSON dictionary describing a Paint value}.
      * @return The decoded paint value.
      * @throws IllegalArgumentException if the given value is {@code null} or
-     * there is a problem decoding the value.
+     * empty or there is a problem decoding the value.
      */
     public static Paint decodePaint(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Cannot decode a null String.");
-        }
+        Utils.checkNullOrEmpty(value, "paint");
 
         Paint paint;
         if (value.startsWith("#") || value.startsWith("0x") || value.startsWith("0X")) {
@@ -476,6 +474,8 @@ public final class GraphicsUtilities {
      * @throws IllegalArgumentException if there is no paint type key found.
      */
     public static Paint decodePaint(Dictionary<String, ?> dictionary) {
+        Utils.checkNull(dictionary, "paint dictionary");
+
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);
         if (paintType == null) {
             throw new IllegalArgumentException(PAINT_TYPE_KEY + " is required.");
