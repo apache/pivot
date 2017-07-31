@@ -31,6 +31,7 @@ import java.text.AttributedCharacterIterator;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.text.CompositeIterator;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -67,7 +68,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
 
             if (selection == null) {
                 TextPane textPane = (TextPane) getComponent();
-                textPane.repaint(caret.x, caret.y, caret.width, caret.height);
+                getTextPane().repaint(caret.x, caret.y, caret.width, caret.height);
             }
         }
     }
@@ -123,8 +124,12 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         }
     }
 
+    private TextPane getTextPane() {
+        return (TextPane)getComponent();
+    }
+
     private Rectangle getCaretRectangle(TextHitInfo textCaret) {
-        TextPane textPane = (TextPane)getComponent();
+        TextPane textPane = getTextPane();
         AttributedStringCharacterIterator composedText = textPane.getComposedText();
 
         // Special case that tweaks the bounds at the end of line so that the entire
@@ -153,20 +158,17 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
         @Override
         public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
-            TextPane textPane = (TextPane)getComponent();
-            return new AttributedStringCharacterIterator(textPane.getText(), beginIndex, endIndex, attributes);
+            return new AttributedStringCharacterIterator(getTextPane().getText(), beginIndex, endIndex, attributes);
         }
 
         @Override
         public int getCommittedTextLength() {
-            TextPane textPane = (TextPane)getComponent();
-            return textPane.getCharacterCount();
+            return getTextPane().getCharacterCount();
         }
 
         @Override
         public int getInsertPositionOffset() {
-            TextPane textPane = (TextPane)getComponent();
-            return textPane.getSelectionStart();
+            return getTextPane().getSelectionStart();
         }
 
         @Override
@@ -176,22 +178,21 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
         @Override
         public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
-            TextPane textPane = (TextPane)getComponent();
-            String selectedText = textPane.getSelectedText();
-            if (selectedText != null) {
+            String selectedText = getTextPane().getSelectedText();
+            if (selectedText != null && !selectedText.isEmpty()) {
                 return new AttributedStringCharacterIterator(selectedText, attributes);
             }
             return null;
         }
 
         private Rectangle offsetToScreen(Rectangle clientRectangle) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = getTextPane();
             return textPane.offsetToScreen(clientRectangle);
         }
 
         @Override
         public Rectangle getTextLocation(TextHitInfo offset) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = getTextPane();
             AttributedStringCharacterIterator composedText = textPane.getComposedText();
 
             if (composedText == null) {
@@ -227,7 +228,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
         @Override
         public void inputMethodTextChanged(InputMethodEvent event) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = getTextPane();
             AttributedCharacterIterator iter = event.getText();
             AttributedStringCharacterIterator composedIter = null;
 
@@ -259,7 +260,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
         @Override
         public void caretPositionChanged(InputMethodEvent event) {
-            TextPane textPane = (TextPane)getComponent();
+            TextPane textPane = getTextPane();
             // TODO:  so far I have not seen this called, so ???
         }
 
@@ -771,19 +772,13 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
-
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
@@ -800,9 +795,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param margin The new set of margin values.
      */
     public void setMargin(Insets margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
+        Utils.checkNull(margin, "margin");
 
         this.margin = margin;
         invalidateComponent();
@@ -814,10 +807,6 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param margin A dictionary with keys in the set {left, top, bottom, right}.
      */
     public final void setMargin(Dictionary<String, ?> margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
-
         setMargin(new Insets(margin));
     }
 
@@ -836,11 +825,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param margin The new single margin value for all the edges.
      */
     public final void setMargin(Number margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
-
-        setMargin(margin.intValue());
+        setMargin(new Insets(margin));
     }
 
     /**
@@ -850,10 +835,6 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * keys left, top, bottom, and/or right.
      */
     public final void setMargin(String margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
-
         setMargin(Insets.decode(margin));
     }
 
