@@ -204,8 +204,7 @@ public abstract class Theme {
     }
 
     /**
-     * Sets the skin class responsible for skinning the specified component
-     * class.
+     * Sets the skin class responsible for skinning the specified component class.
      *
      * @param componentClass The component class.
      * @param skinClass The skin class.
@@ -223,10 +222,7 @@ public abstract class Theme {
      * @return White if the theme is not dark (default), or Black.
      */
     public Color getDefaultBackgroundColor() {
-        if (!isThemeDark()) {
-            return Color.WHITE;
-        }
-        return Color.BLACK;
+        return isThemeDark() ? Color.BLACK : Color.WHITE;
     }
 
     /**
@@ -235,10 +231,7 @@ public abstract class Theme {
      * @return Black if the theme is not dark (default), or White otherwise.
      */
     public Color getDefaultForegroundColor() {
-        if (!isThemeDark()) {
-            return Color.BLACK;
-        }
-        return Color.WHITE;
+        return isThemeDark() ? Color.WHITE : Color.BLACK;
     }
 
     /**
@@ -297,7 +290,7 @@ public abstract class Theme {
 
         int style = font.getStyle();
         if (dictionary.containsKey(BOLD_KEY)) {
-            boolean bold = ((Boolean) dictionary.get(BOLD_KEY)).booleanValue();
+            boolean bold = dictionary.getBoolean(BOLD_KEY);
 
             if (bold) {
                 style |= Font.BOLD;
@@ -307,7 +300,7 @@ public abstract class Theme {
         }
 
         if (dictionary.containsKey(ITALIC_KEY)) {
-            boolean italic = ((Boolean) dictionary.get(ITALIC_KEY)).booleanValue();
+            boolean italic = dictionary.getBoolean(ITALIC_KEY);
 
             if (italic) {
                 style |= Font.ITALIC;
