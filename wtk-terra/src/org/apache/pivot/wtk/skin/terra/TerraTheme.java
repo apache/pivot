@@ -118,7 +118,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
         componentSkinMap.put(Border.class, TerraBorderSkin.class);
-        componentSkinMap.put(BoxPane.class, TerraBoxPaneSkin.class);
         componentSkinMap.put(Calendar.class, TerraCalendarSkin.class);
         componentSkinMap.put(CalendarButton.class, TerraCalendarButtonSkin.class);
         componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
@@ -128,7 +127,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
         componentSkinMap.put(FileBrowser.class, TerraFileBrowserSkin.class);
         componentSkinMap.put(FileBrowserSheet.class, TerraFileBrowserSheetSkin.class);
-        componentSkinMap.put(FillPane.class, TerraFillPaneSkin.class);
         componentSkinMap.put(Form.class, TerraFormSkin.class);
         componentSkinMap.put(Frame.class, TerraFrameSkin.class);
         componentSkinMap.put(GridPane.class, TerraGridPaneSkin.class);
@@ -145,7 +143,6 @@ public final class TerraTheme extends Theme {
         componentSkinMap.put(MenuPopup.class, TerraMenuPopupSkin.class);
         componentSkinMap.put(Meter.class, TerraMeterSkin.class);
         componentSkinMap.put(Palette.class, TerraPaletteSkin.class);
-        componentSkinMap.put(Panel.class, TerraPanelSkin.class);
         componentSkinMap.put(Panorama.class, TerraPanoramaSkin.class);
         componentSkinMap.put(Prompt.class, TerraPromptSkin.class);
         componentSkinMap.put(PushButton.class, TerraPushButtonSkin.class);
@@ -306,7 +303,7 @@ public final class TerraTheme extends Theme {
             if (defaultForegroundColorString != null) {
                 defaultForegroundColor = Color.decode(defaultForegroundColorString);
             } else {
-                defaultForegroundColor = super.getDefaultBackgroundColor();
+                defaultForegroundColor = super.getDefaultForegroundColor();
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);

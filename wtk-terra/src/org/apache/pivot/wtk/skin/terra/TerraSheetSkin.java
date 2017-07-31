@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -524,19 +525,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
@@ -545,18 +540,14 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(new Insets(padding));
     }
@@ -566,18 +557,10 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -595,9 +578,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public void setSlideSource(SheetPlacement slideSource) {
-        if (slideSource == null) {
-            throw new IllegalArgumentException("slideSource is null.");
-        }
+        Utils.checkNull(slideSource, "slideSource");
         this.slideSource = slideSource;
     }
 
@@ -713,8 +694,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         if (owner != null) {
             Bounds clientArea = owner.getClientArea();
 
-            Point location = owner.mapPointToAncestor(owner.getDisplay(), clientArea.x,
-                clientArea.y);
+            Point location = owner.mapPointToAncestor(owner.getDisplay(),
+                clientArea.x, clientArea.y);
             int x = location.x;
             int y = location.y;
 
@@ -742,4 +723,5 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
             sheet.setLocation(x, y);
         }
     }
+
 }

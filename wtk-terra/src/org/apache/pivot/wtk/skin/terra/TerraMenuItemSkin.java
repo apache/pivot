@@ -23,10 +23,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.MenuItemSkin;
@@ -85,37 +87,39 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         menuItem.setCursor(Cursor.DEFAULT);
     }
 
+    private Button.DataRenderer prepare() {
+        Menu.Item menuItem = (Menu.Item) getComponent();
+        return prepare(menuItem, false);
+    }
+
+    private Button.DataRenderer prepare(Menu.Item menuItem, boolean highlight) {
+        Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
+        dataRenderer.render(menuItem.getButtonData(), menuItem, highlight);
+        return dataRenderer;
+    }
+
     @Override
     public int getPreferredWidth(int height) {
-        Menu.Item menuItem = (Menu.Item) getComponent();
-
-        Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
-        dataRenderer.render(menuItem.getButtonData(), menuItem, false);
+        Button.DataRenderer dataRenderer = prepare();
 
         return dataRenderer.getPreferredWidth(height) + EXPANDER_SIZE;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        Menu.Item menuItem = (Menu.Item) getComponent();
-
-        Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
-        dataRenderer.render(menuItem.getButtonData(), menuItem, false);
+        Button.DataRenderer dataRenderer = prepare();
 
         return Math.max(dataRenderer.getPreferredHeight(width), EXPANDER_SIZE);
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        Menu.Item menuItem = (Menu.Item) getComponent();
-
-        Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
-        dataRenderer.render(menuItem.getButtonData(), menuItem, false);
+        Button.DataRenderer dataRenderer = prepare();
 
         Dimensions preferredSize = dataRenderer.getPreferredSize();
 
-        return new Dimensions(preferredSize.width + EXPANDER_SIZE, Math.max(preferredSize.height,
-            EXPANDER_SIZE));
+        return new Dimensions(preferredSize.width + EXPANDER_SIZE,
+                              Math.max(preferredSize.height, EXPANDER_SIZE));
     }
 
     @Override
@@ -143,8 +147,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
         }
 
         // Paint the content
-        Button.DataRenderer dataRenderer = menuItem.getDataRenderer();
-        dataRenderer.render(menuItem.getButtonData(), menuItem, highlight);
+        Button.DataRenderer dataRenderer = prepare(menuItem, highlight);
         dataRenderer.setSize(Math.max(width - EXPANDER_SIZE, 0), height);
 
         dataRenderer.paint(graphics);
@@ -197,10 +200,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
     }
 
     public void setPopupBorderColor(String popupBorderColor) {
-        if (popupBorderColor == null) {
-            throw new IllegalArgumentException("popupBorderColor is null.");
-        }
-
-        menuPopup.getStyles().put("borderColor", popupBorderColor);
+        setPopupBorderColor(GraphicsUtilities.decodeColor(popupBorderColor, "popupBorderColor"));
     }
+
 }

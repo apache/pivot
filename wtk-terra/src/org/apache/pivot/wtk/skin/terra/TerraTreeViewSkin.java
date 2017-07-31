@@ -458,7 +458,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public TerraTreeViewSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -803,7 +803,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -823,7 +823,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -843,7 +843,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -863,7 +863,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setSelectionColor(int selectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
@@ -883,7 +883,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
@@ -903,7 +903,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
@@ -924,7 +924,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
@@ -944,7 +944,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setHighlightColor(int highlightColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setHighlightColor(theme.getColor(highlightColor));
     }
 
@@ -964,7 +964,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
@@ -1045,7 +1045,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setBranchControlColor(int branchControlColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBranchControlColor(theme.getColor(branchControlColor));
     }
 
@@ -1066,7 +1066,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setBranchControlSelectionColor(int branchControlSelectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBranchControlSelectionColor(theme.getColor(branchControlSelectionColor));
     }
 
@@ -1087,7 +1087,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setBranchControlInactiveSelectionColor(int branchControlInactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBranchControlInactiveSelectionColor(theme.getColor(branchControlInactiveSelectionColor));
     }
 
@@ -1107,7 +1107,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public final void setGridColor(int gridColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setGridColor(theme.getColor(gridColor));
     }
 

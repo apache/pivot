@@ -24,6 +24,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -593,7 +594,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     private Color scrollButtonHighlightedBackgroundColor;
 
     public TerraScrollBarSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         minimumHandleLength = 31;
         borderColor = theme.getColor(7);
         scrollButtonImageColor = theme.getColor(1);
@@ -615,7 +616,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
         scrollBar.add(scrollDownButton);
         scrollBar.add(handle);
 
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         Color backgroundColor = theme.getColor(9);
         Color brightBackgroundColor = TerraTheme.brighten(backgroundColor);
@@ -809,11 +810,6 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
         }
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(backgroundColor));
-    }
-
     public int getMinimumHandleLength() {
         return minimumHandleLength;
     }
@@ -834,24 +830,18 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null");
-        }
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -860,24 +850,18 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public void setScrollButtonImageColor(Color scrollButtonImageColor) {
-        if (scrollButtonImageColor == null) {
-            throw new IllegalArgumentException("scrollButtonImageColor is null");
-        }
+        Utils.checkNull(scrollButtonImageColor, "scrollButtonImageColor");
 
         this.scrollButtonImageColor = scrollButtonImageColor;
         repaintComponent();
     }
 
     public final void setScrollButtonImageColor(String scrollButtonImageColor) {
-        if (scrollButtonImageColor == null) {
-            throw new IllegalArgumentException("scrollButtonImageColor is null");
-        }
-
         setScrollButtonImageColor(GraphicsUtilities.decodeColor(scrollButtonImageColor));
     }
 
     public final void setScrollButtonImageColor(int scrollButtonImageColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setScrollButtonImageColor(theme.getColor(scrollButtonImageColor));
     }
 
@@ -886,24 +870,18 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public void setScrollButtonBackgroundColor(Color scrollButtonBackgroundColor) {
-        if (scrollButtonBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonBackgroundColor is null");
-        }
+        Utils.checkNull(scrollButtonBackgroundColor, "scrollButtonBackgroundColor");
 
         this.scrollButtonBackgroundColor = scrollButtonBackgroundColor;
         repaintComponent();
     }
 
     public final void setScrollButtonBackgroundColor(String scrollButtonBackgroundColor) {
-        if (scrollButtonBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonBackgroundColor is null");
-        }
-
         setScrollButtonBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonBackgroundColor));
     }
 
     public final void setScrollButtonBackgroundColor(int scrollButtonBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setScrollButtonBackgroundColor(theme.getColor(scrollButtonBackgroundColor));
     }
 
@@ -912,9 +890,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public void setScrollButtonDisabledBackgroundColor(Color scrollButtonDisabledBackgroundColor) {
-        if (scrollButtonDisabledBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonDisabledBackgroundColor is null");
-        }
+        Utils.checkNull(scrollButtonDisabledBackgroundColor, "scrollButtonDisabledBackgroundColor");
 
         this.scrollButtonDisabledBackgroundColor = scrollButtonDisabledBackgroundColor;
         repaintComponent();
@@ -922,15 +898,11 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public final void setScrollButtonDisabledBackgroundColor(
         String scrollButtonDisabledBackgroundColor) {
-        if (scrollButtonDisabledBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonDisabledBackgroundColor is null");
-        }
-
         setScrollButtonDisabledBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonDisabledBackgroundColor));
     }
 
     public final void setScrollButtonDisabledBackgroundColor(int scrollButtonDisabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setScrollButtonDisabledBackgroundColor(theme.getColor(scrollButtonDisabledBackgroundColor));
     }
 
@@ -939,9 +911,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public void setScrollButtonPressedBackgroundColor(Color scrollButtonPressedBackgroundColor) {
-        if (scrollButtonPressedBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonPressedBackgroundColor is null");
-        }
+        Utils.checkNull(scrollButtonPressedBackgroundColor, "scrollButtonPressedBackgroundColor");
 
         this.scrollButtonPressedBackgroundColor = scrollButtonPressedBackgroundColor;
         repaintComponent();
@@ -949,15 +919,11 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public final void setScrollButtonPressedBackgroundColor(
         String scrollButtonPressedBackgroundColor) {
-        if (scrollButtonPressedBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonPressedBackgroundColor is null");
-        }
-
         setScrollButtonPressedBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonPressedBackgroundColor));
     }
 
     public final void setScrollButtonPressedBackgroundColor(int scrollButtonPressedBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setScrollButtonPressedBackgroundColor(theme.getColor(scrollButtonPressedBackgroundColor));
     }
 
@@ -967,9 +933,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public void setScrollButtonHighlightedBackgroundColor(
         Color scrollButtonHighlightedBackgroundColor) {
-        if (scrollButtonHighlightedBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonHighlightedBackgroundColor is null");
-        }
+        Utils.checkNull(scrollButtonHighlightedBackgroundColor, "scrollButtonHighlightedBackgroundColor");
 
         this.scrollButtonHighlightedBackgroundColor = scrollButtonHighlightedBackgroundColor;
         repaintComponent();
@@ -977,16 +941,12 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public final void setScrollButtonHighlightedBackgroundColor(
         String scrollButtonHighlightedBackgroundColor) {
-        if (scrollButtonHighlightedBackgroundColor == null) {
-            throw new IllegalArgumentException("scrollButtonHighlightedBackgroundColor is null");
-        }
-
         setScrollButtonHighlightedBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonHighlightedBackgroundColor));
     }
 
     public final void setScrollButtonHighlightedBackgroundColor(
         int scrollButtonHighlightedBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setScrollButtonHighlightedBackgroundColor(theme.getColor(scrollButtonHighlightedBackgroundColor));
     }
 

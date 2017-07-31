@@ -241,7 +241,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
     @SuppressWarnings("unused")
     public TerraFrameSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(10));
 
         titleBarColor = theme.getColor(4);
@@ -609,11 +609,6 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public void setBackgroundColor(Color backgroundColor) {
         super.setBackgroundColor(backgroundColor);
         contentBevelColor = TerraTheme.brighten(backgroundColor);
-    }
-
-    public final void setBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(color));
     }
 
     public boolean getShowMinimizeButton() {

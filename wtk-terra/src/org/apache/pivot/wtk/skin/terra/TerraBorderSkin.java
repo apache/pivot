@@ -20,7 +20,8 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.BorderSkin;
 
 /**
- * Terra border skin.
+ * Terra Border skin. Deals with colors that depend on
+ * the current theme.
  */
 public class TerraBorderSkin extends BorderSkin {
     public TerraBorderSkin() {
@@ -30,17 +31,13 @@ public class TerraBorderSkin extends BorderSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
     public final void setTitleColor(int titleColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setTitleColor(theme.getColor(titleColor));
     }
 
-    public final void setBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(color));
-    }
 }

@@ -20,7 +20,8 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.GridPaneSkin;
 
 /**
- * Terra grid pane skin.
+ * Terra GridPane skin. Deals with colors that depend on the
+ * current theme.
  */
 public class TerraGridPaneSkin extends GridPaneSkin {
     public TerraGridPaneSkin() {
@@ -28,18 +29,13 @@ public class TerraGridPaneSkin extends GridPaneSkin {
         setVerticalGridColor(7);
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(backgroundColor));
-    }
-
     public final void setHorizontalGridColor(int horizontalGridColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setHorizontalGridColor(theme.getColor(horizontalGridColor));
     }
 
     public final void setVerticalGridColor(int verticalGridColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setVerticalGridColor(theme.getColor(verticalGridColor));
     }
 }

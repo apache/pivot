@@ -20,7 +20,7 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ScrollPaneSkin;
 
 /**
- * Scroll pane skin that applies terra-specific colors.
+ * Scroll pane skin that applies Terra-specific colors.
  */
 public class TerraScrollPaneSkin extends ScrollPaneSkin {
 
@@ -30,8 +30,4 @@ public class TerraScrollPaneSkin extends ScrollPaneSkin {
         setBackgroundPaint(currentTheme().getColor(4));
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(backgroundColor));
-    }
 }

@@ -20,7 +20,8 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.TextPaneSkin;
 
 /**
- * Terra text area skin.
+ * Terra text area skin. This part of the skin deals with color
+ * selection that is specific to the theme.
  */
 public class TerraTextPaneSkin extends TextPaneSkin {
     public TerraTextPaneSkin() {
@@ -34,37 +35,32 @@ public class TerraTextPaneSkin extends TextPaneSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
     public final void setInactiveColor(int inactiveColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveColor(theme.getColor(inactiveColor));
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(backgroundColor));
+    public final void setSelectionColor(int selectionColor) {
+        Theme theme = currentTheme();
+        setSelectionColor(theme.getColor(selectionColor));
     }
 
-    public final void setSelectionColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setSelectionColor(theme.getColor(backgroundColor));
+    public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
+        Theme theme = currentTheme();
+        setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
-    public final void setSelectionBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setSelectionBackgroundColor(theme.getColor(backgroundColor));
+    public final void setInactiveSelectionColor(int inactiveSelectionColor) {
+        Theme theme = currentTheme();
+        setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
-    public final void setInactiveSelectionColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setInactiveSelectionColor(theme.getColor(backgroundColor));
-    }
-
-    public final void setInactiveSelectionBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setInactiveSelectionBackgroundColor(theme.getColor(backgroundColor));
+    public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
+        Theme theme = currentTheme();
+        setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 }

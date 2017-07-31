@@ -102,7 +102,7 @@ public class TerraTooltipSkin extends WindowSkin {
 
     public TerraTooltipSkin() {
         // Get theme icons/colors
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
 
         setBackgroundColor(theme.getColor(19));
 
@@ -276,4 +276,5 @@ public class TerraTooltipSkin extends WindowSkin {
 
         closeTransition = null;
     }
+
 }

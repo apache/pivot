@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -41,7 +42,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     private int spacing;
 
     public TerraMenuBarSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         font = theme.getFont().deriveFont(Font.BOLD);
         color = theme.getColor(1);
@@ -49,6 +50,11 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         activeColor = theme.getColor(4);
         activeBackgroundColor = theme.getColor(14);
         spacing = 2;
+    }
+
+    private MenuBar.ItemSequence getMenuItems() {
+        MenuBar menuBar = (MenuBar)getComponent();
+        return menuBar.getItems();
     }
 
     @Override
@@ -63,8 +69,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
-        MenuBar menuBar = (MenuBar) getComponent();
-        MenuBar.ItemSequence items = menuBar.getItems();
+        MenuBar.ItemSequence items = getMenuItems();
 
         int j = 0;
         for (int i = 0, n = items.getLength(); i < n; i++) {
@@ -86,8 +91,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     public int getPreferredHeight(int width) {
         int preferredHeight = 0;
 
-        MenuBar menuBar = (MenuBar) getComponent();
-        MenuBar.ItemSequence items = menuBar.getItems();
+        MenuBar.ItemSequence items = getMenuItems();
 
         for (int i = 0, n = items.getLength(); i < n; i++) {
             MenuBar.Item item = items.get(i);
@@ -104,8 +108,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         int preferredWidth = 0;
         int preferredHeight = 0;
 
-        MenuBar menuBar = (MenuBar) getComponent();
-        MenuBar.ItemSequence items = menuBar.getItems();
+        MenuBar.ItemSequence items = getMenuItems();
 
         int j = 0;
         for (int i = 0, n = items.getLength(); i < n; i++) {
@@ -125,12 +128,10 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
 
     @Override
     public void layout() {
-        MenuBar menuBar = (MenuBar) getComponent();
-
         int height = getHeight();
         int itemX = 0;
 
-        for (MenuBar.Item item : menuBar.getItems()) {
+        for (MenuBar.Item item : getMenuItems()) {
             if (item.isVisible()) {
                 item.setSize(item.getPreferredWidth(height), height);
                 item.setLocation(itemX, 0);
@@ -140,37 +141,22 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
         }
     }
 
-    public final void setBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(color));
-    }
-
     public Font getFont() {
         return font;
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -179,24 +165,18 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -205,24 +185,18 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(color));
     }
 
@@ -231,24 +205,18 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public void setActiveColor(Color activeColor) {
-        if (activeColor == null) {
-            throw new IllegalArgumentException("activeColor is null.");
-        }
+        Utils.checkNull(activeColor, "activeColor");
 
         this.activeColor = activeColor;
         repaintComponent();
     }
 
     public final void setActiveColor(String activeColor) {
-        if (activeColor == null) {
-            throw new IllegalArgumentException("activeColor is null.");
-        }
-
         setActiveColor(GraphicsUtilities.decodeColor(activeColor));
     }
 
     public final void setActiveColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setActiveColor(theme.getColor(color));
     }
 
@@ -257,24 +225,18 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public void setActiveBackgroundColor(Color activeBackgroundColor) {
-        if (activeBackgroundColor == null) {
-            throw new IllegalArgumentException("activeBackgroundColor is null.");
-        }
+        Utils.checkNull(activeBackgroundColor, "activeBackgroundColor");
 
         this.activeBackgroundColor = activeBackgroundColor;
         repaintComponent();
     }
 
     public final void setActiveBackgroundColor(String activeBackgroundColor) {
-        if (activeBackgroundColor == null) {
-            throw new IllegalArgumentException("activeBackgroundColor is null.");
-        }
-
         setActiveBackgroundColor(GraphicsUtilities.decodeColor(activeBackgroundColor));
     }
 
     public final void setActiveBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setActiveBackgroundColor(theme.getColor(color));
     }
 
