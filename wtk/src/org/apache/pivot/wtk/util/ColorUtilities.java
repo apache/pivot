@@ -18,6 +18,9 @@ package org.apache.pivot.wtk.util;
 
 import java.awt.Color;
 
+import org.apache.pivot.wtk.Theme;
+
+
 /**
  * Utility methods for/on Colors.
  */
@@ -141,14 +144,25 @@ public final class ColorUtilities {
 
     /**
      * Returns a modified version of the given Color.
-     * @param original the original color
-     * @param transparency the desired transparency (alpha) to set
-     * @return an updated version of the color, with the given transparency
+     * @param original The original color
+     * @param transparency The desired transparency (alpha) to set.
+     * @return An updated version of the color, with the given transparency.
      */
     public static Color setTransparencyInColor(final Color original, final int transparency) {
         Color updated = new Color(original.getRed(), original.getGreen(), original.getBlue(),
             transparency);
 
         return updated;
+    }
+
+    /**
+     * Returns a modified version of the given Theme color.
+     * @param colorIndex Index into the Theme color palette of the color to modify.
+     * @param transparency The transparency value to set in the color.
+     * @return An updated version of the color, with the given transparency.
+     */
+    public static Color setTransparencyInColor(final int colorIndex, final int transparency) {
+        Theme theme = Theme.getTheme();
+        return setTransparencyInColor(theme.getColor(colorIndex), transparency);
     }
 }
