@@ -38,7 +38,7 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setX(int x) {
-        setOrigin(x, y);
+        this.x = x;
     }
 
     public int getY() {
@@ -46,7 +46,7 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setY(int y) {
-        setOrigin(x, y);
+        this.y = y;
     }
 
     public void setOrigin(int x, int y) {
@@ -63,7 +63,7 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setWidth(int width) {
-        setSize(width, height);
+        this.width = width;
     }
 
     public int getHeight() {
@@ -71,7 +71,7 @@ public class ClipDecorator implements Decorator {
     }
 
     public void setHeight(int height) {
-        setSize(width, height);
+        this.height = height;
     }
 
     public void setSize(int width, int height) {
@@ -90,17 +90,8 @@ public class ClipDecorator implements Decorator {
     }
 
     @Override
-    public void update() {
-        // No-op
-    }
-
-    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(x, y, width, height);
     }
 
-    @Override
-    public AffineTransform getTransform(Component component) {
-        return new AffineTransform();
-    }
 }

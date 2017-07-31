@@ -45,28 +45,29 @@ public class ShadeDecorator implements Decorator {
         this(0.33f, Color.BLACK);
     }
 
+    private void checkOpacity(float opacityValue) {
+        if (opacityValue <= 0.0f || opacityValue >= 1.0f) {
+            throw new IllegalArgumentException("opacity must be between 0.0 and 1.0, exclusive.");
+        }
+    }
+
     /**
      * Creates a new <tt>ShadeDecorator</tt> with the specified opacity and
      * shade color.
      *
-     * @param opacity The opacity of the shade, between 0 and 1, exclusive.
+     * @param opacity The opacity of the shade, between 0.0 and 1.0, exclusive.
      * @param color The color of the shade.
      */
     public ShadeDecorator(float opacity, Color color) {
-        if (opacity <= 0 || opacity >= 1) {
-            throw new IllegalArgumentException("opacity must be between 0 and 1, exclusive.");
-        }
-
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        checkOpacity(opacity);
+        Utils.checkNull(color, "color");
 
         this.opacity = opacity;
         this.color = color;
     }
 
     /**
-     * @return The opacity of the decorator, in [0,1].
+     * @return The opacity of the decorator, in [0.0,1.0].
      */
     public float getOpacity() {
         return opacity;
@@ -75,21 +76,21 @@ public class ShadeDecorator implements Decorator {
     /**
      * Sets the opacity of the decorator.
      *
-     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     * @param opacity A number between 0.0 (transparent) and 1.0 (opaque), exclusive.
      */
     public void setOpacity(float opacity) {
+        checkOpacity(opacity);
+
         this.opacity = opacity;
     }
 
     /**
      * Sets the opacity of the decorator.
      *
-     * @param opacity A number between 0 (transparent) and 1 (opaque)
+     * @param opacity A number between 0.0 (transparent) and 1.0 (opaque), exclusive.
      */
     public void setOpacity(Number opacity) {
-        if (opacity == null) {
-            throw new IllegalArgumentException("opacity is null.");
-        }
+        Utils.checkNull(opacity, "opacity");
 
         setOpacity(opacity.floatValue());
     }
@@ -107,9 +108,7 @@ public class ShadeDecorator implements Decorator {
      * @param color The new color for the decorator.
      */
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
     }
@@ -121,19 +120,17 @@ public class ShadeDecorator implements Decorator {
      * values recognized by Pivot}.
      */
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     @Override
-    public Graphics2D prepare(Component componentArgument, Graphics2D graphicsArgument) {
-        this.component = componentArgument;
-        this.graphics = graphicsArgument;
+    public Graphics2D prepare(Component componentValue, Graphics2D graphicsValue) {
+        this.component = componentValue;
+        this.graphics = graphicsValue;
 
-        return graphicsArgument;
+        return graphicsValue;
     }
 
     @Override
@@ -147,8 +144,8 @@ public class ShadeDecorator implements Decorator {
     }
 
     @Override
-    public Bounds getBounds(Component componentArgument) {
-        return new Bounds(0, 0, componentArgument.getWidth(), componentArgument.getHeight());
+    public Bounds getBounds(Component componentValue) {
+        return new Bounds(componentValue.getSize());
     }
 
     @Override
@@ -157,3 +154,4 @@ public class ShadeDecorator implements Decorator {
     }
 
 }
+	

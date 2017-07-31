@@ -24,12 +24,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
 
 /**
- * Decorator that adds a drop shadows to a component.
+ * Decorator that adds a drop shadow to a component.
  */
 public class DropShadowDecorator implements Decorator {
     private int blurRadius;
@@ -54,8 +55,6 @@ public class DropShadowDecorator implements Decorator {
     }
 
     /**
-     * Returns the color used to draw the shadow.
-     *
      * @return The color used to draw the shadow.
      */
     public Color getShadowColor() {
@@ -79,9 +78,7 @@ public class DropShadowDecorator implements Decorator {
      * Pivot}.
      */
     public final void setShadowColor(String shadowColor) {
-        if (shadowColor == null) {
-            throw new IllegalArgumentException("shadowColor is null.");
-        }
+        Utils.checkNull(shadowColor, "shadowColor");
 
         setShadowColor(GraphicsUtilities.decodeColor(shadowColor));
     }
@@ -105,8 +102,6 @@ public class DropShadowDecorator implements Decorator {
     }
 
     /**
-     * Returns the blur radius used to draw the shadow.
-     *
      * @return The blur radius used to draw the shadow.
      */
     public int getBlurRadius() {
@@ -125,7 +120,7 @@ public class DropShadowDecorator implements Decorator {
     /**
      * Returns the amount that the drop shadow will be offset along the x axis.
      *
-     * @return The x offset used to draw the shadow
+     * @return The x offset used to draw the shadow.
      */
     public int getXOffset() {
         return xOffset;
@@ -134,7 +129,7 @@ public class DropShadowDecorator implements Decorator {
     /**
      * Sets the amount that the drop shadow will be offset along the x axis.
      *
-     * @param xOffset The x offset used to draw the shadow
+     * @param xOffset The x offset used to draw the shadow.
      */
     public void setXOffset(int xOffset) {
         this.xOffset = xOffset;
@@ -143,7 +138,7 @@ public class DropShadowDecorator implements Decorator {
     /**
      * Returns the amount that the drop shadow will be offset along the y axis.
      *
-     * @return The y offset used to draw the shadow
+     * @return The y offset used to draw the shadow.
      */
     public int getYOffset() {
         return yOffset;
@@ -152,7 +147,7 @@ public class DropShadowDecorator implements Decorator {
     /**
      * Sets the amount that the drop shadow will be offset along the y axis.
      *
-     * @param yOffset The y offset used to draw the shadow
+     * @param yOffset The y offset used to draw the shadow.
      */
     public void setYOffset(int yOffset) {
         this.yOffset = yOffset;
@@ -176,8 +171,7 @@ public class DropShadowDecorator implements Decorator {
                 shadowImage = createShadow(rectangleImage);
             }
 
-            // Avoid drawing shadow if it will be covered by the component
-            // itself:
+            // Avoid drawing shadow if it will be covered by the component itself:
             Bounds paintBounds = new Bounds(0, 0, width, height);
             if (!component.isOpaque()
                 || !paintBounds.contains(new Bounds(graphics.getClipBounds()))) {
@@ -191,19 +185,9 @@ public class DropShadowDecorator implements Decorator {
     }
 
     @Override
-    public void update() {
-        // No-op
-    }
-
-    @Override
     public Bounds getBounds(Component component) {
         return new Bounds(xOffset - blurRadius, yOffset - blurRadius, component.getWidth()
             + blurRadius * 2, component.getHeight() + blurRadius * 2);
-    }
-
-    @Override
-    public AffineTransform getTransform(Component component) {
-        return new AffineTransform();
     }
 
     /**

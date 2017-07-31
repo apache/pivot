@@ -73,14 +73,6 @@ public class RotationDecorator implements Decorator {
      * {@inheritDoc}
      */
     @Override
-    public void update() {
-        // No-op
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Bounds getBounds(Component component) {
         int width = component.getWidth();
         int height = component.getHeight();

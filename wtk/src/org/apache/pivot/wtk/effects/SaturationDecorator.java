@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 
@@ -57,21 +58,19 @@ public class SaturationDecorator implements Decorator {
     }
 
     public void setMultiplier(Number multiplier) {
-        if (multiplier == null) {
-            throw new IllegalArgumentException("Multiplier is null.");
-        }
+        Utils.checkNull(multiplier, "Multiplier");
 
         setMultiplier(multiplier.floatValue());
     }
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
+    public Graphics2D prepare(Component component, Graphics2D graphicsValue) {
         int x = 0;
         int y = 0;
         int width = component.getWidth();
         int height = component.getHeight();
 
-        java.awt.Rectangle clipBounds = graphicsArgument.getClipBounds();
+        java.awt.Rectangle clipBounds = graphicsValue.getClipBounds();
         if (clipBounds != null) {
             x = clipBounds.x;
             y = clipBounds.y;
@@ -81,11 +80,11 @@ public class SaturationDecorator implements Decorator {
 
         componentImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-        this.graphics = graphicsArgument;
+        this.graphics = graphicsValue;
 
         componentGraphics = componentImage.createGraphics();
         componentGraphics.translate(-x, -y);
-        componentGraphics.setClip(graphicsArgument.getClip());
+        componentGraphics.setClip(graphicsValue.getClip());
 
         return componentGraphics;
     }
@@ -142,13 +141,4 @@ public class SaturationDecorator implements Decorator {
         graphics = null;
     }
 
-    @Override
-    public Bounds getBounds(Component component) {
-        return new Bounds(0, 0, component.getWidth(), component.getHeight());
-    }
-
-    @Override
-    public AffineTransform getTransform(Component component) {
-        return new AffineTransform();
-    }
 }

@@ -62,23 +62,34 @@ public interface Decorator {
      * was painted. This method is called immediately after
      * {@link Component#paint(Graphics2D)}; decorators are called in ascending
      * order.
+     * <p> This default version simply returns, without doing anything (often
+     * the appropriate thing to do).
      */
-    public void update();
+    public default void update() {
+        // Do nothing
+    }
 
     /**
      * Returns the bounding area of the decorator.
+     * <p> This default simply returns the bounds of the component's size.
      *
      * @param component The component that the decorator is attached to.
      * @return The decorator's bounds, relative to the component's origin.
      */
-    public Bounds getBounds(Component component);
+    public default Bounds getBounds(Component component) {
+        return new Bounds(component.getSize());
+    }
 
     /**
      * Returns the transformation the decorator applies to the component's
      * coordinate space.
+     * <p> This default simply returns a new {@link AffineTransform}.
      *
      * @param component The component the decorator is attached to.
      * @return The decorator's transform.
      */
-    public AffineTransform getTransform(Component component);
+    public default AffineTransform getTransform(Component component) {
+        return new AffineTransform();
+    }
+
 }

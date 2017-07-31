@@ -33,11 +33,11 @@ public class BaselineDecorator implements Decorator {
     private Graphics2D graphics = null;
 
     @Override
-    public Graphics2D prepare(Component componentArgument, Graphics2D graphicsArgument) {
-        this.component = componentArgument;
-        this.graphics = graphicsArgument;
+    public Graphics2D prepare(Component componentValue, Graphics2D graphicsValue) {
+        this.component = componentValue;
+        this.graphics = graphicsValue;
 
-        return graphicsArgument;
+        return graphicsValue;
     }
 
     @Override
@@ -61,16 +61,6 @@ public class BaselineDecorator implements Decorator {
 
         component = null;
         graphics = null;
-    }
-
-    @Override
-    public Bounds getBounds(Component componentArgument) {
-        return new Bounds(0, 0, componentArgument.getWidth(), componentArgument.getHeight());
-    }
-
-    @Override
-    public AffineTransform getTransform(Component componentArgument) {
-        return new AffineTransform();
     }
 
 }

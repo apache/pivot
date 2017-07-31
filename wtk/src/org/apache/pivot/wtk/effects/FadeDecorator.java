@@ -44,7 +44,7 @@ public class FadeDecorator implements Decorator {
     public void setOpacity(float opacity) {
         if (opacity < 0f || opacity > 1f) {
             throw new IllegalArgumentException(
-                "opacity must be a value between 0 and 1, inclusive.");
+                "opacity must be a value between 0.0 and 1.0, inclusive.");
         }
 
         this.opacity = opacity;
@@ -56,18 +56,4 @@ public class FadeDecorator implements Decorator {
         return graphics;
     }
 
-    @Override
-    public void update() {
-        // No-op
-    }
-
-    @Override
-    public Bounds getBounds(Component component) {
-        return new Bounds(0, 0, component.getWidth(), component.getHeight());
-    }
-
-    @Override
-    public AffineTransform getTransform(Component component) {
-        return new AffineTransform();
-    }
 }
