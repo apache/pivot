@@ -23,6 +23,7 @@ import java.awt.Transparency;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerListener;
@@ -31,6 +32,7 @@ import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.FocusTraversalPolicy;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Theme;
 
 /**
  * Abstract base class for container skins.
@@ -55,13 +57,8 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
         @Override
         public Component getNextComponent(Container container, Component component,
             FocusTraversalDirection direction) {
-            if (container == null) {
-                throw new IllegalArgumentException("container is null.");
-            }
-
-            if (direction == null) {
-                throw new IllegalArgumentException("direction is null.");
-            }
+            Utils.checkNull(container, "container");
+            Utils.checkNull(direction, "direction");
 
             Component nextComponent = null;
 
@@ -76,7 +73,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
                             // Return the next component in the sequence
                             int index = container.indexOf(component);
                             if (index == -1) {
-                                throw new IllegalArgumentException();
+                                throw new IllegalArgumentException("Component is not a child of the container.");
                             }
 
                             if (index < n - 1) {
@@ -99,7 +96,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
                             // Return the previous component in the sequence
                             int index = container.indexOf(component);
                             if (index == -1) {
-                                throw new IllegalArgumentException();
+                                throw new IllegalArgumentException("Component is not a child of the container.");
                             }
 
                             if (index > 0) {
@@ -198,10 +195,6 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * {@linkplain GraphicsUtilities#decodePaint(String) Color or Paint value}.
      */
     public final void setBackgroundPaint(String backgroundPaint) {
-        if (backgroundPaint == null) {
-            throw new IllegalArgumentException("backgroundPaint is null");
-        }
-
         setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
@@ -212,10 +205,6 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * {@linkplain GraphicsUtilities#decodePaint(Dictionary) Paint description}.
      */
     public final void setBackgroundPaint(Dictionary<String, ?> backgroundPaint) {
-        if (backgroundPaint == null) {
-            throw new IllegalArgumentException("backgroundPaint is null");
-        }
-
         setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
@@ -244,11 +233,17 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+    }
+
+    /**
+     * Sets the background of the container to one of the theme colors.
+     *
+     * @param backgroundColor An index into the theme's color palette.
+     */
+    public final void setBackgroundColor(int backgroundColor) {
+        Theme theme = currentTheme();
+        setBackgroundColor(theme.getColor(backgroundColor));
     }
 
     // Container events
