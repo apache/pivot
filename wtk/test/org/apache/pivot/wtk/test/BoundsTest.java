@@ -45,6 +45,8 @@ public class BoundsTest {
         Dimensions dim1 = new Dimensions(1, 1);
         Point p10 = new Point(10, 10);
         Bounds bnd10 = new Bounds(p10, dim1);
+        Bounds bnd10a = new Bounds(dim1);
+        Bounds bnd10b = new Bounds(0, 0, 1, 1);
 
         Bounds bnd2 = Bounds.decode("[2, 3, 4, 5]");
         Bounds bnd3 = Bounds.decode("{x:2, y:3, width:4, height:5}");
@@ -60,6 +62,7 @@ public class BoundsTest {
 
         assertNotEquals(bnd_1, bnd0);
         assertNotEquals(bnd0, bnd1);
+        assertEquals(bnd10a, bnd10b);
 
         assertEquals(bnd10.getLocation(), p10);
         assertEquals(bnd10.getSize(), dim1);

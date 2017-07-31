@@ -72,6 +72,20 @@ public final class Bounds implements Serializable {
     }
 
     /**
+     * Construct a new Bounds which has the given size and a (0, 0) origin.
+     * @param size The size of the bounded area (must not be {@code null}).
+     * @throws IllegalArgumentException if the size is {@code null}.
+     */
+    public Bounds(Dimensions size) {
+        Utils.checkNull(size, "size");
+
+        x = 0;
+        y = 0;
+        width = size.width;
+        height = size.height;
+    }
+
+    /**
      * Construct a new bounds object from an existing bounds.
      * @param bounds The existing bounds to copy (cannot be {@code null}).
      * @throws IllegalArgumentException if the argument is {@code null}.
