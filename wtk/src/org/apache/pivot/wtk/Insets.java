@@ -53,6 +53,16 @@ public final class Insets implements Serializable {
         this.right = inset;
     }
 
+    public Insets(Number inset) {
+        Utils.checkNull(inset, "padding/margin");
+
+        int value = inset.intValue();
+        this.top = value;
+        this.left = value;
+        this.bottom = value;
+        this.right = value;
+    }
+
     public Insets(int top, int left, int bottom, int right) {
         this.top = top;
         this.left = left;
