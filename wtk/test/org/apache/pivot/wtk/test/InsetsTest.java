@@ -51,6 +51,11 @@ public class InsetsTest {
 
         assertEquals(i3, i3a);
         assertEquals(i3.toString(), "Insets [1, 2, 3, 4]");
+
+        assertEquals(i0.getWidth(), 0);
+        assertEquals(i0.getHeight(), 0);
+        assertEquals(i3.getWidth(), 6);
+        assertEquals(i3.getHeight(), 4);
     }
 
 }

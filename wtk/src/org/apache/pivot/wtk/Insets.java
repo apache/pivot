@@ -89,6 +89,22 @@ public final class Insets implements Serializable {
 
     }
 
+    /**
+     * @return The total width of this Insets (that is, the
+     * left + right values).
+     */
+    public int getWidth() {
+        return left + right;
+    }
+
+    /**
+     * @return The total height of this Insets (that is, the
+     * top + bottom values).
+     */
+    public int getHeight() {
+        return top + bottom;
+    }
+
     @Override
     public boolean equals(Object object) {
         boolean equals = false;
