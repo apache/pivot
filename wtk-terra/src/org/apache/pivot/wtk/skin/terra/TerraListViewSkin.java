@@ -27,6 +27,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
@@ -126,7 +127,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         }
 
         if (listView.getCheckmarksEnabled()) {
-            preferredWidth += CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
+            preferredWidth += CHECKBOX.getWidth() + checkboxPadding.getWidth();
         }
 
         return preferredWidth;
@@ -145,7 +146,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
             int clientWidth = width;
             if (listView.getCheckmarksEnabled()) {
                 clientWidth = Math.max(clientWidth
-                    - (CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right)), 0);
+                    - (CHECKBOX.getWidth() + checkboxPadding.getWidth()), 0);
             }
 
             int index = 0;
@@ -159,7 +160,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
             int fixedItemHeightLocal = itemRenderer.getPreferredHeight(-1);
             if (listView.getCheckmarksEnabled()) {
                 fixedItemHeightLocal = Math.max(CHECKBOX.getHeight()
-                    + (checkboxPadding.top + checkboxPadding.bottom), fixedItemHeightLocal);
+                    + checkboxPadding.getHeight(), fixedItemHeightLocal);
             }
 
             preferredHeight = listData.getLength() * fixedItemHeightLocal;
@@ -177,7 +178,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         int clientWidth = width;
         if (listView.getCheckmarksEnabled()) {
             clientWidth = Math.max(clientWidth
-                - (CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right)), 0);
+                - (CHECKBOX.getWidth() + checkboxPadding.getWidth()), 0);
         }
 
         ListView.ItemRenderer itemRenderer = listView.getItemRenderer();
@@ -188,7 +189,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
             int itemHeight = itemRenderer.getPreferredHeight(clientWidth);
             if (listView.getCheckmarksEnabled()) {
                 itemHeight = Math.max(CHECKBOX.getHeight()
-                    + (checkboxPadding.top + checkboxPadding.bottom), itemHeight);
+                    + checkboxPadding.getHeight(), itemHeight);
             }
 
             baseline = itemRenderer.getBaseline(clientWidth, itemHeight);
@@ -198,7 +199,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
             int fixedItemHeightLocal = itemRenderer.getPreferredHeight(-1);
             if (listView.getCheckmarksEnabled()) {
                 fixedItemHeightLocal = Math.max(CHECKBOX.getHeight()
-                    + (checkboxPadding.top + checkboxPadding.bottom), fixedItemHeightLocal);
+                    + checkboxPadding.getHeight(), fixedItemHeightLocal);
             }
 
             baseline = itemRenderer.getBaseline(clientWidth, fixedItemHeightLocal);
@@ -219,8 +220,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
             int checkboxHeight = 0;
             if (listView.getCheckmarksEnabled()) {
-                checkboxHeight = CHECKBOX.getHeight()
-                    + (checkboxPadding.top + checkboxPadding.bottom);
+                checkboxHeight = CHECKBOX.getHeight() + checkboxPadding.getHeight();
             }
 
             int n = listData.getLength();
@@ -240,7 +240,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                     } else {
                         state = listView.isItemChecked(i) ? Button.State.SELECTED : Button.State.UNSELECTED;
                     }
-                    itemX = CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
+                    itemX = CHECKBOX.getWidth() + checkboxPadding.getWidth();
                     itemWidth -= itemX;
                 }
 
@@ -260,7 +260,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
             if (listView.getCheckmarksEnabled()) {
                 fixedItemHeight = Math.max(CHECKBOX.getHeight()
-                    + (checkboxPadding.top + checkboxPadding.bottom), fixedItemHeight);
+                    + checkboxPadding.getHeight(), fixedItemHeight);
             }
         }
 
@@ -391,7 +391,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 CHECKBOX.paint(checkboxGraphics);
                 checkboxGraphics.dispose();
 
-                itemX = CHECKBOX.getWidth() + (checkboxPadding.left + checkboxPadding.right);
+                itemX = CHECKBOX.getWidth() + checkboxPadding.getWidth();
 
                 itemWidth -= itemX;
             }
@@ -412,9 +412,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     // List view skin methods
     @Override
     public int getItemAt(int y) {
-        if (y < 0) {
-            throw new IllegalArgumentException("y is negative");
-        }
+        Utils.checkNonNegative(y, "y");
 
         ListView listView = (ListView) getComponent();
 
@@ -452,7 +450,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
         ListView listView = (ListView) getComponent();
         if (listView.getCheckmarksEnabled()) {
-            itemIndent = CHECKBOX.getWidth() + checkboxPadding.left + checkboxPadding.right;
+            itemIndent = CHECKBOX.getWidth() + checkboxPadding.getWidth();
         }
 
         return itemIndent;
@@ -506,27 +504,17 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -535,24 +523,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -561,24 +543,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -587,20 +563,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        Utils.checkNull(backgroundColor, "backgroundColor");
+
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -609,24 +583,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
-
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
 
     public final void setSelectionColor(int selectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
@@ -635,24 +603,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
-
         setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
@@ -661,24 +623,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setInactiveSelectionColor(Color inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
-
         setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
@@ -687,24 +643,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
-
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
@@ -713,24 +663,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
+        Utils.checkNull(highlightBackgroundColor, "highlightBackgroundColor");
 
         this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
     }
 
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
         setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
@@ -739,20 +683,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setAlternateItemBackgroundColor(Color alternateItemBackgroundColor) {
+        Utils.checkNull(alternateItemBackgroundColor, "alternateItemBackgroundColor");
+
         this.alternateItemBackgroundColor = alternateItemBackgroundColor;
         repaintComponent();
     }
 
     public final void setAlternateItemBackgroundColor(String alternateItemBackgroundColor) {
-        if (alternateItemBackgroundColor == null) {
-            throw new IllegalArgumentException("alternateItemBackgroundColor is null.");
-        }
-
         setAlternateItemBackgroundColor(GraphicsUtilities.decodeColor(alternateItemBackgroundColor));
     }
 
     public final void setAlternateItemColor(int alternateItemBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setAlternateItemBackgroundColor(theme.getColor(alternateItemBackgroundColor));
     }
 
@@ -778,19 +720,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setCheckboxPadding(Insets checkboxPadding) {
-        if (checkboxPadding == null) {
-            throw new IllegalArgumentException("checkboxPadding is null.");
-        }
+        Utils.checkNull(checkboxPadding, "checkboxPadding");
 
         this.checkboxPadding = checkboxPadding;
         invalidateComponent();
     }
 
     public final void setCheckboxPadding(Dictionary<String, ?> checkboxPadding) {
-        if (checkboxPadding == null) {
-            throw new IllegalArgumentException("checkboxPadding is null.");
-        }
-
         setCheckboxPadding(new Insets(checkboxPadding));
     }
 
@@ -799,18 +735,10 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setCheckboxPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("checkboxPadding is null.");
-        }
-
-        setCheckboxPadding(padding.intValue());
+        setCheckboxPadding(new Insets(padding));
     }
 
     public final void setCheckboxPadding(String checkboxPadding) {
-        if (checkboxPadding == null) {
-            throw new IllegalArgumentException("checkboxPadding is null.");
-        }
-
         setCheckboxPadding(Insets.decode(checkboxPadding));
     }
 
@@ -1367,8 +1295,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                     Bounds visibleSelectionBounds = listView.getVisibleArea(selectionBounds);
                     if (visibleSelectionBounds != null
                         && visibleSelectionBounds.height < selectionBounds.height) {
-                        // Repainting the entire component is a workaround for
-                        // PIVOT-490
+                        // Repainting the entire component is a workaround for PIVOT-490
                         repaintComponent();
 
                         listView.scrollAreaToVisible(selectionBounds);

@@ -35,9 +35,7 @@ public class MenuButton extends Button {
         implements MenuButtonListener {
         @Override
         public void menuChanged(MenuButton menuButton, Menu previousMenu) {
-            for (MenuButtonListener listener : this) {
-                listener.menuChanged(menuButton, previousMenu);
-            }
+            forEach(listener -> listener.menuChanged(menuButton, previousMenu));
         }
     }
 

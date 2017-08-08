@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.BoxPaneListener;
 import org.apache.pivot.wtk.Component;
@@ -55,11 +56,10 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
             int heightUpdated = height;
             // Include padding in constraint
             if (heightUpdated != -1) {
-                heightUpdated = Math.max(heightUpdated - (padding.top + padding.bottom), 0);
+                heightUpdated = Math.max(heightUpdated - padding.getHeight(), 0);
             }
 
-            // Preferred width is the sum of the preferred widths of all
-            // components
+            // Preferred width is the sum of the preferred widths of all components
             int j = 0;
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
@@ -86,7 +86,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
         }
 
         // Include left and right padding values
-        preferredWidth += padding.left + padding.right;
+        preferredWidth += padding.getWidth();
 
         return preferredWidth;
     }
@@ -99,8 +99,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
         Orientation orientation = boxPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            // Preferred height is the maximum preferred height of all
-            // components
+            // Preferred height is the maximum preferred height of all components
             for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                 Component component = boxPane.get(i);
 
@@ -112,7 +111,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
             int widthUpdated = width;
             // Include padding in constraint
             if (widthUpdated != -1) {
-                widthUpdated = Math.max(widthUpdated - (padding.left + padding.right), 0);
+                widthUpdated = Math.max(widthUpdated - padding.getWidth(), 0);
             }
 
             // Preferred height is the sum of the preferred heights of all
@@ -134,7 +133,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
         }
 
         // Include top and bottom padding values
-        preferredHeight += padding.top + padding.bottom;
+        preferredHeight += padding.getHeight();
 
         return preferredHeight;
     }
@@ -171,8 +170,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
             }
 
             case VERTICAL: {
-                // Preferred height is the sum of the preferred heights of all
-                // components
+                // Preferred height is the sum of the preferred heights of all components
                 int j = 0;
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
@@ -199,8 +197,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
         }
 
         // Include padding
-        preferredWidth += padding.left + padding.right;
-        preferredHeight += padding.top + padding.bottom;
+        preferredWidth += padding.getWidth();
+        preferredHeight += padding.getHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -215,7 +213,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
         switch (boxPane.getOrientation()) {
             case HORIZONTAL: {
                 if (fill) {
-                    int clientHeight = Math.max(height - (padding.top + padding.bottom), 0);
+                    int clientHeight = Math.max(height - padding.getHeight(), 0);
 
                     for (Component component : boxPane) {
                         if (component.isVisible()) {
@@ -266,7 +264,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
             }
 
             case VERTICAL: {
-                int clientWidth = Math.max(width - (padding.left + padding.right), 0);
+                int clientWidth = Math.max(width - padding.getWidth(), 0);
 
                 for (Component component : boxPane) {
                     if (component.isVisible()) {
@@ -373,7 +371,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                     int y = 0;
 
                     if (fill) {
-                        componentHeight = Math.max(height - (padding.top + padding.bottom), 0);
+                        componentHeight = Math.max(height - padding.getHeight(), 0);
 
                         componentWidth = component.getPreferredWidth(componentHeight);
                     } else {
@@ -447,7 +445,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                     int x = 0;
 
                     if (fill) {
-                        componentWidth = Math.max(width - (padding.left + padding.right), 0);
+                        componentWidth = Math.max(width - padding.getWidth(), 0);
 
                         componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
@@ -505,9 +503,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param horizontalAlignment The new horizontal alignment for our children.
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
         invalidateComponent();
@@ -533,9 +529,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param verticalAlignment The new horizontal alignment for our children.
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
         invalidateComponent();
@@ -556,9 +550,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param padding The new padding values for all edges.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -572,10 +564,6 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -596,11 +584,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param padding The integer value to use for padding on all edges.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -611,10 +595,6 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -631,9 +611,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param spacing The new amount of spacing between components.
      */
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
+
         this.spacing = spacing;
         invalidateComponent();
     }
@@ -644,9 +623,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param spacing The new amount of spacing to use between components.
      */
     public final void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
     }

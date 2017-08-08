@@ -215,68 +215,50 @@ public class ListView extends Component {
         ListViewListener {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
-            for (ListViewListener listener : this) {
-                listener.listDataChanged(listView, previousListData);
-            }
+            forEach(listener -> listener.listDataChanged(listView, previousListData));
         }
 
         @Override
         public void itemRendererChanged(ListView listView,
             ListView.ItemRenderer previousItemRenderer) {
-            for (ListViewListener listener : this) {
-                listener.itemRendererChanged(listView, previousItemRenderer);
-            }
+            forEach(listener -> listener.itemRendererChanged(listView, previousItemRenderer));
         }
 
         @Override
         public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
-            for (ListViewListener listener : this) {
-                listener.itemEditorChanged(listView, previousItemEditor);
-            }
+            forEach(listener -> listener.itemEditorChanged(listView, previousItemEditor));
         }
 
         @Override
         public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
-            for (ListViewListener listener : this) {
-                listener.selectModeChanged(listView, previousSelectMode);
-            }
+            forEach(listener -> listener.selectModeChanged(listView, previousSelectMode));
         }
 
         @Override
         public void checkmarksEnabledChanged(ListView listView) {
-            for (ListViewListener listener : this) {
-                listener.checkmarksEnabledChanged(listView);
-            }
+            forEach(listener -> listener.checkmarksEnabledChanged(listView));
         }
 
         @Override
         public void checkmarksTriStateChanged(ListView listView) {
-            for (ListViewListener listener : this) {
-                listener.checkmarksTriStateChanged(listView);
-            }
+            forEach(listener -> listener.checkmarksTriStateChanged(listView));
         }
 
         @Override
         public void checkmarksMixedAsCheckedChanged(ListView listView) {
-            for (ListViewListener listener : this) {
-                listener.checkmarksMixedAsCheckedChanged(listView);
-            }
+            forEach(listener -> listener.checkmarksMixedAsCheckedChanged(listView));
         }
 
         @Override
         public void disabledItemFilterChanged(ListView listView,
             Filter<?> previousDisabledItemFilter) {
-            for (ListViewListener listener : this) {
-                listener.disabledItemFilterChanged(listView, previousDisabledItemFilter);
-            }
+            forEach(listener -> listener.disabledItemFilterChanged(listView, previousDisabledItemFilter));
         }
 
         @Override
         public void disabledCheckmarkFilterChanged(ListView listView,
             Filter<?> previousDisabledCheckmarkFilter) {
-            for (ListViewListener listener : this) {
-                listener.disabledCheckmarkFilterChanged(listView, previousDisabledCheckmarkFilter);
-            }
+            forEach(listener -> listener.disabledCheckmarkFilterChanged(listView, previousDisabledCheckmarkFilter));
         }
     }
 
@@ -284,37 +266,27 @@ public class ListView extends Component {
         implements ListViewItemListener {
         @Override
         public void itemInserted(ListView listView, int index) {
-            for (ListViewItemListener listener : this) {
-                listener.itemInserted(listView, index);
-            }
+            forEach(listener -> listener.itemInserted(listView, index));
         }
 
         @Override
         public void itemsRemoved(ListView listView, int index, int count) {
-            for (ListViewItemListener listener : this) {
-                listener.itemsRemoved(listView, index, count);
-            }
+            forEach(listener -> listener.itemsRemoved(listView, index, count));
         }
 
         @Override
         public void itemUpdated(ListView listView, int index) {
-            for (ListViewItemListener listener : this) {
-                listener.itemUpdated(listView, index);
-            }
+            forEach(listener -> listener.itemUpdated(listView, index));
         }
 
         @Override
         public void itemsCleared(ListView listView) {
-            for (ListViewItemListener listener : this) {
-                listener.itemsCleared(listView);
-            }
+            forEach(listener -> listener.itemsCleared(listView));
         }
 
         @Override
         public void itemsSorted(ListView listView) {
-            for (ListViewItemListener listener : this) {
-                listener.itemsSorted(listView);
-            }
+            forEach(listener -> listener.itemsSorted(listView));
         }
     }
 
@@ -322,16 +294,12 @@ public class ListView extends Component {
         ListenerList<ListViewItemStateListener> implements ListViewItemStateListener {
         @Override
         public void itemCheckedChanged(ListView listView, int index) {
-            for (ListViewItemStateListener listener : this) {
-                listener.itemCheckedChanged(listView, index);
-            }
+            forEach(listener -> listener.itemCheckedChanged(listView, index));
         }
 
         @Override
         public void itemCheckedStateChanged(ListView listView, int index) {
-            for (ListViewItemStateListener listener : this) {
-                listener.itemCheckedStateChanged(listView, index);
-            }
+            forEach(listener -> listener.itemCheckedStateChanged(listView, index));
         }
     }
 
@@ -339,30 +307,22 @@ public class ListView extends Component {
         ListenerList<ListViewSelectionListener> implements ListViewSelectionListener {
         @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-            for (ListViewSelectionListener listener : this) {
-                listener.selectedRangeAdded(listView, rangeStart, rangeEnd);
-            }
+            forEach(listener -> listener.selectedRangeAdded(listView, rangeStart, rangeEnd));
         }
 
         @Override
         public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-            for (ListViewSelectionListener listener : this) {
-                listener.selectedRangeRemoved(listView, rangeStart, rangeEnd);
-            }
+            forEach(listener -> listener.selectedRangeRemoved(listView, rangeStart, rangeEnd));
         }
 
         @Override
         public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelection) {
-            for (ListViewSelectionListener listener : this) {
-                listener.selectedRangesChanged(listView, previousSelection);
-            }
+            forEach(listener -> listener.selectedRangesChanged(listView, previousSelection));
         }
 
         @Override
         public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
-            for (ListViewSelectionListener listener : this) {
-                listener.selectedItemChanged(listView, previousSelectedItem);
-            }
+            forEach(listener -> listener.selectedItemChanged(listView, previousSelectedItem));
         }
     }
 
@@ -370,115 +330,85 @@ public class ListView extends Component {
         ListenerList<ListViewBindingListener> implements ListViewBindingListener {
         @Override
         public void listDataKeyChanged(ListView listView, String previousListDataKey) {
-            for (ListViewBindingListener listener : this) {
-                listener.listDataKeyChanged(listView, previousListDataKey);
-            }
+            forEach(listener -> listener.listDataKeyChanged(listView, previousListDataKey));
         }
 
         @Override
         public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
-            for (ListViewBindingListener listener : this) {
-                listener.listDataBindTypeChanged(listView, previousListDataBindType);
-            }
+            forEach(listener -> listener.listDataBindTypeChanged(listView, previousListDataBindType));
         }
 
         @Override
         public void listDataBindMappingChanged(ListView listView,
             ListView.ListDataBindMapping previousListDataBindMapping) {
-            for (ListViewBindingListener listener : this) {
-                listener.listDataBindMappingChanged(listView, previousListDataBindMapping);
-            }
+            forEach(listener -> listener.listDataBindMappingChanged(listView, previousListDataBindMapping));
         }
 
         @Override
         public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
-            for (ListViewBindingListener listener : this) {
-                listener.selectedItemKeyChanged(listView, previousSelectedItemKey);
-            }
+            forEach(listener -> listener.selectedItemKeyChanged(listView, previousSelectedItemKey));
         }
 
         @Override
         public void selectedItemBindTypeChanged(ListView listView,
             BindType previousSelectedItemBindType) {
-            for (ListViewBindingListener listener : this) {
-                listener.selectedItemBindTypeChanged(listView, previousSelectedItemBindType);
-            }
+            forEach(listener -> listener.selectedItemBindTypeChanged(listView, previousSelectedItemBindType));
         }
 
         @Override
         public void selectedItemBindMappingChanged(ListView listView,
             ItemBindMapping previousSelectedItemBindMapping) {
-            for (ListViewBindingListener listener : this) {
-                listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping);
-            }
+            forEach(listener -> listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping));
         }
 
         @Override
         public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
-            for (ListViewBindingListener listener : this) {
-                listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey);
-            }
+            forEach(listener -> listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey));
         }
 
         @Override
         public void selectedItemsBindTypeChanged(ListView listView,
             BindType previousSelectedItemsBindType) {
-            for (ListViewBindingListener listener : this) {
-                listener.selectedItemsBindTypeChanged(listView, previousSelectedItemsBindType);
-            }
+            forEach(listener -> listener.selectedItemsBindTypeChanged(listView, previousSelectedItemsBindType));
         }
 
         @Override
         public void selectedItemsBindMappingChanged(ListView listView,
             ItemBindMapping previousSelectedItemsBindMapping) {
-            for (ListViewBindingListener listener : this) {
-                listener.selectedItemsBindMappingChanged(listView, previousSelectedItemsBindMapping);
-            }
+            forEach(listener -> listener.selectedItemsBindMappingChanged(listView, previousSelectedItemsBindMapping));
         }
 
         @Override
         public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
-            for (ListViewBindingListener listener : this) {
-                listener.checkedItemsKeyChanged(listView, previousCheckedItemsKey);
-            }
+            forEach(listener -> listener.checkedItemsKeyChanged(listView, previousCheckedItemsKey));
         }
 
         @Override
         public void checkedItemsBindTypeChanged(ListView listView,
             BindType previousCheckedItemsBindType) {
-            for (ListViewBindingListener listener : this) {
-                listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType);
-            }
+            forEach(listener -> listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType));
         }
 
         @Override
         public void checkedItemsBindMappingChanged(ListView listView,
             ListView.ItemBindMapping previousCheckedItemsBindMapping) {
-            for (ListViewBindingListener listener : this) {
-                listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping);
-            }
+            forEach(listener -> listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping));
         }
 
         @Override
         public void itemsStateKeyChanged(ListView listView, String previousItemsStateKey) {
-            for (ListViewBindingListener listener : this) {
-                listener.itemsStateKeyChanged(listView, previousItemsStateKey);
-            }
+            forEach(listener -> listener.itemsStateKeyChanged(listView, previousItemsStateKey));
         }
 
         @Override
         public void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType) {
-            for (ListViewBindingListener listener : this) {
-                listener.itemsStateBindTypeChanged(listView, previousItemsStateBindType);
-            }
+            forEach(listener -> listener.itemsStateBindTypeChanged(listView, previousItemsStateBindType));
         }
 
         @Override
         public void itemsStateBindMappingChanged(ListView listView,
             ListView.ItemStateBindMapping previousItemsStateBindMapping) {
-            for (ListViewBindingListener listener : this) {
-                listener.itemsStateBindMappingChanged(listView, previousItemsStateBindMapping);
-            }
+            forEach(listener -> listener.itemsStateBindMappingChanged(listView, previousItemsStateBindMapping));
         }
     }
 

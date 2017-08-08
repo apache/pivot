@@ -20,7 +20,8 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.LabelSkin;
 
 /**
- * Terra label skin.
+ * Terra Label skin.  Only deals with colors that depend on
+ * the current theme.
  */
 public class TerraLabelSkin extends LabelSkin {
     public TerraLabelSkin() {
@@ -29,17 +30,17 @@ public class TerraLabelSkin extends LabelSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
     public final void setDisabledColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(color));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 

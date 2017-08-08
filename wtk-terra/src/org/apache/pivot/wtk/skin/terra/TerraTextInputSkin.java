@@ -292,7 +292,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private static final char BULLET = 0x2022;
 
     public TerraTextInputSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setFont(theme.getFont());
 
         color = theme.getColor(1);
@@ -751,7 +751,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -771,7 +771,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setPromptColor(int promptColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setPromptColor(theme.getColor(promptColor));
     }
 
@@ -791,7 +791,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -813,7 +813,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(color));
     }
 
@@ -833,7 +833,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setInvalidColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInvalidColor(theme.getColor(color));
     }
 
@@ -855,7 +855,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setInvalidBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInvalidBackgroundColor(theme.getColor(color));
     }
 
@@ -878,7 +878,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setDisabledBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBackgroundColor(theme.getColor(color));
     }
 
@@ -898,7 +898,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setBorderColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(color));
     }
 
@@ -918,7 +918,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setDisabledBorderColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBorderColor(theme.getColor(color));
     }
 
@@ -938,7 +938,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setSelectionColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setSelectionColor(theme.getColor(color));
     }
 
@@ -958,7 +958,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setSelectionBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setSelectionBackgroundColor(theme.getColor(color));
     }
 
@@ -978,7 +978,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setInactiveSelectionColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveSelectionColor(theme.getColor(color));
     }
 
@@ -999,7 +999,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setInactiveSelectionBackgroundColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(color));
     }
 
@@ -1023,9 +1023,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setPadding(Number padding) {
-        Utils.checkNull(padding, "padding");
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {

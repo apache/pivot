@@ -67,7 +67,6 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             caretOn = !caretOn;
 
             if (selection == null) {
-                TextPane textPane = (TextPane) getComponent();
                 getTextPane().repaint(caret.x, caret.y, caret.width, caret.height);
             }
         }
@@ -79,7 +78,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     private class ScrollSelectionCallback implements Runnable {
         @Override
         public void run() {
-            TextPane textPane = (TextPane) getComponent();
+            TextPane textPane = getTextPane();
             int selectionStart = textPane.getSelectionStart();
             int selectionLength = textPane.getSelectionLength();
             int selectionEnd = selectionStart + selectionLength - 1;
@@ -186,14 +185,12 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         }
 
         private Rectangle offsetToScreen(Rectangle clientRectangle) {
-            TextPane textPane = getTextPane();
-            return textPane.offsetToScreen(clientRectangle);
+            return getTextPane().offsetToScreen(clientRectangle);
         }
 
         @Override
         public Rectangle getTextLocation(TextHitInfo offset) {
-            TextPane textPane = getTextPane();
-            AttributedStringCharacterIterator composedText = textPane.getComposedText();
+            AttributedStringCharacterIterator composedText = getTextPane().getComposedText();
 
             if (composedText == null) {
                 return offsetToScreen(caret);
@@ -260,7 +257,6 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
         @Override
         public void caretPositionChanged(InputMethodEvent event) {
-            TextPane textPane = getTextPane();
             // TODO:  so far I have not seen this called, so ???
         }
 
@@ -414,7 +410,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     @Override
     public void layout() {
         if (documentView != null) {
-            TextPane textPane = (TextPane) getComponent();
+            TextPane textPane = getTextPane();
             int width = getWidth();
 
             int breakWidth;
@@ -441,7 +437,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        TextPane textPane = (TextPane) getComponent();
+        TextPane textPane = getTextPane();
 
         if (documentView != null) {
             // Draw the selection highlight
@@ -592,11 +588,10 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     private void scrollCharacterToVisible(int offset) {
-        TextPane textPane = (TextPane) getComponent();
         Bounds characterBounds = getCharacterBounds(offset);
 
         if (characterBounds != null) {
-            textPane.scrollAreaToVisible(characterBounds.x, characterBounds.y,
+            getTextPane().scrollAreaToVisible(characterBounds.x, characterBounds.y,
                 characterBounds.width, characterBounds.height);
         }
     }
@@ -857,7 +852,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
-            TextPane textPane = (TextPane) getComponent();
+            TextPane textPane = getTextPane();
 
             Bounds visibleArea = textPane.getVisibleArea();
             visibleArea = new Bounds(visibleArea.x, visibleArea.y, visibleArea.width,
@@ -1037,7 +1032,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     public boolean keyTyped(final Component component, char character) {
         boolean consumed = super.keyTyped(component, character);
 
-        final TextPane textPane = (TextPane) getComponent();
+        final TextPane textPane = getTextPane();
 
         if (textPane.isEditable()) {
             Document document = textPane.getDocument();
@@ -1090,7 +1085,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        final TextPane textPane = (TextPane) getComponent();
+        final TextPane textPane = getTextPane();
         Document document = textPane.getDocument();
 
         int selectionStart = textPane.getSelectionStart();
@@ -1387,7 +1382,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     public void focusedChanged(Component component, Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
-        TextPane textPane = (TextPane) getComponent();
+        TextPane textPane = getTextPane();
         if (textPane.isFocused() && textPane.getSelectionLength() == 0) {
             scrollCharacterToVisible(textPane.getSelectionStart());
             showCaret(true);
