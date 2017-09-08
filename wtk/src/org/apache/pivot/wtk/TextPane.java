@@ -29,6 +29,7 @@ import org.apache.pivot.collections.LinkedList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.StringUtils;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.media.Image;
@@ -651,19 +652,11 @@ public class TextPane extends Container {
 
         if (selectionLength > 0) {
             // Copy selection to clipboard
-            Document selection = (Document) removeDocumentRange(selectionStart, selectionLength);
-
-            String selectedText = null;
-            try {
-                PlainTextSerializer serializer = new PlainTextSerializer();
-                StringWriter writer = new StringWriter();
-                serializer.writeObject(selection, writer);
-                selectedText = writer.toString();
-            } catch (IOException exception) {
-                throw new RuntimeException(exception);
-            }
+            String selectedText = getSelectedText();
 
             if (selectedText != null) {
+                delete(false);
+
                 LocalManifest clipboardContent = new LocalManifest();
                 clipboardContent.putText(selectedText);
                 Clipboard.setContent(clipboardContent);
@@ -685,6 +678,41 @@ public class TextPane extends Container {
         }
     }
 
+    private int insertWithTabSubstitution(String text, int startPos, int offsetInParagraph, int tabWidth) {
+        int n = 0;
+        int len = text.length();
+        int tabIndex = text.indexOf('\t');
+        int offset = offsetInParagraph;
+
+        if (tabIndex < 0) {
+            // Note: this first insert deletes the selection as well
+            insertText(text, startPos);
+            n = len;
+        } else {
+            int tabPos = 0;
+            while (tabIndex >= 0) {
+                insertText(text.substring(tabPos, tabIndex), startPos);
+                int subTextLen = tabIndex - tabPos;
+                n += subTextLen;
+                startPos += subTextLen;
+                offset += subTextLen;
+                int tabLen = tabWidth - (offset % tabWidth);
+                String spaces = StringUtils.fromNChars(' ', tabLen);
+                insertText(spaces, startPos);
+                n += tabLen;
+                startPos += tabLen;
+                offset += tabLen;
+                tabPos = tabIndex + 1;
+                tabIndex = text.indexOf('\t', tabPos);
+            }
+            if (tabPos < len) {
+                insertText(text.substring(tabPos), startPos);
+                n += (len - tabPos);
+            }
+        }
+        return n;
+    }
+
     public void paste() {
         if (document == null) {
             setDocument(new Document());
@@ -696,40 +724,66 @@ public class TextPane extends Container {
             // Paste the string representation of the content
             String text = null;
             try {
-                text = clipboardContent.getText();
+                // Replace \r\n with just \n and plain \r with \n instead
+                // so we can deal with lines uniformly below.
+                text = clipboardContent.getText().replace("\r\n", "\n").replace("\r", "\n");
             } catch (IOException exception) {
                 // No-op
             }
 
             if (text != null && text.length() > 0) {
-                // Remove any existing selection
-                if (selectionLength > 0) {
-                    // TODO Make this part of the undoable action (for all such actions)
-                    delete(true);
-                }
-
                 // Insert the clipboard contents
-                Document documentLocal;
-                int n;
-                try {
-                    PlainTextSerializer serializer = new PlainTextSerializer();
-                    StringReader reader = new StringReader(text);
-                    serializer.setExpandTabs(this.expandTabs);
-                    serializer.setTabWidth(((TextPane.Skin) getSkin()).getTabWidth());
-                    documentLocal = serializer.readObject(reader);
-                    n = documentLocal.getCharacterCount();
+                int n = 0;
+                int start = selectionStart;
+                int tabWidth = ((TextPane.Skin) getSkin()).getTabWidth();
+                Node currentNode = document.getDescendantAt(start);
+                while (!(currentNode instanceof Paragraph))
+                    currentNode = currentNode.getParent();
+                int paragraphStartOffset = start - currentNode.getDocumentOffset();
 
-                    bulkOperation = true;
-                    int start = selectionStart;
-                    this.document.insertRange(documentLocal, start);
-                    bulkOperation = false;
-
-                    textPaneCharacterListeners.charactersInserted(this, start, n);
-                } catch (IOException exception) {
-                    throw new RuntimeException(exception);
+                bulkOperation = true;
+                // If there is only a line fragment here, then just insert it
+                int eolIndex = text.indexOf('\n');
+                if (eolIndex < 0) {
+                    if (expandTabs) {
+                        n = insertWithTabSubstitution(text, start, paragraphStartOffset, tabWidth);
+                    } else {
+                        insertText(text, start);
+                        n = text.length();
+                    }
+                } else {
+                    int textOffset = 0;
+                    // Insert each line into place, with a new paragraph following
+                    while (eolIndex >= 0) {
+                        String fragment = text.substring(textOffset, eolIndex);
+                        int len;
+                        if (expandTabs) {
+                            len = insertWithTabSubstitution(fragment, start, paragraphStartOffset, tabWidth);
+                        } else {
+                            insertText(fragment, start);
+                            len = fragment.length();
+                        }
+                        insertParagraph();
+                        n += len + 1;
+                        start += len + 1;
+                        paragraphStartOffset = 0;
+                        textOffset = eolIndex + 1;
+                        eolIndex = text.indexOf('\n', textOffset);
+                    }
+                    // Now deal with any leftover at end of string
+                    if (textOffset < text.length()) {
+                        String lastFragment = text.substring(textOffset);
+                        if (expandTabs) {
+                            n += insertWithTabSubstitution(lastFragment, start, paragraphStartOffset, tabWidth);
+                        } else {
+                            insertText(lastFragment, start);
+                            n += lastFragment.length();
+                        }
+                    }
                 }
+                bulkOperation = false;
 
-                setSelection(selectionStart + n, 0);
+                textPaneCharacterListeners.charactersInserted(this, start, n);
             }
         }
     }
