@@ -615,7 +615,7 @@ public class TextPane extends Container {
             Node descendant = document.getDescendantAt(offset);
 
             // Used to be: if (selectionLength == 0 && ...
-            if (characterCount == 0 && descendant instanceof Paragraph) {
+            if (characterCount <= 1 && descendant instanceof Paragraph) {
                 // We are deleting a paragraph terminator
                 Paragraph paragraph = (Paragraph) descendant;
 
