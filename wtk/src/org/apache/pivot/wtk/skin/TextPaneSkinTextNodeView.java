@@ -43,6 +43,7 @@ import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.TextNodeListener;
+import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Text node view.
@@ -131,7 +132,14 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         AttributedStringCharacterIterator composedText = textPane.getComposedText();
 
         Element parent = textNode.getParent();
-        String parentClass = parent == null ? "<<<null>>>" : parent.getClass().getSimpleName();
+        // The calculations below really need to know if we're at the end of the paragraph
+        // when composing text, so make sure we ignore intervening span or other nodes, but
+        // also update the offset relative to the paragraph in the process.
+        int relStart = start;
+        if (parent != null && !(parent instanceof Paragraph)) {
+            relStart += parent.getOffset();
+            parent = parent.getParent();
+        }
         int parentCount = parent == null ? 0 : parent.getCharacterCount();
 
         int selectionStart = textPane.getSelectionStart();
@@ -146,7 +154,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             int composedTextLength = composedTextEnd - composedTextBegin; /* exclusive - inclusive, so no +1 needed */
             // If this text node is at the end of a paragraph, increase the span by 1 for the newline
             Span ourSpan;
-            if (parent instanceof Paragraph && charCount == parentCount - 1) {
+            if (parent instanceof Paragraph && charCount + relStart == parentCount - 1) {
                 ourSpan = new Span(documentOffset + start, documentOffset + charCount);
             } else {
                 ourSpan = new Span(documentOffset + start, documentOffset + charCount - 1);
