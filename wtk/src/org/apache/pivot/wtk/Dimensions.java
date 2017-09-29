@@ -19,8 +19,10 @@ package org.apache.pivot.wtk;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing the dimensions of an object.
@@ -34,36 +36,48 @@ public final class Dimensions implements Serializable {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
+    public static final Dimensions ZERO = new Dimensions(0, 0);
+
     public Dimensions(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
     public Dimensions(Dimensions dimensions) {
-        if (dimensions == null) {
-            throw new IllegalArgumentException("dimensions is null.");
-        }
+        Utils.checkNull(dimensions, "dimensions");
 
         this.width = dimensions.width;
         this.height = dimensions.height;
     }
 
     public Dimensions(Dictionary<String, ?> dimensions) {
-        if (dimensions == null) {
-            throw new IllegalArgumentException("dimensions is null.");
-        }
+        Utils.checkNull(dimensions, "dimensions");
 
-        if (dimensions.containsKey(WIDTH_KEY)) {
-            width = ((Integer) dimensions.get(WIDTH_KEY)).intValue();
-        } else {
-            width = 0;
-        }
+        width = dimensions.getInt(WIDTH_KEY, 0);
+        height = dimensions.getInt(HEIGHT_KEY, 0);
+    }
 
-        if (dimensions.containsKey(HEIGHT_KEY)) {
-            height = ((Integer) dimensions.get(HEIGHT_KEY)).intValue();
-        } else {
-            height = 0;
-        }
+    /**
+     * Expand this dimensions by the given amount (positive or
+     * negative) in both width and height directions.
+     *
+     * @param factor The amount to add to/subtract from both the width and height.
+     * @return The new dimensions with the changed values.
+     */
+    public Dimensions expand(int factor) {
+        return new Dimensions(width + factor, height + factor);
+    }
+
+    /**
+     * Expand this dimensions by the given amounts (positive or
+     * negative) separately in the width and height directions.
+     *
+     * @param widthDelta The amount to add to/subtract from the width.
+     * @param heightDelta The amount to add to/subtract from the height.
+     * @return The new dimensions with the changed values.
+     */
+    public Dimensions expand(int widthDelta, int heightDelta) {
+        return new Dimensions(width + widthDelta, height + heightDelta);
     }
 
     @Override
@@ -88,16 +102,54 @@ public final class Dimensions implements Serializable {
         return getClass().getSimpleName() + " [" + width + "x" + height + "]";
     }
 
+    /**
+     * Convert a string dimensions value to the object.
+     * <p> The string can be in a variety of forms:
+     * <ul>
+     * <li>A JSON map like this: <pre>{ width:nnn, height:nnn }</pre></li>
+     * <li>A JSON array list this: <pre>[ width, height ]</pre></li>
+     * <li>A string formatted as: <pre>"widthXheight"</pre> (where the X is case-insensitive)</li>
+     * <li>A simple comma-separated string with two numeric values: <pre>"width, height"</pre></li>
+     * </ul>
+     *
+     * @param value The input string in one of these formats.
+     * @return The parsed dimensions value if possible.
+     * @throws IllegalArgumentException if the input value is null, empty, or cannot be parsed in
+     * one of these forms.
+     */
     public static Dimensions decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNullOrEmpty(value, "dimensions");
 
         Dimensions dimensions;
-        try {
-            dimensions = new Dimensions(JSONSerializer.parseMap(value));
-        } catch (SerializationException exception) {
-            throw new IllegalArgumentException(exception);
+        if (value.startsWith("{")) {
+            try {
+                dimensions = new Dimensions(JSONSerializer.parseMap(value));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else if (value.startsWith("[")) {
+            try {
+                @SuppressWarnings("unchecked")
+                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
+                dimensions = new Dimensions(values.get(0), values.get(1));
+            } catch (SerializationException exception) {
+                throw new IllegalArgumentException(exception);
+            }
+        } else {
+            String[] parts = value.split("\\s*[xX]\\s*");
+            if (parts.length != 2) {
+                parts = value.split("\\s*[,;]\\s*");
+                if (parts.length != 2) {
+                    throw new IllegalArgumentException("Unknown format for Dimensions.decode: " + value);
+                }
+            }
+            try {
+                int width = Integer.parseInt(parts[0]);
+                int height = Integer.parseInt(parts[1]);
+                dimensions = new Dimensions(width, height);
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException(ex);
+            }
         }
 
         return dimensions;
