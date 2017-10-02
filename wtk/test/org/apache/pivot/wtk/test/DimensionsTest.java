@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import org.apache.pivot.wtk.Dimensions;
+import org.apache.pivot.wtk.Insets;
 
 
 /**
@@ -48,6 +49,10 @@ public class DimensionsTest {
         Dimensions e = Dimensions.decode("23 ; 45");
         Dimensions e_1 = new Dimensions(23, 45);
 
+        Insets i_1 = new Insets(1, 2, 1, 2);
+        Dimensions f = e_1.expand(i_1);
+        Dimensions f_1 = new Dimensions(27, 47);
+
         assertEquals(zero, zero_a);
         assertEquals(one, one_a);
         assertEquals(zero, zero_b);
@@ -57,6 +62,7 @@ public class DimensionsTest {
         assertEquals(c, c_1);
         assertEquals(d, d_1);
         assertEquals(e, e_1);
+        assertEquals(f, f_1);
     }
 
     @Test(expected = IllegalArgumentException.class)

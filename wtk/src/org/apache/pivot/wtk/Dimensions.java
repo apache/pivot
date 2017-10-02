@@ -80,6 +80,17 @@ public final class Dimensions implements Serializable {
         return new Dimensions(width + widthDelta, height + heightDelta);
     }
 
+    /**
+     * Expand this dimensions by the given {@link Insets} amounts
+     * in the width and height directions.
+     *
+     * @param insets The padding amounts (width and height) to expand by.
+     * @return The new dimensions with the changed values.
+     */
+    public Dimensions expand(Insets insets) {
+        return new Dimensions(width + insets.getWidth(), height + insets.getHeight());
+    }
+
     @Override
     public boolean equals(Object object) {
         boolean equals = false;

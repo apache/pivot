@@ -101,13 +101,14 @@ public class TerraTooltipSkin extends WindowSkin {
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraTooltipSkin() {
-        // Get theme icons/colors
+        // Get theme colors
         Theme theme = Theme.getTheme();
 
-        setBackgroundColor(theme.getColor(19));
-
         borderColor = theme.getColor(7);
-        padding = new Insets(2);
+        setBackgroundColor(19);
+
+        // More padding on left, right makes it more uniform all around
+        padding = new Insets(2, 4, 2, 4);
     }
 
     @Override
@@ -128,14 +129,14 @@ public class TerraTooltipSkin extends WindowSkin {
         Component content = tooltip.getContent();
 
         if (height != -1) {
-            height -= (padding.top + padding.bottom + 2);
+            height -= padding.getHeight();
         }
 
         if (content != null) {
             preferredWidth = content.getPreferredWidth(height);
         }
 
-        preferredWidth += (padding.left + padding.right + 2);
+        preferredWidth += padding.getWidth();
 
         return preferredWidth;
     }
@@ -148,36 +149,30 @@ public class TerraTooltipSkin extends WindowSkin {
         Component content = tooltip.getContent();
 
         if (width != -1) {
-            width -= (padding.left + padding.right + 2);
+            width -= padding.getWidth();
         }
 
         if (content != null) {
             preferredHeight = content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom + 2);
+        preferredHeight += padding.getHeight();
 
         return preferredHeight;
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        int preferredWidth = 0;
-        int preferredHeight = 0;
+        Dimensions size = Dimensions.ZERO;
 
         Tooltip tooltip = (Tooltip) getComponent();
         Component content = tooltip.getContent();
 
         if (content != null) {
-            Dimensions contentSize = content.getPreferredSize();
-            preferredWidth = contentSize.width;
-            preferredHeight = contentSize.height;
+            size = content.getPreferredSize();
         }
 
-        preferredWidth += (padding.left + padding.right + 2);
-        preferredHeight += (padding.top + padding.bottom + 2);
-
-        return new Dimensions(preferredWidth, preferredHeight);
+        return size.expand(padding);
     }
 
     @Override
@@ -186,10 +181,10 @@ public class TerraTooltipSkin extends WindowSkin {
         Component content = tooltip.getContent();
 
         if (content != null) {
-            int contentWidth = Math.max(getWidth() - (padding.left + padding.right + 2), 0);
-            int contentHeight = Math.max(getHeight() - (padding.top + padding.bottom + 2), 0);
+            int contentWidth = Math.max(getWidth() - padding.getWidth(), 0);
+            int contentHeight = Math.max(getHeight() - padding.getHeight(), 0);
             content.setSize(contentWidth, contentHeight);
-            content.setLocation(padding.left + 1, padding.top + 1);
+            content.setLocation(padding.left, padding.top);
         }
     }
 
