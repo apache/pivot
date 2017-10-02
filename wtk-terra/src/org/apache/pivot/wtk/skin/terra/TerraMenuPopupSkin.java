@@ -63,7 +63,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
                 border.setPreferredWidth(displayWidth);
                 x = 0;
             } else if (x + size.width > displayWidth) {
-                x -= size.width;
+                x = Math.max(displayWidth - size.width, 0);
             }
 
             int y = location.y;
@@ -72,7 +72,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
                 border.setPreferredHeight(displayHeight);
                 y = 0;
             } else if (y + size.height > displayHeight) {
-                y -= size.height;
+                y = Math.max(displayHeight - size.height, 0);
             }
 
             menuPopup.setLocation(x, y);
