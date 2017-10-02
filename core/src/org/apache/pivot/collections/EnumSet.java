@@ -163,4 +163,97 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     public ListenerList<SetListener<E>> getSetListeners() {
         return setListeners;
     }
+
+    /**
+     * Creates an empty enum set.
+     *
+     * @param <E> The enum type of the set.
+     * @param elementClass The class of the individual elements to be used
+     * in this set.
+     * @return The new empty set.
+     */
+    public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementClass) {
+        return new EnumSet<E>(elementClass);
+    }
+
+    /**
+     * Creates an enum set containing the given element.
+     *
+     * @param <E> The enum type of the set.
+     * @param e The only element to assign to the new set.
+     * @return The new set containing the single element.
+     */
+    public static <E extends Enum<E>> EnumSet<E> of(E e) {
+        EnumSet<E> set = new EnumSet<>(e.getDeclaringClass());
+        set.add(e);
+        return set;
+    }
+
+    /**
+     * Creates an enum set containing the given elements.
+     *
+     * @param <E> The enum type of the set.
+     * @param e1 The first element to add to the new set.
+     * @param e2 The second element to add.
+     * @return The new set containing only these two elements.
+     */
+    public static <E extends Enum<E>> EnumSet<E> of (E e1, E e2) {
+        EnumSet<E> set = new EnumSet<>(e1.getDeclaringClass());
+        set.add(e1);
+        set.add(e2);
+        return set;
+    }
+
+    /**
+     * Creates an enum set containing the given elements.
+     *
+     * @param <E> The enum type of the set.
+     * @param e1 The first element to add to the new set.
+     * @param e2 The second element to add.
+     * @param e3 The third element to add.
+     * @return The new set containing only these three elements.
+     */
+    public static <E extends Enum<E>> EnumSet<E> of (E e1, E e2, E e3) {
+        EnumSet<E> set = new EnumSet<>(e1.getDeclaringClass());
+        set.add(e1);
+        set.add(e2);
+        set.add(e3);
+        return set;
+    }
+
+    /**
+     * Creates an enum set containing the given elements.
+     *
+     * @param <E> The enum type of the set.
+     * @param e1 The first element to add to the new set.
+     * @param e2 The second element to add.
+     * @param e3 The third element to add.
+     * @param e4 The fourth element to add.
+     * @return The new set containing only these four elements.
+     */
+    public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3, E e4) {
+        EnumSet<E> set = new EnumSet<>(e1.getDeclaringClass());
+        set.add(e1);
+        set.add(e2);
+        set.add(e3);
+        set.add(e4);
+        return set;
+    }
+
+    /**
+     * Adds all the elements of the given collection of this enum
+     * to this set.
+     *
+     * @param c The other collection to add to this set.
+     * @return Whether or not the enum set changed as a result.
+     */
+    public boolean addAll(Collection<E> c) {
+        boolean changed = false;
+        for (E elem : c) {
+            if (add(elem)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
 }

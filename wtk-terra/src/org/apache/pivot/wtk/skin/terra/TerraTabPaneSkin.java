@@ -1411,6 +1411,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
      * {@link KeyCode#KEYPAD_9 KEYPAD_9}<br>or CommandModifier +
      * {@link KeyCode#N1 1} to {@link KeyCode#N9 9} Select the (enabled) tab at
      * index 0 to 8 respectively.
+     * <p> CommandModifier + Tab to cycle forward through the tabs,
+     * CommandModifier + Shift + Tab to cycle backward.
      *
      * @see Platform#getCommandModifier()
      */
@@ -1479,6 +1481,21 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                     selectedIndex = 8;
                     break;
                 }
+
+                case Keyboard.KeyCode.TAB:
+                    selectedIndex = tabPane.getSelectedIndex();
+                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                        if (selectedIndex <= 0)
+                            selectedIndex = tabs.getLength() - 1;
+                        else
+                           selectedIndex--;
+                    } else {
+                        if (selectedIndex >= tabs.getLength() - 1)
+                            selectedIndex = 0;
+                        else
+                            selectedIndex++;
+                    }
+                    break;
 
                 default: {
                     break;

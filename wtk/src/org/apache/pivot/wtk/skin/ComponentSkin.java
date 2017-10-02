@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Font;
 
+import org.apache.pivot.collections.EnumSet;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -268,7 +269,13 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
         Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (keyCode == Keyboard.KeyCode.TAB && getComponent().isFocused()) {
+        EnumSet<Keyboard.Modifier> otherModifiers = EnumSet.noneOf(Keyboard.Modifier.class);
+        otherModifiers.addAll(Keyboard.Modifier.allModifiers);
+        otherModifiers.remove(Keyboard.Modifier.SHIFT);
+
+        if (keyCode == Keyboard.KeyCode.TAB &&
+            !Keyboard.areAnyPressed(otherModifiers) &&
+            getComponent().isFocused()) {
             FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
                 : FocusTraversalDirection.FORWARD;
 

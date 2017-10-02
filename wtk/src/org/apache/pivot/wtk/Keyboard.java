@@ -20,6 +20,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.Locale;
+
+import org.apache.pivot.collections.EnumSet;
+import org.apache.pivot.collections.Set;
 import org.apache.pivot.util.Utils;
 
 /**
@@ -35,6 +38,13 @@ public final class Keyboard {
         public int getMask() {
             return 1 << ordinal();
         }
+
+        /**
+         * The set of all possible keyboard modifiers (for use with {@link #isPressed}
+         * or {@link #areAnyPressed}).
+         */
+        public static final Set<Modifier> allModifiers =
+            EnumSet.of(Modifier.SHIFT, Modifier.CTRL, Modifier.ALT, Modifier.META);
     }
 
     /**
@@ -280,6 +290,24 @@ public final class Keyboard {
      */
     public static boolean isPressed(Modifier modifier) {
         return (modifiers & modifier.getMask()) > 0;
+    }
+
+    /**
+     * Are any of the given set of {@link Modifier}s pressed?
+     *
+     * @param modifiers The set of modifiers to test.
+     * @return <tt>true</tt> if any of them are pressed, <tt>false</tt>
+     * if none are pressed.
+     */
+    public static boolean areAnyPressed(Set<Modifier> modifiers) {
+        boolean result = false;
+        for (Modifier modifier : modifiers) {
+            if (isPressed(modifier)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
