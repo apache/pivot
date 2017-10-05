@@ -92,7 +92,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin, WindowList
         Window window = (Window) getComponent();
         Component content = window.getContent();
 
-        return (content != null) ? content.getPreferredSize() : new Dimensions(0, 0);
+        return (content != null) ? content.getPreferredSize() : Dimensions.ZERO;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin, WindowList
 
     @Override
     public Bounds getClientArea() {
-        return new Bounds(0, 0, getWidth(), getHeight());
+        return new Bounds(getSize());
     }
 
     @Override

@@ -405,7 +405,7 @@ public final class Bounds implements Serializable {
      * <pre>{ "x": nnn, "y": nnn, "width": nnn, "height": nnn }</pre>
      * <p> The format of a JSON list format will be:
      * <pre>[ x, y, width, height ]</pre>
-     * <p> Also accepted is a simple list (comma- or semi-colon-separated) of four
+     * <p> Also accepted is a simple list (comma- or semicolon-separated) of four
      * integer values.
      *
      * @param boundsValue The JSON string containing the map or list of bounds values

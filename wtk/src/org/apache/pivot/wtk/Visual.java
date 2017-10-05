@@ -27,13 +27,27 @@ public interface Visual {
      * Returns the visual's width.
      * @return Current width of this visual.
      */
-    public int getWidth();
+    int getWidth();
 
     /**
      * Returns the visual's height.
      * @return Current height of this visual.
      */
-    public int getHeight();
+    int getHeight();
+
+    /**
+     * Default method to return the visual's complete size
+     * via a {@link Dimensions} object.  Note that if the
+     * width and height calculations for a particular object
+     * are lengthy and could be better done together rather
+     * than separately, that component should be free to
+     * override this default implementation.
+     *
+     * @return The visual's complete size.
+     */
+    default Dimensions getSize() {
+        return new Dimensions(getWidth(), getHeight());
+    }
 
     /**
      * Returns the visual's baseline.
@@ -41,12 +55,12 @@ public interface Visual {
      * @return The baseline relative to the origin of the visual, or <tt>-1</tt>
      * if this visual does not have a baseline.
      */
-    public int getBaseline();
+    int getBaseline();
 
     /**
      * Paints the visual.
      *
      * @param graphics The graphics context in which to paint the visual.
      */
-    public void paint(Graphics2D graphics);
+    void paint(Graphics2D graphics);
 }

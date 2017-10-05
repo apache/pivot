@@ -26,7 +26,16 @@ public interface ConstrainedVisual extends Visual {
      * @param width The visual's new width.
      * @param height The visual's new height.
      */
-    public void setSize(int width, int height);
+    void setSize(int width, int height);
+
+    /**
+     * Default method to set the visual size via a {@link Dimensions} value.
+     *
+     * @param size The complete size of this visual.
+     */
+    default void setSize(Dimensions size) {
+        setSize(size.width, size.height);
+    }
 
     /**
      * Returns the visual's preferred width given the provided height
@@ -36,7 +45,7 @@ public interface ConstrainedVisual extends Visual {
      * <tt>-1</tt> for no constraint.
      * @return The preferred width given the height constraint.
      */
-    public int getPreferredWidth(int height);
+    int getPreferredWidth(int height);
 
     /**
      * Returns the visual's preferred height given the provided width
@@ -46,13 +55,13 @@ public interface ConstrainedVisual extends Visual {
      * <tt>-1</tt> for no constraint.
      * @return The preferred height given the width constraint.
      */
-    public int getPreferredHeight(int width);
+    int getPreferredHeight(int width);
 
     /**
      * Returns the visual's unconstrained preferred size.
      * @return The unconstrained preferred size for this component.
      */
-    public Dimensions getPreferredSize();
+    Dimensions getPreferredSize();
 
     /**
      * Returns the baseline for a given width and height.
@@ -62,5 +71,5 @@ public interface ConstrainedVisual extends Visual {
      * @return The baseline relative to the origin of this visual, or <tt>-1</tt>
      * if this visual does not have a baseline.
      */
-    public int getBaseline(int width, int height);
+    int getBaseline(int width, int height);
 }

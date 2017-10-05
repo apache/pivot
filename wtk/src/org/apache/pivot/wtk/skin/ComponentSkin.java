@@ -73,6 +73,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
     }
 
     @Override
+    public Dimensions getSize() {
+        return new Dimensions(width, height);
+    }
+
+    @Override
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
