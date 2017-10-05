@@ -16,9 +16,12 @@
  */
 package org.apache.pivot.util.concurrent;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.pivot.util.Utils;
 
 /**
  * Abstract base class for "tasks". A task is an asynchronous operation that may
@@ -36,6 +39,10 @@ public abstract class Task<V> {
         public void run() {
             V resultLocal = null;
             Throwable faultLocal = null;
+
+            synchronized (Task.this) {
+                Task.this.taskThread = new WeakReference<Thread>(Thread.currentThread());
+            }
 
             try {
                 resultLocal = execute();
@@ -103,6 +110,7 @@ public abstract class Task<V> {
     private V result = null;
     private Throwable fault = null;
     private TaskListener<V> taskListener = null;
+    private WeakReference<Thread> taskThread = null;
 
     protected volatile long timeout = Long.MAX_VALUE;
     protected volatile boolean abort = false;
@@ -117,9 +125,7 @@ public abstract class Task<V> {
     }
 
     public Task(ExecutorService executorService) {
-        if (executorService == null) {
-            throw new IllegalArgumentException("executorService is null.");
-        }
+        Utils.checkNull(executorService, "executorService");
 
         this.executorService = executorService;
     }
@@ -159,13 +165,8 @@ public abstract class Task<V> {
      */
     public synchronized void execute(TaskListener<V> taskListenerArgument,
         ExecutorService executorServiceArgument) {
-        if (taskListenerArgument == null) {
-            throw new IllegalArgumentException("taskListener is null.");
-        }
-
-        if (executorServiceArgument == null) {
-            throw new IllegalThreadStateException("executorService is null.");
-        }
+        Utils.checkNull(taskListenerArgument, "taskListener");
+        Utils.checkNull(executorServiceArgument, "executorService");
 
         if (this.taskListener != null) {
             throw new IllegalThreadStateException("Task is already pending.");
@@ -175,6 +176,7 @@ public abstract class Task<V> {
 
         result = null;
         fault = null;
+        taskThread = null;
         abort = false;
 
         // Create a new execute callback and post it to the executor service
@@ -210,6 +212,16 @@ public abstract class Task<V> {
      */
     public synchronized Throwable getFault() {
         return fault;
+    }
+
+    /**
+     * Returns the thread that was used to execute this task in the background.
+     *
+     * @return The background thread or <tt>null</tt> if the weak reference was
+     * already cleared or if the thread hasn't started yet.
+     */
+    public synchronized Thread getBackgroundThread() {
+        return taskThread == null ? null : taskThread.get();
     }
 
     /**
