@@ -1070,7 +1070,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             break;
                         }
                     }
-                } catch (Exception exception) {
+                } catch (Throwable exception) {
                     handleUncaughtException(exception);
                 }
             } else {
@@ -1215,7 +1215,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             break;
                         }
                     }
-                } catch (Exception exception) {
+                } catch (Throwable exception) {
                     handleUncaughtException(exception);
                 }
             }
@@ -1393,7 +1393,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                         break;
                     }
                 }
-            } catch (Exception exception) {
+            } catch (Throwable exception) {
                 handleUncaughtException(exception);
             }
         }
@@ -1469,7 +1469,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                         break;
                     }
                 }
-            } catch (Exception exception) {
+            } catch (Throwable exception) {
                 handleUncaughtException(exception);
             }
         }
@@ -1567,7 +1567,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                         keyLocation);
                                 }
                             }
-                        } catch (Exception exception) {
+                        } catch (Throwable exception) {
                             handleUncaughtException(exception);
                         }
 
@@ -1597,7 +1597,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                         keyLocation);
                                 }
                             }
-                        } catch (Exception exception) {
+                        } catch (Throwable exception) {
                             handleUncaughtException(exception);
                         }
 
@@ -1626,7 +1626,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                     consumed = focusedComponentLocal.keyTyped(keyChar);
                                 }
                             }
-                        } catch (Exception exception) {
+                        } catch (Throwable exception) {
                             handleUncaughtException(exception);
                         }
 
@@ -1796,15 +1796,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             if (!cancelled) {
                 try {
                     callback.run();
-                } catch (Exception exception) {
+                } catch (Throwable exception) {
                     exception.printStackTrace();
-
-                    for (Application application : applications) {
-                        if (application instanceof Application.UncaughtExceptionHandler) {
-                            Application.UncaughtExceptionHandler uncaughtExceptionHandler = (Application.UncaughtExceptionHandler) application;
-                            uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), exception);
-                        }
-                    }
+                    handleUncaughtException(exception);
                 }
 
                 for (Display display : displays) {
