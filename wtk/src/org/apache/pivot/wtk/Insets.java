@@ -140,6 +140,7 @@ public final class Insets implements Serializable {
      * <ul>
      * <li><pre>{ "top": nnn, "left": nnn, "bottom": nnn, "right": nnn }</pre>
      * <li><pre>[ top, left, bottom, right ]</pre>
+     * <li><pre>top[,;] left[,;] bottom[,;] right</pre>
      * <li>nnnn
      * </ul>
      *
@@ -170,10 +171,23 @@ public final class Insets implements Serializable {
                 throw new IllegalArgumentException(exception);
             }
         } else {
-            try {
-                insets = new Insets(Integer.parseInt(value));
-            } catch (NumberFormatException nfe) {
-                throw new IllegalArgumentException(nfe);
+            String[] parts = value.split("\\s*[,;]\\s*");
+            if (parts.length == 4) {
+                try {
+                    insets = new Insets(
+                        Integer.parseInt(parts[0]), Integer.parseInt(parts[1]),
+                        Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+                } catch (NumberFormatException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+            } else if (parts.length == 1) {
+                try {
+                    insets = new Insets(Integer.parseInt(value));
+                } catch (NumberFormatException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+            } else {
+                throw new IllegalArgumentException("Unknown format for Insets: " + value);
             }
         }
 

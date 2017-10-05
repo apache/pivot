@@ -44,6 +44,9 @@ public class InsetsTest {
         Insets i3 = new Insets(1, 2, 3, 4);
         Insets i3a = Insets.decode("{top:1, left:2, bottom:3, right:4}");
 
+        Insets i4 = new Insets(5, 6, 7, 8);
+        Insets i4a = Insets.decode("5, 6; 7, 8");
+
         assertEquals(i0, i0a);
         assertEquals(i1, i1a);
         assertEquals(i2, i2a);
@@ -56,6 +59,11 @@ public class InsetsTest {
         assertEquals(i0.getHeight(), 0);
         assertEquals(i3.getWidth(), 6);
         assertEquals(i3.getHeight(), 4);
+
+        assertEquals(i4, i4a);
+        assertEquals(i4a.getWidth(), 14);
+        assertEquals(i4a.getHeight(), 12);
+        assertEquals(i4a.toString(), "Insets [5, 6, 7, 8]");
     }
 
 }
