@@ -26,6 +26,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing an "alert", a dialog commonly used to facilitate simple
@@ -50,9 +51,7 @@ public class Alert extends Dialog {
 
         @Override
         public void insert(Object option, int index) {
-            if (option == null) {
-                throw new IllegalArgumentException("option is null.");
-            }
+            Utils.checkNull(option, "option");
 
             options.insert(option, index);
 
@@ -122,44 +121,32 @@ public class Alert extends Dialog {
         AlertListener {
         @Override
         public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
-            for (AlertListener listener : this) {
-                listener.messageTypeChanged(alert, previousMessageType);
-            }
+            forEach(listener -> listener.messageTypeChanged(alert, previousMessageType));
         }
 
         @Override
         public void messageChanged(Alert alert, String previousMessage) {
-            for (AlertListener listener : this) {
-                listener.messageChanged(alert, previousMessage);
-            }
+            forEach(listener -> listener.messageChanged(alert, previousMessage));
         }
 
         @Override
         public void bodyChanged(Alert alert, Component previousBody) {
-            for (AlertListener listener : this) {
-                listener.bodyChanged(alert, previousBody);
-            }
+            forEach(listener -> listener.bodyChanged(alert, previousBody));
         }
 
         @Override
         public void optionInserted(Alert alert, int index) {
-            for (AlertListener listener : this) {
-                listener.optionInserted(alert, index);
-            }
+            forEach(listener -> listener.optionInserted(alert, index));
         }
 
         @Override
         public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
-            for (AlertListener listener : this) {
-                listener.optionsRemoved(alert, index, removed);
-            }
+            forEach(listener -> listener.optionsRemoved(alert, index, removed));
         }
 
         @Override
         public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
-            for (AlertListener listener : this) {
-                listener.selectedOptionChanged(alert, previousSelectedOption);
-            }
+            forEach(listener -> listener.selectedOptionChanged(alert, previousSelectedOption));
         }
     }
 
@@ -242,9 +229,7 @@ public class Alert extends Dialog {
     }
 
     public void setMessageType(MessageType messageType) {
-        if (messageType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(messageType, "messageType");
 
         MessageType previousMessageType = this.messageType;
         if (previousMessageType != messageType) {
