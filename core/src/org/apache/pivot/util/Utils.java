@@ -140,7 +140,7 @@ public class Utils {
             if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
             } else {
-                throw new IllegalArgumentException(argument + " cannot be negative.");
+                throw new IllegalArgumentException(argument + " must not be negative.");
             }
         }
     }

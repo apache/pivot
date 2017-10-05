@@ -24,6 +24,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Unmodifiable implementation of the {@link List} interface.
@@ -33,42 +34,42 @@ public final class ImmutableList<T> implements List<T> {
 
     private ListListenerList<T> listListeners = new ListListenerList<>();
 
+    private static final String ERROR_MSG = "Immutable list cannot be modified.";
+
     public ImmutableList(List<T> list) {
-        if (list == null) {
-            throw new IllegalArgumentException("list is null.");
-        }
+        Utils.checkNull(list, "list");
 
         this.list = list;
     }
 
     @Override
     public int add(T item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
     public void insert(T item, int index) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
     public T update(int index, T item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
     public int remove(T item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
     public Sequence<T> remove(int index, int count) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
@@ -98,7 +99,7 @@ public final class ImmutableList<T> implements List<T> {
 
     @Override
     public void setComparator(Comparator<T> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
@@ -111,6 +112,14 @@ public final class ImmutableList<T> implements List<T> {
         return list.toString();
     }
 
+    /**
+     * Get the list of listeners for this list.
+     * <p> Not clear why this would be used, since the listener(s)
+     * would only be called on changes to the list, which can't happen
+     * on an immutable list.
+     *
+     * @return The list listener list.
+     */
     @Override
     public ListenerList<ListListener<T>> getListListeners() {
         return listListeners;
