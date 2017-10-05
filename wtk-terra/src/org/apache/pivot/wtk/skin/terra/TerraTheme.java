@@ -239,9 +239,7 @@ public final class TerraTheme extends Theme {
     }
 
     private void load(URL location) {
-        if (location == null) {
-            throw new IllegalArgumentException("Location URL is null");
-        }
+        Utils.checkNull(location, "location");
 
         try (InputStream inputStream = location.openStream()) {
             JSONSerializer serializer = new JSONSerializer();
@@ -261,20 +259,9 @@ public final class TerraTheme extends Theme {
                 colorMultiplier = mult.floatValue();
             }
 
-            Boolean dark = (Boolean) properties.get("themeIsDark");
-            if (dark != null) {
-                themeIsDark = dark.booleanValue();
-            }
-
-            Boolean flat = (Boolean) properties.get("themeIsFlat");
-            if (flat != null) {
-                themeIsFlat = flat.booleanValue();
-            }
-
-            Boolean transition = (Boolean) properties.get("transitionEnabled");
-            if (transition != null) {
-                transitionEnabled = transition.booleanValue();
-            }
+            themeIsDark = properties.getBoolean("themeIsDark", false);
+            themeIsFlat = properties.getBoolean("themeIsFlat", false);
+            transitionEnabled = properties.getBoolean("transitionEnabled", true);
 
             for (String colorCode : colorCodes) {
                 Color baseColor = Color.decode(colorCode);
