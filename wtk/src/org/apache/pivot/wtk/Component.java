@@ -657,6 +657,18 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Set the automation ID via an enum value.
+     *
+     * @param <E> The enum type that will be used here.
+     * @param enumID The enum value to use as the automation ID for this
+     * component, or <tt>null</tt> to clear the automation ID.
+     * @see #setAutomationID(String)
+     */
+    public <E extends Enum<E>> void setAutomationID(E enumID) {
+        setAutomationID(enumID.toString());
+    }
+
+    /**
      * Returns the currently installed skin.
      *
      * @return The currently installed skin.

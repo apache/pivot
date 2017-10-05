@@ -20,7 +20,7 @@ import org.apache.pivot.collections.HashMap;
 
 /**
  * Supports UI automation by providing a means to obtain a reference to a
- * component via an automation ID.
+ * component via an automation ID.  Allows Enum values as IDs also.
  */
 public final class Automation {
     private Automation() {
@@ -32,11 +32,24 @@ public final class Automation {
         return components.get(automationID);
     }
 
+    public static <E extends Enum<E>> Component get(E enumID) {
+        return get(enumID.toString());
+    }
+
     protected static void add(String automationID, Component component) {
         components.put(automationID, component);
+    }
+
+    protected static <E extends Enum<E>> void add(E enumID, Component component) {
+        add(enumID.toString(), component);
     }
 
     protected static void remove(String automationID) {
         components.remove(automationID);
     }
+
+    protected static <E extends Enum<E>> void remove(E enumID) {
+        remove(enumID.toString());
+    }
+
 }
