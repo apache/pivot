@@ -45,6 +45,8 @@ public class SpanTest {
         Span sp5b = new Span(4, 3);
         Span spN = new Span(0, 4);
         Span spAll = sp1.union(sp0).union(sp2).union(sp3).union(sp4);
+        Span sp6 = Span.decode("4, 6");
+        Span sp6a = new Span(4, 6);
 
         assertEquals(sp_1.getLength(), 2);
         assertEquals(sp0.getLength(), 1);
@@ -76,6 +78,10 @@ public class SpanTest {
 
         assertTrue(sp4.after(sp1));
         assertTrue(sp3a.before(sp4));
+
+        assertEquals(sp6, sp6a);
+        assertEquals(sp6.getLength(), 3);
+        assertEquals(sp6.toString(), "Span {start:4, end:6}");
     }
 
 }

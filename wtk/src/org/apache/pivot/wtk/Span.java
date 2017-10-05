@@ -312,7 +312,7 @@ public final class Span {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " {start: " + start + ", end: " + end + "}";
+        return getClass().getSimpleName() + " {start:" + start + ", end:" + end + "}";
     }
 
     /**
@@ -322,6 +322,8 @@ public final class Span {
      * <p> If the string value is a JSON list, then parse the list
      * and construct using the first two values as start and end
      * respectively, using the {@link #Span(int, int)} constructor.
+     * <p> Also accepted is a simple list of two integer values
+     * separated by comma or semicolon.
      * <p> Otherwise the string should be a single integer value
      * that will be used to construct the span using the {@link #Span(int)}
      * constructor.
@@ -352,7 +354,18 @@ public final class Span {
                 throw new IllegalArgumentException(exception);
             }
         } else {
-            span = new Span(Integer.parseInt(value));
+            String[] parts = value.split("\\s*[,;]\\s*");
+            try {
+                if (parts.length == 2) {
+                    span = new Span(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                } else if (parts.length == 1) {
+                    span = new Span(Integer.parseInt(value));
+                } else {
+                    throw new IllegalArgumentException("Unknown format for Span: " + value);
+                }
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException(ex);
+            }
         }
 
         return span;

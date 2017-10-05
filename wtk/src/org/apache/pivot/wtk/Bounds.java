@@ -405,6 +405,8 @@ public final class Bounds implements Serializable {
      * <pre>{ "x": nnn, "y": nnn, "width": nnn, "height": nnn }</pre>
      * <p> The format of a JSON list format will be:
      * <pre>[ x, y, width, height ]</pre>
+     * <p> Also accepted is a simple list (comma- or semi-colon-separated) of four
+     * integer values.
      *
      * @param boundsValue The JSON string containing the map or list of bounds values
      * (must not be {@code null}).
@@ -433,7 +435,17 @@ public final class Bounds implements Serializable {
                 throw new IllegalArgumentException(exception);
             }
         } else {
-            throw new IllegalArgumentException("Invalid format for Bounds.");
+            String[] parts = boundsValue.split("\\s*[,;]\\s*");
+            if (parts.length != 4) {
+                throw new IllegalArgumentException("Invalid format for Bounds: " + boundsValue);
+            }
+            try {
+                bounds = new Bounds(
+                    Integer.parseInt(parts[0]), Integer.parseInt(parts[1]),
+                    Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException(ex);
+            }
         }
 
         return bounds;

@@ -44,6 +44,10 @@ public class LimitsTest {
         Limits lm5a = new Limits(3, 4);
         Limits lm5b = Limits.decode("[3, 4]");
         Limits lmN = new Limits(0, 4);
+        Limits lm6 = Limits.decode("5; 6");
+        Limits lm6a = new Limits(5, 6);
+        Limits lm7 = Limits.decode("9 - 10");
+        Limits lm7a = new Limits(9, 10);
 
         assertEquals(lm_1.range(), 2);
         assertEquals(lm0.range(), 1);
@@ -64,6 +68,11 @@ public class LimitsTest {
 
         assertEquals(lmN.constrain(5), 4);
         assertEquals(lmN.constrain(-2), 0);
+
+        assertEquals(lm6, lm6a);
+        assertEquals(lm6.toString(), "Limits [5-6]");
+        assertEquals(lm7, lm7a);
+        assertEquals(lm7.toString(), "Limits [9-10]");
     }
 
 }

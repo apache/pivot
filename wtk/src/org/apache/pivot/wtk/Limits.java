@@ -151,7 +151,7 @@ public final class Limits implements Serializable {
     public String toString() {
         StringBuilder buf = new StringBuilder();
 
-        buf.append(getClass().getName());
+        buf.append(getClass().getSimpleName());
         buf.append(" [");
 
         if (minimum == Integer.MIN_VALUE) {
@@ -179,6 +179,9 @@ public final class Limits implements Serializable {
      * <pre>{ "minimum": nnn, "maximum": nnn }</pre>
      * <p> The format of a JSON list format will be:
      * <pre>[ minimum, maximum ]</pre>
+     * <p> Also accepted is a simple comma- or semicolon-separated list of two
+     * integer values, as in: <pre>min, max</pre>, or as <pre>min-max</pre> (as
+     * in the format produced by {@link #toString}).
      *
      * @param value The JSON string containing the map or list of limits values
      * (must not be {@code null}).
@@ -207,7 +210,16 @@ public final class Limits implements Serializable {
                 throw new IllegalArgumentException(exception);
             }
         } else {
-            throw new IllegalArgumentException("Invalid format for Limits.");
+            String[] parts = value.split("\\s*[,;\\-]\\s*");
+            if (parts.length != 2) {
+                throw new IllegalArgumentException("Invalid format for Limits: " + value);
+            }
+            try {
+                limits = new Limits(
+                    Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException(ex);
+            }
         }
 
         return limits;

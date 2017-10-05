@@ -49,27 +49,26 @@ public final class CornerRadii implements Serializable {
         this(radius, radius, radius, radius);
     }
 
+    public CornerRadii(Number radius) {
+        Utils.checkNull(radius, "radius");
+        int radii = radius.intValue();
+        Utils.checkNonNegative(radii, "radii");
+
+        this.topLeft = radii;
+        this.topRight = radii;
+        this.bottomLeft = radii;
+        this.bottomRight = radii;
+    }
+
     private void check(CornerRadii radii) {
         check(radii.topLeft, radii.topRight, radii.bottomLeft, radii.bottomRight);
     }
 
     private void check(int topLeft, int topRight, int bottomLeft, int bottomRight) {
-        if (topLeft < 0) {
-            throw new IllegalArgumentException("topLeft is negative.");
-        }
-
-        if (topRight < 0) {
-            throw new IllegalArgumentException("topRight is negative.");
-        }
-
-        if (bottomLeft < 0) {
-            throw new IllegalArgumentException("bottomLeft is negative.");
-        }
-
-        if (bottomRight < 0) {
-            throw new IllegalArgumentException("bottomRight is negative.");
-        }
-
+        Utils.checkNonNegative(topLeft, "topLeft");
+        Utils.checkNonNegative(topRight, "topRight");
+        Utils.checkNonNegative(bottomLeft, "bottomLeft");
+        Utils.checkNonNegative(bottomRight, "bottomRight");
     }
 
     public CornerRadii(CornerRadii cornerRadii) {
@@ -150,6 +149,9 @@ public final class CornerRadii implements Serializable {
      * and construct using the first four values as top left, top right,
      * bottom left, and bottom right respectively, using the
      * {@link #CornerRadii(int, int, int, int)} constructor.
+     * <p> A form of 4 integers values separate by commas or semicolons
+     * is also accepted, as in "n, n; n, n", where the values are in the
+     * same order as the JSON list form.
      * <p> Otherwise the string should be a single integer value
      * that will be used to construct the radii using the {@link #CornerRadii(int)}
      * constructor.
@@ -162,7 +164,7 @@ public final class CornerRadii implements Serializable {
      * as a JSON list.
      */
     public static CornerRadii decode(String value) {
-        Utils.checkNull(value, "value");
+        Utils.checkNullOrEmpty(value, "value");
 
         CornerRadii cornerRadii;
         if (value.startsWith("{")) {
@@ -180,7 +182,22 @@ public final class CornerRadii implements Serializable {
                 throw new IllegalArgumentException(exception);
             }
         } else {
-            cornerRadii = new CornerRadii(Integer.parseInt(value));
+            String[] parts = value.split("\\s*[,;]\\s*");
+            if (parts.length == 4) {
+                try {
+                    cornerRadii = new CornerRadii(
+                        Integer.parseInt(parts[0]),
+                        Integer.parseInt(parts[1]),
+                        Integer.parseInt(parts[2]),
+                        Integer.parseInt(parts[3]));
+                } catch (NumberFormatException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+            } else if (parts.length == 1) {
+                cornerRadii = new CornerRadii(Integer.parseInt(value));
+            } else {
+                throw new IllegalArgumentException("Bad format for corner radii value: " + value);
+            }
         }
 
         return cornerRadii;

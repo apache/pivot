@@ -37,12 +37,16 @@ public class CornerRadiiTest {
         CornerRadii r2 = new CornerRadii(2, 2, 2, 2);
         CornerRadii r2a = new CornerRadii(2);
         CornerRadii r2b = CornerRadii.decode("{topLeft:2, bottomLeft:2, topRight:2, bottomRight:2}");
+        CornerRadii r3 = new CornerRadii(2, 3, 4, 5);
+        CornerRadii r3a = CornerRadii.decode("2, 3; 4, 5");
 
         assertEquals(r0, r0a);
         assertEquals(r1, r1a);
         assertNotEquals(r0, r1);
         assertEquals(r2, r2a);
         assertEquals(r2a, r2b);
+        assertEquals(r3, r3a);
+        assertEquals(r3a.toString(), "CornerRadii [2,3; 4,5]");
     }
 
 }

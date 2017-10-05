@@ -11,7 +11,7 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the bndecific language governing permissions and
+ * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 package org.apache.pivot.wtk.test;
@@ -60,6 +60,9 @@ public class BoundsTest {
         Bounds bndN = new Bounds(0, 0, 8, 9);
         Bounds bndAll = bnd1.union(bnd0).union(bnd2).union(bnd3).union(bnd4);
 
+        Bounds bnd6 = Bounds.decode("2, 3;  4,  5");
+        Bounds bnd6a = new Bounds(2, 3, 4, 5);
+
         assertNotEquals(bnd_1, bnd0);
         assertNotEquals(bnd0, bnd1);
         assertEquals(bnd10a, bnd10b);
@@ -85,6 +88,9 @@ public class BoundsTest {
 
         assertTrue(bnd5.equals(bnd5a));
         assertEquals(bndN, bndAll);
+
+        assertEquals(bnd6, bnd6a);
+        assertEquals(bnd6a.toString(), "Bounds [2,3;4x5]");
     }
 
 }
