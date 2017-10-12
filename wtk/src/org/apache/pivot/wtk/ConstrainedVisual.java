@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Interface representing a visual that is used in layout.
  */
@@ -34,6 +36,7 @@ public interface ConstrainedVisual extends Visual {
      * @param size The complete size of this visual.
      */
     default void setSize(Dimensions size) {
+        Utils.checkNull(size, "size");
         setSize(size.width, size.height);
     }
 

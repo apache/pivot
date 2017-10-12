@@ -118,10 +118,6 @@ public abstract class Image implements Visual {
         return -1;
     }
 
-    public Dimensions getSize() {
-        return new Dimensions(getWidth(), getHeight());
-    }
-
     public void update(int x, int y, int width, int height) {
         imageListeners.regionUpdated(this, x, y, width, height);
     }
