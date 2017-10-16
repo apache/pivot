@@ -71,9 +71,9 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
         Image image = imageNode.getImage();
 
         if (image == null) {
-            return new Dimensions(0, 0);
+            return Dimensions.ZERO;
         }
-        return new Dimensions(image.getWidth(), image.getHeight());
+        return image.getSize();
     }
 
     @Override

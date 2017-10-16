@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -55,7 +56,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     private static final int ALPHA = 228;
 
     public TerraMenuSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         Color backgroundColor = theme.getColor(4);
         setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
 
@@ -334,6 +335,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setMarginColor(Color marginColor) {
+        // Note: null margin color is allowed
         this.marginColor = marginColor;
         repaintComponent();
     }
@@ -343,9 +345,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setMargin(int margin) {
-        if (margin < 0) {
-            throw new IllegalArgumentException("margin is negative.");
-        }
+        Utils.checkNonNegative(margin, "margin");
 
         this.margin = margin;
         invalidateComponent();
@@ -356,9 +356,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setSeparatorColor(Color separatorColor) {
-        if (separatorColor == null) {
-            throw new IllegalArgumentException("separatorColor is null.");
-        }
+        Utils.checkNull(separatorColor, "separatorColor");
 
         this.separatorColor = separatorColor;
         repaintComponent();
@@ -369,9 +367,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setSectionSpacing(int sectionSpacing) {
-        if (sectionSpacing < 0) {
-            throw new IllegalArgumentException("sectionSpacing is negative.");
-        }
+        Utils.checkNonNegative(sectionSpacing, "sectionSpacing");
 
         this.sectionSpacing = sectionSpacing;
         invalidateComponent();

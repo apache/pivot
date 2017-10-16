@@ -257,7 +257,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private static final int ALPHA = 235;
 
     public TerraSheetSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         Color backgroundColor = theme.getColor(11);
         setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
@@ -295,13 +295,13 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         if (content != null) {
             if (height != -1) {
-                height = Math.max(height - (padding.top + padding.bottom + 2), 0);
+                height = Math.max(height - (padding.getHeight() + 2), 0);
             }
 
             preferredWidth = content.getPreferredWidth(height);
         }
 
-        preferredWidth += (padding.left + padding.right + 2);
+        preferredWidth += (padding.getWidth() + 2);
 
         return preferredWidth;
     }
@@ -315,37 +315,30 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
         if (content != null) {
             if (width != -1) {
-                width = Math.max(width - (padding.left + padding.right + 2), 0);
+                width = Math.max(width - (padding.getWidth() + 2), 0);
             }
 
             preferredHeight = content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom + 2);
+        preferredHeight += (padding.getHeight() + 2);
 
         return preferredHeight;
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        int preferredWidth = 0;
-        int preferredHeight = 0;
+        Dimensions preferredSize = Dimensions.ZERO;
 
         Sheet sheet = (Sheet) getComponent();
         Component content = sheet.getContent();
 
         if (content != null) {
-            Dimensions preferredContentSize = content.getPreferredSize();
-            preferredWidth = preferredContentSize.width;
-            preferredHeight = preferredContentSize.height;
+            preferredSize = content.getPreferredSize();
         }
 
-        preferredWidth += (padding.left + padding.right + 2);
-        preferredHeight += (padding.top + padding.bottom + 2);
-
-        Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
-
-        return preferredSize;
+        // Account for border in the size
+        return preferredSize.expand(2).expand(padding);
     }
 
     @Override
@@ -366,8 +359,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
         if (content != null) {
             content.setLocation(padding.left + 1, padding.top + 1);
 
-            int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
-            int contentHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
+            int contentWidth = Math.max(width - (padding.getWidth() + 2), 0);
+            int contentHeight = Math.max(height - (padding.getHeight() + 2), 0);
             content.setSize(contentWidth, contentHeight);
         }
     }
@@ -547,8 +540,6 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        Utils.checkNull(padding, "padding");
-
         setPadding(new Insets(padding));
     }
 

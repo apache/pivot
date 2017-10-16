@@ -32,7 +32,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
     private Color backgroundColor;
 
     public TerraScrollPaneCornerSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         backgroundColor = theme.getColor(11);
     }
 
@@ -53,7 +53,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
 
     @Override
     public Dimensions getPreferredSize() {
-        return new Dimensions(0, 0);
+        return Dimensions.ZERO;
     }
 
     @Override
@@ -75,20 +75,17 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        // Note: null background is supported here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 }

@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
@@ -278,7 +279,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     private boolean useShadow;
 
     public TerraSplitPaneSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         splitterHandlePrimaryColor = theme.getColor(9);
         splitterHandleSecondaryColor = theme.getColor(10);
         splitterThickness = 6;
@@ -347,7 +348,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
     @Override
     public Dimensions getPreferredSize() {
-        return new Dimensions(0, 0);
+        return Dimensions.ZERO;
     }
 
     @Override
@@ -399,24 +400,18 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     public void setSplitterHandlePrimaryColor(Color splitterHandlePrimaryColor) {
-        if (splitterHandlePrimaryColor == null) {
-            throw new IllegalArgumentException("splitterHandlePrimaryColor is null.");
-        }
+        Utils.checkNull(splitterHandlePrimaryColor, "splitterHandlePrimaryColor");
 
         this.splitterHandlePrimaryColor = splitterHandlePrimaryColor;
         splitter.repaint();
     }
 
     public final void setSplitterHandlePrimaryColor(String splitterHandlePrimaryColor) {
-        if (splitterHandlePrimaryColor == null) {
-            throw new IllegalArgumentException("splitterHandlePrimaryColor is null.");
-        }
-
         setSplitterHandlePrimaryColor(GraphicsUtilities.decodeColor(splitterHandlePrimaryColor));
     }
 
     public final void setSplitterHandlePrimaryColor(int splitterHandlePrimaryColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setSplitterHandlePrimaryColor(theme.getColor(splitterHandlePrimaryColor));
     }
 
@@ -425,24 +420,18 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     public void setSplitterHandleSecondaryColor(Color splitterHandleSecondaryColor) {
-        if (splitterHandleSecondaryColor == null) {
-            throw new IllegalArgumentException("splitterHandleSecondaryColor is null.");
-        }
+        Utils.checkNull(splitterHandleSecondaryColor, "splitterHandleSecondaryColor");
 
         this.splitterHandleSecondaryColor = splitterHandleSecondaryColor;
         splitter.repaint();
     }
 
     public final void setSplitterHandleSecondaryColor(String splitterHandleSecondaryColor) {
-        if (splitterHandleSecondaryColor == null) {
-            throw new IllegalArgumentException("splitterHandleSecondaryColor is null.");
-        }
-
         setSplitterHandleSecondaryColor(GraphicsUtilities.decodeColor(splitterHandleSecondaryColor));
     }
 
     public final void setSplitterHandleSecondaryColor(int splitterHandleSecondaryColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setSplitterHandleSecondaryColor(theme.getColor(splitterHandleSecondaryColor));
     }
 
@@ -451,9 +440,8 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     public void setSplitterThickness(int splitterThickness) {
-        if (splitterThickness < 0) {
-            throw new IllegalArgumentException("splitterThickness is negative.");
-        }
+        Utils.checkNonNegative(splitterThickness, "splitterThickness");
+
         this.splitterThickness = splitterThickness;
         invalidateComponent();
     }

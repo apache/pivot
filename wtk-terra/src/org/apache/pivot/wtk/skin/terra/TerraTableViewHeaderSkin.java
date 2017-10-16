@@ -29,6 +29,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
@@ -131,11 +132,10 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     public static final int MINIMUM_COLUMN_WIDTH = 2;
 
     private SortIndicatorImage sortAscendingImage = new SortIndicatorImage(SortDirection.ASCENDING);
-    private SortIndicatorImage sortDescendingImage = new SortIndicatorImage(
-        SortDirection.DESCENDING);
+    private SortIndicatorImage sortDescendingImage = new SortIndicatorImage(SortDirection.DESCENDING);
 
     public TerraTableViewHeaderSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -372,9 +372,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
 
     @Override
     public int getHeaderAt(int x) {
-        if (x < 0) {
-            throw new IllegalArgumentException("x is negative");
-        }
+        Utils.checkNonNegative(x, "x");
 
         int headerIndex = -1;
 
@@ -431,27 +429,17 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -460,24 +448,18 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -486,24 +468,18 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -512,9 +488,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -523,15 +497,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -540,9 +510,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
         disabledBevelColor = disabledBackgroundColor;
@@ -550,15 +518,11 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
-
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -567,24 +531,18 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -593,24 +551,18 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public void setDisabledBorderColor(Color disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
-
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 

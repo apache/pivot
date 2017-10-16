@@ -57,7 +57,7 @@ class TextPaneSkinSpanView extends TextPaneSkinElementView {
     @Override
     public Dimensions getPreferredSize(int breakWidth) {
         if (getLength() == 0) {
-            return new Dimensions(0, 0);
+            return Dimensions.ZERO;
         }
 
         TextPaneSkinNodeView nodeView = get(0);

@@ -270,7 +270,7 @@ public class TerraSliderSkin extends SliderSkin {
     public static final int MINIMUM_THUMB_HEIGHT = 4;
 
     public TerraSliderSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         trackColor = theme.getColor(6);
         trackWidth = 2;

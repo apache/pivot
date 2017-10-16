@@ -586,7 +586,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     public TerraTabPaneSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         activeTabColor = theme.getColor(11);
         inactiveTabColor = theme.getColor(9);
         borderColor = theme.getColor(7);
@@ -1168,7 +1168,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setActiveTabColor(int activeTabColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setActiveTabColor(theme.getColor(activeTabColor));
     }
 
@@ -1189,7 +1189,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setInactiveTabColor(int inactiveTabColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveTabColor(theme.getColor(inactiveTabColor));
     }
 
@@ -1210,7 +1210,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -1230,7 +1230,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setInactiveBorderColor(int inactiveBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setInactiveBorderColor(theme.getColor(inactiveBorderColor));
     }
 
@@ -1298,7 +1298,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public final void setButtonColor(int buttonColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setButtonColor(theme.getColor(buttonColor));
     }
 

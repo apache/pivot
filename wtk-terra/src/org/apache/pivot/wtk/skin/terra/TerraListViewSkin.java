@@ -84,7 +84,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public TerraListViewSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -563,8 +563,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        Utils.checkNull(backgroundColor, "backgroundColor");
-
+        // We allow a null background color here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }

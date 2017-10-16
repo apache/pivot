@@ -151,7 +151,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     private static final int SCROLL_RATE = 30;
 
     public TextAreaSkin() {
-        Theme theme = Theme.getTheme();
+        Theme theme = currentTheme();
         font = theme.getFont();
 
         color = defaultForegroundColor();
@@ -585,15 +585,12 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        // Null background is allowed here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
@@ -602,19 +599,13 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setInactiveColor(Color inactiveColor) {
-        if (inactiveColor == null) {
-            throw new IllegalArgumentException("inactiveColor is null.");
-        }
+        Utils.checkNull(inactiveColor, "inactiveColor");
 
         this.inactiveColor = inactiveColor;
         repaintComponent();
     }
 
     public final void setInactiveColor(String inactiveColor) {
-        if (inactiveColor == null) {
-            throw new IllegalArgumentException("inactiveColor is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(inactiveColor));
     }
 
@@ -632,10 +623,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public final void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
-
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
     }
 

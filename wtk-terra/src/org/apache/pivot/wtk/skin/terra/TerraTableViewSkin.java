@@ -89,7 +89,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     private boolean validateSelection = false;
 
     public TerraTableViewSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -759,7 +759,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setColor(theme.getColor(color));
     }
 
@@ -779,7 +779,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -788,8 +788,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        Utils.checkNull(backgroundColor, "backgroundColor");
-
+        // We allow a null background color here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
@@ -799,7 +798,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -819,7 +818,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setSelectionColor(int selectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
@@ -840,7 +839,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
@@ -861,7 +860,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
@@ -870,9 +869,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
@@ -884,7 +881,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
@@ -905,7 +902,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
@@ -924,7 +921,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setAlternateRowBackgroundColor(int alternateRowBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setAlternateRowBackgroundColor(theme.getColor(alternateRowBackgroundColor));
     }
 
@@ -942,7 +939,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColumnSelectionColor(int columnSelectionColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setColumnSelectionColor(theme.getColor(columnSelectionColor));
     }
 
@@ -951,9 +948,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setColumnSelectionHorizontalGridColor(Color columnSelectionHorizontalGridColor) {
-        if (columnSelectionHorizontalGridColor == null) {
-            throw new IllegalArgumentException("columnSelectionHorizontalGridColor is null.");
-        }
+        Utils.checkNull(columnSelectionHorizontalGridColor, "columnSelectionHorizontalGridColor");
 
         this.columnSelectionHorizontalGridColor = columnSelectionHorizontalGridColor;
         repaintComponent();
@@ -966,7 +961,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColumnSelectionHorizontalGridColor(int columnSelectionHorizontalGridColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setColumnSelectionHorizontalGridColor(theme.getColor(columnSelectionHorizontalGridColor));
     }
 
@@ -975,9 +970,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setHorizontalGridColor(Color horizontalGridColor) {
-        if (horizontalGridColor == null) {
-            throw new IllegalArgumentException("horizontalGridColor is null.");
-        }
+        Utils.checkNull(horizontalGridColor, "horizontalGridColor");
 
         this.horizontalGridColor = horizontalGridColor;
         repaintComponent();
@@ -988,7 +981,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setHorizontalGridColor(int horizontalGridColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setHorizontalGridColor(theme.getColor(horizontalGridColor));
     }
 
@@ -997,9 +990,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public void setVerticalGridColor(Color verticalGridColor) {
-        if (verticalGridColor == null) {
-            throw new IllegalArgumentException("verticalGridColor is null.");
-        }
+        Utils.checkNull(verticalGridColor, "verticalGridColor");
 
         this.verticalGridColor = verticalGridColor;
         repaintComponent();
@@ -1010,7 +1001,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setVerticalGridColor(int verticalGridColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = Theme.getTheme();
         setVerticalGridColor(theme.getColor(verticalGridColor));
     }
 

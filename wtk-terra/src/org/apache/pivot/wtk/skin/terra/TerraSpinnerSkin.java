@@ -26,6 +26,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -68,10 +69,10 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
          * one time
          */
         public void start(Spinner spinnerArgument, int directionArgument) {
-            assert (directionArgument != 0) : "Direction must be positive or negative";
+            assert (directionArgument != 0) : "Spinner direction must be positive or negative";
 
             if (scheduledSpinnerCallback != null) {
-                throw new IllegalStateException("Already running");
+                throw new IllegalStateException("Spinner is already running");
             }
 
             this.spinner = spinnerArgument;
@@ -530,9 +531,9 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     public static final int BUTTON_IMAGE_SIZE = 5;
 
     public TerraSpinnerSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
-        setBackgroundColor(theme.getColor(4));
+        setBackgroundColor(4);
 
+        Theme theme = currentTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -701,20 +702,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
-
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -723,20 +717,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
-
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
@@ -745,20 +732,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
@@ -772,10 +752,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public final void setButtonColor(String buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null");
-        }
-
         setButtonImageColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
@@ -789,10 +765,6 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null");
-        }
-
         setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
     }
 
@@ -801,28 +773,17 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
-
         invalidateContent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 

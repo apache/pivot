@@ -101,12 +101,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return new Dimensions(width, height);
     }
 
-    protected void setSize(Dimensions size) {
-        Utils.checkNull(size, "size");
-        setSize(size.width, size.height);
-    }
-
-    protected void setSize(int width, int height) {
+    public void setSize(int width, int height) {
         assert (width >= 0);
         assert (height >= 0);
 
@@ -118,6 +113,11 @@ abstract class TextPaneSkinNodeView implements NodeListener {
 
         // Redraw the region currently occupied by this view
         repaint();
+    }
+
+    public void setSize(Dimensions size) {
+        Utils.checkNull(size, "size");
+        setSize(size.width, size.height);
     }
 
     public int getX() {

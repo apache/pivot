@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
@@ -245,7 +246,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     public TerraPanoramaSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         buttonColor = theme.getColor(1);
         buttonBackgroundColor = null;
         buttonPadding = 4;
@@ -342,7 +343,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         Panorama panorama = (Panorama) getComponent();
         Component view = panorama.getView();
         if (view == null) {
-            preferredSize = new Dimensions(0, 0);
+            preferredSize = Dimensions.ZERO;
         } else {
             preferredSize = view.getPreferredSize();
         }
@@ -493,19 +494,13 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public void setButtonColor(Color buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
+        Utils.checkNull(buttonColor, "buttonColor");
 
         this.buttonColor = buttonColor;
         repaintComponent();
     }
 
     public final void setButtonColor(String buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
-
         setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
     }
 
@@ -514,24 +509,17 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public void setButtonBackgroundColor(Color buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null.");
-        }
-
+        // Note: null is perfectly valid here as the button background color
         this.buttonBackgroundColor = buttonBackgroundColor;
         repaintComponent();
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null.");
-        }
-
         setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
     }
 
     public final void setButtonBackgroundColor(int buttonBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setButtonBackgroundColor(theme.getColor(buttonBackgroundColor));
     }
 
@@ -540,18 +528,14 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public void setButtonPadding(int buttonPadding) {
-        if (buttonPadding < 0) {
-            throw new IllegalArgumentException("buttonPadding is negative.");
-        }
+        Utils.checkNonNegative(buttonPadding, "buttonPadding");
 
         this.buttonPadding = buttonPadding;
         invalidateComponent();
     }
 
     public final void setButtonPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setButtonPadding(padding.intValue());
     }

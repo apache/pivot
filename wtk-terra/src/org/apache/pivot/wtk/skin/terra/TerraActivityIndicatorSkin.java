@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ActivityIndicator;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -37,7 +38,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     private ApplicationContext.ScheduledCallback updateCallback = null;
 
     public TerraActivityIndicatorSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(2));
         backgroundColor = null;
     }
@@ -100,9 +101,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         colors = new Color[12];
         for (int i = 0; i < 12; i++) {
@@ -112,15 +111,11 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -129,20 +124,17 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        // We allow null background here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 

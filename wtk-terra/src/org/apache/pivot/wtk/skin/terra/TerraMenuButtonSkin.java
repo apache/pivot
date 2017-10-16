@@ -111,13 +111,13 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     private static final int TRIGGER_WIDTH = 10;
 
     public TerraMenuButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
-        backgroundColor = theme.getColor(10);
-        disabledBackgroundColor = theme.getColor(10);
+        setBackgroundColor(10);
+        setDisabledBackgroundColor(10);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
         padding = new Insets(3);
@@ -125,11 +125,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         minumumAspectRatio = Float.NaN;
         maximumAspectRatio = Float.NaN;
         toolbar = false;
-
-        // Set the derived colors
-        bevelColor = TerraTheme.brighten(backgroundColor);
-        pressedBevelColor = TerraTheme.darken(backgroundColor);
-        disabledBevelColor = disabledBackgroundColor;
 
         menuPopup.getWindowStateListeners().add(menuPopupWindowStateListener);
     }
@@ -260,10 +255,10 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         // Paint the background
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-
         if (backgroundColorLocal != null && bevelColorLocal != null) {
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
             if (!themeIsFlat()) {
                 graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
                     height / 2f, backgroundColorLocal));
@@ -390,7 +385,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -412,7 +407,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -422,7 +417,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     public void setBackgroundColor(Color backgroundColor) {
         Utils.checkNull(backgroundColor, "backgroundColor");
-
+        // Note: in the paint code null is okay, but not for these derived colors...
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.brighten(backgroundColor);
         pressedBevelColor = TerraTheme.darken(backgroundColor);
@@ -430,13 +425,11 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        Utils.checkNull(backgroundColor, "backgroundColor");
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -453,13 +446,11 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
-
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -482,7 +473,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -504,7 +495,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 

@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -58,7 +59,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     private static final int CORNER_RADIUS = 4;
 
     public TerraPushButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -306,24 +307,18 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -332,24 +327,18 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -358,9 +347,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -369,15 +356,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -386,9 +369,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
         disabledBevelColor = disabledBackgroundColor;
@@ -396,15 +377,11 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
-
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -413,24 +390,18 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -439,24 +410,18 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setDisabledBorderColor(Color disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
-
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
@@ -465,19 +430,13 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -486,27 +445,19 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
     private int paddingWidth() {
-        return padding.left + padding.right + 2;
+        return padding.getWidth() + 2;
     }
 
     private int paddingHeight() {
-        return padding.top + padding.bottom + 2;
+        return padding.getHeight() + 2;
     }
 
     public float getMinimumAspectRatio() {
@@ -524,9 +475,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setMinimumAspectRatio(Number minimumAspectRatio) {
-        if (minimumAspectRatio == null) {
-            throw new IllegalArgumentException("minimumAspectRatio is null.");
-        }
+        Utils.checkNull(minimumAspectRatio, "minimumAspectRatio");
 
         setMinimumAspectRatio(minimumAspectRatio.floatValue());
     }
@@ -546,9 +495,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setMaximumAspectRatio(Number maximumAspectRatio) {
-        if (maximumAspectRatio == null) {
-            throw new IllegalArgumentException("maximumAspectRatio is null.");
-        }
+        Utils.checkNull(maximumAspectRatio, "maximumAspectRatio");
 
         setMaximumAspectRatio(maximumAspectRatio.floatValue());
     }

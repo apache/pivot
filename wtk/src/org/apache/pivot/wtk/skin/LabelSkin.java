@@ -565,7 +565,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     /**
      * Sets the background color of the label.
      *
-     * @param backgroundColor The new background color for the label.
+     * @param backgroundColor The new background color for the label
+     * (can be <tt>null</tt> to let the parent background show through).
      */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -580,8 +581,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        Utils.checkNull(backgroundColor, "backgroundColor");
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 

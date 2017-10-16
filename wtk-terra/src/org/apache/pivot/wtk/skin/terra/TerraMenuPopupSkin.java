@@ -139,7 +139,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraMenuPopupSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor((Color) null);
 
         panorama = new Panorama();
@@ -183,10 +183,6 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     }
 
     public void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
         border.getStyles().put("color", borderColor);
     }
 

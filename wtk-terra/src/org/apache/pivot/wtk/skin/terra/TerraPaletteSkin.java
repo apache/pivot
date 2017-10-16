@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
@@ -252,14 +253,13 @@ public class TerraPaletteSkin extends WindowSkin {
 
         if (content != null) {
             if (height != -1) {
-                height = Math.max(height - preferredTitleBarSize.height - 4 - padding.top
-                    - padding.bottom, 0);
+                height = Math.max(height - preferredTitleBarSize.height - 4 - padding.getHeight(), 0);
             }
 
             preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(height));
         }
 
-        preferredWidth += (padding.left + padding.right) + 2;
+        preferredWidth += padding.getWidth() + 2;
 
         return preferredWidth;
     }
@@ -279,13 +279,13 @@ public class TerraPaletteSkin extends WindowSkin {
 
         if (content != null) {
             if (width != -1) {
-                width = Math.max(width - padding.left - padding.right, 0);
+                width = Math.max(width - padding.getWidth(), 0);
             }
 
             preferredHeight += content.getPreferredHeight(width);
         }
 
-        preferredHeight += (padding.top + padding.bottom) + 4;
+        preferredHeight += padding.getHeight() + 4;
 
         return preferredHeight;
     }
@@ -310,8 +310,8 @@ public class TerraPaletteSkin extends WindowSkin {
             preferredHeight += preferredContentSize.height;
         }
 
-        preferredWidth += (padding.left + padding.right) + 2;
-        preferredHeight += (padding.top + padding.bottom) + 4;
+        preferredWidth += padding.getWidth() + 2;
+        preferredHeight += padding.getHeight() + 4;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -344,9 +344,9 @@ public class TerraPaletteSkin extends WindowSkin {
         if (content != null) {
             content.setLocation(padding.left + 1, titleBarTablePane.getHeight() + padding.top + 3);
 
-            int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+            int contentWidth = Math.max(width - (padding.getWidth() + 2), 0);
             int contentHeight = Math.max(height
-                - (titleBarTablePane.getHeight() + padding.top + padding.bottom + 4), 0);
+                - (titleBarTablePane.getHeight() + padding.getHeight() + 4), 0);
 
             content.setSize(contentWidth, contentHeight);
         }
@@ -420,19 +420,13 @@ public class TerraPaletteSkin extends WindowSkin {
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -441,18 +435,10 @@ public class TerraPaletteSkin extends WindowSkin {
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -464,10 +450,6 @@ public class TerraPaletteSkin extends WindowSkin {
      * specification}
      */
     public final void setTitleFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         titleLabel.getStyles().put("font", decodeFont(font));
     }
 
@@ -477,10 +459,6 @@ public class TerraPaletteSkin extends WindowSkin {
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setTitleFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         titleLabel.getStyles().put("font", Theme.deriveFont(font));
     }
 
@@ -491,7 +469,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public final void setTitleFontScale(float scale) {
         this.titleFontScale = scale;
 
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         Font titleFont = theme.getFont();
         titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * scale));
         titleLabel.getStyles().put("font", titleFont);

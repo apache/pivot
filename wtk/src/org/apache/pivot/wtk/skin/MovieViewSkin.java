@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -50,8 +51,10 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
         @Override
         public void regionUpdated(Movie movie, int x, int y, int width, int height) {
-            repaintComponent(movieX + (int) Math.floor(x * scale),
-                movieY + (int) Math.floor(y * scale), (int) Math.ceil(width * scale) + 1,
+            repaintComponent(
+                movieX + (int) Math.floor(x * scale),
+                movieY + (int) Math.floor(y * scale),
+                (int) Math.ceil(width * scale) + 1,
                 (int) Math.ceil(height * scale) + 1);
         }
     };
@@ -90,8 +93,9 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? new Dimensions(0, 0) : new Dimensions(Math.round(movie.getWidth()
-            * scale), Math.round(movie.getHeight() * scale));
+        return (movie == null) ? Dimensions.ZERO :
+            new Dimensions(Math.round(movie.getWidth() * scale),
+                           Math.round(movie.getHeight() * scale));
     }
 
     @Override
@@ -173,15 +177,12 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
+        // Note: null background allowed here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
@@ -203,9 +204,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         if (this.horizontalAlignment != horizontalAlignment) {
             this.horizontalAlignment = horizontalAlignment;
@@ -220,9 +219,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         if (this.verticalAlignment != verticalAlignment) {
             this.verticalAlignment = verticalAlignment;
