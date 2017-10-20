@@ -29,6 +29,7 @@ public class BooleanResultTest {
         AND,
         XOR,
         NOT,
+        CLEAR,
         SET
     }
 
@@ -46,6 +47,9 @@ public class BooleanResultTest {
             case NOT:
                 result.not();
                 break;
+            case CLEAR:
+                result.clear();
+                break;
             case SET:
                 result.set(value);
                 break;
@@ -62,9 +66,14 @@ public class BooleanResultTest {
         operateAndTest(result, false /* ignored */, Operation.NOT, true);
         operateAndTest(result, true, Operation.AND, true);
         operateAndTest(result, false, Operation.SET, false);
+        operateAndTest(result, true, Operation.SET, true);
+        operateAndTest(result, true /* ignored */, Operation.CLEAR, false);
 
         BooleanResult result2 = new BooleanResult(true);
         assertEquals(result2.get(), true);
+
+        result2.clear();
+        assertEquals(result2.get(), false);
     }
 
 }

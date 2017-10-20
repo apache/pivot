@@ -80,6 +80,14 @@ public class BooleanResult {
     }
 
     /**
+     * Clear the boolean result to the default value
+     * of {@code false}.
+     */
+    public void clear() {
+        result = false;
+    }
+
+    /**
      * Set the result value to the given value.
      *
      * @param value The new value to set.
