@@ -130,7 +130,7 @@ public class Utils {
      *
      * @param value The value to check.
      * @param argument A description for the argument, used to
-     * construct a message like {@code "xxx cannot be negative."}.
+     * construct a message like {@code "xxx must not be negative."}.
      * Can be {@code null} or an empty string, in which case a plain
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is negative.
@@ -141,6 +141,50 @@ public class Utils {
                 throw new IllegalArgumentException();
             } else {
                 throw new IllegalArgumentException(argument + " must not be negative.");
+            }
+        }
+    }
+
+    /**
+     * Check if the input argument is negative (less than zero), and throw an
+     * {@link IllegalArgumentException} with or without a descriptive message,
+     * depending on the {@code argument} supplied.
+     *
+     * @param value The value to check.
+     * @param argument A description for the argument, used to
+     * construct a message like {@code "xxx must not be negative."}.
+     * Can be {@code null} or an empty string, in which case a plain
+     * {@link IllegalArgumentException} is thrown without any detail message.
+     * @throws IllegalArgumentException if the value is negative.
+     */
+    public static void checkNonNegative(float value, String argument) {
+        if (value < 0.0f) {
+            if (isNullOrEmpty(argument)) {
+                throw new IllegalArgumentException();
+            } else {
+                throw new IllegalArgumentException(argument + " must not be negative.");
+            }
+        }
+    }
+
+    /**
+     * Check if the input argument is positive (greater than zero), and throw an
+     * {@link IllegalArgumentException} if not, with or without a descriptive message,
+     * depending on the {@code argument} supplied.
+     *
+     * @param value The value to check.
+     * @param argument A description for the argument, used to
+     * construct a message like {@code "xxx must be positive."}.
+     * Can be {@code null} or an empty string, in which case a plain
+     * {@link IllegalArgumentException} is thrown without any detail message.
+     * @throws IllegalArgumentException if the value is negative.
+     */
+    public static void checkPositive(int value, String argument) {
+        if (value <= 0) {
+            if (isNullOrEmpty(argument)) {
+                throw new IllegalArgumentException();
+            } else {
+                throw new IllegalArgumentException(argument + " must be positive.");
             }
         }
     }
