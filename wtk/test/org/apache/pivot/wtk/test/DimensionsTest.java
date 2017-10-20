@@ -34,9 +34,15 @@ public class DimensionsTest {
     public void test() {
         Dimensions zero = Dimensions.ZERO;
         Dimensions zero_a = new Dimensions(0, 0);
+        Dimensions zero_b = new Dimensions(0);
         Dimensions one = new Dimensions(1, 1);
         Dimensions one_a = zero.expand(1);
-        Dimensions zero_b = one_a.expand(-1, -1);
+        Dimensions zero_c = one_a.expand(-1, -1);
+
+        Dimensions seven = new Dimensions(7);
+        Dimensions seven_a = new Dimensions(7, 7);
+        Dimensions seven_b = zero.expand(7);
+        Dimensions seven_c = zero_a.expand(7, 7);
 
         Dimensions a = Dimensions.decode("2 x 3");
         Dimensions a_1 = new Dimensions(2, 3);
@@ -55,7 +61,12 @@ public class DimensionsTest {
 
         assertEquals(zero, zero_a);
         assertEquals(one, one_a);
-        assertEquals(zero, zero_b);
+        assertEquals(zero_a, zero_b);
+        assertEquals(zero, zero_c);
+
+        assertEquals(seven, seven_a);
+        assertEquals(seven, seven_b);
+        assertEquals(seven_b, seven_c);
 
         assertEquals(a, a_1);
         assertEquals(b, b_1);

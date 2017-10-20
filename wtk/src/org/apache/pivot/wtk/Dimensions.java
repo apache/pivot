@@ -36,7 +36,17 @@ public final class Dimensions implements Serializable {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
-    public static final Dimensions ZERO = new Dimensions(0, 0);
+    public static final Dimensions ZERO = new Dimensions(0);
+
+    /**
+     * Construct a "square" dimensions that has the same width
+     * as height.
+     *
+     * @param side The width and height of this dimensions.
+     */
+    public Dimensions(int side) {
+        this.width = this.height = side;
+    }
 
     public Dimensions(int width, int height) {
         this.width = width;

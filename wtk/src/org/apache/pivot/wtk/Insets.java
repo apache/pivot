@@ -70,6 +70,43 @@ public final class Insets implements Serializable {
         this.right = right;
     }
 
+    /**
+     * Construct an <tt>Insets</tt> value given the total
+     * height and width values to produce.
+     * <p> This will assign half the height to each of the top
+     * and bottom, and half the width each to the left and right.
+     * <p> Any excess (for odd values) will be assigned to the bottom
+     * and right respectively.
+     *
+     * @param height  The total height to assign to this Insets value.
+     * @param width   The total width to assign.
+     * @see #getHeight
+     * @see #getWidth
+     */
+    public Insets(int height, int width) {
+        this.top = height / 2;
+        // For odd height, assign the excess to the bottom
+        this.bottom = height - this.top;
+        this.left = width / 2;
+        // Ditto for width, excess on the right
+        this.right = width - this.left;
+    }
+
+    /**
+     * Construct an <tt>Insets</tt> value given the total
+     * dimensions of the value to produce.
+     * <p> This will assign half the dimensions height to each of the top
+     * and bottom, and half the dimensions width each to the left and right.
+     * <p> Any excess (for odd values) will be assigned to the right
+     * and bottom respectively.
+     *
+     * @param size The total size (height and width) to assign.
+     * @see #getSize
+     */
+    public Insets(Dimensions size) {
+        this(size.height, size.width);
+    }
+
     public Insets(Insets insets) {
         Utils.checkNull(insets, "padding/margin");
 
@@ -82,10 +119,10 @@ public final class Insets implements Serializable {
     public Insets(Dictionary<String, ?> insets) {
         Utils.checkNull(insets, "padding/margin");
 
-        top = insets.getInt(TOP_KEY);
-        left = insets.getInt(LEFT_KEY);
-        bottom = insets.getInt(BOTTOM_KEY);
-        right = insets.getInt(RIGHT_KEY);
+        this.top = insets.getInt(TOP_KEY);
+        this.left = insets.getInt(LEFT_KEY);
+        this.bottom = insets.getInt(BOTTOM_KEY);
+        this.right = insets.getInt(RIGHT_KEY);
 
     }
 
@@ -103,6 +140,19 @@ public final class Insets implements Serializable {
      */
     public int getHeight() {
         return top + bottom;
+    }
+
+    /**
+     * Return the total size of this insets value as a single
+     * <tt>Dimensions</tt> value.
+     *
+     * @return The total width and height of this object.
+     * @see #getWidth
+     * @see #getHeight
+     * @see #Insets(Dimensions)
+     */
+    public Dimensions getSize() {
+        return new Dimensions(left + right, top + bottom);
     }
 
     @Override
