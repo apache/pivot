@@ -22,6 +22,7 @@ import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -65,8 +66,10 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         public void regionUpdated(Image image, int x, int y, int width, int height) {
             // TODO A rounding error is causing an off-by-one error; we're
             // accounting for it here by adding 1 to width and height
-            Bounds bounds = new Bounds(imageX + (int) Math.floor(x * scaleX), imageY
-                + (int) Math.floor(y * scaleY), (int) Math.ceil(width * scaleX) + 1,
+            Bounds bounds = new Bounds(
+                imageX + (int) Math.floor(x * scaleX),
+                imageY + (int) Math.floor(y * scaleY),
+                (int) Math.ceil(width * scaleX) + 1,
                 (int) Math.ceil(height * scaleY) + 1);
             repaintComponent(bounds);
         }
@@ -106,8 +109,8 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         ImageView imageView = (ImageView) getComponent();
         Image image = imageView.getImage();
 
-        return (image == null) ? new Dimensions(0, 0) : new Dimensions(image.getWidth(),
-            image.getHeight());
+        return (image == null) ? Dimensions.ZERO :
+            new Dimensions(image.getWidth(), image.getHeight());
     }
 
     @Override
@@ -277,6 +280,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * @param backgroundColor The new color for behind the image.
      */
     public void setBackgroundColor(Color backgroundColor) {
+        // A null background is acceptable
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
@@ -289,10 +293,6 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
@@ -306,7 +306,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets the opacity of the image.
      *
-     * @param opacity A number between 0 (transparent) and 1 (opaque).
+     * @param opacity A number between 0 (transparent) and 1 (opaque), inclusive.
      */
     public void setOpacity(float opacity) {
         if (opacity < 0 || opacity > 1) {
@@ -320,12 +320,10 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * Sets the opacity of the image.
      *
-     * @param opacity A number between 0 (transparent) and 1 (opaque).
+     * @param opacity A number between 0 (transparent) and 1 (opaque), inclusive.
      */
     public final void setOpacity(Number opacity) {
-        if (opacity == null) {
-            throw new IllegalArgumentException("opacity is null.");
-        }
+        Utils.checkNull(opacity, "opacity");
 
         setOpacity(opacity.floatValue());
     }
@@ -344,9 +342,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * @param horizontalAlignment The new alignment value.
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
         layout();
@@ -367,9 +363,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * @param verticalAlignment The new alignment value.
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
         layout();
