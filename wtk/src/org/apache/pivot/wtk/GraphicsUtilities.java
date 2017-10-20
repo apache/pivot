@@ -216,6 +216,16 @@ public final class GraphicsUtilities {
     private GraphicsUtilities() {
     }
 
+    public static final void setAntialiasingOn(final Graphics2D graphics) {
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+    }
+
+    public static final void setAntialiasingOff(final Graphics2D graphics) {
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+    }
+
     public static final void drawLine(final Graphics2D graphics, final int x, final int y,
         final int length, final Orientation orientation) {
         drawLine(graphics, x, y, length, orientation, 1);
@@ -562,6 +572,19 @@ public final class GraphicsUtilities {
     }
 
     /**
+     * Set the default font rendering hints for the given graphics object.
+     *
+     * @param graphics          The graphics object to initialize.
+     * @param fontRenderContext The source of the font rendering hints.
+     */
+    public static void setFontRenderingHints(Graphics2D graphics, FontRenderContext fontRenderContext) {
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+            fontRenderContext.getAntiAliasingHint());
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+            fontRenderContext.getFractionalMetricsHint());
+    }
+
+    /**
      * Set the context in the given graphics environment for subsequent font drawing.
      *
      * @param graphics          The graphics context.
@@ -570,10 +593,39 @@ public final class GraphicsUtilities {
      * @param color             The foreground color for the text.
      */
     public static void prepareForText(Graphics2D graphics, FontRenderContext fontRenderContext, Font font, Color color) {
+        setFontRenderingHints(graphics, fontRenderContext);
+
         graphics.setFont(font);
         graphics.setColor(color);
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, fontRenderContext.getAntiAliasingHint());
-        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, fontRenderContext.getFractionalMetricsHint());
+    }
+
+    /**
+     * Prepare for text rendering by getting the platform font render context and then setting the default
+     * rendering hints in the graphics object.
+     *
+     * @param  graphics The graphics object to prepare.
+     * @return          The {@link Platform#getFontRenderContext} value.
+     */
+    public static FontRenderContext prepareForText(Graphics2D graphics) {
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+
+        setFontRenderingHints(graphics, fontRenderContext);
+
+        return fontRenderContext;
+    }
+
+    /**
+     * Set the context in the given graphics environment for subsequent font drawing and return the font render context.
+     *
+     * @param graphics  The graphics context.
+     * @param font      The font to use.
+     * @param color     The foreground color for the text.
+     * @return          The font render context for the platform.
+     */
+    public static FontRenderContext prepareForText(Graphics2D graphics, Font font, Color color) {
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        prepareForText(graphics, fontRenderContext, font, color);
+        return fontRenderContext;
     }
 
     /**
