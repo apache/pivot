@@ -18,12 +18,16 @@ package org.apache.pivot.util;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
@@ -54,24 +58,24 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             this.end = end;
         }
 
+        public Range(String date) {
+            this.start = this.end = CalendarDate.decode(date);
+        }
+
         public Range(String start, String end) {
             this.start = CalendarDate.decode(start);
             this.end = CalendarDate.decode(end);
         }
 
         public Range(Range range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             this.start = range.start;
             this.end = range.end;
         }
 
         public Range(Dictionary<String, ?> range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             Object startRange = range.get(START_KEY);
             Object endRange = range.get(END_KEY);
@@ -102,9 +106,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         }
 
         public boolean contains(Range range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             Range normalizedRange = range.normalize();
 
@@ -119,9 +121,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         }
 
         public boolean contains(CalendarDate calendarDate) {
-            if (calendarDate == null) {
-                throw new IllegalArgumentException("calendarDate is null.");
-            }
+            Utils.checkNull(calendarDate, "calendarDate");
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
@@ -134,9 +134,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         }
 
         public boolean intersects(Range range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             Range normalizedRange = range.normalize();
 
@@ -156,10 +154,24 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             return new Range(earlier, later);
         }
 
-        public static Range decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
+        @Override
+        public boolean equals(Object o) {
+            if (o != null && o instanceof Range) {
+                Range r = (Range)o;
+                return r.start.equals(this.start) &&
+                    r.end.equals(this.end);
             }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            // TODO: is this is a good calculation?
+            return start.hashCode() * end.hashCode();
+        }
+
+        public static Range decode(String value) {
+            Utils.checkNull(value, "value");
 
             Range range;
             if (value.startsWith("{")) {
@@ -168,8 +180,23 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
                 } catch (SerializationException exception) {
                     throw new IllegalArgumentException(exception);
                 }
+            } else if (value.startsWith("[")) {
+                try {
+                    @SuppressWarnings("unchecked")
+                    List<String> values = (List<String>)JSONSerializer.parseList(value);
+                    range = new Range(values.get(0), values.get(1));
+                } catch (SerializationException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
             } else {
-                range = new Range(CalendarDate.decode(value));
+                String[] parts = value.split("\\s*[,;]\\s*");
+                if (parts.length == 2) {
+                    range = new Range(parts[0], parts[1]);
+                } else if (parts.length == 1) {
+                    range = new Range(value);
+                } else {
+                    throw new IllegalArgumentException("Invalid format for Range: " + value);
+                }
             }
 
             return range;
@@ -212,8 +239,22 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @param calendar The calendar containing the year, month, and day fields.
      */
     public CalendarDate(GregorianCalendar calendar) {
-        this(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH) - 1);
+        this(calendar.get(Calendar.YEAR),
+             calendar.get(Calendar.MONTH),
+             calendar.get(Calendar.DAY_OF_MONTH) - 1);
+    }
+
+    /**
+     * Creates a new <tt>CalendarDate</tt> from the given {@link LocalDate}
+     * (new in Java 8).  This does not represent a moment in time, but only
+     * represents a date (as in year, month and day).
+     *
+     * @param localDate The date value containing year, month and day fields.
+     */
+    public CalendarDate(LocalDate localDate) {
+        this(localDate.getYear(),
+             localDate.getMonthValue() - 1,
+             localDate.getDayOfMonth() - 1);
     }
 
     /**
@@ -355,6 +396,26 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         calendar.set(Calendar.MILLISECOND, time.millisecond);
 
         return calendar;
+    }
+
+    /**
+     * @return An equivalent {@link LocalDate} that represents the same calendar date
+     * as this date.
+     */
+    public LocalDate toLocalDate() {
+        return LocalDate.of(this.year, this.month + 1, this.day + 1);
+    }
+
+    /**
+     * @return A date and time representing this calendar date along with the given
+     * wall clock time.
+     *
+     * @param time The wall clock time to combine with this calendar date.
+     */
+    public LocalDateTime toLocalDateTime(Time time) {
+        LocalTime localTime = LocalTime.of(time.hour, time.minute, time.second, time.millisecond * 1_000_000);
+        LocalDate localDate = toLocalDate();
+        return localDate.atTime(localTime);
     }
 
     /**

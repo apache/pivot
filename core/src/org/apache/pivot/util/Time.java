@@ -18,14 +18,17 @@ package org.apache.pivot.util;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing a time of day, independent of any particular time zone.
@@ -52,24 +55,24 @@ public final class Time implements Comparable<Time>, Serializable {
             this.end = end;
         }
 
+        public Range(String time) {
+            this.start = this.end = Time.decode(time);
+        }
+
         public Range(String start, String end) {
             this.start = Time.decode(start);
             this.end = Time.decode(end);
         }
 
         public Range(Range range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             this.start = range.start;
             this.end = range.end;
         }
 
         public Range(Dictionary<String, ?> range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             Object startRange = range.get(START_KEY);
             Object endRange = range.get(END_KEY);
@@ -100,9 +103,7 @@ public final class Time implements Comparable<Time>, Serializable {
         }
 
         public boolean contains(Range range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             Range normalizedRange = range.normalize();
 
@@ -117,9 +118,7 @@ public final class Time implements Comparable<Time>, Serializable {
         }
 
         public boolean contains(Time time) {
-            if (time == null) {
-                throw new IllegalArgumentException("time is null.");
-            }
+            Utils.checkNull(time, "time");
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
@@ -132,9 +131,7 @@ public final class Time implements Comparable<Time>, Serializable {
         }
 
         public boolean intersects(Range range) {
-            if (range == null) {
-                throw new IllegalArgumentException("range is null.");
-            }
+            Utils.checkNull(range, "range");
 
             Range normalizedRange = range.normalize();
 
@@ -154,10 +151,24 @@ public final class Time implements Comparable<Time>, Serializable {
             return new Range(earlier, later);
         }
 
-        public static Range decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
+        @Override
+        public boolean equals(Object o) {
+            if (o != null && o instanceof Range) {
+                Range r = (Range)o;
+                return r.start.equals(this.start) &&
+                    r.end.equals(this.end);
             }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            // TODO: is this is a good calculation?
+            return start.hashCode() * end.hashCode();
+        }
+
+        public static Range decode(String value) {
+            Utils.checkNull(value, "value");
 
             Range range;
             if (value.startsWith("{")) {
@@ -166,8 +177,23 @@ public final class Time implements Comparable<Time>, Serializable {
                 } catch (SerializationException exception) {
                     throw new IllegalArgumentException(exception);
                 }
+            } else if (value.startsWith("[")) {
+                try {
+                    @SuppressWarnings("unchecked")
+                    List<String> values = (List<String>)JSONSerializer.parseList(value);
+                    range = new Range(values.get(0), values.get(1));
+                } catch (SerializationException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
             } else {
-                range = new Range(Time.decode(value));
+                String[] parts = value.split("\\s*[,;]\\s*");
+                if (parts.length == 2) {
+                    range = new Range(parts[0], parts[1]);
+                } else if (parts.length == 1) {
+                    range = new Range(value);
+                } else {
+                    throw new IllegalArgumentException("Invalid format for Range: " + value);
+                }
             }
 
             return range;
@@ -199,16 +225,16 @@ public final class Time implements Comparable<Time>, Serializable {
     public static final int MILLISECONDS_PER_HOUR = 60 * MILLISECONDS_PER_MINUTE;
     public static final int MILLISECONDS_PER_DAY = 24 * MILLISECONDS_PER_HOUR;
 
-    private static final Pattern PATTERN = Pattern.compile("^(\\d{2}):(\\d{2}):(\\d{2})(\\.(\\d{3}))?$");
+    public static final int NANOS_PER_MILLI = 1_000_000;
+
+    private static final Pattern PATTERN = Pattern.compile("^(\\d{1,2}):(\\d{2}):(\\d{2})(\\.(\\d{3}))?$");
 
     public Time() {
         this(new GregorianCalendar());
     }
 
     public Time(Calendar calendar) {
-        if (calendar == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(calendar, "calendar");
 
         this.hour = calendar.get(Calendar.HOUR_OF_DAY);
         this.minute = calendar.get(Calendar.MINUTE);
@@ -220,22 +246,17 @@ public final class Time implements Comparable<Time>, Serializable {
         this(hour, minute, second, 0);
     }
 
+    private void check(int value, int limit, String part) {
+        if (value < 0 || value > limit) {
+            throw new IllegalArgumentException("Invalid " + part + ".");
+        }
+    }
+
     public Time(int hour, int minute, int second, int millisecond) {
-        if (hour < 0 || hour > 23) {
-            throw new IllegalArgumentException("Invalid hour.");
-        }
-
-        if (minute < 0 || minute > 59) {
-            throw new IllegalArgumentException("Invalid minute.");
-        }
-
-        if (second < 0 || second > 59) {
-            throw new IllegalArgumentException("Invalid second.");
-        }
-
-        if (millisecond < 0 || millisecond > 999) {
-            throw new IllegalArgumentException("Invalid millisecond.");
-        }
+        check(hour, 23, "hour");
+        check(minute, 59, "minute");
+        check(second, 59, "second");
+        check(millisecond, 999, "millisecond");
 
         this.hour = hour;
         this.minute = minute;
@@ -262,6 +283,20 @@ public final class Time implements Comparable<Time>, Serializable {
     }
 
     /**
+     * Construct a <tt>Time</tt> from a {@link LocalTime}, rounding
+     * up the nanosecond value to our milliseconds.
+     *
+     * @param localTime The local time to convert.
+     * @see #NANOS_PER_MILLI
+     */
+    public Time(LocalTime localTime) {
+        this(localTime.getHour(),
+             localTime.getMinute(),
+             localTime.getSecond(),
+             ((localTime.getNano() + (NANOS_PER_MILLI / 2)) / NANOS_PER_MILLI));
+    }
+
+    /**
      * Adds the specified milliseconds of days to this time and returns the
      * resulting time. The number of milliseconds may be negative, in which case
      * the result will be a time prior to this time.
@@ -284,23 +319,24 @@ public final class Time implements Comparable<Time>, Serializable {
      * @return The number of milliseconds in between this time and <tt>time</tt>.
      */
     public int subtract(Time time) {
-        if (time == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(time, "time");
 
         return toMilliseconds() - time.toMilliseconds();
     }
 
     /**
-     * Returns the number of milliseconds since midnight represented by this
-     * time.
-     *
-     * @return The number of milliseconds since midnight represented by this
-     * time.
+     * @return The number of milliseconds since midnight represented by this time.
      */
     public int toMilliseconds() {
         return this.hour * MILLISECONDS_PER_HOUR + this.minute * MILLISECONDS_PER_MINUTE
             + this.second * MILLISECONDS_PER_SECOND + this.millisecond;
+    }
+
+    /**
+     * @return This time converted to a {@link LocalTime}.
+     */
+    public LocalTime toLocalTime() {
+        return LocalTime.of(this.hour, this.minute, this.second, this.millisecond * NANOS_PER_MILLI);
     }
 
     @Override
