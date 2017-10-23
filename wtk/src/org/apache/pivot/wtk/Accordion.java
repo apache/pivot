@@ -23,7 +23,9 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 import org.apache.pivot.wtk.content.AccordionHeaderDataRenderer;
 
 /**
@@ -49,9 +51,7 @@ public class Accordion extends Container {
 
         @Override
         public void insert(Component panel, int index) {
-            if (panel == null) {
-                throw new IllegalArgumentException("panel is null.");
-            }
+            Utils.checkNull(panel, "panel");
 
             // Add the panel to the component sequence
             Accordion.this.add(panel);
@@ -150,24 +150,18 @@ public class Accordion extends Container {
         AccordionListener {
         @Override
         public void panelInserted(Accordion accordion, int index) {
-            for (AccordionListener listener : this) {
-                listener.panelInserted(accordion, index);
-            }
+            forEach(listener -> listener.panelInserted(accordion, index));
         }
 
         @Override
         public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
-            for (AccordionListener listener : this) {
-                listener.panelsRemoved(accordion, index, panels);
-            }
+            forEach(listener -> listener.panelsRemoved(accordion, index, panels));
         }
 
         @Override
         public void headerDataRendererChanged(Accordion accordion,
             Button.DataRenderer previousHeaderDataRenderer) {
-            for (AccordionListener listener : this) {
-                listener.headerDataRendererChanged(accordion, previousHeaderDataRenderer);
-            }
+            forEach(listener -> listener.headerDataRendererChanged(accordion, previousHeaderDataRenderer));
         }
     }
 
@@ -175,27 +169,21 @@ public class Accordion extends Container {
         ListenerList<AccordionSelectionListener> implements AccordionSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
-            Vote vote = Vote.APPROVE;
+            VoteResult result = new VoteResult();
 
-            for (AccordionSelectionListener listener : this) {
-                vote = vote.tally(listener.previewSelectedIndexChange(accordion, selectedIndex));
-            }
+            forEach(listener -> result.tally(listener.previewSelectedIndexChange(accordion, selectedIndex)));
 
-            return vote;
+            return result.get();
         }
 
         @Override
         public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
-            for (AccordionSelectionListener listener : this) {
-                listener.selectedIndexChangeVetoed(accordion, reason);
-            }
+            forEach(listener -> listener.selectedIndexChangeVetoed(accordion, reason));
         }
 
         @Override
         public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
-            for (AccordionSelectionListener listener : this) {
-                listener.selectedIndexChanged(accordion, previousSelectedIndex);
-            }
+            forEach(listener -> listener.selectedIndexChanged(accordion, previousSelectedIndex));
         }
     }
 
@@ -204,17 +192,13 @@ public class Accordion extends Container {
         @Override
         public void headerDataChanged(Accordion accordion, Component component,
             Object previousHeaderData) {
-            for (AccordionAttributeListener listener : this) {
-                listener.headerDataChanged(accordion, component, previousHeaderData);
-            }
+            forEach(listener -> listener.headerDataChanged(accordion, component, previousHeaderData));
         }
 
         @Override
         public void tooltipTextChanged(Accordion accordion, Component component,
             String previousTooltipText) {
-            for (AccordionAttributeListener listener : this) {
-                listener.tooltipTextChanged(accordion, component, previousTooltipText);
-            }
+            forEach(listener -> listener.tooltipTextChanged(accordion, component, previousTooltipText));
         }
     }
 
@@ -267,9 +251,7 @@ public class Accordion extends Container {
     }
 
     public void setHeaderDataRenderer(Button.DataRenderer headerDataRenderer) {
-        if (headerDataRenderer == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(headerDataRenderer, "headerDataRenderer");
 
         Button.DataRenderer previousHeaderDataRenderer = this.headerDataRenderer;
         if (previousHeaderDataRenderer != headerDataRenderer) {

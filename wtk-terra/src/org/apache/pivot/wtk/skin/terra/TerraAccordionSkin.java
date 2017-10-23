@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Accordion;
 import org.apache.pivot.wtk.AccordionAttributeListener;
@@ -324,7 +325,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     public TerraAccordionSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(4));
 
         borderColor = theme.getColor(7);
@@ -333,7 +334,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         buttonColor = theme.getColor(12);
         disabledButtonColor = theme.getColor(7);
         buttonBackgroundColor = theme.getColor(10);
-        buttonPadding = new Insets(3, 4, 3, 4);
+        buttonPadding = new Insets(6, 8);   // height, width
 
         // Set the derived colors
         buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
@@ -404,7 +405,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
 
         if (width != -1) {
-            width = Math.max(0, width - (padding.left + padding.right + 2));
+            width = Math.max(0, width - (padding.getWidth() + 2));
         }
 
         int maxPanelHeight = 0;
@@ -412,7 +413,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
             maxPanelHeight = Math.max(maxPanelHeight, panel.getPreferredHeight(width));
         }
 
-        preferredHeight += (maxPanelHeight + padding.top + padding.bottom + 2);
+        preferredHeight += (maxPanelHeight + padding.getHeight() + 2);
 
         return preferredHeight;
     }
@@ -440,9 +441,9 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
 
         int preferredWidth = Math.max(maxPanelHeaderWidth, maxPanelWidth
-            + (padding.left + padding.right + 2));
+            + (padding.getWidth() + 2));
 
-        preferredHeight += (maxPanelHeight + padding.top + padding.bottom + 2);
+        preferredHeight += (maxPanelHeight + padding.getHeight() + 2);
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -467,7 +468,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         int width = getWidth();
         int height = getHeight();
 
-        int contentWidth = Math.max(width - (padding.left + padding.right + 2), 0);
+        int contentWidth = Math.max(width - (padding.getWidth() + 2), 0);
 
         // Determine the content height
         int panelHeight = 0;
@@ -481,10 +482,10 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
             }
 
             panelHeight = Math.max(panelHeight - 2, 0);
-            contentHeight = Math.max(panelHeight - (padding.top + padding.bottom), 0);
+            contentHeight = Math.max(panelHeight - padding.getHeight(), 0);
         } else {
             panelHeight = selectionChangeTransition.toPanel.getHeight()
-                + (padding.top + padding.bottom);
+                + padding.getHeight();
         }
 
         // Lay out the components
@@ -562,20 +563,14 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         repaintComponent();
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public Insets getPadding() {
@@ -583,19 +578,13 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -604,18 +593,10 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -624,27 +605,17 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setButtonFont(Font buttonFont) {
-        if (buttonFont == null) {
-            throw new IllegalArgumentException("buttonFont is null.");
-        }
+        Utils.checkNull(buttonFont, "buttonFont");
 
         this.buttonFont = buttonFont;
         invalidateComponent();
     }
 
     public final void setButtonFont(String buttonFont) {
-        if (buttonFont == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setButtonFont(decodeFont(buttonFont));
     }
 
     public final void setButtonFont(Dictionary<String, ?> buttonFont) {
-        if (buttonFont == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setButtonFont(Theme.deriveFont(buttonFont));
     }
 
@@ -653,24 +624,18 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setButtonColor(Color buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
+        Utils.checkNull(buttonColor, "buttonColor");
 
         this.buttonColor = buttonColor;
         repaintComponent();
     }
 
     public final void setButtonColor(String buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
-
-        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
     }
 
     public final void setButtonColor(int buttonColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setButtonColor(theme.getColor(buttonColor));
     }
 
@@ -679,24 +644,18 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setDisabledButtonColor(Color disabledButtonColor) {
-        if (disabledButtonColor == null) {
-            throw new IllegalArgumentException("disabledButtonColor is null.");
-        }
+        Utils.checkNull(disabledButtonColor, "disabledButtonColor");
 
         this.disabledButtonColor = disabledButtonColor;
         repaintComponent();
     }
 
     public final void setDisabledButtonColor(String disabledButtonColor) {
-        if (disabledButtonColor == null) {
-            throw new IllegalArgumentException("disabledButtonColor is null.");
-        }
-
-        setDisabledButtonColor(GraphicsUtilities.decodeColor(disabledButtonColor));
+        setDisabledButtonColor(GraphicsUtilities.decodeColor(disabledButtonColor, "disabledButtonColor"));
     }
 
     public final void setDisabledButtonColor(int disabledButtonColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledButtonColor(theme.getColor(disabledButtonColor));
     }
 
@@ -705,9 +664,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setButtonBackgroundColor(Color buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null.");
-        }
+        Utils.checkNull(buttonBackgroundColor, "buttonBackgroundColor");
 
         this.buttonBackgroundColor = buttonBackgroundColor;
         buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
@@ -715,15 +672,11 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null.");
-        }
-
-        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor, "buttonBackgroundColor"));
     }
 
     public final void setButtonBackgroundColor(int buttonBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setButtonBackgroundColor(theme.getColor(buttonBackgroundColor));
     }
 
@@ -732,19 +685,13 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public void setButtonPadding(Insets buttonPadding) {
-        if (buttonPadding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
+        Utils.checkNull(buttonPadding, "buttonPadding");
 
         this.buttonPadding = buttonPadding;
         invalidateComponent();
     }
 
     public final void setButtonPadding(Dictionary<String, ?> buttonPadding) {
-        if (buttonPadding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
-
         setButtonPadding(new Insets(buttonPadding));
     }
 
@@ -753,18 +700,10 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public final void setButtonPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
-
-        setButtonPadding(padding.intValue());
+        setButtonPadding(new Insets(padding));
     }
 
     public final void setButtonPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("buttonPadding is null.");
-        }
-
         setButtonPadding(Insets.decode(padding));
     }
 
