@@ -17,6 +17,7 @@
 package org.apache.pivot.collections;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.Serializable;
 
 import org.apache.pivot.util.Utils;
@@ -199,6 +200,22 @@ public interface Dictionary<K, V> {
             return (Color)get(key);
         } else {
             return (Color)null;
+        }
+    }
+
+    /**
+     * Using the other methods in this interface, retrieve a {@link Font} value
+     * from this dictionary; returning <tt>null</tt> if the key does not exist.
+     *
+     * @param key The key for the (supposed) <tt>Font</tt>
+     * value to retrieve.
+     * @return The font value, or <tt>null</tt> if the key is not present.
+     */
+    default Font getFont(K key) {
+        if (containsKey(key)) {
+            return (Font)get(key);
+        } else {
+            return (Font)null;
         }
     }
 
