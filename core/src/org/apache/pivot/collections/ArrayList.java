@@ -239,7 +239,8 @@ public class ArrayList<T> implements List<T>, Serializable {
             }
 
             if (index != i) {
-                throw new IllegalArgumentException("Illegal insertion point.");
+                throw new IllegalArgumentException(
+                    "Given insertion point " + index + " does not match the sorted insertion location " + i + ".");
             }
         }
 
@@ -272,7 +273,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
                 if ((predecessorItem != null && comparator.compare(item, predecessorItem) < 0)
                     || (successorItem != null && comparator.compare(item, successorItem) > 0)) {
-                    throw new IllegalArgumentException("Illegal item modification.");
+                    throw new IllegalArgumentException("Updated item at index " + index + " is not in correct sorted order.");
                 }
             }
 

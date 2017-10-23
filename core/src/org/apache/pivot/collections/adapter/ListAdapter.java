@@ -81,7 +81,8 @@ public class ListAdapter<T> implements List<T>, Serializable {
     @Override
     public void insert(T item, int index) {
         if (comparator != null && Collections.binarySearch(list, item, comparator) != -(index + 1)) {
-            throw new IllegalArgumentException("Illegal insertion point.");
+            throw new IllegalArgumentException(
+                "Given insertion point " + index + " does not match the sorted insertion location.");
         }
 
         list.add(index, item);
@@ -126,7 +127,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
             if ((predecessor != null && comparator.compare(item, predecessor) < 0)
                 || (successor != null && comparator.compare(item, successor) > 0)) {
-                throw new IllegalArgumentException("Illegal item modification.");
+                throw new IllegalArgumentException("Updated item at index " + index + " is not in correct sorted order.");
             }
         }
 
