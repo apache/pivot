@@ -38,25 +38,10 @@ public class Version implements Comparable<Version>, Serializable {
 
     public Version(int majorRevision, int minorRevision, int maintenanceRevision,
         int updateRevision, String build) {
-        if (majorRevision > 0x7fff) {
-            throw new IllegalArgumentException("majorRevision must be less than or equal "
-                + 0x7fff + ".");
-        }
-
-        if (minorRevision > 0x7fff) {
-            throw new IllegalArgumentException("minorRevision must be less than or equal "
-                + 0x7fff + ".");
-        }
-
-        if (maintenanceRevision > 0x7fff) {
-            throw new IllegalArgumentException("maintenanceRevision must be less than or equal "
-                + 0x7fff + ".");
-        }
-
-        if (updateRevision > 0x7fff) {
-            throw new IllegalArgumentException("updateRevision must be less than or equal "
-                + 0x7fff + ".");
-        }
+        Utils.checkInRangeOfShort(majorRevision, "majorRevision");
+        Utils.checkInRangeOfShort(minorRevision, "minorRevision");
+        Utils.checkInRangeOfShort(maintenanceRevision, "maintenanceRevision");
+        Utils.checkInRangeOfShort(updateRevision, "updateRevision");
 
         this.majorRevision = (short)majorRevision;
         this.minorRevision = (short)minorRevision;

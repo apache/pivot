@@ -190,6 +190,23 @@ public class Utils {
     }
 
     /**
+     * Check that the given value falls within the range of a non-negative "short" value, that is
+     * between 0 and 0x7FFF (inclusive).
+     *
+     * @param value The value to check.
+     * @param argument The optional argument used to describe the value in case it is out of range
+     * (used in the thrown exception).
+     * @throws IllegalArgumentException if the value is out of range.
+     */
+    public static void checkInRangeOfShort(int value, String argument) {
+        if (value < 0 || value > 0x7FFF) {
+            String valueMsg = isNullOrEmpty(argument) ? "value" : argument;
+            throw new IllegalArgumentException(valueMsg + " must be less than or equal "
+                + 0x7FFF + ".");
+        }
+    }
+
+    /**
      * Check that the given {@code index} is between the values of {@code start} and {@code end}.
      *
      * @param index  The candidate index into the range.
