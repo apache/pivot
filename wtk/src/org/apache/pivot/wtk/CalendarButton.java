@@ -25,6 +25,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
 
 /**
@@ -36,31 +37,23 @@ public class CalendarButton extends Button {
         implements CalendarButtonListener {
         @Override
         public void yearChanged(CalendarButton calendarButton, int previousYear) {
-            for (CalendarButtonListener listener : this) {
-                listener.yearChanged(calendarButton, previousYear);
-            }
+            forEach(listener -> listener.yearChanged(calendarButton, previousYear));
         }
 
         @Override
         public void monthChanged(CalendarButton calendarButton, int previousMonth) {
-            for (CalendarButtonListener listener : this) {
-                listener.monthChanged(calendarButton, previousMonth);
-            }
+            forEach(listener -> listener.monthChanged(calendarButton, previousMonth));
         }
 
         @Override
         public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
-            for (CalendarButtonListener listener : this) {
-                listener.localeChanged(calendarButton, previousLocale);
-            }
+            forEach(listener -> listener.localeChanged(calendarButton, previousLocale));
         }
 
         @Override
         public void disabledDateFilterChanged(CalendarButton calendarButton,
             Filter<CalendarDate> previousDisabledDateFilter) {
-            for (CalendarButtonListener listener : this) {
-                listener.disabledDateFilterChanged(calendarButton, previousDisabledDateFilter);
-            }
+            forEach(listener -> listener.disabledDateFilterChanged(calendarButton, previousDisabledDateFilter));
         }
     }
 
@@ -70,9 +63,7 @@ public class CalendarButton extends Button {
         @Override
         public void selectedDateChanged(CalendarButton calendarButton,
             CalendarDate previousSelectedDate) {
-            for (CalendarButtonSelectionListener listener : this) {
-                listener.selectedDateChanged(calendarButton, previousSelectedDate);
-            }
+            forEach(listener -> listener.selectedDateChanged(calendarButton, previousSelectedDate));
         }
     }
 
@@ -81,26 +72,20 @@ public class CalendarButton extends Button {
         @Override
         public void selectedDateKeyChanged(CalendarButton calendarButton,
             String previousSelectedDateKey) {
-            for (CalendarButtonBindingListener listener : this) {
-                listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey);
-            }
+            forEach(listener -> listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey));
         }
 
         @Override
         public void selectedDateBindTypeChanged(CalendarButton calendarButton,
             BindType previousSelectedDateBindType) {
-            for (CalendarButtonBindingListener listener : this) {
-                listener.selectedDateBindTypeChanged(calendarButton, previousSelectedDateBindType);
-            }
+            forEach(listener -> listener.selectedDateBindTypeChanged(calendarButton, previousSelectedDateBindType));
         }
 
         @Override
         public void selectedDateBindMappingChanged(CalendarButton calendarButton,
             Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
-            for (CalendarButtonBindingListener listener : this) {
-                listener.selectedDateBindMappingChanged(calendarButton,
-                    previousSelectedDateBindMapping);
-            }
+            forEach(listener -> listener.selectedDateBindMappingChanged(calendarButton,
+                previousSelectedDateBindMapping));
         }
     }
 
@@ -255,10 +240,6 @@ public class CalendarButton extends Button {
      * @throws IllegalArgumentException if the selected data value is {@code null}.
      */
     public final void setSelectedDate(String selectedDate) {
-        if (selectedDate == null) {
-            throw new IllegalArgumentException("selectedDate is null.");
-        }
-
         setSelectedDate(CalendarDate.decode(selectedDate));
     }
 
@@ -276,9 +257,7 @@ public class CalendarButton extends Button {
      * @throws IllegalArgumentException if the given locale is {@code null}.
      */
     public void setLocale(Locale locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null.");
-        }
+        Utils.checkNull(locale, "locale");
 
         Locale previousLocale = this.locale;
         if (previousLocale != locale) {
@@ -298,9 +277,7 @@ public class CalendarButton extends Button {
      * @throws IllegalArgumentException if the given locale dictionary is {@code null}.
      */
     public void setLocale(Dictionary<String, ?> locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null.");
-        }
+        Utils.checkNull(locale, "locale");
 
         String language = (String) locale.get(LANGUAGE_KEY);
         String country = (String) locale.get(COUNTRY_KEY);
@@ -325,9 +302,7 @@ public class CalendarButton extends Button {
      * @see #setLocale(Dictionary)
      */
     public void setLocale(String locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null.");
-        }
+        Utils.checkNullOrEmpty(locale, "locale");
 
         try {
             setLocale(JSONSerializer.parseMap(locale));
@@ -375,9 +350,7 @@ public class CalendarButton extends Button {
     }
 
     public void setSelectedDateBindType(BindType selectedDateBindType) {
-        if (selectedDateBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedDateBindType, "selectedDateBindType");
 
         BindType previousSelectedDateBindType = this.selectedDateBindType;
 

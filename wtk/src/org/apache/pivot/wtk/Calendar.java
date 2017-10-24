@@ -25,6 +25,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component that allows the user to select a date.
@@ -55,31 +56,23 @@ public class Calendar extends Container {
         CalendarListener {
         @Override
         public void yearChanged(Calendar calendar, int previousYear) {
-            for (CalendarListener listener : this) {
-                listener.yearChanged(calendar, previousYear);
-            }
+            forEach(listener -> listener.yearChanged(calendar, previousYear));
         }
 
         @Override
         public void monthChanged(Calendar calendar, int previousMonth) {
-            for (CalendarListener listener : this) {
-                listener.monthChanged(calendar, previousMonth);
-            }
+            forEach(listener -> listener.monthChanged(calendar, previousMonth));
         }
 
         @Override
         public void localeChanged(Calendar calendar, Locale previousLocale) {
-            for (CalendarListener listener : this) {
-                listener.localeChanged(calendar, previousLocale);
-            }
+            forEach(listener -> listener.localeChanged(calendar, previousLocale));
         }
 
         @Override
         public void disabledDateFilterChanged(Calendar calendar,
             Filter<CalendarDate> previousDisabledDateFilter) {
-            for (CalendarListener listener : this) {
-                listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter);
-            }
+            forEach(listener -> listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter));
         }
     }
 
@@ -88,9 +81,7 @@ public class Calendar extends Container {
 
         @Override
         public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
-            for (CalendarSelectionListener listener : this) {
-                listener.selectedDateChanged(calendar, previousSelectedDate);
-            }
+            forEach(listener -> listener.selectedDateChanged(calendar, previousSelectedDate));
         }
     }
 
@@ -98,25 +89,19 @@ public class Calendar extends Container {
         ListenerList<CalendarBindingListener> implements CalendarBindingListener {
         @Override
         public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
-            for (CalendarBindingListener listener : this) {
-                listener.selectedDateKeyChanged(calendar, previousSelectedDateKey);
-            }
+            forEach(listener -> listener.selectedDateKeyChanged(calendar, previousSelectedDateKey));
         }
 
         @Override
         public void selectedDateBindTypeChanged(Calendar calendar,
             BindType previousSelectedDateBindType) {
-            for (CalendarBindingListener listener : this) {
-                listener.selectedDateBindTypeChanged(calendar, previousSelectedDateBindType);
-            }
+            forEach(listener -> listener.selectedDateBindTypeChanged(calendar, previousSelectedDateBindType));
         }
 
         @Override
         public void selectedDateBindMappingChanged(Calendar calendar,
             SelectedDateBindMapping previousSelectedDateBindMapping) {
-            for (CalendarBindingListener listener : this) {
-                listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping);
-            }
+            forEach(listener -> listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping));
         }
     }
 
@@ -233,10 +218,6 @@ public class Calendar extends Container {
      * @throws IllegalArgumentException if the given date is {@code null}.
      */
     public final void setSelectedDate(String selectedDate) {
-        if (selectedDate == null) {
-            throw new IllegalArgumentException("selectedDate is null.");
-        }
-
         setSelectedDate(CalendarDate.decode(selectedDate));
     }
 
@@ -254,9 +235,7 @@ public class Calendar extends Container {
      * @throws IllegalArgumentException if the locale argument is {@code null}.
      */
     public void setLocale(Locale locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null.");
-        }
+        Utils.checkNull(locale, "locale");
 
         Locale previousLocale = this.locale;
         if (previousLocale != locale) {
@@ -276,9 +255,7 @@ public class Calendar extends Container {
      * @throws IllegalArgumentException if the given locale dictionary is {@code null}.
      */
     public void setLocale(Dictionary<String, ?> locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null.");
-        }
+        Utils.checkNull(locale, "locale");
 
         String language = (String) locale.get(LANGUAGE_KEY);
         String country = (String) locale.get(COUNTRY_KEY);
@@ -303,9 +280,7 @@ public class Calendar extends Container {
      * @see #setLocale(Dictionary)
      */
     public void setLocale(String locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("locale is null.");
-        }
+        Utils.checkNullOrEmpty(locale, "locale");
 
         try {
             setLocale(JSONSerializer.parseMap(locale));
@@ -355,9 +330,7 @@ public class Calendar extends Container {
     }
 
     public void setSelectedDateBindType(BindType selectedDateBindType) {
-        if (selectedDateBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedDateBindType, "selectedDateBindType");
 
         BindType previousSelectedDateBindType = this.selectedDateBindType;
 

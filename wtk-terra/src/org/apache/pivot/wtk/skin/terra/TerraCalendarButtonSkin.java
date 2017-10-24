@@ -28,6 +28,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.Locale;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Bounds;
@@ -147,7 +148,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraCalendarButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -156,7 +157,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         disabledBackgroundColor = theme.getColor(10);
         borderColor = theme.getColor(7);
         disabledBorderColor = theme.getColor(7);
-        padding = new Insets(2, 3, 2, 3);
+        padding = new Insets(4, 6);    // height, width
 
         // Set the derived colors
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -178,6 +179,14 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         calendarPopup.getDecorators().add(dropShadowDecorator);
     }
 
+    private int paddingWidth() {
+        return TRIGGER_WIDTH + padding.getWidth() + 2;
+    }
+
+    private int paddingHeight() {
+        return padding.getHeight() + 2;
+    }
+
     @Override
     public int getPreferredWidth(int height) {
         CalendarButton calendarButton = (CalendarButton) getComponent();
@@ -185,8 +194,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
-        int preferredWidth = dataRenderer.getPreferredWidth(-1) + TRIGGER_WIDTH + padding.left
-            + padding.right + 2;
+        int preferredWidth = dataRenderer.getPreferredWidth(-1) + paddingWidth();
 
         return preferredWidth;
     }
@@ -198,8 +206,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
-        int preferredHeight = dataRenderer.getPreferredHeight(-1) + padding.top + padding.bottom
-            + 2;
+        int preferredHeight = dataRenderer.getPreferredHeight(-1) + paddingHeight();
 
         return preferredHeight;
     }
@@ -212,8 +219,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
         Dimensions contentSize = dataRenderer.getPreferredSize();
-        int preferredWidth = contentSize.width + TRIGGER_WIDTH + padding.left + padding.right + 2;
-        int preferredHeight = contentSize.height + padding.top + padding.bottom + 2;
+        int preferredWidth = contentSize.width + paddingWidth();
+        int preferredHeight = contentSize.height + paddingHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -225,8 +232,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
 
-        int clientWidth = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
-        int clientHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        int clientWidth = Math.max(width - paddingWidth(), 0);
+        int clientHeight = Math.max(height - paddingHeight(), 0);
 
         int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
 
@@ -265,8 +272,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         }
 
         // Paint the background
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         if (!themeIsFlat()) {
             graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
@@ -278,16 +284,15 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
             CORNER_RADIUS));
 
         // Paint the content
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
-        Bounds contentBounds = new Bounds(0, 0, Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(
-            height - 1, 0));
+        Bounds contentBounds = new Bounds(0, 0,
+            Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(height - 1, 0));
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
         dataRenderer.setSize(
-            Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
-            Math.max(contentBounds.height - (padding.top + padding.bottom + 2) + 1, 0));
+            Math.max(contentBounds.width - paddingWidth() + 1, 0),
+            Math.max(contentBounds.height - paddingHeight() + 1, 0));
 
         Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
@@ -295,8 +300,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         if (!themeIsFlat()) {
             // Paint the border
@@ -318,8 +322,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
                 height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
         // Paint the trigger
         GeneralPath triggerIconShape = new GeneralPath(Path2D.WIND_EVEN_ODD);
@@ -349,27 +352,17 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -378,24 +371,18 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -404,24 +391,18 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -430,9 +411,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -441,15 +420,11 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -458,9 +433,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
         disabledBevelColor = disabledBackgroundColor;
@@ -468,15 +441,11 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
-
-        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor, "disabledBackgroundColor"));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -485,9 +454,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         calendarBorder.getStyles().put("color", borderColor);
@@ -495,15 +462,11 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -512,24 +475,18 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setDisabledBorderColor(Color disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
-
-        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor, "disabledBorderColor"));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
@@ -538,19 +495,13 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -559,18 +510,10 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 

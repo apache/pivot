@@ -31,6 +31,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonGroup;
@@ -135,8 +136,8 @@ public class TerraCalendarSkin extends CalendarSkin {
 
             Dimensions preferredSize = dataRenderer.getPreferredSize();
 
-            return new Dimensions(preferredSize.width + padding * 2, preferredSize.height + padding
-                * 2);
+            return new Dimensions(preferredSize.width + padding * 2,
+                                  preferredSize.height + padding * 2);
         }
 
         @Override
@@ -351,8 +352,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         public void render(Object item, Spinner spinner) {
             Calendar calendar = (Calendar) getComponent();
 
-            // Since we're only rendering the month, the year and day do not
-            // matter here
+            // Since we're only rendering the month, the year and day do not matter here
             CalendarDate date = new CalendarDate(2000, ((Integer) item).intValue(), 0);
 
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", calendar.getLocale());
@@ -401,7 +401,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
     @SuppressWarnings("unused")
     public TerraCalendarSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -436,7 +436,8 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         // Year spinner
         yearSpinner = new Spinner();
-        yearSpinner.setSpinnerData(new NumericSpinnerData(0, Short.MAX_VALUE));
+        yearSpinner.setSpinnerData(
+            new NumericSpinnerData(CalendarDate.MIN_CALENDAR_YEAR, CalendarDate.MAX_CALENDAR_YEAR));
 
         yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
             @Override
@@ -504,7 +505,8 @@ public class TerraCalendarSkin extends CalendarSkin {
                     // result of the user toggling the date button (as opposed
                     // to changing the month or year), clear the selection
                     if (selectedDate == null
-                        || (selectedDate.year == yearSpinner.getSelectedIndex() && selectedDate.month == monthSpinner.getSelectedIndex())) {
+                        || (selectedDate.year == yearSpinner.getSelectedIndex()
+                        && selectedDate.month == monthSpinner.getSelectedIndex())) {
                         calendar.setSelectedDate((CalendarDate) null);
                     }
                 } else {
@@ -583,8 +585,8 @@ public class TerraCalendarSkin extends CalendarSkin {
         int width = getWidth();
         Bounds monthYearRowBounds = calendarTablePane.getRowBounds(0);
         graphics.setColor(highlightBackgroundColor);
-        graphics.fillRect(monthYearRowBounds.x, monthYearRowBounds.y, monthYearRowBounds.width,
-            monthYearRowBounds.height);
+        graphics.fillRect(monthYearRowBounds.x, monthYearRowBounds.y,
+            monthYearRowBounds.width, monthYearRowBounds.height);
 
         Bounds labelRowBounds = calendarTablePane.getRowBounds(1);
 
@@ -626,7 +628,8 @@ public class TerraCalendarSkin extends CalendarSkin {
         Locale locale = calendar.getLocale();
         GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
         gregorianCalendar.set(year, month, 1);
-        int firstIndex = (7 + gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK) - gregorianCalendar.getFirstDayOfWeek()) % 7;
+        int firstIndex = (7 + gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
+            - gregorianCalendar.getFirstDayOfWeek()) % 7;
         int lastIndex = firstIndex
             + gregorianCalendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
 
@@ -718,7 +721,8 @@ public class TerraCalendarSkin extends CalendarSkin {
     private static int getCellIndex(int year, int month, int day, Locale locale) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar(locale);
         gregorianCalendar.set(year, month, 1);
-        int firstDay = ((gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK) - gregorianCalendar.getFirstDayOfWeek()) + 7) % 7;
+        int firstDay = ((gregorianCalendar.get(java.util.Calendar.DAY_OF_WEEK)
+            - gregorianCalendar.getFirstDayOfWeek()) + 7) % 7;
         int cellIndex = firstDay + day;
 
         return cellIndex;
@@ -729,9 +733,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
 
@@ -748,18 +750,10 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -768,20 +762,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getDisabledColor() {
@@ -789,20 +777,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public Color getSelectionColor() {
@@ -810,20 +792,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
-
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -831,9 +807,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         selectionBevelColor = TerraTheme.brighten(selectionBackgroundColor);
@@ -841,11 +815,7 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
-
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
     }
 
     public Color getHighlightColor() {
@@ -853,20 +823,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setHighlightColor(Color highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
+        Utils.checkNull(highlightColor, "highlightColor");
 
         this.highlightColor = highlightColor;
         repaintComponent();
     }
 
     public final void setHighlightColor(String highlightColor) {
-        if (highlightColor == null) {
-            throw new IllegalArgumentException("highlightColor is null.");
-        }
-
-        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor));
+        setHighlightColor(GraphicsUtilities.decodeColor(highlightColor, "highlightColor"));
     }
 
     public Color getHighlightBackgroundColor() {
@@ -874,20 +838,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
+        Utils.checkNull(highlightBackgroundColor, "highlightBackgroundColor");
 
         this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
     }
 
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
     }
 
     public Color getDividerColor() {
@@ -895,20 +853,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setDividerColor(Color dividerColor) {
-        if (dividerColor == null) {
-            throw new IllegalArgumentException("dividerColor is null.");
-        }
+        Utils.checkNull(dividerColor, "dividerColor");
 
         this.dividerColor = dividerColor;
         repaintComponent();
     }
 
     public final void setDividerColor(String dividerColor) {
-        if (dividerColor == null) {
-            throw new IllegalArgumentException("dividerColor is null.");
-        }
-
-        setDividerColor(GraphicsUtilities.decodeColor(dividerColor));
+        setDividerColor(GraphicsUtilities.decodeColor(dividerColor, "dividerColor"));
     }
 
     public int getPadding() {
@@ -916,18 +868,14 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public void setPadding(int padding) {
-        if (padding < 0) {
-            throw new IllegalArgumentException("padding is negative.");
-        }
+        Utils.checkNonNegative(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         setPadding(padding.intValue());
     }

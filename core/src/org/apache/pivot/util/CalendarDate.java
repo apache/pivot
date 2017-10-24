@@ -220,8 +220,14 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
     private static final int[] MONTH_LENGTHS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-    private static final int GREGORIAN_CUTOVER_YEAR = 1582;
     private static final Pattern PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
+
+    private static final int GREGORIAN_CUTOVER_YEAR = 1582;
+
+    /** Minimum supported year (must be greater or equal). */
+    public static final int MIN_CALENDAR_YEAR = GREGORIAN_CUTOVER_YEAR + 1;
+    /** Maximum supported year (must be less or equal). */
+    public static final int MAX_CALENDAR_YEAR = 9999;
 
     /**
      * Creates a new <tt>CalendarDate</tt> representing the current day in the
@@ -264,9 +270,11 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @param year The year field. (e.g. <tt>2008</tt>)
      * @param month The month field, 0-based. (e.g. <tt>2</tt> for March)
      * @param day The day of the month, 0-based. (e.g. <tt>14</tt> for the 15th)
+     * @see #MIN_CALENDAR_YEAR
+     * @see #MAX_CALENDAR_YEAR
      */
     public CalendarDate(int year, int month, int day) {
-        if (year <= GREGORIAN_CUTOVER_YEAR || year > 9999) {
+        if (year < MIN_CALENDAR_YEAR || year > MAX_CALENDAR_YEAR) {
             throw new IllegalArgumentException("Invalid year: " + year);
         }
 
@@ -501,6 +509,8 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @return The {@code CalendarDate} corresponding to the input string.
      */
     public static CalendarDate decode(String value) {
+        Utils.checkNullOrEmpty(value, "calendarDate");
+
         Matcher matcher = PATTERN.matcher(value);
 
         if (!matcher.matches()) {
