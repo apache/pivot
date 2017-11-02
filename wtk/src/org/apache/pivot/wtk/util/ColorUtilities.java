@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.util;
 import java.awt.Color;
 
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.CSSColor;
 
 
 /**
@@ -165,4 +166,36 @@ public final class ColorUtilities {
         Theme theme = Theme.getTheme();
         return setTransparencyInColor(theme.getColor(colorIndex), transparency);
     }
+
+    /**
+     * Returns a modified version of the given {@link CSSColor}.
+     * @param original The original color.
+     * @param transparency The desired transparency (alpha) to set.
+     * @return An color value updated from the original with the given transparency.
+     */
+    public static Color setTransparencyInColor(final CSSColor original, final int transparency) {
+        return setTransparencyInColor(original.getColor(), transparency);
+    }
+
+    /**
+     * @return An encoded value for the given color in the form of:
+     * <tt>#RRGGBB</tt> or <tt>0xRRGGBBTT</tt> (where <tt>"TT"</tt> is the
+     * alpha transparency value of the color, if not solid),
+     * either of which is suitable for lookup in the
+     * {@link org.apache.pivot.wtk.GraphicsUtilities#decodeColor(String)} method.
+     * @param color The input color to convert.
+     */
+    public static String toStringValue(final Color color) {
+        int alpha = color.getAlpha();
+        if (alpha != 255) {
+            // A translucent color
+            return String.format("0x%02X%02X%02X%02X",
+                color.getRed(), color.getGreen(), color.getBlue(), alpha);
+        } else {
+            // A solid color
+            return String.format("#%02X%02X%02X",
+                color.getRed(), color.getGreen(), color.getBlue());
+        }
+    }
+
 }

@@ -209,19 +209,39 @@ public enum CSSColor {
      */
     public static CSSColor fromString(String colorName) {
         String lowerName = colorName.toLowerCase(Locale.ENGLISH);
-        CSSColor color = colorMap.get(lowerName);
+        CSSColor color = colorNameMap.get(lowerName);
         if (color == null) {
             throw new IllegalArgumentException("Incorrect Color format.  Color name \"" + colorName + "\" is not valid.");
         }
         return color;
     }
 
-    private static Map<String, CSSColor> colorMap;
+    /**
+     * @return The enum value of the given color value (solid color)
+     * if it can be found.  Any transparency in the given color is stripped out
+     * before a match is attempted.
+     * @param color The solid color to match with one of our values.
+     * @throws IllegalArgumentException if the color value cannot be found.
+     */
+    public static CSSColor fromColor(Color color) {
+        Color solidColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+        CSSColor cssColor = colorValueMap.get(solidColor);
+        if (cssColor == null) {
+            throw new IllegalArgumentException("Incorrect Color value.  " + color.toString() + " does not match any CSS color.");
+        }
+        return cssColor;
+    }
+
+
+    private static Map<String, CSSColor> colorNameMap;
+    private static Map<Color, CSSColor> colorValueMap;
 
     static {
-        colorMap = new HashMap<>();
+        colorNameMap = new HashMap<>();
+        colorValueMap = new HashMap<>();
         for (CSSColor color : values()) {
-            colorMap.put(color.getColorName(), color);
+            colorNameMap.put(color.getColorName(), color);
+            colorValueMap.put(color.getColor(), color);
         }
     }
 }
