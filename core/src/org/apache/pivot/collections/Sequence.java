@@ -543,4 +543,26 @@ public interface Sequence<T> {
      */
     int getLength();
 
+    /**
+     * Add all the elements of the given collection to this sequence
+     * using the {@link #add} method of this interface.
+     *
+     * @param c The other collection to add to this sequence.
+     */
+    default void addAll(Collection<T> c) {
+        c.forEach (item -> add(item));
+    }
+
+    /**
+     * Add all the elements of the given array to this sequence
+     * using the {@link #add} method of this interface.
+     *
+     * @param array The array to add to this sequence.
+     */
+    default void addAll(T[] array) {
+        for (T item : array) {
+            add(item);
+        }
+    }
+
 }
