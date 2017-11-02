@@ -18,6 +18,10 @@ package org.apache.pivot.wtk.content;
 
 import java.awt.Color;
 
+import org.apache.pivot.collections.ArrayList;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Utils;
+import org.apache.pivot.wtk.CSSColor;
 import org.apache.pivot.wtk.GraphicsUtilities;
 
 /**
@@ -40,24 +44,28 @@ public class ColorItem {
         setName(name);
     }
 
+    public ColorItem(String color) {
+        setColor(GraphicsUtilities.decodeColor(color));
+        setName(color);
+    }
+
+    public ColorItem(CSSColor cssColor) {
+        setColor(cssColor.getColor());
+        setName(cssColor.toString());
+    }
+
     public Color getColor() {
         return color;
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
     }
 
     public void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public String getName() {
@@ -84,5 +92,23 @@ public class ColorItem {
     @Override
     public int hashCode() {
         return color.hashCode();
+    }
+
+    /** The cached list of all the color values (cached because it's a big list). */
+    private static List<ColorItem> allColors = null;
+
+    /**
+     * @return A list of color items encompassing all the {@link CSSColor} values.
+     * @see #allColors
+     */
+    public static List<ColorItem> allCSSColors() {
+        if (allColors == null) {
+            CSSColor[] colorValues = CSSColor.values();
+            allColors = new ArrayList<>(colorValues.length);
+            for (CSSColor color : colorValues) {
+                allColors.add(new ColorItem(color));
+            }
+        }
+        return allColors;
     }
 }
