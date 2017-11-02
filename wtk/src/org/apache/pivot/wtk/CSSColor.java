@@ -211,7 +211,7 @@ public enum CSSColor {
         String lowerName = colorName.toLowerCase(Locale.ENGLISH);
         CSSColor color = colorMap.get(lowerName);
         if (color == null) {
-            throw new IllegalArgumentException("Color name \"" + colorName + "\" is not valid.");
+            throw new IllegalArgumentException("Incorrect Color format.  Color name \"" + colorName + "\" is not valid.");
         }
         return color;
     }

@@ -200,40 +200,37 @@ public final class GraphicsUtilities {
     public static Color decodeColor(final String value, String argument) throws NumberFormatException {
         Utils.checkNullOrEmpty(value, argument == null ? "color" : argument);
 
-        String valueLowercase = value.toLowerCase(Locale.ENGLISH);
-
         Color color;
-        if (valueLowercase.startsWith("0x")) {
-            valueLowercase = valueLowercase.substring(2);
-            if (valueLowercase.length() != 8) {
+        if (value.startsWith("0x") || value.startsWith("0X")) {
+            String digits = value.substring(2);
+            if (digits.length() != 8) {
                 throw new IllegalArgumentException(
                     "Incorrect Color format.  Expecting exactly 8 digits after the '0x' prefix.");
             }
 
-            int rgb = Integer.parseInt(valueLowercase.substring(0, 6), 16);
-            float alpha = Integer.parseInt(valueLowercase.substring(6, 8), 16) / 255f;
+            int rgb = Integer.parseInt(digits.substring(0, 6), 16);
+            float alpha = Integer.parseInt(digits.substring(6, 8), 16) / 255f;
 
             color = getColor(rgb, alpha);
-        } else if (valueLowercase.startsWith("#")) {
-            valueLowercase = valueLowercase.substring(1);
-            if (valueLowercase.length() != 6) {
+        } else if (value.startsWith("#")) {
+            String digits = value.substring(1);
+            if (digits.length() != 6) {
                 throw new IllegalArgumentException(
                     "Incorrect Color format.  Expecting exactly 6 digits after the '#' prefix.");
             }
 
-            int rgb = Integer.parseInt(valueLowercase, 16);
+            int rgb = Integer.parseInt(digits, 16);
             float alpha = 1.0f;
 
             color = getColor(rgb, alpha);
         } else {
-            try {
-                color = (Color) Color.class.getDeclaredField(valueLowercase).get(null);
-            } catch (Exception exception) {
-                // PIVOT-985: new fix:  use the new CSSColor lookup for the name, which
-                // has the spelling variants already included in the X11/CSS3 list.
-                // This method will throw if the value doesn't match.
-                color = CSSColor.fromString(valueLowercase).getColor();
-            }
+            // PIVOT-985: new fix:  use the new CSSColor lookup for the name, which
+            // has the spelling variants already included in the X11/CSS3 list, as well
+            // as all the standard Java Color names, so we can do this without doing
+            // the expensive reflection on the Color class. Also handles case-insensitive
+            // lookup.
+            // This method will throw if the name isn't valid.
+            color = CSSColor.fromString(value).getColor();
         }
 
         return color;
