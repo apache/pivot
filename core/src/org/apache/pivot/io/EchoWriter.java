@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Writer that echoes characters to the console as they are written.
  */
@@ -32,13 +34,8 @@ public class EchoWriter extends Writer {
     }
 
     public EchoWriter(Writer out, Writer echo) {
-        if (out == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (echo == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(out, "out");
+        Utils.checkNull(echo, "echo");
 
         this.out = out;
         this.echo = echo;

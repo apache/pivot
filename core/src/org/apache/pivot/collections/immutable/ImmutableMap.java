@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Unmodifiable implementation of the {@link Map} interface.
@@ -33,9 +34,7 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     private MapListenerList<K, V> mapListeners = new MapListenerList<>();
 
     public ImmutableMap(Map<K, V> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("map is null.");
-        }
+        Utils.checkNull(map, "map");
 
         this.map = map;
     }

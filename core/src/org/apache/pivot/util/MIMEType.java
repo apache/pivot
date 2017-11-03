@@ -81,9 +81,7 @@ public class MIMEType implements Dictionary<String, String>, Iterable<String> {
     }
 
     public static MIMEType decode(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value is null.");
-        }
+        Utils.checkNull(value, "value");
 
         MIMEType mimeType;
 

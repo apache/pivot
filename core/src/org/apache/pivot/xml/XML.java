@@ -18,6 +18,7 @@ package org.apache.pivot.xml;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Utils;
 
 /**
  * Contains utility methods for working with XML structures.
@@ -35,17 +36,8 @@ public class XML {
      * @return The matching element, or {@code null} if no such element exists.
      */
     public static Element getElement(Element root, String path) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
-
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
-
-        if (path.length() == 0) {
-            throw new IllegalArgumentException("path is empty.");
-        }
+        Utils.checkNull(root, "root");
+        Utils.checkNullOrEmpty(path, "path");
 
         ArrayList<String> pathComponents = new ArrayList<>(path.split("/"));
         Element current = root;

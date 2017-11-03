@@ -18,6 +18,8 @@ package org.apache.pivot.text;
 
 import java.text.CharacterIterator;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Character iterator that is backed by a {@link java.lang.CharSequence}.
  */
@@ -42,19 +44,12 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
 
     public CharSequenceCharacterIterator(CharSequence charSequence, int beginIndex, int endIndex,
         int index) {
-        if (charSequence == null) {
-            throw new IllegalArgumentException("charSequence may not be null");
-        }
+        Utils.checkNull(charSequence, "charSequence");
 
         int endIndexUpdated = endIndex;
 
         if (endIndex == -1) {
             endIndexUpdated = charSequence.length();
-        }
-
-        if (beginIndex > endIndexUpdated) {
-            throw new IllegalArgumentException("beginIndex > endIndex, " + beginIndex + ">"
-                + endIndexUpdated);
         }
 
         if (beginIndex < 0) {
@@ -66,14 +61,7 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
                 + endIndexUpdated + ">" + charSequence.length());
         }
 
-        if (index < beginIndex) {
-            throw new IndexOutOfBoundsException("(index < beginIndex, " + index + "<" + beginIndex);
-        }
-
-        if (index > endIndexUpdated) {
-            throw new IndexOutOfBoundsException("(index > endIndex, " + index + ">"
-                + endIndexUpdated);
-        }
+        Utils.checkIndexBounds(index, beginIndex, endIndexUpdated);
 
         this.charSequence = charSequence;
         this.beginIndex = beginIndex;
@@ -124,9 +112,7 @@ public final class CharSequenceCharacterIterator implements CharacterIterator {
 
     @Override
     public char setIndex(int index) {
-        if (index < beginIndex || index > endIndex) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(index, beginIndex, endIndex);
 
         this.index = index;
 

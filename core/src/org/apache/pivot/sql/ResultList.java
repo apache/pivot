@@ -31,6 +31,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link List} interface that is backed by a instance of
@@ -68,16 +69,18 @@ public class ResultList implements List<Map<String, Object>> {
         }
 
         public Field(String columnName, String key, Class<?> type) {
-            if (columnName == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNull(columnName, "columnName");
 
-            if (!(type == null || type == Boolean.class || type == Boolean.TYPE
-                || type == Byte.class || type == Byte.TYPE || type == Short.class
-                || type == Short.TYPE || type == Integer.class || type == Integer.TYPE
-                || type == Long.class || type == Long.TYPE || type == Float.class
-                || type == Float.TYPE || type == Double.class || type == Double.TYPE
-                || type == Date.class || type == String.class)) {
+            if (!(type == null
+               || type == Boolean.class || type == Boolean.TYPE
+               || type == Byte.class || type == Byte.TYPE
+               || type == Short.class || type == Short.TYPE
+               || type == Integer.class || type == Integer.TYPE
+               || type == Long.class || type == Long.TYPE
+               || type == Float.class || type == Float.TYPE
+               || type == Double.class || type == Double.TYPE
+               || type == String.class
+               || type == Date.class)) {
                 throw new IllegalArgumentException(type.getName() + " is not a supported type.");
             }
 
@@ -169,9 +172,7 @@ public class ResultList implements List<Map<String, Object>> {
     private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<>();
 
     public ResultList(ResultSet resultSet) {
-        if (resultSet == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(resultSet, "resultSet");
 
         this.resultSet = resultSet;
     }
@@ -185,17 +186,13 @@ public class ResultList implements List<Map<String, Object>> {
     }
 
     public void setFields(Sequence<Field> fields) {
-        if (fields == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(fields, "fields");
 
         this.fields = new ArrayList<>(fields);
     }
 
     public void setFields(Field... fields) {
-        if (fields == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(fields, "fields");
 
         setFields(new ArrayAdapter<>(fields));
     }

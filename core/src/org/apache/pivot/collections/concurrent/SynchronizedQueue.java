@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Queue;
 import org.apache.pivot.collections.QueueListener;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Synchronized implementation of the {@link Queue} interface.
@@ -54,9 +55,7 @@ public class SynchronizedQueue<T> implements Queue<T> {
     private SynchronizedQueueListenerList<T> queueListeners = new SynchronizedQueueListenerList<>();
 
     public SynchronizedQueue(Queue<T> queue) {
-        if (queue == null) {
-            throw new IllegalArgumentException("queue cannot be null.");
-        }
+        Utils.checkNull(queue, "queue");
 
         this.queue = queue;
     }

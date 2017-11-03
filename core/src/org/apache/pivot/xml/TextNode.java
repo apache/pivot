@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.xml;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Class representing an XML text node.
  */
@@ -23,9 +25,7 @@ public class TextNode extends Node {
     private String text;
 
     public TextNode(String text) {
-        if (text == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(text, "text");
 
         this.text = text;
     }

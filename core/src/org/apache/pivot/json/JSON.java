@@ -22,6 +22,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.adapter.MapAdapter;
+import org.apache.pivot.util.Utils;
 
 /**
  * Contains utility methods for working with JSON or JSON-like data structures.
@@ -59,9 +60,7 @@ public class JSON {
      */
     @SuppressWarnings("unchecked")
     public static <T> T get(Object root, Sequence<String> keys) {
-        if (keys == null) {
-            throw new IllegalArgumentException("keys is null.");
-        }
+        Utils.checkNull(keys, "keys");
 
         Object value = root;
 
@@ -72,9 +71,9 @@ public class JSON {
 
             String key = keys.get(i);
 
-            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ? new MapAdapter<>(
-                (java.util.Map<String, T>) value)
-                : (value instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) value)
+            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ?
+                new MapAdapter<>((java.util.Map<String, T>) value)
+                : (value instanceof Map ? ((Map<String, T>) value)
                     : new BeanAdapter(value)));
             if (adapter.containsKey(key)) {
                 value = adapter.get(key);
@@ -133,9 +132,7 @@ public class JSON {
      */
     @SuppressWarnings("unchecked")
     public static <T> T put(Object root, String path, T value) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
+        Utils.checkNull(root, "root");
 
         Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
@@ -148,9 +145,9 @@ public class JSON {
             throw new IllegalArgumentException("Invalid path.");
         }
 
-        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<>(
-            (java.util.Map<String, T>) parent)
-            : (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent)
+        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ?
+            new MapAdapter<>((java.util.Map<String, T>) parent)
+            : (parent instanceof Map ? ((Map<String, T>) parent)
                 : new BeanAdapter(parent)));
 
         Object previousValue;
@@ -179,9 +176,7 @@ public class JSON {
      */
     @SuppressWarnings("unchecked")
     public static <T> T remove(Object root, String path) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
+        Utils.checkNull(root, "root");
 
         Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
@@ -218,9 +213,7 @@ public class JSON {
      */
     @SuppressWarnings("unchecked")
     public static <T> boolean containsKey(Object root, String path) {
-        if (root == null) {
-            throw new IllegalArgumentException("root is null.");
-        }
+        Utils.checkNull(root, "root");
 
         Sequence<String> keys = parse(path);
         if (keys.getLength() == 0) {
@@ -234,9 +227,9 @@ public class JSON {
         if (parent == null) {
             containsKey = false;
         } else {
-            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ? new MapAdapter<>(
-                (java.util.Map<String, T>) parent)
-                : (parent instanceof org.apache.pivot.collections.Map ? ((org.apache.pivot.collections.Map<String, T>) parent)
+            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ?
+                new MapAdapter<>((java.util.Map<String, T>) parent)
+                : (parent instanceof Map ? ((Map<String, T>) parent)
                     : new BeanAdapter(parent)));
             containsKey = adapter.containsKey(key);
 
@@ -263,9 +256,7 @@ public class JSON {
      * @return The sequence of keys corresponding to the given path.
      */
     public static Sequence<String> parse(String path) {
-        if (path == null) {
-            throw new IllegalArgumentException("path is null.");
-        }
+        Utils.checkNull(path, "path");
 
         ArrayList<String> keys = new ArrayList<>();
 

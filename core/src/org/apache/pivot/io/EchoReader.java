@@ -21,6 +21,8 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Reader that echoes characters to the console as they are read.
  */
@@ -33,13 +35,8 @@ public class EchoReader extends Reader {
     }
 
     public EchoReader(Reader in, Writer echo) {
-        if (in == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (echo == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(in, "in");
+        Utils.checkNull(echo, "echo");
 
         this.in = in;
         this.echo = echo;
