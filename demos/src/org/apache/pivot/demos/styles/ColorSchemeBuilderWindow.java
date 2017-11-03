@@ -49,6 +49,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 public class ColorSchemeBuilderWindow extends Window implements Bindable {
     @BXML
@@ -131,9 +132,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     // Update the palette
                     int offset = iLocal * 3;
                     for (int j = 0; j < 3; j++) {
-                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(
-                            j);
-                        colorPaletteCell.getStyles().put("backgroundColor", Integer.valueOf(offset + j));
+                        Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(j);
+                        colorPaletteCell.getStyles().putInt("backgroundColor", offset + j);
                     }
 
                     // Reload the sample part of the content (but not all the application),
@@ -204,13 +204,13 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             row.add(createColorPaletteCell(offset + 2));
         }
 
-        colorPaletteTablePane.getStyles().put("horizontalSpacing", Integer.valueOf(4));
-        colorPaletteTablePane.getStyles().put("verticalSpacing", Integer.valueOf(4));
+        colorPaletteTablePane.getStyles().putInt("horizontalSpacing", 4);
+        colorPaletteTablePane.getStyles().putInt("verticalSpacing", 4);
     }
 
     private static Component createColorPaletteCell(int index) {
         Border border = new Border();
-        border.getStyles().put("backgroundColor", Integer.valueOf(index));
+        border.getStyles().putInt("backgroundColor", index);
 
         Theme theme = Theme.getTheme();
 
@@ -218,10 +218,10 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         label.setText(Integer.toString(index));
         label.getStyles().put("font", "{size:'80%'}");
         label.getStyles().put("backgroundColor", theme.getColor(4));
-        label.getStyles().put("padding", Integer.valueOf(1));
+        label.getStyles().putInt("padding", 1);
 
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().put("padding", Integer.valueOf(2));
+        boxPane.getStyles().putInt("padding", 2);
         boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
         boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
 
@@ -251,11 +251,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
         for (int i = 0; i < numberOfPaletteColors; i++) {
             ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
             Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X",
-                Integer.valueOf(color.getRed()),
-                Integer.valueOf(color.getGreen()),
-                Integer.valueOf(color.getBlue()))
-            );
+            colors.add(ColorUtilities.toStringValue(color));
         }
 
         LocalManifest clipboardContent = new LocalManifest();
@@ -271,18 +267,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
     private void resetPalette() {
         int numberOfPaletteColors = getNumberOfPaletteColors();
-        ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
         for (int i = 0; i < numberOfPaletteColors; i++) {
-            ColorChooserButton colorChooserButton = colorChooserButtons.get(i);
-
-            colorChooserButton.setSelectedColor(themeOriginalColors.get(i));
-
-            Color color = colorChooserButton.getSelectedColor();
-            colors.add(String.format("#%02X%02X%02X",
-                Integer.valueOf(color.getRed()),
-                Integer.valueOf(color.getGreen()),
-                Integer.valueOf(color.getBlue()))
-            );
+            colorChooserButtons.get(i).setSelectedColor(themeOriginalColors.get(i));
         }
 
         reloadContent();
