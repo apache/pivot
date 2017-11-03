@@ -27,6 +27,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Node class representing an XML element.
@@ -112,9 +113,7 @@ public class Element extends Node implements List<Node> {
          * @throws IllegalArgumentException if the value is {@code null}.
          */
         public void setValue(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNull(value, "value");
 
             String previousValue = this.value;
             if (previousValue != value) {
@@ -151,9 +150,10 @@ public class Element extends Node implements List<Node> {
             final int prime = 31;
             int result = 1;
             if (namespacePrefix != null) {
-                result = 31 * result + namespacePrefix.hashCode();
+                result = prime * result + namespacePrefix.hashCode();
             }
             result = prime * result + localName.hashCode();
+            result = prime * result + value.hashCode();
             return result;
         }
 
@@ -201,18 +201,16 @@ public class Element extends Node implements List<Node> {
          */
         @Override
         public void insert(Attribute attribute, int index) {
-            if (attribute == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNull(attribute, "attribute");
 
             if (attribute.getElement() != null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Attribute already belongs to another Element.");
             }
 
             String attributeName = attribute.getName();
             if (attributeMap.containsKey(attributeName)) {
                 throw new IllegalArgumentException("Attribute \"" + attributeName
-                    + "\" already exists.");
+                    + "\" already exists in this element.");
             }
 
             attributes.insert(attribute, index);
@@ -339,9 +337,7 @@ public class Element extends Node implements List<Node> {
          */
         @Override
         public String put(String prefix, String uri) {
-            if (uri == null) {
-                throw new IllegalArgumentException("uri is null.");
-            }
+            Utils.checkNull(uri, "uri");
 
             boolean update = containsKey(prefix);
             String previousURI = namespaces.put(prefix, uri);
@@ -398,51 +394,37 @@ public class Element extends Node implements List<Node> {
         ElementListener {
         @Override
         public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
-            for (ElementListener listener : this) {
-                listener.defaultNamespaceURIChanged(element, previousDefaultNamespaceURI);
-            }
+            forEach(listener -> listener.defaultNamespaceURIChanged(element, previousDefaultNamespaceURI));
         }
 
         @Override
         public void namespaceAdded(Element element, String prefix) {
-            for (ElementListener listener : this) {
-                listener.namespaceAdded(element, prefix);
-            }
+            forEach(listener -> listener.namespaceAdded(element, prefix));
         }
 
         @Override
         public void namespaceUpdated(Element element, String prefix, String previousURI) {
-            for (ElementListener listener : this) {
-                listener.namespaceUpdated(element, prefix, previousURI);
-            }
+            forEach(listener -> listener.namespaceUpdated(element, prefix, previousURI));
         }
 
         @Override
         public void namespaceRemoved(Element element, String prefix, String uri) {
-            for (ElementListener listener : this) {
-                listener.namespaceRemoved(element, prefix, uri);
-            }
+            forEach(listener -> listener.namespaceRemoved(element, prefix, uri));
         }
 
         @Override
         public void attributeInserted(Element element, int index) {
-            for (ElementListener listener : this) {
-                listener.attributeInserted(element, index);
-            }
+            forEach(listener -> listener.attributeInserted(element, index));
         }
 
         @Override
         public void attributesRemoved(Element element, int index, Sequence<Attribute> attributes) {
-            for (ElementListener listener : this) {
-                listener.attributesRemoved(element, index, attributes);
-            }
+            forEach(listener -> listener.attributesRemoved(element, index, attributes));
         }
 
         @Override
         public void attributeValueChanged(Attribute attribute, String previousValue) {
-            for (ElementListener listener : this) {
-                listener.attributeValueChanged(attribute, previousValue);
-            }
+            forEach(listener -> listener.attributeValueChanged(attribute, previousValue));
         }
     }
 
@@ -681,10 +663,6 @@ public class Element extends Node implements List<Node> {
      */
     @Override
     public int add(Node node) {
-        if (node.getParent() != null) {
-            throw new IllegalArgumentException();
-        }
-
         int index = getLength();
         insert(node, index);
 
@@ -700,7 +678,7 @@ public class Element extends Node implements List<Node> {
     @Override
     public void insert(Node node, int index) {
         if (node.getParent() != null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Node already belongs to another parent.");
         }
 
         nodes.insert(node, index);
@@ -925,13 +903,7 @@ public class Element extends Node implements List<Node> {
         }
 
         // Validate local name
-        if (localName == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (localName.length() == 0) {
-            throw new IllegalArgumentException("Local name is empty.");
-        }
+        Utils.checkNullOrEmpty(localName, "localName");
 
         char c = localName.charAt(0);
         if (!Character.isLetter(c) && c != '_') {
