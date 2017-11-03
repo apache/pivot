@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Implementation of the {@link Serializer} interface that reads and writes a
  * byte array.
@@ -32,16 +34,14 @@ import java.io.OutputStream;
 public class ByteArraySerializer implements Serializer<byte[]> {
     public static final String MIME_TYPE = "application/octet-stream";
 
-    public static final int BUFFER_SIZE = 2048;
+    public static final int BUFFER_SIZE = 16384;
 
     /**
      * Reads a byte array from an input stream.
      */
     @Override
     public byte[] readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         byte[] result = null;
 
@@ -72,13 +72,8 @@ public class ByteArraySerializer implements Serializer<byte[]> {
     @Override
     public void writeObject(byte[] bytes, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (bytes == null) {
-            throw new IllegalArgumentException("byte array is null.");
-        }
-
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(bytes, "byte array");
+        Utils.checkNull(outputStream, "outputStream");
 
         try {
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);

@@ -40,6 +40,7 @@ import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from and
@@ -87,7 +88,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     public static final String CSV_EXTENSION = "csv";
     public static final String MIME_TYPE = "text/csv";
-    public static final int BUFFER_SIZE = 2048;
+    public static final int BUFFER_SIZE = 16384;
 
     public CSVSerializer() {
         this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_ITEM_TYPE);
@@ -102,13 +103,8 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     public CSVSerializer(Charset charset, Type itemType) {
-        if (charset == null) {
-            throw new IllegalArgumentException("charset is null.");
-        }
-
-        if (itemType == null) {
-            throw new IllegalArgumentException("itemType is null.");
-        }
+        Utils.checkNull(charset, "charset");
+        Utils.checkNull(itemType, "itemType");
 
         this.charset = charset;
         this.itemType = itemType;
@@ -146,9 +142,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @throws IllegalArgumentException for {@code null} input.
      */
     public void setKeys(Sequence<String> keys) {
-        if (keys == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(keys, "keys");
 
         this.keys = new ArrayList<>(keys);
     }
@@ -160,9 +154,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @throws IllegalArgumentException for {@code null} input.
      */
     public void setKeys(String... keys) {
-        if (keys == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(keys, "keys");
 
         setKeys(new ArrayAdapter<>(keys));
     }
@@ -219,9 +211,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     @SuppressWarnings("resource")
     @Override
     public List<?> readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
         if (verbose) {
@@ -245,9 +235,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @throws IllegalArgumentException for {@code null} input reader.
      */
     public List<?> readObject(Reader reader) throws IOException, SerializationException {
-        if (reader == null) {
-            throw new IllegalArgumentException("reader is null.");
-        }
+        Utils.checkNull(reader, "reader");
 
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
 
@@ -419,8 +407,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             value = valueBuilder.toString();
 
             // Move to the next character after ',' (don't automatically advance
-            // to
-            // the next line)
+            // to the next line)
             if (c == ',') {
                 c = reader.read();
             }
@@ -448,13 +435,8 @@ public class CSVSerializer implements Serializer<List<?>> {
     @Override
     public void writeObject(List<?> items, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (items == null) {
-            throw new IllegalArgumentException("items is null.");
-        }
-
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(items, "items");
+        Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
             BUFFER_SIZE);
@@ -477,13 +459,8 @@ public class CSVSerializer implements Serializer<List<?>> {
      */
     @SuppressWarnings("unchecked")
     public void writeObject(List<?> items, Writer writer) throws IOException {
-        if (items == null) {
-            throw new IllegalArgumentException("items is null.");
-        }
-
-        if (writer == null) {
-            throw new IllegalArgumentException("writer is null.");
-        }
+        Utils.checkNull(items, "items");
+        Utils.checkNull(writer, "writer");
 
         if (writeKeys) {
             // Write keys as first line

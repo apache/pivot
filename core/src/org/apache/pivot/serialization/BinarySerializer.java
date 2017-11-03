@@ -22,6 +22,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Implementation of the {@link Serializer} interface that uses Java's internal
  * serialization mechanism to read and write values. All values in the object
@@ -36,9 +38,7 @@ public class BinarySerializer implements Serializer<Object> {
      */
     @Override
     public Object readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         Object object = null;
 
@@ -58,13 +58,8 @@ public class BinarySerializer implements Serializer<Object> {
     @Override
     public void writeObject(Object object, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (object == null) {
-            throw new IllegalArgumentException("object is null.");
-        }
-
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(object, "object");
+        Utils.checkNull(outputStream, "outputStream");
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(object);

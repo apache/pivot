@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Implementation of the {@link Serializer} interface that reads data from and
  * writes data to Java Strings.  The text data is interpreted using either the
@@ -39,16 +41,14 @@ public class StringSerializer implements Serializer<String> {
 
     public static final String TEXT_EXTENSION = "txt";
     public static final String MIME_TYPE = "text/plain";
-    public static final int BUFFER_SIZE = 2048;
+    public static final int BUFFER_SIZE = 16384;
 
     public StringSerializer() {
         this(StandardCharsets.UTF_8);
     }
 
     public StringSerializer(Charset charset) {
-        if (charset == null) {
-            throw new IllegalArgumentException("charset is null.");
-        }
+        Utils.checkNull(charset, "charset");
 
         this.charset = charset;
     }
@@ -67,9 +67,7 @@ public class StringSerializer implements Serializer<String> {
      */
     @Override
     public String readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         String result = null;
 
@@ -103,13 +101,8 @@ public class StringSerializer implements Serializer<String> {
     @Override
     public void writeObject(String text, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (text == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
-
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(text, "text");
+        Utils.checkNull(outputStream, "outputStream");
 
         try {
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);

@@ -23,6 +23,7 @@ import java.util.Properties;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.adapter.MapAdapter;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Serializer} interface that reads data from and
@@ -41,9 +42,7 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
      */
     @Override
     public Map<?, ?> readObject(InputStream inputStream) throws IOException, SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         Properties properties = new Properties();
         properties.load(inputStream);
@@ -63,13 +62,8 @@ public class PropertiesSerializer implements Serializer<Map<?, ?>> {
     @Override
     public void writeObject(Map<?, ?> object, OutputStream outputStream) throws IOException,
         SerializationException {
-        if (object == null) {
-            throw new IllegalArgumentException("object is null.");
-        }
-
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(object, "object");
+        Utils.checkNull(outputStream, "outputStream");
 
         Map<Object, Object> map = (Map<Object, Object>) object;
 
