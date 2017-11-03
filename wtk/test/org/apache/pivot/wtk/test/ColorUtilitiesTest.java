@@ -26,6 +26,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import org.apache.pivot.wtk.CSSColor;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.util.ColorUtilities;
 
 
@@ -59,6 +60,22 @@ public class ColorUtilitiesTest {
             assertEquals(resultOrange.getColor(), Color.ORANGE);
         } catch (IllegalArgumentException iae) {
             fail("Didn't expect ORANGE not to match!");
+        }
+
+        Color lightGray = Color.LIGHT_GRAY;
+        Color darkGray = Color.DARK_GRAY;
+        assertEquals(lightGray, CSSColor.LightGray.getColor());
+        assertEquals(lightGray, CSSColor.LightGrey.getColor());
+        assertEquals(darkGray, CSSColor.DarkGray.getColor());
+        assertEquals(darkGray, CSSColor.DarkGrey.getColor());
+        CSSColor lightGrey = CSSColor.fromString("lightgrey");
+        assertEquals(lightGrey.getColor(), lightGray);
+
+        try {
+            Color lg2 = GraphicsUtilities.decodeColor("lightGray");
+            assertEquals(lg2, lightGray);
+        } catch (IllegalArgumentException iae) {
+            fail("Decode of \"lightGray\" should succeed!");
         }
 
         int transparency = -1;
