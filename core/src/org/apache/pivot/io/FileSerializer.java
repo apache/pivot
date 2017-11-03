@@ -54,11 +54,11 @@ public class FileSerializer implements Serializer<File> {
      * specific directory.
      *
      * @param tempFileDirectory The directory in which to store temporary
-     * folders.
+     * files (can be {@code null} to use the system default location).
      */
     public FileSerializer(File tempFileDirectory) {
         if (tempFileDirectory != null && !tempFileDirectory.isDirectory()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Temp file directory '" + tempFileDirectory + "' is not a directory.");
         }
 
         this.tempFileDirectory = tempFileDirectory;
