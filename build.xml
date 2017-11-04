@@ -506,7 +506,7 @@ limitations under the License.
             <packageset dir="wtk/src" includes="**/*"/>
             <packageset dir="wtk-terra/src" includes="**/*"/>
 
-            <link href="http://download.oracle.com/javase/8/docs/api"/>
+            <link href="https://docs.oracle.com/javase/8/docs/api/"/>
             <link href="http://download.oracle.com/javaee/7/api/"/>
         </javadoc>
     </target>
