@@ -221,7 +221,7 @@ public class Utils {
             throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
         if (index < start || index > end) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + ","
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds [" + start + ","
                 + end + "].");
         }
     }
@@ -236,7 +236,7 @@ public class Utils {
      */
     public static void checkZeroBasedIndex(int index, int size) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds [0," + (size-1) + "].");
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds [0," + (size-1) + "].");
         }
     }
 
@@ -261,12 +261,12 @@ public class Utils {
                 + ") < 0");
         }
         if (index < start) {
-            throw new IndexOutOfBoundsException("index " + index + " out of bounds [" + start + ","
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds [" + start + ","
                 + end + "].");
         }
 
         if (index + count > end) {
-            throw new IndexOutOfBoundsException("index + count " + index + "," + count
+            throw new IndexOutOfBoundsException("Index + count " + index + "," + count
                 + " out of bounds [" + start + "," + end + "].");
         }
     }
