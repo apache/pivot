@@ -49,37 +49,27 @@ public interface List<T> extends Sequence<T>, Collection<T> {
         ListListener<T> {
         @Override
         public void itemInserted(List<T> list, int index) {
-            for (ListListener<T> listener : this) {
-                listener.itemInserted(list, index);
-            }
+            forEach(listener -> listener.itemInserted(list, index));
         }
 
         @Override
         public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
-            for (ListListener<T> listener : this) {
-                listener.itemsRemoved(list, index, items);
-            }
+            forEach(listener -> listener.itemsRemoved(list, index, items));
         }
 
         @Override
         public void itemUpdated(List<T> list, int index, T previousItem) {
-            for (ListListener<T> listener : this) {
-                listener.itemUpdated(list, index, previousItem);
-            }
+            forEach(listener -> listener.itemUpdated(list, index, previousItem));
         }
 
         @Override
         public void listCleared(List<T> list) {
-            for (ListListener<T> listener : this) {
-                listener.listCleared(list);
-            }
+            forEach(listener -> listener.listCleared(list));
         }
 
         @Override
         public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
-            for (ListListener<T> listener : this) {
-                listener.comparatorChanged(list, previousComparator);
-            }
+            forEach(listener -> listener.comparatorChanged(list, previousComparator));
         }
     }
 

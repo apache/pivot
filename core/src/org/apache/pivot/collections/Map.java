@@ -31,37 +31,27 @@ public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
         MapListener<K, V> {
         @Override
         public void valueAdded(Map<K, V> map, K key) {
-            for (MapListener<K, V> listener : this) {
-                listener.valueAdded(map, key);
-            }
+            forEach(listener -> listener.valueAdded(map, key));
         }
 
         @Override
         public void valueRemoved(Map<K, V> map, K key, V value) {
-            for (MapListener<K, V> listener : this) {
-                listener.valueRemoved(map, key, value);
-            }
+            forEach(listener -> listener.valueRemoved(map, key, value));
         }
 
         @Override
         public void valueUpdated(Map<K, V> map, K key, V previousValue) {
-            for (MapListener<K, V> listener : this) {
-                listener.valueUpdated(map, key, previousValue);
-            }
+            forEach(listener -> listener.valueUpdated(map, key, previousValue));
         }
 
         @Override
         public void mapCleared(Map<K, V> map) {
-            for (MapListener<K, V> listener : this) {
-                listener.mapCleared(map);
-            }
+            forEach(listener -> listener.mapCleared(map));
         }
 
         @Override
         public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
-            for (MapListener<K, V> listener : this) {
-                listener.comparatorChanged(map, previousComparator);
-            }
+            forEach(listener -> listener.comparatorChanged(map, previousComparator));
         }
     }
 

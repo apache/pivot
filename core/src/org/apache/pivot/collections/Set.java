@@ -31,30 +31,22 @@ public interface Set<E> extends Group<E>, Collection<E> {
         SetListener<E> {
         @Override
         public void elementAdded(Set<E> set, E element) {
-            for (SetListener<E> listener : this) {
-                listener.elementAdded(set, element);
-            }
+            forEach(listener -> listener.elementAdded(set, element));
         }
 
         @Override
         public void elementRemoved(Set<E> set, E element) {
-            for (SetListener<E> listener : this) {
-                listener.elementRemoved(set, element);
-            }
+            forEach(listener -> listener.elementRemoved(set, element));
         }
 
         @Override
         public void setCleared(Set<E> set) {
-            for (SetListener<E> listener : this) {
-                listener.setCleared(set);
-            }
+            forEach(listener -> listener.setCleared(set));
         }
 
         @Override
         public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
-            for (SetListener<E> listener : this) {
-                listener.comparatorChanged(set, previousComparator);
-            }
+            forEach(listener -> listener.comparatorChanged(set, previousComparator));
         }
     }
 

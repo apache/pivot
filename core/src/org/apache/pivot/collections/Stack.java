@@ -32,30 +32,22 @@ public interface Stack<T> extends Collection<T> {
         StackListener<T> {
         @Override
         public void itemPushed(Stack<T> stack, T item) {
-            for (StackListener<T> listener : this) {
-                listener.itemPushed(stack, item);
-            }
+            forEach(listener -> listener.itemPushed(stack, item));
         }
 
         @Override
         public void itemPopped(Stack<T> stack, T item) {
-            for (StackListener<T> listener : this) {
-                listener.itemPopped(stack, item);
-            }
+            forEach(listener -> listener.itemPopped(stack, item));
         }
 
         @Override
         public void stackCleared(Stack<T> stack) {
-            for (StackListener<T> listener : this) {
-                listener.stackCleared(stack);
-            }
+            forEach(listener -> listener.stackCleared(stack));
         }
 
         @Override
         public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
-            for (StackListener<T> listener : this) {
-                listener.comparatorChanged(stack, previousComparator);
-            }
+            forEach(listener -> listener.comparatorChanged(stack, previousComparator));
         }
     }
 

@@ -32,30 +32,22 @@ public interface Queue<T> extends Collection<T> {
         QueueListener<T> {
         @Override
         public void itemEnqueued(Queue<T> queue, T item) {
-            for (QueueListener<T> listener : this) {
-                listener.itemEnqueued(queue, item);
-            }
+            forEach(listener -> listener.itemEnqueued(queue, item));
         }
 
         @Override
         public void itemDequeued(Queue<T> queue, T item) {
-            for (QueueListener<T> listener : this) {
-                listener.itemDequeued(queue, item);
-            }
+            forEach(listener -> listener.itemDequeued(queue, item));
         }
 
         @Override
         public void queueCleared(Queue<T> queue) {
-            for (QueueListener<T> listener : this) {
-                listener.queueCleared(queue);
-            }
+            forEach(listener -> listener.queueCleared(queue));
         }
 
         @Override
         public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
-            for (QueueListener<T> listener : this) {
-                listener.comparatorChanged(queue, previousComparator);
-            }
+            forEach(listener -> listener.comparatorChanged(queue, previousComparator));
         }
     }
 
