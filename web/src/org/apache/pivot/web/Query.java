@@ -35,6 +35,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Abstract base class for web queries. A web query is an asynchronous operation
@@ -80,50 +81,6 @@ public abstract class Query<V> extends IOTask<V> {
         public static final int HTTP_VERSION_NOT_SUPPORTED = 505;
     }
 
-    /**
-     * Query listener list.
-     */
-    private static class QueryListenerList<V> extends ListenerList<QueryListener<V>> implements
-        QueryListener<V> {
-        @Override
-        public synchronized void add(QueryListener<V> listener) {
-            super.add(listener);
-        }
-
-        @Override
-        public synchronized void remove(QueryListener<V> listener) {
-            super.remove(listener);
-        }
-
-        @Override
-        public synchronized void connected(Query<V> query) {
-            for (QueryListener<V> listener : this) {
-                listener.connected(query);
-            }
-        }
-
-        @Override
-        public synchronized void requestSent(Query<V> query) {
-            for (QueryListener<V> listener : this) {
-                listener.requestSent(query);
-            }
-        }
-
-        @Override
-        public synchronized void responseReceived(Query<V> query) {
-            for (QueryListener<V> listener : this) {
-                listener.responseReceived(query);
-            }
-        }
-
-        @Override
-        public synchronized void failed(Query<V> query) {
-            for (QueryListener<V> listener : this) {
-                listener.failed(query);
-            }
-        }
-    }
-
     private URL locationContext = null;
     private HostnameVerifier hostnameVerifier = null;
     private Proxy proxy = null;
@@ -137,7 +94,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     private Serializer<?> serializer = new JSONSerializer();
 
-    private QueryListenerList<V> queryListeners = new QueryListenerList<>();
+    private QueryListener.List<V> queryListeners = new QueryListener.List<>();
 
     public static final int DEFAULT_PORT = -1;
 
@@ -307,9 +264,7 @@ public abstract class Query<V> extends IOTask<V> {
      * @throws IllegalArgumentException if the input is {@code null}.
      */
     public void setSerializer(Serializer<?> serializer) {
-        if (serializer == null) {
-            throw new IllegalArgumentException("Serializer is null.");
-        }
+        Utils.checkNull(serializer, "serializer");
 
         this.serializer = serializer;
     }

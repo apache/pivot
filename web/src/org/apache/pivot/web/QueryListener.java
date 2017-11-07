@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.web;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Query listener interface.
  */
@@ -42,6 +44,33 @@ public interface QueryListener<V> {
         @Override
         public void failed(Query<V> query) {
             // empty block
+        }
+    }
+
+    /**
+     * Query listener list.
+     */
+    public static class List<V>
+            extends ListenerList<QueryListener<V>>
+            implements QueryListener<V> {
+        @Override
+        public synchronized void connected(Query<V> query) {
+            forEach(listener -> listener.connected(query));
+        }
+
+        @Override
+        public synchronized void requestSent(Query<V> query) {
+            forEach(listener -> listener.requestSent(query));
+        }
+
+        @Override
+        public synchronized void responseReceived(Query<V> query) {
+            forEach(listener -> listener.responseReceived(query));
+        }
+
+        @Override
+        public synchronized void failed(Query<V> query) {
+            forEach(listener -> listener.failed(query));
         }
     }
 
