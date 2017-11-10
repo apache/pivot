@@ -17,6 +17,7 @@
 package org.apache.pivot.web;
 
 import org.apache.pivot.util.Base64;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Authentication} interface supporting the HTTP <a
@@ -27,13 +28,8 @@ public class BasicAuthentication implements Authentication {
     private String password;
 
     public BasicAuthentication(String username, String password) {
-        if (username == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (password == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(username, "username");
+        Utils.checkNull(password, "password");
 
         this.username = username;
         this.password = password;
