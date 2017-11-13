@@ -81,6 +81,23 @@ public abstract class Action {
         }
     }
 
+    public static class Callback implements Runnable {
+        private Action action;
+        private Component source;
+
+        public Callback(Action action, Component source) {
+            Utils.checkNull(action, "action");
+
+            this.action = action;
+            this.source = source;
+        }
+
+        @Override
+        public void run() {
+            action.perform(source);
+        }
+    }
+
     private boolean enabled = true;
 
     private ActionListener.List actionListeners = new ActionListener.List();

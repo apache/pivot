@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Abstract base class for button components.
@@ -144,44 +145,32 @@ public abstract class Button extends Component {
         ButtonListener {
         @Override
         public void buttonDataChanged(Button button, Object previousButtonData) {
-            for (ButtonListener listener : this) {
-                listener.buttonDataChanged(button, previousButtonData);
-            }
+            forEach(listener -> listener.buttonDataChanged(button, previousButtonData));
         }
 
         @Override
         public void dataRendererChanged(Button button, DataRenderer previousDataRenderer) {
-            for (ButtonListener listener : this) {
-                listener.dataRendererChanged(button, previousDataRenderer);
-            }
+            forEach(listener -> listener.dataRendererChanged(button, previousDataRenderer));
         }
 
         @Override
         public void actionChanged(Button button, Action previousAction) {
-            for (ButtonListener listener : this) {
-                listener.actionChanged(button, previousAction);
-            }
+            forEach(listener -> listener.actionChanged(button, previousAction));
         }
 
         @Override
         public void toggleButtonChanged(Button button) {
-            for (ButtonListener listener : this) {
-                listener.toggleButtonChanged(button);
-            }
+            forEach(listener -> listener.toggleButtonChanged(button));
         }
 
         @Override
         public void triStateChanged(Button button) {
-            for (ButtonListener listener : this) {
-                listener.triStateChanged(button);
-            }
+            forEach(listener -> listener.triStateChanged(button));
         }
 
         @Override
         public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
-            for (ButtonListener listener : this) {
-                listener.buttonGroupChanged(button, previousButtonGroup);
-            }
+            forEach(listener -> listener.buttonGroupChanged(button, previousButtonGroup));
         }
     }
 
@@ -189,9 +178,7 @@ public abstract class Button extends Component {
         implements ButtonStateListener {
         @Override
         public void stateChanged(Button button, Button.State previousState) {
-            for (ButtonStateListener listener : this) {
-                listener.stateChanged(button, previousState);
-            }
+            forEach(listener -> listener.stateChanged(button, previousState));
         }
     }
 
@@ -199,9 +186,7 @@ public abstract class Button extends Component {
         implements ButtonPressListener {
         @Override
         public void buttonPressed(Button button) {
-            for (ButtonPressListener listener : this) {
-                listener.buttonPressed(button);
-            }
+            forEach(listener -> listener.buttonPressed(button));
         }
     }
 
@@ -209,68 +194,50 @@ public abstract class Button extends Component {
         implements ButtonBindingListener {
         @Override
         public void buttonDataKeyChanged(Button button, String previousButtonDataKey) {
-            for (ButtonBindingListener listener : this) {
-                listener.buttonDataKeyChanged(button, previousButtonDataKey);
-            }
+            forEach(listener -> listener.buttonDataKeyChanged(button, previousButtonDataKey));
         }
 
         @Override
         public void buttonDataBindTypeChanged(Button button, BindType previousDataBindType) {
-            for (ButtonBindingListener listener : this) {
-                listener.buttonDataBindTypeChanged(button, previousDataBindType);
-            }
+            forEach(listener -> listener.buttonDataBindTypeChanged(button, previousDataBindType));
         }
 
         @Override
         public void buttonDataBindMappingChanged(Button button,
             Button.ButtonDataBindMapping previousButtonDataBindMapping) {
-            for (ButtonBindingListener listener : this) {
-                listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping);
-            }
+            forEach(listener -> listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping));
         }
 
         @Override
         public void selectedKeyChanged(Button button, String previousSelectedKey) {
-            for (ButtonBindingListener listener : this) {
-                listener.selectedKeyChanged(button, previousSelectedKey);
-            }
+            forEach(listener -> listener.selectedKeyChanged(button, previousSelectedKey));
         }
 
         @Override
         public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType) {
-            for (ButtonBindingListener listener : this) {
-                listener.selectedBindTypeChanged(button, previousSelectedBindType);
-            }
+            forEach(listener -> listener.selectedBindTypeChanged(button, previousSelectedBindType));
         }
 
         @Override
         public void selectedBindMappingChanged(Button button,
             Button.SelectedBindMapping previousSelectedBindMapping) {
-            for (ButtonBindingListener listener : this) {
-                listener.selectedBindMappingChanged(button, previousSelectedBindMapping);
-            }
+            forEach(listener -> listener.selectedBindMappingChanged(button, previousSelectedBindMapping));
         }
 
         @Override
         public void stateKeyChanged(Button button, String previousStateKey) {
-            for (ButtonBindingListener listener : this) {
-                listener.stateKeyChanged(button, previousStateKey);
-            }
+            forEach(listener -> listener.stateKeyChanged(button, previousStateKey));
         }
 
         @Override
         public void stateBindTypeChanged(Button button, BindType previousStateBindType) {
-            for (ButtonBindingListener listener : this) {
-                listener.stateBindTypeChanged(button, previousStateBindType);
-            }
+            forEach(listener -> listener.stateBindTypeChanged(button, previousStateBindType));
         }
 
         @Override
         public void stateBindMappingChanged(Button button,
             Button.StateBindMapping previousStateBindMapping) {
-            for (ButtonBindingListener listener : this) {
-                listener.stateBindMappingChanged(button, previousStateBindMapping);
-            }
+            forEach(listener -> listener.stateBindMappingChanged(button, previousStateBindMapping));
         }
     }
 
@@ -291,6 +258,9 @@ public abstract class Button extends Component {
     private boolean triState = false;
 
     private ButtonGroup buttonGroup = null;
+
+    private boolean queuedAction = false;
+    private int queuedActionDelay = -1;
 
     private String selectedKey = null;
     private BindType selectedBindType = BindType.BOTH;
@@ -335,9 +305,7 @@ public abstract class Button extends Component {
     }
 
     public void setDataRenderer(DataRenderer dataRenderer) {
-        if (dataRenderer == null) {
-            throw new IllegalArgumentException("dataRenderer is null.");
-        }
+        Utils.checkNull(dataRenderer, "dataRenderer");
 
         DataRenderer previousDataRenderer = this.dataRenderer;
 
@@ -390,9 +358,7 @@ public abstract class Button extends Component {
      * exist.
      */
     public void setAction(String actionID) {
-        if (actionID == null) {
-            throw new IllegalArgumentException("actionID is null");
-        }
+        Utils.checkNull(actionID, "actionID");
 
         Action actionLocal = Action.getNamedActions().get(actionID);
         if (actionLocal == null) {
@@ -419,7 +385,16 @@ public abstract class Button extends Component {
         buttonPressListeners.buttonPressed(this);
 
         if (action != null) {
-            action.perform(this);
+            if (queuedAction) {
+                Runnable actionCallback = new Action.Callback(action, this);
+                if (queuedActionDelay <= 0) {
+                    ApplicationContext.queueCallback(actionCallback);
+                } else {
+                    ApplicationContext.scheduleCallback(actionCallback, (long)queuedActionDelay);
+                }
+            } else {
+                action.perform(this);
+            }
         }
     }
 
@@ -452,9 +427,7 @@ public abstract class Button extends Component {
      * @param state The new button selection state.
      */
     public void setState(State state) {
-        if (state == null) {
-            throw new IllegalArgumentException("state is null.");
-        }
+        Utils.checkNull(state, "state");
 
         if (!toggleButton) {
             throw new IllegalStateException("Button is not in toggle mode.");
@@ -540,6 +513,46 @@ public abstract class Button extends Component {
     }
 
     /**
+     * @return Whether or not actions are executed immediately or are queued
+     * for later on {@link #press}.
+     */
+    public boolean isQueuedAction() {
+        return queuedAction;
+    }
+
+    /**
+     * Sets the "queued action" flag so that actions invoked on button press
+     * are queued to the {@link ApplicationContext} callback queue to be run
+     * "later" instead of being invoked now.
+     *
+     * @param flag The new value of the queued action flag for this button.
+     */
+    public void setQueuedAction(boolean flag) {
+        this.queuedAction = flag;
+    }
+
+    /**
+     * @return The (millisecond) delay to use when queuing actions for later.
+     */
+    public int getQueuedActionDelay() {
+        return queuedActionDelay;
+    }
+
+    /**
+     * Set the delay to be used when {@link #setQueuedAction} is set to <tt>true</tt>.
+     * <p> Typically this delay would be a bit longer than the popup window fade
+     * transition (for instance), or similar timing.
+     *
+     * @param delay The delay value (in milliseconds) to use when queuing the action,
+     * or <tt>0</tt> to use no delay.
+     */
+    public void setQueuedActionDelay(int delay) {
+        Utils.checkNonNegative(delay, "delay");
+
+        this.queuedActionDelay = delay;
+    }
+
+    /**
      * Returns the button's button group.
      *
      * @return The group to which the button belongs, or <tt>null</tt> if the
@@ -611,9 +624,7 @@ public abstract class Button extends Component {
     }
 
     public void setButtonDataBindType(BindType buttonDataBindType) {
-        if (buttonDataBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(buttonDataBindType, "buttonDataBindType");
 
         BindType previousButtonDataBindType = this.buttonDataBindType;
 
@@ -665,9 +676,7 @@ public abstract class Button extends Component {
     }
 
     public void setSelectedBindType(BindType selectedBindType) {
-        if (selectedBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedBindType, "selectedBindType");
 
         BindType previousSelectedBindType = this.selectedBindType;
 
@@ -708,9 +717,7 @@ public abstract class Button extends Component {
     }
 
     public void setStateBindType(BindType stateBindType) {
-        if (stateBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(stateBindType, "stateBindType");
 
         BindType previousStateBindType = this.stateBindType;
 
