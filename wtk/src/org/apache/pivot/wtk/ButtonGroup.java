@@ -27,34 +27,10 @@ import org.apache.pivot.util.ListenerList;
  * Class representing a toggle button group.
  */
 public class ButtonGroup implements Group<Button>, Iterable<Button> {
-    private static class ButtonGroupListenerList extends ListenerList<ButtonGroupListener>
-        implements ButtonGroupListener {
-        @Override
-        public void buttonAdded(ButtonGroup buttonGroup, Button button) {
-            for (ButtonGroupListener listener : this) {
-                listener.buttonAdded(buttonGroup, button);
-            }
-        }
-
-        @Override
-        public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
-            for (ButtonGroupListener listener : this) {
-                listener.buttonRemoved(buttonGroup, button);
-            }
-        }
-
-        @Override
-        public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-            for (ButtonGroupListener listener : this) {
-                listener.selectionChanged(buttonGroup, previousSelection);
-            }
-        }
-    }
-
     private HashSet<Button> buttons = new HashSet<>();
     private Button selection = null;
 
-    private ButtonGroupListenerList buttonGroupListeners = new ButtonGroupListenerList();
+    private ButtonGroupListener.List buttonGroupListeners = new ButtonGroupListener.List();
 
     @Override
     public boolean add(Button button) {
@@ -111,7 +87,7 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
 
     public void setSelection(Button selection) {
         if (selection != null && selection.getButtonGroup() != this) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Button to be selected does not belong to this ButtonGroup.");
         }
 
         Button previousSelection = this.selection;
@@ -129,6 +105,14 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
 
             buttonGroupListeners.selectionChanged(this, previousSelection);
         }
+    }
+
+    /**
+     * Clear the currently selected item in this group, making all items
+     * unselected.  This is a shortcut for {@code setSelection(null)}.
+     */
+    public void clearSelection() {
+        setSelection(null);
     }
 
     @Override

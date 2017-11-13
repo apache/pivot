@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Button group listener interface.
  */
@@ -41,12 +44,33 @@ public interface ButtonGroupListener {
     }
 
     /**
+     * The button group listener list.
+     */
+    public static class List extends ListenerList<ButtonGroupListener>
+        implements ButtonGroupListener {
+        @Override
+        public void buttonAdded(ButtonGroup buttonGroup, Button button) {
+            forEach(listener -> listener.buttonAdded(buttonGroup, button));
+        }
+
+        @Override
+        public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
+            forEach(listener -> listener.buttonRemoved(buttonGroup, button));
+        }
+
+        @Override
+        public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+            forEach(listener -> listener.selectionChanged(buttonGroup, previousSelection));
+        }
+    }
+
+    /**
      * Called when a button has been added to a button group.
      *
      * @param buttonGroup The button group that has changed.
      * @param button      The button that was added to the group.
      */
-    public void buttonAdded(ButtonGroup buttonGroup, Button button);
+    void buttonAdded(ButtonGroup buttonGroup, Button button);
 
     /**
      * Called when a button has been removed from a button group.
@@ -54,7 +78,7 @@ public interface ButtonGroupListener {
      * @param buttonGroup The button group that has changed.
      * @param button      The button that was removed from the group.
      */
-    public void buttonRemoved(ButtonGroup buttonGroup, Button button);
+    void buttonRemoved(ButtonGroup buttonGroup, Button button);
 
     /**
      * Called when a button group's selection has changed.
@@ -62,5 +86,6 @@ public interface ButtonGroupListener {
      * @param buttonGroup       The button group that changed.
      * @param previousSelection The previously selected button in the group.
      */
-    public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection);
+    void selectionChanged(ButtonGroup buttonGroup, Button previousSelection);
+
 }
