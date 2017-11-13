@@ -15,6 +15,8 @@ package org.apache.pivot.wtk.validation;
 
 import java.math.BigInteger;
 import java.util.Locale;
+import org.apache.pivot.wtk.Limits;
+
 
 /**
  * A validator for an <tt>int</tt> value limited to a range.
@@ -48,6 +50,17 @@ public class IntRangeValidator extends IntValidator {
         this.maxValue = maxValue;
     }
 
+    public IntRangeValidator(Limits limits) {
+        this.minValue = limits.minimum;
+        this.maxValue = limits.maximum;
+    }
+
+    public IntRangeValidator(Locale locale, Limits limits) {
+        super(locale);
+        this.minValue = limits.minimum;
+        this.maxValue = limits.maximum;
+    }
+
     public int getMinimum() {
         return minValue;
     }
@@ -62,6 +75,11 @@ public class IntRangeValidator extends IntValidator {
 
     public void setMaximum(int maxValue) {
         this.maxValue = maxValue;
+    }
+
+    public void setLimits(Limits limits) {
+        this.minValue = limits.minimum;
+        this.maxValue = limits.maximum;
     }
 
     @Override
