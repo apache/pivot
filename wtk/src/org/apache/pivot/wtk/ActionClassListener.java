@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Action class listener interface.
  */
@@ -37,6 +40,27 @@ public interface ActionClassListener {
         @Override
         public void actionRemoved(String id, Action action) {
             // empty block
+        }
+    }
+
+    /**
+     * Action class listener list.
+     */
+    public static class List extends ListenerList<ActionClassListener>
+        implements ActionClassListener {
+        @Override
+        public void actionAdded(String id) {
+            forEach(listener -> listener.actionAdded(id));
+        }
+
+        @Override
+        public void actionUpdated(String id, Action previousAction) {
+            forEach(listener -> listener.actionUpdated(id, previousAction));
+        }
+
+        @Override
+        public void actionRemoved(String id, Action action) {
+            forEach(listener -> listener.actionRemoved(id, action));
         }
     }
 

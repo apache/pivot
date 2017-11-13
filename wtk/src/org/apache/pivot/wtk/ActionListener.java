@@ -16,10 +16,24 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Action listener interface.
  */
 public interface ActionListener {
+    /**
+     * Action listener list.
+     */
+    public static class List extends ListenerList<ActionListener> implements
+        ActionListener {
+        @Override
+        public void enabledChanged(Action action) {
+            forEach(listener -> listener.enabledChanged(action));
+        }
+    }
+
     /**
      * Called when an action's enabled state has changed.
      *

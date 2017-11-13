@@ -22,6 +22,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Abstract base class for "actions". Actions are common application behaviors
@@ -43,9 +44,7 @@ public abstract class Action {
 
         @Override
         public Action put(String id, Action action) {
-            if (action == null) {
-                throw new IllegalArgumentException("action is null.");
-            }
+            Utils.checkNull(action, "action");
 
             boolean update = containsKey(id);
             Action previousAction = namedActions.put(id, action);
@@ -82,48 +81,14 @@ public abstract class Action {
         }
     }
 
-    private static class ActionListenerList extends ListenerList<ActionListener> implements
-        ActionListener {
-        @Override
-        public void enabledChanged(Action action) {
-            for (ActionListener listener : this) {
-                listener.enabledChanged(action);
-            }
-        }
-    }
-
-    private static class ActionClassListenerList extends ListenerList<ActionClassListener>
-        implements ActionClassListener {
-        @Override
-        public void actionAdded(String id) {
-            for (ActionClassListener listener : this) {
-                listener.actionAdded(id);
-            }
-        }
-
-        @Override
-        public void actionUpdated(String id, Action previousAction) {
-            for (ActionClassListener listener : this) {
-                listener.actionUpdated(id, previousAction);
-            }
-        }
-
-        @Override
-        public void actionRemoved(String id, Action action) {
-            for (ActionClassListener listener : this) {
-                listener.actionRemoved(id, action);
-            }
-        }
-    }
-
     private boolean enabled = true;
 
-    private ActionListenerList actionListeners = new ActionListenerList();
+    private ActionListener.List actionListeners = new ActionListener.List();
 
     private static HashMap<String, Action> namedActions = new HashMap<>();
     private static NamedActionDictionary namedActionDictionary = new NamedActionDictionary();
 
-    private static ActionClassListenerList actionClassListeners = new ActionClassListenerList();
+    private static ActionClassListener.List actionClassListeners = new ActionClassListener.List();
 
     public Action() {
         this(true);

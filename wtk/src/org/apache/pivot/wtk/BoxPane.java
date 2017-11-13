@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Container that arranges components in a line, either vertically or
@@ -47,18 +48,8 @@ import org.apache.pivot.util.ListenerList;
  * have their heights set accordingly.
  */
 public class BoxPane extends Container {
-    private static class BoxPaneListenerList extends ListenerList<BoxPaneListener> implements
-        BoxPaneListener {
-        @Override
-        public void orientationChanged(BoxPane boxPane) {
-            for (BoxPaneListener listener : this) {
-                listener.orientationChanged(boxPane);
-            }
-        }
-    }
-
     private Orientation orientation = null;
-    private BoxPaneListenerList boxPaneListeners = new BoxPaneListenerList();
+    private BoxPaneListener.List boxPaneListeners = new BoxPaneListener.List();
 
     public BoxPane() {
         this(Orientation.HORIZONTAL);
@@ -75,9 +66,7 @@ public class BoxPane extends Container {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
             this.orientation = orientation;

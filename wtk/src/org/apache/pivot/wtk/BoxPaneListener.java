@@ -16,10 +16,24 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Box pane listener interface.
  */
 public interface BoxPaneListener {
+    /**
+     * Box pane listener list.
+     */
+    public static class List extends ListenerList<BoxPaneListener> implements
+        BoxPaneListener {
+        @Override
+        public void orientationChanged(BoxPane boxPane) {
+            forEach(listener -> listener.orientationChanged(boxPane));
+        }
+    }
+
     /**
      * Called when a box pane's orientation has changed.
      *
