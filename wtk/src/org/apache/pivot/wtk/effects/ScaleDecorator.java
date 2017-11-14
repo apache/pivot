@@ -21,9 +21,11 @@ import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -45,10 +47,20 @@ public class ScaleDecorator implements Decorator {
 
     /**
      * Creates a new <tt>ScaleDecorator</tt> with the default <tt>scaleX</tt>
-     * <tt>scaleY</tt> values of <tt>1</tt>.
+     * <tt>scaleY</tt> values of <tt>1.0f</tt>.
      */
     public ScaleDecorator() {
         this(1f, 1f);
+    }
+
+    /**
+     * Creates a new <tt>ScaleDecorator</tt> with a "square" scaling of the given
+     * value in both directions.
+     *
+     * @param scale The scale to use for both X and Y directions.
+     */
+    public ScaleDecorator(float scale) {
+        this(scale, scale);
     }
 
     /**
@@ -89,9 +101,7 @@ public class ScaleDecorator implements Decorator {
      * @param scaleX The amount to scale the component's x-axis
      */
     public void setScaleX(Number scaleX) {
-        if (scaleX == null) {
-            throw new IllegalArgumentException("scaleX is null.");
-        }
+        Utils.checkNull(scaleX, "scaleX");
 
         setScaleX(scaleX.floatValue());
     }
@@ -123,9 +133,7 @@ public class ScaleDecorator implements Decorator {
      * @param scaleY The amount to scale the component's y-axis
      */
     public void setScaleY(Number scaleY) {
-        if (scaleY == null) {
-            throw new IllegalArgumentException("scaleY is null.");
-        }
+        Utils.checkNull(scaleY, "scaleY");
 
         setScaleY(scaleY.floatValue());
     }
@@ -138,13 +146,8 @@ public class ScaleDecorator implements Decorator {
      * @param scaleY The amount to scale the component's y-axis.
      */
     public void setScale(float scaleX, float scaleY) {
-        if (scaleX < 0) {
-            throw new IllegalArgumentException("scaleX is negative.");
-        }
-
-        if (scaleY < 0) {
-            throw new IllegalArgumentException("scaleY is negative.");
-        }
+        Utils.checkNonNegative(scaleX, "scaleX");
+        Utils.checkNonNegative(scaleY, "scaleY");
 
         this.scaleX = scaleX;
         this.scaleY = scaleY;
@@ -186,9 +189,7 @@ public class ScaleDecorator implements Decorator {
      * @param horizontalAlignment The horizontal alignment
      */
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
     }
@@ -218,9 +219,7 @@ public class ScaleDecorator implements Decorator {
      * @param verticalAlignment The vertical alignment
      */
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
     }
@@ -287,14 +286,9 @@ public class ScaleDecorator implements Decorator {
 
     @Override
     public Graphics2D prepare(Component component, Graphics2D graphics) {
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
-        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            fontRenderContext.getAntiAliasingHint());
-        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-            fontRenderContext.getFractionalMetricsHint());
+        FontRenderContext fontRenderContext = GraphicsUtilities.prepareForText(graphics);
 
         int tx = getTranslatedX(component);
         int ty = getTranslatedY(component);
