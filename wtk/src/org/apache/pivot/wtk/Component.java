@@ -848,13 +848,8 @@ public abstract class Component implements ConstrainedVisual {
      */
     @Override
     public void setSize(int width, int height) {
-        if (width < 0) {
-            throw new IllegalArgumentException("width is negative.");
-        }
-
-        if (height < 0) {
-            throw new IllegalArgumentException("height is negative.");
-        }
+        Utils.checkNonNegative(width, "width");
+        Utils.checkNonNegative(height, "height");
 
         int previousWidth = getWidth();
         int previousHeight = getHeight();
@@ -1141,9 +1136,7 @@ public abstract class Component implements ConstrainedVisual {
         int previousMaximumWidth = this.maximumWidth;
 
         if (previousMinimumWidth != minimumWidth || previousMaximumWidth != maximumWidth) {
-            if (minimumWidth < 0) {
-                throw new IllegalArgumentException("minimumWidth is negative.");
-            }
+            Utils.checkNonNegative(minimumWidth, "minimumWidth");
 
             if (minimumWidth > maximumWidth) {
                 throw new IllegalArgumentException("minimumWidth is greater than maximumWidth.");
@@ -1222,9 +1215,7 @@ public abstract class Component implements ConstrainedVisual {
         int previousMaximumHeight = this.maximumHeight;
 
         if (previousMinimumHeight != minimumHeight || previousMaximumHeight != maximumHeight) {
-            if (minimumHeight < 0) {
-                throw new IllegalArgumentException("minimumHeight is negative.");
-            }
+            Utils.checkNonNegative(minimumHeight, "minimumHeight");
 
             if (minimumHeight > maximumHeight) {
                 throw new IllegalArgumentException("minimumHeight is greater than maximumHeight.");

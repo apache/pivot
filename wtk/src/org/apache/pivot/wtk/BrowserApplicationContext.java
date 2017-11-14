@@ -30,6 +30,7 @@ import netscape.javascript.JSObject;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.util.Utils;
 
 /**
  * Application context used to execute applications in a web browser.
@@ -355,9 +356,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * @throws IllegalArgumentException if the name is {@code null}.
      */
     public static Application getApplication(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("name is null.");
-        }
+        Utils.checkNull(name, "name");
 
         Application application = null;
         for (HostApplet hostApplet : hostApplets) {
@@ -378,9 +377,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
      * @return The result of the script evaluation.
      */
     public static Object eval(String script, Application application) {
-        if (application == null) {
-            throw new IllegalArgumentException("application is null.");
-        }
+        Utils.checkNull(application, "application");
 
         HostApplet applicationHostApplet = null;
         for (HostApplet hostApplet : hostApplets) {
