@@ -245,9 +245,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("Spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
 
         this.spacing = spacing;
         invalidateComponent();

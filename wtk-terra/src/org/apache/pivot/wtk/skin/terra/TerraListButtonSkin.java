@@ -29,6 +29,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Border;
@@ -186,7 +187,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraListButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         font = theme.getFont();
         color = theme.getColor(1);
@@ -241,7 +242,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             preferredWidth = Math.max(preferredWidth, dataRenderer.getPreferredWidth(-1));
         }
 
-        preferredWidth += TRIGGER_WIDTH + padding.left + padding.right + 2;
+        preferredWidth += TRIGGER_WIDTH + padding.getWidth() + 2;
 
         return preferredWidth;
     }
@@ -253,8 +254,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
         dataRenderer.render(listButton.getButtonData(), listButton, false);
 
-        int preferredHeight = dataRenderer.getPreferredHeight(-1) + padding.top + padding.bottom
-            + 2;
+        int preferredHeight = dataRenderer.getPreferredHeight(-1) + padding.getHeight() + 2;
 
         return preferredHeight;
     }
@@ -268,7 +268,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         dataRenderer.render(listButton.getButtonData(), listButton, false);
         Dimensions contentSize = dataRenderer.getPreferredSize();
         int preferredWidth = contentSize.width;
-        int preferredHeight = contentSize.height + padding.top + padding.bottom + 2;
+        int preferredHeight = contentSize.height + padding.getHeight() + 2;
 
         // The preferred width of the button is the max. width of the rendered
         // content plus padding and the trigger width
@@ -278,7 +278,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
             preferredWidth = Math.max(preferredWidth, dataRenderer.getPreferredWidth(-1));
         }
 
-        preferredWidth += TRIGGER_WIDTH + padding.left + padding.right + 2;
+        preferredWidth += TRIGGER_WIDTH + padding.getWidth() + 2;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -290,8 +290,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
         dataRenderer.render(listButton.getButtonData(), listButton, false);
 
-        int clientWidth = Math.max(width - (TRIGGER_WIDTH + padding.left + padding.right + 2), 0);
-        int clientHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
+        int clientWidth = Math.max(width - (TRIGGER_WIDTH + padding.getWidth() + 2), 0);
+        int clientHeight = Math.max(height - (padding.getHeight() + 2), 0);
 
         int baseline = dataRenderer.getBaseline(clientWidth, clientHeight);
 
@@ -335,8 +335,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         graphics.setStroke(new BasicStroke());
 
         // Paint the background
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         if (!themeIsFlat()) {
             graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,
@@ -348,16 +347,15 @@ public class TerraListButtonSkin extends ListButtonSkin {
             CORNER_RADIUS));
 
         // Paint the content
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
-        Bounds contentBounds = new Bounds(0, 0, Math.max(width - TRIGGER_WIDTH - 1, 0), Math.max(
-            height - 1, 0));
+        Bounds contentBounds = new Bounds(0, 0, Math.max(width - TRIGGER_WIDTH - 1, 0),
+            Math.max(height - 1, 0));
         Button.DataRenderer dataRenderer = listButton.getDataRenderer();
         dataRenderer.render(listButton.getButtonData(), listButton, false);
         dataRenderer.setSize(
-            Math.max(contentBounds.width - (padding.left + padding.right + 2) + 1, 0),
-            Math.max(contentBounds.height - (padding.top + padding.bottom + 2) + 1, 0));
+            Math.max(contentBounds.width - (padding.getWidth() + 2) + 1, 0),
+            Math.max(contentBounds.height - (padding.getHeight() + 2) + 1, 0));
 
         Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(padding.left + 1, padding.top + 1);
@@ -365,17 +363,16 @@ public class TerraListButtonSkin extends ListButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         // Paint the border
         if (!themeIsFlat()) {
             graphics.setPaint(borderColorLocal);
             graphics.setStroke(new BasicStroke(1));
-            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1, CORNER_RADIUS,
-                CORNER_RADIUS));
-            graphics.draw(new Line2D.Double(contentBounds.x + contentBounds.width, 0.5, contentBounds.x
-                + contentBounds.width, contentBounds.height));
+            graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
+                CORNER_RADIUS, CORNER_RADIUS));
+            graphics.draw(new Line2D.Double(contentBounds.x + contentBounds.width, 0.5,
+                contentBounds.x + contentBounds.width, contentBounds.height));
         }
 
         // Paint the focus state
@@ -391,8 +388,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
                 CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
         // Paint the trigger
         GeneralPath triggerIconShape = new GeneralPath(Path2D.WIND_EVEN_ODD);
@@ -430,14 +426,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
                     graphics.clipRect(0, 0, width - triggerBounds.width, height);
                 }
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+                GraphicsUtilities.setAntialiasingOn(graphics);
 
                 graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1,
                     CORNER_RADIUS, CORNER_RADIUS));
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_OFF);
+                GraphicsUtilities.setAntialiasingOff(graphics);
             }
         }
     }
@@ -446,8 +440,8 @@ public class TerraListButtonSkin extends ListButtonSkin {
     public Bounds getTriggerBounds() {
         int width = getWidth();
         int height = getHeight();
-        return new Bounds(Math.max(width - (TRIGGER_WIDTH + 1), 0), 0, TRIGGER_WIDTH + 1, Math.max(
-            height, 0));
+        return new Bounds(Math.max(width - (TRIGGER_WIDTH + 1), 0), 0,
+            TRIGGER_WIDTH + 1, Math.max(height, 0));
     }
 
     public Font getFont() {
@@ -455,27 +449,17 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -484,24 +468,18 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -510,24 +488,18 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
@@ -536,9 +508,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
+        Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
         bevelColor = TerraTheme.brighten(backgroundColor);
@@ -547,15 +517,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
@@ -564,9 +530,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
+        Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
         disabledBevelColor = disabledBackgroundColor;
@@ -574,15 +538,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        if (disabledBackgroundColor == null) {
-            throw new IllegalArgumentException("disabledBackgroundColor is null.");
-        }
-
         setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBackgroundColor(theme.getColor(disabledBackgroundColor));
     }
 
@@ -591,9 +551,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setBorderColor(Color borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
+        Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         listViewBorder.getStyles().put("color", borderColor);
@@ -601,15 +559,11 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public final void setBorderColor(String borderColor) {
-        if (borderColor == null) {
-            throw new IllegalArgumentException("borderColor is null.");
-        }
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
     public final void setBorderColor(int borderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
@@ -618,24 +572,18 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setDisabledBorderColor(Color disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
+        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
         repaintComponent();
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        if (disabledBorderColor == null) {
-            throw new IllegalArgumentException("disabledBorderColor is null.");
-        }
-
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledBorderColor(theme.getColor(disabledBorderColor));
     }
 
@@ -644,19 +592,13 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(new Insets(padding));
     }
 
@@ -665,18 +607,10 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 

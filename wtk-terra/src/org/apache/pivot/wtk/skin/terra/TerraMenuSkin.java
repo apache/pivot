@@ -222,27 +222,17 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -251,19 +241,13 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -272,19 +256,13 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
@@ -293,19 +271,13 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setActiveColor(Color activeColor) {
-        if (activeColor == null) {
-            throw new IllegalArgumentException("activeColor is null.");
-        }
+        Utils.checkNull(activeColor, "activeColor");
 
         this.activeColor = activeColor;
         repaintComponent();
     }
 
     public final void setActiveColor(String activeColor) {
-        if (activeColor == null) {
-            throw new IllegalArgumentException("activeColor is null.");
-        }
-
         setActiveColor(GraphicsUtilities.decodeColor(activeColor));
     }
 
@@ -314,19 +286,13 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
     }
 
     public void setActiveBackgroundColor(Color activeBackgroundColor) {
-        if (activeBackgroundColor == null) {
-            throw new IllegalArgumentException("activeBackgroundColor is null.");
-        }
+        Utils.checkNull(activeBackgroundColor, "activeBackgroundColor");
 
         this.activeBackgroundColor = activeBackgroundColor;
         repaintComponent();
     }
 
     public final void setActiveBackgroundColor(String activeBackgroundColor) {
-        if (activeBackgroundColor == null) {
-            throw new IllegalArgumentException("activeBackgroundColor is null.");
-        }
-
         setActiveBackgroundColor(GraphicsUtilities.decodeColor(activeBackgroundColor));
     }
 

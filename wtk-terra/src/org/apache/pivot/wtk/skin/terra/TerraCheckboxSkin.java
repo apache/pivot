@@ -26,6 +26,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Dimensions;
@@ -56,7 +57,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     private static final int ALPHA = 68;
 
     public TerraCheckboxSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -180,8 +181,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
                 graphics.setStroke(dashStroke);
                 graphics.setColor(buttonBorderColor);
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+                GraphicsUtilities.setAntialiasingOn(graphics);
 
                 Rectangle2D focusRectangle = new Rectangle2D.Double(CHECKBOX_SIZE + 1, 0.5,
                     dataRenderer.getWidth() + spacing * 2 - 2, dataRenderer.getHeight() - 1);
@@ -222,10 +222,10 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         }
 
         // Paint the checkmark
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
-        if (state == Button.State.SELECTED) {
+        switch (state) {
+          case SELECTED:
             graphics.setColor(buttonSelectionColorLocal);
             graphics.setStroke(new BasicStroke(2.5f));
 
@@ -237,16 +237,16 @@ public class TerraCheckboxSkin extends CheckboxSkin {
 
             graphics.drawLine(offsetX, (n - m) + offsetY, m + offsetX, n + offsetY);
             graphics.drawLine(m + offsetX, n + offsetY, (m + n) + offsetX, offsetY);
-        } else {
-            if (state == Button.State.MIXED) {
-                graphics.setColor(buttonSelectionColorLocal);
-                GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1,
-                    CHECKBOX_SIZE - 8, Orientation.HORIZONTAL, 2);
-            }
+            break;
+
+          case MIXED:
+            graphics.setColor(buttonSelectionColorLocal);
+            GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1,
+                CHECKBOX_SIZE - 8, Orientation.HORIZONTAL, 2);
+            break;
         }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
     }
 
     public Font getFont() {
@@ -254,27 +254,17 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -283,19 +273,13 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -304,19 +288,13 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
@@ -325,17 +303,14 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
+
         this.spacing = spacing;
         invalidateComponent();
     }
 
     public final void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
     }

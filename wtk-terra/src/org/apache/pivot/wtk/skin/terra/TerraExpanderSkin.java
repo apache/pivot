@@ -237,7 +237,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
     //@SuppressWarnings("unused")
     public TerraExpanderSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(4));
 
         titleBarBackgroundColor = theme.getColor(10);
@@ -310,7 +310,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
             int contentHeight = -1;
 
             if (height >= 0) {
-                int reservedHeight = 2 + padding.top + padding.bottom
+                int reservedHeight = 2 + padding.getHeight()
                     + titleBarTablePane.getPreferredHeight(-1);
 
                 if (expander.isExpanded()) {
@@ -322,7 +322,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
             }
 
             preferredWidth = Math.max(content.getPreferredWidth(contentHeight)
-                + (padding.left + padding.right), preferredWidth);
+                + padding.getWidth(), preferredWidth);
         }
 
         preferredWidth += 2;
@@ -344,14 +344,15 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
             int contentWidth = -1;
             if (width >= 0) {
-                contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
+                contentWidth = Math.max(width - (2 + padding.getWidth()), 0);
             }
 
+            int fullHeight = padding.getHeight() + content.getPreferredHeight(contentWidth);
             if (expandTransition == null) {
-                preferredHeight += (padding.top + padding.bottom + content.getPreferredHeight(contentWidth));
+                preferredHeight += fullHeight;
             } else {
                 float scale = expandTransition.getScale();
-                preferredHeight += (int) (scale * (padding.top + padding.bottom + content.getPreferredHeight(contentWidth)));
+                preferredHeight += (int) (scale * fullHeight);
             }
         }
 
@@ -373,7 +374,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
         if (content != null) {
             Dimensions contentSize = content.getPreferredSize();
 
-            preferredWidth = Math.max(contentSize.width + (padding.left + padding.right),
+            preferredWidth = Math.max(contentSize.width + padding.getWidth(),
                 preferredWidth);
 
             if (expander.isExpanded() || expandTransition != null) {
@@ -381,11 +382,12 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
                 // or expanding
                 preferredHeight += 1;
 
+                int fullHeight = padding.getHeight() + contentSize.height;
                 if (expandTransition == null) {
-                    preferredHeight += (padding.top + padding.bottom + contentSize.height);
+                    preferredHeight += fullHeight;
                 } else {
                     float scale = expandTransition.getScale();
-                    preferredHeight += (int) (scale * (padding.top + padding.bottom + contentSize.height));
+                    preferredHeight += (int) (scale * fullHeight);
                 }
             }
         }
@@ -431,9 +433,8 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
         titleBarTablePane.setLocation(1, 1);
 
         if (content != null) {
-            int contentWidth = Math.max(width - (2 + padding.left + padding.right), 0);
-            int contentHeight = Math.max(height
-                - (3 + padding.top + padding.bottom + titleBarHeight), 0);
+            int contentWidth = Math.max(width - (2 + padding.getWidth()), 0);
+            int contentHeight = Math.max(height - (3 + padding.getHeight() + titleBarHeight), 0);
 
             clipDecorator.setSize(contentWidth, contentHeight);
             content.setSize(contentWidth, content.getPreferredHeight(contentWidth));
@@ -551,6 +552,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public void setBorderColor(Color borderColor) {
+        // Looks like null borderColor is alright
         this.borderColor = borderColor;
         repaintComponent();
     }
@@ -564,6 +566,8 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public void setPadding(Insets padding) {
+        Utils.checkNull(padding, "padding");
+
         this.padding = padding;
         invalidateComponent();
     }
@@ -577,9 +581,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setPadding(Number padding) {
-        Utils.checkNull(padding, "padding");
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {

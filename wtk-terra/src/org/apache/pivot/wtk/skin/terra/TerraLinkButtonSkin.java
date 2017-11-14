@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -37,7 +38,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     private Color disabledColor;
 
     public TerraLinkButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         font = theme.getFont();
         color = theme.getColor(12);
         disabledColor = theme.getColor(7);
@@ -86,12 +87,11 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     @Override
     public void paint(Graphics2D graphics) {
         LinkButton linkButton = (LinkButton) getComponent();
-        int width = getWidth();
-        int height = getHeight();
+        Dimensions size = getSize();
 
         Button.DataRenderer dataRenderer = linkButton.getDataRenderer();
         dataRenderer.render(linkButton.getButtonData(), linkButton, highlighted);
-        dataRenderer.setSize(width, height);
+        dataRenderer.setSize(size);
 
         dataRenderer.paint(graphics);
     }
@@ -101,27 +101,17 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -130,24 +120,18 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
     public final void setColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
@@ -156,24 +140,18 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
     public final void setDisabledColor(int disabledColor) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 }
