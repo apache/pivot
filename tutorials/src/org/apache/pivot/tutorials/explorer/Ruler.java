@@ -17,6 +17,7 @@
 package org.apache.pivot.tutorials.explorer;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Orientation;
 
@@ -45,9 +46,7 @@ public class Ruler extends Component {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
             this.orientation = orientation;
