@@ -140,16 +140,9 @@ public class SeparatorSkin extends ComponentSkin implements SeparatorListener {
         String heading = separator.getHeading();
 
         if (heading != null && heading.length() > 0) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            FontRenderContext fontRenderContext = GraphicsUtilities.prepareForText(graphics, font, headingColor);
             LineMetrics lm = font.getLineMetrics(heading, fontRenderContext);
 
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                fontRenderContext.getAntiAliasingHint());
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                fontRenderContext.getFractionalMetricsHint());
-
-            graphics.setFont(font);
-            graphics.setPaint(headingColor);
             graphics.drawString(heading, padding.left, lm.getAscent() + padding.top);
 
             Rectangle2D headingBounds = font.getStringBounds(heading, fontRenderContext);

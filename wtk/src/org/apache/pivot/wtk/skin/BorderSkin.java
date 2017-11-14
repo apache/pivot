@@ -49,6 +49,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     private Color color;
     private Color titleColor;
     private int thickness;
+    private int topThickness;
+    private float titleAscent;
     private Insets padding;
     private CornerRadii cornerRadii;
 
@@ -59,7 +61,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         color = defaultForegroundColor();
         titleColor = defaultForegroundColor();
 
-        thickness = 1;
+        thickness = topThickness = 1;
+        titleAscent = 0.0f;
         padding = Insets.NONE;
         cornerRadii = CornerRadii.NONE;
     }
@@ -72,35 +75,38 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         border.getBorderListeners().add(this);
     }
 
+    private int paddingThicknessWidth() {
+        return padding.getWidth() + (thickness * 2);
+    }
+
+    private int paddingThicknessHeight() {
+        return padding.getHeight() + (topThickness + thickness);
+    }
+
     @Override
     public int getPreferredWidth(int height) {
         int preferredWidth = 0;
 
         Border border = (Border) getComponent();
-        int topThickness = thickness;
 
         String title = border.getTitle();
         if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
             preferredWidth = (int) Math.ceil(headingBounds.getWidth());
-
-            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
         if (content != null) {
             int heightUpdated = height;
             if (heightUpdated != -1) {
-                heightUpdated = Math.max(heightUpdated - (topThickness + thickness)
-                    - padding.getHeight(), 0);
+                heightUpdated = Math.max(heightUpdated - paddingThicknessHeight(), 0);
             }
 
             preferredWidth = Math.max(preferredWidth, content.getPreferredWidth(heightUpdated));
         }
 
-        preferredWidth += padding.getWidth() + (thickness * 2);
+        preferredWidth += paddingThicknessWidth();
 
         return preferredWidth;
     }
@@ -110,27 +116,18 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int preferredHeight = 0;
 
         Border border = (Border) getComponent();
-        int topThickness = thickness;
-
-        String title = border.getTitle();
-        if (title != null && title.length() > 0) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
-        }
 
         Component content = border.getContent();
         if (content != null) {
             int widthUpdated = width;
             if (widthUpdated != -1) {
-                widthUpdated = Math.max(widthUpdated - (thickness * 2)
-                    - padding.getWidth(), 0);
+                widthUpdated = Math.max(widthUpdated - paddingThicknessWidth(), 0);
             }
 
             preferredHeight = content.getPreferredHeight(widthUpdated);
         }
 
-        preferredHeight += padding.getHeight() + (topThickness + thickness);
+        preferredHeight += paddingThicknessHeight();
 
         return preferredHeight;
     }
@@ -141,16 +138,12 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int preferredHeight = 0;
 
         Border border = (Border) getComponent();
-        int topThickness = thickness;
 
         String title = border.getTitle();
         if (title != null && title.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Rectangle2D headingBounds = font.getStringBounds(title, fontRenderContext);
             preferredWidth = (int) Math.ceil(headingBounds.getWidth());
-
-            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
         }
 
         Component content = border.getContent();
@@ -160,8 +153,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
             preferredHeight += preferredSize.height;
         }
 
-        preferredWidth += padding.getWidth() + (thickness * 2);
-        preferredHeight += padding.getHeight() + (topThickness + thickness);
+        preferredWidth += paddingThicknessWidth();
+        preferredHeight += paddingThicknessHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -171,21 +164,12 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int baseline = -1;
 
         Border border = (Border) getComponent();
-        int topThickness = thickness;
 
         // Delegate baseline calculation to the content component
         Component content = border.getContent();
         if (content != null) {
-            String title = border.getTitle();
-            if (title != null && title.length() > 0) {
-                FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-                LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-                topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
-            }
-
-            int clientWidth = Math.max(width - (thickness * 2) - padding.getWidth(), 0);
-            int clientHeight = Math.max(height - (topThickness + thickness)
-                - padding.getHeight(), 0);
+            int clientWidth = Math.max(width - paddingThicknessWidth(), 0);
+            int clientHeight = Math.max(height - paddingThicknessHeight(), 0);
 
             baseline = content.getBaseline(clientWidth, clientHeight);
         }
@@ -204,22 +188,13 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
         int height = getHeight();
 
         Border border = (Border) getComponent();
-        int topThickness = thickness;
-
-        String title = border.getTitle();
-        if (title != null && title.length() > 0) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
-        }
 
         Component content = border.getContent();
         if (content != null) {
             content.setLocation(padding.left + thickness, padding.top + topThickness);
 
-            int contentWidth = Math.max(width - (padding.getWidth() + (thickness * 2)), 0);
-            int contentHeight = Math.max(height
-                - (padding.getHeight() + (topThickness + thickness)), 0);
+            int contentWidth = Math.max(width - paddingThicknessWidth(), 0);
+            int contentHeight = Math.max(height - paddingThicknessHeight(), 0);
 
             content.setSize(contentWidth, contentHeight);
         }
@@ -228,16 +203,8 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     @Override
     public void paint(Graphics2D graphics) {
         Border border = (Border) getComponent();
-        int topThickness = thickness;
-        float titleAscent = 0;
 
         String title = border.getTitle();
-        if (title != null && title.length() > 0) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
-            titleAscent = lm.getAscent();
-            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
-        }
 
         // TODO Java2D doesn't support variable corner radii; we'll need to
         // "fake" this by drawing multiple arcs
@@ -257,14 +224,12 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
             graphics.setPaint(backgroundPaint);
 
             if (cornerRadius > 0) {
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+                GraphicsUtilities.setAntialiasingOn(graphics);
 
-                graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight, cornerRadius,
-                    cornerRadius);
+                graphics.fillRoundRect(strokeX, strokeY, strokeWidth, strokeHeight,
+                    cornerRadius, cornerRadius);
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_OFF);
+                GraphicsUtilities.setAntialiasingOff(graphics);
             } else {
                 graphics.fillRect(strokeX, strokeY, strokeWidth, strokeHeight);
             }
@@ -272,20 +237,14 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
 
         // Draw the title
         if (title != null) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                fontRenderContext.getAntiAliasingHint());
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                fontRenderContext.getFractionalMetricsHint());
+            FontRenderContext fontRenderContext = GraphicsUtilities.prepareForText(graphics, font, titleColor);
 
             // Note that we add one pixel to the string bounds for spacing
             Rectangle2D titleBounds = font.getStringBounds(title, fontRenderContext);
-            titleBounds = new Rectangle2D.Double(padding.left + thickness,
-                (topThickness - titleBounds.getHeight()) / 2, titleBounds.getWidth() + 1,
-                titleBounds.getHeight());
+            titleBounds = new Rectangle2D.Double(
+                padding.left + thickness, (topThickness - titleBounds.getHeight()) / 2,
+                titleBounds.getWidth() + 1, titleBounds.getHeight());
 
-            graphics.setFont(font);
-            graphics.setPaint(titleColor);
             graphics.drawString(title, (int) titleBounds.getX(),
                 (int) (titleBounds.getY() + titleAscent));
 
@@ -299,15 +258,13 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
             graphics.setPaint(color);
 
             if (cornerRadius > 0) {
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+                GraphicsUtilities.setAntialiasingOn(graphics);
 
                 graphics.setStroke(new BasicStroke(thickness));
                 graphics.draw(new RoundRectangle2D.Double(0.5 * thickness, 0.5 * topThickness,
                     strokeWidth, strokeHeight, cornerRadius, cornerRadius));
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_OFF);
+                GraphicsUtilities.setAntialiasingOff(graphics);
             } else {
                 int y = (topThickness - thickness) / 2;
                 GraphicsUtilities.drawRect(graphics, 0, y, width, Math.max(height - y, 0),
@@ -551,6 +508,18 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     // Border events
     @Override
     public void titleChanged(Border border, String previousTitle) {
+        // Redo the top thickness calculation when the title changes
+        topThickness = thickness;
+        titleAscent = 0f;
+
+        String title = border.getTitle();
+        if (title != null && title.length() > 0) {
+            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            LineMetrics lm = font.getLineMetrics(title, fontRenderContext);
+            titleAscent = lm.getAscent();
+            topThickness = Math.max((int) Math.ceil(lm.getHeight()), topThickness);
+        }
+
         invalidateComponent();
     }
 
