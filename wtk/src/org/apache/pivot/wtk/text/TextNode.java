@@ -24,8 +24,8 @@ import org.apache.pivot.wtk.Span;
  * Node representing a sequence of characters.
  */
 public final class TextNode extends Node {
-    private static class TextNodeListenerList extends ListenerList<TextNodeListener> implements
-        TextNodeListener {
+    private static class TextNodeListenerList extends ListenerList<TextNodeListener>
+        implements TextNodeListener {
         /**
          * @param textNode The text node that changed.
          * @param index    Index into this node.
@@ -33,9 +33,7 @@ public final class TextNode extends Node {
          */
         @Override
         public void charactersInserted(TextNode textNode, int index, int count) {
-            for (TextNodeListener listener : this) {
-                listener.charactersInserted(textNode, index, count);
-            }
+            forEach(listener -> listener.charactersInserted(textNode, index, count));
         }
 
         /**
@@ -45,9 +43,7 @@ public final class TextNode extends Node {
          */
         @Override
         public void charactersRemoved(TextNode textNode, int index, int count) {
-            for (TextNodeListener listener : this) {
-                listener.charactersRemoved(textNode, index, count);
-            }
+            forEach(listener -> listener.charactersRemoved(textNode, index, count));
         }
     }
 
@@ -69,7 +65,7 @@ public final class TextNode extends Node {
     }
 
     public String getText() {
-        return getText(0, getCharacterCount());
+        return characters.toString();
     }
 
     public String getText(int beginIndex, int endIndex) {
@@ -93,10 +89,7 @@ public final class TextNode extends Node {
      */
     public void insertText(CharSequence text, int index) {
         Utils.checkNull(text, "text");
-
-        if (index < 0 || index > characters.length()) {
-            throw new IndexOutOfBoundsException("Index " + index + " outside of [0, " + characters.length() + "]");
-        }
+        Utils.checkIndexBounds(index, 0, characters.length());
 
         int characterCount = text.length();
         if (characterCount > 0) {
@@ -111,11 +104,7 @@ public final class TextNode extends Node {
      * @param count Count of characters to remove.
      */
     public void removeText(int index, int count) {
-        if (index < 0 || index + count > characters.length()) {
-            throw new IndexOutOfBoundsException("Index " + index +
-                    " less than 0 or index+count " + count +
-                    " greater than length " + characters.length());
-        }
+        Utils.checkIndexBounds(index, count, 0, characters.length());
 
         if (count > 0) {
             characters.delete(index, index + count);
@@ -182,10 +171,7 @@ public final class TextNode extends Node {
     @Override
     public Node getRange(int offset, int characterCount) {
         Utils.checkNonNegative(characterCount, "characterCount");
-
-        if (offset < 0 || offset + characterCount > characters.length()) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(offset, characterCount, 0, characters.length());
 
         int start = offset;
         int end = offset + characterCount;

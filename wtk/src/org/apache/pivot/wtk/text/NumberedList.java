@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Element representing a numbered list.
@@ -33,9 +34,7 @@ public class NumberedList extends List {
         implements NumberedListListener {
         @Override
         public void styleChanged(NumberedList numberedList, Style previousStyle) {
-            for (NumberedListListener listener : this) {
-                listener.styleChanged(numberedList, previousStyle);
-            }
+            forEach(listener -> listener.styleChanged(numberedList, previousStyle));
         }
     }
 
@@ -57,9 +56,7 @@ public class NumberedList extends List {
     }
 
     public void setStyle(Style style) {
-        if (style == null) {
-            throw new IllegalArgumentException("style is null.");
-        }
+        Utils.checkNull(style, "style");
 
         Style previousStyle = this.style;
         if (previousStyle != style) {
