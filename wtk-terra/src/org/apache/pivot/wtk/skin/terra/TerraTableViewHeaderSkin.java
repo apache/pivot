@@ -404,9 +404,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
         TableView tableView = tableViewHeader.getTableView();
 
         if (tableView != null) {
-            if (headerIndex < 0 || headerIndex >= headerWidths.getLength()) {
-                throw new IndexOutOfBoundsException();
-            }
+            Utils.checkZeroBasedIndex(headerIndex, headerWidths.getLength());
 
             int cellX = 0;
             for (int i = 0; i < headerIndex; i++) {
@@ -455,7 +453,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -475,7 +473,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -497,7 +495,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -518,7 +516,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor, "disabledBackgroundColor"));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
@@ -538,7 +536,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -558,7 +556,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor, "disabledBorderColor"));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {

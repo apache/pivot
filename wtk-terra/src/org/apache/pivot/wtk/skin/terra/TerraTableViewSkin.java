@@ -755,7 +755,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {

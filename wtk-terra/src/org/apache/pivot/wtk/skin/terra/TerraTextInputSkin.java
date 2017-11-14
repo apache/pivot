@@ -747,7 +747,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
