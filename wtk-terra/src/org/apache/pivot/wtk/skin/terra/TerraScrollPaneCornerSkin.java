@@ -81,7 +81,7 @@ public class TerraScrollPaneCornerSkin extends ComponentSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {

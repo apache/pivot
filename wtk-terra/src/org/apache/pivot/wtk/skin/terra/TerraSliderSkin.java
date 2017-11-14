@@ -22,6 +22,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -408,20 +409,14 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setTrackColor(Color trackColor) {
-        if (trackColor == null) {
-            throw new IllegalArgumentException("trackColor is null.");
-        }
+        Utils.checkNull(trackColor, "trackColor");
 
         this.trackColor = trackColor;
         repaintComponent();
     }
 
     public final void setTrackColor(String trackColor) {
-        if (trackColor == null) {
-            throw new IllegalArgumentException("trackColor is null");
-        }
-
-        setTrackColor(GraphicsUtilities.decodeColor(trackColor));
+        setTrackColor(GraphicsUtilities.decodeColor(trackColor, "trackColor"));
     }
 
     public int getTrackWidth() {
@@ -429,18 +424,14 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setTrackWidth(int trackWidth) {
-        if (trackWidth < 0) {
-            throw new IllegalArgumentException("trackWidth is negative.");
-        }
+        Utils.checkNonNegative(trackWidth, "trackWidth");
 
         this.trackWidth = trackWidth;
         repaintComponent();
     }
 
     public void setTrackWidth(Number trackWidth) {
-        if (trackWidth == null) {
-            throw new IllegalArgumentException("trackWidth is null.");
-        }
+        Utils.checkNull(trackWidth, "trackWidth");
 
         setTrackWidth(trackWidth.intValue());
     }
@@ -450,9 +441,7 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setButtonBackgroundColor(Color buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null.");
-        }
+        Utils.checkNull(buttonBackgroundColor, "buttonBackgroundColor");
 
         this.buttonBackgroundColor = buttonBackgroundColor;
         buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
@@ -460,11 +449,7 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
-        if (buttonBackgroundColor == null) {
-            throw new IllegalArgumentException("buttonBackgroundColor is null");
-        }
-
-        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor, "buttonBackgroundColor"));
     }
 
     public Color getButtonBorderColor() {
@@ -472,20 +457,14 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setButtonBorderColor(Color buttonBorderColor) {
-        if (buttonBorderColor == null) {
-            throw new IllegalArgumentException("buttonBorderColor is null.");
-        }
+        Utils.checkNull(buttonBorderColor, "buttonBorderColor");
 
         this.buttonBorderColor = buttonBorderColor;
         repaintComponent();
     }
 
     public final void setButtonBorderColor(String buttonBorderColor) {
-        if (buttonBorderColor == null) {
-            throw new IllegalArgumentException("buttonBorderColor is null.");
-        }
-
-        setButtonBorderColor(GraphicsUtilities.decodeColor(buttonBorderColor));
+        setButtonBorderColor(GraphicsUtilities.decodeColor(buttonBorderColor, "buttonBorderColor"));
     }
 
     public int getThumbWidth() {
@@ -503,9 +482,7 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setThumbWidth(Number thumbWidth) {
-        if (thumbWidth == null) {
-            throw new IllegalArgumentException("thumbWidth is null.");
-        }
+        Utils.checkNull(thumbWidth, "thumbWidth");
 
         setThumbWidth(thumbWidth.intValue());
     }
@@ -525,9 +502,7 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setThumbHeight(Number thumbHeight) {
-        if (thumbHeight == null) {
-            throw new IllegalArgumentException("thumbHeight is null.");
-        }
+        Utils.checkNull(thumbHeight, "thumbHeight");
 
         setThumbHeight(thumbHeight.intValue());
     }
@@ -542,9 +517,7 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     public void setTickSpacing(Number tickSpacing) {
-        if (tickSpacing == null) {
-            throw new IllegalArgumentException("tickSpacing is null.");
-        }
+        Utils.checkNull(tickSpacing, "tickSpacing");
 
         setTickSpacing(tickSpacing.intValue());
     }

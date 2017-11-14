@@ -815,9 +815,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public void setMinimumHandleLength(int minimumHandleLength) {
-        if (minimumHandleLength <= 0) {
-            throw new IllegalArgumentException("minimumHandleLength must be positive.");
-        }
+        Utils.checkPositive(minimumHandleLength, "minimumHandleLength");
 
         if (minimumHandleLength != this.minimumHandleLength) {
             this.minimumHandleLength = minimumHandleLength;
@@ -837,7 +835,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -857,7 +855,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public final void setScrollButtonImageColor(String scrollButtonImageColor) {
-        setScrollButtonImageColor(GraphicsUtilities.decodeColor(scrollButtonImageColor));
+        setScrollButtonImageColor(GraphicsUtilities.decodeColor(scrollButtonImageColor, "scrollButtonImageColor"));
     }
 
     public final void setScrollButtonImageColor(int scrollButtonImageColor) {
@@ -877,7 +875,8 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     }
 
     public final void setScrollButtonBackgroundColor(String scrollButtonBackgroundColor) {
-        setScrollButtonBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonBackgroundColor));
+        setScrollButtonBackgroundColor(
+            GraphicsUtilities.decodeColor(scrollButtonBackgroundColor, "scrollButtonBackgroundColor"));
     }
 
     public final void setScrollButtonBackgroundColor(int scrollButtonBackgroundColor) {
@@ -898,7 +897,8 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public final void setScrollButtonDisabledBackgroundColor(
         String scrollButtonDisabledBackgroundColor) {
-        setScrollButtonDisabledBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonDisabledBackgroundColor));
+        setScrollButtonDisabledBackgroundColor(
+            GraphicsUtilities.decodeColor(scrollButtonDisabledBackgroundColor, "scrollButtonDisabledBackgroundColor"));
     }
 
     public final void setScrollButtonDisabledBackgroundColor(int scrollButtonDisabledBackgroundColor) {
@@ -919,7 +919,8 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public final void setScrollButtonPressedBackgroundColor(
         String scrollButtonPressedBackgroundColor) {
-        setScrollButtonPressedBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonPressedBackgroundColor));
+        setScrollButtonPressedBackgroundColor(
+            GraphicsUtilities.decodeColor(scrollButtonPressedBackgroundColor, "scrollButtonPressedBackgroundColor"));
     }
 
     public final void setScrollButtonPressedBackgroundColor(int scrollButtonPressedBackgroundColor) {
@@ -941,7 +942,8 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
 
     public final void setScrollButtonHighlightedBackgroundColor(
         String scrollButtonHighlightedBackgroundColor) {
-        setScrollButtonHighlightedBackgroundColor(GraphicsUtilities.decodeColor(scrollButtonHighlightedBackgroundColor));
+        setScrollButtonHighlightedBackgroundColor(
+            GraphicsUtilities.decodeColor(scrollButtonHighlightedBackgroundColor, "scrollButtonHighlightedBackgroundColor"));
     }
 
     public final void setScrollButtonHighlightedBackgroundColor(

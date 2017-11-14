@@ -509,6 +509,8 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
 
     @Override
     public void setBackgroundColor(Color backgroundColor) {
+        Utils.checkNull(backgroundColor, "backgroundColor");
+        // Note: backgroundColor could be null except for the "darken" below
         super.setBackgroundColor(backgroundColor);
         bevelColor = TerraTheme.darken(backgroundColor);
     }
@@ -525,7 +527,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public Insets getPadding() {
