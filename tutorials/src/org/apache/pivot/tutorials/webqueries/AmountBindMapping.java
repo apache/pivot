@@ -19,6 +19,7 @@ package org.apache.pivot.tutorials.webqueries;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.TextInput;
 
 /**
@@ -42,9 +43,7 @@ public class AmountBindMapping implements TextInput.TextBindMapping {
     }
 
     public void setAmountFormat(NumberFormat amountFormat) {
-        if (amountFormat == null) {
-            throw new IllegalArgumentException("amountFormat is null.");
-        }
+        Utils.checkNull(amountFormat, "amountFormat");
 
         this.amountFormat = amountFormat;
     }

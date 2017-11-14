@@ -59,27 +59,27 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
                     text = "\"" + text + "\"";
                 }
             } else {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unknown node type: " + node.getClass().getName());
             }
 
             setText(text);
 
-            Font font = (Font) treeView.getStyles().get("font");
+            Font font = treeView.getStyles().getFont("font");
             getStyles().put("font", font);
 
             Color color;
             if (treeView.isEnabled() && !disabled) {
                 if (selected) {
                     if (treeView.isFocused()) {
-                        color = (Color) treeView.getStyles().get("selectionColor");
+                        color = treeView.getStyles().getColor("selectionColor");
                     } else {
-                        color = (Color) treeView.getStyles().get("inactiveSelectionColor");
+                        color = treeView.getStyles().getColor("inactiveSelectionColor");
                     }
                 } else {
-                    color = (Color) treeView.getStyles().get("color");
+                    color = treeView.getStyles().getColor("color");
                 }
             } else {
-                color = (Color) treeView.getStyles().get("disabledColor");
+                color = treeView.getStyles().getColor("disabledColor");
             }
 
             getStyles().put("color", color);
@@ -96,7 +96,7 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
             TextNode textNode = (TextNode) node;
             string = textNode.getText();
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Unknown node type: " + node.getClass().getName());
         }
 
         return string;

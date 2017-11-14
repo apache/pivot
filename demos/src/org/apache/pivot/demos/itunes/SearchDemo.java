@@ -25,6 +25,7 @@ import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.web.GetQuery;
@@ -45,22 +46,14 @@ import org.apache.pivot.wtk.media.Image;
 public class SearchDemo extends Application.Adapter {
     private Window window = null;
 
-    @BXML
-    private TextInput termTextInput;
-    @BXML
-    private PushButton searchButton;
-    @BXML
-    private Label statusLabel;
-    @BXML
-    private TableView resultsTableView;
-    @BXML
-    private BoxPane activityIndicatorBoxPane;
-    @BXML
-    private ActivityIndicator activityIndicator;
-    @BXML
-    private ImageView artworkImageView;
-    @BXML
-    private PushButton previewButton;
+    @BXML private TextInput termTextInput;
+    @BXML private PushButton searchButton;
+    @BXML private Label statusLabel;
+    @BXML private TableView resultsTableView;
+    @BXML private BoxPane activityIndicatorBoxPane;
+    @BXML private ActivityIndicator activityIndicator;
+    @BXML private ImageView artworkImageView;
+    @BXML private PushButton previewButton;
 
     private GetQuery getQuery = null;
 
@@ -110,12 +103,10 @@ public class SearchDemo extends Application.Adapter {
      * @throws IllegalStateException If a query is already executing.
      */
     public void executeQuery(String term) {
-        if (term == null || term.length() == 0) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNullOrEmpty(term, "search term");
 
         if (getQuery != null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Query is already running!");
         }
 
         String country = Locale.getDefault().getCountry().toLowerCase();
@@ -184,7 +175,7 @@ public class SearchDemo extends Application.Adapter {
      */
     public void abortQuery() {
         if (getQuery == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Query is not running!");
         }
 
         getQuery.abort();

@@ -20,6 +20,7 @@ import java.util.Date;
 
 import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
@@ -197,9 +198,7 @@ public class Pivot694 extends Application.Adapter {
     }
 
     protected static final void clearComponent(Component component) {
-        if (component == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(component, "component");
 
         component.clear();
         component.repaint();

@@ -25,6 +25,7 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -102,11 +103,9 @@ public class JavascriptConsoleTest extends Application.Adapter {
     }
 
     /**
-     * Load resource files for the given classname, or if null a default will be
-     * used.
+     * Load resource files for the given classname, or if null a default will be used.
      *
-     * @param className the full class name (to use as a base name), for loading
-     * resources
+     * @param className The full class name (to use as a base name), for loading resources.
      */
     private void loadResources(String className) {
         try {
@@ -115,10 +114,8 @@ public class JavascriptConsoleTest extends Application.Adapter {
             if (resources == null) {
                 resources = new Resources(MAIN_CLASS_NAME, locale);
                 logObject("buildResources, load resources from " + "\""
-                    + ((className != null && className.length() > 0) ? className : MAIN_CLASS_NAME) // set
-                                                                                                    // a
-                                                                                                    // useful
-                                                                                                    // default
+                    // set a useful default
+                    + ((className != null && className.length() > 0) ? className : MAIN_CLASS_NAME)
                     + "\", with locale " + locale);
             }
         } catch (Exception e) {
@@ -176,8 +173,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
      * to not expose them to JS code.
      *
      * @param urlString the URL of the bxml file to load, as a String
-     * @param bxmlSerializer the serializer to use, or if null a new one will be
-     * created
+     * @param bxmlSerializer the serializer to use, or if null a new one will be created
      * @return the Window instance
      */
     public Window loadWindowFromURL(String urlString, final BXMLSerializer bxmlSerializer) {
@@ -217,13 +213,12 @@ public class JavascriptConsoleTest extends Application.Adapter {
      */
     public String getLabel(String name) {
         String label = "";
-        if (name == null || name.length() < 1) {
+        if (Utils.isNullOrEmpty(name)) {
             throw new IllegalArgumentException("name must be a valid string");
         }
 
         // note that if called from bxml files, resources could be not already
-        // loaded,
-        // so try to force its load with a default value ...
+        // loaded, so try to force its load with a default value ...
         if (resources == null) {
             loadResources(null);
         }
@@ -237,8 +232,7 @@ public class JavascriptConsoleTest extends Application.Adapter {
     /**
      * Sample utility method to log a formatted dump of the given object to
      * System.out . <p> Note that it has been set public, static, and accepting
-     * Object (and not String as usual), even to make some tests on it from JS
-     * code.
+     * Object (and not String as usual), even to make some tests on it from JS code.
      *
      * @param msg the object (or message) to log
      */

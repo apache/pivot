@@ -178,7 +178,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
     @SuppressWarnings("unused")
     public FakeWindowSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(10));
 
         titleBarColor = theme.getColor(4);
