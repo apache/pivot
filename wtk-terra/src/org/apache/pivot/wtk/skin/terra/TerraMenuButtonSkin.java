@@ -270,15 +270,14 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         }
 
         // Paint the content
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
-        Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1, Math.max(width
-            - (padding.left + padding.right + spacing + TRIGGER_WIDTH + 2), 0), Math.max(height
-            - (padding.top + padding.bottom + 2), 0));
+        Bounds contentBounds = new Bounds(padding.left + 1, padding.top + 1,
+            Math.max(width - (padding.getWidth() + spacing + TRIGGER_WIDTH + 2), 0),
+            Math.max(height - (padding.getHeight() + 2), 0));
         Button.DataRenderer dataRenderer = menuButton.getDataRenderer();
         dataRenderer.render(menuButton.getButtonData(), menuButton, highlighted);
-        dataRenderer.setSize(contentBounds.width, contentBounds.height);
+        dataRenderer.setSize(contentBounds.getSize());
 
         Graphics2D contentGraphics = (Graphics2D) graphics.create();
         contentGraphics.translate(contentBounds.x, contentBounds.y);
@@ -286,8 +285,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         // Paint the border
         if (borderColorLocal != null && !themeIsFlat()) {
@@ -307,8 +305,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
                 height - 5, 0), CORNER_RADIUS / 2, CORNER_RADIUS / 2));
         }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
         // Paint the trigger
         GeneralPath triggerIconShape = new GeneralPath(Path2D.WIND_EVEN_ODD);
@@ -356,14 +353,10 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setFont(String font) {
-        Utils.checkNull(font, "font");
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        Utils.checkNull(font, "font");
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -379,8 +372,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setColor(String color) {
-        Utils.checkNull(color, "color");
-
         setColor(GraphicsUtilities.decodeColor(color));
     }
 
@@ -401,8 +392,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledColor(String disabledColor) {
-        Utils.checkNull(disabledColor, "disabledColor");
-
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
     }
 
@@ -467,8 +456,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBorderColor(String borderColor) {
-        Utils.checkNull(borderColor, "borderColor");
-
         setBorderColor(GraphicsUtilities.decodeColor(borderColor));
     }
 
@@ -489,8 +476,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        Utils.checkNull(disabledBorderColor, "disabledBorderColor");
-
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
     }
 
@@ -511,8 +496,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        Utils.checkNull(padding, "padding");
-
         setPadding(new Insets(padding));
     }
 
@@ -527,8 +510,6 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setPadding(String padding) {
-        Utils.checkNull(padding, "padding");
-
         setPadding(Insets.decode(padding));
     }
 
@@ -537,9 +518,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
+
         this.spacing = spacing;
         invalidateComponent();
     }
@@ -610,6 +590,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     public void setCloseTransitionDuration(int closeTransitionDuration) {
         menuPopup.getStyles().putInt("closeTransitionDuration", closeTransitionDuration);
+        MenuButton menuButton = (MenuButton) getComponent();
+        menuButton.setQueuedActionDelay(closeTransitionDuration + 50);
     }
 
     public int getCloseTransitionRate() {

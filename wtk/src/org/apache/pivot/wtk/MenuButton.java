@@ -57,6 +57,8 @@ public class MenuButton extends Button {
     public MenuButton() {
         setDataRenderer(DEFAULT_DATA_RENDERER);
         installSkin(MenuButton.class);
+        setQueuedAction(true);
+        setQueuedActionDelay(getStyles().getInt("closeTransitionDuration") + 50);
     }
 
     @Override
