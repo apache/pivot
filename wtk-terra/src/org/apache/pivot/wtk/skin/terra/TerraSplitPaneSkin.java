@@ -407,7 +407,8 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     public final void setSplitterHandlePrimaryColor(String splitterHandlePrimaryColor) {
-        setSplitterHandlePrimaryColor(GraphicsUtilities.decodeColor(splitterHandlePrimaryColor));
+        setSplitterHandlePrimaryColor(
+            GraphicsUtilities.decodeColor(splitterHandlePrimaryColor, "splitterHandlePrimaryColor"));
     }
 
     public final void setSplitterHandlePrimaryColor(int splitterHandlePrimaryColor) {
@@ -427,7 +428,8 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     }
 
     public final void setSplitterHandleSecondaryColor(String splitterHandleSecondaryColor) {
-        setSplitterHandleSecondaryColor(GraphicsUtilities.decodeColor(splitterHandleSecondaryColor));
+        setSplitterHandleSecondaryColor(
+            GraphicsUtilities.decodeColor(splitterHandleSecondaryColor, "splitterHandleSecondaryColor"));
     }
 
     public final void setSplitterHandleSecondaryColor(int splitterHandleSecondaryColor) {

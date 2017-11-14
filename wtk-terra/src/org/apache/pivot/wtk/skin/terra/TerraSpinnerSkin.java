@@ -709,7 +709,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getDisabledColor() {
@@ -724,7 +724,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public Color getBorderColor() {
@@ -739,7 +739,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public Color getButtonColor() {
@@ -747,12 +747,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public void setButtonImageColor(Color buttonColor) {
+        // TODO: is null acceptable here?
         this.buttonColor = buttonColor;
         repaintComponent();
     }
 
     public final void setButtonColor(String buttonColor) {
-        setButtonImageColor(GraphicsUtilities.decodeColor(buttonColor));
+        setButtonImageColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
     }
 
     public Color getButtonBackgroundColor() {
@@ -760,12 +761,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     }
 
     public void setButtonBackgroundColor(Color buttonBackgroundColor) {
+        // TODO: not sure if null is acceptable here (certainly if theme is flat)
         this.buttonBackgroundColor = buttonBackgroundColor;
         repaintComponent();
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
-        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor, "buttonBackgroundColor"));
     }
 
     public Font getFont() {

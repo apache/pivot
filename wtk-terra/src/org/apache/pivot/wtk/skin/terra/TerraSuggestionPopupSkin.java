@@ -224,14 +224,10 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public final void setFont(String font) {
-        Utils.checkNull(font, "font name");
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        Utils.checkNull(font, "font dictionary");
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -244,9 +240,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public final void setColor(String color) {
-        Utils.checkNull(color, "color name");
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getBorderColor() {
@@ -258,9 +252,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public final void setBorderColor(String borderColor) {
-        Utils.checkNull(borderColor, "border color name");
-
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public int getCloseTransitionDuration() {
