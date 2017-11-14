@@ -27,6 +27,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -56,7 +57,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     private static final int ALPHA = 68;
 
     public TerraRadioButtonSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         font = theme.getFont();
         color = theme.getColor(1);
         disabledColor = theme.getColor(7);
@@ -178,8 +179,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
                 graphics.setStroke(dashStroke);
                 graphics.setColor(buttonBorderColor);
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+                GraphicsUtilities.setAntialiasingOn(graphics);
 
                 Rectangle2D focusRectangle = new Rectangle2D.Double(BUTTON_DIAMETER + 1, 0.5,
                     dataRenderer.getWidth() + spacing * 2 - 2, dataRenderer.getHeight() - 1);
@@ -214,8 +214,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             buttonSelectionColorLocal = disabledButtonSelectionColor;
         }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         // Paint the border
         if (!themeIsFlat()) {
@@ -237,8 +236,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             graphics.fill(buttonSelectionCircle);
         }
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
     }
 
     public Font getFont() {
@@ -246,27 +244,17 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -275,20 +263,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     }
 
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getDisabledColor() {
@@ -296,20 +278,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     }
 
     public void setDisabledColor(Color disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
+        Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
     public final void setDisabledColor(String disabledColor) {
-        if (disabledColor == null) {
-            throw new IllegalArgumentException("disabledColor is null.");
-        }
-
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public int getSpacing() {
@@ -317,17 +293,14 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
+
         this.spacing = spacing;
         invalidateComponent();
     }
 
     public final void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
     }

@@ -27,6 +27,7 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -49,22 +50,20 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     private Color textColor;
     private Color textFillColor;
     private Color darkFillColor;
+    private Color brightFillColor;
 
     private static final int DEFAULT_WIDTH = 100;
     private static final int DEFAULT_HEIGHT = 12;
 
     public TerraMeterSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        setColor(16);
+        Theme theme = currentTheme();
         backgroundColor = theme.getColor(10);
-        fillColor = theme.getColor(16);
         gridColor = theme.getColor(10);
         gridFrequency = 0.25f;
         font = theme.getFont().deriveFont(Font.BOLD);
         textColor = theme.getColor(1);
         textFillColor = theme.getColor(4);
-
-        // Set the derived colors
-        darkFillColor = TerraTheme.darken(fillColor);
     }
 
     @Override
@@ -97,8 +96,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
                 preferredWidth = 0;
             }
 
-            // If the meter has no content, its preferred width is hard-coded by
-            // the
+            // If the meter has no content, its preferred width is hard-coded by the
             // class and is not affected by the height constraint
             preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         } else {
@@ -127,8 +125,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
                 preferredHeight = 0;
             }
 
-            // If the meter has no content, its preferred height is hard-coded
-            // by the
+            // If the meter has no content, its preferred height is hard-coded by the
             // class and is not affected by the width constraint
             preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
         }
@@ -152,8 +149,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
             preferredHeight = (int) Math.ceil(lm.getHeight()) + 2;
         }
 
-        // If meter has no content, its preferred size is hard coded by the
-        // class
+        // If meter has no content, its preferred size is hard coded by the class
         preferredWidth = Math.max(preferredWidth, DEFAULT_WIDTH);
         preferredHeight = Math.max(preferredHeight, DEFAULT_HEIGHT);
 
@@ -215,8 +211,8 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
 
         // Paint the interior fill
         if (!themeIsFlat()) {
-            graphics.setPaint(new GradientPaint(0, 0, TerraTheme.brighten(fillColor), 0, height,
-                darkFillColor));
+            graphics.setPaint(new GradientPaint(0, 0, brightFillColor,
+                0, height, darkFillColor));
             graphics.fillRect(0, 0, meterStop, height);
 
             // Paint the grid
@@ -229,17 +225,19 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
                 GraphicsUtilities.drawLine(graphics, gridX, 0, height, Orientation.VERTICAL);
             }
         } else {
-            // Paint the background
-            graphics.setColor(backgroundColor);
-            graphics.fillRect(0, 0, width, height);
-
+            // Paint the meter color up til the stop position
             graphics.setPaint(darkFillColor);
             graphics.fillRect(0, 0, meterStop, height);
+
+            // Then paint the background the rest of the width
+            graphics.setColor(backgroundColor);
+            graphics.fillRect(meterStop, 0, width, height);
+
         }
 
         String text = meter.getText();
         if (text != null && text.length() > 0) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+            FontRenderContext fontRenderContext = GraphicsUtilities.prepareForText(graphics);
             LineMetrics lm = font.getLineMetrics("", fontRenderContext);
             float ascent = lm.getAscent();
 
@@ -251,11 +249,6 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
             float textY = (height - textHeight) / 2;
 
             // Paint the text
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                fontRenderContext.getAntiAliasingHint());
-            graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                fontRenderContext.getFractionalMetricsHint());
-
             Shape clip = graphics.getClip();
             graphics.clipRect(0, 0, meterStop, height);
             graphics.setPaint(textFillColor);
@@ -275,16 +268,22 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     }
 
     public void setColor(Color color) {
+        Utils.checkNull(color, "fillColor");
+        // Note: fillColor null is not acceptable because of the brighten
+        // and darken done on it.
         this.fillColor = color;
+        this.darkFillColor = TerraTheme.darken(fillColor);
+        this.brightFillColor = TerraTheme.brighten(fillColor);
         repaintComponent();
     }
 
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
+    }
 
-        setColor(GraphicsUtilities.decodeColor(color));
+    public final void setColor(int color) {
+        Theme theme = currentTheme();
+        setColor(theme.getColor(color));
     }
 
     public Color getGridColor() {
@@ -292,16 +291,13 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     }
 
     public void setGridColor(Color gridColor) {
+        // Null grid color seems acceptable
         this.gridColor = gridColor;
         repaintComponent();
     }
 
     public final void setGridColor(String gridColor) {
-        if (gridColor == null) {
-            throw new IllegalArgumentException("gridColor is null.");
-        }
-
-        setGridColor(GraphicsUtilities.decodeColor(gridColor));
+        setGridColor(GraphicsUtilities.decodeColor(gridColor, "gridColor"));
     }
 
     public Color getTextColor() {
@@ -314,11 +310,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     }
 
     public final void setTextColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setTextColor(GraphicsUtilities.decodeColor(color));
+        setTextColor(GraphicsUtilities.decodeColor(color, "textColor"));
     }
 
     public Color getTextFillColor() {
@@ -326,16 +318,13 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     }
 
     public void setTextFillColor(Color color) {
+        // Looks like null is acceptable here
         this.textFillColor = color;
         repaintComponent();
     }
 
     public final void setTextFillColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setTextFillColor(GraphicsUtilities.decodeColor(color));
+        setTextFillColor(GraphicsUtilities.decodeColor(color, "textFillColor"));
     }
 
     public float getGridFrequency() {
@@ -351,9 +340,7 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     }
 
     public final void setGridFrequency(Number gridFrequency) {
-        if (gridFrequency == null) {
-            throw new IllegalArgumentException("gridFrequency is null.");
-        }
+        Utils.checkNull(gridFrequency, "gridFrequency");
 
         setGridFrequency(gridFrequency.floatValue());
     }
@@ -363,27 +350,17 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 

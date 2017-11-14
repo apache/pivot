@@ -163,7 +163,7 @@ public class TerraPaletteSkin extends WindowSkin {
 
     @SuppressWarnings("unused")
     public TerraPaletteSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         Color backgroundColor = theme.getColor(10);
         setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
 

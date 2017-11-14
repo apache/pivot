@@ -333,8 +333,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
             dataRenderer.render(tabButton.getButtonData(), tabButton, false);
 
             Graphics2D contentGraphics = (Graphics2D) graphics.create();
-            contentGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
+            GraphicsUtilities.setAntialiasingOff(contentGraphics);
 
             switch (tabOrientation) {
                 case HORIZONTAL: {

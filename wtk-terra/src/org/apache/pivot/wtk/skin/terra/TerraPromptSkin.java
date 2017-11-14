@@ -41,6 +41,8 @@ public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
     private Label messageLabel = null;
     private BoxPane messageBoxPane = null;
     private BoxPane optionButtonBoxPane = null;
+    private static final String BUTTON_STYLE_NAME =
+            TerraPromptSkin.class.getPackage().getName() + "." + TerraTheme.COMMAND_BUTTON_STYLE;
 
     private ButtonPressListener optionButtonPressListener = new ButtonPressListener() {
         @Override
@@ -89,8 +91,7 @@ public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
 
         for (Object option : prompt.getOptions()) {
             PushButton optionButton = new PushButton(option);
-            optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName() + "."
-                + TerraTheme.COMMAND_BUTTON_STYLE);
+            optionButton.setStyleName(BUTTON_STYLE_NAME);
             optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
             optionButtonBoxPane.add(optionButton);
@@ -144,8 +145,7 @@ public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
         Object option = prompt.getOptions().get(index);
 
         PushButton optionButton = new PushButton(option);
-        optionButton.setStyleName(TerraPromptSkin.class.getPackage().getName() + "."
-            + TerraTheme.COMMAND_BUTTON_STYLE);
+        optionButton.setStyleName(BUTTON_STYLE_NAME);
         optionButton.getButtonPressListeners().add(optionButtonPressListener);
 
         optionButtonBoxPane.insert(optionButton, index);

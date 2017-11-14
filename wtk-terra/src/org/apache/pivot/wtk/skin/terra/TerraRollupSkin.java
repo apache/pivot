@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentMouseButtonListener;
@@ -97,6 +98,9 @@ public class TerraRollupSkin extends RollupSkin {
      * Skin for the rollup button.
      */
     protected class RollupButtonSkin extends ComponentSkin {
+        private static final int WIDTH = 7;
+        private static final int HEIGHT = 7;
+
         @Override
         public boolean isFocusable() {
             return false;
@@ -104,17 +108,17 @@ public class TerraRollupSkin extends RollupSkin {
 
         @Override
         public int getPreferredWidth(int height) {
-            return 7;
+            return WIDTH;
         }
 
         @Override
         public int getPreferredHeight(int width) {
-            return 7;
+            return HEIGHT;
         }
 
         @Override
         public Dimensions getPreferredSize() {
-            return new Dimensions(7, 7);
+            return new Dimensions(WIDTH, HEIGHT);
         }
 
         @Override
@@ -132,8 +136,7 @@ public class TerraRollupSkin extends RollupSkin {
             } else {
                 graphics.setPaint(disabledButtonColor);
             }
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             if (rollup.isCollapsible()) {
                 if (rollup.isExpanded()) {
@@ -199,7 +202,7 @@ public class TerraRollupSkin extends RollupSkin {
     private static final int DEFAULT_EXPAND_RATE = 30;
 
     public TerraRollupSkin() {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
 
         buttonColor = theme.getColor(1);
         disabledButtonColor = theme.getColor(7);
@@ -340,24 +343,21 @@ public class TerraRollupSkin extends RollupSkin {
         }
 
         if (content != null) {
+            boolean contentVisible = false;
             if (rollup.isExpanded() || (expandTransition != null && !expandTransition.isReversed())) {
-                int contentWidth, contentHeight;
+                Dimensions size;
                 if (fill) {
-                    contentWidth = justifiedWidth;
-                    contentHeight = content.getPreferredHeight(contentWidth);
+                    size = new Dimensions(justifiedWidth, content.getPreferredHeight(justifiedWidth));
                 } else {
-                    Dimensions contentPreferredSize = content.getPreferredSize();
-                    contentWidth = contentPreferredSize.width;
-                    contentHeight = contentPreferredSize.height;
+                    size = content.getPreferredSize();
                 }
 
                 content.setLocation(x, y);
-                content.setSize(contentWidth, contentHeight);
+                content.setSize(size);
 
-                content.setVisible(true);
-            } else {
-                content.setVisible(false);
+                contentVisible = true;
             }
+            content.setVisible(contentVisible);
 
         }
 
@@ -371,25 +371,19 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     public final void setButtonColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setButtonColor(theme.getColor(color));
     }
 
     public void setButtonColor(Color buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
+        Utils.checkNull(buttonColor, "buttonColor");
 
         this.buttonColor = buttonColor;
         rollupButton.repaint();
     }
 
     public final void setButtonColor(String buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
-
-        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
     }
 
     public Color getDisabledButtonColor() {
@@ -397,25 +391,19 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     public final void setDisabledButtonColor(int color) {
-        TerraTheme theme = (TerraTheme) Theme.getTheme();
+        Theme theme = currentTheme();
         setDisabledButtonColor(theme.getColor(color));
     }
 
     public void setDisabledButtonColor(Color buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
+        Utils.checkNull(buttonColor, "buttonColor");
 
         this.disabledButtonColor = buttonColor;
         rollupButton.repaint();
     }
 
     public final void setDisabledButtonColor(String buttonColor) {
-        if (buttonColor == null) {
-            throw new IllegalArgumentException("buttonColor is null.");
-        }
-
-        setDisabledButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+        setDisabledButtonColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
     }
 
     public int getSpacing() {
@@ -423,15 +411,19 @@ public class TerraRollupSkin extends RollupSkin {
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
         this.spacing = spacing;
 
         Rollup rollup = (Rollup) getComponent();
         if (rollup.isExpanded()) {
             invalidateComponent();
         }
+    }
+
+    public void setSpacing(Number spacing) {
+        Utils.checkNull(spacing, "spacing");
+
+        setSpacing(spacing.intValue());
     }
 
     public int getBuffer() {

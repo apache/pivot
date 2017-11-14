@@ -501,7 +501,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public final void setButtonColor(String buttonColor) {
-        setButtonColor(GraphicsUtilities.decodeColor(buttonColor));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
     }
 
     public Color getButtonBackgroundColor() {
@@ -515,7 +515,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
-        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor));
+        setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor, "buttonBackgroundColor"));
     }
 
     public final void setButtonBackgroundColor(int buttonBackgroundColor) {

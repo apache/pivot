@@ -226,8 +226,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         // Paint the content
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_OFF);
+        GraphicsUtilities.setAntialiasingOff(graphics);
 
         Button.DataRenderer dataRenderer = pushButton.getDataRenderer();
         dataRenderer.render(pushButton.getButtonData(), pushButton, highlighted);
@@ -240,8 +239,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         dataRenderer.paint(contentGraphics);
         contentGraphics.dispose();
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         // Paint the border
         if (borderColorLocal != null && !themeIsFlat()) {
@@ -278,27 +276,17 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -314,7 +302,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -334,7 +322,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -356,7 +344,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -377,7 +365,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor, "disabledBackgroundColor"));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
@@ -397,7 +385,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -417,7 +405,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor, "disabledBorderColor"));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {
