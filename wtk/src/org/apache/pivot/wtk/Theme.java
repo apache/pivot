@@ -191,7 +191,7 @@ public abstract class Theme {
     public abstract boolean isTransitionEnabled();
 
     /**
-     * Set appropriate default styles for the given class name, specified by the
+     * Set appropriate default styles for the given skin object, specified by the
      * current theme.
      *
      * @param <T>  The skin class whose type we are dealing with.

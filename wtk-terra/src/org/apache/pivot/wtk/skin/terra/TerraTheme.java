@@ -112,7 +112,29 @@ public final class TerraTheme extends Theme {
     private Color defaultForegroundColor;
 
     public static final String LOCATION_PROPERTY = "location";
+
+    public static final String FONT_PROPERTY = "font";
+    public static final String COLOR_MULTIPLIER_PROPERTY = "colorMultiplier";
+    public static final String THEME_IS_DARK_PROPERTY = "themeIsDark";
+    public static final String THEME_IS_FLAT_PROPERTY = "themeIsFlat";
+    public static final String TRANSITION_ENABLED_PROPERTY = "transitionEnabled";
+    public static final String COLORS_PROPERTY = "colors";
+    public static final String DEFAULT_STYLES_PROPERTY = "defaultStylesFile";
+    public static final String NAMED_STYLES_PROPERTY = "namedStylesFile";
+    public static final String MESSAGE_ICONS_PROPERTY = "messageIcons";
+    public static final String SMALL_MESSAGE_ICONS_PROPERTY = "smallMessageIcons";
+    public static final String DEFAULT_BACKGROUND_COLOR_PROPERTY = "defaultBackgroundColor";
+    public static final String DEFAULT_FOREGROUND_COLOR_PROPERTY = "defaultForegroundColor";
+
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
+
+    public static final String DEFAULT_STYLES_FILE = "terra_theme_defaults.json";
+    public static final String NAMED_STYLES_FILE = "terra_theme_styles.json";
+
+    /** Can be overridden by {@link #DEFAULT_STYLES_PROPERTY} property. */
+    private String defaultStylesFile = DEFAULT_STYLES_FILE;
+    /** Can be overridden by {@link #NAMED_STYLES_PROPERTY} property. */
+    private String namedStylesFile = NAMED_STYLES_FILE;
 
     private Map<String, Map<String, ?>> themeDefaultStyles = null;
 
@@ -230,7 +252,7 @@ public final class TerraTheme extends Theme {
 
         // Load our theme default styles for each skin class
         themeDefaultStyles = new HashMap<>();
-        try (InputStream inputStream = getClass().getResourceAsStream("terra_theme_defaults.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream(defaultStylesFile)) {
             JSONSerializer serializer = new JSONSerializer();
             Map<String, ?> terraThemeDefaultStyles = (Map<String, ?>) serializer.readObject(inputStream);
 
@@ -242,7 +264,7 @@ public final class TerraTheme extends Theme {
         }
 
         // Install named styles
-        try (InputStream inputStream = getClass().getResourceAsStream("terra_theme_styles.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream(namedStylesFile)) {
             JSONSerializer serializer = new JSONSerializer();
             Map<String, ?> terraThemeNamedStyles = (Map<String, ?>) serializer.readObject(inputStream);
 
@@ -271,22 +293,31 @@ public final class TerraTheme extends Theme {
             @SuppressWarnings("unchecked")
             Map<String, ?> properties = (Map<String, ?>) serializer.readObject(inputStream);
 
-            font = Font.decode((String) properties.get("font"));
+            font = Font.decode((String) properties.get(FONT_PROPERTY));
+
+            String defaultStylesName = (String) properties.get(DEFAULT_STYLES_PROPERTY);
+            if (defaultStylesName != null && !defaultStylesName.isEmpty()) {
+                defaultStylesFile = defaultStylesName;
+            }
+            String namedStylesName = (String) properties.get(NAMED_STYLES_PROPERTY);
+            if (namedStylesName != null && !namedStylesName.isEmpty()) {
+                namedStylesFile = namedStylesName;
+            }
 
             @SuppressWarnings("unchecked")
-            List<String> colorCodes = (List<String>) properties.get("colors");
+            List<String> colorCodes = (List<String>) properties.get(COLORS_PROPERTY);
             numberOfPaletteColors = colorCodes.getLength();
             int numberOfColors = numberOfPaletteColors * 3;
             colors = new ArrayList<>(numberOfColors);
 
-            Double mult = (Double) properties.get("colorMultiplier");
+            Double mult = (Double) properties.get(COLOR_MULTIPLIER_PROPERTY);
             if (mult != null) {
                 colorMultiplier = mult.floatValue();
             }
 
-            themeIsDark = properties.getBoolean("themeIsDark", false);
-            themeIsFlat = properties.getBoolean("themeIsFlat", false);
-            transitionEnabled = properties.getBoolean("transitionEnabled", true);
+            themeIsDark = properties.getBoolean(THEME_IS_DARK_PROPERTY, false);
+            themeIsFlat = properties.getBoolean(THEME_IS_FLAT_PROPERTY, false);
+            transitionEnabled = properties.getBoolean(TRANSITION_ENABLED_PROPERTY, true);
 
             for (String colorCode : colorCodes) {
                 Color baseColor = GraphicsUtilities.decodeColor(colorCode, "baseColor");
@@ -295,20 +326,21 @@ public final class TerraTheme extends Theme {
                 colors.add(brighten(baseColor));
             }
 
+            
             @SuppressWarnings("unchecked")
-            Map<String, String> messageIconNames = (Map<String, String>) properties.get("messageIcons");
+            Map<String, String> messageIconNames = (Map<String, String>) properties.get(MESSAGE_ICONS_PROPERTY);
             messageIcons = new HashMap<>();
             loadMessageIcons(messageIconNames, messageIcons);
 
             @SuppressWarnings("unchecked")
-            Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get("smallMessageIcons");
+            Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get(SMALL_MESSAGE_ICONS_PROPERTY);
             smallMessageIcons = new HashMap<>();
             loadMessageIcons(smallMessageIconNames, smallMessageIcons);
 
-            if ((defaultBackgroundColor = getColorProperty(properties, "defaultBackgroundColor")) == null) {
+            if ((defaultBackgroundColor = getColorProperty(properties, DEFAULT_BACKGROUND_COLOR_PROPERTY)) == null) {
                 defaultBackgroundColor = super.getDefaultBackgroundColor();
             }
-            if ((defaultForegroundColor = getColorProperty(properties, "defaultForegroundColor")) == null) {
+            if ((defaultForegroundColor = getColorProperty(properties, DEFAULT_FOREGROUND_COLOR_PROPERTY)) == null) {
                 defaultForegroundColor = super.getDefaultForegroundColor();
             }
         } catch (IOException exception) {
@@ -573,7 +605,7 @@ public final class TerraTheme extends Theme {
     }
 
     /**
-     * Set appropriate default styles for the given class name, specified by the
+     * Set appropriate default styles for the given skin object, specified by the
      * current theme.
      *
      * @param <T>  The skin class whose type we are dealing with.
