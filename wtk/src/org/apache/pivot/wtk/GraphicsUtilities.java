@@ -189,9 +189,11 @@ public final class GraphicsUtilities {
      * <li>Any of the CSS3/X11 color names from here:
      * <a href="http://www.w3.org/TR/css3-color/">http://www.w3.org/TR/css3-color/</a>
      * (except the Java color names will be accepted first if there is a conflict).</li>
+     * <li>null - case-insensitive</li>
      * </ul>
      * @param argument A name for this color value (for the exception if it can't be decoded).
-     * @return A {@link Color} on successful decoding
+     * @return A {@link Color} on successful decoding, which could be {@code null} for an input
+     * of {@code "null"}.
      * @throws NumberFormatException if the value in the first two cases
      * contains illegal hexadecimal digits.
      * @throws IllegalArgumentException if the value is not in one of the
@@ -200,7 +202,7 @@ public final class GraphicsUtilities {
     public static Color decodeColor(final String value, String argument) throws NumberFormatException {
         Utils.checkNullOrEmpty(value, argument == null ? "color" : argument);
 
-        Color color;
+        Color color = null;
         if (value.startsWith("0x") || value.startsWith("0X")) {
             String digits = value.substring(2);
             if (digits.length() != 8) {
@@ -223,12 +225,11 @@ public final class GraphicsUtilities {
             float alpha = 1.0f;
 
             color = getColor(rgb, alpha);
-        } else {
+        } else if (!value.equalsIgnoreCase("null")) {
             // PIVOT-985: new fix:  use the new CSSColor lookup for the name, which
             // has the spelling variants already included in the X11/CSS3 list, as well
             // as all the standard Java Color names, so we can do this without doing
-            // the expensive reflection on the Color class. Also handles case-insensitive
-            // lookup.
+            // the expensive reflection on the Color class. The lookup here is case-insensitive.
             // This method will throw if the name isn't valid.
             color = CSSColor.fromString(value).getColor();
         }

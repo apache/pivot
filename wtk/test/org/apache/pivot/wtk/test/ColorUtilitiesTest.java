@@ -78,6 +78,8 @@ public class ColorUtilitiesTest {
             fail("Decode of \"lightGray\" should succeed!");
         }
 
+        assertEquals((Color)null, GraphicsUtilities.decodeColor("null"));
+
         int transparency = -1;
         for (CSSColor color : CSSColor.values()) {
             transparency = (transparency + 1) % 256;
