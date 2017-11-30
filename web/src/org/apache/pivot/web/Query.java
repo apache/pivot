@@ -282,7 +282,7 @@ public abstract class Query<V> extends IOTask<V> {
      * DELETE.
      */
     public long getBytesSent() {
-        return bytesSent;
+        return bytesSent.get();
     }
 
     /**
@@ -297,7 +297,7 @@ public abstract class Query<V> extends IOTask<V> {
      * @return The number of bytes received.
      */
     public long getBytesReceived() {
-        return bytesReceived;
+        return bytesReceived.get();
     }
 
     /**
@@ -323,8 +323,8 @@ public abstract class Query<V> extends IOTask<V> {
 
         Serializer<Object> serializerLocal = (Serializer<Object>) this.serializer;
 
-        bytesSent = 0;
-        bytesReceived = 0;
+        bytesSent.set(0);
+        bytesReceived.set(0);
         bytesExpected = -1;
 
         status = 0;

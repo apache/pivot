@@ -20,17 +20,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.pivot.util.concurrent.AbortException;
 import org.apache.pivot.util.concurrent.Task;
 
 /**
- * Abstract base class for input/output tasks.
+ * Abstract base class for asynchronous input/output tasks.
  */
 public abstract class IOTask<V> extends Task<V> {
     /**
      * Input stream that monitors the bytes that are read from it by
-     * incrementing the <tt>bytesReceived</tt> member variable.
+     * incrementing the {@link #bytesReceived} member variable.  Also
+     * checks for task being aborted on every operation.
      */
     protected class MonitoredInputStream extends InputStream {
         private InputStream inputStream;
@@ -50,7 +52,7 @@ public abstract class IOTask<V> extends Task<V> {
             int result = inputStream.read();
 
             if (result != -1) {
-                bytesReceived++;
+                bytesReceived.incrementAndGet();
             }
 
             return result;
@@ -65,7 +67,7 @@ public abstract class IOTask<V> extends Task<V> {
             int count = inputStream.read(b);
 
             if (count != -1) {
-                bytesReceived += count;
+                bytesReceived.addAndGet(count);
             }
 
             return count;
@@ -80,7 +82,7 @@ public abstract class IOTask<V> extends Task<V> {
             int count = inputStream.read(b, off, len);
 
             if (count != -1) {
-                bytesReceived += count;
+                bytesReceived.addAndGet(count);
             }
 
             return count;
@@ -93,7 +95,7 @@ public abstract class IOTask<V> extends Task<V> {
             }
 
             long count = inputStream.skip(n);
-            bytesReceived += count;
+            bytesReceived.addAndGet(count);
             return count;
         }
 
@@ -118,7 +120,7 @@ public abstract class IOTask<V> extends Task<V> {
             }
 
             inputStream.mark(readLimit);
-            mark = bytesReceived;
+            mark = bytesReceived.get();
         }
 
         @Override
@@ -128,7 +130,7 @@ public abstract class IOTask<V> extends Task<V> {
             }
 
             inputStream.reset();
-            bytesReceived = mark;
+            bytesReceived.set(mark);
         }
 
         @Override
@@ -139,7 +141,8 @@ public abstract class IOTask<V> extends Task<V> {
 
     /**
      * Output stream that monitors the bytes that are written to it by
-     * incrementing the <tt>bytesSent</tt> member variable.
+     * incrementing the {@link #bytesSent} member variable.  Also checks
+     * for task being aborted on every operation.
      */
     protected class MonitoredOutputStream extends OutputStream {
         private OutputStream outputStream;
@@ -169,7 +172,7 @@ public abstract class IOTask<V> extends Task<V> {
             }
 
             outputStream.write(b);
-            bytesSent += b.length;
+            bytesSent.addAndGet(b.length);
         }
 
         @Override
@@ -179,7 +182,7 @@ public abstract class IOTask<V> extends Task<V> {
             }
 
             outputStream.write(b, off, len);
-            bytesSent += len;
+            bytesSent.addAndGet(len);
         }
 
         @Override
@@ -189,13 +192,12 @@ public abstract class IOTask<V> extends Task<V> {
             }
 
             outputStream.write(b);
-            bytesSent++;
+            bytesSent.incrementAndGet();
         }
     }
 
-    // TODO: use AtomicInteger instead of volatile ...
-    protected volatile long bytesSent = 0;
-    protected volatile long bytesReceived = 0;
+    protected AtomicLong bytesSent = new AtomicLong();
+    protected AtomicLong bytesReceived = new AtomicLong();
 
     public IOTask() {
         super();
