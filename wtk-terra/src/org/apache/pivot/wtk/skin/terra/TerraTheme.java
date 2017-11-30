@@ -49,6 +49,7 @@ import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.FillPane;
 import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Frame;
+import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.GridPane;
 import org.apache.pivot.wtk.HyperlinkButton;
 import org.apache.pivot.wtk.Label;
@@ -89,6 +90,7 @@ import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VFSBrowser;
 import org.apache.pivot.wtk.VFSBrowserSheet;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
@@ -96,24 +98,28 @@ import org.apache.pivot.wtk.util.ColorUtilities;
  */
 public final class TerraTheme extends Theme {
     private Font font = null;
-    private ArrayList<Color> colors = null;
+    private List<Color> colors = null;
     private int numberOfPaletteColors = 0;
-    private HashMap<MessageType, Image> messageIcons = null;
-    private HashMap<MessageType, Image> smallMessageIcons = null;
+    private Map<MessageType, Image> messageIcons = null;
+    private Map<MessageType, Image> smallMessageIcons = null;
 
     private static float colorMultiplier = 0.1f;
     private static boolean themeIsDark = false;
     private static boolean themeIsFlat = false;
     private static boolean transitionEnabled = true;
 
-    private static Color defaultBackgroundColor;
-    private static Color defaultForegroundColor;
+    private Color defaultBackgroundColor;
+    private Color defaultForegroundColor;
 
     public static final String LOCATION_PROPERTY = "location";
     public static final String COMMAND_BUTTON_STYLE = "commandButton";
 
+    private Map<String, Map<String, ?>> themeDefaultStyles = null;
+
+
     @SuppressWarnings("unchecked")
     public TerraTheme() {
+        // Note: these classes are in addition to the classes listed in Theme's constructor.
         componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
         componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
         componentSkinMap.put(Alert.class, TerraAlertSkin.class);
@@ -222,20 +228,39 @@ public final class TerraTheme extends Theme {
 
         load(locationURL);
 
+        // Load our theme default styles for each skin class
+        themeDefaultStyles = new HashMap<>();
+        try (InputStream inputStream = getClass().getResourceAsStream("terra_theme_defaults.json")) {
+            JSONSerializer serializer = new JSONSerializer();
+            Map<String, ?> terraThemeDefaultStyles = (Map<String, ?>) serializer.readObject(inputStream);
+
+            for (String className : terraThemeDefaultStyles) {
+                themeDefaultStyles.put(className, (Map<String, ?>) terraThemeDefaultStyles.get(className));
+            }
+        } catch (IOException | SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
         // Install named styles
         try (InputStream inputStream = getClass().getResourceAsStream("terra_theme_styles.json")) {
             JSONSerializer serializer = new JSONSerializer();
-            Map<String, ?> terraThemeStyles = (Map<String, ?>) serializer.readObject(inputStream);
+            Map<String, ?> terraThemeNamedStyles = (Map<String, ?>) serializer.readObject(inputStream);
 
-            for (String name : terraThemeStyles) {
+            for (String name : terraThemeNamedStyles) {
                 Component.getNamedStyles().put(packageName + "." + name,
-                    (Map<String, ?>) terraThemeStyles.get(name));
+                    (Map<String, ?>) terraThemeNamedStyles.get(name));
             }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
+        } catch (IOException | SerializationException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    private Color getColorProperty(Map<String, ?> properties, String colorPropertyName) {
+        String colorString = (String) properties.get(colorPropertyName);
+        if (colorString != null) {
+            return GraphicsUtilities.decodeColor(colorString, colorPropertyName);
+        }
+        return null;
     }
 
     private void load(URL location) {
@@ -264,7 +289,7 @@ public final class TerraTheme extends Theme {
             transitionEnabled = properties.getBoolean("transitionEnabled", true);
 
             for (String colorCode : colorCodes) {
-                Color baseColor = Color.decode(colorCode);
+                Color baseColor = GraphicsUtilities.decodeColor(colorCode, "baseColor");
                 colors.add(darken(baseColor));
                 colors.add(baseColor);
                 colors.add(brighten(baseColor));
@@ -280,16 +305,10 @@ public final class TerraTheme extends Theme {
             smallMessageIcons = new HashMap<>();
             loadMessageIcons(smallMessageIconNames, smallMessageIcons);
 
-            String defaultBackgroundColorString = (String) properties.get("defaultBackgroundColor");
-            if (defaultBackgroundColorString != null) {
-                defaultBackgroundColor = Color.decode(defaultBackgroundColorString);
-            } else {
+            if ((defaultBackgroundColor = getColorProperty(properties, "defaultBackgroundColor")) == null) {
                 defaultBackgroundColor = super.getDefaultBackgroundColor();
             }
-            String defaultForegroundColorString = (String) properties.get("defaultForegroundColor");
-            if (defaultForegroundColorString != null) {
-                defaultForegroundColor = Color.decode(defaultForegroundColorString);
-            } else {
+            if ((defaultForegroundColor = getColorProperty(properties, "defaultForegroundColor")) == null) {
                 defaultForegroundColor = super.getDefaultForegroundColor();
             }
         } catch (IOException exception) {
@@ -300,7 +319,7 @@ public final class TerraTheme extends Theme {
     }
 
     private void loadMessageIcons(Map<String, String> messageIconNames,
-        HashMap<MessageType, Image> messageIconsLocal) {
+        Map<MessageType, Image> messageIconsMap) {
         for (String messageIconType : messageIconNames) {
             String messageIconName = messageIconNames.get(messageIconType);
 
@@ -311,8 +330,7 @@ public final class TerraTheme extends Theme {
                 throw new RuntimeException(exception);
             }
 
-            messageIconsLocal.put(MessageType.valueOf(messageIconType.toUpperCase(Locale.ENGLISH)),
-                messageIcon);
+            messageIconsMap.put(MessageType.fromString(messageIconType), messageIcon);
         }
     }
 
@@ -552,6 +570,25 @@ public final class TerraTheme extends Theme {
             return ColorUtilities.adjustBrightness(color, (colorMultiplier * -1.0f));
         }
         return ColorUtilities.adjustBrightness(color, colorMultiplier);
+    }
+
+    /**
+     * Set appropriate default styles for the given class name, specified by the
+     * current theme.
+     *
+     * @param <T>  The skin class whose type we are dealing with.
+     * @param skin The skin object of that type whose styles are to be set.
+     */
+    public <T extends ComponentSkin> void setDefaultStyles(T skin) {
+        String className = skin.getClass().getSimpleName();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> styleMap = (Map<String, Object>)themeDefaultStyles.get(className);
+        if (styleMap == null) {
+            throw new IllegalArgumentException("Cannot find default styles for class " + className);
+        }
+        Component component = skin.getComponent();
+        Component.StyleDictionary styles = component.getStyles();
+        styles.putAll(styleMap);
     }
 
 }

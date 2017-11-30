@@ -266,7 +266,7 @@ public class BeanAdapter implements Map<String, Object> {
 
             if (propertyType != null) {
                 setterMethod = getSetterMethod(key, propertyType);
-                valueUpdated = coerce(valueUpdated, propertyType);
+                valueUpdated = coerce(valueUpdated, propertyType, key);
             }
         }
 
@@ -282,7 +282,7 @@ public class BeanAdapter implements Map<String, Object> {
             if (valueUpdated != null) {
                 Class<?> valueType = valueUpdated.getClass();
                 if (!fieldType.isAssignableFrom(valueType)) {
-                    valueUpdated = coerce(valueUpdated, fieldType);
+                    valueUpdated = coerce(valueUpdated, fieldType, key);
                 }
             }
 
@@ -322,7 +322,8 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws PropertyNotFoundException If any of the given properties do not
      * exist or are read-only.
      */
-    public void putAll(Map<String, ?> valueMap) {
+    @Override
+    public void putAll(Map<String, Object> valueMap) {
         for (String key : valueMap) {
             put(key, valueMap.get(key));
         }
@@ -732,11 +733,12 @@ public class BeanAdapter implements Map<String, Object> {
      * @param <T> The parametric type to coerce to.
      * @param value The object to be coerced.
      * @param type The type to coerce it to.
+     * @param key The property name in question.
      * @return The coerced value.
      * @throws IllegalArgumentException for all the possible other exceptions.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T coerce(Object value, Class<? extends T> type) {
+    public static <T> T coerce(Object value, Class<? extends T> type, String key) {
         Utils.checkNull(type, "type");
 
         Object coercedValue;
@@ -821,7 +823,7 @@ public class BeanAdapter implements Map<String, Object> {
                     }
                 } else {
                     throw new IllegalArgumentException("Unable to coerce "
-                        + value.getClass().getName() + " to " + type + ".");
+                        + value.getClass().getName() + " to " + type + " for \"" + key + "\" property.");
                 }
             }
         }

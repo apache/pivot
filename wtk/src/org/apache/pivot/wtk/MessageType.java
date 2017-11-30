@@ -16,9 +16,28 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Locale;
+
+
 /**
  * Enumeration defining a message's type.
  */
 public enum MessageType {
-    ERROR, WARNING, QUESTION, INFO
+    ERROR,
+    WARNING,
+    QUESTION,
+    INFO;
+
+    /**
+     * Lookup one of these values from the given string.
+     *
+     * @param value The string value to convert.
+     * @return One of our values from the upper-case version
+     * of the input string, if possible.
+     * @throws IllegalArgumentException if the input string doesn't
+     * match any of our values.
+     */
+    public static MessageType fromString(String value) {
+        return valueOf(value.toUpperCase(Locale.ENGLISH));
+    }
 }

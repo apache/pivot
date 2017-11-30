@@ -202,14 +202,6 @@ public class TerraRollupSkin extends RollupSkin {
     private static final int DEFAULT_EXPAND_RATE = 30;
 
     public TerraRollupSkin() {
-        Theme theme = currentTheme();
-
-        buttonColor = theme.getColor(1);
-        disabledButtonColor = theme.getColor(7);
-        spacing = 4;
-        buffer = 4;
-        fill = false;
-        headingToggles = true;
     }
 
     @Override
@@ -221,6 +213,9 @@ public class TerraRollupSkin extends RollupSkin {
         // Add the rollup button
         rollupButton = new RollupButton();
         rollup.add(rollupButton);
+
+        Theme theme = currentTheme();
+        theme.setDefaultStyles(this);
 
         // Initialize state
         headingChanged(rollup, null);

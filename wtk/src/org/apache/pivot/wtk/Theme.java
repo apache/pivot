@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.skin.BorderSkin;
 import org.apache.pivot.wtk.skin.BoxPaneSkin;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
+import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.skin.FillPaneSkin;
 import org.apache.pivot.wtk.skin.FlowPaneSkin;
 import org.apache.pivot.wtk.skin.GridPaneFillerSkin;
@@ -188,6 +189,15 @@ public abstract class Theme {
      * @return {@code true} if enabled (default), {@code false} otherwise.
      */
     public abstract boolean isTransitionEnabled();
+
+    /**
+     * Set appropriate default styles for the given class name, specified by the
+     * current theme.
+     *
+     * @param <T>  The skin class whose type we are dealing with.
+     * @param skin The skin object of that type whose styles are to be set.
+     */
+    public abstract <T extends ComponentSkin> void setDefaultStyles(T skin);
 
     /**
      * Returns the skin class responsible for skinning the specified component

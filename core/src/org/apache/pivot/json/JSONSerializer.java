@@ -262,7 +262,7 @@ public class JSONSerializer implements Serializer<Object> {
         // Read the root value
         Object object;
         try {
-            object = readValue(macroReader, type);
+            object = readValue(macroReader, type, "<root>");
         } catch (SerializationException exception) {
             System.err.println("An error occurred while processing input at line number "
                 + (lineNumberReader.getLineNumber() + 1));
@@ -273,7 +273,7 @@ public class JSONSerializer implements Serializer<Object> {
         return object;
     }
 
-    private Object readValue(Reader reader, Type typeArgument) throws IOException,
+    private Object readValue(Reader reader, Type typeArgument, String key) throws IOException,
         SerializationException {
         Object object = null;
 
@@ -286,13 +286,13 @@ public class JSONSerializer implements Serializer<Object> {
         if (c == 'n') {
             object = readNullValue(reader);
         } else if (c == '"' || c == '\'') {
-            object = readStringValue(reader, typeArgument);
+            object = readStringValue(reader, typeArgument, key);
         } else if (c == '+' || c == '-' || Character.isDigit(c)) {
-            object = readNumberValue(reader, typeArgument);
+            object = readNumberValue(reader, typeArgument, key);
         } else if (c == 't' || c == 'f') {
-            object = readBooleanValue(reader, typeArgument);
+            object = readBooleanValue(reader, typeArgument, key);
         } else if (c == '[') {
-            object = readListValue(reader, typeArgument);
+            object = readListValue(reader, typeArgument, key);
         } else if (c == '{') {
             object = readMapValue(reader, typeArgument);
         } else {
@@ -429,8 +429,8 @@ public class JSONSerializer implements Serializer<Object> {
         return stringBuilder.toString();
     }
 
-    private Object readStringValue(Reader reader, Type typeArgument) throws IOException,
-        SerializationException {
+    private Object readStringValue(Reader reader, Type typeArgument, String key)
+        throws IOException, SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert string to " + typeArgument + ".");
         }
@@ -442,10 +442,10 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readString(this, string);
         }
 
-        return BeanAdapter.coerce(string, (Class<?>) typeArgument);
+        return BeanAdapter.coerce(string, (Class<?>) typeArgument, key);
     }
 
-    private Object readNumberValue(Reader reader, Type typeArgument) throws IOException,
+    private Object readNumberValue(Reader reader, Type typeArgument, String key) throws IOException,
         SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert number to " + typeArgument + ".");
@@ -485,10 +485,10 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readNumber(this, number);
         }
 
-        return BeanAdapter.coerce(number, (Class<?>) typeArgument);
+        return BeanAdapter.coerce(number, (Class<?>) typeArgument, key);
     }
 
-    private Object readBooleanValue(Reader reader, Type typeArgument) throws IOException,
+    private Object readBooleanValue(Reader reader, Type typeArgument, String key) throws IOException,
         SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert boolean to " + typeArgument + ".");
@@ -519,11 +519,11 @@ public class JSONSerializer implements Serializer<Object> {
             jsonSerializerListeners.readBoolean(this, value);
         }
 
-        return BeanAdapter.coerce(value, (Class<?>) typeArgument);
+        return BeanAdapter.coerce(value, (Class<?>) typeArgument, key);
     }
 
     @SuppressWarnings("unchecked")
-    private Object readListValue(Reader reader, Type typeArgument) throws IOException,
+    private Object readListValue(Reader reader, Type typeArgument, String key) throws IOException,
         SerializationException {
         Sequence<Object> sequence = null;
         Type itemType = null;
@@ -608,7 +608,7 @@ public class JSONSerializer implements Serializer<Object> {
         skipWhitespaceAndComments(reader);
 
         while (c != -1 && c != ']') {
-            sequence.add(readValue(reader, itemType));
+            sequence.add(readValue(reader, itemType, key));
             skipWhitespaceAndComments(reader);
 
             if (c == ',') {
@@ -783,13 +783,13 @@ public class JSONSerializer implements Serializer<Object> {
 
                 if (genericValueType != null) {
                     // Set the value in the bean
-                    dictionary.put(key, readValue(reader, genericValueType));
+                    dictionary.put(key, readValue(reader, genericValueType, key));
                 } else {
                     // The property does not exist; ignore this value
-                    readValue(reader, Object.class);
+                    readValue(reader, Object.class, key);
                 }
             } else {
-                dictionary.put(key, readValue(reader, valueType));
+                dictionary.put(key, readValue(reader, valueType, key));
             }
 
             skipWhitespaceAndComments(reader);

@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.Serializable;
 
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Utils;
 
 /**
@@ -219,4 +220,14 @@ public interface Dictionary<K, V> {
         }
     }
 
+    /**
+     * Put all the key/value pairs from the given map into this dictionary.
+     *
+     * @param map The other map to use.
+     */
+    default void putAll(Map<K, V> map) {
+        for (K key : map) {
+            put(key, map.get(key));
+        }
+    }
 }

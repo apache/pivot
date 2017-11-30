@@ -1845,7 +1845,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     objectType, propertyType);
 
                 if (valueToAssign instanceof String) {
-                    valueToAssign = BeanAdapter.coerce((String) valueToAssign, propertyType);
+                    valueToAssign = BeanAdapter.coerce((String) valueToAssign, propertyType, propertyNameUpdated);
                 }
             }
         }
