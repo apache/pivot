@@ -85,17 +85,27 @@ public class ScriptApplication implements Application {
         // Load the file and open the window
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         Component component = (Component) bxmlSerializer.readObject(location, resources);
-        if (component instanceof Window) {
-            this.window = (Window)component;
-        } else {
-            this.window = new Window();
-            this.window.setContent(component);
-        }
-        this.window.open(display);
 
-        Component content = this.window.getContent();
-        if (content != null) {
-            content.requestFocus();
+        if (component instanceof Sheet || component instanceof Palette) {
+            window = new Window();
+            window.setMaximized(true);
+            window.open(display);
+            Window auxWindow = (Window)component;
+            auxWindow.open(window);
+            auxWindow.requestFocus();
+        } else {
+            if (component instanceof Window) {
+                window = (Window)component;
+            } else {
+                window = new Window();
+                window.setContent(component);
+            }
+            window.open(display);
+
+            Component content = window.getContent();
+            if (content != null) {
+                content.requestFocus();
+            }
         }
     }
 
