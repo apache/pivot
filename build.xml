@@ -715,7 +715,8 @@ limitations under the License.
         </copy>
 
         <signjar keystore="${keystore.location}" storepass="${keystore.passwd}"
-            alias="${keystore.alias}" preservelastmodified="true" lazy="true">
+            alias="${keystore.alias}" preservelastmodified="true" lazy="true"
+            tsaurl="http://tsa.starfieldtech.com">
             <path>
                 <fileset dir="${folder.lib}/signed" includes="*.jar" />
             </path>
