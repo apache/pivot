@@ -336,12 +336,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         TextInput textInput = (TextInput) getComponent();
         int textSize = textInput.getTextSize();
 
-        return averageCharacterSize.width * textSize + (padding.left + padding.right) + 2;
+        return averageCharacterSize.width * textSize + padding.getWidth() + 2;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        return averageCharacterSize.height + (padding.top + padding.bottom) + 2;
+        return averageCharacterSize.height + padding.getHeight() + 2;
     }
 
     @Override
@@ -430,7 +430,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (textWidth - scrollLeft + padding.left + 1 < width - padding.right - 1) {
                 // The right edge of the text is less than the right inset;
                 // align the text's right edge with the inset
-                scrollLeft = Math.max(textWidth + (padding.left + padding.right + 2) - width, 0);
+                scrollLeft = Math.max(textWidth + padding.getWidth() + 2 - width, 0);
             } else {
                 // Scroll selection start to visible
                 int selectionStart = textInput.getSelectionStart();
@@ -460,7 +460,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             case CENTER: {
                 TextInput textInput = (TextInput) getComponent();
                 int txtWidth = getTextWidth(textLayout);
-                int availWidth = textInput.getWidth() - (padding.left + padding.right + 2);
+                int availWidth = textInput.getWidth() - (padding.getWidth() + 2);
                 alignmentDeltaX = (availWidth - txtWidth) / 2;
                 break;
             }
@@ -468,7 +468,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 TextInput textInput = (TextInput) getComponent();
                 int txtWidth = getTextWidth(textLayout);
                 int availWidth = textInput.getWidth()
-                    - (padding.left + padding.right + 2 + caret.width);
+                    - (padding.getWidth() + 2 + caret.width);
                 alignmentDeltaX = (availWidth - txtWidth);
                 break;
             }
@@ -673,7 +673,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             }
 
             characterBounds = new Bounds(x + padding.left - scrollLeft + 1 + getAlignmentDeltaX(textLayout),
-                padding.top + 1, width, getHeight() - (padding.top + padding.bottom + 2));
+                padding.top + 1, width, getHeight() - (padding.getHeight() + 2));
         }
 
         return characterBounds;
@@ -695,7 +695,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (characterBounds.x < padding.left + 1) {
                 setScrollLeft(glyphX);
             } else if (characterBounds.x + characterBounds.width > width - (padding.right + 1)) {
-                setScrollLeft(glyphX + (padding.left + padding.right + 2) + characterBounds.width - width);
+                setScrollLeft(glyphX + (padding.getWidth() + 2) + characterBounds.width - width);
             }
         }
     }
@@ -724,14 +724,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     public final void setFont(String font) {
-        Utils.checkNull(font, "font");
-
         setFont(decodeFont(font));
     }
 
     public final void setFont(Dictionary<String, ?> font) {
-        Utils.checkNull(font, "font");
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -1141,13 +1137,69 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return consumed;
     }
 
+    private void selectSpan(TextInput textInput, int start) {
+        int length = textInput.getCharacterCount();
+        if (start >= length) {
+            start = length - 1;
+            if (start < 0) {
+                return;
+            }
+            char ch = textInput.getCharacterAt(start);
+            if (ch == '\r' || ch == '\n') {
+                start--;
+            }
+        }
+        if (start < 0) {
+            return;
+        }
+        char ch = textInput.getCharacterAt(start);
+        int selectionStart = start;
+        int selectionLength = 1;
+        if (Character.isWhitespace(ch)) {
+            // Move backward to beginning of whitespace block
+            // but not before the beginning of the text.
+            do {
+                selectionStart--;
+            } while (selectionStart >= 0
+                && Character.isWhitespace(textInput.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of whitespace block
+            // but not past the end of the text.
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength < length
+                && Character.isWhitespace(textInput.getCharacterAt(selectionStart + selectionLength)));
+        } else if (Character.isJavaIdentifierPart(ch)) {
+            // Move backward to beginning of identifier block
+            do {
+                selectionStart--;
+            } while (selectionStart >= 0
+                && Character.isJavaIdentifierPart(textInput.getCharacterAt(selectionStart)));
+            selectionStart++;
+            selectionLength = start - selectionStart;
+            // Move forward to end of identifier block
+            // but not past end of text.
+            do {
+                selectionLength++;
+            } while (selectionStart + selectionLength < length
+                && Character.isJavaIdentifierPart(textInput.getCharacterAt(selectionStart
+                    + selectionLength)));
+        } else {
+            return;
+        }
+        textInput.setSelection(selectionStart, selectionLength);
+    }
+
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         if (button == Mouse.Button.LEFT && count > 1) {
-            // TODO: double click to select the current word, triple click to select all
-            // (like TextArea and TextPane now)
             TextInput textInput = (TextInput) getComponent();
-            textInput.selectAll();
+            if (count == 2) {
+                selectSpan(textInput, getInsertionPoint(x));
+            } else if (count == 3) {
+                textInput.selectAll();
+            }
         }
 
         return super.mouseClick(component, button, x, y, count);
