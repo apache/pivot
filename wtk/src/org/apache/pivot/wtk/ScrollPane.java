@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Container that provides a scrollable view of a component, with optional fixed
@@ -66,48 +67,6 @@ public class ScrollPane extends Viewport {
         FILL_TO_CAPACITY
     }
 
-    private static class ScrollPaneListenerList extends ListenerList<ScrollPaneListener>
-        implements ScrollPaneListener {
-
-        @Override
-        public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
-            ScrollBarPolicy previousHorizontalScrollBarPolicy) {
-            for (ScrollPaneListener listener : this) {
-                listener.horizontalScrollBarPolicyChanged(scrollPane,
-                    previousHorizontalScrollBarPolicy);
-            }
-        }
-
-        @Override
-        public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
-            ScrollBarPolicy previousVerticalScrollBarPolicy) {
-            for (ScrollPaneListener listener : this) {
-                listener.verticalScrollBarPolicyChanged(scrollPane, previousVerticalScrollBarPolicy);
-            }
-        }
-
-        @Override
-        public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
-            for (ScrollPaneListener listener : this) {
-                listener.rowHeaderChanged(scrollPane, previousRowHeader);
-            }
-        }
-
-        @Override
-        public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
-            for (ScrollPaneListener listener : this) {
-                listener.columnHeaderChanged(scrollPane, previousColumnHeader);
-            }
-        }
-
-        @Override
-        public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
-            for (ScrollPaneListener listener : this) {
-                listener.cornerChanged(scrollPane, previousCorner);
-            }
-        }
-    }
-
     /**
      * Component class representing the components that will get placed in the
      * corners of a <tt>ScrollPane</tt>. Skins will instantiate these components
@@ -125,9 +84,7 @@ public class ScrollPane extends Viewport {
         private Placement placement;
 
         public Corner(Placement placement) {
-            if (placement == null) {
-                throw new IllegalArgumentException("Placement is null.");
-            }
+            Utils.checkNull(placement, "placement");
 
             this.placement = placement;
 
@@ -144,7 +101,7 @@ public class ScrollPane extends Viewport {
     private Component rowHeader;
     private Component columnHeader;
     private Component corner;
-    private ScrollPaneListenerList scrollPaneListeners = new ScrollPaneListenerList();
+    private ScrollPaneListener.List scrollPaneListeners = new ScrollPaneListener.List();
 
     public ScrollPane() {
         this(ScrollBarPolicy.AUTO, ScrollBarPolicy.AUTO);
@@ -154,13 +111,8 @@ public class ScrollPane extends Viewport {
         ScrollBarPolicy verticalScrollBarPolicy) {
         super();
 
-        if (horizontalScrollBarPolicy == null) {
-            throw new IllegalArgumentException("horizontalScrollBarPolicy is null");
-        }
-
-        if (verticalScrollBarPolicy == null) {
-            throw new IllegalArgumentException("verticalScrollBarPolicy is null");
-        }
+        Utils.checkNull(horizontalScrollBarPolicy, "horizontalScrollBarPolicy");
+        Utils.checkNull(verticalScrollBarPolicy, "verticalScrollBarPolicy");
 
         this.horizontalScrollBarPolicy = horizontalScrollBarPolicy;
         this.verticalScrollBarPolicy = verticalScrollBarPolicy;
@@ -173,9 +125,7 @@ public class ScrollPane extends Viewport {
     }
 
     public void setHorizontalScrollBarPolicy(ScrollBarPolicy horizontalScrollBarPolicy) {
-        if (horizontalScrollBarPolicy == null) {
-            throw new IllegalArgumentException("horizontalScrollBarPolicy is null");
-        }
+        Utils.checkNull(horizontalScrollBarPolicy, "horizontalScrollBarPolicy");
 
         ScrollBarPolicy previousHorizontalScrollBarPolicy = this.horizontalScrollBarPolicy;
 
@@ -191,9 +141,7 @@ public class ScrollPane extends Viewport {
     }
 
     public void setVerticalScrollBarPolicy(ScrollBarPolicy verticalScrollBarPolicy) {
-        if (verticalScrollBarPolicy == null) {
-            throw new IllegalArgumentException("verticalScrollBarPolicy is null");
-        }
+        Utils.checkNull(verticalScrollBarPolicy, "verticalScrollBarPolicy");
 
         ScrollBarPolicy previousVerticalScrollBarPolicy = this.verticalScrollBarPolicy;
 

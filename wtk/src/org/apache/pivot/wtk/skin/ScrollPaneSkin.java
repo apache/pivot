@@ -246,15 +246,11 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             }
 
             if (horizontalPolicy == ScrollBarPolicy.FILL) {
-                // Preferred height is the sum of the constrained preferred
-                // height
-                // of the view and the unconstrained preferred height of the
-                // column
-                // header
+                // Preferred height is the sum of the constrained preferred height
+                // of the view and the unconstrained preferred height of the column header
                 int widthUpdated = width;
                 if (widthUpdated >= 0) {
-                    // Subtract the unconstrained preferred width of the row
-                    // header
+                    // Subtract the unconstrained preferred width of the row header
                     // from the width constraint
                     widthUpdated = Math.max(widthUpdated - preferredRowHeaderWidth, 0);
                 }
@@ -663,14 +659,12 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             if (view != null) {
                 if (constrainWidth && constrainHeight) {
                     viewWidth = Math.max(width - rowHeaderWidth - verticalScrollBarWidth, 0);
-                    viewHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight,
-                        0);
+                    viewHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight, 0);
                 } else if (constrainWidth) {
                     viewWidth = Math.max(width - rowHeaderWidth - verticalScrollBarWidth, 0);
                     viewHeight = view.getPreferredHeight(viewWidth);
                 } else if (constrainHeight) {
-                    viewHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight,
-                        0);
+                    viewHeight = Math.max(height - columnHeaderHeight - horizontalScrollBarHeight, 0);
                     viewWidth = view.getPreferredWidth(viewHeight);
                 } else {
                     Dimensions viewPreferredSize = view.getPreferredSize();
