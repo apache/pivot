@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Text input binding listener interface.
  */
@@ -38,6 +41,28 @@ public interface TextInputBindingListener {
         public void textBindMappingChanged(TextInput textInput,
             TextInput.TextBindMapping previousTextBindMapping) {
             // empty block
+        }
+    }
+
+    /**
+     * Text input binding listener list.
+     */
+    public static class List extends ListenerList<TextInputBindingListener>
+            implements TextInputBindingListener {
+        @Override
+        public void textKeyChanged(TextInput textInput, String previousTextKey) {
+            forEach(listener -> listener.textKeyChanged(textInput, previousTextKey));
+        }
+
+        @Override
+        public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
+            forEach(listener -> listener.textBindTypeChanged(textInput, previousTextBindType));
+        }
+
+        @Override
+        public void textBindMappingChanged(TextInput textInput,
+            TextInput.TextBindMapping previousTextBindMapping) {
+            forEach(listener -> listener.textBindMappingChanged(textInput, previousTextBindMapping));
         }
     }
 

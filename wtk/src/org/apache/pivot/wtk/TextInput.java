@@ -108,124 +108,6 @@ public class TextInput extends Component {
         }
     }
 
-    private static class TextInputListenerList extends ListenerList<TextInputListener> implements
-        TextInputListener {
-        @Override
-        public void textSizeChanged(TextInput textInput, int previousTextSize) {
-            forEach(listener -> listener.textSizeChanged(textInput, previousTextSize));
-        }
-
-        @Override
-        public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
-            forEach(listener -> listener.maximumLengthChanged(textInput, previousMaximumLength));
-        }
-
-        @Override
-        public void passwordChanged(TextInput textInput) {
-            forEach(listener -> listener.passwordChanged(textInput));
-        }
-
-        @Override
-        public void promptChanged(TextInput textInput, String previousPrompt) {
-            forEach(listener -> listener.promptChanged(textInput, previousPrompt));
-        }
-
-        @Override
-        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
-            forEach(listener -> listener.textValidatorChanged(textInput, previousValidator));
-        }
-
-        @Override
-        public void strictValidationChanged(TextInput textInput) {
-            forEach(listener -> listener.strictValidationChanged(textInput));
-        }
-
-        @Override
-        public void textValidChanged(TextInput textInput) {
-            forEach(listener -> listener.textValidChanged(textInput));
-        }
-
-        @Override
-        public void editableChanged(TextInput textInput) {
-            forEach(listener -> listener.editableChanged(textInput));
-        }
-    }
-
-    private static class TextInputContentListenerList extends
-        ListenerList<TextInputContentListener> implements TextInputContentListener {
-        @Override
-        public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
-            VoteResult result = new VoteResult();
-
-            forEach(listener -> result.tally(listener.previewInsertText(textInput, text, index)));
-
-            return result.get();
-        }
-
-        @Override
-        public void insertTextVetoed(TextInput textInput, Vote reason) {
-            forEach(listener -> listener.insertTextVetoed(textInput, reason));
-        }
-
-        @Override
-        public void textInserted(TextInput textInput, int index, int count) {
-            forEach(listener -> listener.textInserted(textInput, index, count));
-        }
-
-        @Override
-        public Vote previewRemoveText(TextInput textInput, int index, int count) {
-            VoteResult result = new VoteResult();
-
-            forEach(listener -> result.tally(listener.previewRemoveText(textInput, index, count)));
-
-            return result.get();
-        }
-
-        @Override
-        public void removeTextVetoed(TextInput textInput, Vote reason) {
-            forEach(listener -> listener.removeTextVetoed(textInput, reason));
-        }
-
-        @Override
-        public void textRemoved(TextInput textInput, int index, int count) {
-            forEach(listener -> listener.textRemoved(textInput, index, count));
-        }
-
-        @Override
-        public void textChanged(TextInput textInput) {
-            forEach(listener -> listener.textChanged(textInput));
-        }
-    }
-
-    private static class TextInputSelectionListenerList extends
-        ListenerList<TextInputSelectionListener> implements TextInputSelectionListener {
-        @Override
-        public void selectionChanged(TextInput textInput, int previousSelectionStart,
-            int previousSelectionLength) {
-            forEach(listener -> listener.selectionChanged(textInput, previousSelectionStart,
-                    previousSelectionLength));
-        }
-    }
-
-    private static class TextInputBindingListenerList extends
-        ListenerList<TextInputBindingListener> implements TextInputBindingListener {
-        @Override
-        public void textKeyChanged(TextInput textInput, String previousTextKey) {
-            forEach(listener -> listener.textKeyChanged(textInput, previousTextKey));
-        }
-
-        @Override
-        public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
-            forEach(listener -> listener.textBindTypeChanged(textInput, previousTextBindType));
-        }
-
-        @Override
-        public void textBindMappingChanged(TextInput textInput,
-            TextBindMapping previousTextBindMapping) {
-            forEach(listener -> listener.textBindMappingChanged(textInput, previousTextBindMapping));
-        }
-    }
-
     private StringBuilder characters = new StringBuilder();
     private AttributedStringCharacterIterator composedText = null;
 
@@ -248,10 +130,10 @@ public class TextInput extends Component {
 
     private LinkedList<Edit> editHistory = new LinkedList<>();
 
-    private TextInputListenerList textInputListeners = new TextInputListenerList();
-    private TextInputContentListenerList textInputContentListeners = new TextInputContentListenerList();
-    private TextInputSelectionListenerList textInputSelectionListeners = new TextInputSelectionListenerList();
-    private TextInputBindingListenerList textInputBindingListeners = new TextInputBindingListenerList();
+    private TextInputListener.List textInputListeners = new TextInputListener.List();
+    private TextInputContentListener.List textInputContentListeners = new TextInputContentListener.List();
+    private TextInputSelectionListener.List textInputSelectionListeners = new TextInputSelectionListener.List();
+    private TextInputBindingListener.List textInputBindingListeners = new TextInputBindingListener.List();
 
     public static final int DEFAULT_TEXT_SIZE = 16;
 

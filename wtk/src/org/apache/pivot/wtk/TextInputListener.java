@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.validation.Validator;
 
 /**
@@ -64,6 +65,51 @@ public interface TextInputListener {
         @Override
         public void editableChanged(TextInput textInput) {
             // empty block
+        }
+    }
+
+    /**
+     * Text input listener list.
+     */
+    public static class List extends ListenerList<TextInputListener> implements TextInputListener {
+        @Override
+        public void textSizeChanged(TextInput textInput, int previousTextSize) {
+            forEach(listener -> listener.textSizeChanged(textInput, previousTextSize));
+        }
+
+        @Override
+        public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
+            forEach(listener -> listener.maximumLengthChanged(textInput, previousMaximumLength));
+        }
+
+        @Override
+        public void passwordChanged(TextInput textInput) {
+            forEach(listener -> listener.passwordChanged(textInput));
+        }
+
+        @Override
+        public void promptChanged(TextInput textInput, String previousPrompt) {
+            forEach(listener -> listener.promptChanged(textInput, previousPrompt));
+        }
+
+        @Override
+        public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+            forEach(listener -> listener.textValidatorChanged(textInput, previousValidator));
+        }
+
+        @Override
+        public void strictValidationChanged(TextInput textInput) {
+            forEach(listener -> listener.strictValidationChanged(textInput));
+        }
+
+        @Override
+        public void textValidChanged(TextInput textInput) {
+            forEach(listener -> listener.textValidChanged(textInput));
+        }
+
+        @Override
+        public void editableChanged(TextInput textInput) {
+            forEach(listener -> listener.editableChanged(textInput));
         }
     }
 

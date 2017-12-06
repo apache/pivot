@@ -16,10 +16,26 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Text input selection listener interface.
  */
 public interface TextInputSelectionListener {
+    /**
+     * List class.
+     */
+    public static class List extends ListenerList<TextInputSelectionListener>
+            implements TextInputSelectionListener {
+        @Override
+        public void selectionChanged(TextInput textInput, int previousSelectionStart,
+            int previousSelectionLength) {
+            forEach(listener -> listener.selectionChanged(textInput, previousSelectionStart,
+                    previousSelectionLength));
+        }
+    }
+
     /**
      * Called when a text input's selection state has changed.
      *

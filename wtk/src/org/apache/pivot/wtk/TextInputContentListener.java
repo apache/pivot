@@ -16,14 +16,17 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
+
 
 /**
  * Text input text listener.
  */
 public interface TextInputContentListener {
     /**
-     * Text input text listener adapter.
+     * Text input content listener adapter.
      */
     public static class Adapter implements TextInputContentListener {
         @Override
@@ -59,6 +62,55 @@ public interface TextInputContentListener {
         @Override
         public void textChanged(TextInput textInput) {
             // empty block
+        }
+    }
+
+    /**
+     * Text input content listener list.
+     */
+    public static class List extends ListenerList<TextInputContentListener>
+            implements TextInputContentListener {
+        @Override
+        public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewInsertText(textInput, text, index)));
+
+            return result.get();
+        }
+
+        @Override
+        public void insertTextVetoed(TextInput textInput, Vote reason) {
+            forEach(listener -> listener.insertTextVetoed(textInput, reason));
+        }
+
+        @Override
+        public void textInserted(TextInput textInput, int index, int count) {
+            forEach(listener -> listener.textInserted(textInput, index, count));
+        }
+
+        @Override
+        public Vote previewRemoveText(TextInput textInput, int index, int count) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewRemoveText(textInput, index, count)));
+
+            return result.get();
+        }
+
+        @Override
+        public void removeTextVetoed(TextInput textInput, Vote reason) {
+            forEach(listener -> listener.removeTextVetoed(textInput, reason));
+        }
+
+        @Override
+        public void textRemoved(TextInput textInput, int index, int count) {
+            forEach(listener -> listener.textRemoved(textInput, index, count));
+        }
+
+        @Override
+        public void textChanged(TextInput textInput) {
+            forEach(listener -> listener.textChanged(textInput));
         }
     }
 
