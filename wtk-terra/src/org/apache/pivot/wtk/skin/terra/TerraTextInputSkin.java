@@ -242,6 +242,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private TextLayout textLayout = null;
 
     private int anchor = -1;
+    private FocusTraversalDirection selectDirection = null;
+
     private Rectangle caret = new Rectangle();
     private Rectangle selection = null;
 
@@ -1060,8 +1062,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     // Select the range
                     if (offset > anchor) {
                         textInput.setSelection(anchor, offset - anchor);
+                        selectDirection = FocusTraversalDirection.FORWARD;
                     } else {
                         textInput.setSelection(offset, anchor - offset);
+                        selectDirection = FocusTraversalDirection.BACKWARD;
                     }
                 }
             } else {
@@ -1349,6 +1353,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             if (Keyboard.isPressed(wordNavigationModifier)) {
+                selectDirection = null;
                 // Move the caret to the start of the next word to the left
                 if (start > 0) {
                     // Skip over any space immediately to the left
@@ -1365,6 +1370,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     if (isShiftPressed) {
                         length += start - index;
+                        selectDirection = FocusTraversalDirection.BACKWARD;
                     } else {
                         length = 0;
                     }
@@ -1372,12 +1378,44 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     start = index;
                 }
             } else if (isShiftPressed) {
-                // Add the previous character to the selection
-                if (start > 0) {
-                    start--;
-                    length++;
+                // If the previous direction was BACKWARD, then increase the selection
+                // else decrease the selection back to the anchor.
+                if (selectDirection != null) {
+                    switch (selectDirection) {
+                        case FORWARD:
+                            if (length == 0) {
+                                if (start > 0) {
+                                    start--;
+                                    length++;
+                                    selectDirection = FocusTraversalDirection.BACKWARD;
+                                }
+                            } else {
+                                if (--length == 0) {
+                                    if (start > 0) {
+                                        start--;
+                                         length++;
+                                        selectDirection = FocusTraversalDirection.BACKWARD;
+                                    }
+                                }
+                            }
+                            break;
+                        case BACKWARD:
+                            if (start > 0) {
+                                start--;
+                                length++;
+                            }
+                            break;
+                    }
+                } else {
+                    // Add one to the selection
+                    if (start > 0) {
+                        start--;
+                        length++;
+                        selectDirection = FocusTraversalDirection.BACKWARD;
+                    }
                 }
             } else {
+                selectDirection = null;
                 // Move the caret back by one character
                 if (length == 0 && start > 0) {
                     start--;
@@ -1395,6 +1433,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             }
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             if (Keyboard.isPressed(wordNavigationModifier)) {
+                selectDirection = null;
                 // Move the caret to the start of the next word to the right
                 if (start < textInput.getCharacterCount()) {
                     int index = start + length;
@@ -1413,15 +1452,40 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     if (isShiftPressed) {
                         length = index - start;
+                        selectDirection = FocusTraversalDirection.FORWARD;
                     } else {
                         start = index;
                         length = 0;
                     }
                 }
             } else if (isShiftPressed) {
-                // Add the next character to the selection
-                length++;
+                // If the previous direction was FORWARD, then increase the selection
+                // else decrease the selection back to the anchor.
+                if (selectDirection != null) {
+                    switch (selectDirection) {
+                        case FORWARD:
+                            length++;
+                            break;
+                        case BACKWARD:
+                            if (length == 0) {
+                                length++;
+                                selectDirection = FocusTraversalDirection.FORWARD;
+                            } else {
+                                start++;
+                                if (--length == 0) {
+                                    length++;
+                                    selectDirection = FocusTraversalDirection.FORWARD;
+                                }
+                            }
+                            break;
+                    }
+                } else {
+                    // Add the next character to the selection
+                    length++;
+                    selectDirection = FocusTraversalDirection.FORWARD;
+                }
             } else {
+                selectDirection = null;
                 // Move the caret forward by one character
                 if (length == 0) {
                     start++;
