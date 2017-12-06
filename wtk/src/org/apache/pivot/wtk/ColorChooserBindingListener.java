@@ -16,6 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 /**
  * Color chooser binding listener interface.
  */
@@ -40,6 +43,31 @@ public interface ColorChooserBindingListener {
         public void selectedColorBindMappingChanged(ColorChooser colorChooser,
             ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
             // empty block
+        }
+    }
+
+    /**
+     * Color chooser binding listener list.
+     */
+    public static class List extends ListenerList<ColorChooserBindingListener>
+        implements ColorChooserBindingListener {
+        @Override
+        public void selectedColorKeyChanged(ColorChooser colorChooser,
+            String previousSelectedColorKey) {
+            forEach(listener -> listener.selectedColorKeyChanged(colorChooser, previousSelectedColorKey));
+        }
+
+        @Override
+        public void selectedColorBindTypeChanged(ColorChooser colorChooser,
+            BindType previousSelectedColorBindType) {
+            forEach(listener -> listener.selectedColorBindTypeChanged(colorChooser, previousSelectedColorBindType));
+        }
+
+        @Override
+        public void selectedColorBindMappingChanged(ColorChooser colorChooser,
+            ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
+            forEach(listener -> listener.selectedColorBindMappingChanged(colorChooser,
+                    previousSelectedColorBindMapping));
         }
     }
 

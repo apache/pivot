@@ -17,11 +17,25 @@
 package org.apache.pivot.wtk;
 
 import java.awt.Color;
+import org.apache.pivot.util.ListenerList;
+
 
 /**
  * Color chooser selection listener interface.
  */
 public interface ColorChooserSelectionListener {
+    /**
+     * Color chooser selection listener list.
+     */
+    public static class List extends ListenerList<ColorChooserSelectionListener>
+        implements ColorChooserSelectionListener {
+
+        @Override
+        public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor) {
+            forEach(listener -> listener.selectedColorChanged(colorChooser, previousSelectedColor));
+        }
+    }
+
     /**
      * Called when a color chooser's selected color has changed.
      *

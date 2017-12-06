@@ -29,55 +29,6 @@ import org.apache.pivot.wtk.content.ListButtonColorItemRenderer;
  */
 public class ColorChooserButton extends Button {
     /**
-     * ColorChooser button selection listener list.
-     */
-    private static class ColorChooserButtonSelectionListenerList extends
-        ListenerList<ColorChooserButtonSelectionListener> implements
-        ColorChooserButtonSelectionListener {
-
-        @Override
-        public void selectedColorChanged(ColorChooserButton colorChooserButton,
-            Color previousSelectedColor) {
-            for (ColorChooserButtonSelectionListener listener : this) {
-                listener.selectedColorChanged(colorChooserButton, previousSelectedColor);
-            }
-        }
-    }
-
-    /**
-     * Color chooser button binding listener list.
-     */
-    private static class ColorChooserButtonBindingListenerList extends
-        ListenerList<ColorChooserButtonBindingListener> implements
-        ColorChooserButtonBindingListener {
-        @Override
-        public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
-            String previousSelectedColorKey) {
-            for (ColorChooserButtonBindingListener listener : this) {
-                listener.selectedColorKeyChanged(colorChooserButton, previousSelectedColorKey);
-            }
-        }
-
-        @Override
-        public void selectedColorBindTypeChanged(ColorChooserButton colorChooserButton,
-            BindType previousSelectedColorBindType) {
-            for (ColorChooserButtonBindingListener listener : this) {
-                listener.selectedColorBindTypeChanged(colorChooserButton,
-                    previousSelectedColorBindType);
-            }
-        }
-
-        @Override
-        public void selectedColorBindMappingChanged(ColorChooserButton colorChooserButton,
-            ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
-            for (ColorChooserButtonBindingListener listener : this) {
-                listener.selectedColorBindMappingChanged(colorChooserButton,
-                    previousSelectedColorBindMapping);
-            }
-        }
-    }
-
-    /**
      * ColorChooserButton skin interface. ColorChooserButton skins must
      * implement this interface to facilitate additional communication between
      * the component and the skin.
@@ -92,8 +43,8 @@ public class ColorChooserButton extends Button {
     private BindType selectedColorBindType = BindType.BOTH;
     private ColorChooser.SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserButtonSelectionListenerList colorChooserButtonSelectionListeners = new ColorChooserButtonSelectionListenerList();
-    private ColorChooserButtonBindingListenerList colorChooserButtonBindingListeners = new ColorChooserButtonBindingListenerList();
+    private ColorChooserButtonSelectionListener.List colorChooserButtonSelectionListeners = new ColorChooserButtonSelectionListener.List();
+    private ColorChooserButtonBindingListener.List colorChooserButtonBindingListeners = new ColorChooserButtonBindingListener.List();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonColorItemRenderer();
 
@@ -165,9 +116,7 @@ public class ColorChooserButton extends Button {
      * @throws IllegalArgumentException if the string is {@code null}.
      */
     public final void setSelectedColor(String selectedColor) {
-        Utils.checkNull(selectedColor, "selectedColor");
-
-        setSelectedColor(Color.decode(selectedColor));
+        setSelectedColor(GraphicsUtilities.decodeColor(selectedColor, "selectedColor"));
     }
 
     /**
@@ -232,19 +181,19 @@ public class ColorChooserButton extends Button {
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
 
-            Color selectedColorLocal = null;
+            Color newSelectedColor = null;
 
             if (value instanceof Color) {
-                selectedColorLocal = (Color) value;
+                newSelectedColor = (Color) value;
             } else if (selectedColorBindMapping == null) {
                 if (value != null) {
-                    selectedColorLocal = Color.decode(value.toString());
+                    newSelectedColor = GraphicsUtilities.decodeColor(value.toString(), "selectedColor");
                 }
             } else {
-                selectedColorLocal = selectedColorBindMapping.toColor(value);
+                newSelectedColor = selectedColorBindMapping.toColor(value);
             }
 
-            setSelectedColor(selectedColorLocal);
+            setSelectedColor(newSelectedColor);
         }
     }
 

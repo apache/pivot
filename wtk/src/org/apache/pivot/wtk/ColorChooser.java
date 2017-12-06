@@ -48,59 +48,14 @@ public class ColorChooser extends Container {
         public Object valueOf(Color color);
     }
 
-    /**
-     * Color chooser selection listener list.
-     */
-    private static class ColorChooserSelectionListenerList extends
-        ListenerList<ColorChooserSelectionListener> implements ColorChooserSelectionListener {
-
-        @Override
-        public void selectedColorChanged(ColorChooser colorChooser, Color previousSelectedColor) {
-            for (ColorChooserSelectionListener listener : this) {
-                listener.selectedColorChanged(colorChooser, previousSelectedColor);
-            }
-        }
-    }
-
-    /**
-     * Color chooser binding listener list.
-     */
-    private static class ColorChooserBindingListenerList extends
-        ListenerList<ColorChooserBindingListener> implements ColorChooserBindingListener {
-        @Override
-        public void selectedColorKeyChanged(ColorChooser colorChooser,
-            String previousSelectedColorKey) {
-            for (ColorChooserBindingListener listener : this) {
-                listener.selectedColorKeyChanged(colorChooser, previousSelectedColorKey);
-            }
-        }
-
-        @Override
-        public void selectedColorBindTypeChanged(ColorChooser colorChooser,
-            BindType previousSelectedColorBindType) {
-            for (ColorChooserBindingListener listener : this) {
-                listener.selectedColorBindTypeChanged(colorChooser, previousSelectedColorBindType);
-            }
-        }
-
-        @Override
-        public void selectedColorBindMappingChanged(ColorChooser colorChooser,
-            SelectedColorBindMapping previousSelectedColorBindMapping) {
-            for (ColorChooserBindingListener listener : this) {
-                listener.selectedColorBindMappingChanged(colorChooser,
-                    previousSelectedColorBindMapping);
-            }
-        }
-    }
-
     private Color selectedColor = null;
 
     private String selectedColorKey = null;
     private BindType selectedColorBindType = BindType.BOTH;
     private SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserSelectionListenerList colorChooserSelectionListeners = new ColorChooserSelectionListenerList();
-    private ColorChooserBindingListenerList colorChooserBindingListeners = new ColorChooserBindingListenerList();
+    private ColorChooserSelectionListener.List colorChooserSelectionListeners = new ColorChooserSelectionListener.List();
+    private ColorChooserBindingListener.List colorChooserBindingListeners = new ColorChooserBindingListener.List();
 
     public ColorChooser() {
         installSkin(ColorChooser.class);
@@ -133,13 +88,11 @@ public class ColorChooser extends Container {
     /**
      * Sets the selected color.
      *
-     * @param selectedColor The color to select, or <tt>null</tt> to clear the
+     * @param selectedColor The color to select, or <tt>"null"</tt> to clear the
      * selection.
      */
     public void setSelectedColor(String selectedColor) {
-        Utils.checkNull(selectedColor, "selectedColor");
-
-        setSelectedColor(Color.decode(selectedColor));
+        setSelectedColor(GraphicsUtilities.decodeColor(selectedColor, "selectedColor"));
     }
 
     /**
@@ -203,19 +156,19 @@ public class ColorChooser extends Container {
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
 
-            Color selectedColorLocal = null;
+            Color newSelectedColor = null;
 
             if (value instanceof Color) {
-                selectedColorLocal = (Color) value;
+                newSelectedColor = (Color) value;
             } else if (selectedColorBindMapping == null) {
                 if (value != null) {
-                    selectedColorLocal = Color.decode(value.toString());
+                    newSelectedColor = GraphicsUtilities.decodeColor(value.toString(), "selectedColor");
                 }
             } else {
-                selectedColorLocal = selectedColorBindMapping.toColor(value);
+                newSelectedColor = selectedColorBindMapping.toColor(value);
             }
 
-            setSelectedColor(selectedColorLocal);
+            setSelectedColor(newSelectedColor);
         }
     }
 
