@@ -16,31 +16,65 @@
  */
 package org.apache.pivot.tests;
 
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.ListViewItemStateListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
 
 public class CheckedListViewTest extends Application.Adapter {
-    private Window window = null;
+
+    private String toShortString(Span span) {
+        if (span.getLength() == 1) {
+            return Integer.toString(span.start);
+        } else {
+            return String.format("%1$d-%2$d", span.normalStart(), span.normalEnd());
+        }
+    }
+
+    Window mainWindow;
+    @BXML Checkbox allowMixedStateCheckbox;
+    @BXML Checkbox showMixedAsSelectedCheckbox;
+    @BXML ListView listView;
+    @BXML Label selectedItemsLabel;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
-        final ListView listView = new ListView(
-            JSONSerializer.parseList("['One', 'Two', 'Three', 'Four']"));
-        listView.setSelectMode(ListView.SelectMode.MULTI);
-        listView.setCheckmarksEnabled(true);
-        listView.setItemChecked(0, true);
-        listView.setItemChecked(2, true);
+        BXMLSerializer serializer = new BXMLSerializer();
+        mainWindow = (Window)serializer.readObject(CheckedListViewTest.class, "checked_list_view_test.bxml");
+        serializer.bind(this);
+
+        allowMixedStateCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                listView.setAllowTriStateCheckmarks(button.isSelected());
+                // Not sure why, but changing this setting clears all the checks but doesn't
+                // trigger the item state listener (it's documented, but ...)
+                selectedItemsLabel.setText("");
+            }
+        });
+
+        showMixedAsSelectedCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
+            @Override
+            public void buttonPressed(Button button) {
+                listView.setCheckmarksMixedAsChecked(button.isSelected());
+            }
+        });
 
         listView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
             @Override
@@ -62,16 +96,42 @@ public class CheckedListViewTest extends Application.Adapter {
             }
         });
 
-        window = new Window(listView);
-        window.setTitle("Checked List View Test");
-        window.setMaximized(true);
-        window.open(display);
+        listView.getListViewItemStateListeners().add(new ListViewItemStateListener.Adapter() {
+
+            private void displayCheckedItems(ListView listView) {
+                List<?> listData = listView.getListData();
+                StringBuffer buf = new StringBuffer();
+                for (Integer i : listView.getCheckedIndexes()) {
+                    if (buf.length() > 0) {
+                        buf.append(",");
+                    }
+                    Object item = listData.get(i);
+                    buf.append(item.toString());
+                }
+                selectedItemsLabel.setText(buf.toString());
+            }
+
+            @Override
+            public void itemCheckedChanged(ListView listView, int index) {
+                displayCheckedItems(listView);
+            }
+
+            @Override
+            public void itemCheckedStateChanged(ListView listView, int index) {
+                displayCheckedItems(listView);
+            }
+        });
+
+        listView.setItemChecked(0, true);
+        listView.setItemChecked(2, true);
+
+        mainWindow.open(display);
     }
 
     @Override
     public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
+        if (mainWindow != null) {
+            mainWindow.close();
         }
 
         return false;

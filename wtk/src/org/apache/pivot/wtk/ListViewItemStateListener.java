@@ -21,6 +21,21 @@ package org.apache.pivot.wtk;
  */
 public interface ListViewItemStateListener {
     /**
+     * Adapter class that provides a default implementation of these interface
+     * methods.
+     */
+    public class Adapter implements ListViewItemStateListener {
+        @Override
+        public void itemCheckedChanged(ListView listView, int index) {
+            // Do nothing
+        }
+        @Override
+        public void itemCheckedStateChanged(ListView listView, int index) {
+            // Do nothing
+        }
+    }
+
+    /**
      * Called when an item's checked state has changed.
      *
      * @param listView The list view whose state has changed.
@@ -29,7 +44,8 @@ public interface ListViewItemStateListener {
     public void itemCheckedChanged(ListView listView, int index);
 
     /**
-     * Called when a tri-state item's state has changed.
+     * Called when a tri-state item's state has changed, that is, in or out
+     * of the {@link org.apache.pivot.wtk.Button.State#MIXED} state.
      *
      * @param listView The list view whose state has changed.
      * @param index    The index of the item whose tri-state has changed.
