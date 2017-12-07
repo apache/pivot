@@ -35,6 +35,10 @@
         "#eb0000"
     ],
 
+    defaultStylesFile : "terra_theme_defaults_test.json",
+
+    namedStylesFile : "terra_theme_styles_test.json",
+
     messageIcons: {
         error: "message_type-error-32x32.png",
         warning: "message_type-warning-32x32.png",
