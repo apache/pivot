@@ -24,10 +24,10 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface ActionListener {
     /**
-     * Action listener list.
+     * Action listener listeners list.
      */
-    public static class List extends ListenerList<ActionListener> implements
-        ActionListener {
+    public static class Listeners extends ListenerList<ActionListener>
+        implements ActionListener {
         @Override
         public void enabledChanged(Action action) {
             forEach(listener -> listener.enabledChanged(action));

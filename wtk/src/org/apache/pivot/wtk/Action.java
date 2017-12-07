@@ -100,12 +100,12 @@ public abstract class Action {
 
     private boolean enabled = true;
 
-    private ActionListener.List actionListeners = new ActionListener.List();
+    private ActionListener.Listeners actionListeners = new ActionListener.Listeners();
 
     private static HashMap<String, Action> namedActions = new HashMap<>();
     private static NamedActionDictionary namedActionDictionary = new NamedActionDictionary();
 
-    private static ActionClassListener.List actionClassListeners = new ActionClassListener.List();
+    private static ActionClassListener.Listeners actionClassListeners = new ActionClassListener.Listeners();
 
     public Action() {
         this(true);

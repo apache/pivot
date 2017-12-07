@@ -69,9 +69,9 @@ public interface TextInputListener {
     }
 
     /**
-     * Text input listener list.
+     * Text input listener listeners list.
      */
-    public static class List extends ListenerList<TextInputListener> implements TextInputListener {
+    public static class Listeners extends ListenerList<TextInputListener> implements TextInputListener {
         @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
             forEach(listener -> listener.textSizeChanged(textInput, previousTextSize));

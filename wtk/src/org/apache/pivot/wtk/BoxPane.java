@@ -49,7 +49,7 @@ import org.apache.pivot.util.Utils;
  */
 public class BoxPane extends Container {
     private Orientation orientation = null;
-    private BoxPaneListener.List boxPaneListeners = new BoxPaneListener.List();
+    private BoxPaneListener.Listeners boxPaneListeners = new BoxPaneListener.Listeners();
 
     public BoxPane() {
         this(Orientation.HORIZONTAL);

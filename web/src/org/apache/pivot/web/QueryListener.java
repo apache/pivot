@@ -48,9 +48,9 @@ public interface QueryListener<V> {
     }
 
     /**
-     * Query listener list.
+     * Query listener listeners list.
      */
-    public static class List<V>
+    public static class Listeners<V>
             extends ListenerList<QueryListener<V>>
             implements QueryListener<V> {
         @Override

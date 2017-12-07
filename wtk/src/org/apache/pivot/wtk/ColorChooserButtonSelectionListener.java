@@ -25,9 +25,9 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface ColorChooserButtonSelectionListener {
     /**
-     * ColorChooser button selection listener list.
+     * ColorChooser button selection listener listeners list.
      */
-    public static class List extends ListenerList<ColorChooserButtonSelectionListener>
+    public static class Listeners extends ListenerList<ColorChooserButtonSelectionListener>
         implements ColorChooserButtonSelectionListener {
 
         @Override

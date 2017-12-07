@@ -66,9 +66,9 @@ public interface TextInputContentListener {
     }
 
     /**
-     * Text input content listener list.
+     * Text input content listener listeners list.
      */
-    public static class List extends ListenerList<TextInputContentListener>
+    public static class Listeners extends ListenerList<TextInputContentListener>
             implements TextInputContentListener {
         @Override
         public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {

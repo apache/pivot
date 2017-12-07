@@ -47,9 +47,9 @@ public interface ColorChooserBindingListener {
     }
 
     /**
-     * Color chooser binding listener list.
+     * Color chooser binding listener listeners list.
      */
-    public static class List extends ListenerList<ColorChooserBindingListener>
+    public static class Listeners extends ListenerList<ColorChooserBindingListener>
         implements ColorChooserBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooser colorChooser,

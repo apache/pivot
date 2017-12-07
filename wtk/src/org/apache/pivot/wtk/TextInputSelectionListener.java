@@ -24,9 +24,9 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface TextInputSelectionListener {
     /**
-     * List class.
+     * Text input selection listener listeners list.
      */
-    public static class List extends ListenerList<TextInputSelectionListener>
+    public static class Listeners extends ListenerList<TextInputSelectionListener>
             implements TextInputSelectionListener {
         @Override
         public void selectionChanged(TextInput textInput, int previousSelectionStart,

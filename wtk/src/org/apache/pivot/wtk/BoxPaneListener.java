@@ -24,9 +24,9 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface BoxPaneListener {
     /**
-     * Box pane listener list.
+     * Box pane listener listeners list.
      */
-    public static class List extends ListenerList<BoxPaneListener> implements
+    public static class Listeners extends ListenerList<BoxPaneListener> implements
         BoxPaneListener {
         @Override
         public void orientationChanged(BoxPane boxPane) {

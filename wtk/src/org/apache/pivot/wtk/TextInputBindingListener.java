@@ -45,9 +45,9 @@ public interface TextInputBindingListener {
     }
 
     /**
-     * Text input binding listener list.
+     * Text input binding listener listeners list.
      */
-    public static class List extends ListenerList<TextInputBindingListener>
+    public static class Listeners extends ListenerList<TextInputBindingListener>
             implements TextInputBindingListener {
         @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {

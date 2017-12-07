@@ -94,7 +94,7 @@ public abstract class Query<V> extends IOTask<V> {
 
     private Serializer<?> serializer = new JSONSerializer();
 
-    private QueryListener.List<V> queryListeners = new QueryListener.List<>();
+    private QueryListener.Listeners<V> queryListeners = new QueryListener.Listeners<>();
 
     public static final int DEFAULT_PORT = -1;
 

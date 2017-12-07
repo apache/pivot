@@ -101,7 +101,7 @@ public class ScrollPane extends Viewport {
     private Component rowHeader;
     private Component columnHeader;
     private Component corner;
-    private ScrollPaneListener.List scrollPaneListeners = new ScrollPaneListener.List();
+    private ScrollPaneListener.Listeners scrollPaneListeners = new ScrollPaneListener.Listeners();
 
     public ScrollPane() {
         this(ScrollBarPolicy.AUTO, ScrollBarPolicy.AUTO);

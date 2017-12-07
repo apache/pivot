@@ -43,8 +43,8 @@ public class ColorChooserButton extends Button {
     private BindType selectedColorBindType = BindType.BOTH;
     private ColorChooser.SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserButtonSelectionListener.List colorChooserButtonSelectionListeners = new ColorChooserButtonSelectionListener.List();
-    private ColorChooserButtonBindingListener.List colorChooserButtonBindingListeners = new ColorChooserButtonBindingListener.List();
+    private ColorChooserButtonSelectionListener.Listeners colorChooserButtonSelectionListeners = new ColorChooserButtonSelectionListener.Listeners();
+    private ColorChooserButtonBindingListener.Listeners colorChooserButtonBindingListeners = new ColorChooserButtonBindingListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonColorItemRenderer();
 

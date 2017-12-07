@@ -54,8 +54,8 @@ public class ColorChooser extends Container {
     private BindType selectedColorBindType = BindType.BOTH;
     private SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserSelectionListener.List colorChooserSelectionListeners = new ColorChooserSelectionListener.List();
-    private ColorChooserBindingListener.List colorChooserBindingListeners = new ColorChooserBindingListener.List();
+    private ColorChooserSelectionListener.Listeners colorChooserSelectionListeners = new ColorChooserSelectionListener.Listeners();
+    private ColorChooserBindingListener.Listeners colorChooserBindingListeners = new ColorChooserBindingListener.Listeners();
 
     public ColorChooser() {
         installSkin(ColorChooser.class);

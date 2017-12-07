@@ -44,9 +44,9 @@ public interface ActionClassListener {
     }
 
     /**
-     * Action class listener list.
+     * Action class listener listeners list.
      */
-    public static class List extends ListenerList<ActionClassListener>
+    public static class Listeners extends ListenerList<ActionClassListener>
         implements ActionClassListener {
         @Override
         public void actionAdded(String id) {

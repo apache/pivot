@@ -44,9 +44,9 @@ public interface ButtonGroupListener {
     }
 
     /**
-     * The button group listener list.
+     * The button group listener listeners list.
      */
-    public static class List extends ListenerList<ButtonGroupListener>
+    public static class Listeners extends ListenerList<ButtonGroupListener>
         implements ButtonGroupListener {
         @Override
         public void buttonAdded(ButtonGroup buttonGroup, Button button) {

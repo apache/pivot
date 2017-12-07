@@ -30,7 +30,7 @@ public class ButtonGroup implements Group<Button>, Iterable<Button> {
     private HashSet<Button> buttons = new HashSet<>();
     private Button selection = null;
 
-    private ButtonGroupListener.List buttonGroupListeners = new ButtonGroupListener.List();
+    private ButtonGroupListener.Listeners buttonGroupListeners = new ButtonGroupListener.Listeners();
 
     @Override
     public boolean add(Button button) {

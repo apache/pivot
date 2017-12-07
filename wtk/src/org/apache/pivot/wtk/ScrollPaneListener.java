@@ -58,9 +58,9 @@ public interface ScrollPaneListener {
     }
 
     /**
-     * Scroll pane listener list.
+     * Scroll pane listener listeners list.
      */
-    public static class List extends ListenerList<ScrollPaneListener>
+    public static class Listeners extends ListenerList<ScrollPaneListener>
         implements ScrollPaneListener {
 
         @Override

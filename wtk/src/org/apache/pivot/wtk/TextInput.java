@@ -130,10 +130,10 @@ public class TextInput extends Component {
 
     private LinkedList<Edit> editHistory = new LinkedList<>();
 
-    private TextInputListener.List textInputListeners = new TextInputListener.List();
-    private TextInputContentListener.List textInputContentListeners = new TextInputContentListener.List();
-    private TextInputSelectionListener.List textInputSelectionListeners = new TextInputSelectionListener.List();
-    private TextInputBindingListener.List textInputBindingListeners = new TextInputBindingListener.List();
+    private TextInputListener.Listeners textInputListeners = new TextInputListener.Listeners();
+    private TextInputContentListener.Listeners textInputContentListeners = new TextInputContentListener.Listeners();
+    private TextInputSelectionListener.Listeners textInputSelectionListeners = new TextInputSelectionListener.Listeners();
+    private TextInputBindingListener.Listeners textInputBindingListeners = new TextInputBindingListener.Listeners();
 
     public static final int DEFAULT_TEXT_SIZE = 16;
 
