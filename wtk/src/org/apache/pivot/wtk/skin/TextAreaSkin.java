@@ -154,6 +154,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         Theme theme = currentTheme();
         font = theme.getFont();
 
+        // TODO: find a way to set this in the theme defaults.json file
+        // TODO: these conflict with the values set in TerraTextAreaSkin...
         color = defaultForegroundColor();
         selectionBackgroundColor = defaultForegroundColor();
         inactiveSelectionBackgroundColor = defaultForegroundColor();
@@ -165,16 +167,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             inactiveSelectionColor = Color.DARK_GRAY;
         }
 
-        backgroundColor = null;
-        inactiveColor = Color.GRAY;
-        margin = new Insets(4);
-        wrapText = true;
-        tabWidth = 4;
+        // Remaining default styles set in the theme defaults.json file
     }
 
     @Override
     public void install(Component component) {
         super.install(component);
+
+        Theme theme = currentTheme();
+        theme.setDefaultStyles(this);
 
         TextArea textArea = (TextArea) component;
         textArea.getTextAreaListeners().add(this);

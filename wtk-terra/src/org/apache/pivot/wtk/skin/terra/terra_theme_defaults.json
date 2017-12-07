@@ -37,6 +37,35 @@
         buffer : 4,
         fill : false,
         headingToggles : true
+    },
+
+    TerraTextAreaSkin : {
+        // TODO: conflicts here b/w TextAreaSkin and TerraTextAreaSkin:
+        // This is what TextAreaSkin says right now:
+        // color = defaultForegroundColor();
+        // selectionBackgroundColor = defaultForegroundColor();
+        // inactiveSelectionBackgroundColor = defaultForegroundColor();
+        // if (!themeIsDark()) {
+        //    selectionColor = Color.LIGHT_GRAY;
+        //    inactiveSelectionColor = Color.LIGHT_GRAY;
+        // } else {
+        //    selectionColor = Color.DARK_GRAY;
+        //    inactiveSelectionColor = Color.DARK_GRAY;
+        // }
+        // These were taken from TextAreaSkin (after the preceding code):
+        backgroundColor : 'null',
+        inactiveColor : 'GRAY',
+        margin : 4,
+        wrapText : true,
+        tabWidth : 4,
+        // But, the colors below were taken from TerraTextAreaSkin...
+        color : 1,
+        backgroundColor : 11,
+        inactiveColor : 7,
+        selectionColor : 4,
+        selectionBackgroundColor : 14,
+        inactiveSelectionColor : 1,
+        inactiveSelectionBackgroundColor : 9
     }
 
     /* More to come ... */
