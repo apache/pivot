@@ -40,11 +40,11 @@ public class ListViewIndexBindMapping implements ListView.ItemBindMapping {
      */
     @Override
     public int indexOf(List<?> listData, Object value) {
-        if (value instanceof Integer) {
-        int iValue = ((Integer)value).intValue();
-        if (iValue >= -1 && iValue < listData.getLength()) {
-            return iValue;
-        }
+        if (value instanceof Number) {
+            int iValue = ((Number)value).intValue();
+            if (iValue >= -1 && iValue < listData.getLength()) {
+                return iValue;
+            }
         }
         return -1;
     }
