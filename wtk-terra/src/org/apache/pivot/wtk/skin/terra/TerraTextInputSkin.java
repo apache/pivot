@@ -54,6 +54,7 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.SelectDirection;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.TextInputListener;
@@ -242,7 +243,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private TextLayout textLayout = null;
 
     private int anchor = -1;
-    private FocusTraversalDirection selectDirection = null;
+    private SelectDirection selectDirection = null;
 
     private Rectangle caret = new Rectangle();
     private Rectangle selection = null;
@@ -1062,10 +1063,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     // Select the range
                     if (offset > anchor) {
                         textInput.setSelection(anchor, offset - anchor);
-                        selectDirection = FocusTraversalDirection.FORWARD;
+                        selectDirection = SelectDirection.RIGHT;
                     } else {
                         textInput.setSelection(offset, anchor - offset);
-                        selectDirection = FocusTraversalDirection.BACKWARD;
+                        selectDirection = SelectDirection.LEFT;
                     }
                 }
             } else {
@@ -1370,7 +1371,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     if (isShiftPressed) {
                         length += start - index;
-                        selectDirection = FocusTraversalDirection.BACKWARD;
+                        selectDirection = SelectDirection.LEFT;
                     } else {
                         length = 0;
                     }
@@ -1378,31 +1379,31 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     start = index;
                 }
             } else if (isShiftPressed) {
-                // If the previous direction was BACKWARD, then increase the selection
+                // If the previous direction was LEFT, then increase the selection
                 // else decrease the selection back to the anchor.
                 if (selectDirection != null) {
                     switch (selectDirection) {
-                        case FORWARD:
+                        case LEFT:
+                            if (start > 0) {
+                                start--;
+                                length++;
+                            }
+                            break;
+                        case RIGHT:
                             if (length == 0) {
                                 if (start > 0) {
                                     start--;
                                     length++;
-                                    selectDirection = FocusTraversalDirection.BACKWARD;
+                                    selectDirection = SelectDirection.LEFT;
                                 }
                             } else {
                                 if (--length == 0) {
                                     if (start > 0) {
                                         start--;
                                          length++;
-                                        selectDirection = FocusTraversalDirection.BACKWARD;
+                                        selectDirection = SelectDirection.LEFT;
                                     }
                                 }
-                            }
-                            break;
-                        case BACKWARD:
-                            if (start > 0) {
-                                start--;
-                                length++;
                             }
                             break;
                     }
@@ -1411,7 +1412,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     if (start > 0) {
                         start--;
                         length++;
-                        selectDirection = FocusTraversalDirection.BACKWARD;
+                        selectDirection = SelectDirection.LEFT;
                     }
                 }
             } else {
@@ -1452,29 +1453,29 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                     if (isShiftPressed) {
                         length = index - start;
-                        selectDirection = FocusTraversalDirection.FORWARD;
+                        selectDirection = SelectDirection.RIGHT;
                     } else {
                         start = index;
                         length = 0;
                     }
                 }
             } else if (isShiftPressed) {
-                // If the previous direction was FORWARD, then increase the selection
+                // If the previous direction was RIGHT, then increase the selection
                 // else decrease the selection back to the anchor.
                 if (selectDirection != null) {
                     switch (selectDirection) {
-                        case FORWARD:
+                        case RIGHT:
                             length++;
                             break;
-                        case BACKWARD:
+                        case LEFT:
                             if (length == 0) {
                                 length++;
-                                selectDirection = FocusTraversalDirection.FORWARD;
+                                selectDirection = SelectDirection.RIGHT;
                             } else {
                                 start++;
                                 if (--length == 0) {
                                     length++;
-                                    selectDirection = FocusTraversalDirection.FORWARD;
+                                    selectDirection = SelectDirection.RIGHT;
                                 }
                             }
                             break;
@@ -1482,7 +1483,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 } else {
                     // Add the next character to the selection
                     length++;
-                    selectDirection = FocusTraversalDirection.FORWARD;
+                    selectDirection = SelectDirection.RIGHT;
                 }
             } else {
                 selectDirection = null;
