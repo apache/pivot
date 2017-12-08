@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Separator listener interface.
  */
 public interface SeparatorListener {
+    /**
+     * Separator listener listeners list.
+     */
+    public static class Listeners extends ListenerList<SeparatorListener> implements
+        SeparatorListener {
+        @Override
+        public void headingChanged(Separator separator, String previousHeading) {
+            forEach(listener -> listener.headingChanged(separator, previousHeading));
+        }
+    }
+
     /**
      * Called when a separator's heading has changed.
      *

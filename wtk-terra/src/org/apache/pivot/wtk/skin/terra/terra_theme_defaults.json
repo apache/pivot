@@ -39,6 +39,21 @@
         headingToggles : true
     },
 
+    TerraSeparatorSkin : {
+        // TODO: conflicts between SeparatorSkin and TerraSeparatorSkin
+
+        // color = defaultForegroundColor();
+        // headingColor = defaultForegroundColor();
+
+        font : { bold : true },
+        thickness : 1,
+        padding : [ 4, 0, 4, 4 ],
+
+        // These are from TerraSeparatorSkin
+        color : 7,
+        headingColor : 12
+    },
+
     TerraTextAreaSkin : {
         // TODO: conflicts here b/w TextAreaSkin and TerraTextAreaSkin:
         // This is what TextAreaSkin says right now:

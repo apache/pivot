@@ -24,8 +24,6 @@ import org.apache.pivot.wtk.skin.SeparatorSkin;
  */
 public class TerraSeparatorSkin extends SeparatorSkin {
     public TerraSeparatorSkin() {
-        setColor(7);
-        setHeadingColor(12);
     }
 
     public void setColor(int color) {
