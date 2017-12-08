@@ -338,17 +338,64 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
     @Override
     public int getPreferredWidth(int height) {
-        return 0;
+        int preferredWidth = splitterThickness;
+
+        SplitPane splitPane = (SplitPane)getComponent();
+
+        Component topLeft = splitPane.getTopLeft();
+        if (topLeft != null) {
+            preferredWidth += topLeft.getPreferredWidth(height);
+        }
+
+        Component bottomRight = splitPane.getBottomRight();
+        if (bottomRight != null) {
+            preferredWidth += bottomRight.getPreferredWidth(height);
+        }
+
+        return preferredWidth;
     }
 
     @Override
     public int getPreferredHeight(int width) {
-        return 0;
+        int preferredHeight = splitterThickness;
+
+        SplitPane splitPane = (SplitPane)getComponent();
+
+        Component topLeft = splitPane.getTopLeft();
+        if (topLeft != null) {
+            preferredHeight += topLeft.getPreferredHeight(width);
+        }
+
+        Component bottomRight = splitPane.getBottomRight();
+        if (bottomRight != null) {
+            preferredHeight += bottomRight.getPreferredHeight(width);
+        }
+
+        return preferredHeight;
     }
 
     @Override
     public Dimensions getPreferredSize() {
-        return Dimensions.ZERO;
+        int preferredWidth = splitterThickness;
+        int preferredHeight = splitterThickness;
+
+        SplitPane splitPane = (SplitPane)getComponent();
+
+        Component topLeft = splitPane.getTopLeft();
+        if (topLeft != null) {
+            Dimensions size = topLeft.getPreferredSize();
+            preferredWidth += size.width;
+            preferredHeight += size.height;
+        }
+
+        Component bottomRight = splitPane.getBottomRight();
+        if (bottomRight != null) {
+            Dimensions size = bottomRight.getPreferredSize();
+            preferredWidth += size.width;
+            preferredHeight += size.height;
+        }
+
+        return new Dimensions(preferredWidth, preferredHeight);
     }
 
     @Override
