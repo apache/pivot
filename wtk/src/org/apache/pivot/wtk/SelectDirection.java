@@ -20,8 +20,8 @@ package org.apache.pivot.wtk;
  * Enumeration of the possible directions we can select in.  In other words,
  * which arrow key was first used to initiate selecting?
  * <p> Used by {@link TextArea} and {@link TextPane} for two-dimensional
- * selection logic.  {@link TextInput} uses just forward/backward and not
- * this enum.
+ * selection logic.  {@link TextInput} uses just the {@link #LEFT} and
+ * {@link #RIGHT} values.
  */
 public enum SelectDirection {
     LEFT,
