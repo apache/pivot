@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Button;
@@ -499,14 +500,16 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         setPadding(new Insets(padding));
     }
 
+    public final void setPadding(Sequence<?> padding) {
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     public final void setPadding(Number padding) {
-        Utils.checkNull(padding, "padding");
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {

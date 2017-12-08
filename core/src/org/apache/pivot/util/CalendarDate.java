@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 
@@ -87,6 +88,25 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             if (endRange == null) {
                 throw new IllegalArgumentException(END_KEY + " is required.");
             }
+
+            if (startRange instanceof String) {
+                this.start = CalendarDate.decode((String) startRange);
+            } else {
+                this.start = (CalendarDate) startRange;
+            }
+
+            if (endRange instanceof String) {
+                this.end = CalendarDate.decode((String) endRange);
+            } else {
+                this.end = (CalendarDate) endRange;
+            }
+        }
+
+        public Range(Sequence<?> range) {
+            Utils.checkNull(range, "range");
+
+            Object startRange = range.get(0);
+            Object endRange = range.get(1);
 
             if (startRange instanceof String) {
                 this.start = CalendarDate.decode((String) startRange);
@@ -182,9 +202,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
                 }
             } else if (value.startsWith("[")) {
                 try {
-                    @SuppressWarnings("unchecked")
-                    List<String> values = (List<String>)JSONSerializer.parseList(value);
-                    range = new Range(values.get(0), values.get(1));
+                    range = new Range(JSONSerializer.parseList(value));
                 } catch (SerializationException exception) {
                     throw new IllegalArgumentException(exception);
                 }

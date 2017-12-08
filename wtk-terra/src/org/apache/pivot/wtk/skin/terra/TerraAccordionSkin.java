@@ -588,6 +588,10 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         setPadding(new Insets(padding));
     }
 
+    public final void setPadding(Sequence<?> padding) {
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }

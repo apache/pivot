@@ -31,6 +31,7 @@ import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -640,12 +641,21 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Sets the amount of space to leave between the edge of the Label and its
      * text.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * @param padding A dictionary with keys in the set {top, left, bottom,
      * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        Utils.checkNull(padding, "padding");
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the amount of space to leave between the edge of the Label and its
+     * text.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom,
+     * right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -666,9 +676,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param padding The new (integer) padding value to use for all edges.
      */
     public final void setPadding(Number padding) {
-        Utils.checkNull(padding, "padding");
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -679,8 +687,6 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        Utils.checkNull(padding, "padding");
-
         setPadding(Insets.decode(padding));
     }
 

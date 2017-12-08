@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.BoxPane;
@@ -599,6 +600,10 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 

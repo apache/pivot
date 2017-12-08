@@ -1248,14 +1248,16 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         setPadding(new Insets(padding));
     }
 
+    public final void setPadding(Sequence<?> padding) {
+        setPadding(new Insets(padding));
+    }
+
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
     public final void setPadding(Number padding) {
-        Utils.checkNull(padding, "padding");
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {

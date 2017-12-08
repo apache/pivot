@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -116,6 +117,15 @@ public final class Bounds implements Serializable {
         y = bounds.getInt(Y_KEY);
         width = bounds.getInt(WIDTH_KEY);
         height = bounds.getInt(HEIGHT_KEY);
+    }
+
+    public Bounds(Sequence<?> bounds) {
+        Utils.checkNull(bounds, "bounds");
+
+        x = ((Number)bounds.get(0)).intValue();
+        y = ((Number)bounds.get(1)).intValue();
+        width = ((Number)bounds.get(2)).intValue();
+        height = ((Number)bounds.get(3)).intValue();
     }
 
     /**
@@ -428,9 +438,7 @@ public final class Bounds implements Serializable {
             }
         } else if (boundsValue.startsWith("[")) {
             try {
-                @SuppressWarnings("unchecked")
-                List<Integer> values = (List<Integer>)JSONSerializer.parseList(boundsValue);
-                bounds = new Bounds(values.get(0), values.get(1), values.get(2), values.get(3));
+                bounds = new Bounds(JSONSerializer.parseList(boundsValue));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }

@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -84,6 +85,25 @@ public final class Time implements Comparable<Time>, Serializable {
             if (endRange == null) {
                 throw new IllegalArgumentException(END_KEY + " is required.");
             }
+
+            if (startRange instanceof String) {
+                this.start = Time.decode((String) startRange);
+            } else {
+                this.start = (Time) startRange;
+            }
+
+            if (endRange instanceof String) {
+                this.end = Time.decode((String) endRange);
+            } else {
+                this.end = (Time) endRange;
+            }
+        }
+
+        public Range(Sequence<?> range) {
+            Utils.checkNull(range, "range");
+
+            Object startRange = range.get(0);
+            Object endRange = range.get(1);
 
             if (startRange instanceof String) {
                 this.start = Time.decode((String) startRange);
@@ -179,9 +199,7 @@ public final class Time implements Comparable<Time>, Serializable {
                 }
             } else if (value.startsWith("[")) {
                 try {
-                    @SuppressWarnings("unchecked")
-                    List<String> values = (List<String>)JSONSerializer.parseList(value);
-                    range = new Range(values.get(0), values.get(1));
+                    range = new Range(JSONSerializer.parseList(value));
                 } catch (SerializationException exception) {
                     throw new IllegalArgumentException(exception);
                 }

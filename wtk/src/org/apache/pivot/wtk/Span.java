@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -89,6 +90,13 @@ public final class Span {
 
         start = span.getInt(START_KEY);
         end = span.getInt(END_KEY);
+    }
+
+    public Span(Sequence<?> span) {
+        Utils.checkNull(span, "span");
+
+        start = ((Number)span.get(0)).intValue();
+        end = ((Number)span.get(1)).intValue();
     }
 
     /**
@@ -347,9 +355,7 @@ public final class Span {
             }
         } else if (value.startsWith("[")) {
             try {
-                @SuppressWarnings("unchecked")
-                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
-                span = new Span(values.get(0), values.get(1));
+                span = new Span(JSONSerializer.parseList(value));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }

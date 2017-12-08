@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -111,6 +112,17 @@ public final class CornerRadii implements Serializable {
         check(this);
     }
 
+    public CornerRadii(Sequence<?> cornerRadii) {
+        Utils.checkNull(cornerRadii, "cornerRadii");
+
+        topLeft = ((Number)cornerRadii.get(0)).intValue();
+        topRight = ((Number)cornerRadii.get(1)).intValue();
+        bottomLeft = ((Number)cornerRadii.get(2)).intValue();
+        bottomRight = ((Number)cornerRadii.get(3)).intValue();
+
+        check(this);
+    }
+
     @Override
     public boolean equals(Object object) {
         boolean equals = false;
@@ -175,9 +187,7 @@ public final class CornerRadii implements Serializable {
             }
         } else if (value.startsWith("[")) {
             try {
-                @SuppressWarnings("unchecked")
-                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
-                cornerRadii = new CornerRadii(values.get(0), values.get(1), values.get(2), values.get(3));
+                cornerRadii = new CornerRadii(JSONSerializer.parseList(value));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }
@@ -202,4 +212,5 @@ public final class CornerRadii implements Serializable {
 
         return cornerRadii;
     }
+
 }

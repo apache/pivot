@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.BoxPaneListener;
@@ -560,10 +561,21 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * Sets the amount of space to leave between the edge of the BoxPane and its
      * components.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
+     * @param padding A dictionary with keys in the set {top, left, bottom,
      * right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
+        setPadding(new Insets(padding));
+    }
+
+    /**
+     * Sets the amount of space to leave between the edge of the BoxPane and its
+     * components.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom,
+     * right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 

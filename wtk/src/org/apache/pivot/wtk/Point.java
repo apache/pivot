@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -56,6 +57,13 @@ public final class Point implements Serializable {
 
         this.x = point.getInt(X_KEY);
         this.y = point.getInt(Y_KEY);
+    }
+
+    public Point(Sequence<?> point) {
+        Utils.checkNull(point, "point");
+
+        this.x = ((Number)point.get(0)).intValue();
+        this.y = ((Number)point.get(1)).intValue();
     }
 
     /**
@@ -124,9 +132,7 @@ public final class Point implements Serializable {
             }
         } else if (value.startsWith("[")) {
             try {
-                @SuppressWarnings("unchecked")
-                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
-                point = new Point(values.get(0), values.get(1));
+                point = new Point(JSONSerializer.parseList(value));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }

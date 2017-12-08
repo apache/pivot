@@ -235,14 +235,20 @@ public class JSONSerializer implements Serializer<Object> {
 
     /**
      * Reads data from a JSON stream.
+     * <p> Processes macros at this level using {@link MacroReader}.
      *
      * @param reader The reader from which data will be read.
      * @return One of the following types, depending on the content of the stream
-     * and the value of {@link #getType()}: <ul>
-     * <li>pivot.collections.Dictionary</li> <li>pivot.collections.Sequence</li>
-     * <li>java.lang.String</li> <li>java.lang.Number</li>
-     * <li>java.lang.Boolean</li> <li><tt>null</tt></li> <li>A JavaBean
-     * object</li> </ul>
+     * and the value of {@link #getType()}:
+     * <ul>
+     * <li>pivot.collections.Dictionary</li>
+     * <li>pivot.collections.Sequence</li>
+     * <li>java.lang.String</li>
+     * <li>java.lang.Number</li>
+     * <li>java.lang.Boolean</li>
+     * <li><tt>null</tt></li>
+     * <li>A JavaBean object</li>
+     * </ul>
      * @throws IOException for any I/O related errors while reading.
      * @throws SerializationException for any formatting errors in the data.
      */
@@ -262,7 +268,7 @@ public class JSONSerializer implements Serializer<Object> {
         // Read the root value
         Object object;
         try {
-            object = readValue(macroReader, type, "<root>");
+            object = readValue(macroReader, type, type.getTypeName());
         } catch (SerializationException exception) {
             System.err.println("An error occurred while processing input at line number "
                 + (lineNumberReader.getLineNumber() + 1));
@@ -777,8 +783,7 @@ public class JSONSerializer implements Serializer<Object> {
             c = reader.read();
 
             if (valueType == null) {
-                // The map is a bean instance; get the generic type of the
-                // property
+                // The map is a bean instance; get the generic type of the property
                 Type genericValueType = ((BeanAdapter) dictionary).getGenericType(key);
 
                 if (genericValueType != null) {

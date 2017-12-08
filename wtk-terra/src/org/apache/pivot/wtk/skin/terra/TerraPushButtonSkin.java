@@ -25,6 +25,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
@@ -425,6 +426,10 @@ public class TerraPushButtonSkin extends PushButtonSkin {
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
+        setPadding(new Insets(padding));
+    }
+
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 

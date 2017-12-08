@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -78,7 +79,7 @@ public final class Limits implements Serializable {
      * {@link #MAXIMUM_KEY}.  Missing minimum value will set {@link Integer#MIN_VALUE}
      * as the min, and missing maximum will set {@link Integer#MAX_VALUE} as the max.
      *
-     * @param limits The JSON-formatted dictionary containing the desired limits values.
+     * @param limits The map/dictionary containing the desired limits values.
      * @throws IllegalArgumentException if the min is greater than the max.
      */
     public Limits(Dictionary<String, ?> limits) {
@@ -86,6 +87,17 @@ public final class Limits implements Serializable {
 
         minimum = limits.getInt(MINIMUM_KEY, Integer.MIN_VALUE);
         maximum = limits.getInt(MAXIMUM_KEY, Integer.MAX_VALUE);
+
+        if (minimum > maximum) {
+            throw new IllegalArgumentException("minimum is greater than maximum.");
+        }
+    }
+
+    public Limits(Sequence<?> limits) {
+        Utils.checkNull(limits, "limits");
+
+        minimum = ((Number)limits.get(0)).intValue();
+        maximum = ((Number)limits.get(1)).intValue();
 
         if (minimum > maximum) {
             throw new IllegalArgumentException("minimum is greater than maximum.");
@@ -203,9 +215,7 @@ public final class Limits implements Serializable {
             }
         } else if (value.startsWith("[")) {
             try {
-                @SuppressWarnings("unchecked")
-                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
-                limits = new Limits(values.get(0), values.get(1));
+                limits = new Limits(JSONSerializer.parseList(value));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }

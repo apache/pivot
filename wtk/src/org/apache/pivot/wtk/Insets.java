@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.Utils;
@@ -123,7 +124,15 @@ public final class Insets implements Serializable {
         this.left = insets.getInt(LEFT_KEY);
         this.bottom = insets.getInt(BOTTOM_KEY);
         this.right = insets.getInt(RIGHT_KEY);
+    }
 
+    public Insets(Sequence<?> insets) {
+        Utils.checkNull(insets, "padding/margin");
+
+        this.top = ((Number)insets.get(0)).intValue();
+        this.left = ((Number)insets.get(1)).intValue();
+        this.bottom = ((Number)insets.get(2)).intValue();
+        this.right = ((Number)insets.get(3)).intValue();
     }
 
     /**
@@ -214,9 +223,7 @@ public final class Insets implements Serializable {
             }
         } else if (value.startsWith("[")) {
             try {
-                @SuppressWarnings("unchecked")
-                List<Integer> values = (List<Integer>)JSONSerializer.parseList(value);
-                insets = new Insets(values.get(0), values.get(1), values.get(2), values.get(3));
+                insets = new Insets(JSONSerializer.parseList(value));
             } catch (SerializationException exception) {
                 throw new IllegalArgumentException(exception);
             }
