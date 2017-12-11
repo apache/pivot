@@ -845,7 +845,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         Class<?> type = Class.forName(className, true, classLoader);
                         value = newTypedObject(type);
                     } catch (Throwable exception) {
-                        throw new SerializationException(exception);
+                        throw new SerializationException("Error creating a new '" + className + "' object", exception);
                     }
                 }
             } else {

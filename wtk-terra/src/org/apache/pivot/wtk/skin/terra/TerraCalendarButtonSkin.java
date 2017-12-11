@@ -292,7 +292,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         Button.DataRenderer dataRenderer = calendarButton.getDataRenderer();
         dataRenderer.render(calendarButton.getButtonData(), calendarButton, false);
         dataRenderer.setSize(
-            Math.max(contentBounds.width - paddingWidth() + 1, 0),
+            Math.max(contentBounds.width - (paddingWidth() - TRIGGER_WIDTH) + 1, 0),
             Math.max(contentBounds.height - paddingHeight() + 1, 0));
 
         Graphics2D contentGraphics = (Graphics2D) graphics.create();
@@ -337,7 +337,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         triggerGraphics.setPaint(color);
 
         Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0), 0,
-            TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
+            TRIGGER_WIDTH, Math.max(height - padding.getHeight(), 0));
         int tx = triggerBounds.x + (triggerBounds.width - triggerIconShape.getBounds().width) / 2;
         int ty = triggerBounds.y + (triggerBounds.height - triggerIconShape.getBounds().height) / 2;
         triggerGraphics.translate(tx, ty);
