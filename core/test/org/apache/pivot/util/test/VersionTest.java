@@ -129,6 +129,42 @@ public class VersionTest {
         String newJava10Formatted = newJava10.toString();
         System.out.format("Potential new Java 10 version: %1$s, parsed and formatted: %2$s%n", newJava10Version, newJava10Formatted);
         assertEquals(newJava10Formatted, "10.0.0_00--ea");
+    }
+    
+    @Test
+    public void testJava9Versions() {
+        // All the other suggested versions from "http://openjdk.java.net/jeps/223"
+        String[] versions = {
+            "9-ea+19",
+            "9+100",
+            "9.0.1+20",
+            "9.0.2+12",
+            "9.1.2+62",
+            "9.1.3+15",
+            "9.1.4+8",
+            "9.2.4+45",
+            "7.4.10+11",
+            "7.4.11+15",
+            "7.5.11+43",
+            "7.5.12+18",
+            "7.5.13+13",
+            "7.5.14+13",
+            "7.6.14+19",
+            "7.6.15+20",
+            "9-ea",
+            "9-ea+73",
+            "9+100",
+            "9",
+            "9.1.2",
+            "9.1.2+62",
+            "9.0.1",
+            "9.0.1+20"
+        };
 
+        // Just make sure we don't throw or get other errors decoding all these
+        for (String version : versions) {
+            Version v = Version.decode(version);
+            System.out.format("Raw %1$s -> %2$s%n", version, v.toString());
+        }
     }
 }
