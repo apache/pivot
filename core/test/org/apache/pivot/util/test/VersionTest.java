@@ -64,6 +64,13 @@ public class VersionTest {
         Version v1_0 = new Version(1, 0, 0, 0);
         assertEquals("version 0 decode", v0, v1_0);
         assertEquals("version 0 to string", v1_0.toString(), s1_0_0);
+
+        // New Java 9 version number scheme
+        String j9 = "9.0.1+11";
+        Version vj9 = Version.decode(j9);
+        Version vj9_0 = new Version(9, 0, 1, 0);
+        assertEquals("Java version 9 decode", vj9, vj9_0);
+        assertEquals("Java version 9 to string", vj9.toString(), "9.0.1_00-11");
     }
 
     @Test

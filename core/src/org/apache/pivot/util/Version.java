@@ -115,9 +115,13 @@ public class Version implements Comparable<Version>, Serializable {
 
         String revision;
         // Some "version" strings separate fields with a space
+        // While Java 9 uses a new scheme where "build" uses a "+"
         int i = string.indexOf(" ");
         if (i == -1) {
             i = string.indexOf("-");
+        }
+        if (i == -1) {
+            i = string.indexOf("+");
         }
         if (i == -1) {
             revision = string;
@@ -135,7 +139,7 @@ public class Version implements Comparable<Version>, Serializable {
                 minorRevision = Short.parseShort(revisionNumbers[1]);
 
                 if (revisionNumbers.length > 2) {
-                    String[] maintenanceRevisionNumbers = revisionNumbers[2].split("_");
+                    String[] maintenanceRevisionNumbers = revisionNumbers[2].split("[_\\-]");
 
                     if (maintenanceRevisionNumbers.length > 0) {
                         maintenanceRevision = Short.parseShort(maintenanceRevisionNumbers[0]);
