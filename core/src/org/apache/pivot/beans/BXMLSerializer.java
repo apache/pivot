@@ -109,7 +109,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
 /*    private static void printBindings(String message, java.util.Map<String,Object> bindings) {
         System.out.format("===== %1$s =====%n", message);
-        System.out.format("--- Bindings %1$s [%2$s] ---%n", bindings, bindings.getClass().getName());
+        System.out.format("--- Bindings %1$s=%2$s ---%n", bindings, bindings.getClass().getName());
         for (String key : bindings.keySet()) {
             Object value = bindings.get(key);
             System.out.format("key: %1$s, value: %2$s [%3$s]%n", key, value, Integer.toHexString(System.identityHashCode(value)));
@@ -361,6 +361,30 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
     }
 
+    private ScriptEngine newEngineByName(String scriptLanguage)
+        throws SerializationException
+    {
+        ScriptEngine engine = scriptEngineManager.getEngineByName(scriptLanguage);
+
+        if (engine == null) {
+            throw new SerializationException("Unable to find scripting engine for"
+                + " language \"" + scriptLanguage + "\".");
+        }
+
+        // NOTE: this might not be right for Rhino engine, but works for Nashorn
+        engine.setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
+        if (engine.getFactory().getNames().contains("javascript")) {
+            try {
+                engine.eval(NASHORN_COMPAT_SCRIPT);
+            } catch (ScriptException se) {
+                throw new SerializationException("Unable to execute Nashorn compatibility script:",
+                    se);
+            }
+        }
+
+        return engine;
+    }
+
     /**
      * Get a script engine instance for the given script language (typically "JavaScript").
      * <p> Two things happen for a new script engine:  set the global bindings to our
@@ -383,23 +407,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             return engine;
         }
 
-        engine = scriptEngineManager.getEngineByName(scriptLanguage);
-
-        if (engine == null) {
-            throw new SerializationException("Unable to find scripting engine for"
-                + " language \"" + scriptLanguage + "\".");
-        }
-
-        // NOTE: this might not be right for Rhino engine, but works for Nashorn
-        engine.setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
-        if (engine.getFactory().getNames().contains("javascript")) {
-            try {
-                engine.eval(NASHORN_COMPAT_SCRIPT);
-            } catch (ScriptException se) {
-                throw new SerializationException("Unable to execute Nashorn compatibility script:",
-                    se);
-            }
-        }
+        engine = newEngineByName(scriptLanguage);
 
         scriptEngines.put(languageKey, engine);
 
@@ -1072,8 +1080,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     Class<?> propertyClass = null;
 
                     if (Character.isUpperCase(localName.charAt(0))) {
-                        // The attribute represents a static property or
-                        // listener list
+                        // The attribute represents a static property or listener list
                         int j = localName.indexOf('.');
                         name = localName.substring(j + 1);
 
@@ -1273,13 +1280,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 if (element.parent != null) {
                     if (element.parent.type == Element.Type.WRITABLE_PROPERTY) {
                         // Set this as the property value; it will be applied
-                        // later in the
-                        // parent's closing tag
+                        // later in the parent's closing tag
                         element.parent.value = element.value;
                     } else if (element.parent.value != null) {
                         // If the parent element has a default property, use it;
-                        // otherwise, if the
-                        // parent is a sequence, add the element to it
+                        // otherwise, if the parent is a sequence, add the element to it.
                         Class<?> parentType = element.parent.value.getClass();
                         DefaultProperty defaultProperty = parentType.getAnnotation(DefaultProperty.class);
 
@@ -1363,7 +1368,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             case LISTENER_LIST_PROPERTY: {
                 // Evaluate the script
                 String script = (String) element.value;
-                ScriptEngine scriptEngine = getEngineByName(language);
+
+                // Get a new engine here in order to make the script function private to this object
+                ScriptEngine scriptEngine = newEngineByName(language);
 
                 // ORIGINAL COMMENT: Don't pollute the engine namespace with the listener functions
                 // Removed for Java 1.8+ because Nashorn handles globals differently
