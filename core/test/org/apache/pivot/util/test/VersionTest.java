@@ -117,5 +117,18 @@ public class VersionTest {
         String formattedJavaVersion = javaVersion.toString();
         System.out.format("Java Runtime version (parsed and formatted): %1$s, raw: %2$s%n", formattedJavaVersion, sysJavaVersion);
         assertEquals("Java Runtime version", sysJavaVersion, formattedJavaVersion);
+
+        String newJava9Version = "9-ea+19";
+        Version newJava9 = Version.decode(newJava9Version);
+        String newJava9Formatted = newJava9.toString();
+        System.out.format("Potential new Java version: %1$s, parsed and formatted: %2$s%n", newJava9Version, newJava9Formatted);
+        assertEquals(newJava9Formatted, "9.0.0_00-ea+19");
+
+        String newJava10Version = "10+-ea";
+        Version newJava10 = Version.decode(newJava10Version);
+        String newJava10Formatted = newJava10.toString();
+        System.out.format("Potential new Java 10 version: %1$s, parsed and formatted: %2$s%n", newJava10Version, newJava10Formatted);
+        assertEquals(newJava10Formatted, "10.0.0_00--ea");
+
     }
 }
