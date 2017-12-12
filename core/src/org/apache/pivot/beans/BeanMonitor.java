@@ -199,8 +199,6 @@ public class BeanMonitor {
                     } catch (IllegalAccessException | InvocationTargetException exception) {
                         throw new RuntimeException(exception);
                     }
-
-                    break;
                 }
             }
         }
