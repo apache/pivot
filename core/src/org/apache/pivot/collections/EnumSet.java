@@ -177,6 +177,22 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     /**
+     * Creates an enum set initially containing all the elements of the backing enum.
+     *
+     * @param <E> The enum type of the set.
+     * @param elementClass The class of the individual elements to be used
+     * in this set.
+     * @return The new complete set.
+     */
+    public static <E extends Enum<E>> EnumSet<E> allOf(Class<E> elementClass) {
+        EnumSet<E> set = new EnumSet<E>(elementClass);
+        for (E e : elementClass.getEnumConstants()) {
+            set.add(e);
+        }
+        return set;
+    }
+
+    /**
      * Creates an enum set containing the given element.
      *
      * @param <E> The enum type of the set.
