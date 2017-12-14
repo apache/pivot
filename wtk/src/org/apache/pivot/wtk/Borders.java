@@ -20,6 +20,36 @@ package org.apache.pivot.wtk;
  * Enumeration defining the possible border configurations for a Ruler.
  */
 public enum Borders {
-    NONE, ALL, LEFT, RIGHT, TOP, BOTTOM,
-    LEFT_RIGHT, TOP_BOTTOM
+    /** No borders at all. */
+    NONE,
+    /** All four borders. */
+    ALL,
+    /** Only the left side. */
+    LEFT,
+    /** Only the right side. */
+    RIGHT,
+    /** Only the top. */
+    TOP,
+    /** Only the bottom. */
+    BOTTOM,
+    /** Both the left and right sides. */
+    LEFT_RIGHT,
+    /** Both the top and bottom. */
+    TOP_BOTTOM,
+    /** The left side and the top. */
+    LEFT_TOP,
+    /** The left side and the bottom. */
+    LEFT_BOTTOM,
+    /** The right side and the top. */
+    RIGHT_TOP,
+    /** The right side and the bottom. */
+    RIGHT_BOTTOM,
+    /** All sides except the right side. */
+    NOT_RIGHT,
+    /** All sides except the bottom. */
+    NOT_BOTTOM,
+    /** All sides except the left side. */
+    NOT_LEFT,
+    /** All sides except the top. */
+    NOT_TOP
 }

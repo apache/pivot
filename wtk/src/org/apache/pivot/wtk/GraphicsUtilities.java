@@ -517,5 +517,88 @@ public final class GraphicsUtilities {
         return caretRect;
     }
 
+    /**
+     * Draw borders around a rectangular area.
+     *
+     * @param graphics The graphics area to draw in.
+     * @param borders The borders specification.
+     * @param top The top coordinate (typically 0)
+     * @param left The left coordinate (typically 0)
+     * @param bottom The bottom interior coordinate (height - 1)
+     * @param right The right interior coordinate (width - 1)
+     */
+    public static void drawBorders(Graphics2D graphics, Borders borders, int top, int left, int bottom, int right) {
+        // The single line/object cases, or the first of the multiple line cases
+        switch (borders) {
+            case NONE:
+                break;
+            case ALL:
+                graphics.drawRect(left, top, right, bottom);
+                break;
+            case TOP:
+            case TOP_BOTTOM:
+                // The top here
+                graphics.drawLine(left, top, right, top);
+                break;
+            case BOTTOM:
+                // The bottom here
+                graphics.drawLine(left, bottom, right, bottom);
+                break;
+            case LEFT:
+            case LEFT_RIGHT:
+            case LEFT_TOP:
+            case LEFT_BOTTOM:
+            case NOT_RIGHT:
+            case NOT_BOTTOM:
+            case NOT_TOP:
+                // The left here
+                graphics.drawLine(0, 0, 0, bottom);
+                break;
+            case RIGHT:
+            case RIGHT_TOP:
+            case RIGHT_BOTTOM:
+            case NOT_LEFT:
+                // The right here
+                graphics.drawLine(right, 0, right, bottom);
+                break;
+        }
+
+        // The second of the double/triple line cases
+        switch (borders) {
+            case LEFT_RIGHT:
+            case NOT_BOTTOM:
+            case NOT_TOP:
+                // The right side now
+                graphics.drawLine(right, top, right, bottom);
+                break;
+            case TOP_BOTTOM:
+            case LEFT_BOTTOM:
+            case RIGHT_BOTTOM:
+            case NOT_LEFT:
+                // The bottom now
+                graphics.drawLine(left, bottom, right, bottom);
+                break;
+            case LEFT_TOP:
+            case RIGHT_TOP:
+            case NOT_RIGHT:
+                // The top now
+                graphics.drawLine(left, top, right, top);
+                break;
+        }
+
+        // Now the third of the triple line cases
+        switch (borders) {
+            case NOT_RIGHT:
+            case NOT_TOP:
+                // The bottom now
+                graphics.drawLine(left, bottom, right, bottom);
+                break;
+            case NOT_LEFT:
+            case NOT_BOTTOM:
+                // The top now
+                graphics.drawLine(left, top, right, top);
+                break;
+        }
+    }
 }
 

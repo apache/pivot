@@ -98,33 +98,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         graphics.fillRect(0, 0, width, height);
 
         graphics.setColor(color);
-        switch (borders) {
-            case NONE:
-                break;
-            case ALL:
-                graphics.drawRect(0, 0, width - 1, height - 1);
-                break;
-            case TOP:
-                graphics.drawLine(0, 0, width - 1, 0);
-                break;
-            case BOTTOM:
-                graphics.drawLine(0, height - 1, width - 1, height - 1);
-                break;
-            case LEFT:
-                graphics.drawLine(0, 0, 0, height - 1);
-                break;
-            case RIGHT:
-                graphics.drawLine(width - 1, 0, width - 1, height - 1);
-                break;
-            case LEFT_RIGHT:
-                graphics.drawLine(0, 0, 0, height - 1);
-                graphics.drawLine(width - 1, 0, width - 1, height - 1);
-                break;
-            case TOP_BOTTOM:
-                graphics.drawLine(0, 0, width - 1, 0);
-                graphics.drawLine(0, height - 1, width - 1, height - 1);
-                break;
-        }
+        GraphicsUtilities.drawBorders(graphics, borders, 0, 0, height - 1, width - 1);
 
         height -= markerInsets.getHeight();
         width -= markerInsets.getWidth();
