@@ -295,7 +295,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
             Font effectiveFont = getEffectiveFont();
             LineMetrics lm = effectiveFont.getLineMetrics("", fontRenderContext);
-            float ascent = lm.getAscent();
+            float ascent = lm.getAscent() + lm.getLeading();
 
             graphics.setFont(effectiveFont);
 
