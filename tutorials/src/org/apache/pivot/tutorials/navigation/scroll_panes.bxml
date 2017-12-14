@@ -25,11 +25,11 @@ limitations under the License.
                 tooltipText="Pemaquid Point Lighthouse, Bristol ME"/>
 
             <columnHeader>
-                <Ruler orientation="horizontal"/>
+                <Ruler orientation="horizontal" styles="{markerSpacing:8, backgroundColor:'LightSteelBlue'}"/>
             </columnHeader>
 
             <rowHeader>
-                <Ruler orientation="vertical"/>
+                <Ruler orientation="vertical" styles="{markerSpacing:8, backgroundColor:'LightSteelBlue'}"/>
             </rowHeader>
         </ScrollPane>
     </Border>

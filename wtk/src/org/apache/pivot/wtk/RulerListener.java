@@ -16,6 +16,17 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
+
 public interface RulerListener {
+    public static class Listeners extends ListenerList<RulerListener> implements
+        RulerListener {
+        @Override
+        public void orientationChanged(Ruler ruler) {
+            forEach(listener -> listener.orientationChanged(ruler));
+        }
+    }
+
     public void orientationChanged(Ruler ruler);
 }

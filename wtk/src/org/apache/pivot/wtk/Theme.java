@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.skin.ImageViewSkin;
 import org.apache.pivot.wtk.skin.LabelSkin;
 import org.apache.pivot.wtk.skin.MovieViewSkin;
 import org.apache.pivot.wtk.skin.PanelSkin;
+import org.apache.pivot.wtk.skin.RulerSkin;
 import org.apache.pivot.wtk.skin.ScrollPaneSkin;
 import org.apache.pivot.wtk.skin.SeparatorSkin;
 import org.apache.pivot.wtk.skin.StackPaneSkin;
@@ -92,6 +93,7 @@ public abstract class Theme {
         componentSkinMap.put(Label.class, LabelSkin.class);
         componentSkinMap.put(MovieView.class, MovieViewSkin.class);
         componentSkinMap.put(Panel.class, PanelSkin.class);
+        componentSkinMap.put(Ruler.class, RulerSkin.class);
         componentSkinMap.put(ScrollPane.class, ScrollPaneSkin.class);
         componentSkinMap.put(Separator.class, SeparatorSkin.class);
         componentSkinMap.put(StackPane.class, StackPaneSkin.class);
