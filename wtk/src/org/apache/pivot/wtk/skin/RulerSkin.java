@@ -20,9 +20,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.apache.pivot.util.Utils;
+import org.apache.pivot.wtk.Borders;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.CSSColor;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Ruler;
 import org.apache.pivot.wtk.RulerListener;
@@ -32,6 +34,9 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
     private Color color;
     private Color backgroundColor;
     private int markerSpacing;
+    private Insets markerInsets;
+    private boolean flip;
+    private Borders borders;
 
     public RulerSkin() {
         // For now the default colors are not from the Theme.
@@ -39,6 +44,9 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         setBackgroundColor(CSSColor.LightYellow.getColor());
 
         markerSpacing = 5;
+        markerInsets = new Insets(0);
+        flip = false;
+        borders = Borders.ALL;
     }
 
     @Override
@@ -75,26 +83,66 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         int width = getWidth();
         int height = getHeight();
 
+        int top = markerInsets.top;
+        int left = markerInsets.left;
+        int bottom = height - markerInsets.getHeight();
+        int right = width - markerInsets.getWidth();
+
         Ruler ruler = (Ruler) getComponent();
 
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, width, height);
 
         graphics.setColor(color);
-        graphics.drawRect(0, 0, width - 1, height - 1);
+        switch (borders) {
+            case NONE:
+                break;
+            case ALL:
+                graphics.drawRect(0, 0, width - 1, height - 1);
+                break;
+            case TOP:
+                graphics.drawLine(0, 0, width - 1, 0);
+                break;
+            case BOTTOM:
+                graphics.drawLine(0, height - 1, width - 1, height - 1);
+                break;
+            case LEFT:
+                graphics.drawLine(0, 0, 0, height - 1);
+                break;
+            case RIGHT:
+                graphics.drawLine(width - 1, 0, width - 1, height - 1);
+                break;
+            case LEFT_RIGHT:
+                graphics.drawLine(0, 0, 0, height - 1);
+                graphics.drawLine(width - 1, 0, width - 1, height - 1);
+                break;
+            case TOP_BOTTOM:
+                graphics.drawLine(0, 0, width - 1, 0);
+                graphics.drawLine(0, height - 1, width - 1, height - 1);
+                break;
+        }
+
+        height -= markerInsets.getHeight();
+        width -= markerInsets.getWidth();
 
         Orientation orientation = ruler.getOrientation();
         switch (orientation) {
             case HORIZONTAL: {
-                for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
-                    int x = i * markerSpacing;
+                int start = flip ? bottom - 1 : top;
+                int end2 = flip ? (bottom - 1 - height / 2) : height / 2;
+                int end3 = flip ? (bottom - 1 - height / 3) : height / 3;
+                int end4 = flip ? (bottom - 1 - height / 4) : height / 4;
 
+                for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
+                    int x = i * markerSpacing + left;
+
+                    
                     if (i % 4 == 0) {
-                        graphics.drawLine(x, 0, x, height / 2);
+                        graphics.drawLine(x, start, x, end2);
                     } else if (i % 2 == 0) {
-                        graphics.drawLine(x, 0, x, height / 3);
+                        graphics.drawLine(x, start, x, end3);
                     } else {
-                        graphics.drawLine(x, 0, x, height / 4);
+                        graphics.drawLine(x, start, x, end4);
                     }
                 }
 
@@ -102,15 +150,20 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
             }
 
             case VERTICAL: {
+                int start = flip ? right - 1 : left;
+                int end2 = flip ? (right - 1 - width / 2) : width / 2;
+                int end3 = flip ? (right - 1 - width / 3) : width / 3;
+                int end4 = flip ? (right - 1 - width / 4) : width / 4;
+
                 for (int i = 0, n = height / markerSpacing + 1; i < n; i++) {
-                    int y = i * markerSpacing;
+                    int y = i * markerSpacing + top;
 
                     if (i % 4 == 0) {
-                        graphics.drawLine(0, y, width / 2, y);
+                        graphics.drawLine(start, y, end2, y);
                     } else if (i % 2 == 0) {
-                        graphics.drawLine(0, y, width / 3, y);
+                        graphics.drawLine(start, y, end3, y);
                     } else {
-                        graphics.drawLine(0, y, width / 4, y);
+                        graphics.drawLine(start, y, end4, y);
                     }
                 }
 
@@ -143,6 +196,46 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         Utils.checkNull(spacing, "markerSpacing");
 
         setMarkerSpacing(spacing.intValue());
+    }
+
+    /**
+     * @return Whether the ruler is "flipped", that is the markers
+     * start from the inside rather than the outside.
+     */
+    public boolean getFlip() {
+        return flip;
+    }
+
+    public void setFlip(boolean flip) {
+        this.flip = flip;
+    }
+
+    /**
+     * @return The border configuration for this ruler.
+     */
+    public Borders getBorders() {
+        return borders;
+    }
+
+    public void setBorders(Borders borders) {
+        Utils.checkNull(borders, "borders");
+
+        this.borders = borders;
+        repaintComponent();
+    }
+
+    /**
+     * @return The insets for the markers (on each edge).
+     */
+    public Insets getMarkerInsets() {
+        return markerInsets;
+    }
+
+    public void setMarkerInsets(Insets insets) {
+        Utils.checkNull(insets, "markerInsets");
+
+        this.markerInsets = insets;
+        repaintComponent();
     }
 
     /**
