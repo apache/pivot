@@ -60,7 +60,7 @@ class RulerSkin extends ComponentSkin implements RulerListener {
 
         Ruler ruler = (Ruler) getComponent();
 
-        graphics.setColor(new Color(0xFF, 0xFF, 0xE0));
+        graphics.setColor(CSSColor.LightYellow.getColor());
         graphics.fillRect(0, 0, width, height);
 
         graphics.setColor(Color.BLACK);
