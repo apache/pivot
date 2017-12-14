@@ -188,7 +188,7 @@ public final class GraphicsUtilities {
      * <li>Any of the names of the static colors in the Java {@link Color} class.</li>
      * <li>Any of the CSS3/X11 color names from here:
      * <a href="http://www.w3.org/TR/css3-color/">http://www.w3.org/TR/css3-color/</a>
-     * (except the Java color names will be accepted first if there is a conflict).</li>
+     * (except the Java color values will be used for the standard Java names).</li>
      * <li>null - case-insensitive</li>
      * </ul>
      * @param argument A name for this color value (for the exception if it can't be decoded).
@@ -249,7 +249,8 @@ public final class GraphicsUtilities {
      * <li>Any of the names of the static colors in the Java {@link Color} class.</li>
      * <li>Any of the CSS3/X11 color names from here:
      * <a href="http://www.w3.org/TR/css3-color/">http://www.w3.org/TR/css3-color/</a>
-     * (except the Java color names will be accepted first if there is a conflict).</li>
+     * (except the Java color values will be used for the standard Java names).</li>
+     * <li>null - case-insensitive</li>
      * </ul>
      * @return A {@link Color} on successful decoding
      * @throws NumberFormatException if the value in the first two cases

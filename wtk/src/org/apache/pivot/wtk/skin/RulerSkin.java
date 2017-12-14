@@ -37,6 +37,8 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
     private Insets markerInsets;
     private boolean flip;
     private Borders borders;
+    private int majorDivision;
+    private int minorDivision;
 
     public RulerSkin() {
         // For now the default colors are not from the Theme.
@@ -47,6 +49,8 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         markerInsets = new Insets(0);
         flip = false;
         borders = Borders.ALL;
+        majorDivision = 4;
+        minorDivision = 2;
     }
 
     @Override
@@ -128,18 +132,19 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         Orientation orientation = ruler.getOrientation();
         switch (orientation) {
             case HORIZONTAL: {
+                int mid = (height + 2) * 3 / 8;
                 int start = flip ? bottom - 1 : top;
                 int end2 = flip ? (bottom - 1 - height / 2) : height / 2;
-                int end3 = flip ? (bottom - 1 - height / 3) : height / 3;
+                int end3 = flip ? (bottom - 1 - mid) : mid;
                 int end4 = flip ? (bottom - 1 - height / 4) : height / 4;
 
                 for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
                     int x = i * markerSpacing + left;
 
                     
-                    if (i % 4 == 0) {
+                    if (majorDivision != 0 && i % majorDivision == 0) {
                         graphics.drawLine(x, start, x, end2);
-                    } else if (i % 2 == 0) {
+                    } else if (minorDivision != 0 && i % minorDivision == 0) {
                         graphics.drawLine(x, start, x, end3);
                     } else {
                         graphics.drawLine(x, start, x, end4);
@@ -150,17 +155,18 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
             }
 
             case VERTICAL: {
+                int mid = (width + 2) * 3 / 8;
                 int start = flip ? right - 1 : left;
                 int end2 = flip ? (right - 1 - width / 2) : width / 2;
-                int end3 = flip ? (right - 1 - width / 3) : width / 3;
+                int end3 = flip ? (right - 1 - mid) : mid;
                 int end4 = flip ? (right - 1 - width / 4) : width / 4;
 
                 for (int i = 0, n = height / markerSpacing + 1; i < n; i++) {
                     int y = i * markerSpacing + top;
 
-                    if (i % 4 == 0) {
+                    if (majorDivision != 0 && i % majorDivision == 0) {
                         graphics.drawLine(start, y, end2, y);
-                    } else if (i % 2 == 0) {
+                    } else if (minorDivision != 0 && i % minorDivision == 0) {
                         graphics.drawLine(start, y, end3, y);
                     } else {
                         graphics.drawLine(start, y, end4, y);
@@ -181,12 +187,78 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         invalidateComponent();
     }
 
+    /**
+     * @return The interval at which the "major" (that is, the long)
+     * markers are drawn.
+     */
+    public int getMajorDivision() {
+        return majorDivision;
+    }
+
+    /**
+     * Set the major division interval.
+     *
+     * @param major The number of markers interval at which to draw
+     * a "major" (long) marker.  Can be zero to not draw any major
+     * markers.
+     */
+    public void setMajorDivision(int major) {
+        Utils.checkNonNegative(major, "majorDivision");
+
+        // TODO: check for sanity of major vs. minor here??
+        this.majorDivision = major;
+        repaintComponent();
+    }
+
+    public void setMajorDivision(Number major) {
+        Utils.checkNull(major, "majorDivision");
+
+        setMajorDivision(major.intValue());
+    }
+
+    /**
+     * @return The interval at which the "minor" (that is, the slightly
+     * longer than normal) markers are drawn.
+     */
+    public int getMinorDivision() {
+        return minorDivision;
+    }
+
+    /**
+     * Set the minor division interval.
+     *
+     * @param minor The number of markers interval at which to draw
+     * a "minor" (slightly longer than normal) marker.  Can be zero
+     * to not draw any minor markers.
+     */
+    public void setMinorDivision(int minor) {
+        Utils.checkNonNegative(minor, "minorDivision");
+
+        // TODO: check for sanity of major vs. minor here??
+        this.minorDivision = minor;
+        repaintComponent();
+    }
+
+    public void setMinorDivision(Number minor) {
+        Utils.checkNull(minor, "minorDivision");
+
+        setMinorDivision(minor.intValue());
+    }
+
+    /**
+     * @return The number of pixels interval at which to draw markers.
+     */
     public int getMarkerSpacing() {
         return markerSpacing;
     }
 
+    /**
+     * Set the number of pixels interval at which to draw the markers.
+     *
+     * @param spacing The number of pixels between markers (must be &gt;= 1).
+     */
     public void setMarkerSpacing(int spacing) {
-        Utils.checkNonNegative(spacing, "markerSpacing");
+        Utils.checkPositive(spacing, "markerSpacing");
 
         this.markerSpacing = spacing;
         invalidateComponent();
