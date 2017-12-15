@@ -19,6 +19,8 @@ package org.apache.pivot.wtk.skin;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Borders;
 import org.apache.pivot.wtk.Component;
@@ -176,7 +178,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      * a "major" (long) marker.  Can be zero to not draw any major
      * markers.
      */
-    public void setMajorDivision(int major) {
+    public final void setMajorDivision(int major) {
         Utils.checkNonNegative(major, "majorDivision");
 
         // TODO: check for sanity of major vs. minor here??
@@ -184,7 +186,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         repaintComponent();
     }
 
-    public void setMajorDivision(Number major) {
+    public final void setMajorDivision(Number major) {
         Utils.checkNull(major, "majorDivision");
 
         setMajorDivision(major.intValue());
@@ -205,7 +207,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      * a "minor" (slightly longer than normal) marker.  Can be zero
      * to not draw any minor markers.
      */
-    public void setMinorDivision(int minor) {
+    public final void setMinorDivision(int minor) {
         Utils.checkNonNegative(minor, "minorDivision");
 
         // TODO: check for sanity of major vs. minor here??
@@ -213,7 +215,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         repaintComponent();
     }
 
-    public void setMinorDivision(Number minor) {
+    public final void setMinorDivision(Number minor) {
         Utils.checkNull(minor, "minorDivision");
 
         setMinorDivision(minor.intValue());
@@ -231,14 +233,14 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      *
      * @param spacing The number of pixels between markers (must be &gt;= 1).
      */
-    public void setMarkerSpacing(int spacing) {
+    public final void setMarkerSpacing(int spacing) {
         Utils.checkPositive(spacing, "markerSpacing");
 
         this.markerSpacing = spacing;
         invalidateComponent();
     }
 
-    public void setMarkerSpacing(Number spacing) {
+    public final void setMarkerSpacing(Number spacing) {
         Utils.checkNull(spacing, "markerSpacing");
 
         setMarkerSpacing(spacing.intValue());
@@ -252,7 +254,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         return flip;
     }
 
-    public void setFlip(boolean flip) {
+    public final void setFlip(boolean flip) {
         this.flip = flip;
     }
 
@@ -263,7 +265,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         return borders;
     }
 
-    public void setBorders(Borders borders) {
+    public final void setBorders(Borders borders) {
         Utils.checkNull(borders, "borders");
 
         this.borders = borders;
@@ -277,11 +279,31 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         return markerInsets;
     }
 
-    public void setMarkerInsets(Insets insets) {
+    public final void setMarkerInsets(Insets insets) {
         Utils.checkNull(insets, "markerInsets");
 
         this.markerInsets = insets;
         repaintComponent();
+    }
+
+    public final void setMarkerInsets(Dictionary<String, ?> insets) {
+        setMarkerInsets(new Insets(insets));
+    }
+
+    public final void setMarkerInsets(Sequence<?> insets) {
+        setMarkerInsets(new Insets(insets));
+    }
+
+    public final void setMarkerInsets(int insets) {
+        setMarkerInsets(new Insets(insets));
+    }
+
+    public final void setMarkerInsets(Number insets) {
+        setMarkerInsets(new Insets(insets));
+    }
+
+    public final void setMarkerInsets(String insets) {
+        setMarkerInsets(Insets.decode(insets));
     }
 
     /**
@@ -298,7 +320,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      *
      * @param color The foreground (that is, the marker) color.
      */
-    public void setColor(Color color) {
+    public final void setColor(Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
@@ -311,11 +333,11 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
-    public void setColor(String color) {
+    public final void setColor(String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
-    public void setColor(int color) {
+    public final void setColor(int color) {
         Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
@@ -335,7 +357,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      * @param backgroundColor New background color value (can be {@code null}
      * for a transparent background).
      */
-    public void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
@@ -347,11 +369,11 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
      */
-    public void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public void setBackgroundColor(int backgroundColor) {
+    public final void setBackgroundColor(int backgroundColor) {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
