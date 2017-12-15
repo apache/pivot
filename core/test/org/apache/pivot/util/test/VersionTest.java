@@ -130,7 +130,7 @@ public class VersionTest {
         System.out.format("Potential new Java 10 version: %1$s, parsed and formatted: %2$s%n", newJava10Version, newJava10Formatted);
         assertEquals(newJava10Formatted, "10.0.0_00--ea");
     }
-    
+
     @Test
     public void testJava9Versions() {
         // All the other suggested versions from "http://openjdk.java.net/jeps/223"

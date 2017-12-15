@@ -183,7 +183,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         height -= markerInsets.getHeight();
         width -= markerInsets.getWidth();
 
-        FontRenderContext fontRenderContext = showMajorNumbers || showMinorNumbers ? 
+        FontRenderContext fontRenderContext = showMajorNumbers || showMinorNumbers ?
             GraphicsUtilities.prepareForText(graphics, font, color) : null;
 
         Orientation orientation = ruler.getOrientation();
@@ -198,7 +198,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
                 for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
                     int x = i * markerSpacing + left;
 
-                    
+
                     if (majorDivision != 0 && i % majorDivision == 0) {
                         graphics.drawLine(x, start, x, end2);
                         // Don't show any numbers at 0 -- make a style for this?

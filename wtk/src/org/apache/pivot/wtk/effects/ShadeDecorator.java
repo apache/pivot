@@ -155,4 +155,4 @@ public class ShadeDecorator implements Decorator {
     }
 
 }
-	
+

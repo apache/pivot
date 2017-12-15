@@ -326,7 +326,7 @@ public final class TerraTheme extends Theme {
                 colors.add(brighten(baseColor));
             }
 
-            
+
             @SuppressWarnings("unchecked")
             Map<String, String> messageIconNames = (Map<String, String>) properties.get(MESSAGE_ICONS_PROPERTY);
             messageIcons = new HashMap<>();
