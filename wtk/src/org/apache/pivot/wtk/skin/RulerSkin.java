@@ -522,8 +522,8 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
     public void setFont(Font font) {
         Utils.checkNull(font, "font");
 
-        // The font we will use is the same name and style, but a 9.5 pt type
-        this.font = font.deriveFont(9.5f);
+        // The font we will use is the same name and style, but a 11 pt type
+        this.font = font.deriveFont(11.0f);
 
         // Make some size calculations for the drawing code
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
