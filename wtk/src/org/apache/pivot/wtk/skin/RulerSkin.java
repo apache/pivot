@@ -17,7 +17,13 @@
 package org.apache.pivot.wtk.skin;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.font.LineMetrics;
+import java.awt.geom.Rectangle2D;
+import java.text.StringCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -25,14 +31,20 @@ import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Borders;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.CSSColor;
+import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Ruler;
 import org.apache.pivot.wtk.RulerListener;
 import org.apache.pivot.wtk.Theme;
 
 public class RulerSkin extends ComponentSkin implements RulerListener {
+    private static final int MAJOR_SIZE = 10;
+    private static final int MINOR_SIZE = 8;
+    private static final int REGULAR_SIZE = 5;
+
     private Color color;
     private Color backgroundColor;
     private int markerSpacing;
@@ -41,6 +53,10 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
     private Borders borders;
     private int majorDivision;
     private int minorDivision;
+    private boolean showMajorNumbers;
+    private boolean showMinorNumbers;
+    private Font font;
+    private float charWidth, charHeight, descent;
 
     public RulerSkin() {
         // For now the default colors are not from the Theme.
@@ -53,6 +69,10 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         borders = Borders.ALL;
         majorDivision = 4;
         minorDivision = 2;
+        showMajorNumbers = showMinorNumbers = false;
+
+        Theme theme = currentTheme();
+        setFont(theme.getFont());
     }
 
     @Override
@@ -73,7 +93,10 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         Ruler ruler = (Ruler) getComponent();
         Orientation orientation = ruler.getOrientation();
 
-        return (orientation == Orientation.HORIZONTAL) ? 20 : 0;
+        // Give a little extra height if showing numbers
+        return (orientation == Orientation.HORIZONTAL) ?
+            ((showMajorNumbers || showMinorNumbers) ?
+                ((int)Math.ceil(charHeight) + MAJOR_SIZE + 5) : MAJOR_SIZE * 2) : 0;
     }
 
     @Override
@@ -81,7 +104,62 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         Ruler ruler = (Ruler) getComponent();
         Orientation orientation = ruler.getOrientation();
 
-        return (orientation == Orientation.VERTICAL) ? 20 : 0;
+        // Give a little extra width if showing numbers
+        return (orientation == Orientation.VERTICAL) ?
+            ((showMajorNumbers || showMinorNumbers) ?
+                ((int)Math.ceil(charWidth) + MAJOR_SIZE + 5) : MAJOR_SIZE * 2) : 0;
+    }
+
+    private void showNumber(Graphics2D graphics, FontRenderContext fontRenderContext, int number, int x, int y) {
+        String num = Integer.toString(number);
+
+        StringCharacterIterator line;
+        GlyphVector glyphVector;
+        Rectangle2D textBounds;
+        float width, height;
+        float fx, fy;
+
+        Ruler ruler = (Ruler) getComponent();
+        Orientation orientation = ruler.getOrientation();
+
+        switch (orientation) {
+            case HORIZONTAL:
+                // Draw the whole number just off the tip of the line given by (x,y)
+                line = new StringCharacterIterator(num);
+                glyphVector = font.createGlyphVector(fontRenderContext, line);
+                textBounds = glyphVector.getLogicalBounds();
+                width = (float) textBounds.getWidth();
+                height = (float) textBounds.getHeight();
+                fx = (float)(x + 1) - (width / 2.0f);
+                if (flip) {
+                    fy = (float)(y - 2);
+                } else {
+                    fy = (float)(y - 1) + height;
+                }
+                graphics.drawGlyphVector(glyphVector, fx, fy);
+                break;
+            case VERTICAL:
+                // Draw the number one digit at a time, vertically just off the tip of the line
+                if (flip) {
+                    fx = (float)(x - 1) - charWidth;
+                } else {
+                    fx = (float)(x + 3);
+                }
+                int numDigits = num.length();
+                float heightAdjust = (numDigits % 2 == 1) ? charHeight / 2.0f : 0.0f;
+                for (int i = 0; i < numDigits; i++) {
+                    line = new StringCharacterIterator(num.substring(i, i + 1));
+                    glyphVector = font.createGlyphVector(fontRenderContext, line);
+                    int midDigit = (numDigits + 1) / 2;
+                    if (i <= midDigit) {
+                        fy = (float)y + heightAdjust - descent - (float)(midDigit - i - 1) * charHeight;
+                    } else {
+                        fy = (float)y + heightAdjust - descent + (float)(i - midDigit - 1) * charHeight;
+                    }
+                    graphics.drawGlyphVector(glyphVector, fx, fy);
+                }
+                break;
+        }
     }
 
     @Override
@@ -91,8 +169,8 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
 
         int top = markerInsets.top;
         int left = markerInsets.left;
-        int bottom = height - markerInsets.getHeight();
-        int right = width - markerInsets.getWidth();
+        int bottom = height - markerInsets.bottom;
+        int right = width - markerInsets.right;
 
         Ruler ruler = (Ruler) getComponent();
 
@@ -105,14 +183,17 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         height -= markerInsets.getHeight();
         width -= markerInsets.getWidth();
 
+        FontRenderContext fontRenderContext = showMajorNumbers || showMinorNumbers ? 
+            GraphicsUtilities.prepareForText(graphics, font, color) : null;
+
         Orientation orientation = ruler.getOrientation();
         switch (orientation) {
             case HORIZONTAL: {
-                int mid = (height + 2) * 3 / 8;
+                int mid = MINOR_SIZE - 1;
                 int start = flip ? bottom - 1 : top;
-                int end2 = flip ? (bottom - 1 - height / 2) : height / 2;
+                int end2 = flip ? (bottom - 1 - (MAJOR_SIZE - 1)) : (MAJOR_SIZE - 1);
                 int end3 = flip ? (bottom - 1 - mid) : mid;
-                int end4 = flip ? (bottom - 1 - height / 4) : height / 4;
+                int end4 = flip ? (bottom - 1 - (REGULAR_SIZE - 1)) : (REGULAR_SIZE - 1);
 
                 for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
                     int x = i * markerSpacing + left;
@@ -120,8 +201,15 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
                     
                     if (majorDivision != 0 && i % majorDivision == 0) {
                         graphics.drawLine(x, start, x, end2);
+                        // Don't show any numbers at 0 -- make a style for this?
+                        if (showMajorNumbers && i > 0) {
+                            showNumber(graphics, fontRenderContext, i, x, end2);
+                        }
                     } else if (minorDivision != 0 && i % minorDivision == 0) {
                         graphics.drawLine(x, start, x, end3);
+                        if (showMinorNumbers && i > 0) {
+                            showNumber(graphics, fontRenderContext, i, x, end3);
+                        }
                     } else {
                         graphics.drawLine(x, start, x, end4);
                     }
@@ -131,19 +219,26 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
             }
 
             case VERTICAL: {
-                int mid = (width + 2) * 3 / 8;
+                int mid = MINOR_SIZE - 1;
                 int start = flip ? right - 1 : left;
-                int end2 = flip ? (right - 1 - width / 2) : width / 2;
+                int end2 = flip ? (right - 1 - (MAJOR_SIZE - 1)) : (MAJOR_SIZE - 1);
                 int end3 = flip ? (right - 1 - mid) : mid;
-                int end4 = flip ? (right - 1 - width / 4) : width / 4;
+                int end4 = flip ? (right - 1 - (REGULAR_SIZE - 1)) : (REGULAR_SIZE - 1);
 
                 for (int i = 0, n = height / markerSpacing + 1; i < n; i++) {
                     int y = i * markerSpacing + top;
 
                     if (majorDivision != 0 && i % majorDivision == 0) {
                         graphics.drawLine(start, y, end2, y);
+                        // Don't show any numbers at 0 -- make a style for this?
+                        if (showMajorNumbers && i > 0) {
+                            showNumber(graphics, fontRenderContext, i, end2, y);
+                        }
                     } else if (minorDivision != 0 && i % minorDivision == 0) {
                         graphics.drawLine(start, y, end3, y);
+                        if (showMinorNumbers && i > 0) {
+                            showNumber(graphics, fontRenderContext, i, end3, y);
+                        }
                     } else {
                         graphics.drawLine(start, y, end4, y);
                     }
@@ -256,6 +351,40 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
 
     public final void setFlip(boolean flip) {
         this.flip = flip;
+    }
+
+    /**
+     * @return Whether to display numbers at each major division.
+     */
+    public boolean getShowMajorNumbers() {
+        return showMajorNumbers;
+    }
+
+    /**
+     * Sets the flag to say whether to show numbers at each major division.
+     *
+     * @param showMajorNumbers Whether numbers should be shown for major divisions.
+     */
+    public final void setShowMajorNumbers(boolean showMajorNumbers) {
+        this.showMajorNumbers = showMajorNumbers;
+        invalidateComponent();
+    }
+
+    /**
+     * @return Whether to display numbers at each minor division.
+     */
+    public boolean getShowMinorNumbers() {
+        return showMinorNumbers;
+    }
+
+    /**
+     * Sets the flag to say whether to show numbers at each minor division.
+     *
+     * @param showMinorNumbers Whether numbers should be shown for minor divisions.
+     */
+    public final void setShowMinorNumbers(boolean showMinorNumbers) {
+        this.showMinorNumbers = showMinorNumbers;
+        invalidateComponent();
     }
 
     /**
@@ -377,4 +506,54 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
+
+    /**
+     * @return The font used to format division numbers (if enabled).
+     */
+    public Font getFont() {
+        return font;
+    }
+
+    /**
+     * Sets the font used in rendering the Ruler's text.
+     *
+     * @param font The new font to use.
+     */
+    public void setFont(Font font) {
+        Utils.checkNull(font, "font");
+
+        // The font we will use is the same name and style, but a 9.5 pt type
+        this.font = font.deriveFont(9.5f);
+
+        // Make some size calculations for the drawing code
+        FontRenderContext fontRenderContext = Platform.getFontRenderContext();
+        GlyphVector glyphVector = this.font.createGlyphVector(fontRenderContext, "0");
+        Rectangle2D textBounds = glyphVector.getLogicalBounds();
+        this.charWidth = (float)textBounds.getWidth();
+        // Since we're just drawing numbers, the line spacing can be just the ascent value for the font
+        LineMetrics lm = this.font.getLineMetrics("0", fontRenderContext);
+        this.charHeight = lm.getAscent();
+        this.descent = lm.getDescent();
+
+        invalidateComponent();
+    }
+
+    /**
+     * Sets the font used in rendering the Ruler's text.
+     *
+     * @param font A {@link ComponentSkin#decodeFont(String) font specification}
+     */
+    public final void setFont(String font) {
+        setFont(decodeFont(font));
+    }
+
+    /**
+     * Sets the font used in rendering the Ruler's text.
+     *
+     * @param font A dictionary {@link Theme#deriveFont describing a font}
+     */
+    public final void setFont(Dictionary<String, ?> font) {
+        setFont(Theme.deriveFont(font));
+    }
+
 }
