@@ -207,7 +207,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
                 int totalLines = height / lineHeight + 1;
 
                 for (int num = 1 + linesAbove, n = totalLines - (linesBelow - 1); num < n; num++) {
-                    float y = (float)(num * lineHeight) - descent;
+                    float y = (float)(num * lineHeight + markerInsets.top) - descent;
 
                     StringCharacterIterator line = new StringCharacterIterator(Integer.toString(num));
                     GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);

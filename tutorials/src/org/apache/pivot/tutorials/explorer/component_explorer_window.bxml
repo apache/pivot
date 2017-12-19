@@ -379,10 +379,16 @@ limitations under the License.
                                     </Border>
                                     <Border TabPane.tabData="%contentPane.bxmlSourceLabel">
                                         <ScrollPane horizontalScrollBarPolicy="fill_to_capacity"
-                                            verticalScrollBarPolicy="fill_to_capacity">
+                                            verticalScrollBarPolicy="fill_to_capacity" styles="{backgroundColor:'white'}">
                                             <TextArea bxml:id="sourceTextArea"
                                                 editable="false"
                                                 styles="{wrapText:false, font:'Courier 10'}"/>
+                                            <columnHeader>
+                                                <NumberRuler orientation="horizontal" styles="{color:6,backgroundColor:5,font:'Courier 10',markerSpacing:6,showMinorNumbers:true,markerInsets:{top:0,bottom:0,left:4,right:4}}"/>
+                                            </columnHeader>
+                                            <rowHeader>
+                                                <NumberRuler orientation="vertical" styles="{color:6, backgroundColor:5,font:'Courier 10',markerInsets:{top:3,bottom:3,left:0,right:0}}"/>
+                                            </rowHeader>
                                         </ScrollPane>
                                     </Border>
 
