@@ -130,7 +130,7 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
                 textBounds = glyphVector.getLogicalBounds();
                 width = (float) textBounds.getWidth();
                 height = (float) textBounds.getHeight();
-                fx = (float)(x + 1) - (width / 2.0f);
+                fx = (float)x - (width / 2.0f);
                 if (flip) {
                     fy = (float)(y - 2);
                 } else {
@@ -189,15 +189,13 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
         Orientation orientation = ruler.getOrientation();
         switch (orientation) {
             case HORIZONTAL: {
-                int mid = MINOR_SIZE - 1;
                 int start = flip ? bottom - 1 : top;
-                int end2 = flip ? (bottom - 1 - (MAJOR_SIZE - 1)) : (MAJOR_SIZE - 1);
-                int end3 = flip ? (bottom - 1 - mid) : mid;
-                int end4 = flip ? (bottom - 1 - (REGULAR_SIZE - 1)) : (REGULAR_SIZE - 1);
+                int end2 = flip ? (start - (MAJOR_SIZE - 1)) : (MAJOR_SIZE - 1);
+                int end3 = flip ? (start - (MINOR_SIZE - 1)) : (MINOR_SIZE - 1);
+                int end4 = flip ? (start - (REGULAR_SIZE - 1)) : (REGULAR_SIZE - 1);
 
-                for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
+                for (int i = 0, n = right / markerSpacing + 1; i < n; i++) {
                     int x = i * markerSpacing + left;
-
 
                     if (majorDivision != 0 && i % majorDivision == 0) {
                         graphics.drawLine(x, start, x, end2);
@@ -208,7 +206,8 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
                     } else if (minorDivision != 0 && i % minorDivision == 0) {
                         graphics.drawLine(x, start, x, end3);
                         if (showMinorNumbers && i > 0) {
-                            showNumber(graphics, fontRenderContext, i, x, end3);
+                            // Show the minor numbers at the same y point as the major
+                            showNumber(graphics, fontRenderContext, i, x, end2);
                         }
                     } else {
                         graphics.drawLine(x, start, x, end4);
@@ -219,13 +218,12 @@ public class RulerSkin extends ComponentSkin implements RulerListener {
             }
 
             case VERTICAL: {
-                int mid = MINOR_SIZE - 1;
                 int start = flip ? right - 1 : left;
-                int end2 = flip ? (right - 1 - (MAJOR_SIZE - 1)) : (MAJOR_SIZE - 1);
-                int end3 = flip ? (right - 1 - mid) : mid;
-                int end4 = flip ? (right - 1 - (REGULAR_SIZE - 1)) : (REGULAR_SIZE - 1);
+                int end2 = flip ? (start - (MAJOR_SIZE - 1)) : (MAJOR_SIZE - 1);
+                int end3 = flip ? (start - (MINOR_SIZE - 1)) : (MINOR_SIZE - 1);
+                int end4 = flip ? (start - (REGULAR_SIZE - 1)) : (REGULAR_SIZE - 1);
 
-                for (int i = 0, n = height / markerSpacing + 1; i < n; i++) {
+                for (int i = 0, n = bottom / markerSpacing + 1; i < n; i++) {
                     int y = i * markerSpacing + top;
 
                     if (majorDivision != 0 && i % majorDivision == 0) {
