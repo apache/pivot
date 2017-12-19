@@ -16,10 +16,15 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Listener for changes to a {@link NumberRuler} that affect size and position.
  */
 public interface NumberRulerListener {
+    /**
+     * Default implementation of the listener interface.
+     */
     public static class Adapter implements NumberRulerListener {
         @Override
         public void orientationChanged(NumberRuler ruler) {
@@ -31,7 +36,34 @@ public interface NumberRulerListener {
             // Empty block
         }
     }
+
+    /**
+     * Listeners list for this interface.
+     */
+    public static class Listeners extends ListenerList<NumberRulerListener>
+        implements NumberRulerListener {
+        @Override
+        public void orientationChanged(NumberRuler ruler) {
+            forEach(listener -> listener.orientationChanged(ruler));
+        }
+        @Override
+        public void textSizeChanged(NumberRuler ruler, int previousSize) {
+            forEach(listener -> listener.textSizeChanged(ruler, previousSize));
+        }
+    }
+
+    /**
+     * The orientation of the {@link NumberRuler} changed.
+     *
+     * @param ruler The component that has changed.
+     */
     public void orientationChanged(NumberRuler ruler);
 
+    /**
+     * The text size (number of characters) of the ruler has changed.
+     *
+     * @param ruler The component that has changed.
+     * @param previousSize The previous value of the size.
+     */
     public void textSizeChanged(NumberRuler ruler, int previousSize);
 }

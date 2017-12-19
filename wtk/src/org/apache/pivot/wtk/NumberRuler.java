@@ -25,24 +25,11 @@ import org.apache.pivot.util.Utils;
  * ({@link TextArea} or {@link TextPane}).
  */
 public class NumberRuler extends Component {
-    private static class NumberRulerListenerList
-        extends ListenerList<NumberRulerListener>
-        implements NumberRulerListener {
-        @Override
-        public void orientationChanged(NumberRuler ruler) {
-            forEach(listener -> listener.orientationChanged(ruler));
-        }
-        @Override
-        public void textSizeChanged(NumberRuler ruler, int previousSize) {
-            forEach(listener -> listener.textSizeChanged(ruler, previousSize));
-        }
-    }
-
     private Orientation orientation = Orientation.VERTICAL;
     /** Maximum number of digits expected in the numbering. */
     private int textSize = 5;
 
-    private NumberRulerListenerList rulerListeners = new NumberRulerListenerList();
+    private NumberRulerListener.Listeners rulerListeners = new NumberRulerListener.Listeners();
 
     public NumberRuler() {
         installSkin(NumberRuler.class);
