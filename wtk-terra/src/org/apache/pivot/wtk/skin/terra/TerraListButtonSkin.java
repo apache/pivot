@@ -106,15 +106,12 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
             repaintComponent();
 
-            ApplicationContext.queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    int selectedIndex = listView.getSelectedIndex();
+            ApplicationContext.queueCallback(() -> {
+                int selectedIndex = listView.getSelectedIndex();
 
-                    if (selectedIndex >= 0) {
-                        Bounds itemBounds = listView.getItemBounds(selectedIndex);
-                        listView.scrollAreaToVisible(itemBounds);
-                    }
+                if (selectedIndex >= 0) {
+                    Bounds itemBounds = listView.getItemBounds(selectedIndex);
+                    listView.scrollAreaToVisible(itemBounds);
                 }
             });
         }

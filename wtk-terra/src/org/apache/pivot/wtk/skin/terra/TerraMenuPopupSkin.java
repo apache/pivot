@@ -48,39 +48,36 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  */
 public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     MenuPopupStateListener {
-    private class RepositionCallback implements Runnable {
-        @Override
-        public void run() {
-            MenuPopup menuPopup = (MenuPopup) getComponent();
-            Display display = menuPopup.getDisplay();
-
-            Point location = menuPopup.getLocation();
-            Dimensions size = menuPopup.getSize();
-
-            int x = location.x;
-            int displayWidth = display.getWidth();
-            if (size.width > displayWidth) {
-                border.setPreferredWidth(displayWidth);
-                x = 0;
-            } else if (x + size.width > displayWidth) {
-                x = Math.max(displayWidth - size.width, 0);
-            }
-
-            int y = location.y;
-            int displayHeight = display.getHeight();
-            if (size.height > displayHeight) {
-                border.setPreferredHeight(displayHeight);
-                y = 0;
-            } else if (y + size.height > displayHeight) {
-                y = Math.max(displayHeight - size.height, 0);
-            }
-
-            menuPopup.setLocation(x, y);
-        }
-    }
-
     private Panorama panorama;
     private Border border;
+
+    private Runnable repositionCallback = () -> {
+        MenuPopup menuPopup = (MenuPopup) getComponent();
+        Display display = menuPopup.getDisplay();
+
+        Point location = menuPopup.getLocation();
+        Dimensions size = menuPopup.getSize();
+
+        int x = location.x;
+        int displayWidth = display.getWidth();
+        if (size.width > displayWidth) {
+            border.setPreferredWidth(displayWidth);
+            x = 0;
+        } else if (x + size.width > displayWidth) {
+            x = Math.max(displayWidth - size.width, 0);
+        }
+
+        int y = location.y;
+        int displayHeight = display.getHeight();
+        if (size.height > displayHeight) {
+            border.setPreferredHeight(displayHeight);
+            y = 0;
+        } else if (y + size.height > displayHeight) {
+            y = Math.max(displayHeight - size.height, 0);
+        }
+
+        menuPopup.setLocation(x, y);
+    };
 
     private DropShadowDecorator dropShadowDecorator = null;
     private Transition closeTransition = null;
@@ -238,7 +235,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         panorama.setScrollTop(0);
 
         // Always ensure that the menu popup fits on the display.
-        ApplicationContext.queueCallback(new RepositionCallback());
+        ApplicationContext.queueCallback(repositionCallback);
     }
 
     @Override

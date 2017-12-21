@@ -1683,12 +1683,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 selectedTab.setVisible(true);
                 selectedTab.requestFocus();
 
-                ApplicationContext.queueCallback(new Runnable() {
-                    @Override
-                    public void run() {
-                        button.scrollAreaToVisible(0, 0, button.getWidth(), button.getHeight());
-                    }
-                });
+                ApplicationContext.queueCallback(() ->
+                    button.scrollAreaToVisible(0, 0, button.getWidth(), button.getHeight()));
             }
 
             if (previousSelectedIndex != -1) {

@@ -24,49 +24,13 @@ import org.apache.pivot.util.concurrent.TaskListener;
  * Class that forwards task events to the UI thread.
  */
 public class TaskAdapter<T> implements TaskListener<T> {
-    /**
-     * Callback that gets posted to the UI thread when our task has been
-     * executed.
-     */
-    private class TaskExecutedCallback implements Runnable {
-        private Task<T> task;
-
-        public TaskExecutedCallback(Task<T> task) {
-            this.task = task;
-        }
-
-        @Override
-        public void run() {
-            taskListener.taskExecuted(task);
-        }
-    }
-
-    /**
-     * Callback that gets posted to the UI thread when our task execution has
-     * failed.
-     */
-    private class ExecuteFailedCallback implements Runnable {
-        private Task<T> task;
-
-        public ExecuteFailedCallback(Task<T> task) {
-            this.task = task;
-        }
-
-        @Override
-        public void run() {
-            taskListener.executeFailed(task);
-        }
-    }
-
-    // The TaskListener that we're adapting
+    /** The TaskListener that we're adapting. */
     private TaskListener<T> taskListener;
 
     /**
-     * Creates a new <tt>TaskAdapter</tt> that wraps the specified task
-     * listener.
+     * Creates a new <tt>TaskAdapter</tt> that wraps the specified task listener.
      *
-     * @param taskListener The task listener that will be notified on the UI
-     * thread
+     * @param taskListener The task listener that will be notified on the UI thread.
      */
     public TaskAdapter(TaskListener<T> taskListener) {
         Utils.checkNull(taskListener, "Task listener");
@@ -77,12 +41,12 @@ public class TaskAdapter<T> implements TaskListener<T> {
     // TaskListener methods
 
     @Override
-    public void taskExecuted(Task<T> task) {
-        ApplicationContext.queueCallback(new TaskExecutedCallback(task));
+    public void taskExecuted(final Task<T> task) {
+        ApplicationContext.queueCallback(() -> taskListener.taskExecuted(task));
     }
 
     @Override
-    public void executeFailed(Task<T> task) {
-        ApplicationContext.queueCallback(new ExecuteFailedCallback(task));
+    public void executeFailed(final Task<T> task) {
+        ApplicationContext.queueCallback(() -> taskListener.executeFailed(task));
     }
 }
