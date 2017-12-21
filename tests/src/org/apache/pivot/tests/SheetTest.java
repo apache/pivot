@@ -84,7 +84,7 @@ public class SheetTest extends Application.Adapter {
         prompt.setTitle("Prompt");
         prompt.getStyles().put("resizable", true);
 
-        prompt.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
+        prompt.getComponentMouseListeners().add(new ComponentMouseListener() {
             @Override
             public void mouseOver(Component component) {
                 System.out.println("Mouse Over");
