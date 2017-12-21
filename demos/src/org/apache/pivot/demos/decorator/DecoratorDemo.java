@@ -42,7 +42,7 @@ public class DecoratorDemo extends Application.Adapter {
         final FadeDecorator fadeDecorator = new FadeDecorator();
         translucentFrame.getDecorators().insert(fadeDecorator, 0);
 
-        translucentFrame.getComponentMouseListeners().add(new ComponentMouseListener.Adapter() {
+        translucentFrame.getComponentMouseListeners().add(new ComponentMouseListener() {
             @Override
             public void mouseOver(Component component) {
                 fadeDecorator.setOpacity(0.9f);

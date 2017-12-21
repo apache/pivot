@@ -23,7 +23,9 @@ package org.apache.pivot.wtk;
 public interface ComponentMouseListener {
     /**
      * Component mouse button listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements ComponentMouseListener {
         @Override
         public boolean mouseMove(Component component, int x, int y) {
@@ -48,21 +50,27 @@ public interface ComponentMouseListener {
      * @param x X position of the mouse.
      * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
-     * propagate.
+     * propagate (default return).
      */
-    public boolean mouseMove(Component component, int x, int y);
+    default public boolean mouseMove(Component component, int x, int y) {
+        return false;
+    }
 
     /**
      * Called when the mouse enters a component.
+     * <p> Default is to do nothing.
      *
      * @param component Component that is now under the mouse pointer.
      */
-    public void mouseOver(Component component);
+    default public void mouseOver(Component component) {
+    }
 
     /**
      * Called when the mouse exits a component.
+     * <p> Default is to do nothing.
      *
      * @param component Component that has now lost the mouse pointer.
      */
-    public void mouseOut(Component component);
+    default public void mouseOut(Component component) {
+    }
 }

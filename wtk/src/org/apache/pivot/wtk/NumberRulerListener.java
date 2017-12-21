@@ -24,7 +24,9 @@ import org.apache.pivot.util.ListenerList;
 public interface NumberRulerListener {
     /**
      * Default implementation of the listener interface.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements NumberRulerListener {
         @Override
         public void orientationChanged(NumberRuler ruler) {
@@ -54,16 +56,20 @@ public interface NumberRulerListener {
 
     /**
      * The orientation of the {@link NumberRuler} changed.
+     * <p> Default operation is to do nothing.
      *
      * @param ruler The component that has changed.
      */
-    public void orientationChanged(NumberRuler ruler);
+    default public void orientationChanged(NumberRuler ruler) {
+    }
 
     /**
      * The text size (number of characters) of the ruler has changed.
+     * <p> Default operation is to do nothing.
      *
      * @param ruler The component that has changed.
      * @param previousSize The previous value of the size.
      */
-    public void textSizeChanged(NumberRuler ruler, int previousSize);
+    default public void textSizeChanged(NumberRuler ruler, int previousSize) {
+    }
 }

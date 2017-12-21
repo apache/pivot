@@ -246,7 +246,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
 
     private int maximumFlagImageWidth = 0;
 
-    private ComponentMouseListener fieldMouseListener = new ComponentMouseListener.Adapter() {
+    private ComponentMouseListener fieldMouseListener = new ComponentMouseListener() {
         @Override
         public void mouseOver(Component component) {
             if (!showFlagMessagesInline) {
