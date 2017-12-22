@@ -105,6 +105,32 @@ public interface Dictionary<K, V> {
     boolean containsKey(K key);
 
     /**
+     * Retrieve a String value from this dictionary; returning null if the key
+     * does not exist.
+     *
+     * @param key The key for the (supposed) <tt>String</tt> value.
+     * @return The string value, or <tt>null</tt> if the key is not present.
+     */
+    default String getString(K key) {
+        return getString(key, null);
+    }
+
+    /**
+     * Retrieve a String value from this dictionary; returning null if the key
+     * does not exist.
+     *
+     * @param key The key for the (supposed) <tt>String</tt> value.
+     * @param defaultValue The string to return if the key is not present.
+     * @return The string value, or the default value if the key is not present.
+     */
+    default String getString(K key, String defaultValue) {
+        if (containsKey(key)) {
+            return (String)get(key);
+        }
+        return defaultValue;
+    }
+
+    /**
      * Using the other methods in this interface, retrieve an integer value
      * from this dictionary; returning 0 if the key does not exist.
      *
@@ -128,9 +154,8 @@ public interface Dictionary<K, V> {
     default int getInt(K key, int defaultValue) {
         if (containsKey(key)) {
             return ((Number)get(key)).intValue();
-        } else {
-            return defaultValue;
         }
+        return defaultValue;
     }
 
     /**
@@ -170,9 +195,8 @@ public interface Dictionary<K, V> {
     default boolean getBoolean(K key, boolean defaultValue) {
         if (containsKey(key)) {
             return ((Boolean)get(key)).booleanValue();
-        } else {
-            return defaultValue;
         }
+        return defaultValue;
     }
 
     /**
@@ -199,9 +223,8 @@ public interface Dictionary<K, V> {
     default Color getColor(K key) {
         if (containsKey(key)) {
             return (Color)get(key);
-        } else {
-            return (Color)null;
         }
+        return (Color)null;
     }
 
     /**
@@ -215,9 +238,8 @@ public interface Dictionary<K, V> {
     default Font getFont(K key) {
         if (containsKey(key)) {
             return (Font)get(key);
-        } else {
-            return (Font)null;
         }
+        return (Font)null;
     }
 
     /**
