@@ -50,6 +50,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     private int padding = 2;
     private int markerSpacing;
     private Insets markerInsets;
+    private Insets rowPadding;
     private int majorDivision;
     private int minorDivision;
     private boolean showMajorNumbers;
@@ -69,6 +70,8 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
 
         markerSpacing = 5;
         markerInsets = new Insets(0);
+
+        rowPadding = new Insets(0);
 
         // Note: these aren't settable
         majorDivision = 10;
@@ -207,14 +210,18 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
                 int totalLines = height / lineHeight + 1;
 
                 for (int num = 1 + linesAbove, n = totalLines - (linesBelow - 1); num < n; num++) {
-                    float y = (float)(num * lineHeight + markerInsets.top) - descent;
+                    String numberString = Integer.toString(num);
+                    StringCharacterIterator line = new StringCharacterIterator(numberString);
 
-                    StringCharacterIterator line = new StringCharacterIterator(Integer.toString(num));
+                    int lineY = (num - 1) * lineHeight + markerInsets.top;
+                    Graphics2D lineGraphics = (Graphics2D) graphics.create(0, lineY, width, lineHeight);
+
+                    float y = (float)(lineHeight - rowPadding.bottom) - descent;
                     GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
                     Rectangle2D textBounds = glyphVector.getLogicalBounds();
                     float lineWidth = (float) textBounds.getWidth();
                     float x = (float)width - (lineWidth + (float)padding);
-                    graphics.drawGlyphVector(glyphVector, x, y);
+                    lineGraphics.drawGlyphVector(glyphVector, x, y);
                 }
 
                 break;
@@ -269,6 +276,39 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
 
     public final void setMarkerInsets(String insets) {
         setMarkerInsets(Insets.decode(insets));
+    }
+
+    public final void setRowPadding(Insets padding) {
+        Utils.checkNull(padding, "rowPadding");
+
+        this.rowPadding = padding;
+        // Do the line height calculations again with this new padding
+        if (this.font != null) {
+            setFont(this.font);
+        } else {
+            lineHeight = rowPadding.getHeight();
+            invalidateComponent();
+        }
+    }
+
+    public final void setRowPadding(Dictionary<String, ?> padding) {
+        setRowPadding(new Insets(padding));
+    }
+
+    public final void setRowPadding(Sequence<?> padding) {
+        setRowPadding(new Insets(padding));
+    }
+
+    public final void setRowPadding(int padding) {
+        setRowPadding(new Insets(padding));
+    }
+
+    public final void setRowPadding(Number padding) {
+        setRowPadding(new Insets(padding));
+    }
+
+    public final void setRowPadding(String padding) {
+        setRowPadding(Insets.decode(padding));
     }
 
     /**
@@ -362,7 +402,8 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         LineMetrics lm = this.font.getLineMetrics("0", fontRenderContext);
         this.charHeight = lm.getAscent();
         this.descent = lm.getDescent();
-        this.lineHeight = (int)Math.ceil(lm.getHeight());
+        this.lineHeight = (int)Math.ceil(lm.getHeight()) +
+            (rowPadding != null ? rowPadding.getHeight() : 0);
 
         invalidateComponent();
     }
