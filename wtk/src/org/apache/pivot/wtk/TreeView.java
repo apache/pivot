@@ -29,8 +29,9 @@ import org.apache.pivot.collections.Sequence.Tree.Path;
 import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.Utils;
+import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 import org.apache.pivot.wtk.content.TreeViewNodeRenderer;
 
 /**
@@ -214,60 +215,44 @@ public class TreeView extends Component {
 
         @Override
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
-            for (TreeViewListener listener : this) {
-                listener.treeDataChanged(treeView, previousTreeData);
-            }
+            forEach(listener -> listener.treeDataChanged(treeView, previousTreeData));
         }
 
         @Override
         public void nodeRendererChanged(TreeView treeView, NodeRenderer previousNodeRenderer) {
-            for (TreeViewListener listener : this) {
-                listener.nodeRendererChanged(treeView, previousNodeRenderer);
-            }
+            forEach(listener -> listener.nodeRendererChanged(treeView, previousNodeRenderer));
         }
 
         @Override
         public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
-            for (TreeViewListener listener : this) {
-                listener.nodeEditorChanged(treeView, previousNodeEditor);
-            }
+            forEach(listener -> listener.nodeEditorChanged(treeView, previousNodeEditor));
         }
 
         @Override
         public void selectModeChanged(TreeView treeView, SelectMode previousSelectMode) {
-            for (TreeViewListener listener : this) {
-                listener.selectModeChanged(treeView, previousSelectMode);
-            }
+            forEach(listener -> listener.selectModeChanged(treeView, previousSelectMode));
         }
 
         @Override
         public void checkmarksEnabledChanged(TreeView treeView) {
-            for (TreeViewListener listener : this) {
-                listener.checkmarksEnabledChanged(treeView);
-            }
+            forEach(listener -> listener.checkmarksEnabledChanged(treeView));
         }
 
         @Override
         public void showMixedCheckmarkStateChanged(TreeView treeView) {
-            for (TreeViewListener listener : this) {
-                listener.showMixedCheckmarkStateChanged(treeView);
-            }
+            forEach(listener -> listener.showMixedCheckmarkStateChanged(treeView));
         }
 
         @Override
         public void disabledNodeFilterChanged(TreeView treeView,
             Filter<?> previousDisabledNodeFilter) {
-            for (TreeViewListener listener : this) {
-                listener.disabledNodeFilterChanged(treeView, previousDisabledNodeFilter);
-            }
+            forEach(listener -> listener.disabledNodeFilterChanged(treeView, previousDisabledNodeFilter));
         }
 
         @Override
         public void disabledCheckmarkFilterChanged(TreeView treeView,
             Filter<?> previousDisabledCheckmarkFilter) {
-            for (TreeViewListener listener : this) {
-                listener.disabledCheckmarkFilterChanged(treeView, previousDisabledCheckmarkFilter);
-            }
+            forEach(listener -> listener.disabledCheckmarkFilterChanged(treeView, previousDisabledCheckmarkFilter));
         }
     }
 
@@ -278,34 +263,26 @@ public class TreeView extends Component {
         implements TreeViewBranchListener {
         @Override
         public void branchExpanded(TreeView treeView, Path path) {
-            for (TreeViewBranchListener listener : this) {
-                listener.branchExpanded(treeView, path);
-            }
+            forEach(listener -> listener.branchExpanded(treeView, path));
         }
 
         @Override
         public void branchCollapsed(TreeView treeView, Path path) {
-            for (TreeViewBranchListener listener : this) {
-                listener.branchCollapsed(treeView, path);
-            }
+            forEach(listener -> listener.branchCollapsed(treeView, path));
         }
 
         @Override
         public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
-            Vote vote = Vote.APPROVE;
+            VoteResult vote = new VoteResult(Vote.APPROVE);
 
-            for (TreeViewBranchListener listener : this) {
-                vote = vote.tally(listener.previewBranchExpandedChange(treeView, path));
-            }
+            forEach(listener -> vote.tally(listener.previewBranchExpandedChange(treeView, path)));
 
-            return vote;
+            return vote.get();
         }
 
         @Override
         public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
-            for (TreeViewBranchListener listener : this) {
-                listener.branchExpandedChangeVetoed(treeView, path, reason);
-            }
+            forEach(listener -> listener.branchExpandedChangeVetoed(treeView, path, reason));
         }
     }
 
@@ -316,37 +293,27 @@ public class TreeView extends Component {
         implements TreeViewNodeListener {
         @Override
         public void nodeInserted(TreeView treeView, Path path, int index) {
-            for (TreeViewNodeListener listener : this) {
-                listener.nodeInserted(treeView, path, index);
-            }
+            forEach(listener -> listener.nodeInserted(treeView, path, index));
         }
 
         @Override
         public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
-            for (TreeViewNodeListener listener : this) {
-                listener.nodesRemoved(treeView, path, index, count);
-            }
+            forEach(listener -> listener.nodesRemoved(treeView, path, index, count));
         }
 
         @Override
         public void nodeUpdated(TreeView treeView, Path path, int index) {
-            for (TreeViewNodeListener listener : this) {
-                listener.nodeUpdated(treeView, path, index);
-            }
+            forEach(listener -> listener.nodeUpdated(treeView, path, index));
         }
 
         @Override
         public void nodesCleared(TreeView treeView, Path path) {
-            for (TreeViewNodeListener listener : this) {
-                listener.nodesCleared(treeView, path);
-            }
+            forEach(listener -> listener.nodesCleared(treeView, path));
         }
 
         @Override
         public void nodesSorted(TreeView treeView, Path path) {
-            for (TreeViewNodeListener listener : this) {
-                listener.nodesSorted(treeView, path);
-            }
+            forEach(listener -> listener.nodesSorted(treeView, path));
         }
     }
 
@@ -358,9 +325,7 @@ public class TreeView extends Component {
         @Override
         public void nodeCheckStateChanged(TreeView treeView, Path path,
             TreeView.NodeCheckState previousCheckState) {
-            for (TreeViewNodeStateListener listener : this) {
-                listener.nodeCheckStateChanged(treeView, path, previousCheckState);
-            }
+            forEach(listener -> listener.nodeCheckStateChanged(treeView, path, previousCheckState));
         }
     }
 
@@ -371,30 +336,22 @@ public class TreeView extends Component {
         ListenerList<TreeViewSelectionListener> implements TreeViewSelectionListener {
         @Override
         public void selectedPathAdded(TreeView treeView, Path path) {
-            for (TreeViewSelectionListener listener : this) {
-                listener.selectedPathAdded(treeView, path);
-            }
+            forEach(listener -> listener.selectedPathAdded(treeView, path));
         }
 
         @Override
         public void selectedPathRemoved(TreeView treeView, Path path) {
-            for (TreeViewSelectionListener listener : this) {
-                listener.selectedPathRemoved(treeView, path);
-            }
+            forEach(listener -> listener.selectedPathRemoved(treeView, path));
         }
 
         @Override
         public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
-            for (TreeViewSelectionListener listener : this) {
-                listener.selectedPathsChanged(treeView, previousSelectedPaths);
-            }
+            forEach(listener -> listener.selectedPathsChanged(treeView, previousSelectedPaths));
         }
 
         @Override
         public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
-            for (TreeViewSelectionListener listener : this) {
-                listener.selectedNodeChanged(treeView, previousSelectedNode);
-            }
+            forEach(listener -> listener.selectedNodeChanged(treeView, previousSelectedNode));
         }
     }
 
@@ -691,14 +648,12 @@ public class TreeView extends Component {
 
             int n = paths.getLength();
             try {
-                // Update all affected paths by incrementing the appropriate
-                // path element
+                // Update all affected paths by incrementing the appropriate path element
                 for (int depth = basePath.getLength(); i < n; i++) {
                     Path affectedPath = paths.get(i);
 
                     if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
-                        // All paths from here forward are guaranteed to be
-                        // unaffected
+                        // All paths from here forward are guaranteed to be unaffected
                         break;
                     }
 
@@ -722,8 +677,7 @@ public class TreeView extends Component {
          * <tt>count</tt> is <tt>2</tt>, then <tt>paths</tt> will be updated to
          * <tt>[[4, 0]]</tt>. No events are fired.
          *
-         * @param paths Sequence of paths guaranteed to be sorted by
-         * "row order".
+         * @param paths Sequence of paths guaranteed to be sorted by "row order".
          * @param basePath The path to the parent of the removed items.
          * @param index The index of the first removed item within the base.
          * @param count The number of items removed.
@@ -761,8 +715,7 @@ public class TreeView extends Component {
                 Path affectedPath = paths.get(i);
 
                 if (!Sequence.Tree.isDescendant(basePath, affectedPath)) {
-                    // All paths from here forward are guaranteed to be
-                    // unaffected
+                    // All paths from here forward are guaranteed to be unaffected
                     break;
                 }
 
@@ -782,8 +735,7 @@ public class TreeView extends Component {
          * then <tt>paths</tt> will be updated to <tt>[[3], [3, 1], [5,
          * 0]]</tt>. No events are fired.
          *
-         * @param paths Sequence of paths guaranteed to be sorted by
-         * "row order".
+         * @param paths Sequence of paths guaranteed to be sorted by "row order".
          * @param basePath The path to the parent of the updated item.
          * @param index The index of the updated item within its parent.
          */
@@ -817,8 +769,7 @@ public class TreeView extends Component {
          * <tt>[3]</tt>, then <tt>paths</tt> will be updated to <tt>[[3], [5,
          * 0]]</tt>. No events are fired.
          *
-         * @param paths Sequence of paths guaranteed to be sorted by
-         * "row order".
+         * @param paths Sequence of paths guaranteed to be sorted by "row order".
          * @param basePath The path whose children were sorted.
          * @return The number of path elements that were updated.
          */
@@ -910,10 +861,7 @@ public class TreeView extends Component {
      */
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TreeView.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TreeView.Skin.class.getName());
-        }
+        checkSkin(skin, TreeView.Skin.class);
 
         super.setSkin(skin);
     }
@@ -1143,8 +1091,7 @@ public class TreeView extends Component {
     }
 
     /**
-     * Returns the first selected path, as it would appear in a fully expanded
-     * tree.
+     * Returns the first selected path, as it would appear in a fully expanded tree.
      *
      * @return The first selected path, or <tt>null</tt> if nothing is selected.
      */
@@ -1153,8 +1100,7 @@ public class TreeView extends Component {
     }
 
     /**
-     * Returns the last selected path, as it would appear in a fully expanded
-     * tree.
+     * Returns the last selected path, as it would appear in a fully expanded tree.
      *
      * @return The last selected path, or <tt>null</tt> if nothing is selected.
      */
@@ -1268,8 +1214,8 @@ public class TreeView extends Component {
 
         if (previousTreeDataKey != treeDataKey) {
             this.treeDataKey = treeDataKey;
-            // treeViewBindingListeners.treeDataKeyChanged(this,
-            // previousTreeDataKey); // future use
+            // treeViewBindingListeners.treeDataKeyChanged(this, previousTreeDataKey);
+            // future use
         }
     }
 
@@ -1298,8 +1244,7 @@ public class TreeView extends Component {
     }
 
     /**
-     * @return Whether or not the node at the given path is part of the
-     * current selection.
+     * @return Whether or not the node at the given path is part of the current selection.
      * @param path Path to the node to check.
      */
     public boolean isNodeSelected(Path path) {
@@ -1496,8 +1441,7 @@ public class TreeView extends Component {
      * checked, but one or more of its descendants are."
      *
      * @param path The path to the node.
-     * @param checked <tt>true</tt> to check the node; <tt>false</tt> to uncheck
-     * it.
+     * @param checked <tt>true</tt> to check the node; <tt>false</tt> to uncheck it.
      * @throws IllegalStateException If checkmarks are not enabled (see
      * {@link #getCheckmarksEnabled()}).
      * @see NodeCheckState#MIXED

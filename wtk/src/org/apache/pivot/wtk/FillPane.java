@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Container that fills the space it has been given inside its parent and then
@@ -67,9 +68,7 @@ public class FillPane extends Container {
         FillPaneListener {
         @Override
         public void orientationChanged(FillPane fillPane) {
-            for (FillPaneListener listener : this) {
-                listener.orientationChanged(fillPane);
-            }
+            forEach(listener -> listener.orientationChanged(fillPane));
         }
     }
 
@@ -91,9 +90,7 @@ public class FillPane extends Container {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
             this.orientation = orientation;

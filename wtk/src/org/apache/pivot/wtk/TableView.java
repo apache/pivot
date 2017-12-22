@@ -1198,10 +1198,7 @@ public class TableView extends Component {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TableView.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TableView.Skin.class.getName());
-        }
+        checkSkin(skin, TableView.Skin.class);
 
         super.setSkin(skin);
     }

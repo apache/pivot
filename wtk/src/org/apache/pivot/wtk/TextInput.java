@@ -145,10 +145,7 @@ public class TextInput extends Component {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TextInput.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TextInput.Skin.class.getName());
-        }
+        checkSkin(skin, TextInput.Skin.class);
 
         super.setSkin(skin);
     }

@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component that displays progress information.
@@ -26,23 +27,17 @@ public class Meter extends Component {
         MeterListener {
         @Override
         public void orientationChanged(Meter meter) {
-            for (MeterListener listener : this) {
-                listener.orientationChanged(meter);
-            }
+            forEach(listener -> listener.orientationChanged(meter));
         }
 
         @Override
         public void percentageChanged(Meter meter, double oldPercentage) {
-            for (MeterListener listener : this) {
-                listener.percentageChanged(meter, oldPercentage);
-            }
+            forEach(listener -> listener.percentageChanged(meter, oldPercentage));
         }
 
         @Override
         public void textChanged(Meter meter, String oldText) {
-            for (MeterListener listener : this) {
-                listener.textChanged(meter, oldText);
-            }
+            forEach(listener -> listener.textChanged(meter, oldText));
         }
     }
 
@@ -92,9 +87,7 @@ public class Meter extends Component {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException("orientation is null.");
-        }
+        Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
             this.orientation = orientation;

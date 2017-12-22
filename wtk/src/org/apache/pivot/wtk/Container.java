@@ -24,8 +24,10 @@ import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.BooleanResult;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.effects.Decorator;
 
 /**
@@ -37,31 +39,23 @@ public abstract class Container extends Component implements Sequence<Component>
         ContainerListener {
         @Override
         public void componentInserted(Container container, int index) {
-            for (ContainerListener listener : this) {
-                listener.componentInserted(container, index);
-            }
+            forEach(listener -> listener.componentInserted(container, index));
         }
 
         @Override
         public void componentsRemoved(Container container, int index, Sequence<Component> components) {
-            for (ContainerListener listener : this) {
-                listener.componentsRemoved(container, index, components);
-            }
+            forEach(listener -> listener.componentsRemoved(container, index, components));
         }
 
         @Override
         public void componentMoved(Container container, int from, int to) {
-            for (ContainerListener listener : this) {
-                listener.componentMoved(container, from, to);
-            }
+            forEach(listener -> listener.componentMoved(container, from, to));
         }
 
         @Override
         public void focusTraversalPolicyChanged(Container container,
             FocusTraversalPolicy previousFocusTraversalPolicy) {
-            for (ContainerListener listener : this) {
-                listener.focusTraversalPolicyChanged(container, previousFocusTraversalPolicy);
-            }
+            forEach(listener -> listener.focusTraversalPolicyChanged(container, previousFocusTraversalPolicy));
         }
     }
 
@@ -69,48 +63,40 @@ public abstract class Container extends Component implements Sequence<Component>
         implements ContainerMouseListener {
         @Override
         public boolean mouseMove(Container container, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult(false);
 
-            for (ContainerMouseListener listener : this) {
-                consumed |= listener.mouseMove(container, x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseMove(container, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult(false);
 
-            for (ContainerMouseListener listener : this) {
-                consumed |= listener.mouseDown(container, button, x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseDown(container, button, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult(false);
 
-            for (ContainerMouseListener listener : this) {
-                consumed |= listener.mouseUp(container, button, x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseUp(container, button, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
 
         @Override
         public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
             int scrollAmount, int wheelRotation, int x, int y) {
-            boolean consumed = false;
+            BooleanResult consumed = new BooleanResult(false);
 
-            for (ContainerMouseListener listener : this) {
-                consumed |= listener.mouseWheel(container, scrollType, scrollAmount, wheelRotation,
-                    x, y);
-            }
+            forEach(listener -> consumed.or(listener.mouseWheel(container, scrollType,
+                    scrollAmount, wheelRotation, x, y)));
 
-            return consumed;
+            return consumed.get();
         }
     }
 
@@ -144,9 +130,7 @@ public abstract class Container extends Component implements Sequence<Component>
     @Override
     public void insert(Component component, int index) {
         assertEventDispatchThread();
-        if (component == null) {
-            throw new IllegalArgumentException("component is null.");
-        }
+        Utils.checkNull(component, "component");
 
         if (component instanceof Container && ((Container) component).isAncestor(this)) {
             throw new IllegalArgumentException("Component already exists in ancestry.");
@@ -318,9 +302,7 @@ public abstract class Container extends Component implements Sequence<Component>
     }
 
     public Component getNamedComponent(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(name, "name");
 
         Component namedComponent = null;
 

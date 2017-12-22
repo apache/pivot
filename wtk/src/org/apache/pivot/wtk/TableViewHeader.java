@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component representing a table view header.
@@ -43,16 +44,12 @@ public class TableViewHeader extends Component {
         ListenerList<TableViewHeaderListener> implements TableViewHeaderListener {
         @Override
         public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
-            for (TableViewHeaderListener listener : this) {
-                listener.tableViewChanged(tableViewHeader, previousTableView);
-            }
+            forEach(listener -> listener.tableViewChanged(tableViewHeader, previousTableView));
         }
 
         @Override
         public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
-            for (TableViewHeaderListener listener : this) {
-                listener.sortModeChanged(tableViewHeader, previousSortMode);
-            }
+            forEach(listener -> listener.sortModeChanged(tableViewHeader, previousSortMode));
         }
     }
 
@@ -60,9 +57,7 @@ public class TableViewHeader extends Component {
         ListenerList<TableViewHeaderPressListener> implements TableViewHeaderPressListener {
         @Override
         public void headerPressed(TableViewHeader tableViewHeader, int index) {
-            for (TableViewHeaderPressListener listener : this) {
-                listener.headerPressed(tableViewHeader, index);
-            }
+            forEach(listener -> listener.headerPressed(tableViewHeader, index));
         }
     }
 
@@ -83,10 +78,7 @@ public class TableViewHeader extends Component {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TableViewHeader.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TableViewHeader.Skin.class.getName());
-        }
+        checkSkin(skin, TableViewHeader.Skin.class);
 
         super.setSkin(skin);
     }
@@ -109,9 +101,7 @@ public class TableViewHeader extends Component {
     }
 
     public void setSortMode(SortMode sortMode) {
-        if (sortMode == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(sortMode, "sortMode");
 
         SortMode previousSortMode = this.sortMode;
         if (previousSortMode != sortMode) {

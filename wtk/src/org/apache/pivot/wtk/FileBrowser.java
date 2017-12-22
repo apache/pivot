@@ -24,6 +24,7 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component representing a file browser.
@@ -42,46 +43,34 @@ public class FileBrowser extends Container {
         implements FileBrowserListener {
         @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
-            for (FileBrowserListener listener : this) {
-                listener.rootDirectoryChanged(fileBrowser, previousRootDirectory);
-            }
+            forEach(listener -> listener.rootDirectoryChanged(fileBrowser, previousRootDirectory));
         }
 
         @Override
         public void selectedFileAdded(FileBrowser fileBrowser, File file) {
-            for (FileBrowserListener listener : this) {
-                listener.selectedFileAdded(fileBrowser, file);
-            }
+            forEach(listener -> listener.selectedFileAdded(fileBrowser, file));
         }
 
         @Override
         public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
-            for (FileBrowserListener listener : this) {
-                listener.selectedFileRemoved(fileBrowser, file);
-            }
+            forEach(listener -> listener.selectedFileRemoved(fileBrowser, file));
         }
 
         @Override
         public void selectedFilesChanged(FileBrowser fileBrowser,
             Sequence<File> previousSelectedFiles) {
-            for (FileBrowserListener listener : this) {
-                listener.selectedFilesChanged(fileBrowser, previousSelectedFiles);
-            }
+            forEach(listener -> listener.selectedFilesChanged(fileBrowser, previousSelectedFiles));
         }
 
         @Override
         public void multiSelectChanged(FileBrowser fileBrowser) {
-            for (FileBrowserListener listener : this) {
-                listener.multiSelectChanged(fileBrowser);
-            }
+            forEach(listener -> listener.multiSelectChanged(fileBrowser));
         }
 
         @Override
         public void disabledFileFilterChanged(FileBrowser fileBrowser,
             Filter<File> previousDisabledFileFilter) {
-            for (FileBrowserListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter);
-            }
+            forEach(listener -> listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter));
         }
     }
 
@@ -107,13 +96,11 @@ public class FileBrowser extends Container {
      * @param rootFolder The root folder full name.
      */
     public FileBrowser(String rootFolder) {
-        if (rootFolder == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(rootFolder, "rootFolder");
 
         rootDirectory = new File(rootFolder);
         if (!rootDirectory.isDirectory()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(rootFolder + " is not a directory.");
         }
 
         installSkin(FileBrowser.class);
@@ -136,8 +123,10 @@ public class FileBrowser extends Container {
      * or is not a directory.
      */
     public void setRootDirectory(File rootDirectory) {
-        if (rootDirectory == null || !rootDirectory.isDirectory()) {
-            throw new IllegalArgumentException();
+        Utils.checkNull(rootDirectory, "rootDirectory");
+
+        if (!rootDirectory.isDirectory()) {
+            throw new IllegalArgumentException(rootDirectory.getPath() + " is not a directory.");
         }
 
         if (rootDirectory.exists()) {
@@ -163,14 +152,12 @@ public class FileBrowser extends Container {
      * or if the file is not in the current root directory.
      */
     public boolean addSelectedFile(final File file) {
-        if (file == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(file, "file");
 
         File fileMutable = file;
         if (fileMutable.isAbsolute()) {
             if (!fileMutable.getParentFile().equals(rootDirectory)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(file.getPath() + " is not a child of the root directory.");
             }
         } else {
             fileMutable = new File(rootDirectory, fileMutable.getPath());
@@ -193,9 +180,7 @@ public class FileBrowser extends Container {
      * @throws IllegalArgumentException if the file argument is {@code null}.
      */
     public boolean removeSelectedFile(File file) {
-        if (file == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(file, "file");
 
         int index = selectedFiles.remove(file);
         if (index != -1) {
@@ -258,9 +243,7 @@ public class FileBrowser extends Container {
      * current root directory.
      */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
-        if (selectedFiles == null) {
-            throw new IllegalArgumentException("selectedFiles is null.");
-        }
+        Utils.checkNull(selectedFiles, "selectedFiles");
 
         if (!multiSelect && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
@@ -273,16 +256,14 @@ public class FileBrowser extends Container {
         for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
             File file = selectedFiles.get(i);
 
-            if (file == null) {
-                throw new IllegalArgumentException("file is null.");
-            }
+            Utils.checkNull(file, "file");
 
             if (!file.isAbsolute()) {
                 file = new File(rootDirectory, file.getPath());
             }
 
             if (!file.getParentFile().equals(rootDirectory)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(file.getPath() + " is not a child of the root directory.");
             }
 
             fileList.add(file);

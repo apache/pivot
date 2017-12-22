@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Abstract base class for viewport components. Viewports provide a windowed
@@ -47,23 +48,17 @@ public abstract class Viewport extends Container {
 
         @Override
         public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
-            for (ViewportListener listener : this) {
-                listener.scrollTopChanged(viewport, previousScrollTop);
-            }
+            forEach(listener -> listener.scrollTopChanged(viewport, previousScrollTop));
         }
 
         @Override
         public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
-            for (ViewportListener listener : this) {
-                listener.scrollLeftChanged(viewport, previousScrollLeft);
-            }
+            forEach(listener -> listener.scrollLeftChanged(viewport, previousScrollLeft));
         }
 
         @Override
         public void viewChanged(Viewport viewport, Component previousView) {
-            for (ViewportListener listener : this) {
-                listener.viewChanged(viewport, previousView);
-            }
+            forEach(listener -> listener.viewChanged(viewport, previousView));
         }
     }
 
@@ -78,10 +73,7 @@ public abstract class Viewport extends Container {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof Viewport.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + Viewport.Skin.class.getName());
-        }
+        checkSkin(skin, Viewport.Skin.class);
 
         super.setSkin(skin);
     }

@@ -26,6 +26,7 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.util.Utils;
 
 /**
  * Class representing a "prompt", a sheet commonly used to facilitate simple
@@ -50,9 +51,7 @@ public class Prompt extends Sheet {
 
         @Override
         public void insert(Object option, int index) {
-            if (option == null) {
-                throw new IllegalArgumentException("option is null.");
-            }
+            Utils.checkNull(option, "option");
 
             options.insert(option, index);
 
@@ -122,44 +121,32 @@ public class Prompt extends Sheet {
         PromptListener {
         @Override
         public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
-            for (PromptListener listener : this) {
-                listener.messageTypeChanged(prompt, previousMessageType);
-            }
+            forEach(listener -> listener.messageTypeChanged(prompt, previousMessageType));
         }
 
         @Override
         public void messageChanged(Prompt prompt, String previousMessage) {
-            for (PromptListener listener : this) {
-                listener.messageChanged(prompt, previousMessage);
-            }
+            forEach(listener -> listener.messageChanged(prompt, previousMessage));
         }
 
         @Override
         public void bodyChanged(Prompt prompt, Component previousBody) {
-            for (PromptListener listener : this) {
-                listener.bodyChanged(prompt, previousBody);
-            }
+            forEach(listener -> listener.bodyChanged(prompt, previousBody));
         }
 
         @Override
         public void optionInserted(Prompt prompt, int index) {
-            for (PromptListener listener : this) {
-                listener.optionInserted(prompt, index);
-            }
+            forEach(listener -> listener.optionInserted(prompt, index));
         }
 
         @Override
         public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
-            for (PromptListener listener : this) {
-                listener.optionsRemoved(prompt, index, removed);
-            }
+            forEach(listener -> listener.optionsRemoved(prompt, index, removed));
         }
 
         @Override
         public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
-            for (PromptListener listener : this) {
-                listener.selectedOptionChanged(prompt, previousSelectedOption);
-            }
+            forEach(listener -> listener.selectedOptionChanged(prompt, previousSelectedOption));
         }
     }
 
@@ -209,9 +196,7 @@ public class Prompt extends Sheet {
     }
 
     public void setMessageType(MessageType messageType) {
-        if (messageType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(messageType, "messageType");
 
         MessageType previousMessageType = this.messageType;
         if (previousMessageType != messageType) {

@@ -17,9 +17,11 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Component that allows a user to select one of a range of values. Most often
@@ -45,9 +47,7 @@ public class ScrollBar extends Container {
         }
 
         public Scope(Dictionary<String, ?> scope) {
-            if (scope == null) {
-                throw new IllegalArgumentException("scope is null.");
-            }
+            Utils.checkNull(scope, "scope");
 
             if (!scope.containsKey(START_KEY)) {
                 throw new IllegalArgumentException(START_KEY + " is required.");
@@ -61,9 +61,17 @@ public class ScrollBar extends Container {
                 throw new IllegalArgumentException(EXTENT_KEY + " is required.");
             }
 
-            start = ((Integer) scope.get(START_KEY)).intValue();
-            end = ((Integer) scope.get(END_KEY)).intValue();
-            extent = ((Integer) scope.get(EXTENT_KEY)).intValue();
+            start = scope.getInt(START_KEY);
+            end = scope.getInt(END_KEY);
+            extent = scope.getInt(EXTENT_KEY);
+        }
+
+        public Scope(Sequence<?> scope) {
+            Utils.checkNull(scope, "scope");
+
+            start = ((Number)scope.get(0)).intValue();
+            end = ((Number)scope.get(1)).intValue();
+            extent = ((Number)scope.get(2)).intValue();
         }
 
         @Override
@@ -72,15 +80,32 @@ public class ScrollBar extends Container {
         }
 
         public static Scope decode(String value) {
-            if (value == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNullOrEmpty(value, "scope");
 
             Scope scope;
-            try {
-                scope = new Scope(JSONSerializer.parseMap(value));
-            } catch (SerializationException exception) {
-                throw new IllegalArgumentException(exception);
+            if (value.startsWith("{")) {
+                try {
+                    scope = new Scope(JSONSerializer.parseMap(value));
+                } catch (SerializationException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
+            } else if (value.startsWith("[")) {
+                try {
+                    scope = new Scope(JSONSerializer.parseList(value));
+                } catch (SerializationException exception) {
+                    throw new IllegalArgumentException(exception);
+                }
+            } else {
+                String[] parts = value.split("\\s*[,;]\\s*");
+                if (parts.length != 3) {
+                    throw new IllegalArgumentException("Invalid format for ScrollBar.Scope: " + value);
+                }
+                try {
+                    scope = new Scope(
+                        Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                } catch (NumberFormatException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
             }
 
             return scope;
@@ -91,31 +116,23 @@ public class ScrollBar extends Container {
         ScrollBarListener {
         @Override
         public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
-            for (ScrollBarListener listener : this) {
-                listener.orientationChanged(scrollBar, previousOrientation);
-            }
+            forEach(listener -> listener.orientationChanged(scrollBar, previousOrientation));
         }
 
         @Override
         public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
             int previousExtent) {
-            for (ScrollBarListener listener : this) {
-                listener.scopeChanged(scrollBar, previousStart, previousEnd, previousExtent);
-            }
+            forEach(listener -> listener.scopeChanged(scrollBar, previousStart, previousEnd, previousExtent));
         }
 
         @Override
         public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
-            for (ScrollBarListener listener : this) {
-                listener.unitIncrementChanged(scrollBar, previousUnitIncrement);
-            }
+            forEach(listener -> listener.unitIncrementChanged(scrollBar, previousUnitIncrement));
         }
 
         @Override
         public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
-            for (ScrollBarListener listener : this) {
-                listener.blockIncrementChanged(scrollBar, previousBlockIncrement);
-            }
+            forEach(listener -> listener.blockIncrementChanged(scrollBar, previousBlockIncrement));
         }
     }
 
@@ -123,9 +140,7 @@ public class ScrollBar extends Container {
         implements ScrollBarValueListener {
         @Override
         public void valueChanged(ScrollBar scrollBar, int previousValue) {
-            for (ScrollBarValueListener listener : this) {
-                listener.valueChanged(scrollBar, previousValue);
-            }
+            forEach(listener -> listener.valueChanged(scrollBar, previousValue));
         }
     }
 
@@ -145,9 +160,7 @@ public class ScrollBar extends Container {
     }
 
     public ScrollBar(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException("orientation is null");
-        }
+        Utils.checkNull(orientation, "orientation");
 
         this.orientation = orientation;
 
@@ -159,9 +172,7 @@ public class ScrollBar extends Container {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException("orientation is null");
-        }
+        Utils.checkNull(orientation, "orientation");
 
         Orientation previousOrientation = this.orientation;
 
@@ -196,26 +207,16 @@ public class ScrollBar extends Container {
     }
 
     public final void setRange(Span range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        Utils.checkNull(range, "range");
 
         setRange(range.start, range.end);
     }
 
     public final void setRange(Dictionary<String, ?> range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
-
         setRange(new Span(range));
     }
 
     public final void setRange(String range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
-
         setRange(Span.decode(range));
     }
 
@@ -238,20 +239,15 @@ public class ScrollBar extends Container {
 
         if (start != previousStart || end != previousEnd || extent != previousExtent) {
             if (start > value) {
-                throw new IllegalArgumentException(String.format(
-                    "start (%d) is greater than value (%d)",
-                    Integer.valueOf(start), Integer.valueOf(value)));
+                throw new IllegalArgumentException(
+                    "start (" + start + ") is greater than value (" + value + ")");
             }
 
-            if (extent < 0) {
-                throw new IllegalArgumentException(String.format("extent (%d) is negative",
-                    Integer.valueOf(extent)));
-            }
+            Utils.checkNonNegative(extent, "extent");
 
             if (end < value + extent) {
-                throw new IllegalArgumentException(String.format(
-                    "end (%d) is less than value (%d) + extent (%d)",
-                    Integer.valueOf(end), Integer.valueOf(value), Integer.valueOf(extent)));
+                throw new IllegalArgumentException(
+                    "end (" + end + ") is less than value ("+ value + ") + extent (" + extent + ")");
             }
 
             this.start = start;
@@ -263,26 +259,20 @@ public class ScrollBar extends Container {
     }
 
     public final void setScope(Scope scope) {
-        if (scope == null) {
-            throw new IllegalArgumentException("scope is null.");
-        }
+        Utils.checkNull(scope, "scope");
 
         setScope(scope.start, scope.end, scope.extent);
     }
 
     public final void setScope(Dictionary<String, ?> scope) {
-        if (scope == null) {
-            throw new IllegalArgumentException("scope is null.");
-        }
+        setScope(new Scope(scope));
+    }
 
+    public final void setScope(Sequence<?> scope) {
         setScope(new Scope(scope));
     }
 
     public final void setScope(String scope) {
-        if (scope == null) {
-            throw new IllegalArgumentException("scope is null.");
-        }
-
         setScope(Scope.decode(scope));
     }
 
@@ -295,15 +285,13 @@ public class ScrollBar extends Container {
 
         if (value != previousValue) {
             if (value < start) {
-                throw new IllegalArgumentException(String.format(
-                    "value (%d) is less than start (%d)",
-                    Integer.valueOf(value), Integer.valueOf(start)));
+                throw new IllegalArgumentException(
+                    "value (" + value + ") is less than start (" + start + ")");
             }
 
             if (value + extent > end) {
-                throw new IllegalArgumentException(String.format(
-                    "value (%d) + extent (%d) is greater than end (%d)",
-                    Integer.valueOf(value), Integer.valueOf(extent), Integer.valueOf(end)));
+                throw new IllegalArgumentException(
+                    "value (" + value + ") + extent (" + extent + ") is greater than end (" + end + ")");
             }
 
             this.value = value;
@@ -317,9 +305,7 @@ public class ScrollBar extends Container {
     }
 
     public void setUnitIncrement(int unitIncrement) {
-        if (unitIncrement < 0) {
-            throw new IllegalArgumentException("unitIncrement is negative");
-        }
+        Utils.checkNonNegative(unitIncrement, "unitIncrement");
 
         int previousUnitIncrement = this.unitIncrement;
 
@@ -334,9 +320,7 @@ public class ScrollBar extends Container {
     }
 
     public void setBlockIncrement(int blockIncrement) {
-        if (blockIncrement < 0) {
-            throw new IllegalArgumentException("blockIncrement is negative");
-        }
+        Utils.checkNonNegative(blockIncrement, "blockIncrement");
 
         int previousBlockIncrement = this.blockIncrement;
 

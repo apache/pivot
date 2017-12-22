@@ -24,6 +24,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ImmutableIterator;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
@@ -297,9 +298,8 @@ public class RadioButtonGroup extends ButtonGroup {
      */
     @Override
     public boolean add(Button button) {
-        if (button == null) {
-            throw new IllegalArgumentException("Button cannot be null");
-        }
+        Utils.checkNull(button, "button");
+
         boolean result = super.add(button);
         if (result) {
             buttonOrder.add(button);
@@ -347,9 +347,8 @@ public class RadioButtonGroup extends ButtonGroup {
      * @throws IllegalArgumentException if the button parameter is {@code null}.
      */
     public void insert(Button button, int index) {
-        if (button == null) {
-            throw new IllegalArgumentException("Button cannot be null");
-        }
+        Utils.checkNull(button, "button");
+
         boolean result = super.add(button);
         if (result) {
             buttonOrder.insert(button, index);

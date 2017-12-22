@@ -716,6 +716,21 @@ public abstract class Component implements ConstrainedVisual {
     }
 
     /**
+     * Check if the given skin is correct with respect to the necessary skin class.
+     * <p> Meant to be called from the subclass' {@link #setSkin} method.
+     *
+     * @param skin The skin object to check.
+     * @param expectedClass What the skin class should be.
+     * @throws IllegalArgumentException if the skin object doesn't implement the given skin interface.
+     */
+    protected final void checkSkin(Skin skin, Class<?> expectedClass) {
+        if (!expectedClass.isInstance(skin)) {
+            throw new IllegalArgumentException("Skin class must implement "
+                + expectedClass.getName());
+        }
+    }
+
+    /**
      * Installs the skin for the given component class, as defined by the
      * current theme.
      *

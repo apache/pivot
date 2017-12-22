@@ -92,6 +92,14 @@ public final class Span {
         end = span.getInt(END_KEY);
     }
 
+    /**
+     * Construct a new span from the given sequence with two
+     * numeric values corresponding to the start and end values
+     * respectively.
+     *
+     * @param span A sequence containing the start and end values.
+     * @throws IllegalArgumentException if the given span is {@code null}.
+     */
     public Span(Sequence<?> span) {
         Utils.checkNull(span, "span");
 
@@ -344,7 +352,7 @@ public final class Span {
      * as a JSON list.
      */
     public static Span decode(String value) {
-        Utils.checkNull(value, "value");
+        Utils.checkNullOrEmpty(value, "value");
 
         Span span;
         if (value.startsWith("{")) {

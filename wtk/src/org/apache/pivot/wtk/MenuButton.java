@@ -63,10 +63,7 @@ public class MenuButton extends Button {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof MenuButton.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + MenuButton.Skin.class.getName());
-        }
+        checkSkin(skin, MenuButton.Skin.class);
 
         super.setSkin(skin);
     }

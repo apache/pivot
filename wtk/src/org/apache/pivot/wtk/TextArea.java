@@ -576,10 +576,7 @@ public class TextArea extends Component {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TextArea.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TextArea.Skin.class.getName());
-        }
+        checkSkin(skin, TextArea.Skin.class);
 
         super.setSkin(skin);
     }

@@ -61,10 +61,7 @@ public class ColorChooserButton extends Button {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof ColorChooserButton.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + ColorChooserButton.Skin.class.getName());
-        }
+        checkSkin(skin, ColorChooserButton.Skin.class);
 
         super.setSkin(skin);
     }

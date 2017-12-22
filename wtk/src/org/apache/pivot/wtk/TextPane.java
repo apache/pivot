@@ -321,10 +321,7 @@ public class TextPane extends Container {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TextPane.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TextPane.Skin.class.getName());
-        }
+        checkSkin(skin, TextPane.Skin.class);
 
         super.setSkin(skin);
     }

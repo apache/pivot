@@ -40,6 +40,7 @@ import java.util.prefs.Preferences;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
@@ -836,12 +837,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @throws IllegalStateException if the application is being displayed full screen.
      */
     public static void sizeHostToFit(Window window) {
-        if (window == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(window, "window");
 
         if (isFullScreen()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Full screen window cannot be sized to fit.");
         }
 
         Dimensions size = window.getPreferredSize();

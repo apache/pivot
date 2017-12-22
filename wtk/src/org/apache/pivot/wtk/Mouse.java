@@ -18,6 +18,8 @@ package org.apache.pivot.wtk;
 
 import java.awt.MouseInfo;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Class representing the system mouse.
  */
@@ -80,9 +82,7 @@ public final class Mouse {
      * The mouse pointer must currently be over the component.
      */
     public static void capture(Component capturerArgument) {
-        if (capturerArgument == null) {
-            throw new IllegalArgumentException("capturer is null.");
-        }
+        Utils.checkNull(capturerArgument, "capturer");
 
         if (!capturerArgument.isMouseOver()) {
             throw new IllegalArgumentException("Mouse pointer is not currently over capturer.");
@@ -228,7 +228,7 @@ public final class Mouse {
             }
 
             default: {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unknown mouse cursor type " + cursorID);
             }
         }
 
@@ -243,9 +243,7 @@ public final class Mouse {
      * @throws IllegalStateException If the mouse is not currently captured.
      */
     public static void setCursor(Cursor cursor) {
-        if (cursor == null) {
-            throw new IllegalArgumentException("cursor is null.");
-        }
+        Utils.checkNull(cursor, "cursor");
 
         if (capturer == null) {
             throw new IllegalStateException("Mouse is not currently captured.");
@@ -264,12 +262,10 @@ public final class Mouse {
      * if the component is not currently visible.
      */
     public static void setCursor(final Component component) {
-        if (component == null) {
-            throw new IllegalArgumentException("component is null.");
-        }
+        Utils.checkNull(component, "component");
 
         if (!component.isVisible()) {
-            throw new IllegalArgumentException("component is not visible.");
+            throw new IllegalArgumentException("Component for mouse cursor is not visible.");
         }
 
         Component componentOrParent = component;
@@ -369,7 +365,7 @@ public final class Mouse {
             }
 
             default: {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Unknown mouse cursor type " + cursor.toString());
             }
         }
 

@@ -17,7 +17,9 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Window class representing a "sheet". A sheet behaves like a dialog that is
@@ -28,33 +30,26 @@ public class Sheet extends Window {
         implements SheetStateListener {
         @Override
         public Vote previewSheetClose(Sheet sheet, boolean result) {
-            Vote vote = Vote.APPROVE;
+            VoteResult vote = new VoteResult(Vote.APPROVE);
 
-            for (SheetStateListener listener : this) {
-                vote = vote.tally(listener.previewSheetClose(sheet, result));
-            }
+            forEach(listener -> vote.tally(listener.previewSheetClose(sheet, result)));
 
-            return vote;
+            return vote.get();
         }
 
         @Override
         public void sheetCloseVetoed(Sheet sheet, Vote reason) {
-            for (SheetStateListener listener : this) {
-                listener.sheetCloseVetoed(sheet, reason);
-            }
+            forEach(listener -> listener.sheetCloseVetoed(sheet, reason));
         }
 
         @Override
         public void sheetClosed(Sheet sheet) {
-            for (SheetStateListener listener : this) {
-                listener.sheetClosed(sheet);
-            }
+            forEach(listener -> listener.sheetClosed(sheet));
         }
     }
 
     private SheetCloseListener sheetCloseListener = null;
     private boolean result = false;
-
     private boolean closing = false;
 
     private SheetStateListenerList sheetStateListeners = new SheetStateListenerList();
@@ -78,9 +73,7 @@ public class Sheet extends Window {
     }
 
     public final void open(Window owner, SheetCloseListener sheetCloseListenerArgument) {
-        if (owner == null) {
-            throw new IllegalArgumentException("owner is null");
-        }
+        Utils.checkNull(owner, "owner");
 
         open(owner.getDisplay(), owner, sheetCloseListenerArgument);
     }

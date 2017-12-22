@@ -17,7 +17,9 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Window class whose primary purpose is to facilitate interaction between an
@@ -28,9 +30,7 @@ public class Dialog extends Frame {
         DialogListener {
         @Override
         public void modalChanged(Dialog dialog) {
-            for (DialogListener listener : this) {
-                listener.modalChanged(dialog);
-            }
+            forEach(listener -> listener.modalChanged(dialog));
         }
     }
 
@@ -38,27 +38,21 @@ public class Dialog extends Frame {
         implements DialogStateListener {
         @Override
         public Vote previewDialogClose(Dialog dialog, boolean result) {
-            Vote vote = Vote.APPROVE;
+            VoteResult vote = new VoteResult(Vote.APPROVE);
 
-            for (DialogStateListener listener : this) {
-                vote = vote.tally(listener.previewDialogClose(dialog, result));
-            }
+            forEach(listener -> vote.tally(listener.previewDialogClose(dialog, result)));
 
-            return vote;
+            return vote.get();
         }
 
         @Override
         public void dialogCloseVetoed(Dialog dialog, Vote reason) {
-            for (DialogStateListener listener : this) {
-                listener.dialogCloseVetoed(dialog, reason);
-            }
+            forEach(listener -> listener.dialogCloseVetoed(dialog, reason));
         }
 
         @Override
         public void dialogClosed(Dialog dialog, boolean modal) {
-            for (DialogStateListener listener : this) {
-                listener.dialogClosed(dialog, modal);
-            }
+            forEach(listener -> listener.dialogClosed(dialog, modal));
         }
     }
 
@@ -150,9 +144,7 @@ public class Dialog extends Frame {
      * dialog is closed.
      */
     public final void open(Window owner, DialogCloseListener dialogCloseListenerArgument) {
-        if (owner == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(owner, "owner");
 
         open(owner.getDisplay(), owner, dialogCloseListenerArgument);
     }

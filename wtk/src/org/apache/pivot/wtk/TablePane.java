@@ -23,6 +23,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Container that arranges components in a two-dimensional grid, optionally
@@ -199,9 +200,7 @@ public class TablePane extends Container {
 
         @Override
         public void insert(Component component, int index) {
-            if (component == null) {
-                throw new IllegalArgumentException("Component is null.");
-            }
+            Utils.checkNull(component, "Component");
 
             if (component.getParent() != null) {
                 throw new IllegalArgumentException("Component already has a parent.");
@@ -220,9 +219,7 @@ public class TablePane extends Container {
             Component previousComponent = cells.get(index);
 
             if (component != previousComponent) {
-                if (component == null) {
-                    throw new IllegalArgumentException("Component is null.");
-                }
+                Utils.checkNull(component, "Component");
 
                 if (component.getParent() != null) {
                     throw new IllegalArgumentException("Component already has a parent.");
@@ -473,12 +470,10 @@ public class TablePane extends Container {
 
         @Override
         public void insert(Row row, int index) {
-            if (row == null) {
-                throw new IllegalArgumentException("row is null.");
-            }
+            Utils.checkNull(row, "Row");
 
             if (row.tablePane != null) {
-                throw new IllegalArgumentException("row is already in use by another table pane.");
+                throw new IllegalArgumentException("Row is already in use by another table pane.");
             }
 
             rows.insert(row, index);
@@ -568,13 +563,11 @@ public class TablePane extends Container {
 
         @Override
         public void insert(Column column, int index) {
-            if (column == null) {
-                throw new IllegalArgumentException("column is null.");
-            }
+            Utils.checkNull(column, "Column");
 
             if (column.tablePane != null) {
                 throw new IllegalArgumentException(
-                    "column is already in use by another table pane.");
+                    "Column is already in use by another table pane.");
             }
 
             columns.insert(column, index);
@@ -653,81 +646,59 @@ public class TablePane extends Container {
         TablePaneListener {
         @Override
         public void rowInserted(TablePane tablePane, int index) {
-            for (TablePaneListener listener : this) {
-                listener.rowInserted(tablePane, index);
-            }
+            forEach(listener -> listener.rowInserted(tablePane, index));
         }
 
         @Override
         public void rowsRemoved(TablePane tablePane, int index, Sequence<TablePane.Row> rows) {
-            for (TablePaneListener listener : this) {
-                listener.rowsRemoved(tablePane, index, rows);
-            }
+            forEach(listener -> listener.rowsRemoved(tablePane, index, rows));
         }
 
         @Override
         public void rowHeightChanged(TablePane.Row row, int previousHeight, boolean previousRelative) {
-            for (TablePaneListener listener : this) {
-                listener.rowHeightChanged(row, previousHeight, previousRelative);
-            }
+            forEach(listener -> listener.rowHeightChanged(row, previousHeight, previousRelative));
         }
 
         @Override
         public void rowHighlightedChanged(TablePane.Row row) {
-            for (TablePaneListener listener : this) {
-                listener.rowHighlightedChanged(row);
-            }
+            forEach(listener -> listener.rowHighlightedChanged(row));
         }
 
         @Override
         public void columnInserted(TablePane tablePane, int index) {
-            for (TablePaneListener listener : this) {
-                listener.columnInserted(tablePane, index);
-            }
+            forEach(listener -> listener.columnInserted(tablePane, index));
         }
 
         @Override
         public void columnsRemoved(TablePane tablePane, int index,
             Sequence<TablePane.Column> columns) {
-            for (TablePaneListener listener : this) {
-                listener.columnsRemoved(tablePane, index, columns);
-            }
+            forEach(listener -> listener.columnsRemoved(tablePane, index, columns));
         }
 
         @Override
         public void columnWidthChanged(TablePane.Column column, int previousWidth,
             boolean previousRelative) {
-            for (TablePaneListener listener : this) {
-                listener.columnWidthChanged(column, previousWidth, previousRelative);
-            }
+            forEach(listener -> listener.columnWidthChanged(column, previousWidth, previousRelative));
         }
 
         @Override
         public void columnHighlightedChanged(TablePane.Column column) {
-            for (TablePaneListener listener : this) {
-                listener.columnHighlightedChanged(column);
-            }
+            forEach(listener -> listener.columnHighlightedChanged(column));
         }
 
         @Override
         public void cellInserted(TablePane.Row row, int column) {
-            for (TablePaneListener listener : this) {
-                listener.cellInserted(row, column);
-            }
+            forEach(listener -> listener.cellInserted(row, column));
         }
 
         @Override
         public void cellsRemoved(TablePane.Row row, int column, Sequence<Component> removed) {
-            for (TablePaneListener listener : this) {
-                listener.cellsRemoved(row, column, removed);
-            }
+            forEach(listener -> listener.cellsRemoved(row, column, removed));
         }
 
         @Override
         public void cellUpdated(TablePane.Row row, int column, Component previousComponent) {
-            for (TablePaneListener listener : this) {
-                listener.cellUpdated(row, column, previousComponent);
-            }
+            forEach(listener -> listener.cellUpdated(row, column, previousComponent));
         }
     }
 
@@ -735,17 +706,13 @@ public class TablePane extends Container {
         ListenerList<TablePaneAttributeListener> implements TablePaneAttributeListener {
         @Override
         public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
-            for (TablePaneAttributeListener listener : this) {
-                listener.rowSpanChanged(tablePane, component, previousRowSpan);
-            }
+            forEach(listener -> listener.rowSpanChanged(tablePane, component, previousRowSpan));
         }
 
         @Override
         public void columnSpanChanged(TablePane tablePane, Component component,
             int previousColumnSpan) {
-            for (TablePaneAttributeListener listener : this) {
-                listener.columnSpanChanged(tablePane, component, previousColumnSpan);
-            }
+            forEach(listener -> listener.columnSpanChanged(tablePane, component, previousColumnSpan));
         }
     }
 
@@ -774,9 +741,7 @@ public class TablePane extends Container {
      * be made
      */
     public TablePane(Sequence<Column> columns) {
-        if (columns == null) {
-            throw new IllegalArgumentException("columns is null");
-        }
+        Utils.checkNull(columns, "columns");
 
         this.rows = new ArrayList<>();
         this.columns = new ArrayList<>(columns);
@@ -786,10 +751,7 @@ public class TablePane extends Container {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof TablePane.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + TablePane.Skin.class.getName());
-        }
+        checkSkin(skin, TablePane.Skin.class);
 
         super.setSkin(skin);
     }

@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * A <tt>SplitPane</tt> is a container component that splits its size up into
@@ -59,51 +60,37 @@ public class SplitPane extends Container {
         SplitPaneListener {
         @Override
         public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
-            for (SplitPaneListener listener : this) {
-                listener.topLeftChanged(splitPane, previousTopLeft);
-            }
+            forEach(listener -> listener.topLeftChanged(splitPane, previousTopLeft));
         }
 
         @Override
         public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
-            for (SplitPaneListener listener : this) {
-                listener.bottomRightChanged(splitPane, previousBottomRight);
-            }
+            forEach(listener -> listener.bottomRightChanged(splitPane, previousBottomRight));
         }
 
         @Override
         public void orientationChanged(SplitPane splitPane) {
-            for (SplitPaneListener listener : this) {
-                listener.orientationChanged(splitPane);
-            }
+            forEach(listener -> listener.orientationChanged(splitPane));
         }
 
         @Override
         public void primaryRegionChanged(SplitPane splitPane) {
-            for (SplitPaneListener listener : this) {
-                listener.primaryRegionChanged(splitPane);
-            }
+            forEach(listener -> listener.primaryRegionChanged(splitPane));
         }
 
         @Override
         public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
-            for (SplitPaneListener listener : this) {
-                listener.splitRatioChanged(splitPane, previousSplitRatio);
-            }
+            forEach(listener -> listener.splitRatioChanged(splitPane, previousSplitRatio));
         }
 
         @Override
         public void lockedChanged(SplitPane splitPane) {
-            for (SplitPaneListener listener : this) {
-                listener.lockedChanged(splitPane);
-            }
+            forEach(listener -> listener.lockedChanged(splitPane));
         }
 
         @Override
         public void resizeModeChanged(SplitPane splitPane, ResizeMode previousResizeMode) {
-            for (SplitPaneListener listener : this) {
-                listener.resizeModeChanged(splitPane, previousResizeMode);
-            }
+            forEach(listener -> listener.resizeModeChanged(splitPane, previousResizeMode));
         }
     }
 
@@ -229,9 +216,7 @@ public class SplitPane extends Container {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException("orientation is null.");
-        }
+        Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
             this.orientation = orientation;
@@ -244,9 +229,7 @@ public class SplitPane extends Container {
     }
 
     public void setPrimaryRegion(Region primaryRegion) {
-        if (primaryRegion == null) {
-            throw new IllegalArgumentException("primaryRegion is null.");
-        }
+        Utils.checkNull(primaryRegion, "primaryRegion");
 
         if (this.primaryRegion != primaryRegion) {
             this.primaryRegion = primaryRegion;
@@ -287,9 +270,7 @@ public class SplitPane extends Container {
     }
 
     public void setResizeMode(ResizeMode resizeMode) {
-        if (resizeMode == null) {
-            throw new IllegalArgumentException("resizeMode is null.");
-        }
+        Utils.checkNull(resizeMode, "resizeMode");
 
         ResizeMode previousResizeMode = this.resizeMode;
 

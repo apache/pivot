@@ -52,16 +52,12 @@ public class Label extends Component {
         LabelListener {
         @Override
         public void textChanged(Label label, String previousText) {
-            for (LabelListener listener : this) {
-                listener.textChanged(label, previousText);
-            }
+            forEach(listener -> listener.textChanged(label, previousText));
         }
 
         @Override
         public void maximumLengthChanged(Label label, int previousMaximumLength) {
-            for (LabelListener listener : this) {
-                listener.maximumLengthChanged(label, previousMaximumLength);
-            }
+            forEach(listener -> listener.maximumLengthChanged(label, previousMaximumLength));
         }
 
     }
@@ -70,24 +66,18 @@ public class Label extends Component {
         implements LabelBindingListener {
         @Override
         public void textKeyChanged(Label label, String previousTextKey) {
-            for (LabelBindingListener listener : this) {
-                listener.textKeyChanged(label, previousTextKey);
-            }
+            forEach(listener -> listener.textKeyChanged(label, previousTextKey));
         }
 
         @Override
         public void textBindTypeChanged(Label label, BindType previousTextBindType) {
-            for (LabelBindingListener listener : this) {
-                listener.textBindTypeChanged(label, previousTextBindType);
-            }
+            forEach(listener -> listener.textBindTypeChanged(label, previousTextBindType));
         }
 
         @Override
         public void textBindMappingChanged(Label label,
             Label.TextBindMapping previousTextBindMapping) {
-            for (LabelBindingListener listener : this) {
-                listener.textBindMappingChanged(label, previousTextBindMapping);
-            }
+            forEach(listener -> listener.textBindMappingChanged(label, previousTextBindMapping));
         }
     }
 
@@ -174,9 +164,7 @@ public class Label extends Component {
      * @throws IllegalArgumentException if the length given is negative.
      */
     public void setMaximumLength(int maximumLength) {
-        if (maximumLength < 0) {
-            throw new IllegalArgumentException("maximumLength is negative.");
-        }
+        Utils.checkNonNegative(maximumLength, "maximumLength");
 
         int previousMaximumLength = this.maximumLength;
         if (previousMaximumLength != maximumLength) {
@@ -245,7 +233,7 @@ public class Label extends Component {
                 value = textBindMapping.toString(value);
             }
 
-            setText(value != null ? (String) value : "");
+            setTextOrEmpty((String)value);
         }
     }
 

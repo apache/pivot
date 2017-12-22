@@ -17,7 +17,9 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Allows a user to select one of a range of values.
@@ -27,16 +29,12 @@ public class Slider extends Container {
         SliderListener {
         @Override
         public void orientationChanged(Slider slider) {
-            for (SliderListener listener : this) {
-                listener.orientationChanged(slider);
-            }
+            forEach(listener -> listener.orientationChanged(slider));
         }
 
         @Override
         public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
-            for (SliderListener listener : this) {
-                listener.rangeChanged(slider, previousStart, previousEnd);
-            }
+            forEach(listener -> listener.rangeChanged(slider, previousStart, previousEnd));
         }
     }
 
@@ -44,9 +42,7 @@ public class Slider extends Container {
         implements SliderValueListener {
         @Override
         public void valueChanged(Slider slider, int previousValue) {
-            for (SliderValueListener listener : this) {
-                listener.valueChanged(slider, previousValue);
-            }
+            forEach(listener -> listener.valueChanged(slider, previousValue));
         }
     }
 
@@ -90,8 +86,7 @@ public class Slider extends Container {
 
     public void setRange(int start, int end) {
         if (start > end) {
-            throw new IllegalArgumentException("start " + start + " is greater than maximum " + end
-                + ".");
+            throw new IllegalArgumentException("start " + start + " is greater than maximum " + end + ".");
         }
 
         int previousStart = this.start;
@@ -118,26 +113,20 @@ public class Slider extends Container {
     }
 
     public final void setRange(Span range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        Utils.checkNull(range, "range");
 
         setRange(range.start, range.end);
     }
 
     public final void setRange(Dictionary<String, ?> range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
+        setRange(new Span(range));
+    }
 
+    public final void setRange(Sequence<?> range) {
         setRange(new Span(range));
     }
 
     public final void setRange(String range) {
-        if (range == null) {
-            throw new IllegalArgumentException("range is null.");
-        }
-
         setRange(Span.decode(range));
     }
 
@@ -147,13 +136,11 @@ public class Slider extends Container {
 
     public void setValue(int value) {
         if (value < start) {
-            throw new IllegalArgumentException("value " + value + " is less than minimum " + start
-                + ".");
+            throw new IllegalArgumentException("value " + value + " is less than minimum " + start + ".");
         }
 
         if (value > end) {
-            throw new IllegalArgumentException("value " + value + " is greater than maximum " + end
-                + ".");
+            throw new IllegalArgumentException("value " + value + " is greater than maximum " + end + ".");
         }
 
         int previousValue = this.value;
@@ -169,9 +156,7 @@ public class Slider extends Container {
     }
 
     public void setOrientation(Orientation orientation) {
-        if (orientation == null) {
-            throw new IllegalArgumentException("orientation is null.");
-        }
+        Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
             this.orientation = orientation;

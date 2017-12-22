@@ -20,6 +20,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Singleton class providing a means of sharing data between components and
  * applications.
@@ -47,18 +49,18 @@ public final class Clipboard {
      * @return The current clipboard content manifest.
      */
     public static Manifest getContent() {
-        Manifest contentLocal = Clipboard.content;
+        Manifest currentContent = Clipboard.content;
 
-        if (contentLocal == null) {
+        if (currentContent == null) {
             try {
                 java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                contentLocal = new RemoteManifest(awtClipboard.getContents(null));
+                currentContent = new RemoteManifest(awtClipboard.getContents(null));
             } catch (SecurityException exception) {
                 // No-op
             }
         }
 
-        return contentLocal;
+        return currentContent;
     }
 
     /**
@@ -80,9 +82,7 @@ public final class Clipboard {
      */
     public static void setContent(LocalManifest content,
         ClipboardContentListener clipboardContentListener) {
-        if (content == null) {
-            throw new IllegalArgumentException("content is null");
-        }
+        Utils.checkNull(content, "content");
 
         try {
             java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

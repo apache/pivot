@@ -728,10 +728,7 @@ public class ListView extends Component {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof ListView.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + ListView.Skin.class.getName());
-        }
+        checkSkin(skin, ListView.Skin.class);
 
         super.setSkin(skin);
     }

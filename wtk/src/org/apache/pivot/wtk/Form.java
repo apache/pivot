@@ -27,6 +27,7 @@ import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * A container that arranges field components in a form layout. Each field has
@@ -74,9 +75,7 @@ public class Form extends Container {
 
         @Override
         public void insert(Component field, int index) {
-            if (field == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNull(field, "field");
 
             if (field.getParent() != null) {
                 throw new IllegalArgumentException("Field already has a parent.");
@@ -165,7 +164,7 @@ public class Form extends Container {
         @Override
         public void insert(Section section, int index) {
             if (section.form != null) {
-                throw new IllegalArgumentException("section already has a form.");
+                throw new IllegalArgumentException("Section already has a Form.");
             }
 
             sections.insert(section, index);
@@ -274,9 +273,7 @@ public class Form extends Container {
          * <tt>null</tt> for no message.
          */
         public Flag(MessageType messageType, String message) {
-            if (messageType == null) {
-                throw new IllegalArgumentException("messageType is null.");
-            }
+            Utils.checkNull(messageType, "messageType");
 
             this.messageType = messageType;
             this.message = message;
@@ -298,9 +295,7 @@ public class Form extends Container {
          * @throws IllegalArgumentException if the message type is {@code null}.
          */
         public void setMessageType(MessageType messageType) {
-            if (messageType == null) {
-                throw new IllegalArgumentException();
-            }
+            Utils.checkNull(messageType, "messageType");
 
             this.messageType = messageType;
         }
@@ -326,6 +321,8 @@ public class Form extends Container {
         }
 
         public static Flag decode(String flag) {
+            Utils.checkNullOrEmpty(flag, "flag");
+
             Dictionary<String, ?> map;
             try {
                 map = JSONSerializer.parseMap(flag);
@@ -333,13 +330,13 @@ public class Form extends Container {
                 throw new IllegalArgumentException(exception);
             }
 
-            String messageType = (String) map.get(MESSAGE_TYPE_KEY);
+            String messageType = map.getString(MESSAGE_TYPE_KEY);
             if (messageType == null) {
                 throw new IllegalArgumentException(MESSAGE_TYPE_KEY + " is required.");
             }
 
-            Flag value = new Flag(MessageType.valueOf(messageType.toUpperCase(Locale.ENGLISH)),
-                (String) map.get(MESSAGE_KEY));
+            Flag value = new Flag(MessageType.fromString(messageType),
+                map.getString(MESSAGE_KEY));
 
             return value;
         }
@@ -353,37 +350,27 @@ public class Form extends Container {
         FormListener {
         @Override
         public void sectionInserted(Form form, int index) {
-            for (FormListener listener : this) {
-                listener.sectionInserted(form, index);
-            }
+            forEach(listener -> listener.sectionInserted(form, index));
         }
 
         @Override
         public void sectionsRemoved(Form form, int index, Sequence<Section> removed) {
-            for (FormListener listener : this) {
-                listener.sectionsRemoved(form, index, removed);
-            }
+            forEach(listener -> listener.sectionsRemoved(form, index, removed));
         }
 
         @Override
         public void sectionHeadingChanged(Form.Section section) {
-            for (FormListener listener : this) {
-                listener.sectionHeadingChanged(section);
-            }
+            forEach(listener -> listener.sectionHeadingChanged(section));
         }
 
         @Override
         public void fieldInserted(Section section, int index) {
-            for (FormListener listener : this) {
-                listener.fieldInserted(section, index);
-            }
+            forEach(listener -> listener.fieldInserted(section, index));
         }
 
         @Override
         public void fieldsRemoved(Section section, int index, Sequence<Component> fields) {
-            for (FormListener listener : this) {
-                listener.fieldsRemoved(section, index, fields);
-            }
+            forEach(listener -> listener.fieldsRemoved(section, index, fields));
         }
     }
 
@@ -391,23 +378,17 @@ public class Form extends Container {
         implements FormAttributeListener {
         @Override
         public void labelChanged(Form form, Component component, String previousLabel) {
-            for (FormAttributeListener listener : this) {
-                listener.labelChanged(form, component, previousLabel);
-            }
+            forEach(listener -> listener.labelChanged(form, component, previousLabel));
         }
 
         @Override
         public void requiredChanged(Form form, Component field) {
-            for (FormAttributeListener listener : this) {
-                listener.requiredChanged(form, field);
-            }
+            forEach(listener -> listener.requiredChanged(form, field));
         }
 
         @Override
         public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
-            for (FormAttributeListener listener : this) {
-                listener.flagChanged(form, component, previousFlag);
-            }
+            forEach(listener -> listener.flagChanged(form, component, previousFlag));
         }
     }
 
@@ -615,10 +596,6 @@ public class Form extends Container {
     }
 
     public static final void setFlag(Component component, String flag) {
-        if (flag == null) {
-            throw new IllegalArgumentException("flag is null.");
-        }
-
         setFlag(component, Flag.decode(flag));
     }
 

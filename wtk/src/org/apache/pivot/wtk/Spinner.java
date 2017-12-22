@@ -28,6 +28,7 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 
 /**
@@ -123,23 +124,17 @@ public class Spinner extends Container {
         SpinnerListener {
         @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
-            for (SpinnerListener listener : this) {
-                listener.spinnerDataChanged(spinner, previousSpinnerData);
-            }
+            forEach(listener -> listener.spinnerDataChanged(spinner, previousSpinnerData));
         }
 
         @Override
         public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
-            for (SpinnerListener listener : this) {
-                listener.itemRendererChanged(spinner, previousItemRenderer);
-            }
+            forEach(listener -> listener.itemRendererChanged(spinner, previousItemRenderer));
         }
 
         @Override
         public void circularChanged(Spinner spinner) {
-            for (SpinnerListener listener : this) {
-                listener.circularChanged(spinner);
-            }
+            forEach(listener -> listener.circularChanged(spinner));
         }
     }
 
@@ -147,37 +142,27 @@ public class Spinner extends Container {
         implements SpinnerItemListener {
         @Override
         public void itemInserted(Spinner spinner, int index) {
-            for (SpinnerItemListener listener : this) {
-                listener.itemInserted(spinner, index);
-            }
+            forEach(listener -> listener.itemInserted(spinner, index));
         }
 
         @Override
         public void itemsRemoved(Spinner spinner, int index, int count) {
-            for (SpinnerItemListener listener : this) {
-                listener.itemsRemoved(spinner, index, count);
-            }
+            forEach(listener -> listener.itemsRemoved(spinner, index, count));
         }
 
         @Override
         public void itemUpdated(Spinner spinner, int index) {
-            for (SpinnerItemListener listener : this) {
-                listener.itemUpdated(spinner, index);
-            }
+            forEach(listener -> listener.itemUpdated(spinner, index));
         }
 
         @Override
         public void itemsCleared(Spinner spinner) {
-            for (SpinnerItemListener listener : this) {
-                listener.itemsCleared(spinner);
-            }
+            forEach(listener -> listener.itemsCleared(spinner));
         }
 
         @Override
         public void itemsSorted(Spinner spinner) {
-            for (SpinnerItemListener listener : this) {
-                listener.itemsSorted(spinner);
-            }
+            forEach(listener -> listener.itemsSorted(spinner));
         }
     }
 
@@ -185,16 +170,12 @@ public class Spinner extends Container {
         ListenerList<SpinnerSelectionListener> implements SpinnerSelectionListener {
         @Override
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
-            for (SpinnerSelectionListener listener : this) {
-                listener.selectedIndexChanged(spinner, previousSelectedIndex);
-            }
+            forEach(listener -> listener.selectedIndexChanged(spinner, previousSelectedIndex));
         }
 
         @Override
         public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-            for (SpinnerSelectionListener listener : this) {
-                listener.selectedItemChanged(spinner, previousSelectedItem);
-            }
+            forEach(listener -> listener.selectedItemChanged(spinner, previousSelectedItem));
         }
     }
 
@@ -202,47 +183,35 @@ public class Spinner extends Container {
         implements SpinnerBindingListener {
         @Override
         public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
-            for (SpinnerBindingListener listener : this) {
-                listener.spinnerDataKeyChanged(spinner, previousSpinnerDataKey);
-            }
+            forEach(listener -> listener.spinnerDataKeyChanged(spinner, previousSpinnerDataKey));
         }
 
         @Override
         public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
-            for (SpinnerBindingListener listener : this) {
-                listener.spinnerDataBindTypeChanged(spinner, previousSpinnerDataBindType);
-            }
+            forEach(listener -> listener.spinnerDataBindTypeChanged(spinner, previousSpinnerDataBindType));
         }
 
         @Override
         public void spinnerDataBindMappingChanged(Spinner spinner,
             Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
-            for (SpinnerBindingListener listener : this) {
-                listener.spinnerDataBindMappingChanged(spinner, previousSpinnerDataBindMapping);
-            }
+            forEach(listener -> listener.spinnerDataBindMappingChanged(spinner, previousSpinnerDataBindMapping));
         }
 
         @Override
         public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
-            for (SpinnerBindingListener listener : this) {
-                listener.selectedItemKeyChanged(spinner, previousSelectedItemKey);
-            }
+            forEach(listener -> listener.selectedItemKeyChanged(spinner, previousSelectedItemKey));
         }
 
         @Override
         public void selectedItemBindTypeChanged(Spinner spinner,
             BindType previousSelectedItemBindType) {
-            for (SpinnerBindingListener listener : this) {
-                listener.selectedItemBindTypeChanged(spinner, previousSelectedItemBindType);
-            }
+            forEach(listener -> listener.selectedItemBindTypeChanged(spinner, previousSelectedItemBindType));
         }
 
         @Override
         public void selectedItemBindMappingChanged(Spinner spinner,
             ItemBindMapping previousSelectedItemBindMapping) {
-            for (SpinnerBindingListener listener : this) {
-                listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping);
-            }
+            forEach(listener -> listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping));
         }
     }
 
@@ -385,9 +354,7 @@ public class Spinner extends Container {
      */
     @SuppressWarnings("unchecked")
     public void setSpinnerData(List<?> spinnerData) {
-        if (spinnerData == null) {
-            throw new IllegalArgumentException("spinnerData is null.");
-        }
+        Utils.checkNull(spinnerData, "spinnerData");
 
         List<?> previousSpinnerData = this.spinnerData;
 
@@ -415,9 +382,7 @@ public class Spinner extends Container {
     }
 
     public final void setSpinnerData(String spinnerData) {
-        if (spinnerData == null) {
-            throw new IllegalArgumentException("spinnerData is null.");
-        }
+        Utils.checkNullOrEmpty(spinnerData, "spinnerData");
 
         try {
             setSpinnerData(JSONSerializer.parseList(spinnerData));
@@ -428,10 +393,7 @@ public class Spinner extends Container {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof Spinner.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + Spinner.Skin.class.getName());
-        }
+        checkSkin(skin, Spinner.Skin.class);
 
         super.setSkin(skin);
     }
@@ -449,9 +411,7 @@ public class Spinner extends Container {
      * @param itemRenderer The new item renderer for the list.
      */
     public void setItemRenderer(ItemRenderer itemRenderer) {
-        if (itemRenderer == null) {
-            throw new IllegalArgumentException("itemRenderer is null.");
-        }
+        Utils.checkNull(itemRenderer, "itemRenderer");
 
         ItemRenderer previousItemRenderer = this.itemRenderer;
 
@@ -540,9 +500,7 @@ public class Spinner extends Container {
     }
 
     public void setSpinnerDataBindType(BindType spinnerDataBindType) {
-        if (spinnerDataBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(spinnerDataBindType, "spinnerDataBindType");
 
         BindType previousSpinnerDataBindType = this.spinnerDataBindType;
 
@@ -584,9 +542,7 @@ public class Spinner extends Container {
     }
 
     public void setSelectedItemBindType(BindType selectedItemBindType) {
-        if (selectedItemBindType == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(selectedItemBindType, "selectedItemBindType");
 
         BindType previousSelectedItemBindType = this.selectedItemBindType;
         if (previousSelectedItemBindType != selectedItemBindType) {

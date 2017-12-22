@@ -139,10 +139,7 @@ public class CalendarButton extends Button {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof CalendarButton.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + CalendarButton.Skin.class.getName());
-        }
+        checkSkin(skin, CalendarButton.Skin.class);
 
         super.setSkin(skin);
     }

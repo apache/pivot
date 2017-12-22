@@ -24,6 +24,7 @@ import java.io.File;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.io.FileList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
@@ -43,9 +44,7 @@ public class LocalManifest implements Manifest {
     }
 
     public void putText(String textArgument) {
-        if (textArgument == null) {
-            throw new IllegalArgumentException("text is null.");
-        }
+        Utils.checkNull(textArgument, "text");
 
         this.text = textArgument;
     }
@@ -61,9 +60,7 @@ public class LocalManifest implements Manifest {
     }
 
     public void putImage(Image imageArgument) {
-        if (imageArgument == null) {
-            throw new IllegalArgumentException("image is null.");
-        }
+        Utils.checkNull(imageArgument, "image");
 
         this.image = imageArgument;
     }
@@ -79,9 +76,7 @@ public class LocalManifest implements Manifest {
     }
 
     public void putFileList(FileList fileListArgument) {
-        if (fileListArgument == null) {
-            throw new IllegalArgumentException("fileList is null.");
-        }
+        Utils.checkNull(fileListArgument, "fileList");
 
         this.fileList = fileListArgument;
     }

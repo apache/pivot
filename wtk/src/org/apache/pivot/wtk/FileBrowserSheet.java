@@ -24,6 +24,7 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 import org.apache.pivot.io.FileList;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * File browser sheet.
@@ -119,13 +120,8 @@ public class FileBrowserSheet extends Sheet {
      * @param rootFolder The root folder full name.
      */
     public FileBrowserSheet(Mode mode, String rootFolder) {
-        if (mode == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (rootFolder == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(mode, "mode");
+        Utils.checkNullOrEmpty(rootFolder, "rootFolder");
 
         this.mode = mode;
 
@@ -139,9 +135,7 @@ public class FileBrowserSheet extends Sheet {
     }
 
     public void setMode(Mode mode) {
-        if (mode == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(mode, "mode");
 
         Mode previousMode = this.mode;
 
@@ -162,26 +156,23 @@ public class FileBrowserSheet extends Sheet {
      * @throws IllegalArgumentException if the folder argument is {@code null}.
      */
     public void setRootFolder(String rootFolder) {
-        if (rootFolder == null) {
-            throw new IllegalArgumentException("Root folder is null.");
-        }
+        Utils.checkNullOrEmpty(rootFolder, "rootFolder");
 
-        rootDirectory = new File(rootFolder);
-        if (!rootDirectory.isDirectory()) {
+        File rootFile = new File(rootFolder);
+        if (!rootFile.isDirectory()) {
             // Give some grace here to allow setting the root directory
             // to a regular file and have it work (by using its parent)
-            rootDirectory = rootDirectory.getParentFile();
-            if (rootDirectory == null || !rootDirectory.isDirectory()) {
-                throw new IllegalArgumentException("Root folder is not a directory.");
+            rootFile = rootFile.getParentFile();
+            if (rootFile == null || !rootFile.isDirectory()) {
+                throw new IllegalArgumentException(rootFolder + " is not a directory.");
             }
         }
+        this.rootDirectory = rootFile;
 
     }
 
     public void setRootDirectory(File rootDirectory) {
-        if (rootDirectory == null) {
-            throw new IllegalArgumentException("Root directory is null.");
-        }
+        Utils.checkNull(rootDirectory, "rootDirectory");
 
         if (!rootDirectory.isDirectory()) {
             // Give some grace here to allow setting the root directory
@@ -259,9 +250,7 @@ public class FileBrowserSheet extends Sheet {
      * current root directory.
      */
     public Sequence<File> setSelectedFiles(Sequence<File> selectedFiles) {
-        if (selectedFiles == null) {
-            throw new IllegalArgumentException("selectedFiles is null.");
-        }
+        Utils.checkNull(selectedFiles, "selectedFiles");
 
         if (mode != Mode.OPEN_MULTIPLE && selectedFiles.getLength() > 1) {
             throw new IllegalArgumentException("Multi-select is not enabled.");
@@ -274,16 +263,14 @@ public class FileBrowserSheet extends Sheet {
         for (int i = 0, n = selectedFiles.getLength(); i < n; i++) {
             File file = selectedFiles.get(i);
 
-            if (file == null) {
-                throw new IllegalArgumentException("file is null.");
-            }
+            Utils.checkNull(file, "file");
 
             if (!file.isAbsolute()) {
                 file = new File(rootDirectory, file.getPath());
             }
 
             if (!file.getParentFile().equals(rootDirectory)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(file.getPath() + " is not a child of the root directory.");
             }
 
             fileList.add(file);

@@ -273,44 +273,32 @@ public class GridPane extends Container {
         GridPaneListener {
         @Override
         public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
-            for (GridPaneListener listener : this) {
-                listener.columnCountChanged(gridPane, previousColumnCount);
-            }
+            forEach(listener -> listener.columnCountChanged(gridPane, previousColumnCount));
         }
 
         @Override
         public void rowInserted(GridPane gridPane, int index) {
-            for (GridPaneListener listener : this) {
-                listener.rowInserted(gridPane, index);
-            }
+            forEach(listener -> listener.rowInserted(gridPane, index));
         }
 
         @Override
         public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
-            for (GridPaneListener listener : this) {
-                listener.rowsRemoved(gridPane, index, rows);
-            }
+            forEach(listener -> listener.rowsRemoved(gridPane, index, rows));
         }
 
         @Override
         public void cellInserted(GridPane.Row row, int column) {
-            for (GridPaneListener listener : this) {
-                listener.cellInserted(row, column);
-            }
+            forEach(listener -> listener.cellInserted(row, column));
         }
 
         @Override
         public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
-            for (GridPaneListener listener : this) {
-                listener.cellsRemoved(row, column, removed);
-            }
+            forEach(listener -> listener.cellsRemoved(row, column, removed));
         }
 
         @Override
         public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
-            for (GridPaneListener listener : this) {
-                listener.cellUpdated(row, column, previousComponent);
-            }
+            forEach(listener -> listener.cellUpdated(row, column, previousComponent));
         }
     }
 
@@ -334,9 +322,7 @@ public class GridPane extends Container {
      * @param columnCount Number of columns for this grid.
      */
     public GridPane(int columnCount) {
-        if (columnCount < 0) {
-            throw new IllegalArgumentException("columnCount is negative.");
-        }
+        Utils.checkNonNegative(columnCount, "columnCount");
 
         setColumnCount(columnCount);
 
@@ -345,10 +331,7 @@ public class GridPane extends Container {
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {
-        if (!(skin instanceof GridPane.Skin)) {
-            throw new IllegalArgumentException("Skin class must implement "
-                + GridPane.Skin.class.getName());
-        }
+        checkSkin(skin, GridPane.Skin.class);
 
         super.setSkin(skin);
     }
