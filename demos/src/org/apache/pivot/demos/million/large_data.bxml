@@ -34,6 +34,7 @@ limitations under the License.
                             listData="['10e0.csv', '10e1.csv', '10e2.csv', '10e3.csv', '10e4.csv', '10e5.csv']" selectedIndex="0"/>
                         <PushButton bxml:id="loadDataButton" buttonData="Load Data" styles="{minimumAspectRatio:3}"/>
                         <PushButton bxml:id="cancelButton" buttonData="Cancel" enabled="false" styles="{minimumAspectRatio:3}"/>
+                        <PushButton bxml:id="clearButton" buttonData="Clear" styles="{minimumAspectRatio:3}"/>
                     </BoxPane>
                     <Label bxml:id="statusLabel"/>
                     <Separator/>
@@ -43,7 +44,7 @@ limitations under the License.
                 <Border>
                     <ScrollPane horizontalScrollBarPolicy="fill_to_capacity">
                         <TableView bxml:id="tableView" selectMode="single"
-                            styles="{showHorizontalGridLines:false}">
+                            styles="{showHorizontalGridLines:false,includeTrailingVerticalGridLine:true}">
                             <columns>
                                 <TableView.Column name="c0" headerData="0" width="120"/>
                                 <TableView.Column name="c1" headerData="1" width="120"/>
@@ -53,8 +54,11 @@ limitations under the License.
                         </TableView>
 
                         <columnHeader>
-                            <TableViewHeader tableView="$tableView" sortMode="single_column"/>
+                            <TableViewHeader tableView="$tableView" sortMode="single_column" styles="{includeTrailingVerticalGridLine:true}"/>
                         </columnHeader>
+                        <rowHeader>
+                            <NumberRuler orientation="vertical" textSize="7" styles="{backgroundColor:4,color:2,rowPadding:{top:2,bottom:3,left:0,right:0}}"/>
+                        </rowHeader>
                     </ScrollPane>
                 </Border>
             </TablePane.Row>

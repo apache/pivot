@@ -50,8 +50,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
 public class LargeData extends Application.Adapter {
-    private static String USER_HOME; // useful for local tests as Java
-                                     // Application
+    private static String USER_HOME; // useful for local tests as Java Application
 
     URL origin = null;
 
@@ -124,6 +123,9 @@ public class LargeData extends Application.Adapter {
             for (Object item : page) {
                 tableData.add(item);
             }
+            String msg = "Read " + tableData.getLength() + " rows...";
+            statusLabel.setText(msg);
+            statusLabel.repaint(true);
         }
     }
 
@@ -133,6 +135,7 @@ public class LargeData extends Application.Adapter {
     private ListButton fileListButton = null;
     private PushButton loadDataButton = null;
     private PushButton cancelButton = null;
+    private PushButton clearButton = null;
     private Label statusLabel = null;
     private TableView tableView = null;
 
@@ -163,6 +166,7 @@ public class LargeData extends Application.Adapter {
         fileListButton = (ListButton) bxmlSerializer.getNamespace().get("fileListButton");
         loadDataButton = (PushButton) bxmlSerializer.getNamespace().get("loadDataButton");
         cancelButton = (PushButton) bxmlSerializer.getNamespace().get("cancelButton");
+        clearButton = (PushButton) bxmlSerializer.getNamespace().get("clearButton");
         statusLabel = (Label) bxmlSerializer.getNamespace().get("statusLabel");
         tableView = (TableView) bxmlSerializer.getNamespace().get("tableView");
 
@@ -179,26 +183,26 @@ public class LargeData extends Application.Adapter {
                 }
             });
 
-        loadDataButton.getButtonPressListeners().add(new ButtonPressListener() {
-            @Override
-            public void buttonPressed(Button button) {
-                loadDataButton.setEnabled(false);
-                cancelButton.setEnabled(true);
-
-                loadData();
-            }
+        loadDataButton.getButtonPressListeners().add((button) -> {
+            loadDataButton.setEnabled(false);
+            cancelButton.setEnabled(true);
+            loadData();
         });
 
-        cancelButton.getButtonPressListeners().add(new ButtonPressListener() {
-            @Override
-            public void buttonPressed(Button button) {
-                if (loadDataTask != null) {
-                    loadDataTask.abort();
-                }
-
-                loadDataButton.setEnabled(true);
-                cancelButton.setEnabled(false);
+        cancelButton.getButtonPressListeners().add((button) -> {
+            if (loadDataTask != null) {
+                loadDataTask.abort();
             }
+            loadDataButton.setEnabled(true);
+            cancelButton.setEnabled(false);
+        });
+
+        clearButton.getButtonPressListeners().add((button) -> {
+            if (loadDataTask != null) {
+                loadDataTask.abort();
+            }
+            tableView.getTableData().clear(); // empty the table
+            statusLabel.setText("");
         });
 
         tableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
@@ -256,24 +260,33 @@ public class LargeData extends Application.Adapter {
                     long t1 = System.currentTimeMillis();
                     String msg = "Read " + tableView.getTableData().getLength() + " rows in "
                         + (t1 - t0) + "ms";
-                    System.out.println(msg);
 
-                    statusLabel.setText(msg);
                     loadDataButton.setEnabled(true);
                     cancelButton.setEnabled(false);
 
                     loadDataTask = null;
+
+                    ApplicationContext.queueCallback(() -> {
+                        System.out.println(msg);
+                        statusLabel.setText(msg);
+                        statusLabel.repaint(true);
+                    });
                 }
 
                 @Override
                 public void executeFailed(Task<Void> task) {
                     String taskFault = task.getFault().toString();
-                    System.err.println(taskFault);
-                    statusLabel.setText(taskFault);
+
                     loadDataButton.setEnabled(true);
                     cancelButton.setEnabled(false);
 
                     loadDataTask = null;
+
+                    ApplicationContext.queueCallback(() -> {
+                        System.out.println(taskFault);
+                        statusLabel.setText(taskFault);
+                        statusLabel.repaint(true);
+                    });
                 }
             }));
         }
