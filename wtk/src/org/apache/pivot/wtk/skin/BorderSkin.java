@@ -337,7 +337,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
      * values recognized by Pivot}.
      */
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getTitleColor() {

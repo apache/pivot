@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -78,4 +79,22 @@ public class InsetsTest {
         assertEquals(i5.toString(), "Insets [2, 2, 3, 3]");
     }
 
+    @Test
+    public void testNullEmpty() {
+        try {
+            Insets.decode(null);
+            fail("Insets.decode of null string should fail!");
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Valid exception: " + iae.getMessage());
+            assertEquals(iae.getMessage(), "padding/margin must not be null or empty.");
+        }
+
+        try {
+            Insets.decode("");
+            fail("Insets.decode of empty string should fail!");
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Valid exception: " + iae.getMessage());
+            assertEquals(iae.getMessage(), "padding/margin must not be null or empty.");
+        }
+    }
 }

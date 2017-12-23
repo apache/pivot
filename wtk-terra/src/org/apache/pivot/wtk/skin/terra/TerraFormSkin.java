@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -911,19 +912,17 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -932,18 +931,10 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -952,18 +943,14 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public void setHorizontalSpacing(int horizontalSpacing) {
-        if (horizontalSpacing < 0) {
-            throw new IllegalArgumentException("horizontalSpacing is negative.");
-        }
+        Utils.checkNonNegative(horizontalSpacing, "horizontalSpacing");
 
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
     }
 
     public final void setHorizontalSpacing(Number horizontalSpacing) {
-        if (horizontalSpacing == null) {
-            throw new IllegalArgumentException("horizontalSpacing is null.");
-        }
+        Utils.checkNull(horizontalSpacing, "horizontalSpacing");
 
         setHorizontalSpacing(horizontalSpacing.intValue());
     }
@@ -973,18 +960,14 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public void setVerticalSpacing(int verticalSpacing) {
-        if (verticalSpacing < 0) {
-            throw new IllegalArgumentException("verticalSpacing is negative.");
-        }
+        Utils.checkNonNegative(verticalSpacing, "verticalSpacing");
 
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
     }
 
     public final void setVerticalSpacing(Number verticalSpacing) {
-        if (verticalSpacing == null) {
-            throw new IllegalArgumentException("verticalSpacing is null.");
-        }
+        Utils.checkNull(verticalSpacing, "verticalSpacing");
 
         setVerticalSpacing(verticalSpacing.intValue());
     }
@@ -994,18 +977,14 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public void setFlagIconOffset(int flagIconOffset) {
-        if (flagIconOffset < 0) {
-            throw new IllegalArgumentException("flagIconOffset is negative.");
-        }
+        Utils.checkNonNegative(flagIconOffset, "flagIconOffset");
 
         this.flagIconOffset = flagIconOffset;
         invalidateComponent();
     }
 
     public final void setFlagIconOffset(Number flagIconOffset) {
-        if (flagIconOffset == null) {
-            throw new IllegalArgumentException("flagIconOffset is null.");
-        }
+        Utils.checkNull(flagIconOffset, "flagIconOffset");
 
         setFlagIconOffset(flagIconOffset.intValue());
     }
@@ -1060,9 +1039,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public void setDelimiter(String delimiter) {
-        if (delimiter == null) {
-            throw new IllegalArgumentException("delimiter is null.");
-        }
+        Utils.checkNull(delimiter, "delimiter");
 
         this.delimiter = delimiter;
 
@@ -1093,11 +1070,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public final void setSeparatorColor(String separatorColor) {
-        if (separatorColor == null) {
-            throw new IllegalArgumentException("separatorColor is null.");
-        }
-
-        setSeparatorColor(GraphicsUtilities.decodeColor(separatorColor));
+        setSeparatorColor(GraphicsUtilities.decodeColor(separatorColor, "separatorColor"));
     }
 
     public Color getSeparatorHeadingColor() {
@@ -1113,11 +1086,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     }
 
     public final void setSeparatorHeadingColor(String separatorHeadingColor) {
-        if (separatorHeadingColor == null) {
-            throw new IllegalArgumentException("separatorHeadingColor is null.");
-        }
-
-        setSeparatorHeadingColor(GraphicsUtilities.decodeColor(separatorHeadingColor));
+        setSeparatorHeadingColor(GraphicsUtilities.decodeColor(separatorHeadingColor, "separatorHeadingColor"));
     }
 
     // Form events

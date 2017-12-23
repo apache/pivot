@@ -123,10 +123,6 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     }
 
     public void setPopupBorderColor(String popupBorderColor) {
-        if (popupBorderColor == null) {
-            throw new IllegalArgumentException("popupBorderColor is null.");
-        }
-
         menuPopup.getStyles().put("borderColor", popupBorderColor);
     }
 }
