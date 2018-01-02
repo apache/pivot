@@ -16,91 +16,25 @@
  */
 package org.apache.pivot.wtk.content;
 
-import java.net.URL;
-
 import org.apache.pivot.wtk.media.Image;
 
 /**
  * Default list item implementation.
  */
-public class ListItem {
-    private Image icon;
-    private String text;
-    private Object userData = null;
-
+public class ListItem extends UserContent {
     public ListItem() {
-        this(null, null);
+        super(null, null);
     }
 
     public ListItem(Image icon) {
-        this(icon, null);
+        super(icon, null);
     }
 
     public ListItem(String text) {
-        this(null, text);
+        super(null, text);
     }
 
     public ListItem(Image icon, String text) {
-        this.icon = icon;
-        this.text = text;
-    }
-
-    public Image getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Image icon) {
-        this.icon = icon;
-    }
-
-    /**
-     * Sets the list item's icon by URL. <p> If the icon already exists in the
-     * application context resource cache, the cached value will be used.
-     * Otherwise, the icon will be loaded synchronously and added to the cache.
-     *
-     * @param iconURL The location of the icon to set.
-     */
-    public void setIcon(URL iconURL) {
-        if (iconURL == null) {
-            throw new IllegalArgumentException("iconURL is null.");
-        }
-
-        setIcon(Image.loadFromCache(iconURL));
-    }
-
-    /**
-     * Sets the list item's icon by {@linkplain ClassLoader#getResource(String)
-     * resource name}.
-     *
-     * @param iconName The resource name of the icon to set.
-     * @see #setIcon(URL)
-     */
-    public void setIcon(String iconName) {
-        if (iconName == null) {
-            throw new IllegalArgumentException("iconName is null.");
-        }
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(iconName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("cannot find icon resource " + iconName);
-        }
-        setIcon(url);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Object getUserData() {
-        return userData;
-    }
-
-    public void setUserData(Object userData) {
-        this.userData = userData;
+        super(icon, text);
     }
 }
