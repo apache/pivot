@@ -112,7 +112,7 @@ public interface Dictionary<K, V> {
      * @return The string value, or <tt>null</tt> if the key is not present.
      */
     default String getString(K key) {
-        return getString(key, null);
+        return (String)get(key);
     }
 
     /**
@@ -221,10 +221,7 @@ public interface Dictionary<K, V> {
      * @return The color value, or <tt>null</tt> if the key is not present.
      */
     default Color getColor(K key) {
-        if (containsKey(key)) {
-            return (Color)get(key);
-        }
-        return (Color)null;
+        return (Color)get(key);
     }
 
     /**
@@ -236,10 +233,7 @@ public interface Dictionary<K, V> {
      * @return The font value, or <tt>null</tt> if the key is not present.
      */
     default Font getFont(K key) {
-        if (containsKey(key)) {
-            return (Font)get(key);
-        }
-        return (Font)null;
+        return (Font)get(key);
     }
 
     /**

@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -56,9 +58,29 @@ public abstract class Component implements ConstrainedVisual {
         private StyleDictionary() {
         }
 
+        public Object get(Style key) {
+            return styles.get(key.toString());
+        }
+
         @Override
         public Object get(String key) {
             return styles.get(key);
+        }
+
+        public Color getColor(Style key) {
+            return getColor(key.toString());
+        }
+
+        public Font getFont(Style key) {
+            return getFont(key.toString());
+        }
+
+        public boolean getBoolean(Style key) {
+            return getBoolean(key.toString());
+        }
+
+        public Object put(Style key, Object value) {
+            return put(key.toString(), value);
         }
 
         /**
@@ -92,9 +114,17 @@ public abstract class Component implements ConstrainedVisual {
             return previousValue;
         }
 
+        public Object putBoolean(Style key, boolean value) {
+            return putBoolean(key.toString(), value);
+        }
+
         @Override
         public Object remove(String key) {
             throw new UnsupportedOperationException();
+        }
+
+        public boolean containsKey(Style key) {
+            return styles.containsKey(key.toString());
         }
 
         @Override
@@ -102,8 +132,16 @@ public abstract class Component implements ConstrainedVisual {
             return styles.containsKey(key);
         }
 
+        public boolean isReadOnly(Style key) {
+            return styles.isReadOnly(key.toString());
+        }
+
         public boolean isReadOnly(String key) {
             return styles.isReadOnly(key);
+        }
+
+        public Class<?> getType(Style key) {
+            return styles.getType(key.toString());
         }
 
         public Class<?> getType(String key) {

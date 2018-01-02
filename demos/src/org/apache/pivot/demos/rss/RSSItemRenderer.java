@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.TextNode;
 import org.apache.pivot.xml.XML;
@@ -38,16 +39,16 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
     public RSSItemRenderer() {
         super(Orientation.VERTICAL);
 
-        getStyles().put("padding", new Insets(2, 2, 8, 2));
-        getStyles().put("fill", true);
+        getStyles().put(Style.padding, new Insets(2, 2, 8, 2));
+        getStyles().putBoolean(Style.fill, true);
 
-        titleLabel.getStyles().put("wrapText", true);
+        titleLabel.getStyles().putBoolean(Style.wrapText, true);
         add(titleLabel);
 
-        categoriesLabel.getStyles().put("wrapText", true);
+        categoriesLabel.getStyles().putBoolean(Style.wrapText, true);
         add(categoriesLabel);
 
-        submitterLabel.getStyles().put("wrapText", true);
+        submitterLabel.getStyles().putBoolean(Style.wrapText, true);
         add(submitterLabel);
     }
 
@@ -89,30 +90,30 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
             submitterLabel.setText("Submitter: " + submitter);
         }
 
-        Font font = (Font) listView.getStyles().get("font");
+        Font font = listView.getStyles().getFont(Style.font);
         Font largeFont = font.deriveFont(Font.BOLD, 14);
-        titleLabel.getStyles().put("font", largeFont);
-        categoriesLabel.getStyles().put("font", font);
-        submitterLabel.getStyles().put("font", font);
+        titleLabel.getStyles().put(Style.font, largeFont);
+        categoriesLabel.getStyles().put(Style.font, font);
+        submitterLabel.getStyles().put(Style.font, font);
 
         Color color;
         if (listView.isEnabled() && !disabled) {
             if (selected) {
                 if (listView.isFocused()) {
-                    color = (Color) listView.getStyles().get("selectionColor");
+                    color = listView.getStyles().getColor(Style.selectionColor);
                 } else {
-                    color = (Color) listView.getStyles().get("inactiveSelectionColor");
+                    color = listView.getStyles().getColor(Style.inactiveSelectionColor);
                 }
             } else {
-                color = (Color) listView.getStyles().get("color");
+                color = listView.getStyles().getColor(Style.color);
             }
         } else {
-            color = (Color) listView.getStyles().get("disabledColor");
+            color = listView.getStyles().getColor(Style.disabledColor);
         }
 
-        titleLabel.getStyles().put("color", color);
-        categoriesLabel.getStyles().put("color", color);
-        submitterLabel.getStyles().put("color", color);
+        titleLabel.getStyles().put(Style.color, color);
+        categoriesLabel.getStyles().put(Style.color, color);
+        submitterLabel.getStyles().put(Style.color, color);
     }
 
     @Override

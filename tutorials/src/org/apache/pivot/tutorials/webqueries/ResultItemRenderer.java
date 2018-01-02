@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 
 /**
  * List item renderer for query results.
@@ -43,8 +44,8 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
         add(addressLabel);
         add(phoneLabel);
 
-        getStyles().put("padding", new Insets(3, 2, 3, 2));
-        getStyles().put("spacing", 2);
+        getStyles().put(Style.padding, new Insets(3, 2, 3, 2));
+        getStyles().put(Style.spacing, 2);
     }
 
     @Override
@@ -76,28 +77,28 @@ public class ResultItemRenderer extends BoxPane implements ListView.ItemRenderer
             }
         }
 
-        Font font = (Font) listView.getStyles().get("font");
-        titleLabel.getStyles().put("font", font.deriveFont(font.getStyle() | Font.BOLD));
-        phoneLabel.getStyles().put("font", font);
-        addressLabel.getStyles().put("font", font);
+        Font font = listView.getStyles().getFont(Style.font);
+        titleLabel.getStyles().put(Style.font, font.deriveFont(font.getStyle() | Font.BOLD));
+        phoneLabel.getStyles().put(Style.font, font);
+        addressLabel.getStyles().put(Style.font, font);
 
         Color color;
         if (listView.isEnabled() && !disabled) {
             if (selected) {
                 if (listView.isFocused()) {
-                    color = (Color) listView.getStyles().get("selectionColor");
+                    color = listView.getStyles().getColor(Style.selectionColor);
                 } else {
-                    color = (Color) listView.getStyles().get("inactiveSelectionColor");
+                    color = listView.getStyles().getColor(Style.inactiveSelectionColor);
                 }
             } else {
-                color = (Color) listView.getStyles().get("color");
+                color = listView.getStyles().getColor(Style.color);
             }
         } else {
-            color = (Color) listView.getStyles().get("disabledColor");
+            color = listView.getStyles().getColor(Style.disabledColor);
         }
 
-        titleLabel.getStyles().put("color", color);
-        phoneLabel.getStyles().put("color", color);
-        addressLabel.getStyles().put("color", color);
+        titleLabel.getStyles().put(Style.color, color);
+        phoneLabel.getStyles().put(Style.color, color);
+        addressLabel.getStyles().put(Style.color, color);
     }
 }

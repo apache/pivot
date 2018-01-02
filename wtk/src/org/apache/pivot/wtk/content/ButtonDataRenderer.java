@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
@@ -36,13 +37,13 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     protected Label label = new Label();
 
     public ButtonDataRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         add(imageView);
         add(label);
 
-        imageView.getStyles().put("backgroundColor", null);
+        imageView.getStyles().put(Style.backgroundColor, null);
     }
 
     @Override
@@ -75,12 +76,12 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
             imageView.setVisible(true);
             imageView.setImage(icon);
 
-            imageView.getStyles().put("opacity", button.isEnabled() ? Float.valueOf(1.0f) : Float.valueOf(0.5f));
+            imageView.getStyles().put(Style.opacity, button.isEnabled() ? Float.valueOf(1.0f) : Float.valueOf(0.5f));
 
             if (getFillIcon()) {
                 int buttonWidth = button.getWidth();
                 int buttonHeight = button.getHeight();
-                Insets padding = (Insets) button.getStyles().get("padding");
+                Insets padding = (Insets) button.getStyles().get(Style.padding);
                 if (buttonWidth > 0) {
                     imageView.setPreferredWidth(Math.max(buttonWidth
                         - (padding.left + padding.right + 2), 0));
@@ -100,17 +101,17 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         } else {
             label.setVisible(true);
 
-            Font font = (Font) button.getStyles().get("font");
-            label.getStyles().put("font", font);
+            Font font = button.getStyles().getFont(Style.font);
+            label.getStyles().put(Style.font, font);
 
             Color color;
             if (button.isEnabled()) {
-                color = (Color) button.getStyles().get("color");
+                color = button.getStyles().getColor(Style.color);
             } else {
-                color = (Color) button.getStyles().get("disabledColor");
+                color = button.getStyles().getColor(Style.disabledColor);
             }
 
-            label.getStyles().put("color", color);
+            label.getStyles().put(Style.color, color);
         }
     }
 
@@ -139,12 +140,12 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     }
 
     public boolean getFillIcon() {
-        return ((Boolean) imageView.getStyles().get("fill")).booleanValue();
+        return imageView.getStyles().getBoolean(Style.fill);
     }
 
     public void setFillIcon(boolean fillIcon) {
-        imageView.getStyles().put("fill", Boolean.valueOf(fillIcon));
-        getStyles().put("fill", Boolean.valueOf(fillIcon));
+        imageView.getStyles().putBoolean(Style.fill, fillIcon);
+        getStyles().putBoolean(Style.fill, fillIcon);
     }
 
     @Override
