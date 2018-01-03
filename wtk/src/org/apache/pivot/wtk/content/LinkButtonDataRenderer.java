@@ -22,6 +22,7 @@ import java.awt.Font;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TextDecoration;
 import org.apache.pivot.wtk.media.Image;
@@ -35,7 +36,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
 
     @SuppressWarnings("unused")
     public LinkButtonDataRenderer() {
-        getStyles().put("horizontalSpacing", Integer.valueOf(4));
+        getStyles().putInt(Style.horizontalSpacing, 4);
 
         new TablePane.Column(this);  // note: this is useful, even if not used directly
         new TablePane.Column(this, 1, true);  // note: this is useful, even if not used directly
@@ -44,7 +45,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         row.add(imageView);
         row.add(label);
 
-        label.getStyles().put("wrapText", Boolean.valueOf(true));
+        label.getStyles().putBoolean(Style.wrapText, true);
     }
 
     @Override
@@ -61,9 +62,9 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         Image icon = null;
         String text = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            icon = buttonData.getIcon();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            icon = baseContent.getIcon();
         } else if (data instanceof Image) {
             icon = (Image) data;
         }
@@ -76,7 +77,7 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
             imageView.setVisible(true);
             imageView.setImage(icon);
 
-            imageView.getStyles().put("opacity", button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
+            imageView.getStyles().put(Style.opacity, button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
         }
 
         // Update the label
@@ -87,29 +88,29 @@ public class LinkButtonDataRenderer extends TablePane implements Button.DataRend
         } else {
             label.setVisible(true);
 
-            Font font = (Font) button.getStyles().get("font");
-            label.getStyles().put("font", font);
+            Font font = button.getStyles().getFont(Style.font);
+            label.getStyles().put(Style.font, font);
 
             Color color;
             if (button.isEnabled()) {
-                color = (Color) button.getStyles().get("color");
+                color = button.getStyles().getColor(Style.color);
             } else {
-                color = (Color) button.getStyles().get("disabledColor");
+                color = button.getStyles().getColor(Style.disabledColor);
             }
 
-            label.getStyles().put("color", color);
+            label.getStyles().put(Style.color, color);
         }
 
-        label.getStyles().put("textDecoration", highlighted ? TextDecoration.UNDERLINE : null);
+        label.getStyles().put(Style.textDecoration, highlighted ? TextDecoration.UNDERLINE : null);
     }
 
     @Override
     public String toString(Object data) {
         String string = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            string = buttonData.getText();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            string = baseContent.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();

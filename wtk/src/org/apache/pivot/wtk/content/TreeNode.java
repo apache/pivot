@@ -40,6 +40,10 @@ public class TreeNode extends UserContent {
         super(icon, text);
     }
 
+    public TreeNode(BaseContent content) {
+        super(content.icon, content.text);
+    }
+
     public TreeBranch getParent() {
         return parent;
     }

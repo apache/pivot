@@ -18,10 +18,14 @@ package org.apache.pivot.examples.wrapping;
 
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 
+/**
+ * A button data renderer that wraps the text.
+ */
 public class WrappingButtonDataRenderer extends Label implements Button.DataRenderer {
     public WrappingButtonDataRenderer() {
-        getStyles().put("wrapText", true);
+        getStyles().putBoolean(Style.wrapText, true);
     }
 
     @Override

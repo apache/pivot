@@ -18,22 +18,23 @@ package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Style;
 
 /**
  * Default menu button data renderer.
  */
 public class MenuButtonDataRenderer extends ButtonDataRenderer {
     public MenuButtonDataRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
     }
 
     @Override
     public void render(final Object data, final Button button, boolean highlight) {
-        Object dataMutable = data;
-        if (dataMutable == null) {
-            dataMutable = "";
+        Object localData = data;
+        if (localData == null) {
+            localData = "";
         }
 
-        super.render(dataMutable, button, highlight);
+        super.render(localData, button, highlight);
     }
 }

@@ -37,4 +37,9 @@ public class ListItem extends UserContent {
     public ListItem(Image icon, String text) {
         super(icon, text);
     }
+
+    public ListItem(BaseContent content) {
+        super(content.icon, content.text);
+    }
+
 }

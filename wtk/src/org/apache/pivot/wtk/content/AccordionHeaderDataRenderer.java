@@ -17,12 +17,13 @@
 package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Style;
 
 /**
  * Default accordion header data renderer.
  */
 public class AccordionHeaderDataRenderer extends ButtonDataRenderer {
     public AccordionHeaderDataRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
     }
 }

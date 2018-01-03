@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewHeader;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -38,9 +39,9 @@ public class TableViewHeaderDataRenderer extends BoxPane implements TableView.He
     protected Label label = new Label();
 
     public TableViewHeaderDataRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", new Insets(1, 2, 1, 2));
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        getStyles().put(Style.padding, new Insets(1, 2, 1, 2));
 
         add(imageView);
         add(label);
@@ -61,9 +62,9 @@ public class TableViewHeaderDataRenderer extends BoxPane implements TableView.He
         Image icon = null;
         String text = null;
 
-        if (data instanceof TableViewHeaderData) {
-            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData) data;
-            icon = tableViewHeaderData.getIcon();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            icon = baseContent.getIcon();
         } else if (data instanceof Image) {
             icon = (Image) data;
         }
@@ -76,7 +77,7 @@ public class TableViewHeaderDataRenderer extends BoxPane implements TableView.He
             imageView.setVisible(false);
         } else {
             imageView.setVisible(true);
-            imageView.getStyles().put("opacity", tableViewHeader.isEnabled() ? 1.0f : 0.5f);
+            imageView.getStyles().put(Style.opacity, tableViewHeader.isEnabled() ? 1.0f : 0.5f);
         }
 
         // Show/hide the label
@@ -90,20 +91,20 @@ public class TableViewHeaderDataRenderer extends BoxPane implements TableView.He
             // Update the label styles
             Component.StyleDictionary labelStyles = label.getStyles();
 
-            Object labelFont = tableViewHeader.getStyles().get("font");
+            Object labelFont = tableViewHeader.getStyles().get(Style.font);
             if (labelFont instanceof Font) {
-                labelStyles.put("font", labelFont);
+                labelStyles.put(Style.font, labelFont);
             }
 
             Object color = null;
             if (tableViewHeader.isEnabled()) {
-                color = tableViewHeader.getStyles().get("color");
+                color = tableViewHeader.getStyles().get(Style.color);
             } else {
-                color = tableViewHeader.getStyles().get("disabledColor");
+                color = tableViewHeader.getStyles().get(Style.disabledColor);
             }
 
             if (color instanceof Color) {
-                labelStyles.put("color", color);
+                labelStyles.put(Style.color, color);
             }
         }
     }
@@ -112,9 +113,9 @@ public class TableViewHeaderDataRenderer extends BoxPane implements TableView.He
     public String toString(Object data) {
         String string = null;
 
-        if (data instanceof TableViewHeaderData) {
-            TableViewHeaderData tableViewHeaderData = (TableViewHeaderData) data;
-            string = tableViewHeaderData.getText();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            string = baseContent.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();

@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextPane;
-import org.apache.pivot.wtk.content.ButtonData;
+import org.apache.pivot.wtk.content.BaseContent;
 
 /**
  * Node representing a live pivot component.
@@ -85,8 +85,8 @@ public class ComponentNode extends Block {
             return ((Label)comp).getText();
         } else if (comp instanceof Button) {
             Object buttonData = ((Button)comp).getButtonData();
-            if (buttonData instanceof ButtonData) {
-                return ((ButtonData)buttonData).getText();
+            if (buttonData instanceof BaseContent) {
+                return ((BaseContent)buttonData).getText();
             } else if (buttonData instanceof String) {
                 return (String)buttonData;
             } else {

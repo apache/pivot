@@ -37,4 +37,9 @@ public class TableViewHeaderData extends BaseContent {
     public TableViewHeaderData(Image icon, String text) {
         super(icon, text);
     }
+
+    public TableViewHeaderData(BaseContent content) {
+        super(content.icon, content.text);
+    }
+
 }

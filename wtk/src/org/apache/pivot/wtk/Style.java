@@ -25,17 +25,23 @@ package org.apache.pivot.wtk;
  * skins as appropriate.
  */
 public enum Style {
+    activeColor,
     backgroundColor,
+    checkmarkImage,
     color,
     disabledColor,
     fill,
     font,
     horizontalAlignment,
+    horizontalSpacing,
     inactiveSelectionColor,
+    margin,
     opacity,
     padding,
     selectionColor,
+    showKeyboardShortcuts,
     spacing,
+    textDecoration,
     verticalAlignment,
     wrapText
 }

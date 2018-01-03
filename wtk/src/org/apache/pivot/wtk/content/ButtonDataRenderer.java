@@ -60,9 +60,9 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         Image icon = null;
         String text = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            icon = buttonData.getIcon();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            icon = baseContent.getIcon();
         } else if (data instanceof Image) {
             icon = (Image) data;
         }
@@ -71,7 +71,6 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
         // Update the image view
         if (icon == null) {
             imageView.setVisible(false);
-            imageView.setImage(icon);
         } else {
             imageView.setVisible(true);
             imageView.setImage(icon);
@@ -152,9 +151,9 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     public String toString(Object data) {
         String string = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            string = buttonData.getText();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            string = baseContent.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();

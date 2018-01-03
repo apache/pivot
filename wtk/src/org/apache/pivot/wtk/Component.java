@@ -75,6 +75,10 @@ public abstract class Component implements ConstrainedVisual {
             return getFont(key.toString());
         }
 
+        public int getInt(Style key) {
+            return getInt(key.toString());
+        }
+
         public boolean getBoolean(Style key) {
             return getBoolean(key.toString());
         }
@@ -114,10 +118,18 @@ public abstract class Component implements ConstrainedVisual {
             return previousValue;
         }
 
+        public Object putInt(Style key, int value) {
+            return putInt(key.toString(), value);
+        }
+
         public Object putBoolean(Style key, boolean value) {
             return putBoolean(key.toString(), value);
         }
 
+        /**
+         * Not supported here.
+         * @throws UnsupportedOperationException always.
+         */
         @Override
         public Object remove(String key) {
             throw new UnsupportedOperationException();

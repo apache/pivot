@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Menu;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
@@ -40,7 +41,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
 
     @SuppressWarnings("unused")
     public MenuItemDataRenderer() {
-        getStyles().put("padding", new Insets(2));
+        getStyles().put(Style.padding, new Insets(2));
 
         new TablePane.Column(this, 1, true);  // note: this is useful, even if not used directly
         new TablePane.Column(this);  // note: this is useful, even if not used directly
@@ -48,14 +49,14 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         BoxPane boxPane = new BoxPane();
         boxPane.add(imageView);
         boxPane.add(textLabel);
-        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        boxPane.getStyles().put("padding", new Insets(0, 0, 0, 6));
+        boxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        boxPane.getStyles().put(Style.padding, new Insets(0, 0, 0, 6));
 
         TablePane.Row row = new TablePane.Row(this);
         row.add(boxPane);
         row.add(keyboardShortcutLabel);
 
-        imageView.getStyles().put("backgroundColor", null);
+        imageView.getStyles().put(Style.backgroundColor, null);
     }
 
     @Override
@@ -73,8 +74,8 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         String text = null;
         Keyboard.KeyStroke keyboardShortcut = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
+        if (data instanceof BaseContent) {
+            BaseContent buttonData = (BaseContent) data;
             icon = buttonData.getIcon();
 
             if (buttonData instanceof MenuItemData) {
@@ -89,44 +90,44 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
         // If the button is selected, icon is a checkmark; otherwise,
         // attempt to retrieve icon from button data
         if (button.isSelected()) {
-            icon = (Image) button.getStyles().get("checkmarkImage");
+            icon = (Image) button.getStyles().get(Style.checkmarkImage);
         }
 
         // Update the image view
         Menu.Item menuItem = (Menu.Item) button;
         Menu menu = (Menu) menuItem.getParent();
 
-        int margin = ((Integer) menu.getStyles().get("margin")).intValue();
-        Insets padding = (Insets) getStyles().get("padding");
+        int margin = menu.getStyles().getInt(Style.margin);
+        Insets padding = (Insets) getStyles().get(Style.padding);
 
         imageView.setImage(icon);
         imageView.setPreferredWidth(margin - padding.left * 2);
-        imageView.getStyles().put("opacity", button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
+        imageView.getStyles().put(Style.opacity, button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
 
         // Update the labels
         textLabel.setText(text != null ? text : "");
 
-        Font font = (Font) menu.getStyles().get("font");
-        textLabel.getStyles().put("font", font);
-        keyboardShortcutLabel.getStyles().put("font", font.deriveFont(Font.ITALIC));
+        Font font = menu.getStyles().getFont(Style.font);
+        textLabel.getStyles().put(Style.font, font);
+        keyboardShortcutLabel.getStyles().put(Style.font, font.deriveFont(Font.ITALIC));
 
         Color color;
         if (button.isEnabled()) {
             if (highlighted) {
-                color = (Color) menu.getStyles().get("activeColor");
+                color = menu.getStyles().getColor(Style.activeColor);
             } else {
-                color = (Color) menu.getStyles().get("color");
+                color = menu.getStyles().getColor(Style.color);
             }
         } else {
-            color = (Color) menu.getStyles().get("disabledColor");
+            color = menu.getStyles().getColor(Style.disabledColor);
         }
 
-        textLabel.getStyles().put("color", color);
-        keyboardShortcutLabel.getStyles().put("color", color);
+        textLabel.getStyles().put(Style.color, color);
+        keyboardShortcutLabel.getStyles().put(Style.color, color);
 
         boolean showKeyboardShortcuts = false;
-        if (menu.getStyles().containsKey("showKeyboardShortcuts")) {
-            showKeyboardShortcuts = ((Boolean) menu.getStyles().get("showKeyboardShortcuts")).booleanValue();
+        if (menu.getStyles().containsKey(Style.showKeyboardShortcuts)) {
+            showKeyboardShortcuts = menu.getStyles().getBoolean(Style.showKeyboardShortcuts);
         }
 
         if (showKeyboardShortcuts) {
@@ -142,9 +143,9 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
     public String toString(Object data) {
         String string = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            string = buttonData.getText();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            string = baseContent.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();

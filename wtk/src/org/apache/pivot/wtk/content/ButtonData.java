@@ -38,4 +38,8 @@ public class ButtonData extends UserContent {
         super(icon, text);
     }
 
+    public ButtonData(BaseContent content) {
+        super(content.icon, content.text);
+    }
+
 }

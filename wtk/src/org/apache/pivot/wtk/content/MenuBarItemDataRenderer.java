@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuBar;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
@@ -37,14 +38,14 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
     protected Label label = new Label();
 
     public MenuBarItemDataRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", new Insets(4, 6, 4, 6));
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        getStyles().put(Style.padding, new Insets(4, 6, 4, 6));
 
         add(imageView);
         add(label);
 
-        imageView.getStyles().put("backgroundColor", null);
+        imageView.getStyles().put(Style.backgroundColor, null);
     }
 
     @Override
@@ -61,9 +62,9 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         Image icon = null;
         String text = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            icon = buttonData.getIcon();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            icon = baseContent.getIcon();
         } else if (data instanceof Image) {
             icon = (Image) data;
         }
@@ -78,7 +79,7 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         } else {
             imageView.setVisible(true);
             imageView.setImage(icon);
-            imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+            imageView.getStyles().put(Style.opacity, button.isEnabled() ? 1.0f : 0.5f);
         }
 
         // Update the label
@@ -89,21 +90,21 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
         } else {
             label.setVisible(true);
 
-            Font font = (Font) menuBar.getStyles().get("font");
-            label.getStyles().put("font", font);
+            Font font = menuBar.getStyles().getFont(Style.font);
+            label.getStyles().put(Style.font, font);
 
             Color color;
             if (button.isEnabled()) {
                 if (highlighted) {
-                    color = (Color) menuBar.getStyles().get("activeColor");
+                    color = menuBar.getStyles().getColor(Style.activeColor);
                 } else {
-                    color = (Color) menuBar.getStyles().get("color");
+                    color = menuBar.getStyles().getColor(Style.color);
                 }
             } else {
-                color = (Color) menuBar.getStyles().get("disabledColor");
+                color = menuBar.getStyles().getColor(Style.disabledColor);
             }
 
-            label.getStyles().put("color", color);
+            label.getStyles().put(Style.color, color);
         }
     }
 
@@ -111,9 +112,9 @@ public class MenuBarItemDataRenderer extends BoxPane implements Button.DataRende
     public String toString(Object data) {
         String string = null;
 
-        if (data instanceof ButtonData) {
-            ButtonData buttonData = (ButtonData) data;
-            string = buttonData.getText();
+        if (data instanceof BaseContent) {
+            BaseContent baseContent = (BaseContent) data;
+            string = baseContent.getText();
         } else if (!(data instanceof Image)) {
             if (data != null) {
                 string = data.toString();

@@ -63,6 +63,15 @@ public class MenuItemData extends ButtonData {
     /**
      * Constructor.
      *
+     * @param content The icon and text to display in the menu item.
+     */
+    public MenuItemData(BaseContent content) {
+        this(content.icon, content.text, null);
+    }
+
+    /**
+     * Constructor.
+     *
      * @param icon The icon to display in the menu item.
      * @param text The text to display in the menu item.
      * @param keyboardShortcut The keyboard shortcut associated with this menu
@@ -82,6 +91,12 @@ public class MenuItemData extends ButtonData {
         this.keyboardShortcut = keyboardShortcut;
     }
 
+    /**
+     * Set the keyboard shortcut for this menu item using a string
+     * recognizable by the {@link Keyboard.KeyStroke#decode} method.
+     *
+     * @param keyboardShortcut The keystroke name.
+     */
     public void setKeyboardShortcut(String keyboardShortcut) {
         setKeyboardShortcut(Keyboard.KeyStroke.decode(keyboardShortcut));
     }
