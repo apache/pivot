@@ -976,6 +976,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 toolTipTextArea.setText(text);
                 toolTipTextArea.getStyles().put("wrapText", true);
+                toolTipTextArea.getStyles().put("backgroundColor", null);
 
                 tooltip.setContent(toolTipTextArea);
 

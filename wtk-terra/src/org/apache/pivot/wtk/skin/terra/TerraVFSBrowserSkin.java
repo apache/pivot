@@ -1130,6 +1130,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 toolTipTextArea.setText(text);
                 toolTipTextArea.getStyles().put("wrapText", true);
+                toolTipTextArea.getStyles().put("backgroundColor", null);
 
                 tooltip.setContent(toolTipTextArea);
 
