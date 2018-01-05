@@ -198,7 +198,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             preferredWidth = averageCharacterSize.width * lineWidth;
         }
 
-        preferredWidth += margin.left + margin.right;
+        preferredWidth += margin.getWidth();
 
         return preferredWidth;
     }
@@ -208,15 +208,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         int preferredHeight = 0;
 
         // Include margin in constraint
-        int breakWidth = (wrapText && width != -1) ? Math.max(width - (margin.left + margin.right),
-            0) : Integer.MAX_VALUE;
+        int breakWidth = (wrapText && width != -1) ?
+            Math.max(width - margin.getWidth(), 0) : Integer.MAX_VALUE;
 
         for (TextAreaSkinParagraphView paragraphView : paragraphViews) {
             paragraphView.setBreakWidth(breakWidth);
             preferredHeight += paragraphView.getHeight();
         }
 
-        preferredHeight += margin.top + margin.bottom;
+        preferredHeight += margin.getHeight();
 
         return preferredHeight;
     }
@@ -232,8 +232,8 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
             preferredHeight += paragraphView.getHeight();
         }
 
-        preferredWidth += margin.left + margin.right;
-        preferredHeight += margin.top + margin.bottom;
+        preferredWidth += margin.getWidth();
+        preferredHeight += margin.getHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -244,7 +244,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         TextArea textArea = (TextArea) getComponent();
 
         int width = getWidth();
-        int breakWidth = (wrapText) ? Math.max(width - (margin.left + margin.right), 0)
+        int breakWidth = (wrapText) ? Math.max(width - margin.getWidth(), 0)
             : Integer.MAX_VALUE;
 
         int y = margin.top;
@@ -313,7 +313,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
         graphics.setFont(font);
         graphics.translate(0, margin.top);
 
-        int breakWidth = (wrapText) ? Math.max(width - (margin.left + margin.right), 0)
+        int breakWidth = (wrapText) ? Math.max(width - margin.getWidth(), 0)
             : Integer.MAX_VALUE;
 
         for (int i = 0, n = paragraphViews.getLength(); i < n; i++) {
@@ -1632,7 +1632,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
 
                     if (lastRowIndex - firstRowIndex > 0) {
                         selection.add(new Area(new Rectangle(margin.left, leadingSelectionBounds.y
-                            + leadingSelectionBounds.height, width - (margin.left + margin.right),
+                            + leadingSelectionBounds.height, width - margin.getWidth(),
                             trailingSelectionBounds.y
                                 - (leadingSelectionBounds.y + leadingSelectionBounds.height))));
                     }
