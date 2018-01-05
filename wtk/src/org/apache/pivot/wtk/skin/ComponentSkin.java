@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.DragSource;
 import org.apache.pivot.wtk.DropTarget;
 import org.apache.pivot.wtk.FocusTraversalDirection;
+import org.apache.pivot.wtk.FontUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
 import org.apache.pivot.wtk.Keyboard.Modifier;
@@ -404,22 +405,10 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
      * @return The font corresponding to the specification.
      * @throws IllegalArgumentException if the given string is <tt>null</tt>
      * or empty or the font specification cannot be decoded.
+     * @see FontUtilities#decodeFont(String)
      */
     public static Font decodeFont(String value) {
-        Utils.checkNullOrEmpty(value, "font");
-
-        Font font;
-        if (value.startsWith("{")) {
-            try {
-                font = Theme.deriveFont(JSONSerializer.parseMap(value));
-            } catch (SerializationException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-        } else {
-            font = Font.decode(value);
-        }
-
-        return font;
+        return FontUtilities.decodeFont(value);
     }
 
     /**

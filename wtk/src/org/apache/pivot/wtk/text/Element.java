@@ -27,9 +27,9 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
+import org.apache.pivot.wtk.FontUtilities;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Theme;
-import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
  * Abstract base class for elements. <p> TODO Add style properties. <p> TODO Add
@@ -578,7 +578,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     public final void setFont(String font) {
-        setFont(ComponentSkin.decodeFont(font));
+        setFont(FontUtilities.decodeFont(font));
     }
 
     /**
