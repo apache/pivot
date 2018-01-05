@@ -41,24 +41,11 @@ public class TextArea extends Component {
      * Class representing a paragraph of text.
      */
     public static final class Paragraph {
-        private static class ParagraphListenerList extends ListenerList<ParagraphListener>
-            implements ParagraphListener {
-            @Override
-            public void textInserted(Paragraph paragraph, int index, int count) {
-                forEach(listener -> listener.textInserted(paragraph, index, count));
-            }
-
-            @Override
-            public void textRemoved(Paragraph paragraph, int index, int count) {
-                forEach(listener -> listener.textRemoved(paragraph, index, count));
-            }
-        }
-
         private StringBuilder characters = new StringBuilder(INITIAL_PARAGRAPH_CAPACITY);
         private TextArea textArea = null;
         private int offset = -1;
 
-        private ParagraphListenerList paragraphListeners = new ParagraphListenerList();
+        private ParagraphListener.Listeners paragraphListeners = new ParagraphListener.Listeners();
 
         public CharSequence getCharacters() {
             return characters;
@@ -125,9 +112,7 @@ public class TextArea extends Component {
         }
 
         public void removeText(int index, int count) {
-            if (index < 0 || index + count > characters.length()) {
-                throw new IndexOutOfBoundsException();
-            }
+            Utils.checkIndexBounds(index, count, 0, characters.length());
 
             characters.delete(index, index + count);
 
@@ -179,6 +164,22 @@ public class TextArea extends Component {
             @Override
             public void textRemoved(Paragraph paragraph, int index, int count) {
                 // empty block
+            }
+        }
+
+        /**
+         * Paragraph listeners.
+         */
+        public static class Listeners extends ListenerList<ParagraphListener>
+            implements ParagraphListener {
+            @Override
+            public void textInserted(Paragraph paragraph, int index, int count) {
+                forEach(listener -> listener.textInserted(paragraph, index, count));
+            }
+
+            @Override
+            public void textRemoved(Paragraph paragraph, int index, int count) {
+                forEach(listener -> listener.textRemoved(paragraph, index, count));
             }
         }
 
@@ -598,18 +599,13 @@ public class TextArea extends Component {
      * @return A string containing a copy of the text area's text content.
      */
     public String getText(int beginIndex, int endIndex) {
-        if (beginIndex > endIndex) {
-            throw new IllegalArgumentException();
-        }
-
-        if (beginIndex < 0 || endIndex > characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkTwoIndexBounds(beginIndex, endIndex, 0, characterCount);
 
         int count = endIndex - beginIndex;
         if (count == 0) {
             return "";
         }
+
         StringBuilder textBuilder = new StringBuilder(count);
 
         // Get paragraph and character offset at beginIndex
@@ -978,13 +974,7 @@ public class TextArea extends Component {
      * @param selectionLength The length of the selection.
      */
     public void setSelection(int selectionStart, int selectionLength) {
-        if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative.");
-        }
-
-        if (selectionStart < 0 || selectionStart + selectionLength > characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(selectionStart, selectionLength, 0, characterCount);
 
         int previousSelectionStart = this.selectionStart;
         int previousSelectionLength = this.selectionLength;
@@ -1046,9 +1036,7 @@ public class TextArea extends Component {
      * @param maximumLength The maximum length of the text area's text content.
      */
     public void setMaximumLength(int maximumLength) {
-        if (maximumLength < 0) {
-            throw new IllegalArgumentException("maximumLength is negative.");
-        }
+        Utils.checkNonNegative(maximumLength, "maximumLength");
 
         int previousMaximumLength = this.maximumLength;
 
