@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import org.apache.pivot.io.IOTask;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.ApplicationContext;
@@ -46,23 +47,17 @@ public abstract class Image implements Visual {
         ImageListener {
         @Override
         public void sizeChanged(Image image, int previousWidth, int previousHeight) {
-            for (ImageListener listener : this) {
-                listener.sizeChanged(image, previousWidth, previousHeight);
-            }
+            forEach(listener -> listener.sizeChanged(image, previousWidth, previousHeight));
         }
 
         @Override
         public void baselineChanged(Image image, int previousBaseline) {
-            for (ImageListener listener : this) {
-                listener.baselineChanged(image, previousBaseline);
-            }
+            forEach(listener -> listener.baselineChanged(image, previousBaseline));
         }
 
         @Override
         public void regionUpdated(Image image, int x, int y, int width, int height) {
-            for (ImageListener listener : this) {
-                listener.regionUpdated(image, x, y, width, height);
-            }
+            forEach(listener -> listener.regionUpdated(image, x, y, width, height));
         }
     }
 
@@ -128,7 +123,7 @@ public abstract class Image implements Visual {
 
     @Override
     public String toString() {
-        return getClass().getName() + " [" + getWidth() + "," + getHeight() + "]";
+        return getClass().getSimpleName() + " [" + getWidth() + "," + getHeight() + "]";
     }
 
     public static Image load(URL location) throws TaskExecutionException {
@@ -143,9 +138,7 @@ public abstract class Image implements Visual {
     }
 
     public static Image loadFromCache(URL location) {
-        if (location == null) {
-            throw new IllegalArgumentException("location is null.");
-        }
+        Utils.checkNull(location, "image location");
 
         Image image = (Image) ApplicationContext.getResourceCache().get(location);
         if (image == null) {
