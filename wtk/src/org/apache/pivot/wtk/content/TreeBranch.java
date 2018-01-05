@@ -26,6 +26,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -76,9 +77,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * @param iconURL The location of the expanded icon to set.
      */
     public void setExpandedIcon(URL iconURL) {
-        if (iconURL == null) {
-            throw new IllegalArgumentException("iconURL is null.");
-        }
+        Utils.checkNull(iconURL, "iconURL");
 
         setExpandedIcon(Image.loadFromCache(iconURL));
     }
@@ -91,28 +90,28 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * @see #setExpandedIcon(URL)
      */
     public void setExpandedIcon(String expandedIconName) {
-        if (expandedIconName == null) {
-            throw new IllegalArgumentException("expandedIconName is null.");
-        }
+        Utils.checkNullOrEmpty(expandedIconName, "expandedIconName");
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(expandedIconName.substring(1));
         if (url == null) {
-            throw new IllegalArgumentException("cannot find expandedIcon resource "
+            throw new IllegalArgumentException("Cannot find expandedIcon resource: "
                 + expandedIconName);
         }
         setExpandedIcon(url);
     }
 
-    @Override
-    public int add(TreeNode treeNode) {
-        if (treeNode == null) {
-            throw new IllegalArgumentException("treeNode is null.");
-        }
+    private void checkNode(TreeNode treeNode) {
+        Utils.checkNull(treeNode, "treeNode");
 
         if (treeNode.getParent() != null) {
             throw new IllegalArgumentException("treeNode already has a parent.");
         }
+    }
+
+    @Override
+    public int add(TreeNode treeNode) {
+        checkNode(treeNode);
 
         int index = treeNodes.add(treeNode);
         treeNode.setParent(this);
@@ -123,13 +122,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public void insert(TreeNode treeNode, int index) {
-        if (treeNode == null) {
-            throw new IllegalArgumentException("treeNode is null.");
-        }
-
-        if (treeNode.getParent() != null) {
-            throw new IllegalArgumentException("treeNode already has a parent.");
-        }
+        checkNode(treeNode);
 
         treeNodes.insert(treeNode, index);
         treeNode.setParent(this);
@@ -138,13 +131,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
 
     @Override
     public TreeNode update(int index, TreeNode treeNode) {
-        if (treeNode == null) {
-            throw new IllegalArgumentException("treeNode is null.");
-        }
-
-        if (treeNode.getParent() != null) {
-            throw new IllegalArgumentException("treeNode already has a parent.");
-        }
+        checkNode(treeNode);
 
         TreeNode previousTreeNode = treeNodes.update(index, treeNode);
         previousTreeNode.setParent(null);
@@ -200,8 +187,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     @Override
     public int indexOf(TreeNode treeNode) {
         // We can't use the ArrayList indexOf method, because if we have a
-        // comparator, it
-        // might return the wrong answer.
+        // comparator, it might return the wrong answer.
         int index = 0;
         int length = treeNodes.getLength();
         while (index < length) {
@@ -276,7 +262,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(getClass().getName());
+        sb.append(getClass().getSimpleName());
         sb.append(" [");
 
         int i = 0;

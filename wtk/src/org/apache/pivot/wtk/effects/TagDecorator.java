@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.effects;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.HorizontalAlignment;
@@ -48,13 +49,8 @@ public class TagDecorator implements Decorator {
 
     public TagDecorator(Visual tag, HorizontalAlignment horizontalAlignment,
         VerticalAlignment verticalAlignment, int xOffset, int yOffset) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
-
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.tag = tag;
         this.horizontalAlignment = horizontalAlignment;
@@ -76,9 +72,7 @@ public class TagDecorator implements Decorator {
     }
 
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
     }
@@ -88,9 +82,7 @@ public class TagDecorator implements Decorator {
     }
 
     public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
-        if (verticalAlignment == null) {
-            throw new IllegalArgumentException("verticalAlignment is null.");
-        }
+        Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
     }
