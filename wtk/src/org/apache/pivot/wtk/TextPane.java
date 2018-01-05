@@ -593,6 +593,14 @@ public class TextPane extends Container {
         return (document == null) ? 0 : document.getCharacterCount();
     }
 
+    /**
+     * Delete the currently selected text (if selection length &gt; 0),
+     * or the character before or after the current cursor position,
+     * depending on the <tt>backspace</tt> flag.
+     * @param backspace {@code true} if the single character delete is
+     * the character before the current position, or {@code false} for
+     * the character after (at) the current position.
+     */
     public void delete(boolean backspace) {
         if (selectionLength > 0) {
             removeText(selectionStart, selectionLength);
@@ -605,6 +613,12 @@ public class TextPane extends Container {
         }
     }
 
+    /**
+     * Remove the text from the document starting at the given position
+     * for the given number of characters.
+     * @param offset Starting location to remove text.
+     * @param characterCount The number of characters to remove.
+     */
     public void removeText(int offset, int characterCount) {
         checkDocumentExists();
 
@@ -638,7 +652,7 @@ public class TextPane extends Container {
             document.add(new Paragraph());
         }
 
-        // Move the caret to the merge point
+        // Move the caret to the removal point
         if (offset >= 0) {
             setSelection(offset, 0);
         }
@@ -874,16 +888,7 @@ public class TextPane extends Container {
      * {@code null} if there is no document.
      */
     public String getText(int beginIndex, int endIndex) {
-        if (beginIndex > endIndex) {
-            throw new IllegalArgumentException("Beginning index " + beginIndex +
-                " is greater than ending index " + endIndex + ".");
-        }
-
-        if (beginIndex < 0 || endIndex > getCharacterCount()) {
-            throw new IndexOutOfBoundsException("Beginning index = " + beginIndex +
-                ", ending index = " + endIndex + ", document.characterCount = " +
-                getCharacterCount() + ".");
-        }
+        Utils.checkTwoIndexBounds(beginIndex, endIndex, 0, getCharacterCount());
 
         int count = endIndex - beginIndex;
         if (count == 0) {
@@ -1044,10 +1049,7 @@ public class TextPane extends Container {
     public void setSelection(int selectionStart, int selectionLength) {
         checkDocumentExists();
 
-        if (selectionLength < 0) {
-            throw new IllegalArgumentException("selectionLength is negative, selectionLength="
-                + selectionLength);
-        }
+        Utils.checkNonNegative(selectionLength, "selectionLength");
 
         int composedTextLength = composedText != null ? (composedText.getEndIndex() - composedText.getBeginIndex()) : 0;
         indexBoundsCheck("selectionStart", selectionStart, 0, document.getCharacterCount() - 1 + composedTextLength);
