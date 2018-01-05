@@ -129,11 +129,12 @@ public class TextPane extends Container {
 
         @Override
         public void undo() {
-            Document tmp = new Document();
+            int currentOffset = this.offset;
             for (int i = 0; i < removed.getLength(); i++) {
-                tmp.add(removed.get(i));
+                Node removedNode = removed.get(i);
+                node.insertRange(removedNode, currentOffset);
+                currentOffset += removedNode.getCharacterCount();
             }
-            node.insertRange(tmp, offset);
         }
     }
 

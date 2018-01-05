@@ -438,7 +438,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
             // Notify parent
             super.rangeRemoved(offset, removedCharacterCount);
-            super.nodesRemoved(removed, offset);
+            super.nodesRemoved(this, removed, offset);
 
             // Fire event
             elementListeners.nodesRemoved(this, index, removed);

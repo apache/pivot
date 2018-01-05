@@ -248,15 +248,17 @@ public abstract class Node {
      * Therefore the topmost node will be given the offset into the whole document.
      * Listeners for this node will just be given the offset relative to this node.
      *
-     * @param removed The actual sequence of nodes removed from here.
+     * @param node The <em>original</em> node (that is, NOT the parent) where the
+     * nodes were removed from.
+     * @param removed The actual sequence of nodes removed from that node.
      * @param offsetArgument Offset relative to this node.
      */
-    protected void nodesRemoved(Sequence<Node> removed, int offsetArgument) {
+    protected void nodesRemoved(Node node, Sequence<Node> removed, int offsetArgument) {
         if (parent != null) {
-            parent.nodesRemoved(removed, offsetArgument + this.offset);
+            parent.nodesRemoved(node, removed, offsetArgument + this.offset);
         }
 
-        nodeListeners.nodesRemoved(this, removed, offsetArgument);
+        nodeListeners.nodesRemoved(node, removed, offsetArgument);
     }
 
     /**
