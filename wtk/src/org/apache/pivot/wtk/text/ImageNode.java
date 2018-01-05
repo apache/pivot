@@ -18,7 +18,9 @@ package org.apache.pivot.wtk.text;
 
 import java.net.URL;
 
+import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -29,9 +31,7 @@ public class ImageNode extends Block {
         ImageNodeListener {
         @Override
         public void imageChanged(ImageNode imageNode, Image previousImage) {
-            for (ImageNodeListener listener : this) {
-                listener.imageChanged(imageNode, previousImage);
-            }
+            forEach(listener -> listener.imageChanged(imageNode, previousImage));
         }
     }
 
@@ -80,10 +80,6 @@ public class ImageNode extends Block {
      * @param imageURL The location of the image to set.
      */
     public void setImage(URL imageURL) {
-        if (imageURL == null) {
-            throw new IllegalArgumentException("imageURL is null.");
-        }
-
         setImage(Image.loadFromCache(imageURL));
     }
 
@@ -93,18 +89,10 @@ public class ImageNode extends Block {
      *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
+     * @see ImageUtils#findByName(String)
      */
     public void setImage(String imageName) {
-        if (imageName == null) {
-            throw new IllegalArgumentException("imageName is null.");
-        }
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(imageName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("cannot find image resource " + imageName);
-        }
-        setImage(url);
+        setImage(ImageUtils.findByName(imageName));
     }
 
     @Override
@@ -129,9 +117,7 @@ public class ImageNode extends Block {
 
     @Override
     public Element getRange(int offset, int characterCount) {
-        if (offset < 0 || offset > 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(offset, 0, 1);
 
         if (characterCount != 1) {
             throw new IllegalArgumentException("Invalid characterCount.");
