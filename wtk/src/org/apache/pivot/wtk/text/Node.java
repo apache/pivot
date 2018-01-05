@@ -28,16 +28,12 @@ public abstract class Node {
         NodeListener {
         @Override
         public void parentChanged(Node node, Element previousParent) {
-            for (NodeListener listener : this) {
-                listener.parentChanged(node, previousParent);
-            }
+            forEach(listener -> listener.parentChanged(node, previousParent));
         }
 
         @Override
         public void offsetChanged(Node node, int previousOffset) {
-            for (NodeListener listener : this) {
-                listener.offsetChanged(node, previousOffset);
-            }
+            forEach(listener -> listener.offsetChanged(node, previousOffset));
         }
 
         /**
@@ -45,9 +41,7 @@ public abstract class Node {
          */
         @Override
         public void nodeInserted(Node node, int offset) {
-            for (NodeListener listener : this) {
-                listener.nodeInserted(node, offset);
-            }
+            forEach(listener -> listener.nodeInserted(node, offset));
         }
 
         /**
@@ -55,9 +49,7 @@ public abstract class Node {
          */
         @Override
         public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
-            for (NodeListener listener : this) {
-                listener.nodesRemoved(node, removed, offset);
-            }
+            forEach(listener -> listener.nodesRemoved(node, removed, offset));
         }
 
         /**
@@ -65,9 +57,7 @@ public abstract class Node {
          */
         @Override
         public void rangeInserted(Node node, int offset, int characterCount) {
-            for (NodeListener listener : this) {
-                listener.rangeInserted(node, offset, characterCount);
-            }
+            forEach(listener -> listener.rangeInserted(node, offset, characterCount));
         }
 
         /**
@@ -75,9 +65,7 @@ public abstract class Node {
          */
         @Override
         public void rangeRemoved(Node node, int offset, int characterCount) {
-            for (NodeListener listener : this) {
-                listener.rangeRemoved(node, offset, characterCount);
-            }
+            forEach(listener -> listener.rangeRemoved(node, offset, characterCount));
         }
     }
 
