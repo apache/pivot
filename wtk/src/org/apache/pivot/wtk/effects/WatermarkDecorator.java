@@ -24,9 +24,12 @@ import java.net.URL;
 
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.util.ImageUtils;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.FontUtilities;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
@@ -132,9 +135,7 @@ public class WatermarkDecorator implements Decorator {
      * @param font This decorator's font
      */
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         label.getStyles().put("font", font);
         validate();
@@ -146,19 +147,7 @@ public class WatermarkDecorator implements Decorator {
      * @param font This decorator's font
      */
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        if (font.startsWith("{")) {
-            try {
-                setFont(Theme.deriveFont(JSONSerializer.parseMap(font)));
-            } catch (SerializationException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-        } else {
-            setFont(Font.decode(font));
-        }
+        setFont(FontUtilities.decodeFont(font));
     }
 
     /**
@@ -189,10 +178,6 @@ public class WatermarkDecorator implements Decorator {
      * @param imageURL The location of the image to set.
      */
     public void setImage(URL imageURL) {
-        if (imageURL == null) {
-            throw new IllegalArgumentException("imageURL is null.");
-        }
-
         setImage(Image.loadFromCache(imageURL));
     }
 
@@ -201,18 +186,10 @@ public class WatermarkDecorator implements Decorator {
      *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
+     * @see ImageUtils#findByName(String)
      */
     public void setImage(String imageName) {
-        if (imageName == null) {
-            throw new IllegalArgumentException("imageName is null.");
-        }
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(imageName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("cannot find image resource " + imageName);
-        }
-        setImage(url);
+        setImage(ImageUtils.findByName(imageName));
     }
 
     /**
@@ -251,7 +228,7 @@ public class WatermarkDecorator implements Decorator {
      */
     public void setTheta(double theta) {
         if (theta < 0 || theta > Math.PI / 2) {
-            throw new IllegalArgumentException("Theta must be between 0 nd PI / 2.");
+            throw new IllegalArgumentException("Theta must be between 0 and PI / 2.");
         }
 
         this.theta = theta;
@@ -313,16 +290,6 @@ public class WatermarkDecorator implements Decorator {
 
         component = null;
         graphics = null;
-    }
-
-    @Override
-    public Bounds getBounds(Component componentArgument) {
-        return new Bounds(0, 0, componentArgument.getWidth(), componentArgument.getHeight());
-    }
-
-    @Override
-    public AffineTransform getTransform(Component componentArgument) {
-        return new AffineTransform();
     }
 
 }
