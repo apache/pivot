@@ -1270,7 +1270,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private static Component addColorControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        Color color = (Color) dictionary.get(key);
+        Color color = dictionary.getColor(key);
 
         ColorChooserButton colorChooserButton = new ColorChooserButton();
         colorChooserButton.setSelectedColor(color);
@@ -1298,7 +1298,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         ColorChooserButton colorChooserButton = (ColorChooserButton) controls.get(key);
 
         if (colorChooserButton != null) {
-            Color value = (Color) dictionary.get(key);
+            Color value = dictionary.getColor(key);
             colorChooserButton.setSelectedColor(value);
         }
     }
