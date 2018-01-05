@@ -32,7 +32,7 @@ import java.text.AttributedCharacterIterator;
 
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.text.CompositeIterator;
-import org.apache.pivot.util.Utils;
+import org.apache.pivot.util.ClassUtils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
@@ -528,7 +528,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         } else {
             textSubString = text.substring(start, start + length);
         }
-        return Utils.simpleDefaultToString(this) +
+        return ClassUtils.simpleToString(this) +
             " start=" + start + ",length=" + length + " [" + textSubString + "]";
     }
 

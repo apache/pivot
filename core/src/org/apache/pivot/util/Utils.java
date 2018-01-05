@@ -264,7 +264,6 @@ public class Utils {
             throw new IndexOutOfBoundsException("Index " + index + " out of bounds [" + start + ","
                 + end + "].");
         }
-
         if (index + count > end) {
             throw new IndexOutOfBoundsException("Index + count " + index + "," + count
                 + " out of bounds [" + start + "," + end + "].");
@@ -272,30 +271,26 @@ public class Utils {
     }
 
     /**
-     * Get the default value of {@link Object#toString} for any given object.
+     * Check that the given {@code startIndex} and {@code endIndex} are between
+     * the values of {@code start} and {@code end}.
      *
-     * @param obj Any object.
-     * @return The result of what {@link Object#toString} would return without
-     * any alternative implementation of <tt>toString()</tt> that may be implemented
-     * in the class or any intervening superclass.
+     * @param startIndex  The beginning index to check.
+     * @param endIndex    The ending index (inclusive) to check.
+     * @param start  The start of the acceptable range (inclusive).
+     * @param end    The end of the acceptable range (inclusive).
+     *
+     * @throws IllegalArgumentException if {@code endIndex} is &lt; {@code startIndex}.
+     * @throws IndexOutOfBoundsException if {@code startIndex} is &lt; {@code start} or {@code endIndex} is &gt; {@code end}.
      */
-    public static String defaultToString(Object obj) {
-        return obj.getClass().getName() + "@" +
-            Integer.toHexString(System.identityHashCode(obj));
-    }
+    public static void checkTwoIndexBounds(int startIndex, int endIndex, int start, int end) {
+        if (startIndex > endIndex) {
+            throw new IllegalArgumentException("endIndex (" + endIndex + ") < " + "startIndex (" + startIndex + ")");
+        }
 
-    /**
-     * Get the (simple) default value of {@link Object#toString} for any given object.
-     *
-     * @param obj Any object.
-     * @return The result of what {@link Object#toString} would return without
-     * any alternative implementation of <tt>toString()</tt> that may be implemented
-     * in the class or any intervening superclass, except that the simple name
-     * of the class is used (without any package designation).
-     */
-    public static String simpleDefaultToString(Object obj) {
-        return obj.getClass().getSimpleName() + "@" +
-            Integer.toHexString(System.identityHashCode(obj));
+        if (startIndex < start || endIndex > end) {
+            throw new IndexOutOfBoundsException("startIndex " + startIndex + " or endIndex " + endIndex
+                + " out of bounds [" + start + "," + end + "].");
+        }
     }
 
 }
