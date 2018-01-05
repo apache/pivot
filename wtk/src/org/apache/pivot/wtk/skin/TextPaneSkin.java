@@ -29,6 +29,7 @@ import java.awt.geom.Area;
 import java.text.AttributedCharacterIterator;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.text.CompositeIterator;
 import org.apache.pivot.util.Utils;
@@ -353,7 +354,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         } else {
             Dimensions documentDimensions = documentView.getPreferredSize(Integer.MAX_VALUE);
 
-            preferredWidth = documentDimensions.width + margin.left + margin.right;
+            preferredWidth = documentDimensions.width + margin.getWidth();
         }
 
         return preferredWidth;
@@ -368,14 +369,14 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         } else {
             int breakWidth;
             if (wrapText) {
-                breakWidth = Math.max(width - (margin.left + margin.right), 0);
+                breakWidth = Math.max(width - margin.getWidth(), 0);
             } else {
                 breakWidth = Integer.MAX_VALUE;
             }
 
             Dimensions documentDimensions = documentView.getPreferredSize(breakWidth);
 
-            preferredHeight = documentDimensions.height + margin.top + margin.bottom;
+            preferredHeight = documentDimensions.height + margin.getHeight();
         }
 
         return preferredHeight;
@@ -392,8 +393,8 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         } else {
             Dimensions documentDimensions = documentView.getPreferredSize(Integer.MAX_VALUE);
 
-            preferredWidth = documentDimensions.width + margin.left + margin.right;
-            preferredHeight = documentDimensions.height + margin.top + margin.bottom;
+            preferredWidth = documentDimensions.width + margin.getWidth();
+            preferredHeight = documentDimensions.height + margin.getHeight();
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -415,7 +416,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
             int breakWidth;
             if (wrapText) {
-                breakWidth = Math.max(width - (margin.left + margin.right), 0);
+                breakWidth = Math.max(width - margin.getWidth(), 0);
             } else {
                 breakWidth = Integer.MAX_VALUE;
             }
@@ -450,7 +451,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
             int width = getWidth();
             int breakWidth;
             if (wrapText) {
-                breakWidth = Math.max(width - (margin.left + margin.right), 0);
+                breakWidth = Math.max(width - margin.getWidth(), 0);
             } else {
                 breakWidth = Integer.MAX_VALUE;
             }
@@ -580,9 +581,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public void setTabWidth(int tabWidth) {
-        if (tabWidth < 0) {
-            throw new IllegalArgumentException("tabWidth is negative.");
-        }
+        Utils.checkNonNegative(tabWidth, "tabWidth");
 
         this.tabWidth = tabWidth;
     }
@@ -609,9 +608,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param font The new font for all the text.
      */
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
@@ -623,10 +620,6 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(decodeFont(font));
     }
 
@@ -636,10 +629,6 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -656,9 +645,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * @param color The new text color.
      */
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
@@ -671,11 +658,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * values recognized by Pivot}.
      */
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getInactiveColor() {
@@ -683,20 +666,14 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public void setInactiveColor(Color inactiveColor) {
-        if (inactiveColor == null) {
-            throw new IllegalArgumentException("inactiveColor is null.");
-        }
+        Utils.checkNull(inactiveColor, "inactiveColor");
 
         this.inactiveColor = inactiveColor;
         repaintComponent();
     }
 
     public final void setInactiveColor(String inactiveColor) {
-        if (inactiveColor == null) {
-            throw new IllegalArgumentException("inactiveColor is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(inactiveColor));
+        setColor(GraphicsUtilities.decodeColor(inactiveColor, "inactiveColor"));
     }
 
     public Color getSelectionColor() {
@@ -704,20 +681,14 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
-
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -725,20 +696,15 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
-
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor,
+            "selectionBackgroundColor"));
     }
 
     public Color getInactiveSelectionColor() {
@@ -746,20 +712,15 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public void setInactiveSelectionColor(Color inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
-
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor,
+            "inactiveSelectionColor"));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -774,7 +735,8 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor,
+            "inactiveSelectionBackgroundColor"));
     }
 
     /**
@@ -799,9 +761,18 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     /**
      * Sets the amount of space between the edge of the TextPane and its Document.
      *
-     * @param margin A dictionary with keys in the set {left, top, bottom, right}.
+     * @param margin A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setMargin(Dictionary<String, ?> margin) {
+        setMargin(new Insets(margin));
+    }
+
+    /**
+     * Sets the amount of space between the edge of the TextPane and its Document.
+     *
+     * @param margin A sequence with values in the order {top, left, bottom, right}.
+     */
+    public final void setMargin(Sequence<?> margin) {
         setMargin(new Insets(margin));
     }
 
@@ -1093,7 +1064,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
         Keyboard.Modifier commandModifier = Platform.getCommandModifier();
         boolean commandPressed = Keyboard.isPressed(commandModifier);
-        // boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
+        boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
         boolean shiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
         // boolean ctrlPressed = Keyboard.isPressed(Keyboard.Modifier.CTRL);
         boolean metaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
@@ -1165,12 +1136,13 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                 }
             } else if (keyCode == Keyboard.KeyCode.LEFT) {
                 if (shiftPressed) {
+                    // TODO: undo last right select depending... see TextInput skin
                     // Add the previous character to the selection
                     if (selectionStart > 0) {
                         selectionStart--;
                         selectionLength++;
                     }
-                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                } else if (wordNavPressed) {
                     // Move the caret to the start of the next word to our left
                     if (selectionStart > 0) {
                         // first, skip over any space immediately to our left
@@ -1203,6 +1175,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                 consumed = true;
             } else if (keyCode == Keyboard.KeyCode.RIGHT) {
                 if (shiftPressed) {
+                    // TODO: possibly undo the last left select... see TextInput skin
                     // Add the next character to the selection
                     if (selectionStart + selectionLength < document.getCharacterCount()) {
                         selectionLength++;
@@ -1210,7 +1183,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
 
                     textPane.setSelection(selectionStart, selectionLength);
                     scrollCharacterToVisible(selectionStart + selectionLength);
-                } else if (Keyboard.isPressed(Keyboard.Modifier.CTRL)) {
+                } else if (wordNavPressed) {
                     // Move the caret to the start of the next word to our right
                     if (selectionStart < document.getCharacterCount()) {
                         // first, skip over any word-letters to our right
@@ -1303,8 +1276,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                         // Get next insertion point from leading selection character
                         from = selectionStart;
                     } else {
-                        // Get next insertion point from trailing selection
-                        // character
+                        // Get next insertion point from trailing selection character
                         from = selectionStart + selectionLength - 1;
                     }
 
