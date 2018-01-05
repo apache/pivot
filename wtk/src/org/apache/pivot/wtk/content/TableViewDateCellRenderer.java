@@ -23,6 +23,7 @@ import java.util.Date;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.Utils;
 
 /**
  * Default renderer for table view cells that contain date data. Renders cell
@@ -36,13 +37,16 @@ public class TableViewDateCellRenderer extends TableViewCellRenderer {
     }
 
     public void setDateFormat(DateFormat dateFormat) {
-        if (dateFormat == null) {
-            throw new IllegalArgumentException("dateFormat is null.");
-        }
+        Utils.checkNull(dateFormat, "dateFormat");
 
         this.dateFormat = dateFormat;
     }
 
+    /**
+     * Sets the date format to the given pattern string.
+     * @param dateFormat A pattern string for use with {@link SimpleDateFormat}.
+     * @see #setDateFormat(DateFormat)
+     */
     public void setDateFormat(String dateFormat) {
         setDateFormat(new SimpleDateFormat(dateFormat));
     }

@@ -28,6 +28,7 @@ import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Spinner data model that presents a bounded list of calendar dates. <p> This
@@ -89,13 +90,8 @@ public class CalendarDateSpinnerData implements List<CalendarDate> {
      * @param upperBound The latest date to include in this spinner data.
      */
     public CalendarDateSpinnerData(CalendarDate lowerBound, CalendarDate upperBound) {
-        if (lowerBound == null) {
-            throw new IllegalArgumentException("lowerBound is null.");
-        }
-
-        if (upperBound == null) {
-            throw new IllegalArgumentException("upperBound is null.");
-        }
+        Utils.checkNull(lowerBound, "lowerBound");
+        Utils.checkNull(upperBound, "upperBound");
 
         if (lowerBound.compareTo(upperBound) > 0) {
             throw new IllegalArgumentException("lowerBound is after upperBound.");
