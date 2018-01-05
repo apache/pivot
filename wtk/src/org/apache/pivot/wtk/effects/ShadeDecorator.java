@@ -121,9 +121,7 @@ public class ShadeDecorator implements Decorator {
      * values recognized by Pivot}.
      */
     public final void setColor(String color) {
-        Utils.checkNull(color, "color");
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     @Override
@@ -142,16 +140,6 @@ public class ShadeDecorator implements Decorator {
 
         component = null;
         graphics = null;
-    }
-
-    @Override
-    public Bounds getBounds(Component componentValue) {
-        return new Bounds(componentValue.getSize());
-    }
-
-    @Override
-    public AffineTransform getTransform(Component componentArgument) {
-        return new AffineTransform();
     }
 
 }

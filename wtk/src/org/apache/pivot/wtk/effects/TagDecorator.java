@@ -125,10 +125,10 @@ public class TagDecorator implements Decorator {
 
     @Override
     public Bounds getBounds(Component component) {
-        Bounds boundsLocal;
+        Bounds localBounds;
 
         if (tag == null) {
-            boundsLocal = null;
+            localBounds = null;
         } else {
             int x, y;
 
@@ -174,14 +174,10 @@ public class TagDecorator implements Decorator {
                 }
             }
 
-            boundsLocal = new Bounds(x, y, tag.getWidth(), tag.getHeight());
+            localBounds = new Bounds(x, y, tag.getWidth(), tag.getHeight());
         }
 
-        return boundsLocal;
+        return localBounds;
     }
 
-    @Override
-    public AffineTransform getTransform(Component component) {
-        return new AffineTransform();
-    }
 }

@@ -78,9 +78,7 @@ public class DropShadowDecorator implements Decorator {
      * Pivot}.
      */
     public final void setShadowColor(String shadowColor) {
-        Utils.checkNull(shadowColor, "shadowColor");
-
-        setShadowColor(GraphicsUtilities.decodeColor(shadowColor));
+        setShadowColor(GraphicsUtilities.decodeColor(shadowColor, "shadowColor"));
     }
 
     /**

@@ -19,6 +19,7 @@ package org.apache.pivot.wtk.effects;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Point;
@@ -65,9 +66,7 @@ public class TranslationDecorator implements Decorator {
     }
 
     public void setOffset(Point offset) {
-        if (offset == null) {
-            throw new IllegalArgumentException("offset is null.");
-        }
+        Utils.checkNull(offset, "offset");
 
         setOffset(offset.x, offset.y);
     }
