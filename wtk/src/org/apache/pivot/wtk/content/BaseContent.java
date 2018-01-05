@@ -18,7 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.net.URL;
 
-import org.apache.pivot.util.Utils;
+import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.wtk.media.Image;
 
 /**
@@ -62,8 +62,6 @@ public class BaseContent {
      * @param iconURL The location of the icon to set.
      */
     public void setIcon(URL iconURL) {
-        Utils.checkNull(iconURL, "iconURL");
-
         setIcon(Image.loadFromCache(iconURL));
     }
 
@@ -73,16 +71,10 @@ public class BaseContent {
      *
      * @param iconName The resource name of the icon to set.
      * @see #setIcon(URL)
+     * @see ImageUtils#findByName(String)
      */
     public void setIcon(String iconName) {
-        Utils.checkNullOrEmpty(iconName, "iconName");
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(iconName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("Cannot find icon resource: " + iconName);
-        }
-        setIcon(url);
+        setIcon(ImageUtils.findByName(iconName));
     }
 
     public String getText() {

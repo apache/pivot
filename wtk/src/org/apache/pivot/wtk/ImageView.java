@@ -24,6 +24,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
@@ -96,16 +97,12 @@ public class ImageView extends Component {
         ImageViewListener {
         @Override
         public void imageChanged(ImageView imageView, Image previousImage) {
-            for (ImageViewListener listener : this) {
-                listener.imageChanged(imageView, previousImage);
-            }
+            forEach(listener -> listener.imageChanged(imageView, previousImage));
         }
 
         @Override
         public void asynchronousChanged(ImageView imageView) {
-            for (ImageViewListener listener : this) {
-                listener.asynchronousChanged(imageView);
-            }
+            forEach(listener -> listener.asynchronousChanged(imageView));
         }
     }
 
@@ -113,24 +110,18 @@ public class ImageView extends Component {
         ListenerList<ImageViewBindingListener> implements ImageViewBindingListener {
         @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {
-            for (ImageViewBindingListener listener : this) {
-                listener.imageKeyChanged(imageView, previousImageKey);
-            }
+            forEach(listener -> listener.imageKeyChanged(imageView, previousImageKey));
         }
 
         @Override
         public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType) {
-            for (ImageViewBindingListener listener : this) {
-                listener.imageBindTypeChanged(imageView, previousImageBindType);
-            }
+            forEach(listener -> listener.imageBindTypeChanged(imageView, previousImageBindType));
         }
 
         @Override
         public void imageBindMappingChanged(ImageView imageView,
             ImageView.ImageBindMapping previousImageBindMapping) {
-            for (ImageViewBindingListener listener : this) {
-                listener.imageBindMappingChanged(imageView, previousImageBindMapping);
-            }
+            forEach(listener -> listener.imageBindMappingChanged(imageView, previousImageBindMapping));
         }
     }
 
@@ -143,8 +134,7 @@ public class ImageView extends Component {
     private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
     private ImageViewBindingListenerList imageViewBindingListeners = new ImageViewBindingListenerList();
 
-    // Maintains a mapping of image URL to image views that should be notified
-    // when
+    // Maintains a mapping of image URL to image views that should be notified when
     // an asynchronously loaded image is available
     private static HashMap<java.net.URI, ArrayList<ImageView>> loadMap = new HashMap<>();
 
@@ -203,8 +193,7 @@ public class ImageView extends Component {
         Image imageLocal = (Image) ApplicationContext.getResourceCache().get(imageURL);
 
         if (imageLocal == null) {
-            // Convert to URI because using a URL as a key causes performance
-            // problems
+            // Convert to URI because using a URL as a key causes performance problems
             final java.net.URI imageURI;
             try {
                 imageURI = imageURL.toURI();
@@ -214,8 +203,7 @@ public class ImageView extends Component {
 
             if (asynchronous) {
                 if (loadMap.containsKey(imageURI)) {
-                    // Add this to the list of image views that are interested
-                    // in
+                    // Add this to the list of image views that are interested in
                     // the image at this URL
                     loadMap.get(imageURI).add(this);
                 } else {
@@ -224,9 +212,7 @@ public class ImageView extends Component {
                         public void taskExecuted(Task<Image> task) {
                             Image imageLoadedLocal = task.getResult();
 
-                            // Update the contents of all image views that
-                            // requested this
-                            // image
+                            // Update the contents of all image views that requested this image
                             for (ImageView imageView : loadMap.get(imageURI)) {
                                 imageView.setImage(imageLoadedLocal);
                             }
@@ -259,16 +245,10 @@ public class ImageView extends Component {
      *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
+     * @see ImageUtils#findByName(String)
      */
     public final void setImage(String imageName) {
-        Utils.checkNull(imageName, "imageName");
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(imageName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("cannot find image resource " + imageName);
-        }
-        setImage(url);
+        setImage(ImageUtils.findByName(imageName));
     }
 
     /**
