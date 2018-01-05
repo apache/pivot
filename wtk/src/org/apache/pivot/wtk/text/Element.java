@@ -29,6 +29,7 @@ import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.skin.ComponentSkin;
 
 /**
  * Abstract base class for elements. <p> TODO Add style properties. <p> TODO Add
@@ -39,51 +40,37 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         ElementListener {
         @Override
         public void nodeInserted(Element element, int index) {
-            for (ElementListener listener : this) {
-                listener.nodeInserted(element, index);
-            }
+            forEach(listener -> listener.nodeInserted(element, index));
         }
 
         @Override
         public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-            for (ElementListener listener : this) {
-                listener.nodesRemoved(element, index, nodes);
-            }
+            forEach(listener -> listener.nodesRemoved(element, index, nodes));
         }
 
         @Override
         public void fontChanged(Element element, Font previousFont) {
-            for (ElementListener listener : this) {
-                listener.fontChanged(element, previousFont);
-            }
+            forEach(listener -> listener.fontChanged(element, previousFont));
         }
 
         @Override
         public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
-            for (ElementListener listener : this) {
-                listener.backgroundColorChanged(element, previousBackgroundColor);
-            }
+            forEach(listener -> listener.backgroundColorChanged(element, previousBackgroundColor));
         }
 
         @Override
         public void foregroundColorChanged(Element element, Color previousForegroundColor) {
-            for (ElementListener listener : this) {
-                listener.foregroundColorChanged(element, previousForegroundColor);
-            }
+            forEach(listener -> listener.foregroundColorChanged(element, previousForegroundColor));
         }
 
         @Override
         public void underlineChanged(Element element) {
-            for (ElementListener listener : this) {
-                listener.underlineChanged(element);
-            }
+            forEach(listener -> listener.underlineChanged(element));
         }
 
         @Override
         public void strikethroughChanged(Element element) {
-            for (ElementListener listener : this) {
-                listener.strikethroughChanged(element);
-            }
+            forEach(listener -> listener.strikethroughChanged(element));
         }
     }
 
@@ -116,26 +103,24 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     @Override
     public void insertRange(Node range, int offset) {
         if (!(range instanceof Element)) {
-            throw new IllegalArgumentException("range is not an element.");
+            throw new IllegalArgumentException("Range node (" +
+                range.getClass().getSimpleName() + ") is not an Element.");
         }
 
-        if (offset < 0 || offset > characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(offset, 0, characterCount);
 
         Element element = (Element) range;
         int n = element.getLength();
 
         if (n > 0) {
-            // Clear the range content, since the child nodes will become
-            // children
+            // Clear the range content, since the child nodes will become children
             // of this element
-            Sequence<Node> nodesLocal = element.remove(0, n);
+            Sequence<Node> localNodes = element.remove(0, n);
 
             if (offset == characterCount) {
                 // Append the range contents to the end of this element
                 for (int i = 0; i < n; i++) {
-                    add(nodesLocal.get(i));
+                    add(localNodes.get(i));
                 }
             } else {
                 // Merge the range contents into this element
@@ -153,7 +138,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 }
 
                 for (int i = 0; i < n; i++) {
-                    insert(nodesLocal.get(i), index + i);
+                    insert(localNodes.get(i), index + i);
                 }
 
                 // Insert the remainder of the node
@@ -166,11 +151,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     public Node removeRange(int offset, int charCount) {
-        Utils.checkNonNegative(charCount, "characterCount");
-
-        if (offset < 0 || offset + charCount > this.characterCount) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(offset, charCount, 0, characterCount);
 
         // Create a copy of this element
         Node range = duplicate(false);
@@ -255,16 +236,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     public Element getRange(int offset, int charCount) {
-        Utils.checkNonNegative(charCount, "charCount");
-
-        if (offset < 0) {
-            throw new IndexOutOfBoundsException("offset < 0, offset=" + offset);
-        }
-        if (offset + charCount > this.characterCount) {
-            throw new IndexOutOfBoundsException("offset+characterCount > this.characterCount (offset="
-                + offset + " charCount=" + charCount + " this.characterCount="
-                + this.characterCount + ")");
-        }
+        Utils.checkIndexBounds(offset, charCount, 0, characterCount);
 
         // Create a copy of this element
         Element range = duplicate(false);
@@ -374,13 +346,10 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     @Override
     public void insert(Node node, int index) {
         Utils.checkNull(node, "node");
-
-        if (index < 0 || index > nodes.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(index, 0, nodes.getLength());
 
         if (node.getParent() != null) {
-            throw new IllegalArgumentException("node already has a parent.");
+            throw new IllegalArgumentException(node.getClass().getSimpleName() + " node already has a parent.");
         }
 
         if (node == this) {
@@ -434,9 +403,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     public Sequence<Node> remove(int index, int count) {
-        if (index < 0 || index + count > nodes.getLength()) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkIndexBounds(index, count, 0, nodes.getLength());
 
         // Remove the nodes
         Sequence<Node> removed = nodes.remove(index, count);
@@ -482,9 +449,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     public Node get(int index) {
-        if (index < 0 || index > nodes.getLength() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        Utils.checkZeroBasedIndex(index, nodes.getLength());
 
         return nodes.get(index);
     }
@@ -598,23 +563,12 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         return new ImmutableIterator<>(nodes.iterator());
     }
 
-    public void dumpOffsets() {
-        for (int i = 0, n = getLength(); i < n; i++) {
-            Node node = get(i);
-            System.out.println("[" + i + "] " + node.getOffset() + ":" + node.getCharacterCount());
-        }
-
-        System.out.println();
-    }
-
     public java.awt.Font getFont() {
         return font;
     }
 
     public void setFont(Font font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
+        Utils.checkNull(font, "font");
 
         Font previousFont = this.font;
         if (previousFont != font) {
@@ -624,19 +578,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     public final void setFont(String font) {
-        if (font == null) {
-            throw new IllegalArgumentException("font is null.");
-        }
-
-        if (font.startsWith("{")) {
-            try {
-                setFont(Theme.deriveFont(JSONSerializer.parseMap(font)));
-            } catch (SerializationException exception) {
-                throw new IllegalArgumentException(exception);
-            }
-        } else {
-            setFont(Font.decode(font));
-        }
+        setFont(ComponentSkin.decodeFont(font));
     }
 
     /**
@@ -668,11 +610,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @param foregroundColor The foreground color.
      */
     public void setForegroundColor(String foregroundColor) {
-        if (foregroundColor == null) {
-            throw new IllegalArgumentException("foregroundColor is null.");
-        }
-
-        setForegroundColor(GraphicsUtilities.decodeColor(foregroundColor));
+        setForegroundColor(GraphicsUtilities.decodeColor(foregroundColor, "foregroundColor"));
     }
 
     /**
@@ -704,11 +642,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @param backgroundColor The background color.
      */
     public void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor == null) {
-            throw new IllegalArgumentException("backgroundColor is null.");
-        }
-
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public boolean isUnderline() {
