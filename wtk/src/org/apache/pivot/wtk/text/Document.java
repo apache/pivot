@@ -41,7 +41,8 @@ public class Document extends Block {
     @Override
     public void insert(Node node, int index) {
         if (!(node instanceof Block)) {
-            throw new IllegalArgumentException("Child node must be an instance of "
+            throw new IllegalArgumentException("Child node (" +
+                node.getClass().getSimpleName() + ") must be an instance of "
                 + Block.class.getName());
         }
 
