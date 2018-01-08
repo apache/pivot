@@ -116,12 +116,12 @@ public class TextPane extends Container {
         public void undo();
     }
 
-    private static class RangeRemovedEdit implements Edit {
+    private static class NodesRemovedEdit implements Edit {
         private final Node node;
         private final int offset;
         private final Sequence<Node> removed;
 
-        public RangeRemovedEdit(Node node, Sequence<Node> removed, int offset) {
+        public NodesRemovedEdit(Node node, Sequence<Node> removed, int offset) {
             this.node = node;
             this.offset = offset;
             this.removed = removed;
@@ -135,6 +135,23 @@ public class TextPane extends Container {
                 node.insertRange(removedNode, currentOffset);
                 currentOffset += removedNode.getCharacterCount();
             }
+        }
+    }
+
+    private class RangeRemovedEdit implements Edit {
+        private final Node node;
+        private final int offset;
+        private final int characterCount;
+
+        public RangeRemovedEdit(Node node, int offset, int characterCount) {
+            this.node = node;
+            this.offset = offset;
+            this.characterCount = characterCount;
+        }
+
+        @Override
+        public void undo() {
+            // TODO: implement
         }
     }
 
@@ -264,7 +281,7 @@ public class TextPane extends Container {
             }
 
             if (!undoingHistory) {
-                addHistoryItem(new RangeRemovedEdit(node, removed, offset));
+                addHistoryItem(new NodesRemovedEdit(node, removed, offset));
             }
         }
 
@@ -301,6 +318,10 @@ public class TextPane extends Container {
                     }
                 }
             }
+
+/*            if (!undoingHistory) {
+                addHistoryItem(new RangeRemovedEdit(node, offset, characterCount));
+            } */
 
             if (!bulkOperation) {
                 textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
