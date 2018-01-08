@@ -257,66 +257,31 @@ abstract class TextPaneSkinNodeView implements NodeListener {
      * objects given the node model objects, we will implement this interface
      * for each node type, which will just create the appropriate view object.
      */
+    @FunctionalInterface
     private interface NodeCreator {
         TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node);
     }
 
     private static HashMap<Class<? extends Node>, NodeCreator> nodeViewCreatorMap = new HashMap<>();
     static {
-        nodeViewCreatorMap.put(Document.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinDocumentView(textPaneSkin, (Document)node);
-            }
-        });
-        nodeViewCreatorMap.put(Paragraph.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinParagraphView(textPaneSkin, (Paragraph)node);
-            }
-        });
-        nodeViewCreatorMap.put(TextNode.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)node);
-            }
-        });
-        nodeViewCreatorMap.put(ImageNode.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinImageNodeView(textPaneSkin, (ImageNode)node);
-            }
-        });
-        nodeViewCreatorMap.put(ComponentNode.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinComponentNodeView(textPaneSkin, (ComponentNode)node);
-            }
-        });
-        nodeViewCreatorMap.put(TextSpan.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinSpanView(textPaneSkin, (TextSpan)node);
-            }
-        });
-        nodeViewCreatorMap.put(NumberedList.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinNumberedListView(textPaneSkin, (NumberedList)node);
-            }
-        });
-        nodeViewCreatorMap.put(BulletedList.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinBulletedListView(textPaneSkin, (BulletedList)node);
-            }
-        });
-        nodeViewCreatorMap.put(List.Item.class, new NodeCreator() {
-            @Override
-            public TextPaneSkinNodeView create(TextPaneSkin textPaneSkin, Node node) {
-                return new TextPaneSkinListItemView(textPaneSkin, (List.Item)node);
-            }
-        });
+        nodeViewCreatorMap.put(Document.class, (textPaneSkin, node) ->
+            new TextPaneSkinDocumentView(textPaneSkin, (Document)node));
+        nodeViewCreatorMap.put(Paragraph.class, (textPaneSkin, node) ->
+            new TextPaneSkinParagraphView(textPaneSkin, (Paragraph)node));
+        nodeViewCreatorMap.put(TextNode.class, (textPaneSkin, node) ->
+            new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)node));
+        nodeViewCreatorMap.put(ImageNode.class, (textPaneSkin, node) ->
+            new TextPaneSkinImageNodeView(textPaneSkin, (ImageNode)node));
+        nodeViewCreatorMap.put(ComponentNode.class, (textPaneSkin, node) ->
+            new TextPaneSkinComponentNodeView(textPaneSkin, (ComponentNode)node));
+        nodeViewCreatorMap.put(TextSpan.class, (textPaneSkin, node) ->
+            new TextPaneSkinSpanView(textPaneSkin, (TextSpan)node));
+        nodeViewCreatorMap.put(NumberedList.class, (textPaneSkin, node) ->
+            new TextPaneSkinNumberedListView(textPaneSkin, (NumberedList)node));
+        nodeViewCreatorMap.put(BulletedList.class, (textPaneSkin, node) ->
+            new TextPaneSkinBulletedListView(textPaneSkin, (BulletedList)node));
+        nodeViewCreatorMap.put(List.Item.class, (textPaneSkin, node) ->
+            new TextPaneSkinListItemView(textPaneSkin, (List.Item)node));
     }
 
     /**
