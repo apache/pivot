@@ -142,16 +142,23 @@ public class TextPane extends Container {
         private final Node node;
         private final int offset;
         private final int characterCount;
+        private final CharSequence removedChars;
 
-        public RangeRemovedEdit(Node node, int offset, int characterCount) {
+        public RangeRemovedEdit(Node node, int offset, int characterCount, CharSequence removedChars) {
             this.node = node;
             this.offset = offset;
             this.characterCount = characterCount;
+            this.removedChars = removedChars;
         }
 
         @Override
         public void undo() {
-            // TODO: implement
+            if (!(node instanceof TextNode)) {
+                // TODO: can we / should we handle this?
+                throw new IllegalArgumentException("Undo of removed characters must be to a TextNode.");
+            }
+            TextNode textNode = (TextNode)node;
+            textNode.insertText(removedChars, offset - textNode.getDocumentOffset());
         }
     }
 
@@ -302,7 +309,7 @@ public class TextPane extends Container {
          * @param offset Offset into the document.
          */
         @Override
-        public void rangeRemoved(Node node, int offset, int characterCount) {
+        public void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars) {
             // if the end of the selection is in or after the range removed
             if (selectionStart + selectionLength > offset) {
                 // if the start of the selection is in the range removed
@@ -319,9 +326,9 @@ public class TextPane extends Container {
                 }
             }
 
-/*            if (!undoingHistory) {
-                addHistoryItem(new RangeRemovedEdit(node, offset, characterCount));
-            } */
+            if (!undoingHistory && removedChars != null) {
+                addHistoryItem(new RangeRemovedEdit(node, offset, characterCount, removedChars));
+            }
 
             if (!bulkOperation) {
                 textPaneCharacterListeners.charactersRemoved(TextPane.this, offset, characterCount);
@@ -335,7 +342,7 @@ public class TextPane extends Container {
     private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
     private TextPaneSelectionListenerList textPaneSelectionListeners = new TextPaneSelectionListenerList();
 
-    private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 30;
+    private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 100;
 
     public TextPane() {
         installSkin(TextPane.class);

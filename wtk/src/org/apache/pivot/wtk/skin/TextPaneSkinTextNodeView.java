@@ -104,8 +104,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             return new Dimensions((int)Math.ceil(textLayout.getAdvance()), lineHeight);
         }
         // TODO: should this be 0 height?  Maybe use average character height
-        Dimensions zero = new Dimensions(0, 0);
-        return zero;
+        return Dimensions.ZERO;
     }
 
     private AttributedStringCharacterIterator getCharIterator(TextNode textNode, int start, int end, Font font) {

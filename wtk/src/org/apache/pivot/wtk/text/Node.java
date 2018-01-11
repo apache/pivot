@@ -64,8 +64,8 @@ public abstract class Node {
          * @param offset Offset relative to this node.
          */
         @Override
-        public void rangeRemoved(Node node, int offset, int characterCount) {
-            forEach(listener -> listener.rangeRemoved(node, offset, characterCount));
+        public void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars) {
+            forEach(listener -> listener.rangeRemoved(node, offset, characterCount, removedChars));
         }
     }
 
@@ -229,15 +229,20 @@ public abstract class Node {
      * Therefore the topmost node will be given the offset into the whole document.
      * Listeners for this node will just be given the offset relative to this node.
      *
-     * @param offsetArgument Offset relative to this node.
+     * @param node The <em>original</em> node (that is, NOT the parent) where the
+     * range was removed.
+     * @param offsetArgument Offset relative to the current node.
      * @param characterCount Count of characters removed.
+     * @param removedChars The optional actual characters removed (only in the case
+     * of direct removal from a text node).
      */
-    protected void rangeRemoved(int offsetArgument, int characterCount) {
+    protected void rangeRemoved(Node node, int offsetArgument, int characterCount,
+        CharSequence removedChars) {
         if (parent != null) {
-            parent.rangeRemoved(offsetArgument + this.offset, characterCount);
+            parent.rangeRemoved(node, offsetArgument + this.offset, characterCount, removedChars);
         }
 
-        nodeListeners.rangeRemoved(this, offsetArgument, characterCount);
+        nodeListeners.rangeRemoved(node, offsetArgument, characterCount, removedChars);
     }
 
     /**
@@ -249,7 +254,7 @@ public abstract class Node {
      * Listeners for this node will just be given the offset relative to this node.
      *
      * @param node The <em>original</em> node (that is, NOT the parent) where the
-     * nodes were removed from.
+     * nodes were removed.
      * @param removed The actual sequence of nodes removed from that node.
      * @param offsetArgument Offset relative to this node.
      */

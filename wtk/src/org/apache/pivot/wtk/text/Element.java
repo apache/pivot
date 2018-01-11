@@ -437,7 +437,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
             }
 
             // Notify parent
-            super.rangeRemoved(offset, removedCharacterCount);
+            super.rangeRemoved(this, offset, removedCharacterCount, null);
             super.nodesRemoved(this, removed, offset);
 
             // Fire event
@@ -542,7 +542,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    protected void rangeRemoved(int offset, int charCount) {
+    protected void rangeRemoved(Node originalNode, int offset, int charCount, CharSequence removedChars) {
         this.characterCount -= charCount;
 
         // Update the offsets of consecutive nodes, if any
@@ -555,7 +555,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
             }
         }
 
-        super.rangeRemoved(offset, charCount);
+        super.rangeRemoved(originalNode, offset, charCount, removedChars);
     }
 
     @Override

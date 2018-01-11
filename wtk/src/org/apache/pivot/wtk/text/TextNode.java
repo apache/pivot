@@ -107,10 +107,12 @@ public final class TextNode extends Node {
         Utils.checkIndexBounds(index, count, 0, characters.length());
 
         if (count > 0) {
+            // Save the deleted characters for possible undo later
+            CharSequence removedChars = getCharacters(index, index + count);
             characters.delete(index, index + count);
 
             textNodeListeners.charactersRemoved(this, index, count);
-            rangeRemoved(index, count);
+            rangeRemoved(this, index, count, removedChars);
         }
     }
 

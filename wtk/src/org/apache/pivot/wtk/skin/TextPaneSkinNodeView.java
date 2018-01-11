@@ -238,7 +238,8 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     }
 
     @Override
-    public void rangeRemoved(Node nodeArgument, int offset, int characterCount) {
+    public void rangeRemoved(Node nodeArgument, int offset, int characterCount,
+        CharSequence removedChars) {
         // No-op
     }
 

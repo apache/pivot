@@ -49,7 +49,7 @@ public interface NodeListener {
         }
 
         @Override
-        public void rangeRemoved(Node node, int offset, int characterCount) {
+        public void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars) {
             // empty block
         }
     }
@@ -103,6 +103,9 @@ public interface NodeListener {
      * @param node           The node where text was removed.
      * @param offset         Starting offset of the text removal.
      * @param characterCount Count of characters removed.
+     * @param removedChars   (optional) Actual characters that were removed
+     *                       if the removal was directly from a text node,
+     *                       otherwise this will be null.
      */
-    public void rangeRemoved(Node node, int offset, int characterCount);
+    public void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars);
 }
