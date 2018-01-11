@@ -25,7 +25,7 @@ import java.io.StringWriter;
 import java.net.URL;
 
 import org.apache.pivot.beans.DefaultProperty;
-import org.apache.pivot.collections.LinkedList;
+import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.util.ListenerList;
@@ -265,7 +265,7 @@ public class TextPane extends Container {
             }
 
             if (!undoingHistory) {
-                addHistoryItem(new RangeInsertedEdit(node, offset, characterCount));
+                editHistory.push(new RangeInsertedEdit(node, offset, characterCount));
             }
 
             if (!bulkOperation) {
@@ -288,7 +288,7 @@ public class TextPane extends Container {
             }
 
             if (!undoingHistory) {
-                addHistoryItem(new NodesRemovedEdit(node, removed, offset));
+                editHistory.push(new NodesRemovedEdit(node, removed, offset));
             }
         }
 
@@ -327,7 +327,7 @@ public class TextPane extends Container {
             }
 
             if (!undoingHistory && removedChars != null) {
-                addHistoryItem(new RangeRemovedEdit(node, offset, characterCount, removedChars));
+                editHistory.push(new RangeRemovedEdit(node, offset, characterCount, removedChars));
             }
 
             if (!bulkOperation) {
@@ -336,7 +336,7 @@ public class TextPane extends Container {
         }
     };
 
-    private LinkedList<Edit> editHistory = new LinkedList<>();
+    private LinkedStack<Edit> editHistory = new LinkedStack<>(MAXIMUM_EDIT_HISTORY_LENGTH);
 
     private TextPaneListenerList textPaneListeners = new TextPaneListenerList();
     private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
@@ -829,20 +829,11 @@ public class TextPane extends Container {
     }
 
     public void undo() {
-        int n = editHistory.getLength();
-        if (n > 0) {
+        if (editHistory.getDepth() > 0) {
             undoingHistory = true;
-            Edit edit = editHistory.remove(n - 1, 1).get(0);
+            Edit edit = editHistory.pop();
             edit.undo();
             undoingHistory = false;
-        }
-    }
-
-    private void addHistoryItem(Edit edit) {
-        editHistory.add(edit);
-
-        if (editHistory.getLength() > MAXIMUM_EDIT_HISTORY_LENGTH) {
-            editHistory.remove(0, 1);
         }
     }
 
