@@ -1267,6 +1267,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * {@link KeyCode#DOWN DOWN} Increases the selection size by including the
      * next enabled row when select mode is {@link SelectMode#MULTI}<br>
      * {@code Cmd/Ctrl-A} in {@link SelectMode#MULTI} select mode to select everything<br>
+     * {@code Cmd/Ctrl-U} will unselect whatever is selected<br>
      * {@link KeyCode#SPACE SPACE} wil select/unselect the "current" location
      */
     @Override
@@ -1358,6 +1359,23 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         tableView.selectAll();
                         lastKeyboardSelectIndex = tableView.getTableData().getLength() - 1; // TODO: what should it be?
                         consumed = true;
+                    }
+                }
+                break;
+            }
+
+            case Keyboard.KeyCode.U: {
+                Modifier cmdModifier = Platform.getCommandModifier();
+                if (Keyboard.isPressed(cmdModifier)) {
+                    switch (selectMode) {
+                        case NONE:
+                            break;
+                        case SINGLE:
+                        case MULTI:
+                            tableView.clearSelection();
+                            lastKeyboardSelectIndex = 0; // TODO: what should it be?
+                            consumed = true;
+                            break;
                     }
                 }
                 break;
