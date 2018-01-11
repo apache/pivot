@@ -61,6 +61,16 @@ public class SynchronizedStack<T> implements Stack<T> {
     }
 
     @Override
+    public int getMaxDepth() {
+        return stack.getMaxDepth();
+    }
+
+    @Override
+    public void setMaxDepth(int maxDepth) {
+        stack.setMaxDepth(maxDepth);
+    }
+
+    @Override
     public synchronized void push(T item) {
         stack.push(item);
         stackListeners.itemPushed(this, item);

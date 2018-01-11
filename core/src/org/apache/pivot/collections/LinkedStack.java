@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Stack} interface that is backed by a linked
@@ -31,6 +32,7 @@ public class LinkedStack<T> implements Stack<T>, Serializable {
     private static final long serialVersionUID = -6276454328308188689L;
 
     private LinkedList<T> linkedList = new LinkedList<>();
+    private int maxDepth = 0;
     private transient StackListenerList<T> stackListeners = new StackListenerList<>();
 
     public LinkedStack() {
@@ -41,17 +43,51 @@ public class LinkedStack<T> implements Stack<T>, Serializable {
         setComparator(comparator);
     }
 
+    public LinkedStack(int maxDepth) {
+        setMaxDepth(maxDepth);
+    }
+
+    public LinkedStack(int maxDepth, Comparator<T> comparator) {
+        setMaxDepth(maxDepth);
+        setComparator(comparator);
+    }
+
+    /**
+     * @return The maximum depth this stack is permitted to reach,
+     * where 0 means unlimited.
+     */
+    @Override
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    /**
+     * Set the maximum depth permitted for this stack, 0 means unlimited.
+     *
+     * @param maxDepth The new maximum depth for this stack.
+     */
+    @Override
+    public void setMaxDepth(int maxDepth) {
+        Utils.checkNonNegative(maxDepth, "maxDepth");
+        this.maxDepth = maxDepth;
+    }
+
     @Override
     public void push(T item) {
         linkedList.add(item);
         stackListeners.itemPushed(this, item);
+
+        // Now check for too many items on this stack
+        if (maxDepth > 0 && linkedList.getLength() > maxDepth) {
+            linkedList.remove(0, 1);
+        }
     }
 
     @Override
     public T pop() {
         int length = linkedList.getLength();
         if (length == 0) {
-            throw new IllegalStateException("queue is empty");
+            throw new IllegalStateException((getComparator()==null?"stack":"queue")+" is empty");
         }
 
         T item = linkedList.remove(length - 1, 1).get(0);

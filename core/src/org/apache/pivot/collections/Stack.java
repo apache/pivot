@@ -92,6 +92,18 @@ public interface Stack<T> extends Collection<T> {
     public int getDepth();
 
     /**
+     * @return The maximum permitted stack/queue length (0 = unlimited).
+     */
+    public int getMaxDepth();
+
+    /**
+     * Set the maximum permitted stack/queue depth (0 = unlimited).
+     *
+     * @param maxDepth The new maximum depth.
+     */
+    public void setMaxDepth(int maxDepth);
+
+    /**
      * @return The stack listener list.
      */
     public ListenerList<StackListener<T>> getStackListeners();

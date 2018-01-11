@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Stack} interface that is backed by an array.
@@ -30,6 +31,7 @@ public class ArrayStack<T> implements Stack<T>, Serializable {
     private static final long serialVersionUID = 3175064065273930731L;
 
     private ArrayList<T> arrayList = new ArrayList<>();
+    private int maxDepth = 0;
     private transient StackListenerList<T> stackListeners = new StackListenerList<>();
 
     public ArrayStack() {
@@ -44,17 +46,53 @@ public class ArrayStack<T> implements Stack<T>, Serializable {
         ensureCapacity(capacity);
     }
 
+    public ArrayStack(int capacity, int maxDepth) {
+        ensureCapacity(capacity);
+        setMaxDepth(maxDepth);
+    }
+
+    public ArrayStack(int capacity, int maxDepth, Comparator<T> comparator) {
+        ensureCapacity(capacity);
+        setMaxDepth(maxDepth);
+        setComparator(comparator);
+    }
+
+    /**
+     * @return The maximum depth this stack is permitted to reach,
+     * where 0 means unlimited.
+     */
+    @Override
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    /**
+     * Set the maximum depth permitted for this stack, 0 means unlimited.
+     *
+     * @param maxDepth The new maximum depth for this stack.
+     */
+    @Override
+    public void setMaxDepth(int maxDepth) {
+        Utils.checkNonNegative(maxDepth, "maxDepth");
+        this.maxDepth = maxDepth;
+    }
+
     @Override
     public void push(T item) {
         arrayList.add(item);
         stackListeners.itemPushed(this, item);
+
+        // Now check for too many items on this stack
+        if (maxDepth > 0 && arrayList.getLength() > maxDepth) {
+            arrayList.remove(0, 1);
+        }
     }
 
     @Override
     public T pop() {
         int length = arrayList.getLength();
         if (length == 0) {
-            throw new IllegalStateException("queue is empty");
+            throw new IllegalStateException((getComparator()==null?"stack":"queue")+" is empty");
         }
 
         T item = arrayList.remove(length - 1, 1).get(0);

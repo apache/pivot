@@ -17,6 +17,7 @@
 package org.apache.pivot.collections.test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.pivot.collections.ArrayStack;
 import org.apache.pivot.collections.LinkedStack;
@@ -24,10 +25,12 @@ import org.apache.pivot.collections.Stack;
 import org.junit.Test;
 
 public class StackTest {
+    private static final int MAX_STACK_DEPTH = 10;
+
     @Test
     public void stackTest() {
-        testStack(new ArrayStack<String>(5));
-        testStack(new LinkedStack<String>());
+        testStack(new ArrayStack<String>(MAX_STACK_DEPTH, MAX_STACK_DEPTH));
+        testStack(new LinkedStack<String>(MAX_STACK_DEPTH));
     }
 
     private static void testStack(Stack<String> stack) {
@@ -47,5 +50,11 @@ public class StackTest {
             assertTrue(c == 'A');
             i--;
         }
+
+        // Ensure we only get max depth items even if we push more
+        for (i = 0; i <= MAX_STACK_DEPTH + 5; i++) {
+            stack.push("This is a test");
+        }
+        assertEquals(stack.getDepth(), MAX_STACK_DEPTH);
     }
 }
