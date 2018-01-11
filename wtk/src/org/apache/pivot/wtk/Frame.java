@@ -85,18 +85,22 @@ public class Frame extends Window {
         requestActive();
     }
 
+    private LinkedList<Component> getAncestorPath(Component component) {
+        LinkedList<Component> path = new LinkedList<>();
+
+        for (Component ancestor = component;
+             !(ancestor instanceof Display);
+             ancestor = ancestor.getParent()) {
+            path.insert(ancestor, 0);
+        }
+
+        return path;
+    }
+
     @Override
     protected void descendantGainedFocus(Component descendant, Component previousFocusedComponent) {
         if (menuBar != null) {
-            LinkedList<Component> path = new LinkedList<>();
-
-            Component ancestor = descendant;
-            while (!(ancestor instanceof Display)) {
-                path.insert(ancestor, 0);
-                ancestor = ancestor.getParent();
-            }
-
-            for (Component component : path) {
+            for (Component component : getAncestorPath(descendant)) {
                 MenuHandler menuHandler = component.getMenuHandler();
 
                 if (menuHandler != null) {
@@ -111,15 +115,7 @@ public class Frame extends Window {
     @Override
     protected void descendantLostFocus(Component descendant) {
         if (menuBar != null) {
-            LinkedList<Component> path = new LinkedList<>();
-
-            Component ancestor = descendant;
-            while (!(ancestor instanceof Display)) {
-                path.insert(ancestor, 0);
-                ancestor = ancestor.getParent();
-            }
-
-            for (Component component : path) {
+            for (Component component : getAncestorPath(descendant)) {
                 MenuHandler menuHandler = component.getMenuHandler();
 
                 if (menuHandler != null) {
