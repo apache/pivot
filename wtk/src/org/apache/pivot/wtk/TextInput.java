@@ -19,7 +19,7 @@ package org.apache.pivot.wtk;
 import java.awt.Toolkit;
 import java.io.IOException;
 
-import org.apache.pivot.collections.LinkedList;
+import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.util.ListenerList;
@@ -128,7 +128,7 @@ public class TextInput extends Component {
     private boolean strictValidation = false;
     private boolean textValid = true;
 
-    private LinkedList<Edit> editHistory = new LinkedList<>();
+    private LinkedStack<Edit> editHistory = new LinkedStack<>(MAXIMUM_EDIT_HISTORY_LENGTH);
 
     private TextInputListener.Listeners textInputListeners = new TextInputListener.Listeners();
     private TextInputContentListener.Listeners textInputContentListeners = new TextInputContentListener.Listeners();
@@ -224,7 +224,7 @@ public class TextInput extends Component {
 
                 // Add an insert history item
                 if (addToEditHistory) {
-                    addHistoryItem(new InsertTextEdit(text, index));
+                    editHistory.push(new InsertTextEdit(text, index));
                 }
 
                 // Update selection
@@ -267,7 +267,7 @@ public class TextInput extends Component {
             if (vote == Vote.APPROVE) {
                 // Add a remove history item
                 if (addToEditHistory) {
-                    addHistoryItem(new RemoveTextEdit(index, count));
+                    editHistory.push(new RemoveTextEdit(index, count));
                 }
 
                 // Remove the text
@@ -410,18 +410,9 @@ public class TextInput extends Component {
     }
 
     public void undo() {
-        int n = editHistory.getLength();
-        if (n > 0) {
-            Edit edit = editHistory.remove(n - 1, 1).get(0);
+        if (editHistory.getDepth() > 0) {
+            Edit edit = editHistory.pop();
             edit.undo();
-        }
-    }
-
-    private void addHistoryItem(Edit edit) {
-        editHistory.add(edit);
-
-        if (editHistory.getLength() > MAXIMUM_EDIT_HISTORY_LENGTH) {
-            editHistory.remove(0, 1);
         }
     }
 

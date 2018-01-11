@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
-import org.apache.pivot.collections.LinkedList;
+import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ImmutableIterator;
@@ -556,7 +556,7 @@ public class TextArea extends Component {
     private BindType textBindType = BindType.BOTH;
     private TextBindMapping textBindMapping = null;
 
-    private LinkedList<Edit> editHistory = new LinkedList<>();
+    private LinkedStack<Edit> editHistory = new LinkedStack<>(MAXIMUM_EDIT_HISTORY_LENGTH);
 
     private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
     private TextAreaContentListenerList textAreaContentListeners = new TextAreaContentListenerList();
@@ -769,7 +769,7 @@ public class TextArea extends Component {
 
             // Add an insert history item
             if (addToEditHistory) {
-                addHistoryItem(new InsertTextEdit(text, index));
+                editHistory.push(new InsertTextEdit(text, index));
             }
         }
     }
@@ -786,7 +786,7 @@ public class TextArea extends Component {
         if (count > 0) {
             // Add a remove history item
             if (addToEditHistory) {
-                addHistoryItem(new RemoveTextEdit(index, count));
+                editHistory.push(new RemoveTextEdit(index, count));
             }
 
             // Identify the leading and trailing paragraph indexes
@@ -926,18 +926,9 @@ public class TextArea extends Component {
     }
 
     public void undo() {
-        int n = editHistory.getLength();
-        if (n > 0) {
-            Edit edit = editHistory.remove(n - 1, 1).get(0);
+        if (editHistory.getDepth() > 0) {
+            Edit edit = editHistory.pop();
             edit.undo();
-        }
-    }
-
-    private void addHistoryItem(Edit edit) {
-        editHistory.add(edit);
-
-        if (editHistory.getLength() > MAXIMUM_EDIT_HISTORY_LENGTH) {
-            editHistory.remove(0, 1);
         }
     }
 
