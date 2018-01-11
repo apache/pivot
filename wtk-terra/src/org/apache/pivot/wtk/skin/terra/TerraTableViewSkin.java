@@ -85,6 +85,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
     private int highlightIndex = -1;
     private int selectIndex = -1;
+    private int lastKeyboardSelectIndex = -1;
 
     private boolean validateSelection = false;
 
@@ -1264,7 +1265,9 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * selection size by including the previous enabled row when select mode is
      * {@link SelectMode#MULTI}<br> {@link Modifier#SHIFT SHIFT} +
      * {@link KeyCode#DOWN DOWN} Increases the selection size by including the
-     * next enabled row when select mode is {@link SelectMode#MULTI}
+     * next enabled row when select mode is {@link SelectMode#MULTI}<br>
+     * {@code Cmd/Ctrl-A} in {@link SelectMode#MULTI} select mode to select everything<br>
+     * {@link KeyCode#SPACE SPACE} wil select/unselect the "current" location
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
@@ -1289,6 +1292,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         } else {
                             tableView.setSelectedIndex(index);
                         }
+                        lastKeyboardSelectIndex = index;
                     }
 
                     consumed = true;
@@ -1313,11 +1317,49 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         } else {
                             tableView.setSelectedIndex(index);
                         }
+                        lastKeyboardSelectIndex = index;
                     }
 
                     consumed = true;
                 }
 
+                break;
+            }
+
+            case Keyboard.KeyCode.SPACE: {
+                if (lastKeyboardSelectIndex != -1 && selectMode != TableView.SelectMode.NONE) {
+                    if (!tableView.isRowDisabled(lastKeyboardSelectIndex)) {
+                        switch (selectMode) {
+                            case SINGLE:
+                                if (tableView.isRowSelected(lastKeyboardSelectIndex)) {
+                                    tableView.setSelectedIndex(-1);
+                                } else {
+                                    tableView.setSelectedIndex(lastKeyboardSelectIndex);
+                                }
+                                break;
+                            case MULTI:
+                                if (tableView.isRowSelected(lastKeyboardSelectIndex)) {
+                                    tableView.removeSelectedIndex(lastKeyboardSelectIndex);
+                                } else {
+                                    tableView.addSelectedIndex(lastKeyboardSelectIndex);
+                                }
+                                break;
+                        }
+                        consumed = true;
+                    }
+                }
+                break;
+            }
+
+            case Keyboard.KeyCode.A: {
+                Modifier cmdModifier = Platform.getCommandModifier();
+                if (Keyboard.isPressed(cmdModifier)) {
+                    if (selectMode == TableView.SelectMode.MULTI) {
+                        tableView.selectAll();
+                        lastKeyboardSelectIndex = tableView.getTableData().getLength() - 1; // TODO: what should it be?
+                        consumed = true;
+                    }
+                }
                 break;
             }
 
