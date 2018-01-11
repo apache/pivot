@@ -109,6 +109,16 @@ public class SynchronizedQueue<T> implements Queue<T> {
     }
 
     @Override
+    public int getMaxLength() {
+        return queue.getMaxLength();
+    }
+
+    @Override
+    public void setMaxLength(int maxLength) {
+        queue.setMaxLength(maxLength);
+    }
+
+    @Override
     public synchronized Comparator<T> getComparator() {
         return queue.getComparator();
     }

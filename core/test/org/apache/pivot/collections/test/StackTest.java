@@ -16,8 +16,8 @@
  */
 package org.apache.pivot.collections.test;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.pivot.collections.ArrayStack;
 import org.apache.pivot.collections.LinkedStack;

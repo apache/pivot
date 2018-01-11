@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Queue} interface that is backed by a linked
@@ -31,6 +32,7 @@ public class LinkedQueue<T> implements Queue<T>, Serializable {
     private static final long serialVersionUID = 1598074020226109253L;
 
     private LinkedList<T> linkedList = new LinkedList<>();
+    private int maxLength = 0;
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<>();
 
     public LinkedQueue() {
@@ -41,15 +43,26 @@ public class LinkedQueue<T> implements Queue<T>, Serializable {
         setComparator(comparator);
     }
 
+    public LinkedQueue(int maxLength) {
+        setMaxLength(maxLength);
+    }
+
+    public LinkedQueue(int maxLength, Comparator<T> comparator) {
+        setMaxLength(maxLength);
+        setComparator(comparator);
+    }
+
     @Override
     public void enqueue(T item) {
-        if (getComparator() == null) {
-            linkedList.insert(item, 0);
-        } else {
-            linkedList.add(item);
-        }
+        if (maxLength == 0 || linkedList.getLength() < maxLength) {
+            if (getComparator() == null) {
+                linkedList.insert(item, 0);
+            } else {
+                linkedList.add(item);
+            }
 
-        queueListeners.itemEnqueued(this, item);
+            queueListeners.itemEnqueued(this, item);
+        }
     }
 
     @Override
@@ -92,6 +105,17 @@ public class LinkedQueue<T> implements Queue<T>, Serializable {
     @Override
     public int getLength() {
         return linkedList.getLength();
+    }
+
+    @Override
+    public int getMaxLength() {
+        return maxLength;
+    }
+
+    @Override
+    public void setMaxLength(int maxLength) {
+        Utils.checkNonNegative(maxLength, "maxLength");
+        this.maxLength = maxLength;
     }
 
     @Override

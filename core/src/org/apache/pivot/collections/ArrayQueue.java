@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Queue} interface that is backed by an array.
@@ -30,6 +31,7 @@ public class ArrayQueue<T> implements Queue<T>, Serializable {
     private static final long serialVersionUID = -3856732506886968324L;
 
     private ArrayList<T> arrayList = new ArrayList<>();
+    private int maxLength = 0;
     private transient QueueListenerList<T> queueListeners = new QueueListenerList<>();
 
     public ArrayQueue() {
@@ -44,15 +46,28 @@ public class ArrayQueue<T> implements Queue<T>, Serializable {
         ensureCapacity(capacity);
     }
 
+    public ArrayQueue(int capacity, int maxLength) {
+        ensureCapacity(capacity);
+        setMaxLength(maxLength);
+    }
+
+    public ArrayQueue(int capacity, int maxLength, Comparator<T> comparator) {
+        ensureCapacity(capacity);
+        setMaxLength(maxLength);
+        setComparator(comparator);
+    }
+
     @Override
     public void enqueue(T item) {
-        if (getComparator() == null) {
-            arrayList.insert(item, 0);
-        } else {
-            arrayList.add(item);
-        }
+        if (maxLength == 0 || arrayList.getLength() < maxLength) {
+            if (getComparator() == null) {
+                arrayList.insert(item, 0);
+            } else {
+                arrayList.add(item);
+            }
 
-        queueListeners.itemEnqueued(this, item);
+            queueListeners.itemEnqueued(this, item);
+        }
     }
 
     @Override
@@ -95,6 +110,17 @@ public class ArrayQueue<T> implements Queue<T>, Serializable {
     @Override
     public int getLength() {
         return arrayList.getLength();
+    }
+
+    @Override
+    public int getMaxLength() {
+        return maxLength;
+    }
+
+    @Override
+    public void setMaxLength(int maxLength) {
+        Utils.checkNonNegative(maxLength, "maxLength");
+        this.maxLength = maxLength;
     }
 
     public void ensureCapacity(int capacity) {

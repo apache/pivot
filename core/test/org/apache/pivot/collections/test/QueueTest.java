@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.collections.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
@@ -23,6 +24,7 @@ import java.util.Comparator;
 import org.apache.pivot.collections.ArrayQueue;
 import org.apache.pivot.collections.LinkedQueue;
 import org.apache.pivot.collections.Queue;
+import org.apache.pivot.collections.QueueListener;
 import org.junit.Test;
 
 public class QueueTest {
@@ -32,6 +34,8 @@ public class QueueTest {
         testQueue(new LinkedQueue<String>());
         testSortedQueue(new ArrayQueue<String>(5));
         testSortedQueue(new LinkedQueue<String>());
+        testMaxLengthQueue(new ArrayQueue<String>(5, 5));
+        testMaxLengthQueue(new LinkedQueue<String>(5));
     }
 
     private static void testQueue(Queue<String> queue) {
@@ -77,5 +81,25 @@ public class QueueTest {
             assertTrue(c == 'A');
             i--;
         }
+    }
+
+    private static class Listener extends QueueListener.Adapter<String> {
+        public int queueCount = 0;
+
+        @Override
+        public void itemEnqueued(Queue<String> queue, String item) {
+            queueCount++;
+        }
+    }
+
+    private static void testMaxLengthQueue(Queue<String> queue) {
+        Listener listener = new Listener();
+        queue.getQueueListeners().add(listener);
+
+        for (int i = 0; i < queue.getMaxLength() + 2; i++) {
+            queue.enqueue("This is a test!");
+        }
+
+        assertEquals(listener.queueCount, queue.getMaxLength());
     }
 }

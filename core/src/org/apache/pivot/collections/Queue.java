@@ -55,6 +55,8 @@ public interface Queue<T> extends Collection<T> {
      * Enqueues an item. If the queue is unsorted, the item is added at the tail
      * of the queue (index <tt>0</tt>). Otherwise, it is inserted at the
      * appropriate index.
+     * <p> If there is a maximum queue length defined and the queue is already at
+     * the maximum length this new item will not be queued.
      *
      * @param item The item to add to the queue.
      */
@@ -90,6 +92,18 @@ public interface Queue<T> extends Collection<T> {
      * @return The length of the queue.
      */
     public int getLength();
+
+    /**
+     * @return The maximum queue length allowed (0 means unlimited).
+     */
+    public int getMaxLength();
+
+    /**
+     * Set the maximum allowed queue length (0 means unlimited).
+     *
+     * @param maxLength The maximum allowed length.
+     */
+    public void setMaxLength(int maxLength);
 
     /**
      * @return The queue listener list.

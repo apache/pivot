@@ -55,6 +55,9 @@ public interface Stack<T> extends Collection<T> {
      * "Pushes" an item onto the stack. If the stack is unsorted, the item is
      * added at the top of the stack (<tt>getLength()</tt>). Otherwise, it is
      * inserted at the appropriate index.
+     * <p> If there is a maximum stack depth defined and the stack goes past
+     * this maximum depth, the deepest item (which could be this new item,
+     * depending on the comparator) will be removed.
      *
      * @param item The item to push onto the stack.
      */
