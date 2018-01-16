@@ -33,7 +33,7 @@ public class LinkedStack<T> implements Stack<T>, Serializable {
 
     private LinkedList<T> linkedList = new LinkedList<>();
     private int maxDepth = 0;
-    private transient StackListenerList<T> stackListeners = new StackListenerList<>();
+    private transient StackListener.Listeners<T> stackListeners = new StackListener.Listeners<>();
 
     public LinkedStack() {
         this(null);

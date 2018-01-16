@@ -17,14 +17,43 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Stack listener interface.
  */
 public interface StackListener<T> {
     /**
-     * StackListener adapter.
+     * Stack listeners.
      */
+    public static class Listeners<T> extends ListenerList<StackListener<T>> implements
+        StackListener<T> {
+        @Override
+        public void itemPushed(Stack<T> stack, T item) {
+            forEach(listener -> listener.itemPushed(stack, item));
+        }
+
+        @Override
+        public void itemPopped(Stack<T> stack, T item) {
+            forEach(listener -> listener.itemPopped(stack, item));
+        }
+
+        @Override
+        public void stackCleared(Stack<T> stack) {
+            forEach(listener -> listener.stackCleared(stack));
+        }
+
+        @Override
+        public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
+            forEach(listener -> listener.comparatorChanged(stack, previousComparator));
+        }
+    }
+
+    /**
+     * StackListener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter<T> implements StackListener<T> {
         @Override
         public void itemPushed(Stack<T> stack, T item) {
@@ -53,7 +82,8 @@ public interface StackListener<T> {
      * @param stack The stack that has changed.
      * @param item The newly pushed item.
      */
-    public void itemPushed(Stack<T> stack, T item);
+    default public void itemPushed(Stack<T> stack, T item) {
+    }
 
     /**
      * Called when an item has been popped off of a stack.
@@ -61,14 +91,16 @@ public interface StackListener<T> {
      * @param stack The stack that has changed.
      * @param item The item newly popped from the stack.
      */
-    public void itemPopped(Stack<T> stack, T item);
+    default public void itemPopped(Stack<T> stack, T item) {
+    }
 
     /**
      * Called when a stack has been cleared.
      *
      * @param stack The newly cleared stack.
      */
-    public void stackCleared(Stack<T> stack);
+    default public void stackCleared(Stack<T> stack) {
+    }
 
     /**
      * Called when a stack's comparator has changed.
@@ -76,5 +108,6 @@ public interface StackListener<T> {
      * @param stack The stack in question.
      * @param previousComparator The previous comparator for this stack (if any).
      */
-    public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator);
+    default public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
+    }
 }

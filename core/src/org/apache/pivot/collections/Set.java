@@ -25,32 +25,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface Set<E> extends Group<E>, Collection<E> {
     /**
-     * Set listener list.
-     */
-    public static class SetListenerList<E> extends ListenerList<SetListener<E>> implements
-        SetListener<E> {
-        @Override
-        public void elementAdded(Set<E> set, E element) {
-            forEach(listener -> listener.elementAdded(set, element));
-        }
-
-        @Override
-        public void elementRemoved(Set<E> set, E element) {
-            forEach(listener -> listener.elementRemoved(set, element));
-        }
-
-        @Override
-        public void setCleared(Set<E> set) {
-            forEach(listener -> listener.setCleared(set));
-        }
-
-        @Override
-        public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
-            forEach(listener -> listener.comparatorChanged(set, previousComparator));
-        }
-    }
-
-    /**
      * @see SetListener#elementAdded(Set, Object)
      */
     @Override

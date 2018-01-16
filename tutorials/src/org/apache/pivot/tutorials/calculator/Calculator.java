@@ -71,7 +71,7 @@ public class Calculator
             serializer.readObject(Calculator.class, "calculator.bxml");
             serializer.bind(this);
 
-            mainWindow.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+            mainWindow.getComponentKeyListeners().add(new ComponentKeyListener() {
                 @Override
                 public boolean keyTyped(Component comp, char ch) {
                     // Some keys don't give us virtual key mappings, so we need to
@@ -86,7 +86,7 @@ public class Calculator
                       case '%':
                         ACTION.PERCENT.perform(comp);
                         return true;
-                      case '\u007F':
+                      case '':
                         ACTION.BACKSPACE.perform(comp);
                         return true;
                       default:

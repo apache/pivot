@@ -63,7 +63,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         }
     };
 
-    private ComponentKeyListener calendarPopupKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener calendarPopupKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected date.<br>

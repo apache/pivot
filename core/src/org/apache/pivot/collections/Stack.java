@@ -26,32 +26,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface Stack<T> extends Collection<T> {
     /**
-     * Stack listener list.
-     */
-    public static class StackListenerList<T> extends ListenerList<StackListener<T>> implements
-        StackListener<T> {
-        @Override
-        public void itemPushed(Stack<T> stack, T item) {
-            forEach(listener -> listener.itemPushed(stack, item));
-        }
-
-        @Override
-        public void itemPopped(Stack<T> stack, T item) {
-            forEach(listener -> listener.itemPopped(stack, item));
-        }
-
-        @Override
-        public void stackCleared(Stack<T> stack) {
-            forEach(listener -> listener.stackCleared(stack));
-        }
-
-        @Override
-        public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
-            forEach(listener -> listener.comparatorChanged(stack, previousComparator));
-        }
-    }
-
-    /**
      * "Pushes" an item onto the stack. If the stack is unsorted, the item is
      * added at the top of the stack (<tt>getLength()</tt>). Otherwise, it is
      * inserted at the appropriate index.

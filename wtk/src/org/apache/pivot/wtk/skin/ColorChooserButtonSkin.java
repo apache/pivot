@@ -69,7 +69,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
     }
 
-    private ComponentKeyListener colorChooserPopupKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener colorChooserPopupKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected color.<br>

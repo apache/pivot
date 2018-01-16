@@ -63,7 +63,7 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
         }
     };
 
-    private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener listViewPopupKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected list item.<br>

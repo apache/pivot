@@ -32,7 +32,7 @@ public class ArrayStack<T> implements Stack<T>, Serializable {
 
     private ArrayList<T> arrayList = new ArrayList<>();
     private int maxDepth = 0;
-    private transient StackListenerList<T> stackListeners = new StackListenerList<>();
+    private transient StackListener.Listeners<T> stackListeners = new StackListener.Listeners<>();
 
     public ArrayStack() {
         this(null);

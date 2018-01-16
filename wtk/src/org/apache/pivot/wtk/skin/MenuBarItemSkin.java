@@ -38,7 +38,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     protected MenuPopup menuPopup = new MenuPopup();
     private boolean closeMenuPopup = false;
 
-    private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#LEFT LEFT} or {@link KeyCode#TAB TAB} +
          * {@link Keyboard.Modifier#SHIFT SHIFT} Activate the menu to the left

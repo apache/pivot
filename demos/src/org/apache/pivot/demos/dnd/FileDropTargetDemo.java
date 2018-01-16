@@ -56,7 +56,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
         fileList = new FileList();
         fileTableView.setTableData(fileList);
 
-        fileList.getListListeners().add(new ListListener.Adapter<File>() {
+        fileList.getListListeners().add(new ListListener<File>() {
             @Override
             public void itemInserted(List<File> list, int index) {
                 uploadButton.setEnabled(list.getLength() > 0);
@@ -72,7 +72,7 @@ public class FileDropTargetDemo extends Window implements Bindable {
             }
         });
 
-        fileTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+        fileTableView.getComponentKeyListeners().add(new ComponentKeyListener() {
             @Override
             public boolean keyPressed(Component component, int keyCode,
                 Keyboard.KeyLocation keyLocation) {

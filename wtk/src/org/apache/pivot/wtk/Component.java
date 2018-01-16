@@ -509,36 +509,6 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentKeyListenerList extends ListenerList<ComponentKeyListener>
-        implements ComponentKeyListener {
-        @Override
-        public boolean keyTyped(Component component, char character) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.keyTyped(component, character)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.keyPressed(component, keyCode, keyLocation)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.keyReleased(component, keyCode, keyLocation)));
-
-            return consumed.get();
-        }
-    }
-
     private static class ComponentTooltipListenerList extends
         ListenerList<ComponentTooltipListener> implements ComponentTooltipListener {
         @Override
@@ -659,7 +629,7 @@ public abstract class Component implements ConstrainedVisual {
     private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
     private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
     private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
-    private ComponentKeyListenerList componentKeyListeners = new ComponentKeyListenerList();
+    private ComponentKeyListener.Listeners componentKeyListeners = new ComponentKeyListener.Listeners();
     private ComponentTooltipListenerList componentTooltipListeners = new ComponentTooltipListenerList();
     private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
 

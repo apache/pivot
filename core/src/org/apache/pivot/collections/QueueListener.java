@@ -17,14 +17,43 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Queue listener interface.
  */
 public interface QueueListener<T> {
     /**
-     * QueueListener adapter.
+     * Queue listeners.
      */
+    public static class Listeners<T> extends ListenerList<QueueListener<T>> implements
+        QueueListener<T> {
+        @Override
+        public void itemEnqueued(Queue<T> queue, T item) {
+            forEach(listener -> listener.itemEnqueued(queue, item));
+        }
+
+        @Override
+        public void itemDequeued(Queue<T> queue, T item) {
+            forEach(listener -> listener.itemDequeued(queue, item));
+        }
+
+        @Override
+        public void queueCleared(Queue<T> queue) {
+            forEach(listener -> listener.queueCleared(queue));
+        }
+
+        @Override
+        public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
+            forEach(listener -> listener.comparatorChanged(queue, previousComparator));
+        }
+    }
+
+    /**
+     * QueueListener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter<T> implements QueueListener<T> {
         @Override
         public void itemEnqueued(Queue<T> queue, T item) {
@@ -53,7 +82,8 @@ public interface QueueListener<T> {
      * @param queue The queue that has been modified.
      * @param item The item that was just added to the queue.
      */
-    public void itemEnqueued(Queue<T> queue, T item);
+    default public void itemEnqueued(Queue<T> queue, T item) {
+    }
 
     /**
      * Called when an item has been removed from the head of a queue.
@@ -61,14 +91,16 @@ public interface QueueListener<T> {
      * @param queue The queue in question.
      * @param item The item that was just removed from the head of the queue.
      */
-    public void itemDequeued(Queue<T> queue, T item);
+    default public void itemDequeued(Queue<T> queue, T item) {
+    }
 
     /**
      * Called when a queue has been cleared.
      *
      * @param queue The newly cleared queue object.
      */
-    public void queueCleared(Queue<T> queue);
+    default public void queueCleared(Queue<T> queue) {
+    }
 
     /**
      * Called when a queue's comparator has changed.
@@ -76,5 +108,6 @@ public interface QueueListener<T> {
      * @param queue The queue that changed.
      * @param previousComparator Previous value of the queue's comparator (if any).
      */
-    public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator);
+    default public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
+    }
 }

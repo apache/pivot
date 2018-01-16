@@ -16,11 +16,23 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.media.Image;
 
 /**
  * Image node listener interface.
  */
 public interface ImageNodeListener {
+    /**
+     * The image node listeners.
+     */
+    public static class Listeners extends ListenerList<ImageNodeListener> implements
+        ImageNodeListener {
+        @Override
+        public void imageChanged(ImageNode imageNode, Image previousImage) {
+            forEach(listener -> listener.imageChanged(imageNode, previousImage));
+        }
+    }
+
     public void imageChanged(ImageNode imageNode, Image previousImage);
 }

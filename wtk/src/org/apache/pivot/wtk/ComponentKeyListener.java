@@ -16,13 +16,51 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.BooleanResult;
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component key listener interface.
  */
 public interface ComponentKeyListener {
     /**
-     * Component key listener adapter.
+     * Component key listeners.
      */
+    public static class Listeners extends ListenerList<ComponentKeyListener>
+        implements ComponentKeyListener {
+        @Override
+        public boolean keyTyped(Component component, char character) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.keyTyped(component, character)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.keyPressed(component, keyCode, keyLocation)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.keyReleased(component, keyCode, keyLocation)));
+
+            return consumed.get();
+        }
+    }
+
+    /**
+     * Component key listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ComponentKeyListener {
         @Override
         public boolean keyTyped(Component component, char character) {
@@ -49,7 +87,9 @@ public interface ComponentKeyListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean keyTyped(Component component, char character);
+    default public boolean keyTyped(Component component, char character) {
+        return false;
+    }
 
     /**
      * Called when a key has been pressed.
@@ -60,7 +100,9 @@ public interface ComponentKeyListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
+    default public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        return false;
+    }
 
     /**
      * Called when a key has been released.
@@ -71,5 +113,7 @@ public interface ComponentKeyListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation);
+    default public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        return false;
+    }
 }

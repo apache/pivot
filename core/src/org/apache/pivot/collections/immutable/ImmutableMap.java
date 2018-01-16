@@ -31,7 +31,7 @@ import org.apache.pivot.util.Utils;
 public class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;
 
-    private MapListenerList<K, V> mapListeners = new MapListenerList<>();
+    private MapListener.Listeners<K, V> mapListeners = new MapListener.Listeners<>();
 
     public ImmutableMap(Map<K, V> map) {
         Utils.checkNull(map, "map");

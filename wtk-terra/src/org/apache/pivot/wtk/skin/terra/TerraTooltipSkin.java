@@ -74,7 +74,7 @@ public class TerraTooltipSkin extends WindowSkin {
         }
     };
 
-    private ComponentKeyListener displayKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener displayKeyListener = new ComponentKeyListener() {
         /**
          * Close the Tooltip.
          */

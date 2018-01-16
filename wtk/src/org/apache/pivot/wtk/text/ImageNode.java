@@ -21,23 +21,16 @@ import java.net.URL;
 import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
+import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.media.Image;
 
 /**
- * Node representing an image.
+ * Node representing an image to be inserted into a {@link TextPane}.
  */
 public class ImageNode extends Block {
-    private static class ImageNodeListenerList extends ListenerList<ImageNodeListener> implements
-        ImageNodeListener {
-        @Override
-        public void imageChanged(ImageNode imageNode, Image previousImage) {
-            forEach(listener -> listener.imageChanged(imageNode, previousImage));
-        }
-    }
-
     private Image image = null;
 
-    private ImageNodeListenerList imageNodeListeners = new ImageNodeListenerList();
+    private ImageNodeListener.Listeners imageNodeListeners = new ImageNodeListener.Listeners();
 
     public ImageNode() {
     }

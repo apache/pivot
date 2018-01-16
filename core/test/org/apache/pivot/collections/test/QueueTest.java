@@ -83,7 +83,7 @@ public class QueueTest {
         }
     }
 
-    private static class Listener extends QueueListener.Adapter<String> {
+    private static class Listener implements QueueListener<String> {
         public int queueCount = 0;
 
         @Override

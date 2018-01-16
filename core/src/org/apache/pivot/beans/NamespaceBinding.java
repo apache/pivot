@@ -58,7 +58,7 @@ public class NamespaceBinding {
 
     private boolean updating = false;
 
-    private MapListener<String, Object> sourceMapListener = new MapListener.Adapter<String, Object>() {
+    private MapListener<String, Object> sourceMapListener = new MapListener<String, Object>() {
         @Override
         public void valueUpdated(Map<String, Object> map, String key, Object previousValue) {
             if (key.equals(sourceKey) && !updating) {

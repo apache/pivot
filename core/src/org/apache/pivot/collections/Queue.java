@@ -26,32 +26,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface Queue<T> extends Collection<T> {
     /**
-     * Queue listener list.
-     */
-    public static class QueueListenerList<T> extends ListenerList<QueueListener<T>> implements
-        QueueListener<T> {
-        @Override
-        public void itemEnqueued(Queue<T> queue, T item) {
-            forEach(listener -> listener.itemEnqueued(queue, item));
-        }
-
-        @Override
-        public void itemDequeued(Queue<T> queue, T item) {
-            forEach(listener -> listener.itemDequeued(queue, item));
-        }
-
-        @Override
-        public void queueCleared(Queue<T> queue) {
-            forEach(listener -> listener.queueCleared(queue));
-        }
-
-        @Override
-        public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
-            forEach(listener -> listener.comparatorChanged(queue, previousComparator));
-        }
-    }
-
-    /**
      * Enqueues an item. If the queue is unsorted, the item is added at the tail
      * of the queue (index <tt>0</tt>). Otherwise, it is inserted at the
      * appropriate index.

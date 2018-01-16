@@ -105,7 +105,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         }
     };
 
-    private ComponentKeyListener textInputKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener textInputKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#DOWN DOWN} Transfer focus to the suggestion list and
          * select the first suggestion if no others are selected.<br>
@@ -144,7 +144,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         }
     };
 
-    private ComponentKeyListener listViewKeyListener = new ComponentKeyListener.Adapter() {
+    private ComponentKeyListener listViewKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#TAB TAB} Close the suggestion popup with a 'result' of
          * true, and transfer focus forwards from the TextInput.<br>

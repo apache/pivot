@@ -940,11 +940,11 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
          * the first item.<br> {@link KeyCode#ESCAPE ESCAPE} Clear the search
          * field.
          */
-        searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+        searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener() {
             @Override
             public boolean keyPressed(Component componentArgument, int keyCode,
                 Keyboard.KeyLocation keyLocation) {
-                boolean consumed = super.keyPressed(componentArgument, keyCode, keyLocation);
+                boolean consumed = false;
 
                 if (keyCode == Keyboard.KeyCode.ESCAPE) {
                     searchTextInput.setText("");

@@ -29,7 +29,7 @@ import org.apache.pivot.util.Utils;
  * Synchronized implementation of the {@link Map} interface.
  */
 public class SynchronizedMap<K, V> implements Map<K, V> {
-    private static class SynchronizedMapListenerList<K, V> extends MapListenerList<K, V> {
+    private static class SynchronizedMapListenerList<K, V> extends MapListener.Listeners<K, V> {
         @Override
         public synchronized void add(MapListener<K, V> listener) {
             super.add(listener);

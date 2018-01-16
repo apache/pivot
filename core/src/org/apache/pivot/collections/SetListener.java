@@ -17,14 +17,43 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Set listener interface.
  */
 public interface SetListener<E> {
     /**
-     * Set listener adapter.
+     * Set listeners.
      */
+    public static class Listeners<E> extends ListenerList<SetListener<E>> implements
+        SetListener<E> {
+        @Override
+        public void elementAdded(Set<E> set, E element) {
+            forEach(listener -> listener.elementAdded(set, element));
+        }
+
+        @Override
+        public void elementRemoved(Set<E> set, E element) {
+            forEach(listener -> listener.elementRemoved(set, element));
+        }
+
+        @Override
+        public void setCleared(Set<E> set) {
+            forEach(listener -> listener.setCleared(set));
+        }
+
+        @Override
+        public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
+            forEach(listener -> listener.comparatorChanged(set, previousComparator));
+        }
+    }
+
+    /**
+     * Set listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter<E> implements SetListener<E> {
         @Override
         public void elementAdded(Set<E> set, E element) {
@@ -53,7 +82,8 @@ public interface SetListener<E> {
      * @param set The source of the set event.
      * @param element The element that was added to the set.
      */
-    public void elementAdded(Set<E> set, E element);
+    default public void elementAdded(Set<E> set, E element) {
+    }
 
     /**
      * Called when an element is removed from the set.
@@ -61,14 +91,16 @@ public interface SetListener<E> {
      * @param set The source of the set event.
      * @param element The element that was removed from the set.
      */
-    public void elementRemoved(Set<E> set, E element);
+    default public void elementRemoved(Set<E> set, E element) {
+    }
 
     /**
      * Called when set data has been reset.
      *
      * @param set The source of the set event.
      */
-    public void setCleared(Set<E> set);
+    default public void setCleared(Set<E> set) {
+    }
 
     /**
      * Called when a set's comparator has changed.
@@ -76,5 +108,6 @@ public interface SetListener<E> {
      * @param set The source of the event.
      * @param previousComparator The previous comparator value.
      */
-    public void comparatorChanged(Set<E> set, Comparator<E> previousComparator);
+    default public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
+    }
 }

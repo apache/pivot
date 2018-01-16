@@ -76,7 +76,7 @@ public class CheckedListViewTest extends Application.Adapter {
             }
         });
 
-        listView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+        listView.getComponentKeyListeners().add(new ComponentKeyListener() {
             @Override
             public boolean keyPressed(Component component, int keyCode,
                 Keyboard.KeyLocation keyLocation) {

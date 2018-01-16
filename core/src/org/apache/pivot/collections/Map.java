@@ -25,37 +25,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface Map<K, V> extends Dictionary<K, V>, Collection<K> {
     /**
-     * Map listener list.
-     */
-    public static class MapListenerList<K, V> extends ListenerList<MapListener<K, V>> implements
-        MapListener<K, V> {
-        @Override
-        public void valueAdded(Map<K, V> map, K key) {
-            forEach(listener -> listener.valueAdded(map, key));
-        }
-
-        @Override
-        public void valueRemoved(Map<K, V> map, K key, V value) {
-            forEach(listener -> listener.valueRemoved(map, key, value));
-        }
-
-        @Override
-        public void valueUpdated(Map<K, V> map, K key, V previousValue) {
-            forEach(listener -> listener.valueUpdated(map, key, previousValue));
-        }
-
-        @Override
-        public void mapCleared(Map<K, V> map) {
-            forEach(listener -> listener.mapCleared(map));
-        }
-
-        @Override
-        public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
-            forEach(listener -> listener.comparatorChanged(map, previousComparator));
-        }
-    }
-
-    /**
      * Sets the value of the given key, creating a new entry or replacing the
      * existing value, and firing a corresponding event.
      *

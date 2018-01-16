@@ -37,7 +37,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = 4005649560306864969L;
 
     private java.util.Map<K, V> map = null;
-    private transient MapListenerList<K, V> mapListeners = new MapListenerList<>();
+    private transient MapListener.Listeners<K, V> mapListeners = new MapListener.Listeners<>();
 
     public MapAdapter(java.util.Map<K, V> map) {
         Utils.checkNull(map, "map");

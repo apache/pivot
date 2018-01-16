@@ -28,23 +28,12 @@ import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.content.BaseContent;
 
 /**
- * Node representing a live pivot component.
+ * Node representing a live Pivot component to be inserted into a {@link TextPane}.
  */
 public class ComponentNode extends Block {
-
-    private static class ComponentNodeListenerList extends ListenerList<ComponentNodeListener>
-        implements ComponentNodeListener {
-        @Override
-        public void componentChanged(ComponentNode componentNode, Component previousComponent) {
-            for (ComponentNodeListener listener : this) {
-                listener.componentChanged(componentNode, previousComponent);
-            }
-        }
-    }
-
     private Component component = null;
 
-    private ComponentNodeListenerList componentNodeListeners = new ComponentNodeListenerList();
+    private ComponentNodeListener.Listeners componentNodeListeners = new ComponentNodeListener.Listeners();
 
     public ComponentNode() {
     }

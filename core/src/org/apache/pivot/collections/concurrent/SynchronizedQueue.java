@@ -29,7 +29,7 @@ import org.apache.pivot.util.Utils;
  * Synchronized implementation of the {@link Queue} interface.
  */
 public class SynchronizedQueue<T> implements Queue<T> {
-    private static class SynchronizedQueueListenerList<T> extends QueueListenerList<T> {
+    private static class SynchronizedQueueListenerList<T> extends QueueListener.Listeners<T> {
         @Override
         public synchronized void add(QueueListener<T> listener) {
             super.add(listener);

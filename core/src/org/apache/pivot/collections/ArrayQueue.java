@@ -32,7 +32,7 @@ public class ArrayQueue<T> implements Queue<T>, Serializable {
 
     private ArrayList<T> arrayList = new ArrayList<>();
     private int maxLength = 0;
-    private transient QueueListenerList<T> queueListeners = new QueueListenerList<>();
+    private transient QueueListener.Listeners<T> queueListeners = new QueueListener.Listeners<>();
 
     public ArrayQueue() {
         this(null);

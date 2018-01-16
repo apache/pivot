@@ -31,7 +31,7 @@ import org.apache.pivot.util.Utils;
 public class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;
 
-    private SetListenerList<E> setListeners = new SetListenerList<>();
+    private SetListener.Listeners<E> setListeners = new SetListener.Listeners<>();
 
     public ImmutableSet(Set<E> set) {
         Utils.checkNull(set, "set");

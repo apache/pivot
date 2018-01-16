@@ -95,7 +95,7 @@ public class RadioButtonGroup extends ButtonGroup {
      * some of the buttons contained within may not be focusable, or even
      * visible.
      */
-    private final ComponentKeyListener componentKeyListener = new ComponentKeyListener.Adapter() {
+    private final ComponentKeyListener componentKeyListener = new ComponentKeyListener() {
         /**
          * Handle TAB & SHIFT+TAB focus traversal, HOME, END & arrow keys
          */

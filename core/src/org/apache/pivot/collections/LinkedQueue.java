@@ -33,7 +33,7 @@ public class LinkedQueue<T> implements Queue<T>, Serializable {
 
     private LinkedList<T> linkedList = new LinkedList<>();
     private int maxLength = 0;
-    private transient QueueListenerList<T> queueListeners = new QueueListenerList<>();
+    private transient QueueListener.Listeners<T> queueListeners = new QueueListener.Listeners<>();
 
     public LinkedQueue() {
         this(null);

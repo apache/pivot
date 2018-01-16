@@ -29,7 +29,7 @@ import org.apache.pivot.util.Utils;
  * Synchronized implementation of the {@link Set} interface.
  */
 public class SynchronizedSet<E> implements Set<E> {
-    private static class SynchronizedSetListenerList<E> extends SetListenerList<E> {
+    private static class SynchronizedSetListenerList<E> extends SetListener.Listeners<E> {
         @Override
         public synchronized void add(SetListener<E> listener) {
             super.add(listener);

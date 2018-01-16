@@ -24,7 +24,9 @@ import java.util.Comparator;
 public interface ListListener<T> {
     /**
      * List listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter<T> implements ListListener<T> {
         @Override
         public void itemInserted(List<T> list, int index) {
@@ -58,7 +60,8 @@ public interface ListListener<T> {
      * @param list The source of the list event.
      * @param index The index at which the item was added.
      */
-    public void itemInserted(List<T> list, int index);
+    default public void itemInserted(List<T> list, int index) {
+    }
 
     /**
      * Called when items have been removed from a list.
@@ -67,7 +70,8 @@ public interface ListListener<T> {
      * @param index The starting index from which items have been removed.
      * @param items The items that were removed from the list.
      */
-    public void itemsRemoved(List<T> list, int index, Sequence<T> items);
+    default public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
+    }
 
     /**
      * Called when a list item has been updated.
@@ -76,14 +80,16 @@ public interface ListListener<T> {
      * @param index The index of the item that was updated.
      * @param previousItem The item that was previously stored at <tt>index</tt>.
      */
-    public void itemUpdated(List<T> list, int index, T previousItem);
+    default public void itemUpdated(List<T> list, int index, T previousItem) {
+    }
 
     /**
      * Called when list data has been reset.
      *
      * @param list The source of the list event.
      */
-    public void listCleared(List<T> list);
+    default public void listCleared(List<T> list) {
+    }
 
     /**
      * Called when a list's comparator has changed.
@@ -91,5 +97,6 @@ public interface ListListener<T> {
      * @param list The source of the event.
      * @param previousComparator The previous comparator value.
      */
-    public void comparatorChanged(List<T> list, Comparator<T> previousComparator);
+    default public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
+    }
 }

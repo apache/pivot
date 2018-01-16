@@ -36,7 +36,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = -816891924416727900L;
 
     private java.util.Set<E> set = null;
-    private transient SetListenerList<E> setListeners = new SetListenerList<>();
+    private transient SetListener.Listeners<E> setListeners = new SetListener.Listeners<>();
 
     public SetAdapter(java.util.Set<E> set) {
         Utils.checkNull(set, "set");

@@ -33,7 +33,7 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     private EnumSet<E> keySet;
     private Object[] values;
 
-    private transient MapListenerList<E, V> mapListeners = new MapListenerList<>();
+    private transient MapListener.Listeners<E, V> mapListeners = new MapListener.Listeners<>();
 
     public EnumMap(Class<E> enumClass) {
         keySet = new EnumSet<>(enumClass);

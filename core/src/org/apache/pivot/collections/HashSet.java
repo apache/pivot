@@ -74,7 +74,7 @@ public class HashSet<E> implements Set<E>, Serializable {
 
     protected HashMap<E, Void> hashMap = new HashMap<>();
 
-    private transient SetListenerList<E> setListeners = null;
+    private transient SetListener.Listeners<E> setListeners = null;
 
     public HashSet() {
     }
@@ -178,7 +178,7 @@ public class HashSet<E> implements Set<E>, Serializable {
     @Override
     public ListenerList<SetListener<E>> getSetListeners() {
         if (setListeners == null) {
-            setListeners = new SetListenerList<>();
+            setListeners = new SetListener.Listeners<>();
         }
 
         return setListeners;

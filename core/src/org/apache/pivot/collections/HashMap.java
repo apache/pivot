@@ -102,7 +102,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     private int count = 0;
     private ArrayList<K> keys = null;
 
-    private transient MapListenerList<K, V> mapListeners = null;
+    private transient MapListener.Listeners<K, V> mapListeners = null;
 
     public static final int DEFAULT_CAPACITY = 16;
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
@@ -423,7 +423,7 @@ public class HashMap<K, V> implements Map<K, V>, Serializable {
     @Override
     public ListenerList<MapListener<K, V>> getMapListeners() {
         if (mapListeners == null) {
-            mapListeners = new MapListenerList<>();
+            mapListeners = new MapListener.Listeners<>();
         }
 
         return mapListeners;

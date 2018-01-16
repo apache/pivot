@@ -16,11 +16,23 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;
 
 /**
  * Component node listener interface.
  */
 public interface ComponentNodeListener {
+    /**
+     * The component node listeners.
+     */
+    public static class Listeners extends ListenerList<ComponentNodeListener>
+        implements ComponentNodeListener {
+        @Override
+        public void componentChanged(ComponentNode componentNode, Component previousComponent) {
+            forEach(listener -> listener.componentChanged(componentNode, previousComponent));
+        }
+    }
+
     public void componentChanged(ComponentNode componentNode, Component previousComponent);
 }

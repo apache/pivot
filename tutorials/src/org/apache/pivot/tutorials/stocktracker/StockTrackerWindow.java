@@ -211,7 +211,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             }
         });
 
-        stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+        stocksTableView.getComponentKeyListeners().add(new ComponentKeyListener() {
             @Override
             public boolean keyPressed(Component component, int keyCode,
                 Keyboard.KeyLocation keyLocation) {
@@ -234,7 +234,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             }
         });
 
-        symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener.Adapter() {
+        symbolTextInput.getComponentKeyListeners().add(new ComponentKeyListener() {
             @Override
             public boolean keyPressed(Component component, int keyCode,
                 Keyboard.KeyLocation keyLocation) {

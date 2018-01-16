@@ -29,7 +29,7 @@ import org.apache.pivot.util.Utils;
  * Synchronized implementation of the {@link Stack} interface.
  */
 public class SynchronizedStack<T> implements Stack<T> {
-    private static class SynchronizedStackListenerList<T> extends StackListenerList<T> {
+    private static class SynchronizedStackListenerList<T> extends StackListener.Listeners<T> {
         @Override
         public synchronized void add(StackListener<T> listener) {
             super.add(listener);

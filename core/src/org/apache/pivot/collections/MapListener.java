@@ -17,14 +17,48 @@
 package org.apache.pivot.collections;
 
 import java.util.Comparator;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Map listener interface.
  */
 public interface MapListener<K, V> {
     /**
-     * Map listener adapter.
+     * Map listeners.
      */
+    public static class Listeners<K, V> extends ListenerList<MapListener<K, V>> implements
+        MapListener<K, V> {
+        @Override
+        public void valueAdded(Map<K, V> map, K key) {
+            forEach(listener -> listener.valueAdded(map, key));
+        }
+
+        @Override
+        public void valueRemoved(Map<K, V> map, K key, V value) {
+            forEach(listener -> listener.valueRemoved(map, key, value));
+        }
+
+        @Override
+        public void valueUpdated(Map<K, V> map, K key, V previousValue) {
+            forEach(listener -> listener.valueUpdated(map, key, previousValue));
+        }
+
+        @Override
+        public void mapCleared(Map<K, V> map) {
+            forEach(listener -> listener.mapCleared(map));
+        }
+
+        @Override
+        public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
+            forEach(listener -> listener.comparatorChanged(map, previousComparator));
+        }
+    }
+
+    /**
+     * Map listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter<K, V> implements MapListener<K, V> {
         @Override
         public void valueAdded(Map<K, V> map, K key) {
@@ -58,7 +92,8 @@ public interface MapListener<K, V> {
      * @param map The source of the map event.
      * @param key The key that was added to the map.
      */
-    public void valueAdded(Map<K, V> map, K key);
+    default public void valueAdded(Map<K, V> map, K key) {
+    }
 
     /**
      * Called when a map value has been updated.
@@ -68,7 +103,8 @@ public interface MapListener<K, V> {
      * @param previousValue The value that was previously associated with the
      * key.
      */
-    public void valueUpdated(Map<K, V> map, K key, V previousValue);
+    default public void valueUpdated(Map<K, V> map, K key, V previousValue) {
+    }
 
     /**
      * Called when a key/value pair has been removed from a map.
@@ -77,14 +113,16 @@ public interface MapListener<K, V> {
      * @param key The key that was removed.
      * @param value The value that was removed.
      */
-    public void valueRemoved(Map<K, V> map, K key, V value);
+    default public void valueRemoved(Map<K, V> map, K key, V value) {
+    }
 
     /**
      * Called when map data has been reset.
      *
      * @param map The source of the map event.
      */
-    public void mapCleared(Map<K, V> map);
+    default public void mapCleared(Map<K, V> map) {
+    }
 
     /**
      * Called when a map's comparator has changed.
@@ -92,5 +130,6 @@ public interface MapListener<K, V> {
      * @param map The source of the event.
      * @param previousComparator The previous comparator value.
      */
-    public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator);
+    default public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
+    }
 }
