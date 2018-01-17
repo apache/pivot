@@ -57,7 +57,7 @@ import org.apache.pivot.wtk.skin.ListButtonSkin;
  * Terra list button skin.
  */
 public class TerraListButtonSkin extends ListButtonSkin {
-    private WindowStateListener listViewPopupStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener listViewPopupStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             // Adjust for list size

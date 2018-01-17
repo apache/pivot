@@ -16,12 +16,24 @@
  */
 package org.apache.pivot.tutorials.explorer.tools;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;
 
 /**
  * Component inspector listener interface.
  */
 public interface ComponentInspectorListener {
+    /**
+     * The component inspector listeners.
+     */
+    public static class Listeners extends
+        ListenerList<ComponentInspectorListener> implements ComponentInspectorListener {
+        @Override
+        public void sourceChanged(ComponentInspector componentInspector, Component previousSource) {
+            forEach(listener -> listener.sourceChanged(componentInspector, previousSource));
+        }
+    }
+
     /**
      * Called when an component inspector's source component has changed.
      *

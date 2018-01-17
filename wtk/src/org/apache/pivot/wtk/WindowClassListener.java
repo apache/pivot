@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Window class listener interface.
  */
 public interface WindowClassListener {
+    /**
+     * Window class listeners.
+     */
+    public static class Listeners extends ListenerList<WindowClassListener>
+        implements WindowClassListener {
+        @Override
+        public void activeWindowChanged(Window previousActiveWindow) {
+            forEach(listener -> listener.activeWindowChanged(previousActiveWindow));
+        }
+    }
+
     /**
      * Called when the active window has changed.
      *

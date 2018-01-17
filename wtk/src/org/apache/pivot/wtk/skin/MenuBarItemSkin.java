@@ -67,7 +67,7 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
         }
     };
 
-    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();

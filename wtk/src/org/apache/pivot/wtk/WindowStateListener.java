@@ -16,15 +16,63 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Window state listener interface.
  */
 public interface WindowStateListener {
     /**
-     * Window state listener adapter.
+     * Window state listeners.
      */
+    public static class Listeners extends ListenerList<WindowStateListener>
+        implements WindowStateListener {
+        @Override
+        public void windowOpened(Window window) {
+            forEach(listener -> listener.windowOpened(window));
+        }
+
+        @Override
+        public Vote previewWindowClose(Window window) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewWindowClose(window)));
+
+            return result.get();
+        }
+
+        @Override
+        public void windowCloseVetoed(Window window, Vote reason) {
+            forEach(listener -> listener.windowCloseVetoed(window, reason));
+        }
+
+        @Override
+        public Vote previewWindowOpen(Window window) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewWindowOpen(window)));
+
+            return result.get();
+        }
+
+        @Override
+        public void windowOpenVetoed(Window window, Vote reason) {
+            forEach(listener -> listener.windowOpenVetoed(window, reason));
+        }
+
+        @Override
+        public void windowClosed(Window window, Display display, Window owner) {
+            forEach(listener -> listener.windowClosed(window, display, owner));
+        }
+    }
+
+    /**
+     * Window state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements WindowStateListener {
         @Override
         public void windowOpened(Window window) {
@@ -62,7 +110,8 @@ public interface WindowStateListener {
      *
      * @param window The newly opened window.
      */
-    public void windowOpened(Window window);
+    default public void windowOpened(Window window) {
+    }
 
     /**
      * Called to preview a window close event.
@@ -70,7 +119,9 @@ public interface WindowStateListener {
      * @param window The window that wants to close.
      * @return The vote from each listener as to whether to allow the close.
      */
-    public Vote previewWindowClose(Window window);
+    default public Vote previewWindowClose(Window window) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called to preview a window open event.
@@ -78,7 +129,9 @@ public interface WindowStateListener {
      * @param window The window that wants to open.
      * @return The vote from the listener as to whether to allow the open.
      */
-    public Vote previewWindowOpen(Window window);
+    default public Vote previewWindowOpen(Window window) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a window close event has been vetoed.
@@ -87,7 +140,8 @@ public interface WindowStateListener {
      * @param reason The accumulated vote from all the listeners that
      *               vetoed this event.
      */
-    public void windowCloseVetoed(Window window, Vote reason);
+    default public void windowCloseVetoed(Window window, Vote reason) {
+    }
 
     /**
      * Called when a window open event has been vetoed.
@@ -96,7 +150,8 @@ public interface WindowStateListener {
      * @param reason The accumulated vote from all the listeners that
      *               vetoed this event.
      */
-    public void windowOpenVetoed(Window window, Vote reason);
+    default public void windowOpenVetoed(Window window, Vote reason) {
+    }
 
     /**
      * Called when a window has closed.
@@ -105,5 +160,6 @@ public interface WindowStateListener {
      * @param display The display in which the window was shown.
      * @param owner   The owner of this window (which could be {@code null}).
      */
-    public void windowClosed(Window window, Display display, Window owner);
+    default public void windowClosed(Window window, Display display, Window owner) {
+    }
 }

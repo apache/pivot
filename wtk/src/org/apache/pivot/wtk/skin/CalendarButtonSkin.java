@@ -107,7 +107,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         }
     };
 
-    private WindowStateListener calendarPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener calendarPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();

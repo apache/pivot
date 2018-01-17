@@ -137,7 +137,7 @@ public class SheetTest extends Application.Adapter {
             }
         });
 
-        sheet.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+        sheet.getWindowStateListeners().add(new WindowStateListener() {
             @Override
             public void windowOpened(Window window) {
                 closeButton.requestFocus();

@@ -17,11 +17,40 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Window action mapping listener interface.
  */
 public interface WindowActionMappingListener {
+    /**
+     * Window action mapping listeners.
+     */
+    public static class Listeners extends ListenerList<WindowActionMappingListener>
+        implements WindowActionMappingListener {
+        @Override
+        public void actionMappingAdded(Window window) {
+            forEach(listener -> listener.actionMappingAdded(window));
+        }
+
+        @Override
+        public void actionMappingsRemoved(Window window, int index,
+            Sequence<Window.ActionMapping> removed) {
+            forEach(listener -> listener.actionMappingsRemoved(window, index, removed));
+        }
+
+        @Override
+        public void keyStrokeChanged(Window.ActionMapping actionMapping,
+            Keyboard.KeyStroke previousKeyStroke) {
+            forEach(listener -> listener.keyStrokeChanged(actionMapping, previousKeyStroke));
+        }
+
+        @Override
+        public void actionChanged(Window.ActionMapping actionMapping, Action previousAction) {
+            forEach(listener -> listener.actionChanged(actionMapping, previousAction));
+        }
+    }
+
     /**
      * Called when an action mapping has been added to a window.
      *

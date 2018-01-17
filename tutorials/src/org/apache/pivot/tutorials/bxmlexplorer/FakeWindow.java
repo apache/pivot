@@ -35,46 +35,7 @@ import org.apache.pivot.wtk.media.Image;
 @DefaultProperty("content")
 public class FakeWindow extends Container {
 
-    private static class FakeWindowListenerList extends ListenerList<FakeWindowListener>
-        implements FakeWindowListener {
-        @Override
-        public void titleChanged(FakeWindow window, String previousTitle) {
-            for (FakeWindowListener listener : this) {
-                listener.titleChanged(window, previousTitle);
-            }
-        }
-
-        @Override
-        public void iconAdded(FakeWindow window, Image addedIcon) {
-            for (FakeWindowListener listener : this) {
-                listener.iconAdded(window, addedIcon);
-            }
-        }
-
-        @Override
-        public void iconInserted(FakeWindow window, Image addedIcon, int index) {
-            for (FakeWindowListener listener : this) {
-                listener.iconInserted(window, addedIcon, index);
-            }
-        }
-
-        @Override
-        public void iconsRemoved(FakeWindow window, int index, Sequence<Image> removed) {
-            for (FakeWindowListener listener : this) {
-                listener.iconsRemoved(window, index, removed);
-            }
-        }
-
-        @Override
-        public void contentChanged(FakeWindow window, Component previousContent) {
-            for (FakeWindowListener listener : this) {
-                listener.contentChanged(window, previousContent);
-            }
-        }
-
-    }
-
-    private FakeWindowListenerList windowListeners = new FakeWindowListenerList();
+    private FakeWindowListener.Listeners windowListeners = new FakeWindowListener.Listeners();
 
     private Component content = null;
 

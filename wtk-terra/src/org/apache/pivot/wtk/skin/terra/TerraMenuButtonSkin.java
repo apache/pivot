@@ -67,7 +67,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
     private static final int CORNER_RADIUS = 4;
 
-    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             MenuButton menuButton = (MenuButton) getComponent();

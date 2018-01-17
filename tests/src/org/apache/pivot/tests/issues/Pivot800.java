@@ -40,7 +40,7 @@ public class Pivot800 extends Application.Adapter {
         sheet.open(window);
     }
 
-    private class SelectFileListener extends WindowStateListener.Adapter {
+    private class SelectFileListener implements WindowStateListener {
         @Override
         public void windowOpened(Window window) {
             File homeFolder = new File(System.getProperty("user.home"));

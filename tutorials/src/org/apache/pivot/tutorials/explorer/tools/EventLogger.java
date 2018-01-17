@@ -157,40 +157,6 @@ public class EventLogger extends Container {
         }
     }
 
-    /**
-     * Event logger listener list.
-     */
-    private static class EventLoggerListenerList extends ListenerList<EventLoggerListener>
-        implements EventLoggerListener {
-        @Override
-        public void sourceChanged(EventLogger eventLogger, Component previousSource) {
-            for (EventLoggerListener listener : this) {
-                listener.sourceChanged(eventLogger, previousSource);
-            }
-        }
-
-        @Override
-        public void eventIncluded(EventLogger eventLogger, Method event) {
-            for (EventLoggerListener listener : this) {
-                listener.eventIncluded(eventLogger, event);
-            }
-        }
-
-        @Override
-        public void eventExcluded(EventLogger eventLogger, Method event) {
-            for (EventLoggerListener listener : this) {
-                listener.eventExcluded(eventLogger, event);
-            }
-        }
-
-        @Override
-        public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
-            for (EventLoggerListener listener : this) {
-                listener.eventFired(eventLogger, event, arguments);
-            }
-        }
-    }
-
     private Component source = null;
 
     private HashMap<Class<?>, Object> eventListenerProxies = new HashMap<>();
@@ -202,7 +168,7 @@ public class EventLogger extends Container {
     private HashSet<Method> includeEvents = new HashSet<>();
     private IncludeEventGroup includeEventGroup = new IncludeEventGroup();
 
-    private EventLoggerListenerList eventLoggerListeners = new EventLoggerListenerList();
+    private EventLoggerListener.Listeners eventLoggerListeners = new EventLoggerListener.Listeners();
 
     /**
      * Creates a new event logger that is not tied to any source component.

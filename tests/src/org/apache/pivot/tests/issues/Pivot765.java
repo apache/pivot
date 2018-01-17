@@ -42,7 +42,7 @@ public class Pivot765 extends Application.Adapter {
         button.setButtonData("Populate menu and open!");
         Window window = new Window(button);
 
-        button.getListPopup().getWindowStateListeners().add(new WindowStateListener.Adapter() {
+        button.getListPopup().getWindowStateListeners().add(new WindowStateListener() {
             @Override
             public Vote previewWindowOpen(Window windowArgument) {
                 Menu menu = new Menu();

@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.WindowStateListener;
 public abstract class MenuItemSkin extends ButtonSkin implements Menu.ItemListener {
     protected MenuPopup menuPopup = new MenuPopup();
 
-    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();

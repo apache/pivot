@@ -1141,7 +1141,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                     menuPopup = new MenuPopup(menu);
 
                                     menuPopup.getWindowStateListeners().add(
-                                        new WindowStateListener.Adapter() {
+                                        new WindowStateListener() {
                                             @Override
                                             public void windowClosed(Window window,
                                                 Display displayArgument, Window owner) {

@@ -144,13 +144,8 @@ public class Window extends Container {
                 throw new IllegalArgumentException("Action mapping already has a window.");
             }
 
-            if (actionMapping.keyStroke == null) {
-                throw new IllegalArgumentException("Keystroke is undefined.");
-            }
-
-            if (actionMapping.action == null) {
-                throw new IllegalArgumentException("Action is undefined.");
-            }
+            Utils.checkNull(actionMapping.keyStroke, "Keystroke");
+            Utils.checkNull(actionMapping.action, "Action");
 
             if (actionMap.containsKey(actionMapping.keyStroke)) {
                 throw new IllegalArgumentException("A mapping for " + actionMapping.keyStroke
@@ -282,118 +277,6 @@ public class Window extends Container {
         }
     }
 
-    private static class WindowListenerList extends ListenerList<WindowListener> implements
-        WindowListener {
-        @Override
-        public void titleChanged(Window window, String previousTitle) {
-            forEach(listener -> listener.titleChanged(window, previousTitle));
-        }
-
-        @Override
-        public void iconAdded(Window window, Image addedIcon) {
-            forEach(listener -> listener.iconAdded(window, addedIcon));
-        }
-
-        @Override
-        public void iconInserted(Window window, Image addedIcon, int index) {
-            forEach(listener -> listener.iconInserted(window, addedIcon, index));
-        }
-
-        @Override
-        public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
-            forEach(listener -> listener.iconsRemoved(window, index, removed));
-        }
-
-        @Override
-        public void contentChanged(Window window, Component previousContent) {
-            forEach(listener -> listener.contentChanged(window, previousContent));
-        }
-
-        @Override
-        public void activeChanged(Window window, Window obverseWindow) {
-            forEach(listener -> listener.activeChanged(window, obverseWindow));
-        }
-
-        @Override
-        public void maximizedChanged(Window window) {
-            forEach(listener -> listener.maximizedChanged(window));
-        }
-    }
-
-    private static class WindowStateListenerList extends ListenerList<WindowStateListener>
-        implements WindowStateListener {
-        @Override
-        public void windowOpened(Window window) {
-            forEach(listener -> listener.windowOpened(window));
-        }
-
-        @Override
-        public Vote previewWindowClose(Window window) {
-            VoteResult result = new VoteResult();
-
-            forEach(listener -> result.tally(listener.previewWindowClose(window)));
-
-            return result.get();
-        }
-
-        @Override
-        public void windowCloseVetoed(Window window, Vote reason) {
-            forEach(listener -> listener.windowCloseVetoed(window, reason));
-        }
-
-        @Override
-        public Vote previewWindowOpen(Window window) {
-            VoteResult result = new VoteResult();
-
-            forEach(listener -> result.tally(listener.previewWindowOpen(window)));
-
-            return result.get();
-        }
-
-        @Override
-        public void windowOpenVetoed(Window window, Vote reason) {
-            forEach(listener -> listener.windowOpenVetoed(window, reason));
-        }
-
-        @Override
-        public void windowClosed(Window window, Display display, Window owner) {
-            forEach(listener -> listener.windowClosed(window, display, owner));
-        }
-    }
-
-    private static class WindowActionMappingListenerList extends
-        ListenerList<WindowActionMappingListener> implements WindowActionMappingListener {
-        @Override
-        public void actionMappingAdded(Window window) {
-            forEach(listener -> listener.actionMappingAdded(window));
-        }
-
-        @Override
-        public void actionMappingsRemoved(Window window, int index,
-            Sequence<Window.ActionMapping> removed) {
-            forEach(listener -> listener.actionMappingsRemoved(window, index, removed));
-        }
-
-        @Override
-        public void keyStrokeChanged(Window.ActionMapping actionMapping,
-            Keyboard.KeyStroke previousKeyStroke) {
-            forEach(listener -> listener.keyStrokeChanged(actionMapping, previousKeyStroke));
-        }
-
-        @Override
-        public void actionChanged(Window.ActionMapping actionMapping, Action previousAction) {
-            forEach(listener -> listener.actionChanged(actionMapping, previousAction));
-        }
-    }
-
-    private static class WindowClassListenerList extends ListenerList<WindowClassListener>
-        implements WindowClassListener {
-        @Override
-        public void activeWindowChanged(Window previousActiveWindow) {
-            forEach(listener -> listener.activeWindowChanged(previousActiveWindow));
-        }
-    }
-
     private Window owner = null;
     private ArrayList<Window> ownedWindows = new ArrayList<>();
 
@@ -413,11 +296,11 @@ public class Window extends Container {
 
     private Point restoreLocation = null;
 
-    private WindowListenerList windowListeners = new WindowListenerList();
-    private WindowStateListenerList windowStateListeners = new WindowStateListenerList();
-    private WindowActionMappingListenerList windowActionMappingListeners = new WindowActionMappingListenerList();
+    private WindowListener.Listeners windowListeners = new WindowListener.Listeners();
+    private WindowStateListener.Listeners windowStateListeners = new WindowStateListener.Listeners();
+    private WindowActionMappingListener.Listeners windowActionMappingListeners = new WindowActionMappingListener.Listeners();
 
-    private static WindowClassListenerList windowClassListeners = new WindowClassListenerList();
+    private static WindowClassListener.Listeners windowClassListeners = new WindowClassListener.Listeners();
 
     private static Window activeWindow = null;
 

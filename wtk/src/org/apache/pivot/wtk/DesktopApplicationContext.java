@@ -90,7 +90,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
         private transient Window rootOwner = null;
         private transient Runnable updateHostWindowTitleBarCallback = null;
 
-        private transient WindowListener rootOwnerListener = new WindowListener.Adapter() {
+        private transient WindowListener rootOwnerListener = new WindowListener() {
             @Override
             public void titleChanged(Window window, String previousTitle) {
                 updateFrameTitleBar();

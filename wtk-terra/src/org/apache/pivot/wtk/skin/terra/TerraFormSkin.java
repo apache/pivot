@@ -381,7 +381,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
         }
         flagMessageWindow.getDecorators().add(new PopupFieldIndicatorDecorator());
 
-        flagMessageWindow.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+        flagMessageWindow.getWindowStateListeners().add(new WindowStateListener() {
             private ApplicationContext.ScheduledCallback scheduledHideFlagMessageCallback = null;
 
             @Override

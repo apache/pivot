@@ -105,7 +105,7 @@ public class SheetSlideDirectionWindow extends Window implements Bindable {
         };
 
         // Add/remove the mouse handler based on the Sheet's state
-        sheet.getWindowStateListeners().add(new WindowStateListener.Adapter() {
+        sheet.getWindowStateListeners().add(new WindowStateListener() {
             @Override
             public void windowOpened(Window window) {
                 window.getDisplay().getContainerMouseListeners().add(displayMouseHandler);

@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.explorer.tools;
 
 import java.lang.reflect.Method;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.Component;
 
 /**
@@ -25,27 +26,28 @@ import org.apache.pivot.wtk.Component;
  */
 public interface EventLoggerListener {
     /**
-     * Event logger listener adapter.
+     * Event logger listeners.
      */
-    public static class Adapter implements EventLoggerListener {
+    public static class Listeners extends ListenerList<EventLoggerListener>
+        implements EventLoggerListener {
         @Override
         public void sourceChanged(EventLogger eventLogger, Component previousSource) {
-            // empty block
+            forEach(listener -> listener.sourceChanged(eventLogger, previousSource));
         }
 
         @Override
-        public void eventIncluded(EventLogger eventLogger, Method method) {
-            // empty block
+        public void eventIncluded(EventLogger eventLogger, Method event) {
+            forEach(listener -> listener.eventIncluded(eventLogger, event));
         }
 
         @Override
-        public void eventExcluded(EventLogger eventLogger, Method method) {
-            // empty block
+        public void eventExcluded(EventLogger eventLogger, Method event) {
+            forEach(listener -> listener.eventExcluded(eventLogger, event));
         }
 
         @Override
         public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
-            // empty block
+            forEach(listener -> listener.eventFired(eventLogger, event, arguments));
         }
     }
 
@@ -55,7 +57,8 @@ public interface EventLoggerListener {
      * @param eventLogger
      * @param previousSource
      */
-    public void sourceChanged(EventLogger eventLogger, Component previousSource);
+    default public void sourceChanged(EventLogger eventLogger, Component previousSource) {
+    }
 
     /**
      * Called when a declared event has been included in the list of logged
@@ -64,7 +67,8 @@ public interface EventLoggerListener {
      * @param eventLogger
      * @param event
      */
-    public void eventIncluded(EventLogger eventLogger, Method event);
+    default public void eventIncluded(EventLogger eventLogger, Method event) {
+    }
 
     /**
      * Called when a declared event has been excluded from the list of logged
@@ -73,7 +77,8 @@ public interface EventLoggerListener {
      * @param eventLogger
      * @param event
      */
-    public void eventExcluded(EventLogger eventLogger, Method event);
+    default public void eventExcluded(EventLogger eventLogger, Method event) {
+    }
 
     /**
      * Called when an included event has been fired by the event logger's
@@ -83,5 +88,6 @@ public interface EventLoggerListener {
      * @param event
      * @param arguments
      */
-    public void eventFired(EventLogger eventLogger, Method event, Object[] arguments);
+    default public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
+    }
 }

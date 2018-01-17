@@ -112,7 +112,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
     };
 
-    private WindowStateListener colorChooserPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener colorChooserPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();

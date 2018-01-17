@@ -40,7 +40,7 @@ public abstract class MenuButtonSkin extends ButtonSkin implements MenuButton.Sk
     protected boolean pressed = false;
     protected MenuPopup menuPopup = new MenuPopup();
 
-    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener menuPopupWindowStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             Display display = window.getDisplay();

@@ -51,7 +51,7 @@ import org.apache.pivot.wtk.skin.ColorChooserButtonSkin;
  * Terra color chooser button skin.
  */
 public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
-    private WindowStateListener colorChooserPopupStateListener = new WindowStateListener.Adapter() {
+    private WindowStateListener colorChooserPopupStateListener = new WindowStateListener() {
         @Override
         public void windowOpened(Window window) {
             ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
