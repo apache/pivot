@@ -48,17 +48,21 @@ public class FormattedValidator<F extends Format> implements Validator {
 
     @Override
     public boolean isValid(final String text) {
-        String textToParse = text;
+        String textToParse;
         final ParsePosition pos = new ParsePosition(0);
         if (format instanceof NumberFormat) {
-            // We have to upper case because of the exponent symbol
-            textToParse = textToParse.toUpperCase(locale);
+            if (text.length() > 1 && text.charAt(0) == '+') {
+                textToParse = text.substring(1).toUpperCase(locale);
+            } else {
+                textToParse = text.toUpperCase(locale);
+            }
+        } else {
+            textToParse = text;
         }
         Object obj = format.parseObject(textToParse, pos);
 
         // The text is only valid if we successfully parsed ALL of it. Don't
-        // want trailing bits of
-        // not-valid text.
-        return obj != null && pos.getErrorIndex() == -1 && pos.getIndex() == text.length();
+        // want trailing bits of not-valid text.
+        return obj != null && pos.getErrorIndex() == -1 && pos.getIndex() == textToParse.length();
     }
 }

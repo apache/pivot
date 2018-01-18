@@ -51,8 +51,15 @@ public class DecimalValidator extends FormattedValidator<NumberFormat> {
     protected final Number parseNumber(final String text) {
         String textToParse;
         try {
+            // The default DecimalFormat doesn't support leading "+" sign,
+            // and there is no setting in DecimalFormatSymbols for a positive
+            // sign either, so just do it ourselves.
             // We have to upper case because of the exponent symbol
-            textToParse = text.toUpperCase(locale);
+            if (text.length() > 1 && text.charAt(0) == '+') {
+                textToParse = text.substring(1).toUpperCase(locale);
+            } else {
+                textToParse = text.toUpperCase(locale);
+            }
             return format.parse(textToParse);
         } catch (ParseException ex) {
             // this should never happen

@@ -123,7 +123,7 @@ public class TextInputValidatorTest extends Application.Adapter {
         });
         invalidComparableRangeLabel = (Label) namespace.get("invalidComparableRangeLabel");
 
-        textinputDouble.setText("\u221E"); // infinite symbol
+        textinputDouble.setText("+\u221E"); // positive infinity text
         textinputDouble.setValidator(new DoubleValidator());
 
         // textinputFloat.setText("123456.789");
