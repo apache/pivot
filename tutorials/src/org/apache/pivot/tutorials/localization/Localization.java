@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 
-public class Localization extends Application.Adapter {
+public class Localization implements Application {
     private Window window = null;
 
     public static final String LANGUAGE_KEY = "language";

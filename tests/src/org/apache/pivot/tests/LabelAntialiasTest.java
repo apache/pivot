@@ -31,7 +31,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
-public class LabelAntialiasTest extends Application.Adapter {
+public class LabelAntialiasTest implements Application {
     private Window window = null;
 
     private Label buildLabel(double rotation) {

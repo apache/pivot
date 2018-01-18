@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class DeploymentExample extends Application.Adapter {
+public class DeploymentExample implements Application {
     private Window window = null;
 
     @Override

@@ -40,7 +40,7 @@ import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
-public class Pivot894 extends Application.Adapter {
+public class Pivot894 implements Application {
     // global counter, just to know how many iterations the application is doing
     static int num = 0;
 

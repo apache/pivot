@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.TagDecorator;
 import org.apache.pivot.wtk.media.Image;
 
-public class TagDecoratorTest extends Application.Adapter {
+public class TagDecoratorTest implements Application {
     private Frame frame = null;
 
     @Override

@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Panorama;
 
-public class PanoramaTest extends Application.Adapter {
+public class PanoramaTest implements Application {
     private Frame frame1 = null;
     private Frame frame2 = null;
 

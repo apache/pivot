@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Window;
 
-public class ListViewTest extends Application.Adapter {
+public class ListViewTest implements Application {
     private Window window = null;
 
     @Override

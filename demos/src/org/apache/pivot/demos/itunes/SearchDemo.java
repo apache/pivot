@@ -43,7 +43,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.media.Image;
 
-public class SearchDemo extends Application.Adapter {
+public class SearchDemo implements Application {
     private Window window = null;
 
     @BXML private TextInput termTextInput;

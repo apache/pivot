@@ -62,7 +62,7 @@ import org.apache.pivot.wtk.Window;
  * @see DesktopApplicationContext#replaceSplashScreen(Display)
  * @see DesktopApplicationContext#PRESERVE_SPLASH_SCREEN_ARGUMENT
  */
-public class SplashScreenTest extends Application.Adapter {
+public class SplashScreenTest implements Application {
 
     private static class SplashScreenProgressOverlay {
         private final SplashScreen splashScreen;

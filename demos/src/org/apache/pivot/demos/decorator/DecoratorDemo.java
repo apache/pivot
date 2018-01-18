@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.FadeDecorator;
 
-public class DecoratorDemo extends Application.Adapter {
+public class DecoratorDemo implements Application {
     private Window reflectionWindow = null;
     private Frame translucentFrame = null;
 

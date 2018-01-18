@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 
 
-public class HyperlinkButtonTest2 extends Application.Adapter {
+public class HyperlinkButtonTest2 implements Application {
     private Frame frame = null;
 
     private static final String bxmlFile =

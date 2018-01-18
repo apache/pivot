@@ -34,7 +34,7 @@ import org.apache.pivot.wtk.Window;
 /**
  * Web query tutorial application.
  */
-public class WebQueries extends Application.Adapter {
+public class WebQueries implements Application {
     private Window window = null;
 
     private ListView listView = null;

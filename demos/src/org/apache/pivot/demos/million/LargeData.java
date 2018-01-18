@@ -49,7 +49,7 @@ import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowComparator;
 
-public class LargeData extends Application.Adapter {
+public class LargeData implements Application {
     private static String USER_HOME; // useful for local tests as Java Application
 
     URL origin = null;

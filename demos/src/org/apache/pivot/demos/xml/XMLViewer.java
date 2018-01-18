@@ -53,7 +53,7 @@ import org.apache.pivot.xml.XMLSerializer;
  * Utility application that allows the user to browse an XML DOM using a tree
  * view component.
  */
-public class XMLViewer extends Application.Adapter {
+public class XMLViewer implements Application {
     private Window window = null;
 
     @BXML private TreeView treeView = null;

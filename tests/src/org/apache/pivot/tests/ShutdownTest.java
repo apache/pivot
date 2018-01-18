@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.DialogCloseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.MessageType;
 
-public class ShutdownTest extends Application.Adapter {
+public class ShutdownTest implements Application {
     private Display display = null;
     private Alert alert = null;
     private boolean cancelShutdown = true;

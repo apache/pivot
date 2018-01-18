@@ -44,7 +44,7 @@ import org.apache.pivot.wtk.validation.Validator;
 /**
  * Text input validator test.
  */
-public class TextInputValidatorTest extends Application.Adapter {
+public class TextInputValidatorTest implements Application {
     private Locale locale = Locale.getDefault(); // the default locale
 
     private Window window = null;
@@ -115,7 +115,7 @@ public class TextInputValidatorTest extends Application.Adapter {
         bdCompRange.setAutoTrim(true); // enable auto-trim of input string, before validating
         System.out.println("ComparableRangeValidator: enable auto-trim of input string, before validating");
         textinputComparableRange.setValidator(bdCompRange);
-        textinputComparableRange.getTextInputListeners().add(new TextInputListener.Adapter() {
+        textinputComparableRange.getTextInputListeners().add(new TextInputListener() {
             @Override
             public void textValidChanged(TextInput textInput) {
                 invalidComparableRangeLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
@@ -145,7 +145,7 @@ public class TextInputValidatorTest extends Application.Adapter {
         textinputFloatRange.setValidator(new FloatRangeValidator(2.0f, 123456789f));
 
         // test the listener by updating a label
-        textinputFloatRange.getTextInputListeners().add(new TextInputListener.Adapter() {
+        textinputFloatRange.getTextInputListeners().add(new TextInputListener() {
             @Override
             public void textValidChanged(TextInput textInput) {
                 invalidLabel.setText(textInput.isTextValid() ? "valid" : "invalid");

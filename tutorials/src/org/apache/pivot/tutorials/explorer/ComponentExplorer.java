@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 
-public class ComponentExplorer extends Application.Adapter {
+public class ComponentExplorer implements Application {
     private ComponentExplorerWindow window = null;
 
     public static final String CLASS_PROPERTY = "class";

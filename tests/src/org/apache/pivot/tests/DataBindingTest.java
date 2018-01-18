@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.content.ListButtonDataRenderer;
 import org.apache.pivot.wtk.content.ListViewItemRenderer;
 import org.apache.pivot.wtk.content.SpinnerItemRenderer;
 
-public class DataBindingTest extends Application.Adapter {
+public class DataBindingTest implements Application {
     public static class TestListButtonDataRenderer extends ListButtonDataRenderer {
         @Override
         public String toString(Object item) {

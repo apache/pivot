@@ -34,7 +34,7 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
-public class ColorPaletteTest extends Application.Adapter {
+public class ColorPaletteTest implements Application {
     private Window window = null;
 
     @SuppressWarnings("unused")

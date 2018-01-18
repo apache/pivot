@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot811 extends Application.Adapter {
+public class Pivot811 implements Application {
     private Display display = null;
 
     @Override

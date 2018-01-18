@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot694 extends Application.Adapter {
+public class Pivot694 implements Application {
     private Window window = null;
 
     // TODO: for release 2.1 ... maybe generalizing some test here

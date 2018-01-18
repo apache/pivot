@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.ScaleDecorator;
 
-public class ScaleDecoratorDemo extends Application.Adapter {
+public class ScaleDecoratorDemo implements Application {
     private Window scaleWindow;
     @BXML private ImageView imageView;
     @BXML private ScaleDecorator scaleDecorator;

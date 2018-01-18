@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class DOMInteractionDemo extends Application.Adapter {
+public class DOMInteractionDemo implements Application {
 
     private class CallFromBrowserCallback implements Runnable {
         String text;

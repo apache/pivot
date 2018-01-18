@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot738 extends Application.Adapter {
+public class Pivot738 implements Application {
     private Window window = null;
 
     @Override

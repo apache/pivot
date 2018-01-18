@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.Window;
 
-public class SliderTest extends Application.Adapter {
+public class SliderTest implements Application {
     private Window window = null;
     private Slider slider1 = null;
     private Slider slider2 = null;

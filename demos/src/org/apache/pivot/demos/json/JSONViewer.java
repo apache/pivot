@@ -49,7 +49,7 @@ import org.apache.pivot.wtk.effects.OverlayDecorator;
  * Utility application that allows the user to browse a JSON structure using a
  * tree view component.
  */
-public class JSONViewer extends Application.Adapter {
+public class JSONViewer implements Application {
     private Window window = null;
 
     @BXML

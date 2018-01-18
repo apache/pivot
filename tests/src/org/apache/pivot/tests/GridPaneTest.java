@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class GridPaneTest extends Application.Adapter {
+public class GridPaneTest implements Application {
     private Window window = null;
 
     @Override

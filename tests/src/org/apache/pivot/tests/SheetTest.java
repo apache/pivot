@@ -41,7 +41,7 @@ import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
-public class SheetTest extends Application.Adapter {
+public class SheetTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 

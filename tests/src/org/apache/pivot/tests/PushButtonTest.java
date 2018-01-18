@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class PushButtonTest extends Application.Adapter {
+public class PushButtonTest implements Application {
     private Window window = null;
 
     @Override

@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.ListViewItemStateListener;
 import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.Window;
 
-public class CheckedListViewTest extends Application.Adapter {
+public class CheckedListViewTest implements Application {
 
     private String toShortString(Span span) {
         if (span.getLength() == 1) {

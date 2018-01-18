@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.Window;
 
-public class BXMLExplorer extends Application.Adapter {
+public class BXMLExplorer implements Application {
 
     /**
      * For the moment editing is experimental, so use a property to turn it on.

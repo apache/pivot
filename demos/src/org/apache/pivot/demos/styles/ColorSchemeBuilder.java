@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 
-public class ColorSchemeBuilder extends Application.Adapter {
+public class ColorSchemeBuilder implements Application {
     private ColorSchemeBuilderWindow window = null;
 
     @Override

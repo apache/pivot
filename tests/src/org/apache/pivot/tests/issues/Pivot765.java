@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.WindowStateListener;
  * populate the Menu before the Window opens, so that correct sizing and layout
  * can be performed.
  */
-public class Pivot765 extends Application.Adapter {
+public class Pivot765 implements Application {
     private boolean menuPopulated = false;
 
     @Override

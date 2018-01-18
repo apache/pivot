@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class NamespaceTest extends Application.Adapter {
+public class NamespaceTest implements Application {
     private Window window = null;
 
     @Override

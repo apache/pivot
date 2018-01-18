@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.TextArea.ParagraphListener;
 import org.apache.pivot.wtk.TextAreaContentListener;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot841 extends Application.Adapter {
+public class Pivot841 implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {

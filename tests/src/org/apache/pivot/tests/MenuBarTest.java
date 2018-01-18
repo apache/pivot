@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 
-public class MenuBarTest extends Application.Adapter {
+public class MenuBarTest implements Application {
     private Frame frame1 = null;
     private Frame frame2 = null;
 

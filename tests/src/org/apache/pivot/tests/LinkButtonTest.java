@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.media.Image;
 
-public class LinkButtonTest extends Application.Adapter {
+public class LinkButtonTest implements Application {
     private Window window = new Window();
 
     @Override

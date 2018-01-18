@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Scripting extends Application.Adapter {
+public class Scripting implements Application {
     public static class MyButtonPressListener implements ButtonPressListener {
         @Override
         public void buttonPressed(Button button) {

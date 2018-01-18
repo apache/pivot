@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
-public class Pivot721 extends Application.Adapter {
+public class Pivot721 implements Application {
 
     private Window window;
 

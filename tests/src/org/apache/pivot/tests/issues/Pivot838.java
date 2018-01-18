@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot838 extends Application.Adapter {
+public class Pivot838 implements Application {
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {

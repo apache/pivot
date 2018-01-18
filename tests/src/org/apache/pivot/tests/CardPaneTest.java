@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Sheet;
 
-public class CardPaneTest extends Application.Adapter {
+public class CardPaneTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 

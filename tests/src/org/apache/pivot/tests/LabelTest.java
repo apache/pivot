@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextDecoration;
 
-public class LabelTest extends Application.Adapter {
+public class LabelTest implements Application {
     private Frame frame = null;
 
     @Override

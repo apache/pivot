@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Visual;
 
-public class NativeDragDropTest extends Application.Adapter {
+public class NativeDragDropTest implements Application {
     private Frame frame = null;
 
     @Override

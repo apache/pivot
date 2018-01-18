@@ -37,7 +37,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.VFSBrowserSheet;
 
-public class VFSBrowserTest extends Application.Adapter {
+public class VFSBrowserTest implements Application {
 
     public VFSBrowserTest() {
     }

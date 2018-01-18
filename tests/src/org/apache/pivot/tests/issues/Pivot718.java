@@ -36,7 +36,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TreeBranch;
 import org.apache.pivot.wtk.content.TreeNode;
 
-public class Pivot718 extends Application.Adapter {
+public class Pivot718 implements Application {
 
     private Window window = null;
     private TreeView tree;

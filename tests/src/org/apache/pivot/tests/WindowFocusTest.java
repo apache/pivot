@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 
-public class WindowFocusTest extends Application.Adapter {
+public class WindowFocusTest implements Application {
     private Frame frame1;
     private Frame frame2;
 

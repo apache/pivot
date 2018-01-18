@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Spinner;
 
-public class SpinnerFocusTest extends Application.Adapter {
+public class SpinnerFocusTest implements Application {
     private Frame frame = null;
     private Spinner spinner = null;
 

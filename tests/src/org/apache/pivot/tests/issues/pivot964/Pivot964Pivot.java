@@ -49,7 +49,7 @@ import com.kitfox.svg.animation.AnimationElement;
 /**
  * Test application with Pivot components
  */
-public class Pivot964Pivot extends Application.Adapter {
+public class Pivot964Pivot implements Application {
 
     // Display stuff
     protected SVGDiagram diagram;

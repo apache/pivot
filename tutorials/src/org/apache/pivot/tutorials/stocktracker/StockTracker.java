@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Display;
 /**
  * Stock Tracker application.
  */
-public class StockTracker extends Application.Adapter {
+public class StockTracker implements Application {
     private StockTrackerWindow window = null;
 
     public static final String LANGUAGE_KEY = "language";

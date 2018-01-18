@@ -33,7 +33,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot832 extends Application.Adapter {
+public class Pivot832 implements Application {
     private Window window = null;
     private String selectedFolder = null;
 

@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class MemGame extends Application.Adapter implements ButtonPressListener {
+public class MemGame implements Application, ButtonPressListener {
     private static final String IMG_BASE_FOLDER = "/org/apache/pivot/demos/memorygame/img/";
 
     private static Random random = new Random();

@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 
-public class FormTest extends Application.Adapter {
+public class FormTest implements Application {
     private Frame frame = null;
 
     @Override

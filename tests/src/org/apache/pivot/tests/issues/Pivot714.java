@@ -34,7 +34,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot714 extends Application.Adapter {
+public class Pivot714 implements Application {
 
     private Frame frame;
     private Dialog result;

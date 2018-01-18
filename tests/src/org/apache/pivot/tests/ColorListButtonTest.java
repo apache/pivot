@@ -26,7 +26,7 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
-public class ColorListButtonTest extends Application.Adapter {
+public class ColorListButtonTest implements Application {
     private Frame frame = null;
     private ListButton listButton = null;
 

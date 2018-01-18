@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Window;
 
-public class Windows extends Application.Adapter {
+public class Windows implements Application {
     private Display display = null;
 
     @Override

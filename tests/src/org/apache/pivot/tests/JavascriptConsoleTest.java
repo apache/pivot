@@ -40,7 +40,7 @@ import org.apache.pivot.wtk.Window;
  * and it's to show different ways to do the same things, even as iterative
  * development.
  */
-public class JavascriptConsoleTest extends Application.Adapter {
+public class JavascriptConsoleTest implements Application {
     public static final String LANGUAGE_KEY = "language";
     public static final String MAIN_CLASS_NAME = JavascriptConsoleTest.class.getName();
 

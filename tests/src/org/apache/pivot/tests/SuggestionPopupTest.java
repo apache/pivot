@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
 
-public class SuggestionPopupTest extends Application.Adapter {
+public class SuggestionPopupTest implements Application {
     private Window window = null;
 
     @BXML

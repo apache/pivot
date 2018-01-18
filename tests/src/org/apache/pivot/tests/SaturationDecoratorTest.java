@@ -23,7 +23,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class SaturationDecoratorTest extends Application.Adapter {
+public class SaturationDecoratorTest implements Application {
     private Window window = null;
 
     @Override

@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Display;
 /**
  * Query servlet tutorial client application.
  */
-public class Expenses extends Application.Adapter {
+public class Expenses implements Application {
     private String hostname = null;
     private int port = 0;
     private boolean secure = false;

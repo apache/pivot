@@ -27,7 +27,9 @@ import org.apache.pivot.wtk.Keyboard.KeyLocation;
 public interface Application {
     /**
      * Application adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements Application {
 
         @Override
@@ -72,7 +74,9 @@ public interface Application {
     public interface UnprocessedKeyHandler {
         /**
          * UnprocessedKeyHandler adapter.
+         * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
          */
+        @Deprecated
         public static class Adapter implements UnprocessedKeyHandler {
             @Override
             public void keyTyped(char character) {
@@ -90,11 +94,14 @@ public interface Application {
             }
         }
 
-        public void keyTyped(char character);
+        default public void keyTyped(char character) {
+        }
 
-        public void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation);
+        default public void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+        }
 
-        public void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation);
+        default public void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+        }
     }
 
     /**
@@ -111,29 +118,34 @@ public interface Application {
      * @param properties Initialization properties passed to the application.
      * @throws Exception if there is any problem during startup.
      */
-    public void startup(Display display, Map<String, String> properties) throws Exception;
+    default public void startup(Display display, Map<String, String> properties) throws Exception {
+    }
 
     /**
      * Called when the application is being shut down.
      *
      * @param optional If <tt>true</tt>, the shutdown may be cancelled by
      * returning a value of <tt>true</tt>.
-     * @return <tt>true</tt> to cancel shutdown, <tt>false</tt> to continue.
+     * @return <tt>true</tt> to cancel shutdown, <tt>false</tt> to proceed with shutdown (default).
      * @throws Exception if there is a problem during shutdown.
      */
-    public boolean shutdown(boolean optional) throws Exception;
+    default public boolean shutdown(boolean optional) throws Exception {
+        return false;
+    }
 
     /**
      * Called to notify the application that it is being suspended.
      *
      * @throws Exception if there is a problem doing the suspend.
      */
-    public void suspend() throws Exception;
+    default public void suspend() throws Exception {
+    }
 
     /**
      * Called when a suspended application has been resumed.
      *
      * @throws Exception if there is a problem doing the resume.
      */
-    public void resume() throws Exception;
+    default public void resume() throws Exception {
+    }
 }

@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
-public class Pivot686 extends Application.Adapter {
+public class Pivot686 implements Application {
     private Window window = null;
     private TextInput textInput = null;
     private PushButton pushButton = null;

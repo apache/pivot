@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Display;
  * Test application to show the memory leak (the subject for this bug). For more
  * info, look at LeakTestWindow.
  */
-public class Pivot861 extends Application.Adapter {
+public class Pivot861 implements Application {
 
     @Override
     public void startup(final Display display, Map<String, String> args) throws Exception {

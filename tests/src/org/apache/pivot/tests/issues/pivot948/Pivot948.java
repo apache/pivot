@@ -20,10 +20,7 @@ import org.apache.pivot.beans.*;
 import org.apache.pivot.collections.*;
 import org.apache.pivot.wtk.*;
 
-public class Pivot948 extends Application.Adapter
-                      implements ButtonPressListener,
-                      ListView.ItemBindMapping
-{
+public class Pivot948 implements Application, ButtonPressListener, ListView.ItemBindMapping {
     private Window window = null;
     @BXML private ListButton inputList;
     @BXML private PushButton loadButton;

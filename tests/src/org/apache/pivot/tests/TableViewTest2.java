@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
-public class TableViewTest2 extends Application.Adapter {
+public class TableViewTest2 implements Application {
     private Window window = null;
     private TableView tableView = null;
     private Window menu = null;

@@ -66,7 +66,7 @@ import org.apache.pivot.wtk.text.TextSpan;
 /**
  * Demonstrates the use of the rich-text functionality in TextPane.
  */
-public class TextPaneDemo extends Application.Adapter {
+public class TextPaneDemo implements Application {
     private Window window = null;
     @BXML private TextPane textPane = null;
     @BXML private PushButton openFileButton = null;

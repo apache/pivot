@@ -24,8 +24,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Window;
 
-public class ApplicationHandlerTest extends Application.Adapter implements
-    Application.UnprocessedKeyHandler {
+public class ApplicationHandlerTest implements Application, Application.UnprocessedKeyHandler {
     private Window window = null;
 
     @Override

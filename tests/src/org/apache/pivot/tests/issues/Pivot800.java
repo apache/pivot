@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
 
-public class Pivot800 extends Application.Adapter {
+public class Pivot800 implements Application {
     private FileBrowserSheet sheet;
 
     @Override

@@ -25,13 +25,12 @@ import org.apache.pivot.collections.Map;
  * Application should not be invoked directly by the application.
  *
  * @see Application
- * @see Application.Adapter
  */
 public interface ApplicationWithProperties extends Application {
     /**
      * ApplicationWithProperties adapter.
      */
-    public static class Adapter extends Application.Adapter implements ApplicationWithProperties {
+    public static class Adapter implements Application, ApplicationWithProperties {
         // TODO: verify if change with something (but general) like
         // ResourceCacheDictionary, and then synchronize its methods ...
         private Map<String, Object> properties = new HashMap<>();

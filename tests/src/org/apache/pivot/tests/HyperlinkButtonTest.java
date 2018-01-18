@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 
 
-public class HyperlinkButtonTest extends Application.Adapter {
+public class HyperlinkButtonTest implements Application {
     private Frame frame = null;
 
     @Override

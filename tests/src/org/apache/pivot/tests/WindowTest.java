@@ -34,7 +34,7 @@ import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
-public class WindowTest extends Application.Adapter {
+public class WindowTest implements Application {
     private Frame window1 = new Frame();
     private Frame dialogOwner = new Frame();
 

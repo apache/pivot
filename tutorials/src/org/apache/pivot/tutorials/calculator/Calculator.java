@@ -23,9 +23,7 @@ import org.apache.pivot.collections.*;
 import org.apache.pivot.serialization.*;
 import org.apache.pivot.wtk.*;
 
-public class Calculator
-    extends Application.Adapter
-{
+public class Calculator implements Application {
     private BXMLSerializer serializer;
 
     @BXML private Window mainWindow;

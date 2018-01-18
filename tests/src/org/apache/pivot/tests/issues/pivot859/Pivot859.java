@@ -38,7 +38,7 @@ import org.apache.pivot.wtk.Window;
 /**
  * Test application , to be run in multiple instances in the same HTML page.
  */
-public class Pivot859 extends Application.Adapter {
+public class Pivot859 implements Application {
 
     private Window window = null;
     private TextInput urlInput = null;

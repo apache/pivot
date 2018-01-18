@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Window;
 
-public class ContextMenuTest extends Application.Adapter {
+public class ContextMenuTest implements Application {
     private Window window = null;
 
     @BXML

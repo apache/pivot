@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 
-public class CalendarTest extends Application.Adapter {
+public class CalendarTest implements Application {
     private Window window = null;
 
     @BXML

@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Window;
 
-public class ActionMappingTest extends Application.Adapter {
+public class ActionMappingTest implements Application {
     private Window window = null;
 
     @Override

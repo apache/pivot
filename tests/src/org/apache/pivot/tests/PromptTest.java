@@ -30,7 +30,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
-public class PromptTest extends Application.Adapter {
+public class PromptTest implements Application {
     private Window window = null;
     private PushButton helloButton = null;
 

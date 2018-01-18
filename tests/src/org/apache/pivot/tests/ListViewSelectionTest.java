@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Span;
 
-public class ListViewSelectionTest extends Application.Adapter {
+public class ListViewSelectionTest implements Application {
     private ListView listView = new ListView();
 
     public ListViewSelectionTest() {

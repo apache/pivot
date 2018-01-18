@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Window;
 
-public class ButtonGroupTest extends Application.Adapter {
+public class ButtonGroupTest implements Application {
     private Window window = null;
 
     @Override
