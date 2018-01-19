@@ -17,14 +17,43 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * List view selection listener interface.
  */
 public interface ListViewSelectionListener {
     /**
-     * List view selection listener adapter.
+     * List view selection listeners.
      */
+    public static class Listeners extends ListenerList<ListViewSelectionListener> implements
+        ListViewSelectionListener {
+        @Override
+        public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+            forEach(listener -> listener.selectedRangeAdded(listView, rangeStart, rangeEnd));
+        }
+
+        @Override
+        public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+            forEach(listener -> listener.selectedRangeRemoved(listView, rangeStart, rangeEnd));
+        }
+
+        @Override
+        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelection) {
+            forEach(listener -> listener.selectedRangesChanged(listView, previousSelection));
+        }
+
+        @Override
+        public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+            forEach(listener -> listener.selectedItemChanged(listView, previousSelectedItem));
+        }
+    }
+
+    /**
+     * List view selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListViewSelectionListener {
         @Override
         public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
@@ -54,7 +83,8 @@ public interface ListViewSelectionListener {
      * @param rangeStart The start index of the range that was added, inclusive.
      * @param rangeEnd The end index of the range that was added, inclusive.
      */
-    public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd);
+    default public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+    }
 
     /**
      * Called when a range has been removed from a list view's selection.
@@ -65,7 +95,8 @@ public interface ListViewSelectionListener {
      * @param rangeEnd The starting index of the range that was removed,
      * inclusive.
      */
-    public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd);
+    default public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+    }
 
     /**
      * Called when a list view's selection state has changed.
@@ -76,7 +107,8 @@ public interface ListViewSelectionListener {
      * indirectly as a result of a model change, contains the current selection.
      * Otherwise, contains <tt>null</tt>.
      */
-    public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges);
+    default public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+    }
 
     /**
      * Called when a list view's selected item has changed.
@@ -84,5 +116,6 @@ public interface ListViewSelectionListener {
      * @param listView The source of the event.
      * @param previousSelectedItem The item that was previously selected.
      */
-    public void selectedItemChanged(ListView listView, Object previousSelectedItem);
+    default public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+    }
 }

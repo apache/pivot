@@ -27,7 +27,9 @@ public interface ScrollPaneListener {
     /**
      * Scroll pane listener adapter: default implementation methods
      * for this interface.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements ScrollPaneListener {
         @Override
         public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
@@ -98,8 +100,9 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousPolicy The previous horizontal scroll bar policy.
      */
-    public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
-        ScrollBarPolicy previousPolicy);
+    default public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
+        ScrollBarPolicy previousPolicy) {
+    }
 
     /**
      * Called when the scroll pane's vertical scroll bar policy changed.
@@ -107,8 +110,9 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousPolicy The previous vertical scroll bar policy.
      */
-    public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
-        ScrollBarPolicy previousPolicy);
+    default public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
+        ScrollBarPolicy previousPolicy) {
+    }
 
     /**
      * Called when the scroll pane's row header changed.
@@ -116,7 +120,8 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousRowHeader The previous row header for this scroll pane.
      */
-    public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader);
+    default public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
+    }
 
     /**
      * Called when the scroll pane's column header changed.
@@ -124,7 +129,8 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousColumnHeader The previous column header for this scroll pane.
      */
-    public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader);
+    default public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
+    }
 
     /**
      * Called when the scroll pane's corner component changed.
@@ -132,5 +138,6 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousCorner The previous corner component.
      */
-    public void cornerChanged(ScrollPane scrollPane, Component previousCorner);
+    default public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
+    }
 }

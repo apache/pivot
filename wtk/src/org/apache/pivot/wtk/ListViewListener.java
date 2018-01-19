@@ -18,14 +18,71 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * List view listener interface.
  */
 public interface ListViewListener {
     /**
-     * List view listener adapter.
+     * List view listeners.
      */
+    public static class Listeners extends ListenerList<ListViewListener> implements
+        ListViewListener {
+        @Override
+        public void listDataChanged(ListView listView, List<?> previousListData) {
+            forEach(listener -> listener.listDataChanged(listView, previousListData));
+        }
+
+        @Override
+        public void itemRendererChanged(ListView listView,
+            ListView.ItemRenderer previousItemRenderer) {
+            forEach(listener -> listener.itemRendererChanged(listView, previousItemRenderer));
+        }
+
+        @Override
+        public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+            forEach(listener -> listener.itemEditorChanged(listView, previousItemEditor));
+        }
+
+        @Override
+        public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
+            forEach(listener -> listener.selectModeChanged(listView, previousSelectMode));
+        }
+
+        @Override
+        public void checkmarksEnabledChanged(ListView listView) {
+            forEach(listener -> listener.checkmarksEnabledChanged(listView));
+        }
+
+        @Override
+        public void checkmarksTriStateChanged(ListView listView) {
+            forEach(listener -> listener.checkmarksTriStateChanged(listView));
+        }
+
+        @Override
+        public void checkmarksMixedAsCheckedChanged(ListView listView) {
+            forEach(listener -> listener.checkmarksMixedAsCheckedChanged(listView));
+        }
+
+        @Override
+        public void disabledItemFilterChanged(ListView listView,
+            Filter<?> previousDisabledItemFilter) {
+            forEach(listener -> listener.disabledItemFilterChanged(listView, previousDisabledItemFilter));
+        }
+
+        @Override
+        public void disabledCheckmarkFilterChanged(ListView listView,
+            Filter<?> previousDisabledCheckmarkFilter) {
+            forEach(listener -> listener.disabledCheckmarkFilterChanged(listView, previousDisabledCheckmarkFilter));
+        }
+    }
+
+    /**
+     * List view listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListViewListener {
         @Override
         public void listDataChanged(ListView listView, List<?> previousListData) {
@@ -82,7 +139,8 @@ public interface ListViewListener {
      * @param listView         The source of the event.
      * @param previousListData The previous list data that was displayed.
      */
-    public void listDataChanged(ListView listView, List<?> previousListData);
+    default public void listDataChanged(ListView listView, List<?> previousListData) {
+    }
 
     /**
      * Called when a list view's item renderer has changed.
@@ -90,7 +148,8 @@ public interface ListViewListener {
      * @param listView             The source of the event.
      * @param previousItemRenderer The previous renderer used for each item.
      */
-    public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer);
+    default public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
+    }
 
     /**
      * Called when a list view's item editor has changed.
@@ -98,7 +157,8 @@ public interface ListViewListener {
      * @param listView           The source of the event.
      * @param previousItemEditor The previous editor used for updating items.
      */
-    public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor);
+    default public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+    }
 
     /**
      * Called when a list view's select mode has changed.
@@ -106,21 +166,24 @@ public interface ListViewListener {
      * @param listView           The source of the event.
      * @param previousSelectMode The previous selection mode.
      */
-    public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode);
+    default public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
+    }
 
     /**
      * Called when a list view's checkmarks enabled flag has changed.
      *
      * @param listView The list view that has been changed.
      */
-    public void checkmarksEnabledChanged(ListView listView);
+    default public void checkmarksEnabledChanged(ListView listView) {
+    }
 
     /**
      * Called when a list view's tri-state checkmarks flag has been changed.
      *
      * @param listView The list view that has been changed.
      */
-    public void checkmarksTriStateChanged(ListView listView);
+    default public void checkmarksTriStateChanged(ListView listView) {
+    }
 
     /**
      * Called when a list view's flag to decide if mixed checkbox state should
@@ -128,7 +191,8 @@ public interface ListViewListener {
      *
      * @param listView The list view that has been changed.
      */
-    public void checkmarksMixedAsCheckedChanged(ListView listView);
+    default public void checkmarksMixedAsCheckedChanged(ListView listView) {
+    }
 
     /**
      * Called when a list view's disabled item filter has changed.
@@ -136,7 +200,8 @@ public interface ListViewListener {
      * @param listView                   The source of the event.
      * @param previousDisabledItemFilter The previous filter function used to disable specific items.
      */
-    public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter);
+    default public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+    }
 
     /**
      * Called when a list view's disabled checkmark filter has changed.
@@ -145,6 +210,7 @@ public interface ListViewListener {
      * @param previousDisabledCheckmarkFilter The previous filter function used to disable checkmarks
      *                                        for certain items.
      */
-    public void disabledCheckmarkFilterChanged(ListView listView,
-        Filter<?> previousDisabledCheckmarkFilter);
+    default public void disabledCheckmarkFilterChanged(ListView listView,
+        Filter<?> previousDisabledCheckmarkFilter) {
+    }
 }

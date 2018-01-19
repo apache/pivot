@@ -16,13 +16,33 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component state listener interface.
  */
 public interface ComponentStateListener {
     /**
-     * Component state listener adapter.
+     * Component state listeners.
      */
+    public static class Listeners extends ListenerList<ComponentStateListener>
+        implements ComponentStateListener {
+        @Override
+        public void enabledChanged(Component component) {
+            forEach(listener -> listener.enabledChanged(component));
+        }
+
+        @Override
+        public void focusedChanged(Component component, Component obverseComponent) {
+            forEach(listener -> listener.focusedChanged(component, obverseComponent));
+        }
+    }
+
+    /**
+     * Component state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ComponentStateListener {
         @Override
         public void enabledChanged(Component component) {
@@ -44,7 +64,8 @@ public interface ComponentStateListener {
      *
      * @param component The component whose enabled state is changing.
      */
-    public void enabledChanged(Component component);
+    default public void enabledChanged(Component component) {
+    }
 
     /**
      * Called when a component's focused state has changed. <p> This will be
@@ -59,5 +80,6 @@ public interface ComponentStateListener {
      * component that is losing focus. If the component is losing focus this is
      * the component that is gaining the focus instead.
      */
-    public void focusedChanged(Component component, Component obverseComponent);
+    default public void focusedChanged(Component component, Component obverseComponent) {
+    }
 }

@@ -25,7 +25,9 @@ import org.apache.pivot.wtk.validation.Validator;
 public interface TextInputListener {
     /**
      * Text input listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements TextInputListener {
         @Override
         public void textSizeChanged(TextInput textInput, int previousTextSize) {
@@ -119,7 +121,8 @@ public interface TextInputListener {
      * @param textInput        The source of this event.
      * @param previousTextSize The previous text size for the control
      */
-    public void textSizeChanged(TextInput textInput, int previousTextSize);
+    default public void textSizeChanged(TextInput textInput, int previousTextSize) {
+    }
 
     /**
      * Called when a text input's maximum length has changed.
@@ -127,14 +130,16 @@ public interface TextInputListener {
      * @param textInput             The source of this event.
      * @param previousMaximumLength The previous maximum text length.
      */
-    public void maximumLengthChanged(TextInput textInput, int previousMaximumLength);
+    default public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
+    }
 
     /**
      * Called when a text input's password flag has changed.
      *
      * @param textInput The source of this event.
      */
-    public void passwordChanged(TextInput textInput);
+    default public void passwordChanged(TextInput textInput) {
+    }
 
     /**
      * Called when a text input's prompt has changed.
@@ -142,7 +147,8 @@ public interface TextInputListener {
      * @param textInput      The source of this event.
      * @param previousPrompt The previous prompt string.
      */
-    public void promptChanged(TextInput textInput, String previousPrompt);
+    default public void promptChanged(TextInput textInput, String previousPrompt) {
+    }
 
     /**
      * Called when the validator changes.
@@ -150,27 +156,31 @@ public interface TextInputListener {
      * @param textInput         The source of this event.
      * @param previousValidator The previous validator for the text.
      */
-    public void textValidatorChanged(TextInput textInput, Validator previousValidator);
+    default public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+    }
 
     /**
      * Called when a text input's strict validation flag has changed.
      *
      * @param textInput The text input that has changed.
      */
-    public void strictValidationChanged(TextInput textInput);
+    default public void strictValidationChanged(TextInput textInput) {
+    }
 
     /**
      * Called when the text changes validity.
      *
      * @param textInput The text input that has been changed.
      */
-    public void textValidChanged(TextInput textInput);
+    default public void textValidChanged(TextInput textInput) {
+    }
 
     /**
      * Called when the editable state has changed.
      *
      * @param textInput The text input whose state has changed.
      */
-    public void editableChanged(TextInput textInput);
+    default public void editableChanged(TextInput textInput) {
+    }
 
 }

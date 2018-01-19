@@ -52,7 +52,7 @@ public class RSSFeedDemo extends Window implements Bindable {
         statusLabel = (Label) namespace.get("statusLabel");
 
         feedListView.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 private int index = -1;
 
                 @Override

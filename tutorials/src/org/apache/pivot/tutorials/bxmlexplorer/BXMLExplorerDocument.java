@@ -137,7 +137,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         });
 
         playgroundCardPane.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 @Override
                 public boolean mouseClick(Component component, Button button, int x, int y,
                     int count) {

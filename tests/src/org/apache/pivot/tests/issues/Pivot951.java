@@ -34,7 +34,7 @@ public class Pivot951 implements Application {
         window = new Window();
 
         Border brd = new Border();
-        brd.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+        brd.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             @Override
             public boolean mouseClick(Component component, Button button, int x, int y, int count) {
                 if (count == 1) {

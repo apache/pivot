@@ -326,223 +326,6 @@ public abstract class Component implements ConstrainedVisual {
         }
     }
 
-    private static class ComponentListenerList extends ListenerList<ComponentListener> implements
-        ComponentListener {
-        @Override
-        public void parentChanged(Component component, Container previousParent) {
-            forEach(listener -> listener.parentChanged(component, previousParent));
-        }
-
-        @Override
-        public void sizeChanged(Component component, int previousWidth, int previousHeight) {
-            forEach(listener -> listener.sizeChanged(component, previousWidth, previousHeight));
-        }
-
-        @Override
-        public void preferredSizeChanged(Component component, int previousPreferredWidth,
-            int previousPreferredHeight) {
-            forEach(listener -> listener.preferredSizeChanged(component, previousPreferredWidth,
-                    previousPreferredHeight));
-        }
-
-        @Override
-        public void widthLimitsChanged(Component component, int previousMinimumWidth,
-            int previousMaximumWidth) {
-            forEach(listener -> listener.widthLimitsChanged(component, previousMinimumWidth, previousMaximumWidth));
-        }
-
-        @Override
-        public void heightLimitsChanged(Component component, int previousMinimumHeight,
-            int previousMaximumHeight) {
-            forEach(listener -> listener.heightLimitsChanged(component, previousMinimumHeight,
-                    previousMaximumHeight));
-        }
-
-        @Override
-        public void locationChanged(Component component, int previousX, int previousY) {
-            forEach(listener -> listener.locationChanged(component, previousX, previousY));
-        }
-
-        @Override
-        public void visibleChanged(Component component) {
-            forEach(listener -> listener.visibleChanged(component));
-        }
-
-        @Override
-        public void cursorChanged(Component component, Cursor previousCursor) {
-            forEach(listener -> listener.cursorChanged(component, previousCursor));
-        }
-
-        @Override
-        public void tooltipTextChanged(Component component, String previousTooltipText) {
-            forEach(listener -> listener.tooltipTextChanged(component, previousTooltipText));
-        }
-
-        @Override
-        public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
-            forEach(listener -> listener.tooltipDelayChanged(component, previousTooltipDelay));
-        }
-
-        @Override
-        public void dragSourceChanged(Component component, DragSource previousDragSource) {
-            forEach(listener -> listener.dragSourceChanged(component, previousDragSource));
-        }
-
-        @Override
-        public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
-            forEach(listener -> listener.dropTargetChanged(component, previousDropTarget));
-        }
-
-        @Override
-        public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
-            forEach(listener -> listener.menuHandlerChanged(component, previousMenuHandler));
-        }
-
-        @Override
-        public void nameChanged(Component component, String previousName) {
-            forEach(listener -> listener.nameChanged(component, previousName));
-        }
-    }
-
-    private static class ComponentStateListenerList extends ListenerList<ComponentStateListener>
-        implements ComponentStateListener {
-        @Override
-        public void enabledChanged(Component component) {
-            forEach(listener -> listener.enabledChanged(component));
-        }
-
-        @Override
-        public void focusedChanged(Component component, Component obverseComponent) {
-            forEach(listener -> listener.focusedChanged(component, obverseComponent));
-        }
-    }
-
-    private static class ComponentDecoratorListenerList extends
-        ListenerList<ComponentDecoratorListener> implements ComponentDecoratorListener {
-        @Override
-        public void decoratorInserted(Component component, int index) {
-            forEach(listener -> listener.decoratorInserted(component, index));
-        }
-
-        @Override
-        public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
-            forEach(listener -> listener.decoratorUpdated(component, index, previousDecorator));
-        }
-
-        @Override
-        public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
-            forEach(listener -> listener.decoratorsRemoved(component, index, decorators));
-        }
-    }
-
-    private static class ComponentStyleListenerList extends ListenerList<ComponentStyleListener>
-        implements ComponentStyleListener {
-        @Override
-        public void styleUpdated(Component component, String styleKey, Object previousValue) {
-            forEach(listener -> listener.styleUpdated(component, styleKey, previousValue));
-        }
-    }
-
-    private static class ComponentMouseListenerList extends ListenerList<ComponentMouseListener>
-        implements ComponentMouseListener {
-        @Override
-        public boolean mouseMove(Component component, int x, int y) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.mouseMove(component, x, y)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public void mouseOver(Component component) {
-            forEach(listener -> listener.mouseOver(component));
-        }
-
-        @Override
-        public void mouseOut(Component component) {
-            forEach(listener -> listener.mouseOut(component));
-        }
-    }
-
-    private static class ComponentMouseButtonListenerList extends
-        ListenerList<ComponentMouseButtonListener> implements ComponentMouseButtonListener {
-        @Override
-        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.mouseDown(component, button, x, y)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.mouseUp(component, button, x, y)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.mouseClick(component, button, x, y, count)));
-
-            return consumed.get();
-        }
-    }
-
-    private static class ComponentMouseWheelListenerList extends
-        ListenerList<ComponentMouseWheelListener> implements ComponentMouseWheelListener {
-        @Override
-        public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
-            BooleanResult consumed = new BooleanResult();
-
-            forEach(listener -> consumed.or(listener.mouseWheel(component, scrollType, scrollAmount, wheelRotation,
-                    x, y)));
-
-            return consumed.get();
-        }
-    }
-
-    private static class ComponentTooltipListenerList extends
-        ListenerList<ComponentTooltipListener> implements ComponentTooltipListener {
-        @Override
-        public void tooltipTriggered(Component component, int x, int y) {
-            forEach(listener -> listener.tooltipTriggered(component, x, y));
-        }
-    }
-
-    private static class ComponentDataListenerList extends ListenerList<ComponentDataListener>
-        implements ComponentDataListener {
-        @Override
-        public void valueAdded(Component component, String key) {
-            forEach(listener -> listener.valueAdded(component, key));
-        }
-
-        @Override
-        public void valueUpdated(Component component, String key, Object previousValue) {
-            forEach(listener -> listener.valueUpdated(component, key, previousValue));
-        }
-
-        @Override
-        public void valueRemoved(Component component, String key, Object value) {
-            forEach(listener -> listener.valueRemoved(component, key, value));
-        }
-    }
-
-    private static class ComponentClassListenerList extends ListenerList<ComponentClassListener>
-        implements ComponentClassListener {
-        @Override
-        public void focusedComponentChanged(Component previousFocusedComponent) {
-            forEach(listener -> listener.focusedComponentChanged(previousFocusedComponent));
-        }
-    }
-
     // The currently installed skin, or null if no skin is installed
     private Skin skin = null;
 
@@ -622,16 +405,16 @@ public abstract class Component implements ConstrainedVisual {
     private String automationID;
 
     // Event listener lists
-    private ComponentListenerList componentListeners = new ComponentListenerList();
-    private ComponentStateListenerList componentStateListeners = new ComponentStateListenerList();
-    private ComponentDecoratorListenerList componentDecoratorListeners = new ComponentDecoratorListenerList();
-    private ComponentStyleListenerList componentStyleListeners = new ComponentStyleListenerList();
-    private ComponentMouseListenerList componentMouseListeners = new ComponentMouseListenerList();
-    private ComponentMouseButtonListenerList componentMouseButtonListeners = new ComponentMouseButtonListenerList();
-    private ComponentMouseWheelListenerList componentMouseWheelListeners = new ComponentMouseWheelListenerList();
+    private ComponentListener.Listeners componentListeners = new ComponentListener.Listeners();
+    private ComponentStateListener.Listeners componentStateListeners = new ComponentStateListener.Listeners();
+    private ComponentDecoratorListener.Listeners componentDecoratorListeners = new ComponentDecoratorListener.Listeners();
+    private ComponentStyleListener.Listeners componentStyleListeners = new ComponentStyleListener.Listeners();
+    private ComponentMouseListener.Listeners componentMouseListeners = new ComponentMouseListener.Listeners();
+    private ComponentMouseButtonListener.Listeners componentMouseButtonListeners = new ComponentMouseButtonListener.Listeners();
+    private ComponentMouseWheelListener.Listeners componentMouseWheelListeners = new ComponentMouseWheelListener.Listeners();
     private ComponentKeyListener.Listeners componentKeyListeners = new ComponentKeyListener.Listeners();
-    private ComponentTooltipListenerList componentTooltipListeners = new ComponentTooltipListenerList();
-    private ComponentDataListenerList componentDataListeners = new ComponentDataListenerList();
+    private ComponentTooltipListener.Listeners componentTooltipListeners = new ComponentTooltipListener.Listeners();
+    private ComponentDataListener.Listeners componentDataListeners = new ComponentDataListener.Listeners();
 
     // The component that currently has the focus
     private static Component focusedComponent = null;
@@ -641,7 +424,7 @@ public abstract class Component implements ConstrainedVisual {
     private static HashMap<String, Map<String, ?>> namedStyles = new HashMap<>();
 
     // Class event listeners
-    private static ComponentClassListenerList componentClassListeners = new ComponentClassListenerList();
+    private static ComponentClassListener.Listeners componentClassListeners = new ComponentClassListener.Listeners();
 
     /**
      * Returns the component's automation ID.

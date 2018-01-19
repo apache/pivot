@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component class listener interface.
  */
 public interface ComponentClassListener {
+    /**
+     * Component class listeners.
+     */
+    public static class Listeners extends ListenerList<ComponentClassListener>
+        implements ComponentClassListener {
+        @Override
+        public void focusedComponentChanged(Component previousFocusedComponent) {
+            forEach(listener -> listener.focusedComponentChanged(previousFocusedComponent));
+        }
+    }
+
     /**
      * Called when the focused component changes.
      *

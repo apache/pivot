@@ -25,7 +25,9 @@ import org.apache.pivot.util.ListenerList;
 public interface ColorChooserButtonBindingListener {
     /**
      * Color chooser button binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements ColorChooserButtonBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
@@ -78,8 +80,9 @@ public interface ColorChooserButtonBindingListener {
      * @param colorChooserButton       The color chooser button that has changed.
      * @param previousSelectedColorKey The previous binding key for the selected color.
      */
-    public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
-        String previousSelectedColorKey);
+    default public void selectedColorKeyChanged(ColorChooserButton colorChooserButton,
+        String previousSelectedColorKey) {
+    }
 
     /**
      * Called when a color chooser button's selected color bind type has
@@ -88,8 +91,9 @@ public interface ColorChooserButtonBindingListener {
      * @param colorChooserButton            The color chooser button that has changed.
      * @param previousSelectedColorBindType The previous bind type for the selected color.
      */
-    public void selectedColorBindTypeChanged(ColorChooserButton colorChooserButton,
-        BindType previousSelectedColorBindType);
+    default public void selectedColorBindTypeChanged(ColorChooserButton colorChooserButton,
+        BindType previousSelectedColorBindType) {
+    }
 
     /**
      * Called when a color chooser button's selected color bind mapping has
@@ -98,6 +102,7 @@ public interface ColorChooserButtonBindingListener {
      * @param colorChooserButton               The color chooser button that has changed.
      * @param previousSelectedColorBindMapping The previous bind mapping for the selected color.
      */
-    public void selectedColorBindMappingChanged(ColorChooserButton colorChooserButton,
-        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping);
+    default public void selectedColorBindMappingChanged(ColorChooserButton colorChooserButton,
+        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
+    }
 }

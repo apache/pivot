@@ -183,7 +183,7 @@ public class TerraRollupSkin extends RollupSkin {
 
     private ExpandTransition expandTransition = null;
 
-    private ComponentMouseButtonListener headingMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
+    private ComponentMouseButtonListener headingMouseButtonListener = new ComponentMouseButtonListener() {
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;

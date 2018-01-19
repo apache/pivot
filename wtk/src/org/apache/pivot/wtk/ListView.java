@@ -211,57 +211,6 @@ public class ListView extends Component {
         public void setState(Object item, Button.State state);
     }
 
-    private static class ListViewListenerList extends ListenerList<ListViewListener> implements
-        ListViewListener {
-        @Override
-        public void listDataChanged(ListView listView, List<?> previousListData) {
-            forEach(listener -> listener.listDataChanged(listView, previousListData));
-        }
-
-        @Override
-        public void itemRendererChanged(ListView listView,
-            ListView.ItemRenderer previousItemRenderer) {
-            forEach(listener -> listener.itemRendererChanged(listView, previousItemRenderer));
-        }
-
-        @Override
-        public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
-            forEach(listener -> listener.itemEditorChanged(listView, previousItemEditor));
-        }
-
-        @Override
-        public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
-            forEach(listener -> listener.selectModeChanged(listView, previousSelectMode));
-        }
-
-        @Override
-        public void checkmarksEnabledChanged(ListView listView) {
-            forEach(listener -> listener.checkmarksEnabledChanged(listView));
-        }
-
-        @Override
-        public void checkmarksTriStateChanged(ListView listView) {
-            forEach(listener -> listener.checkmarksTriStateChanged(listView));
-        }
-
-        @Override
-        public void checkmarksMixedAsCheckedChanged(ListView listView) {
-            forEach(listener -> listener.checkmarksMixedAsCheckedChanged(listView));
-        }
-
-        @Override
-        public void disabledItemFilterChanged(ListView listView,
-            Filter<?> previousDisabledItemFilter) {
-            forEach(listener -> listener.disabledItemFilterChanged(listView, previousDisabledItemFilter));
-        }
-
-        @Override
-        public void disabledCheckmarkFilterChanged(ListView listView,
-            Filter<?> previousDisabledCheckmarkFilter) {
-            forEach(listener -> listener.disabledCheckmarkFilterChanged(listView, previousDisabledCheckmarkFilter));
-        }
-    }
-
     private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
         implements ListViewItemListener {
         @Override
@@ -300,29 +249,6 @@ public class ListView extends Component {
         @Override
         public void itemCheckedStateChanged(ListView listView, int index) {
             forEach(listener -> listener.itemCheckedStateChanged(listView, index));
-        }
-    }
-
-    private static class ListViewSelectionListenerList extends
-        ListenerList<ListViewSelectionListener> implements ListViewSelectionListener {
-        @Override
-        public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
-            forEach(listener -> listener.selectedRangeAdded(listView, rangeStart, rangeEnd));
-        }
-
-        @Override
-        public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
-            forEach(listener -> listener.selectedRangeRemoved(listView, rangeStart, rangeEnd));
-        }
-
-        @Override
-        public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelection) {
-            forEach(listener -> listener.selectedRangesChanged(listView, previousSelection));
-        }
-
-        @Override
-        public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
-            forEach(listener -> listener.selectedItemChanged(listView, previousSelectedItem));
         }
     }
 
@@ -603,10 +529,10 @@ public class ListView extends Component {
         }
     };
 
-    private ListViewListenerList listViewListeners = new ListViewListenerList();
+    private ListViewListener.Listeners listViewListeners = new ListViewListener.Listeners();
     private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
     private ListViewItemStateListenerList listViewItemStateListeners = new ListViewItemStateListenerList();
-    private ListViewSelectionListenerList listViewSelectionListeners = new ListViewSelectionListenerList();
+    private ListViewSelectionListener.Listeners listViewSelectionListeners = new ListViewSelectionListener.Listeners();
     private ListViewBindingListenerList listViewBindingListeners = new ListViewBindingListenerList();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();

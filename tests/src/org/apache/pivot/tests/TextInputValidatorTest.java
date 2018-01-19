@@ -115,7 +115,7 @@ public class TextInputValidatorTest implements Application {
         bdCompRange.setAutoTrim(true); // enable auto-trim of input string, before validating
         System.out.println("ComparableRangeValidator: enable auto-trim of input string, before validating");
         textinputComparableRange.setValidator(bdCompRange);
-        textinputComparableRange.getTextInputListeners().add(new TextInputListener.Adapter() {
+        textinputComparableRange.getTextInputListeners().add(new TextInputListener() {
             @Override
             public void textValidChanged(TextInput textInput) {
                 invalidComparableRangeLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
@@ -145,7 +145,7 @@ public class TextInputValidatorTest implements Application {
         textinputFloatRange.setValidator(new FloatRangeValidator(2.0f, 123456789f));
 
         // test the listener by updating a label
-        textinputFloatRange.getTextInputListeners().add(new TextInputListener.Adapter() {
+        textinputFloatRange.getTextInputListeners().add(new TextInputListener() {
             @Override
             public void textValidChanged(TextInput textInput) {
                 invalidLabel.setText(textInput.isTextValid() ? "valid" : "invalid");

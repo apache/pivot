@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.text.ComponentNodeListener;
 
 class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements ComponentNodeListener {
 
-    private final ComponentListener myComponentListener = new ComponentListener.Adapter() {
+    private final ComponentListener myComponentListener = new ComponentListener() {
         @Override
         public void sizeChanged(Component component, int previousWidth, int previousHeight) {
             invalidateUpTree();

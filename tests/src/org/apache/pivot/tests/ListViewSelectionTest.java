@@ -117,7 +117,7 @@ public class ListViewSelectionTest implements Application {
         dumpSelection();
         verifySelection(4);
 
-        listView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
+        listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override
             public void selectedRangesChanged(ListView listViewArgument,
                 Sequence<Span> previousSelectedRanges) {

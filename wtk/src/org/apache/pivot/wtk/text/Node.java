@@ -24,56 +24,11 @@ import org.apache.pivot.wtk.Span;
  * Abstract base class for document nodes.
  */
 public abstract class Node {
-    private static class NodeListenerList extends ListenerList<NodeListener> implements
-        NodeListener {
-        @Override
-        public void parentChanged(Node node, Element previousParent) {
-            forEach(listener -> listener.parentChanged(node, previousParent));
-        }
-
-        @Override
-        public void offsetChanged(Node node, int previousOffset) {
-            forEach(listener -> listener.offsetChanged(node, previousOffset));
-        }
-
-        /**
-         * @param offset Offset relative to this node.
-         */
-        @Override
-        public void nodeInserted(Node node, int offset) {
-            forEach(listener -> listener.nodeInserted(node, offset));
-        }
-
-        /**
-         * @param offset Offset relative to this node.
-         */
-        @Override
-        public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
-            forEach(listener -> listener.nodesRemoved(node, removed, offset));
-        }
-
-        /**
-         * @param offset Offset relative to this node.
-         */
-        @Override
-        public void rangeInserted(Node node, int offset, int characterCount) {
-            forEach(listener -> listener.rangeInserted(node, offset, characterCount));
-        }
-
-        /**
-         * @param offset Offset relative to this node.
-         */
-        @Override
-        public void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars) {
-            forEach(listener -> listener.rangeRemoved(node, offset, characterCount, removedChars));
-        }
-    }
-
     private Element parent = null;
     private int offset = 0;
     private Object userData = null;
 
-    private NodeListenerList nodeListeners = new NodeListenerList();
+    private NodeListener.Listeners nodeListeners = new NodeListener.Listeners();
 
     /**
      * Returns the parent element of this node.

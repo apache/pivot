@@ -16,13 +16,38 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component data listener interface.
  */
 public interface ComponentDataListener {
     /**
-     * Component data listener adapter.
+     * Component data listeners.
      */
+    public static class Listeners extends ListenerList<ComponentDataListener>
+        implements ComponentDataListener {
+        @Override
+        public void valueAdded(Component component, String key) {
+            forEach(listener -> listener.valueAdded(component, key));
+        }
+
+        @Override
+        public void valueUpdated(Component component, String key, Object previousValue) {
+            forEach(listener -> listener.valueUpdated(component, key, previousValue));
+        }
+
+        @Override
+        public void valueRemoved(Component component, String key, Object value) {
+            forEach(listener -> listener.valueRemoved(component, key, value));
+        }
+    }
+
+    /**
+     * Component data listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ComponentDataListener {
         @Override
         public void valueAdded(Component component, String key) {
@@ -46,7 +71,8 @@ public interface ComponentDataListener {
      * @param component The component that has changed.
      * @param key       The key for the key/value pair that was added to this component's data dictionary.
      */
-    public void valueAdded(Component component, String key);
+    default public void valueAdded(Component component, String key) {
+    }
 
     /**
      * Called when a value has been updated in a component's user data
@@ -56,7 +82,8 @@ public interface ComponentDataListener {
      * @param key           The key for the value that has been updated.
      * @param previousValue The previous value for this key.
      */
-    public void valueUpdated(Component component, String key, Object previousValue);
+    default public void valueUpdated(Component component, String key, Object previousValue) {
+    }
 
     /**
      * Called when a value has been removed from a component's user data
@@ -66,5 +93,6 @@ public interface ComponentDataListener {
      * @param key       The key for the key/value pair that has been removed.
      * @param value     The corresponding value that was removed.
      */
-    public void valueRemoved(Component component, String key, Object value);
+    default public void valueRemoved(Component component, String key, Object value) {
+    }
 }

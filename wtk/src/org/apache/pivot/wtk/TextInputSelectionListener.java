@@ -46,6 +46,7 @@ public interface TextInputSelectionListener {
      * @param previousSelectionLength If the selection changed directly, the
      * previous selection length. Otherwise, the current selection length.
      */
-    public void selectionChanged(TextInput textInput, int previousSelectionStart,
-        int previousSelectionLength);
+    default public void selectionChanged(TextInput textInput, int previousSelectionStart,
+        int previousSelectionLength) {
+    }
 }

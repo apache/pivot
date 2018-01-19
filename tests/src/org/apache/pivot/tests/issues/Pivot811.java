@@ -74,14 +74,14 @@ public class Pivot811 implements Application {
         listView.setListData(listData);
         scrollPane.setView(listView);
 
-        listView.getListViewSelectionListeners().add(new ListViewSelectionListener.Adapter() {
+        listView.getListViewSelectionListeners().add(new ListViewSelectionListener() {
             @Override
             public void selectedItemChanged(ListView listViewArgument, Object previousSelectedItem) {
                 System.out.println("selectedItemChanged : " + listViewArgument.getSelectedItem());
             }
         });
 
-        listView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+        listView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
                 int count) {

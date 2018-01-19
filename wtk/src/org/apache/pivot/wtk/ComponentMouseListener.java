@@ -16,11 +16,39 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.BooleanResult;
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component mouse listener interface. Component mouse events are "bubbling" and
  * are fired as the event propagates up the component hierarchy.
  */
 public interface ComponentMouseListener {
+    /**
+     * Component mouse listeners.
+     */
+    public static class Listeners extends ListenerList<ComponentMouseListener>
+        implements ComponentMouseListener {
+        @Override
+        public boolean mouseMove(Component component, int x, int y) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.mouseMove(component, x, y)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public void mouseOver(Component component) {
+            forEach(listener -> listener.mouseOver(component));
+        }
+
+        @Override
+        public void mouseOut(Component component) {
+            forEach(listener -> listener.mouseOut(component));
+        }
+    }
+
     /**
      * Component mouse button listener adapter.
      * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.

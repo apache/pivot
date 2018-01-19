@@ -16,10 +16,30 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.BooleanResult;
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component mouse wheel listener interface.
  */
 public interface ComponentMouseWheelListener {
+    /**
+     * Mouse wheel listeners.
+     */
+    public static class Listeners extends ListenerList<ComponentMouseWheelListener>
+        implements ComponentMouseWheelListener {
+        @Override
+        public boolean mouseWheel(Component component, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.mouseWheel(component, scrollType, scrollAmount, wheelRotation,
+                    x, y)));
+
+            return consumed.get();
+        }
+    }
+
     /**
      * Called when the mouse wheel is scrolled over a component.
      *

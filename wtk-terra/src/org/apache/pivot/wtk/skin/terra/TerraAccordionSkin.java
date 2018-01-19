@@ -310,7 +310,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     private ClipDecorator previousSelectedPanelClipDecorator = new ClipDecorator();
     private ClipDecorator selectedPanelClipDecorator = new ClipDecorator();
 
-    private ComponentStateListener panelStateListener = new ComponentStateListener.Adapter() {
+    private ComponentStateListener panelStateListener = new ComponentStateListener() {
         @Override
         public void enabledChanged(Component component) {
             Accordion accordion = (Accordion) getComponent();

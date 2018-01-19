@@ -49,7 +49,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     protected boolean pressed = false;
 
-    private ComponentMouseButtonListener calendarPopupMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
+    private ComponentMouseButtonListener calendarPopupMouseButtonListener = new ComponentMouseButtonListener() {
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             CalendarButton calendarButton = (CalendarButton) getComponent();

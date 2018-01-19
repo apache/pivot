@@ -899,13 +899,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         });
 
         fileTableView.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 private int index = -1;
 
                 @Override
                 public boolean mouseClick(Component componentArgument, Mouse.Button button, int x,
                     int y, int count) {
-                    boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
+                    boolean consumed = false;
 
                     if (count == 1) {
                         index = fileTableView.getRowAt(y);

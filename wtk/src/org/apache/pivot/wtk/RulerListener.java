@@ -20,13 +20,20 @@ import org.apache.pivot.util.ListenerList;
 
 
 public interface RulerListener {
-    public static class Listeners extends ListenerList<RulerListener> implements
-        RulerListener {
+    /**
+     * Ruler listeners.
+     */
+    public static class Listeners extends ListenerList<RulerListener> implements RulerListener {
         @Override
         public void orientationChanged(Ruler ruler) {
             forEach(listener -> listener.orientationChanged(ruler));
         }
     }
 
+    /**
+     * Called when the ruler orientation has changed (thus necessitating layout again).
+     *
+     * @param ruler The ruler that has changed.
+     */
     public void orientationChanged(Ruler ruler);
 }

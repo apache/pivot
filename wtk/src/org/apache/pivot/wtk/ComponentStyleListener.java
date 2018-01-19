@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component style listener interface.
  */
 public interface ComponentStyleListener {
+    /**
+     * Component style listeners.
+     */
+    public static class Listeners extends ListenerList<ComponentStyleListener>
+        implements ComponentStyleListener {
+        @Override
+        public void styleUpdated(Component component, String styleKey, Object previousValue) {
+            forEach(listener -> listener.styleUpdated(component, styleKey, previousValue));
+        }
+    }
+
     /**
      * Called when a component style has been updated.
      *

@@ -45,7 +45,7 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
     protected ListView listView;
     protected Window listViewPopup;
 
-    private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener.Adapter() {
+    private ComponentMouseButtonListener listViewPopupMouseButtonListener = new ComponentMouseButtonListener() {
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             ListButton listButton = (ListButton) getComponent();

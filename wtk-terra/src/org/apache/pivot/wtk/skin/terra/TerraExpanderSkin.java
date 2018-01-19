@@ -215,7 +215,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     private ExpandTransition expandTransition = null;
     private ClipDecorator clipDecorator = new ClipDecorator();
 
-    private ComponentMouseButtonListener titleBarMouseListener = new ComponentMouseButtonListener.Adapter() {
+    private ComponentMouseButtonListener titleBarMouseListener = new ComponentMouseButtonListener() {
         @Override
         public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
             boolean consumed = false;

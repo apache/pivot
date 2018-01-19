@@ -206,7 +206,7 @@ public class TerraPaletteSkin extends WindowSkin {
         buttonBoxPane.add(closeButton);
 
         closeButton.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 @Override
                 public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
                     // Consume the event so we don't process it as a click on

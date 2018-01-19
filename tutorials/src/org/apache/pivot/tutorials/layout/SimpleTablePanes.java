@@ -40,7 +40,7 @@ public class SimpleTablePanes extends Window implements Bindable {
         tablePane = (TablePane) namespace.get("tablePane");
 
         tablePane.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 @Override
                 public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
                     int count) {

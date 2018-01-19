@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component tooltip listener interface.
  */
 public interface ComponentTooltipListener {
+    /**
+     * Component tooltip listeners.
+     */
+    public static class Listeners extends ListenerList<ComponentTooltipListener>
+        implements ComponentTooltipListener {
+        @Override
+        public void tooltipTriggered(Component component, int x, int y) {
+            forEach(listener -> listener.tooltipTriggered(component, x, y));
+        }
+    }
+
     /**
      * Called when a tooltip has been triggered over a component.
      *

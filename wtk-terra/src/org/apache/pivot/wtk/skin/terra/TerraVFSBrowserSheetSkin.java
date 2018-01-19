@@ -251,13 +251,13 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
         });
 
         fileBrowser.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 private FileObject file = null;
 
                 @Override
                 public boolean mouseClick(Component componentArgument, Mouse.Button button, int x,
                     int y, int count) {
-                    boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
+                    boolean consumed = false;
 
                     VFSBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 

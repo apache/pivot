@@ -257,7 +257,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         section.add(textInput);
         Form.setLabel(textInput, key);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -297,7 +297,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         section.add(textInput);
         Form.setLabel(textInput, key);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -337,7 +337,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         section.add(textInput);
         Form.setLabel(textInput, key);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -375,7 +375,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         section.add(textInput);
         Form.setLabel(textInput, key);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -474,7 +474,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(point.x));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -508,7 +508,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(point.y));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -567,7 +567,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(dimensions.width));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -601,7 +601,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(dimensions.height));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -660,7 +660,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(limits.minimum));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -694,7 +694,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(limits.maximum));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -753,7 +753,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(insets.top));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -788,7 +788,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(insets.left));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -823,7 +823,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(insets.bottom));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -858,7 +858,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(insets.right));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -904,7 +904,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(span == null ? "" : String.valueOf(span.start));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -940,7 +940,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(span == null ? "" : String.valueOf(span.end));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1001,7 +1001,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(cornerRadii.topLeft));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1036,7 +1036,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(cornerRadii.topRight));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1071,7 +1071,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(cornerRadii.bottomLeft));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1106,7 +1106,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(String.valueOf(cornerRadii.bottomRight));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1152,7 +1152,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(scope == null ? "" : String.valueOf(scope.start));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1188,7 +1188,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(scope == null ? "" : String.valueOf(scope.end));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {
@@ -1224,7 +1224,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         textInput.setText(scope == null ? "" : String.valueOf(scope.extent));
         flowPane.add(textInput);
 
-        textInput.getComponentStateListeners().add(new ComponentStateListener.Adapter() {
+        textInput.getComponentStateListeners().add(new ComponentStateListener() {
             @Override
             public void focusedChanged(Component component, Component obverseComponent) {
                 if (!component.isFocused()) {

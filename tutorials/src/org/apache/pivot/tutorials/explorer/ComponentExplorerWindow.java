@@ -175,7 +175,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
             }
         });
 
-        treeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener.Adapter() {
+        treeView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
             @Override
             public boolean mouseClick(Component component, Mouse.Button button, int x, int y,
                 int count) {

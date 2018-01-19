@@ -93,7 +93,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         }
     };
 
-    private ComponentStateListener textInputStateListener = new ComponentStateListener.Adapter() {
+    private ComponentStateListener textInputStateListener = new ComponentStateListener() {
         @Override
         public void focusedChanged(Component component, Component obverseComponent) {
             SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
@@ -134,7 +134,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         }
     };
 
-    private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener.Adapter() {
+    private ListViewSelectionListener listViewSelectionListener = new ListViewSelectionListener() {
         @Override
         public void selectedItemChanged(ListView listViewArgument, Object previousSelectedItem) {
             int index = listViewArgument.getSelectedIndex();

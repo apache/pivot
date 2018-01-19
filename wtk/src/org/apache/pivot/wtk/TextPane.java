@@ -250,7 +250,7 @@ public class TextPane extends Container {
         }
     };
 
-    private NodeListener documentListener = new NodeListener.Adapter() {
+    private NodeListener documentListener = new NodeListener() {
         /**
          * @param offset Offset into the document.
          */

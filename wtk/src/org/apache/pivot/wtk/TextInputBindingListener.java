@@ -25,7 +25,9 @@ import org.apache.pivot.util.ListenerList;
 public interface TextInputBindingListener {
     /**
      * Text input binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements TextInputBindingListener {
         @Override
         public void textKeyChanged(TextInput textInput, String previousTextKey) {
@@ -72,7 +74,8 @@ public interface TextInputBindingListener {
      * @param textInput The source of this event.
      * @param previousTextKey The previous text key for the component.
      */
-    public void textKeyChanged(TextInput textInput, String previousTextKey);
+    default public void textKeyChanged(TextInput textInput, String previousTextKey) {
+    }
 
     /**
      * Called when a text input's text bind type has changed.
@@ -80,7 +83,8 @@ public interface TextInputBindingListener {
      * @param textInput The source of this event.
      * @param previousTextBindType The previous bind type for this component.
      */
-    public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType);
+    default public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
+    }
 
     /**
      * Called when a text input's text bind mapping has changed.
@@ -88,6 +92,7 @@ public interface TextInputBindingListener {
      * @param textInput The source of this event.
      * @param previousTextBindMapping The previous bind mapping for this component.
      */
-    public void textBindMappingChanged(TextInput textInput,
-        TextInput.TextBindMapping previousTextBindMapping);
+    default public void textBindMappingChanged(TextInput textInput,
+        TextInput.TextBindMapping previousTextBindMapping) {
+    }
 }

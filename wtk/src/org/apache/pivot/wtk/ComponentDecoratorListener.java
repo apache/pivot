@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.effects.Decorator;
 
 /**
@@ -24,8 +25,31 @@ import org.apache.pivot.wtk.effects.Decorator;
  */
 public interface ComponentDecoratorListener {
     /**
-     * Component decorator list adapter.
+     * Component decorator listeners.
      */
+    public static class Listeners extends ListenerList<ComponentDecoratorListener>
+        implements ComponentDecoratorListener {
+        @Override
+        public void decoratorInserted(Component component, int index) {
+            forEach(listener -> listener.decoratorInserted(component, index));
+        }
+
+        @Override
+        public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
+            forEach(listener -> listener.decoratorUpdated(component, index, previousDecorator));
+        }
+
+        @Override
+        public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
+            forEach(listener -> listener.decoratorsRemoved(component, index, decorators));
+        }
+    }
+
+    /**
+     * Component decorator list adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ComponentDecoratorListener {
         @Override
         public void decoratorInserted(Component component, int index) {
@@ -50,7 +74,8 @@ public interface ComponentDecoratorListener {
      * @param component The component that has changed.
      * @param index     The starting index of the decorator that has been inserted.
      */
-    public void decoratorInserted(Component component, int index);
+    default public void decoratorInserted(Component component, int index) {
+    }
 
     /**
      * Called when a decorator has been updated in a component's decorator
@@ -60,7 +85,8 @@ public interface ComponentDecoratorListener {
      * @param index             The index of the decorator that has been updated.
      * @param previousDecorator The previous decorator at that index.
      */
-    public void decoratorUpdated(Component component, int index, Decorator previousDecorator);
+    default public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
+    }
 
     /**
      * Called when decorators have been removed from a component's decorator
@@ -70,5 +96,6 @@ public interface ComponentDecoratorListener {
      * @param index      The starting index where decorators were removed.
      * @param decorators The complete sequence of decorators that were removed.
      */
-    public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators);
+    default public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
+    }
 }

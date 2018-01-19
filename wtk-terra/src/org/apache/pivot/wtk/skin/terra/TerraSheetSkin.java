@@ -185,7 +185,7 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
     private boolean closingResult;
     private boolean doingFinalClose = false;
 
-    private ComponentListener ownerListener = new ComponentListener.Adapter() {
+    private ComponentListener ownerListener = new ComponentListener() {
         @Override
         public void locationChanged(Component component, int previousX, int previousY) {
             alignToOwner();

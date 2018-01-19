@@ -16,13 +16,51 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.BooleanResult;
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Component mouse button listener interface.
  */
 public interface ComponentMouseButtonListener {
     /**
-     * Component mouse button listener adapter.
+     * Component mouse button listeners.
      */
+    public static class Listeners extends ListenerList<ComponentMouseButtonListener>
+        implements ComponentMouseButtonListener {
+        @Override
+        public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.mouseDown(component, button, x, y)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.mouseUp(component, button, x, y)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+            BooleanResult consumed = new BooleanResult();
+
+            forEach(listener -> consumed.or(listener.mouseClick(component, button, x, y, count)));
+
+            return consumed.get();
+        }
+    }
+
+    /**
+     * Component mouse button listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ComponentMouseButtonListener {
         @Override
         public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
@@ -48,9 +86,11 @@ public interface ComponentMouseButtonListener {
      * @param x X position of the mouse.
      * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
-     * propagate.
+     * propagate (default).
      */
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y);
+    default public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+        return false;
+    }
 
     /**
      * Called when a mouse button is released over a component.
@@ -60,9 +100,11 @@ public interface ComponentMouseButtonListener {
      * @param x X position of the mouse.
      * @param y Y position of the mouse.
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
-     * propagate.
+     * propagate (default).
      */
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y);
+    default public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+        return false;
+    }
 
     /**
      * Called when a mouse button is clicked over a component.
@@ -73,7 +115,9 @@ public interface ComponentMouseButtonListener {
      * @param y Y position of the mouse.
      * @param count Number of clicks (1 = single click, 2 = double click, etc.).
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
-     * propagate.
+     * propagate (default).
      */
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count);
+    default public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        return false;
+    }
 }

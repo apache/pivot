@@ -25,7 +25,9 @@ import org.apache.pivot.util.ListenerList;
 public interface ColorChooserBindingListener {
     /**
      * Color chooser binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements ColorChooserBindingListener {
         @Override
         public void selectedColorKeyChanged(ColorChooser colorChooser,
@@ -77,7 +79,8 @@ public interface ColorChooserBindingListener {
      * @param colorChooser             The color chooser that has changed.
      * @param previousSelectedColorKey The previous value of the selected color binding key.
      */
-    public void selectedColorKeyChanged(ColorChooser colorChooser, String previousSelectedColorKey);
+    default public void selectedColorKeyChanged(ColorChooser colorChooser, String previousSelectedColorKey) {
+    }
 
     /**
      * Called when a color chooser's selected color bind type has changed.
@@ -85,8 +88,9 @@ public interface ColorChooserBindingListener {
      * @param colorChooser                  The color chooser that has changed.
      * @param previousSelectedColorBindType The previous value of the selected color bind type.
      */
-    public void selectedColorBindTypeChanged(ColorChooser colorChooser,
-        BindType previousSelectedColorBindType);
+    default public void selectedColorBindTypeChanged(ColorChooser colorChooser,
+        BindType previousSelectedColorBindType) {
+    }
 
     /**
      * Called when a color chooser's selected color bind mapping has changed.
@@ -94,6 +98,7 @@ public interface ColorChooserBindingListener {
      * @param colorChooser                     The color chooser that has changed.
      * @param previousSelectedColorBindMapping The previous bind mapping for the selected color.
      */
-    public void selectedColorBindMappingChanged(ColorChooser colorChooser,
-        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping);
+    default public void selectedColorBindMappingChanged(ColorChooser colorChooser,
+        ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping) {
+    }
 }

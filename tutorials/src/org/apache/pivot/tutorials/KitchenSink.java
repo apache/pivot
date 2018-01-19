@@ -761,7 +761,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                 });
 
                 this.customTableView.getComponentMouseButtonListeners().add(
-                    new ComponentMouseButtonListener.Adapter() {
+                    new ComponentMouseButtonListener() {
                         @Override
                         public boolean mouseClick(Component comp, Mouse.Button button, int x,
                             int y, int count) {

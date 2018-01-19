@@ -570,7 +570,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     private SelectionChangeTransition selectionChangeTransition = null;
     private ClipDecorator clipDecorator = new ClipDecorator();
 
-    private ComponentStateListener tabStateListener = new ComponentStateListener.Adapter() {
+    private ComponentStateListener tabStateListener = new ComponentStateListener() {
         @Override
         public void enabledChanged(Component component) {
             TabPane tabPane = (TabPane) getComponent();

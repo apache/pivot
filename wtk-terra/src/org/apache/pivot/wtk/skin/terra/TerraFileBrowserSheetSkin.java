@@ -178,13 +178,13 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         });
 
         fileBrowser.getComponentMouseButtonListeners().add(
-            new ComponentMouseButtonListener.Adapter() {
+            new ComponentMouseButtonListener() {
                 private File file = null;
 
                 @Override
                 public boolean mouseClick(Component componentArgument, Mouse.Button button, int x,
                     int y, int count) {
-                    boolean consumed = super.mouseClick(componentArgument, button, x, y, count);
+                    boolean consumed = false;
 
                     FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 

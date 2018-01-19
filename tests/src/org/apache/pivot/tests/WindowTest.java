@@ -47,7 +47,7 @@ public class WindowTest implements Application {
         window1.setMinimumWidth(320);
         window1.setMinimumHeight(240);
 
-        window1.getComponentListeners().add(new ComponentListener.Adapter() {
+        window1.getComponentListeners().add(new ComponentListener() {
             @Override
             public void sizeChanged(Component component, int previousWidth, int previousHeight) {
                 window1.align(window1.getDisplay().getBounds(), HorizontalAlignment.CENTER,
