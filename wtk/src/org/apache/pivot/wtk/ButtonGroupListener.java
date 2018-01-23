@@ -24,26 +24,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface ButtonGroupListener {
     /**
-     * Button group listener adapter.
-     */
-    public class Adapter implements ButtonGroupListener {
-        @Override
-        public void buttonAdded(ButtonGroup buttonGroup, Button button) {
-            // empty block
-        }
-
-        @Override
-        public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
-            // empty block
-        }
-
-        @Override
-        public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
-            // empty block
-        }
-    }
-
-    /**
      * The button group listener listeners list.
      */
     public static class Listeners extends ListenerList<ButtonGroupListener>
@@ -65,12 +45,35 @@ public interface ButtonGroupListener {
     }
 
     /**
+     * Button group listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
+    public class Adapter implements ButtonGroupListener {
+        @Override
+        public void buttonAdded(ButtonGroup buttonGroup, Button button) {
+            // empty block
+        }
+
+        @Override
+        public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
+            // empty block
+        }
+
+        @Override
+        public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+            // empty block
+        }
+    }
+
+    /**
      * Called when a button has been added to a button group.
      *
      * @param buttonGroup The button group that has changed.
      * @param button      The button that was added to the group.
      */
-    void buttonAdded(ButtonGroup buttonGroup, Button button);
+    default public void buttonAdded(ButtonGroup buttonGroup, Button button) {
+    }
 
     /**
      * Called when a button has been removed from a button group.
@@ -78,7 +81,8 @@ public interface ButtonGroupListener {
      * @param buttonGroup The button group that has changed.
      * @param button      The button that was removed from the group.
      */
-    void buttonRemoved(ButtonGroup buttonGroup, Button button);
+    default public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
+    }
 
     /**
      * Called when a button group's selection has changed.
@@ -86,6 +90,6 @@ public interface ButtonGroupListener {
      * @param buttonGroup       The button group that changed.
      * @param previousSelection The previously selected button in the group.
      */
-    void selectionChanged(ButtonGroup buttonGroup, Button previousSelection);
-
+    default public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+    }
 }

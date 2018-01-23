@@ -38,7 +38,7 @@ public class ListButtons extends Window implements Bindable {
         listButton = (ListButton) namespace.get("listButton");
         imageView = (ImageView) namespace.get("imageView");
 
-        listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener.Adapter() {
+        listButton.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
             @Override
             public void selectedItemChanged(ListButton listButtonArgument,
                 Object previousSelectedItem) {

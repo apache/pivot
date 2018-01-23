@@ -339,7 +339,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         // Set the derived colors
         buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
 
-        panelHeaderGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
+        panelHeaderGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 Button button = panelHeaderGroup.getSelection();

@@ -154,7 +154,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
      * Private class that handles interaction with the Input Method Editor,
      * including requests and events.
      */
-    private class TextInputMethodHandler extends TextInputMethodListener.Adapter {
+    private class TextInputMethodHandler implements TextInputMethodListener {
 
         @Override
         public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {

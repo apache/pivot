@@ -170,8 +170,7 @@ public class LargeData implements Application {
         statusLabel = (Label) bxmlSerializer.getNamespace().get("statusLabel");
         tableView = (TableView) bxmlSerializer.getNamespace().get("tableView");
 
-        fileListButton.getListButtonSelectionListeners().add(
-            new ListButtonSelectionListener.Adapter() {
+        fileListButton.getListButtonSelectionListeners().add( new ListButtonSelectionListener() {
                 @Override
                 public void selectedItemChanged(ListButton listButtonArgument,
                     Object previousSelectedItem) {

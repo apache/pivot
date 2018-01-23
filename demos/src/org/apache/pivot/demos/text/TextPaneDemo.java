@@ -310,7 +310,7 @@ public class TextPaneDemo implements Application {
                 }
             });
 
-        ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener.Adapter() {
+        ListButtonSelectionListener fontButtonPressListener = new ListButtonSelectionListener() {
             @Override
             public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                 int selectedFontSize = ((Integer) fontSizeListButton.getSelectedItem()).intValue();

@@ -165,7 +165,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
             throw new RuntimeException(fse);
         }
 
-        saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
+        saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener() {
             @Override
             public void textChanged(TextInput textInput) {
                 Form.clearFlag(saveAsBoxPane);

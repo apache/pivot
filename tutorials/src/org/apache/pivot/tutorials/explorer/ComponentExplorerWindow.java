@@ -196,8 +196,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
             }
         });
 
-        horizontalScrollBarPolicyGroup.getButtonGroupListeners().add(
-            new ButtonGroupListener.Adapter() {
+        horizontalScrollBarPolicyGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
                 @Override
                 public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                     Button button = buttonGroup.getSelection();
@@ -222,8 +221,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
                 }
             });
 
-        verticalScrollBarPolicyGroup.getButtonGroupListeners().add(
-            new ButtonGroupListener.Adapter() {
+        verticalScrollBarPolicyGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
                 @Override
                 public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                     Button button = buttonGroup.getSelection();

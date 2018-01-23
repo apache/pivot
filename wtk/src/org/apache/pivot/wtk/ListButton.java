@@ -41,113 +41,6 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  */
 @DefaultProperty("listData")
 public class ListButton extends Button {
-    private static class ListButtonListenerList extends ListenerList<ListButtonListener>
-        implements ListButtonListener {
-        @Override
-        public void listDataChanged(ListButton listButton, List<?> previousListData) {
-            forEach(listener -> listener.listDataChanged(listButton, previousListData));
-        }
-
-        @Override
-        public void itemRendererChanged(ListButton listButton,
-            ListView.ItemRenderer previousItemRenderer) {
-            forEach(listener -> listener.itemRendererChanged(listButton, previousItemRenderer));
-        }
-
-        @Override
-        public void repeatableChanged(ListButton listButton) {
-            forEach(listener -> listener.repeatableChanged(listButton));
-        }
-
-        @Override
-        public void disabledItemFilterChanged(ListButton listButton,
-            Filter<?> previousDisabledItemFilter) {
-            forEach(listener -> listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter));
-        }
-
-        @Override
-        public void listSizeChanged(ListButton listButton, int previousListSize) {
-            forEach(listener -> listener.listSizeChanged(listButton, previousListSize));
-        }
-    }
-
-    private static class ListButtonItemListenerList extends ListenerList<ListButtonItemListener>
-        implements ListButtonItemListener {
-        @Override
-        public void itemInserted(ListButton listButton, int index) {
-            forEach(listener -> listener.itemInserted(listButton, index));
-        }
-
-        @Override
-        public void itemsRemoved(ListButton listButton, int index, int count) {
-            forEach(listener -> listener.itemsRemoved(listButton, index, count));
-        }
-
-        @Override
-        public void itemUpdated(ListButton listButton, int index) {
-            forEach(listener -> listener.itemUpdated(listButton, index));
-        }
-
-        @Override
-        public void itemsCleared(ListButton listButton) {
-            forEach(listener -> listener.itemsCleared(listButton));
-        }
-
-        @Override
-        public void itemsSorted(ListButton listButton) {
-            forEach(listener -> listener.itemsSorted(listButton));
-        }
-    }
-
-    private static class ListButtonSelectionListenerList extends
-        ListenerList<ListButtonSelectionListener> implements ListButtonSelectionListener {
-        @Override
-        public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
-            forEach(listener -> listener.selectedIndexChanged(listButton, previousSelectedIndex));
-        }
-
-        @Override
-        public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-            forEach(listener -> listener.selectedItemChanged(listButton, previousSelectedItem));
-        }
-    }
-
-    private static class ListButtonBindingListenerList extends
-        ListenerList<ListButtonBindingListener> implements ListButtonBindingListener {
-        @Override
-        public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
-            forEach(listener -> listener.listDataKeyChanged(listButton, previousListDataKey));
-        }
-
-        @Override
-        public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
-            forEach(listener -> listener.listDataBindTypeChanged(listButton, previousListDataBindType));
-        }
-
-        @Override
-        public void listDataBindMappingChanged(ListButton listButton,
-            ListView.ListDataBindMapping previousListDataBindMapping) {
-            forEach(listener -> listener.listDataBindMappingChanged(listButton, previousListDataBindMapping));
-        }
-
-        @Override
-        public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
-            forEach(listener -> listener.selectedItemKeyChanged(listButton, previousSelectedItemKey));
-        }
-
-        @Override
-        public void selectedItemBindTypeChanged(ListButton listButton,
-            BindType previousSelectedItemBindType) {
-            forEach(listener -> listener.selectedItemBindTypeChanged(listButton, previousSelectedItemBindType));
-        }
-
-        @Override
-        public void selectedItemBindMappingChanged(ListButton listButton,
-            ListView.ItemBindMapping previousSelectedItemBindMapping) {
-            forEach(listener -> listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping));
-        }
-    }
-
     /**
      * ListButton skin interface. ListButton skins must implement this interface
      * to facilitate additional communication between the component and the
@@ -248,10 +141,10 @@ public class ListButton extends Button {
         }
     };
 
-    private ListButtonListenerList listButtonListeners = new ListButtonListenerList();
-    private ListButtonItemListenerList listButtonItemListeners = new ListButtonItemListenerList();
-    private ListButtonSelectionListenerList listButtonSelectionListeners = new ListButtonSelectionListenerList();
-    private ListButtonBindingListenerList listButtonBindingListeners = new ListButtonBindingListenerList();
+    private ListButtonListener.Listeners listButtonListeners = new ListButtonListener.Listeners();
+    private ListButtonItemListener.Listeners listButtonItemListeners = new ListButtonItemListener.Listeners();
+    private ListButtonSelectionListener.Listeners listButtonSelectionListeners = new ListButtonSelectionListener.Listeners();
+    private ListButtonBindingListener.Listeners listButtonBindingListeners = new ListButtonBindingListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonDataRenderer();
     private static final ListView.ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();

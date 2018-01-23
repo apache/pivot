@@ -202,7 +202,7 @@ public class RadioButtonGroup extends ButtonGroup {
      * ComponentKeyListener.<br> This relies on the logic within ButtonGroup to
      * prevent duplicates.
      */
-    private final ButtonGroupListener buttonGroupListener = new ButtonGroupListener.Adapter() {
+    private final ButtonGroupListener buttonGroupListener = new ButtonGroupListener() {
         @Override
         public void buttonAdded(ButtonGroup buttonGroup, Button button) {
             button.getComponentKeyListeners().add(componentKeyListener);

@@ -16,13 +16,56 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * List button binding listener list interface.
  */
 public interface ListButtonBindingListener {
     /**
-     * List button binding listener adapter.
+     * List button binding listeners.
      */
+    public static class Listeners extends ListenerList<ListButtonBindingListener>
+        implements ListButtonBindingListener {
+        @Override
+        public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
+            forEach(listener -> listener.listDataKeyChanged(listButton, previousListDataKey));
+        }
+
+        @Override
+        public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
+            forEach(listener -> listener.listDataBindTypeChanged(listButton, previousListDataBindType));
+        }
+
+        @Override
+        public void listDataBindMappingChanged(ListButton listButton,
+            ListView.ListDataBindMapping previousListDataBindMapping) {
+            forEach(listener -> listener.listDataBindMappingChanged(listButton, previousListDataBindMapping));
+        }
+
+        @Override
+        public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
+            forEach(listener -> listener.selectedItemKeyChanged(listButton, previousSelectedItemKey));
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(ListButton listButton,
+            BindType previousSelectedItemBindType) {
+            forEach(listener -> listener.selectedItemBindTypeChanged(listButton, previousSelectedItemBindType));
+        }
+
+        @Override
+        public void selectedItemBindMappingChanged(ListButton listButton,
+            ListView.ItemBindMapping previousSelectedItemBindMapping) {
+            forEach(listener -> listener.selectedItemBindMappingChanged(listButton, previousSelectedItemBindMapping));
+        }
+    }
+
+    /**
+     * List button binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListButtonBindingListener {
         @Override
         public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
@@ -64,7 +107,8 @@ public interface ListButtonBindingListener {
      * @param listButton          The list button that has changed.
      * @param previousListDataKey The previous binding key for the list data.
      */
-    public void listDataKeyChanged(ListButton listButton, String previousListDataKey);
+    default public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
+    }
 
     /**
      * Called when a list button's list data bind type has changed.
@@ -72,7 +116,8 @@ public interface ListButtonBindingListener {
      * @param listButton               The list button that has changed.
      * @param previousListDataBindType The previous bind type for the list data.
      */
-    public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType);
+    default public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
+    }
 
     /**
      * Called when a list button's list data bind mapping has changed.
@@ -80,8 +125,9 @@ public interface ListButtonBindingListener {
      * @param listButton                  The list button that has changed.
      * @param previousListDataBindMapping The previous bind mapping for the list data.
      */
-    public void listDataBindMappingChanged(ListButton listButton,
-        ListView.ListDataBindMapping previousListDataBindMapping);
+    default public void listDataBindMappingChanged(ListButton listButton,
+        ListView.ListDataBindMapping previousListDataBindMapping) {
+    }
 
     /**
      * Called when a list button's selected item key has changed.
@@ -89,7 +135,8 @@ public interface ListButtonBindingListener {
      * @param listButton              The list button that has changed.
      * @param previousSelectedItemKey The previous binding key for the button's selected item.
      */
-    public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey);
+    default public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
+    }
 
     /**
      * Called when a list button's selected item bind type has changed.
@@ -97,8 +144,9 @@ public interface ListButtonBindingListener {
      * @param listButton                   The list button that has changed.
      * @param previousSelectedItemBindType The previous bind type for the selected item.
      */
-    public void selectedItemBindTypeChanged(ListButton listButton,
-        BindType previousSelectedItemBindType);
+    default public void selectedItemBindTypeChanged(ListButton listButton,
+        BindType previousSelectedItemBindType) {
+    }
 
     /**
      * Called when a list button's selected item bind mapping has changed.
@@ -106,6 +154,7 @@ public interface ListButtonBindingListener {
      * @param listButton                      The list button that has changed.
      * @param previousSelectedItemBindMapping The previous bind mapping for the button's selected item.
      */
-    public void selectedItemBindMappingChanged(ListButton listButton,
-        ListView.ItemBindMapping previousSelectedItemBindMapping);
+    default public void selectedItemBindMappingChanged(ListButton listButton,
+        ListView.ItemBindMapping previousSelectedItemBindMapping) {
+    }
 }

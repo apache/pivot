@@ -53,7 +53,7 @@ public class SuggestionDemo extends Window implements Bindable {
         textInput = (TextInput) namespace.get("textInput");
         activityIndicator = (ActivityIndicator) namespace.get("activityIndicator");
 
-        textInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
+        textInput.getTextInputContentListeners().add(new TextInputContentListener() {
             @Override
             public void textInserted(TextInput textInputArgument, int index, int count) {
                 getSuggestions();

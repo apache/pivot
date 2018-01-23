@@ -16,13 +16,48 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * List button item listener interface.
  */
 public interface ListButtonItemListener {
     /**
-     * List button item listener adapter.
+     * List button item listeners.
      */
+    public static class Listeners extends ListenerList<ListButtonItemListener>
+        implements ListButtonItemListener {
+        @Override
+        public void itemInserted(ListButton listButton, int index) {
+            forEach(listener -> listener.itemInserted(listButton, index));
+        }
+
+        @Override
+        public void itemsRemoved(ListButton listButton, int index, int count) {
+            forEach(listener -> listener.itemsRemoved(listButton, index, count));
+        }
+
+        @Override
+        public void itemUpdated(ListButton listButton, int index) {
+            forEach(listener -> listener.itemUpdated(listButton, index));
+        }
+
+        @Override
+        public void itemsCleared(ListButton listButton) {
+            forEach(listener -> listener.itemsCleared(listButton));
+        }
+
+        @Override
+        public void itemsSorted(ListButton listButton) {
+            forEach(listener -> listener.itemsSorted(listButton));
+        }
+    }
+
+    /**
+     * List button item listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListButtonItemListener {
         @Override
         public void itemInserted(ListButton listButton, int index) {
@@ -56,7 +91,8 @@ public interface ListButtonItemListener {
      * @param listButton The list button that has changed.
      * @param index      The index where the new data was inserted.
      */
-    public void itemInserted(ListButton listButton, int index);
+    default public void itemInserted(ListButton listButton, int index) {
+    }
 
     /**
      * Called when items are removed from a list button's list data.
@@ -65,7 +101,8 @@ public interface ListButtonItemListener {
      * @param index      The starting index of the removed data items.
      * @param count      The number of items removed.
      */
-    public void itemsRemoved(ListButton listButton, int index, int count);
+    default public void itemsRemoved(ListButton listButton, int index, int count) {
+    }
 
     /**
      * Called when an item is updated within a list button's list data.
@@ -73,19 +110,22 @@ public interface ListButtonItemListener {
      * @param listButton The list button whose data has changed.
      * @param index      The index into the data list of the updated item.
      */
-    public void itemUpdated(ListButton listButton, int index);
+    default public void itemUpdated(ListButton listButton, int index) {
+    }
 
     /**
      * Called when a list button's list data has been cleared.
      *
      * @param listButton The list button whose data was cleared.
      */
-    public void itemsCleared(ListButton listButton);
+    default public void itemsCleared(ListButton listButton) {
+    }
 
     /**
      * Called when a list button's list data is sorted.
      *
      * @param listButton The list button whose data has been sorted.
      */
-    public void itemsSorted(ListButton listButton);
+    default public void itemsSorted(ListButton listButton) {
+    }
 }

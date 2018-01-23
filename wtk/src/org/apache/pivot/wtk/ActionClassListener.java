@@ -24,26 +24,6 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface ActionClassListener {
     /**
-     * Action class listener adapter.
-     */
-    public class Adapter implements ActionClassListener {
-        @Override
-        public void actionAdded(String id) {
-            // empty block
-        }
-
-        @Override
-        public void actionUpdated(String id, Action previousAction) {
-            // empty block
-        }
-
-        @Override
-        public void actionRemoved(String id, Action action) {
-            // empty block
-        }
-    }
-
-    /**
      * Action class listener listeners list.
      */
     public static class Listeners extends ListenerList<ActionClassListener>
@@ -65,11 +45,34 @@ public interface ActionClassListener {
     }
 
     /**
+     * Action class listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
+    public class Adapter implements ActionClassListener {
+        @Override
+        public void actionAdded(String id) {
+            // empty block
+        }
+
+        @Override
+        public void actionUpdated(String id, Action previousAction) {
+            // empty block
+        }
+
+        @Override
+        public void actionRemoved(String id, Action action) {
+            // empty block
+        }
+    }
+
+    /**
      * Called when an action has been added to the named action dictionary.
      *
      * @param id The identifier for the newly added action.
      */
-    public void actionAdded(String id);
+    default public void actionAdded(String id) {
+    }
 
     /**
      * Called when an action has been updated in the named action dictionary.
@@ -77,7 +80,8 @@ public interface ActionClassListener {
      * @param id             The identifier for the updated action.
      * @param previousAction The previous {@link Action} associated with this identifier.
      */
-    public void actionUpdated(String id, Action previousAction);
+    default public void actionUpdated(String id, Action previousAction) {
+    }
 
     /**
      * Called when an action has been removed from the named action dictionary.
@@ -85,5 +89,6 @@ public interface ActionClassListener {
      * @param id     Identifier for the action that was removed.
      * @param action The removed action.
      */
-    public void actionRemoved(String id, Action action);
+    default public void actionRemoved(String id, Action action) {
+    }
 }

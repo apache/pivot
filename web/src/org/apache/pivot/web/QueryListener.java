@@ -23,8 +23,36 @@ import org.apache.pivot.util.ListenerList;
  */
 public interface QueryListener<V> {
     /**
-     * Query listener adapter.
+     * Query listener listeners list.
      */
+    public static class Listeners<V> extends ListenerList<QueryListener<V>>
+        implements QueryListener<V> {
+        @Override
+        public synchronized void connected(Query<V> query) {
+            forEach(listener -> listener.connected(query));
+        }
+
+        @Override
+        public synchronized void requestSent(Query<V> query) {
+            forEach(listener -> listener.requestSent(query));
+        }
+
+        @Override
+        public synchronized void responseReceived(Query<V> query) {
+            forEach(listener -> listener.responseReceived(query));
+        }
+
+        @Override
+        public synchronized void failed(Query<V> query) {
+            forEach(listener -> listener.failed(query));
+        }
+    }
+
+    /**
+     * Query listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter<V> implements QueryListener<V> {
         @Override
         public void connected(Query<V> query) {
@@ -48,39 +76,13 @@ public interface QueryListener<V> {
     }
 
     /**
-     * Query listener listeners list.
-     */
-    public static class Listeners<V>
-            extends ListenerList<QueryListener<V>>
-            implements QueryListener<V> {
-        @Override
-        public synchronized void connected(Query<V> query) {
-            forEach(listener -> listener.connected(query));
-        }
-
-        @Override
-        public synchronized void requestSent(Query<V> query) {
-            forEach(listener -> listener.requestSent(query));
-        }
-
-        @Override
-        public synchronized void responseReceived(Query<V> query) {
-            forEach(listener -> listener.responseReceived(query));
-        }
-
-        @Override
-        public synchronized void failed(Query<V> query) {
-            forEach(listener -> listener.failed(query));
-        }
-    }
-
-    /**
      * Called when a query has connected to the server but the request has not
      * yet been sent.
      *
      * @param query The query that has just connected.
      */
-    public void connected(Query<V> query);
+    default public void connected(Query<V> query) {
+    }
 
     /**
      * Called when the request has been sent to the server but the response has
@@ -88,19 +90,22 @@ public interface QueryListener<V> {
      *
      * @param query The query whose request has been sent.
      */
-    public void requestSent(Query<V> query);
+    default public void requestSent(Query<V> query) {
+    }
 
     /**
      * Called when a response has been received from the server.
      *
      * @param query The query whose response has just been received.
      */
-    public void responseReceived(Query<V> query);
+    default public void responseReceived(Query<V> query) {
+    }
 
     /**
      * Called when an error has occurred.
      *
      * @param query The query that has failed.
      */
-    public void failed(Query<V> query);
+    default public void failed(Query<V> query) {
+    }
 }

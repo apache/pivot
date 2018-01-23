@@ -26,50 +26,10 @@ import org.apache.pivot.util.VoteResult;
  */
 public interface TextInputContentListener {
     /**
-     * Text input content listener adapter.
-     */
-    public static class Adapter implements TextInputContentListener {
-        @Override
-        public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
-            return Vote.APPROVE;
-        }
-
-        @Override
-        public void insertTextVetoed(TextInput textInput, Vote reason) {
-            // empty block
-        }
-
-        @Override
-        public void textInserted(TextInput textInput, int index, int count) {
-            // empty block
-        }
-
-        @Override
-        public Vote previewRemoveText(TextInput textInput, int index, int count) {
-            return Vote.APPROVE;
-        }
-
-        @Override
-        public void removeTextVetoed(TextInput textInput, Vote reason) {
-            // empty block
-        }
-
-        @Override
-        public void textRemoved(TextInput textInput, int index, int count) {
-            // empty block
-        }
-
-        @Override
-        public void textChanged(TextInput textInput) {
-            // empty block
-        }
-    }
-
-    /**
      * Text input content listener listeners list.
      */
     public static class Listeners extends ListenerList<TextInputContentListener>
-            implements TextInputContentListener {
+        implements TextInputContentListener {
         @Override
         public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
             VoteResult result = new VoteResult();
@@ -115,6 +75,48 @@ public interface TextInputContentListener {
     }
 
     /**
+     * Text input content listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
+    public static class Adapter implements TextInputContentListener {
+        @Override
+        public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void insertTextVetoed(TextInput textInput, Vote reason) {
+            // empty block
+        }
+
+        @Override
+        public void textInserted(TextInput textInput, int index, int count) {
+            // empty block
+        }
+
+        @Override
+        public Vote previewRemoveText(TextInput textInput, int index, int count) {
+            return Vote.APPROVE;
+        }
+
+        @Override
+        public void removeTextVetoed(TextInput textInput, Vote reason) {
+            // empty block
+        }
+
+        @Override
+        public void textRemoved(TextInput textInput, int index, int count) {
+            // empty block
+        }
+
+        @Override
+        public void textChanged(TextInput textInput) {
+            // empty block
+        }
+    }
+
+    /**
      * Called to preview a text insertion.
      *
      * @param textInput The source of the event.
@@ -122,7 +124,9 @@ public interface TextInputContentListener {
      * @param index The index at which the text will be inserted.
      * @return The accumulated vote as to whether to allow this insertion.
      */
-    public Vote previewInsertText(TextInput textInput, CharSequence text, int index);
+    default public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a text insertion has been vetoed.
@@ -130,7 +134,8 @@ public interface TextInputContentListener {
      * @param textInput The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    public void insertTextVetoed(TextInput textInput, Vote reason);
+    default public void insertTextVetoed(TextInput textInput, Vote reason) {
+    }
 
     /**
      * Called when text has been inserted into a text input.
@@ -139,7 +144,8 @@ public interface TextInputContentListener {
      * @param index The index at which the text was inserted.
      * @param count The number of characters that were inserted.
      */
-    public void textInserted(TextInput textInput, int index, int count);
+    default public void textInserted(TextInput textInput, int index, int count) {
+    }
 
     /**
      * Called to preview a text removal.
@@ -149,7 +155,9 @@ public interface TextInputContentListener {
      * @param count The count of characters to be removed starting from that index.
      * @return The accumulated vote as to whether to allow this removal.
      */
-    public Vote previewRemoveText(TextInput textInput, int index, int count);
+    default public Vote previewRemoveText(TextInput textInput, int index, int count) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a text removal has been vetoed.
@@ -157,7 +165,8 @@ public interface TextInputContentListener {
      * @param textInput The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    public void removeTextVetoed(TextInput textInput, Vote reason);
+    default public void removeTextVetoed(TextInput textInput, Vote reason) {
+    }
 
     /**
      * Called when text has been removed from a text input.
@@ -166,12 +175,14 @@ public interface TextInputContentListener {
      * @param index The index from which the text was removed.
      * @param count The number of characters that were removed.
      */
-    public void textRemoved(TextInput textInput, int index, int count);
+    default public void textRemoved(TextInput textInput, int index, int count) {
+    }
 
     /**
      * Called when a text input's text has changed.
      *
      * @param textInput The source of the event.
      */
-    public void textChanged(TextInput textInput);
+    default public void textChanged(TextInput textInput) {
+    }
 }

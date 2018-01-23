@@ -492,7 +492,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         // Add the buttons
         dateButtonGroup = new ButtonGroup();
-        dateButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
+        dateButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 Calendar calendar = (Calendar) getComponent();

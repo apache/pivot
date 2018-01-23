@@ -37,7 +37,9 @@ public interface TextInputMethodListener extends InputMethodRequests, InputMetho
     /**
      * A default implementation of the {@link TextInputMethodListener} interface that can be used
      * to provide the minimum necessary functionality.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements TextInputMethodListener {
         @Override
         public AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes) {
@@ -85,22 +87,40 @@ public interface TextInputMethodListener extends InputMethodRequests, InputMetho
         }
     }
 
-    AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes);
+    default public AttributedCharacterIterator cancelLatestCommittedText(
+        AttributedCharacterIterator.Attribute[] attributes) {
+        return null;
+    }
 
-    AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes);
+    default public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex,
+        AttributedCharacterIterator.Attribute[] attributes) {
+        return null;
+    }
 
-    int getCommittedTextLength();
+    default public int getCommittedTextLength() {
+        return 0;
+    }
 
-    int getInsertPositionOffset();
+    default public int getInsertPositionOffset() {
+        return 0;
+    }
 
-    TextHitInfo getLocationOffset(int x, int y);
+    default public TextHitInfo getLocationOffset(int x, int y) {
+        return null;
+    }
 
-    AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes);
+    default public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+        return null;
+    }
 
-    Rectangle getTextLocation(TextHitInfo offset);
+    default public Rectangle getTextLocation(TextHitInfo offset) {
+        return new Rectangle();
+    }
 
-    void inputMethodTextChanged(InputMethodEvent event);
+    default public void inputMethodTextChanged(InputMethodEvent event) {
+    }
 
-    void caretPositionChanged(InputMethodEvent event);
+    default public void caretPositionChanged(InputMethodEvent event) {
+    }
 
 }

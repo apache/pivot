@@ -211,133 +211,6 @@ public class ListView extends Component {
         public void setState(Object item, Button.State state);
     }
 
-    private static class ListViewItemListenerList extends ListenerList<ListViewItemListener>
-        implements ListViewItemListener {
-        @Override
-        public void itemInserted(ListView listView, int index) {
-            forEach(listener -> listener.itemInserted(listView, index));
-        }
-
-        @Override
-        public void itemsRemoved(ListView listView, int index, int count) {
-            forEach(listener -> listener.itemsRemoved(listView, index, count));
-        }
-
-        @Override
-        public void itemUpdated(ListView listView, int index) {
-            forEach(listener -> listener.itemUpdated(listView, index));
-        }
-
-        @Override
-        public void itemsCleared(ListView listView) {
-            forEach(listener -> listener.itemsCleared(listView));
-        }
-
-        @Override
-        public void itemsSorted(ListView listView) {
-            forEach(listener -> listener.itemsSorted(listView));
-        }
-    }
-
-    private static class ListViewItemStateListenerList extends
-        ListenerList<ListViewItemStateListener> implements ListViewItemStateListener {
-        @Override
-        public void itemCheckedChanged(ListView listView, int index) {
-            forEach(listener -> listener.itemCheckedChanged(listView, index));
-        }
-
-        @Override
-        public void itemCheckedStateChanged(ListView listView, int index) {
-            forEach(listener -> listener.itemCheckedStateChanged(listView, index));
-        }
-    }
-
-    private static class ListViewBindingListenerList extends
-        ListenerList<ListViewBindingListener> implements ListViewBindingListener {
-        @Override
-        public void listDataKeyChanged(ListView listView, String previousListDataKey) {
-            forEach(listener -> listener.listDataKeyChanged(listView, previousListDataKey));
-        }
-
-        @Override
-        public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
-            forEach(listener -> listener.listDataBindTypeChanged(listView, previousListDataBindType));
-        }
-
-        @Override
-        public void listDataBindMappingChanged(ListView listView,
-            ListView.ListDataBindMapping previousListDataBindMapping) {
-            forEach(listener -> listener.listDataBindMappingChanged(listView, previousListDataBindMapping));
-        }
-
-        @Override
-        public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
-            forEach(listener -> listener.selectedItemKeyChanged(listView, previousSelectedItemKey));
-        }
-
-        @Override
-        public void selectedItemBindTypeChanged(ListView listView,
-            BindType previousSelectedItemBindType) {
-            forEach(listener -> listener.selectedItemBindTypeChanged(listView, previousSelectedItemBindType));
-        }
-
-        @Override
-        public void selectedItemBindMappingChanged(ListView listView,
-            ItemBindMapping previousSelectedItemBindMapping) {
-            forEach(listener -> listener.selectedItemBindMappingChanged(listView, previousSelectedItemBindMapping));
-        }
-
-        @Override
-        public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
-            forEach(listener -> listener.selectedItemsKeyChanged(listView, previousSelectedItemsKey));
-        }
-
-        @Override
-        public void selectedItemsBindTypeChanged(ListView listView,
-            BindType previousSelectedItemsBindType) {
-            forEach(listener -> listener.selectedItemsBindTypeChanged(listView, previousSelectedItemsBindType));
-        }
-
-        @Override
-        public void selectedItemsBindMappingChanged(ListView listView,
-            ItemBindMapping previousSelectedItemsBindMapping) {
-            forEach(listener -> listener.selectedItemsBindMappingChanged(listView, previousSelectedItemsBindMapping));
-        }
-
-        @Override
-        public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
-            forEach(listener -> listener.checkedItemsKeyChanged(listView, previousCheckedItemsKey));
-        }
-
-        @Override
-        public void checkedItemsBindTypeChanged(ListView listView,
-            BindType previousCheckedItemsBindType) {
-            forEach(listener -> listener.checkedItemsBindTypeChanged(listView, previousCheckedItemsBindType));
-        }
-
-        @Override
-        public void checkedItemsBindMappingChanged(ListView listView,
-            ListView.ItemBindMapping previousCheckedItemsBindMapping) {
-            forEach(listener -> listener.checkedItemsBindMappingChanged(listView, previousCheckedItemsBindMapping));
-        }
-
-        @Override
-        public void itemsStateKeyChanged(ListView listView, String previousItemsStateKey) {
-            forEach(listener -> listener.itemsStateKeyChanged(listView, previousItemsStateKey));
-        }
-
-        @Override
-        public void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType) {
-            forEach(listener -> listener.itemsStateBindTypeChanged(listView, previousItemsStateBindType));
-        }
-
-        @Override
-        public void itemsStateBindMappingChanged(ListView listView,
-            ListView.ItemStateBindMapping previousItemsStateBindMapping) {
-            forEach(listener -> listener.itemsStateBindMappingChanged(listView, previousItemsStateBindMapping));
-        }
-    }
-
     private List<?> listData = null;
 
     private ItemRenderer itemRenderer = null;
@@ -530,10 +403,10 @@ public class ListView extends Component {
     };
 
     private ListViewListener.Listeners listViewListeners = new ListViewListener.Listeners();
-    private ListViewItemListenerList listViewItemListeners = new ListViewItemListenerList();
-    private ListViewItemStateListenerList listViewItemStateListeners = new ListViewItemStateListenerList();
+    private ListViewItemListener.Listeners listViewItemListeners = new ListViewItemListener.Listeners();
+    private ListViewItemStateListener.Listeners listViewItemStateListeners = new ListViewItemStateListener.Listeners();
     private ListViewSelectionListener.Listeners listViewSelectionListeners = new ListViewSelectionListener.Listeners();
-    private ListViewBindingListenerList listViewBindingListeners = new ListViewBindingListenerList();
+    private ListViewBindingListener.Listeners listViewBindingListeners = new ListViewBindingListener.Listeners();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
 

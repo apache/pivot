@@ -52,7 +52,7 @@ public class CardPaneTest implements Application {
         cardPane = (CardPane) bxmlSerializer.getNamespace().get("cardPane");
         sizeGroup = (ButtonGroup) bxmlSerializer.getNamespace().get("sizeGroup");
 
-        sizeGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
+        sizeGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 final Button selection = buttonGroup.getSelection();

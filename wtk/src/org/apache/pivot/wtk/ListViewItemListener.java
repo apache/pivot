@@ -16,13 +16,48 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * List view item listener interface.
  */
 public interface ListViewItemListener {
     /**
-     * List view item listener adapter.
+     * List view item listeners.
      */
+    public static class Listeners extends ListenerList<ListViewItemListener>
+        implements ListViewItemListener {
+        @Override
+        public void itemInserted(ListView listView, int index) {
+            forEach(listener -> listener.itemInserted(listView, index));
+        }
+
+        @Override
+        public void itemsRemoved(ListView listView, int index, int count) {
+            forEach(listener -> listener.itemsRemoved(listView, index, count));
+        }
+
+        @Override
+        public void itemUpdated(ListView listView, int index) {
+            forEach(listener -> listener.itemUpdated(listView, index));
+        }
+
+        @Override
+        public void itemsCleared(ListView listView) {
+            forEach(listener -> listener.itemsCleared(listView));
+        }
+
+        @Override
+        public void itemsSorted(ListView listView) {
+            forEach(listener -> listener.itemsSorted(listView));
+        }
+    }
+
+    /**
+     * List view item listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListViewItemListener {
         @Override
         public void itemInserted(ListView listView, int index) {
@@ -56,7 +91,8 @@ public interface ListViewItemListener {
      * @param listView The source of the event.
      * @param index The index of the item that was inserted.
      */
-    public void itemInserted(ListView listView, int index);
+    default public void itemInserted(ListView listView, int index) {
+    }
 
     /**
      * Called when items have been removed from the list view.
@@ -66,7 +102,8 @@ public interface ListViewItemListener {
      * @param count The number of items that were removed, or <tt>-1</tt> if all
      * items were removed.
      */
-    public void itemsRemoved(ListView listView, int index, int count);
+    default public void itemsRemoved(ListView listView, int index, int count) {
+    }
 
     /**
      * Called when an item in the list view has been updated.
@@ -74,19 +111,22 @@ public interface ListViewItemListener {
      * @param listView The source of the event.
      * @param index The first index affected by the event.
      */
-    public void itemUpdated(ListView listView, int index);
+    default public void itemUpdated(ListView listView, int index) {
+    }
 
     /**
      * Called when the items in a list view have been cleared.
      *
      * @param listView The source of the event.
      */
-    public void itemsCleared(ListView listView);
+    default public void itemsCleared(ListView listView) {
+    }
 
     /**
      * Called when the items in a list view have been sorted.
      *
      * @param listView The source of the event.
      */
-    public void itemsSorted(ListView listView);
+    default public void itemsSorted(ListView listView) {
+    }
 }

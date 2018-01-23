@@ -16,13 +16,33 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * List button selection listener interface.
  */
 public interface ListButtonSelectionListener {
     /**
-     * List button selection listener adapter.
+     * List button selection listeners.
      */
+    public static class Listeners extends ListenerList<ListButtonSelectionListener>
+        implements ListButtonSelectionListener {
+        @Override
+        public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+            forEach(listener -> listener.selectedIndexChanged(listButton, previousSelectedIndex));
+        }
+
+        @Override
+        public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+            forEach(listener -> listener.selectedItemChanged(listButton, previousSelectedItem));
+        }
+    }
+
+    /**
+     * List button selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListButtonSelectionListener {
         @Override
         public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
@@ -43,7 +63,8 @@ public interface ListButtonSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex);
+    default public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+    }
 
     /**
      * Called when a list button's selected item has changed.
@@ -52,5 +73,6 @@ public interface ListButtonSelectionListener {
      * @param previousSelectedItem The item that was previously selected, or
      * <tt>null</tt> if the previous selection cannot be determined.
      */
-    public void selectedItemChanged(ListButton listButton, Object previousSelectedItem);
+    default public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+    }
 }

@@ -96,7 +96,7 @@ public class CheckedListViewTest implements Application {
             }
         });
 
-        listView.getListViewItemStateListeners().add(new ListViewItemStateListener.Adapter() {
+        listView.getListViewItemStateListeners().add(new ListViewItemStateListener() {
 
             private void displayCheckedItems(ListView listView) {
                 List<?> listData = listView.getListData();

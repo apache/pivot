@@ -607,7 +607,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         tabButtonPanorama.getStyles().putInt("buttonPadding", 6);
         tabButtonPanorama.setView(tabButtonBoxPane);
 
-        tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener.Adapter() {
+        tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override
             public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
                 Button button = tabButtonGroup.getSelection();

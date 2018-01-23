@@ -869,7 +869,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         homeDirectory = fileBrowser.getHomeDirectory();
 
         driveListButton.getListButtonSelectionListeners().add(
-            new ListButtonSelectionListener.Adapter() {
+            new ListButtonSelectionListener() {
                 @Override
                 public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                     if (previousSelectedItem != null) {
@@ -889,7 +889,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             });
 
         pathListButton.getListButtonSelectionListeners().add(
-            new ListButtonSelectionListener.Adapter() {
+            new ListButtonSelectionListener() {
                 @Override
                 public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                     FileObject ancestorDirectory = (FileObject) listButton.getSelectedItem();
@@ -960,7 +960,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             }
         });
 
-        searchTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
+        searchTextInput.getTextInputContentListeners().add(new TextInputContentListener() {
             @Override
             public void textChanged(TextInput textInput) {
                 refreshFileList();

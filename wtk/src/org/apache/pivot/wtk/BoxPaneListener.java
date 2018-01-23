@@ -26,8 +26,7 @@ public interface BoxPaneListener {
     /**
      * Box pane listener listeners list.
      */
-    public static class Listeners extends ListenerList<BoxPaneListener> implements
-        BoxPaneListener {
+    public static class Listeners extends ListenerList<BoxPaneListener> implements BoxPaneListener {
         @Override
         public void orientationChanged(BoxPane boxPane) {
             forEach(listener -> listener.orientationChanged(boxPane));

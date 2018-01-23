@@ -742,7 +742,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         bxmlSerializer.bind(this, TerraFileBrowserSkin.class);
 
         driveListButton.getListButtonSelectionListeners().add(
-            new ListButtonSelectionListener.Adapter() {
+            new ListButtonSelectionListener() {
                 @Override
                 public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                     if (previousSelectedItem != null) {
@@ -760,7 +760,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             });
 
         pathListButton.getListButtonSelectionListeners().add(
-            new ListButtonSelectionListener.Adapter() {
+            new ListButtonSelectionListener() {
                 @Override
                 public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
                     File ancestorDirectory = (File) listButton.getSelectedItem();
@@ -819,7 +819,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
-        searchTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
+        searchTextInput.getTextInputContentListeners().add(new TextInputContentListener() {
             @Override
             public void textChanged(TextInput textInput) {
                 refreshFileList();

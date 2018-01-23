@@ -16,14 +16,34 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * List view item state listener interface.
  */
 public interface ListViewItemStateListener {
     /**
+     * List view item state listeners.
+     */
+    public static class Listeners extends ListenerList<ListViewItemStateListener>
+        implements ListViewItemStateListener {
+        @Override
+        public void itemCheckedChanged(ListView listView, int index) {
+            forEach(listener -> listener.itemCheckedChanged(listView, index));
+        }
+
+        @Override
+        public void itemCheckedStateChanged(ListView listView, int index) {
+            forEach(listener -> listener.itemCheckedStateChanged(listView, index));
+        }
+    }
+
+    /**
      * Adapter class that provides a default implementation of these interface
      * methods.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public class Adapter implements ListViewItemStateListener {
         @Override
         public void itemCheckedChanged(ListView listView, int index) {
@@ -41,7 +61,8 @@ public interface ListViewItemStateListener {
      * @param listView The list view whose state has changed.
      * @param index    The index of the item whose checked state has changed.
      */
-    public void itemCheckedChanged(ListView listView, int index);
+    default public void itemCheckedChanged(ListView listView, int index) {
+    }
 
     /**
      * Called when a tri-state item's state has changed, that is, in or out
@@ -50,6 +71,7 @@ public interface ListViewItemStateListener {
      * @param listView The list view whose state has changed.
      * @param index    The index of the item whose tri-state has changed.
      */
-    public void itemCheckedStateChanged(ListView listView, int index);
+    default public void itemCheckedStateChanged(ListView listView, int index) {
+    }
 
 }

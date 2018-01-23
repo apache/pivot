@@ -111,7 +111,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         // set the same rootDirectory to fileBrowser
         fileBrowser.setRootDirectory(fileBrowserSheet.getRootDirectory());
 
-        saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener.Adapter() {
+        saveAsTextInput.getTextInputContentListeners().add(new TextInputContentListener() {
             @Override
             public void textChanged(TextInput textInput) {
                 Form.clearFlag(saveAsBoxPane);

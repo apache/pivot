@@ -18,14 +18,50 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * List button listener list interface.
  */
 public interface ListButtonListener {
     /**
-     * List button listener adapter.
+     * List button listeners.
      */
+    public static class Listeners extends ListenerList<ListButtonListener>
+        implements ListButtonListener {
+        @Override
+        public void listDataChanged(ListButton listButton, List<?> previousListData) {
+            forEach(listener -> listener.listDataChanged(listButton, previousListData));
+        }
+
+        @Override
+        public void itemRendererChanged(ListButton listButton,
+            ListView.ItemRenderer previousItemRenderer) {
+            forEach(listener -> listener.itemRendererChanged(listButton, previousItemRenderer));
+        }
+
+        @Override
+        public void repeatableChanged(ListButton listButton) {
+            forEach(listener -> listener.repeatableChanged(listButton));
+        }
+
+        @Override
+        public void disabledItemFilterChanged(ListButton listButton,
+            Filter<?> previousDisabledItemFilter) {
+            forEach(listener -> listener.disabledItemFilterChanged(listButton, previousDisabledItemFilter));
+        }
+
+        @Override
+        public void listSizeChanged(ListButton listButton, int previousListSize) {
+            forEach(listener -> listener.listSizeChanged(listButton, previousListSize));
+        }
+    }
+
+    /**
+     * List button listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ListButtonListener {
         @Override
         public void listDataChanged(ListButton listButton, List<?> previousListData) {
@@ -61,7 +97,8 @@ public interface ListButtonListener {
      * @param listButton       The list button that has changed.
      * @param previousListData The previous list data.
      */
-    public void listDataChanged(ListButton listButton, List<?> previousListData);
+    default public void listDataChanged(ListButton listButton, List<?> previousListData) {
+    }
 
     /**
      * Called when a list button's item renderer has changed.
@@ -69,15 +106,17 @@ public interface ListButtonListener {
      * @param listButton           The list button that was changed.
      * @param previousItemRenderer The previous renderer for the button's items.
      */
-    public void itemRendererChanged(ListButton listButton,
-        ListView.ItemRenderer previousItemRenderer);
+    default public void itemRendererChanged(ListButton listButton,
+        ListView.ItemRenderer previousItemRenderer) {
+    }
 
     /**
      * Called when a list button's repeatable flag has changed.
      *
      * @param listButton The list button that has changed.
      */
-    public void repeatableChanged(ListButton listButton);
+    default public void repeatableChanged(ListButton listButton) {
+    }
 
     /**
      * Called when a list button's disabled item filter has changed.
@@ -85,8 +124,9 @@ public interface ListButtonListener {
      * @param listButton                 The list button that has changed.
      * @param previousDisabledItemFilter The previous disabled item filter for the list button.
      */
-    public void disabledItemFilterChanged(ListButton listButton,
-        Filter<?> previousDisabledItemFilter);
+    default public void disabledItemFilterChanged(ListButton listButton,
+        Filter<?> previousDisabledItemFilter) {
+    }
 
     /**
      * Called when a list button's list size has changed.
@@ -94,5 +134,6 @@ public interface ListButtonListener {
      * @param listButton       The list button that has changed.
      * @param previousListSize The previous value of the visible list size.
      */
-    public void listSizeChanged(ListButton listButton, int previousListSize);
+    default public void listSizeChanged(ListButton listButton, int previousListSize) {
+    }
 }
