@@ -145,7 +145,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             colorChooserButton.getColorChooserButtonSelectionListeners().add(
                 colorChooserButtonSelectionListener);
 
-            SpinnerSelectionListener spinnerSelectionListener = new SpinnerSelectionListener.Adapter() {
+            SpinnerSelectionListener spinnerSelectionListener = new SpinnerSelectionListener() {
                 @Override
                 public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
                     int red = ((Integer) redSpinner.getSelectedItem()).intValue();

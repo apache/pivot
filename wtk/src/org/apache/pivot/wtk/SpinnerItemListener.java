@@ -16,13 +16,48 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Spinner item listener interface.
  */
 public interface SpinnerItemListener {
     /**
-     * Spinner item listener adapter.
+     * Spinner item listeners.
      */
+    public static class Listeners extends ListenerList<SpinnerItemListener>
+        implements SpinnerItemListener {
+        @Override
+        public void itemInserted(Spinner spinner, int index) {
+            forEach(listener -> listener.itemInserted(spinner, index));
+        }
+
+        @Override
+        public void itemsRemoved(Spinner spinner, int index, int count) {
+            forEach(listener -> listener.itemsRemoved(spinner, index, count));
+        }
+
+        @Override
+        public void itemUpdated(Spinner spinner, int index) {
+            forEach(listener -> listener.itemUpdated(spinner, index));
+        }
+
+        @Override
+        public void itemsCleared(Spinner spinner) {
+            forEach(listener -> listener.itemsCleared(spinner));
+        }
+
+        @Override
+        public void itemsSorted(Spinner spinner) {
+            forEach(listener -> listener.itemsSorted(spinner));
+        }
+    }
+
+    /**
+     * Spinner item listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SpinnerItemListener {
         @Override
         public void itemInserted(Spinner spinner, int index) {
@@ -56,7 +91,8 @@ public interface SpinnerItemListener {
      * @param spinner The source of the event.
      * @param index Where the item was inserted.
      */
-    public void itemInserted(Spinner spinner, int index);
+    default public void itemInserted(Spinner spinner, int index) {
+    }
 
     /**
      * Called when items are removed from a spinner's data.
@@ -65,7 +101,8 @@ public interface SpinnerItemListener {
      * @param index The start of the items that were removed.
      * @param count The number of items removed from there.
      */
-    public void itemsRemoved(Spinner spinner, int index, int count);
+    default public void itemsRemoved(Spinner spinner, int index, int count) {
+    }
 
     /**
      * Called when an item is updated within a spinner's data.
@@ -73,19 +110,22 @@ public interface SpinnerItemListener {
      * @param spinner The source of this event.
      * @param index The location of the item that was updated.
      */
-    public void itemUpdated(Spinner spinner, int index);
+    default public void itemUpdated(Spinner spinner, int index) {
+    }
 
     /**
      * Called when a spinner's data has been cleared.
      *
      * @param spinner The source of this event.
      */
-    public void itemsCleared(Spinner spinner);
+    default public void itemsCleared(Spinner spinner) {
+    }
 
     /**
      * Called when a spinner's data is sorted.
      *
      * @param spinner The source of this event.
      */
-    public void itemsSorted(Spinner spinner);
+    default public void itemsSorted(Spinner spinner) {
+    }
 }

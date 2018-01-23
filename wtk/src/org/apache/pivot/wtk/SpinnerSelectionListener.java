@@ -16,13 +16,33 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Spinner selection listener interface.
  */
 public interface SpinnerSelectionListener {
     /**
-     * Spinner selection listener adapter.
+     * Spinner selection listeners.
      */
+    public static class Listeners extends ListenerList<SpinnerSelectionListener>
+        implements SpinnerSelectionListener {
+        @Override
+        public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+            forEach(listener -> listener.selectedIndexChanged(spinner, previousSelectedIndex));
+        }
+
+        @Override
+        public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+            forEach(listener -> listener.selectedItemChanged(spinner, previousSelectedItem));
+        }
+    }
+
+    /**
+     * Spinner selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SpinnerSelectionListener {
         @Override
         public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
@@ -43,7 +63,8 @@ public interface SpinnerSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex);
+    default public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+    }
 
     /**
      * Called when a spinners's selected item has changed.
@@ -52,5 +73,6 @@ public interface SpinnerSelectionListener {
      * @param previousSelectedItem The item that was previously selected, or
      * <tt>null</tt> if the previous selection cannot be determined.
      */
-    public void selectedItemChanged(Spinner spinner, Object previousSelectedItem);
+    default public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+    }
 }

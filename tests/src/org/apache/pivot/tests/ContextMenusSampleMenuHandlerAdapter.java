@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuHandler;
 
-public class ContextMenusSampleMenuHandlerAdapter extends MenuHandler.Adapter {
+public class ContextMenusSampleMenuHandlerAdapter implements MenuHandler {
     private Component descendant = null;
 
     protected Component getDescendant() {

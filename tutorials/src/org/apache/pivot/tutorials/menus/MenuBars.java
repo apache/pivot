@@ -43,7 +43,7 @@ public class MenuBars extends Frame implements Bindable {
     @BXML
     private TabPane tabPane = null;
 
-    private MenuHandler menuHandler = new MenuHandler.Adapter() {
+    private MenuHandler menuHandler = new MenuHandler() {
         TextInputContentListener textInputTextListener = new TextInputContentListener() {
             @Override
             public void textChanged(TextInput textInput) {

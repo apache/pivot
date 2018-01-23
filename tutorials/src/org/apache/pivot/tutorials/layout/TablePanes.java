@@ -39,7 +39,7 @@ import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Window;
 
 public class TablePanes extends Window implements Bindable {
-    private class ContextMenuHandler extends MenuHandler.Adapter {
+    private class ContextMenuHandler implements MenuHandler {
         private int x = -1;
         private int y = -1;
 

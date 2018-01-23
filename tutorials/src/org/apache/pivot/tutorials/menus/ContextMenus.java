@@ -29,7 +29,7 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.Window;
 
 public class ContextMenus extends Window implements Bindable {
-    private MenuHandler menuHandler = new MenuHandler.Adapter() {
+    private MenuHandler menuHandler = new MenuHandler() {
         @Override
         public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
             final Component descendant = getDescendantAt(x, y);

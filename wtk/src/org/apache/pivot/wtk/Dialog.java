@@ -26,36 +26,6 @@ import org.apache.pivot.util.VoteResult;
  * application and a user.
  */
 public class Dialog extends Frame {
-    private static class DialogListenerList extends ListenerList<DialogListener> implements
-        DialogListener {
-        @Override
-        public void modalChanged(Dialog dialog) {
-            forEach(listener -> listener.modalChanged(dialog));
-        }
-    }
-
-    private static class DialogStateListenerList extends ListenerList<DialogStateListener>
-        implements DialogStateListener {
-        @Override
-        public Vote previewDialogClose(Dialog dialog, boolean result) {
-            VoteResult vote = new VoteResult(Vote.APPROVE);
-
-            forEach(listener -> vote.tally(listener.previewDialogClose(dialog, result)));
-
-            return vote.get();
-        }
-
-        @Override
-        public void dialogCloseVetoed(Dialog dialog, Vote reason) {
-            forEach(listener -> listener.dialogCloseVetoed(dialog, reason));
-        }
-
-        @Override
-        public void dialogClosed(Dialog dialog, boolean modal) {
-            forEach(listener -> listener.dialogClosed(dialog, modal));
-        }
-    }
-
     private boolean modal;
     private DialogCloseListener dialogCloseListener = null;
 
@@ -63,8 +33,8 @@ public class Dialog extends Frame {
 
     private boolean closing = false;
 
-    private DialogListenerList dialogListeners = new DialogListenerList();
-    private DialogStateListenerList dialogStateListeners = new DialogStateListenerList();
+    private DialogListener.Listeners dialogListeners = new DialogListener.Listeners();
+    private DialogStateListener.Listeners dialogStateListeners = new DialogStateListener.Listeners();
 
     public Dialog() {
         this(true);

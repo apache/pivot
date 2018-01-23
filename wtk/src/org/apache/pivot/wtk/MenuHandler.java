@@ -22,7 +22,9 @@ package org.apache.pivot.wtk;
 public interface MenuHandler {
     /**
      * Menu handler adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
      */
+    @Deprecated
     public static class Adapter implements MenuHandler {
         @Override
         public void configureMenuBar(Component component, MenuBar menuBar) {
@@ -47,7 +49,8 @@ public interface MenuHandler {
      * @param component The component that is hosting the menu bar.
      * @param menuBar The menu bar to configure.
      */
-    public void configureMenuBar(Component component, MenuBar menuBar);
+    default public void configureMenuBar(Component component, MenuBar menuBar) {
+    }
 
     /**
      * Called when a component to which this handler is attached loses the
@@ -56,7 +59,8 @@ public interface MenuHandler {
      * @param component The component that is hosting the menu bar.
      * @param menuBar The menu bar to clean up.
      */
-    public void cleanupMenuBar(Component component, MenuBar menuBar);
+    default public void cleanupMenuBar(Component component, MenuBar menuBar) {
+    }
 
     /**
      * Called when the user right-clicks on a component to which this handler is
@@ -67,7 +71,9 @@ public interface MenuHandler {
      * @param x The X location of the click.
      * @param y The Y location of the click.
      * @return <tt>true</tt> to stop propagation of context menu configuration;
-     * <tt>false</tt> to allow it to continue.
+     * <tt>false</tt> to allow it to continue (default).
      */
-    public boolean configureContextMenu(Component component, Menu menu, int x, int y);
+    default public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
+        return false;
+    }
 }

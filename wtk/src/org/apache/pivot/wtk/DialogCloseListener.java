@@ -26,5 +26,6 @@ public interface DialogCloseListener {
      * @param dialog The dialog that has been closed.
      * @param modal  Whether this was a modal dialog or not.
      */
-    public void dialogClosed(Dialog dialog, boolean modal);
+    default public void dialogClosed(Dialog dialog, boolean modal) {
+    }
 }

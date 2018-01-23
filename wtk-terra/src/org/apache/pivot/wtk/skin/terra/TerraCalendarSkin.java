@@ -426,7 +426,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         monthSpinner.setCircular(true);
         monthSpinner.getStyles().put("sizeToContent", new Boolean(true));
 
-        monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
+        monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
                 Calendar calendar = (Calendar) getComponent();
@@ -439,7 +439,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         yearSpinner.setSpinnerData(
             new NumericSpinnerData(CalendarDate.MIN_CALENDAR_YEAR, CalendarDate.MAX_CALENDAR_YEAR));
 
-        yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener.Adapter() {
+        yearSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
                 Calendar calendar = (Calendar) getComponent();

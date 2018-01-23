@@ -16,15 +16,44 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Dialog state listener interface.
  */
 public interface DialogStateListener extends DialogCloseListener {
     /**
-     * Dialog state listener adapter.
+     * Dialog state listeners.
      */
+    public static class Listeners extends ListenerList<DialogStateListener>
+        implements DialogStateListener {
+        @Override
+        public Vote previewDialogClose(Dialog dialog, boolean result) {
+            VoteResult vote = new VoteResult(Vote.APPROVE);
+
+            forEach(listener -> vote.tally(listener.previewDialogClose(dialog, result)));
+
+            return vote.get();
+        }
+
+        @Override
+        public void dialogCloseVetoed(Dialog dialog, Vote reason) {
+            forEach(listener -> listener.dialogCloseVetoed(dialog, reason));
+        }
+
+        @Override
+        public void dialogClosed(Dialog dialog, boolean modal) {
+            forEach(listener -> listener.dialogClosed(dialog, modal));
+        }
+    }
+
+    /**
+     * Dialog state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements DialogStateListener {
         @Override
         public Vote previewDialogClose(Dialog dialog, boolean result) {
@@ -49,7 +78,9 @@ public interface DialogStateListener extends DialogCloseListener {
      * @param result The result flag ({@code true} means "OK", while {@code false} roughly means "Cancel").
      * @return       The consensus vote as to whether or not to allow the close to occur.
      */
-    public Vote previewDialogClose(Dialog dialog, boolean result);
+    default public Vote previewDialogClose(Dialog dialog, boolean result) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a dialog close event has been vetoed.
@@ -57,5 +88,6 @@ public interface DialogStateListener extends DialogCloseListener {
      * @param dialog The dialog that is not going to close because of this veto.
      * @param reason The vote result that indicates the veto.
      */
-    public void dialogCloseVetoed(Dialog dialog, Vote reason);
+    default public void dialogCloseVetoed(Dialog dialog, Vote reason) {
+    }
 }

@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Dialog listener interface.
  */
 public interface DialogListener {
+    /**
+     * Dialog listeners.
+     */
+    public static class Listeners extends ListenerList<DialogListener> implements
+        DialogListener {
+        @Override
+        public void modalChanged(Dialog dialog) {
+            forEach(listener -> listener.modalChanged(dialog));
+        }
+    }
+
     /**
      * Called when a dialog's modal flag has changed.
      *

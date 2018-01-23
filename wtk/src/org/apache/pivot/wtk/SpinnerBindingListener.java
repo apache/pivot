@@ -16,13 +16,56 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Spinner binding listener interface.
  */
 public interface SpinnerBindingListener {
     /**
-     * Spinner binding listener adapter.
+     * Spinner binding listeners.
      */
+    public static class Listeners extends ListenerList<SpinnerBindingListener>
+        implements SpinnerBindingListener {
+        @Override
+        public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
+            forEach(listener -> listener.spinnerDataKeyChanged(spinner, previousSpinnerDataKey));
+        }
+
+        @Override
+        public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
+            forEach(listener -> listener.spinnerDataBindTypeChanged(spinner, previousSpinnerDataBindType));
+        }
+
+        @Override
+        public void spinnerDataBindMappingChanged(Spinner spinner,
+            Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
+            forEach(listener -> listener.spinnerDataBindMappingChanged(spinner, previousSpinnerDataBindMapping));
+        }
+
+        @Override
+        public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
+            forEach(listener -> listener.selectedItemKeyChanged(spinner, previousSelectedItemKey));
+        }
+
+        @Override
+        public void selectedItemBindTypeChanged(Spinner spinner,
+            BindType previousSelectedItemBindType) {
+            forEach(listener -> listener.selectedItemBindTypeChanged(spinner, previousSelectedItemBindType));
+        }
+
+        @Override
+        public void selectedItemBindMappingChanged(Spinner spinner,
+            Spinner.ItemBindMapping previousSelectedItemBindMapping) {
+            forEach(listener -> listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping));
+        }
+    }
+
+    /**
+     * Spinner binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SpinnerBindingListener {
         @Override
         public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
@@ -64,7 +107,8 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose data is changing.
      * @param previousSpinnerDataKey The previous key for the spinner's data.
      */
-    public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey);
+    default public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
+    }
 
     /**
      * Called when a spinner's spinner data bind type has changed.
@@ -72,7 +116,8 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose data is changing.
      * @param previousSpinnerDataBindType What the data bind type used to be.
      */
-    public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType);
+    default public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
+    }
 
     /**
      * Called when a spinner's spinner data bind mapping has changed.
@@ -80,8 +125,9 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose data is changing.
      * @param previousSpinnerDataBindMapping What the data bind mapping used to be.
      */
-    public void spinnerDataBindMappingChanged(Spinner spinner,
-        Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping);
+    default public void spinnerDataBindMappingChanged(Spinner spinner,
+        Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
+    }
 
     /**
      * Called when a spinner's selected item key has changed.
@@ -89,7 +135,8 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner that is the source of this event.
      * @param previousSelectedItemKey What the selected item key used to be.
      */
-    public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey);
+    default public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
+    }
 
     /**
      * Called when a spinner's selected item bind type has changed.
@@ -97,7 +144,8 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose selected binding has changed.
      * @param previousSelectedItemBindType The previous selected item bind type.
      */
-    public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType);
+    default public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
+    }
 
     /**
      * Called when a spinner's selected item bind mapping has changed.
@@ -105,6 +153,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose bind mapping has changed.
      * @param previousSelectedItemBindMapping What the selected item bind mapping used to be.
      */
-    public void selectedItemBindMappingChanged(Spinner spinner,
-        Spinner.ItemBindMapping previousSelectedItemBindMapping);
+    default public void selectedItemBindMappingChanged(Spinner spinner,
+        Spinner.ItemBindMapping previousSelectedItemBindMapping) {
+    }
 }

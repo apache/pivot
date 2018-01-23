@@ -17,14 +17,38 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Spinner listener interface.
  */
 public interface SpinnerListener {
     /**
-     * Spinner listener adapter.
+     * Spinner listeners.
      */
+    public static class Listeners extends ListenerList<SpinnerListener> implements
+        SpinnerListener {
+        @Override
+        public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
+            forEach(listener -> listener.spinnerDataChanged(spinner, previousSpinnerData));
+        }
+
+        @Override
+        public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
+            forEach(listener -> listener.itemRendererChanged(spinner, previousItemRenderer));
+        }
+
+        @Override
+        public void circularChanged(Spinner spinner) {
+            forEach(listener -> listener.circularChanged(spinner));
+        }
+    }
+
+    /**
+     * Spinner listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SpinnerListener {
         @Override
         public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
@@ -48,7 +72,8 @@ public interface SpinnerListener {
      * @param spinner The source of this event.
      * @param previousSpinnerData What the spinner data used to be.
      */
-    public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData);
+    default public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
+    }
 
     /**
      * Called when a spinner's item renderer has changed.
@@ -56,12 +81,14 @@ public interface SpinnerListener {
      * @param spinner The source of this event.
      * @param previousItemRenderer What the item renderer used to be.
      */
-    public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer);
+    default public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
+    }
 
     /**
      * Called when a spinner's circular property has changed.
      *
      * @param spinner The source of this event.
      */
-    public void circularChanged(Spinner spinner);
+    default public void circularChanged(Spinner spinner) {
+    }
 }

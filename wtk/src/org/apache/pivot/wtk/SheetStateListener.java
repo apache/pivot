@@ -16,15 +16,44 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Sheet state listener interface.
  */
 public interface SheetStateListener extends SheetCloseListener {
     /**
-     * Sheet state listener adapter.
+     * Sheet state listeners.
      */
+    public static class Listeners extends ListenerList<SheetStateListener>
+        implements SheetStateListener {
+        @Override
+        public Vote previewSheetClose(Sheet sheet, boolean result) {
+            VoteResult vote = new VoteResult(Vote.APPROVE);
+
+            forEach(listener -> vote.tally(listener.previewSheetClose(sheet, result)));
+
+            return vote.get();
+        }
+
+        @Override
+        public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+            forEach(listener -> listener.sheetCloseVetoed(sheet, reason));
+        }
+
+        @Override
+        public void sheetClosed(Sheet sheet) {
+            forEach(listener -> listener.sheetClosed(sheet));
+        }
+    }
+
+    /**
+     * Sheet state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SheetStateListener {
         @Override
         public Vote previewSheetClose(Sheet sheet, boolean result) {
@@ -49,7 +78,9 @@ public interface SheetStateListener extends SheetCloseListener {
      * @param result The proposed result of the close.
      * @return What this listener wants to decide about this proposed close.
      */
-    public Vote previewSheetClose(Sheet sheet, boolean result);
+    default public Vote previewSheetClose(Sheet sheet, boolean result) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a sheet close event has been vetoed.
@@ -57,5 +88,6 @@ public interface SheetStateListener extends SheetCloseListener {
      * @param sheet The close event source.
      * @param reason The accumulated vote that resulted in the veto.
      */
-    public void sheetCloseVetoed(Sheet sheet, Vote reason);
+    default public void sheetCloseVetoed(Sheet sheet, Vote reason) {
+    }
 }

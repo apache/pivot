@@ -43,7 +43,7 @@ public class ContextMenuTest implements Application {
         window = (Window) bxmlSerializer.readObject(ContextMenuTest.class, "context_menu_test.bxml");
         bxmlSerializer.bind(this, ContextMenuTest.class);
 
-        window.setMenuHandler(new MenuHandler.Adapter() {
+        window.setMenuHandler(new MenuHandler() {
             @Override
             public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
                 menu.getSections().add(globalSection);

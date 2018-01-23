@@ -520,7 +520,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                     throw new RuntimeException(exception);
                 }
 
-                this.menuImageView.setMenuHandler(new MenuHandler.Adapter() {
+                this.menuImageView.setMenuHandler(new MenuHandler() {
                     @Override
                     public boolean configureContextMenu(Component comp, Menu menu, int x, int y) {
                         menu.getSections().add(MenusRollupStateHandler.this.menuSection);

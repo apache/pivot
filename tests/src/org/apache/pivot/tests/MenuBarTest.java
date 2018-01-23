@@ -74,7 +74,7 @@ public class MenuBarTest implements Application {
         frame2.setTitle("Frame 2, from bxml");
         bxmlSerializer.bind(this, MenuBarTest.class);
 
-        MenuHandler menuHandler = new MenuHandler.Adapter() {
+        MenuHandler menuHandler = new MenuHandler() {
             @Override
             public void configureMenuBar(Component component, MenuBar menuBar) {
                 System.out.println("Configure menu bar: got focus on " + component.getName());

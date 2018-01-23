@@ -67,7 +67,7 @@ public class BXMLExplorerWindow extends Window implements Bindable {
     @BXML
     private Menu.Item fileNewMenuItem;
 
-    private MenuHandler menuHandler = new MenuHandler.Adapter() {
+    private MenuHandler menuHandler = new MenuHandler() {
         TextInputContentListener textInputTextListener = new TextInputContentListener() {
             @Override
             public void textChanged(TextInput textInput) {

@@ -120,101 +120,6 @@ public class Spinner extends Container {
         public Object get(List<?> spinnerData, int index);
     }
 
-    private static class SpinnerListenerList extends ListenerList<SpinnerListener> implements
-        SpinnerListener {
-        @Override
-        public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
-            forEach(listener -> listener.spinnerDataChanged(spinner, previousSpinnerData));
-        }
-
-        @Override
-        public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
-            forEach(listener -> listener.itemRendererChanged(spinner, previousItemRenderer));
-        }
-
-        @Override
-        public void circularChanged(Spinner spinner) {
-            forEach(listener -> listener.circularChanged(spinner));
-        }
-    }
-
-    private static class SpinnerItemListenerList extends ListenerList<SpinnerItemListener>
-        implements SpinnerItemListener {
-        @Override
-        public void itemInserted(Spinner spinner, int index) {
-            forEach(listener -> listener.itemInserted(spinner, index));
-        }
-
-        @Override
-        public void itemsRemoved(Spinner spinner, int index, int count) {
-            forEach(listener -> listener.itemsRemoved(spinner, index, count));
-        }
-
-        @Override
-        public void itemUpdated(Spinner spinner, int index) {
-            forEach(listener -> listener.itemUpdated(spinner, index));
-        }
-
-        @Override
-        public void itemsCleared(Spinner spinner) {
-            forEach(listener -> listener.itemsCleared(spinner));
-        }
-
-        @Override
-        public void itemsSorted(Spinner spinner) {
-            forEach(listener -> listener.itemsSorted(spinner));
-        }
-    }
-
-    private static class SpinnerSelectionListenerList extends
-        ListenerList<SpinnerSelectionListener> implements SpinnerSelectionListener {
-        @Override
-        public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
-            forEach(listener -> listener.selectedIndexChanged(spinner, previousSelectedIndex));
-        }
-
-        @Override
-        public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-            forEach(listener -> listener.selectedItemChanged(spinner, previousSelectedItem));
-        }
-    }
-
-    private static class SpinnerBindingListenerList extends ListenerList<SpinnerBindingListener>
-        implements SpinnerBindingListener {
-        @Override
-        public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
-            forEach(listener -> listener.spinnerDataKeyChanged(spinner, previousSpinnerDataKey));
-        }
-
-        @Override
-        public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
-            forEach(listener -> listener.spinnerDataBindTypeChanged(spinner, previousSpinnerDataBindType));
-        }
-
-        @Override
-        public void spinnerDataBindMappingChanged(Spinner spinner,
-            Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
-            forEach(listener -> listener.spinnerDataBindMappingChanged(spinner, previousSpinnerDataBindMapping));
-        }
-
-        @Override
-        public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
-            forEach(listener -> listener.selectedItemKeyChanged(spinner, previousSelectedItemKey));
-        }
-
-        @Override
-        public void selectedItemBindTypeChanged(Spinner spinner,
-            BindType previousSelectedItemBindType) {
-            forEach(listener -> listener.selectedItemBindTypeChanged(spinner, previousSelectedItemBindType));
-        }
-
-        @Override
-        public void selectedItemBindMappingChanged(Spinner spinner,
-            ItemBindMapping previousSelectedItemBindMapping) {
-            forEach(listener -> listener.selectedItemBindMappingChanged(spinner, previousSelectedItemBindMapping));
-        }
-    }
-
     private List<?> spinnerData = null;
 
     private ItemRenderer itemRenderer = null;
@@ -305,10 +210,10 @@ public class Spinner extends Container {
         }
     };
 
-    private SpinnerListenerList spinnerListeners = new SpinnerListenerList();
-    private SpinnerItemListenerList spinnerItemListeners = new SpinnerItemListenerList();
-    private SpinnerSelectionListenerList spinnerSelectionListeners = new SpinnerSelectionListenerList();
-    private SpinnerBindingListenerList spinnerBindingListeners = new SpinnerBindingListenerList();
+    private SpinnerListener.Listeners spinnerListeners = new SpinnerListener.Listeners();
+    private SpinnerItemListener.Listeners spinnerItemListeners = new SpinnerItemListener.Listeners();
+    private SpinnerSelectionListener.Listeners spinnerSelectionListeners = new SpinnerSelectionListener.Listeners();
+    private SpinnerBindingListener.Listeners spinnerBindingListeners = new SpinnerBindingListener.Listeners();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new SpinnerItemRenderer();
 

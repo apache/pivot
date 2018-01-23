@@ -26,33 +26,11 @@ import org.apache.pivot.util.VoteResult;
  * modal only over a window's content component.
  */
 public class Sheet extends Window {
-    private static class SheetStateListenerList extends ListenerList<SheetStateListener>
-        implements SheetStateListener {
-        @Override
-        public Vote previewSheetClose(Sheet sheet, boolean result) {
-            VoteResult vote = new VoteResult(Vote.APPROVE);
-
-            forEach(listener -> vote.tally(listener.previewSheetClose(sheet, result)));
-
-            return vote.get();
-        }
-
-        @Override
-        public void sheetCloseVetoed(Sheet sheet, Vote reason) {
-            forEach(listener -> listener.sheetCloseVetoed(sheet, reason));
-        }
-
-        @Override
-        public void sheetClosed(Sheet sheet) {
-            forEach(listener -> listener.sheetClosed(sheet));
-        }
-    }
-
     private SheetCloseListener sheetCloseListener = null;
     private boolean result = false;
     private boolean closing = false;
 
-    private SheetStateListenerList sheetStateListeners = new SheetStateListenerList();
+    private SheetStateListener.Listeners sheetStateListeners = new SheetStateListener.Listeners();
 
     /**
      * Creates a new sheet.
