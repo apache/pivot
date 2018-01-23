@@ -43,25 +43,6 @@ public abstract class Viewport extends Container {
         public Bounds getViewportBounds();
     }
 
-    private static class ViewportListenerList extends ListenerList<ViewportListener> implements
-        ViewportListener {
-
-        @Override
-        public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
-            forEach(listener -> listener.scrollTopChanged(viewport, previousScrollTop));
-        }
-
-        @Override
-        public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
-            forEach(listener -> listener.scrollLeftChanged(viewport, previousScrollLeft));
-        }
-
-        @Override
-        public void viewChanged(Viewport viewport, Component previousView) {
-            forEach(listener -> listener.viewChanged(viewport, previousView));
-        }
-    }
-
     private int scrollTop = 0;
     private int scrollLeft = 0;
     private Component view;
@@ -69,7 +50,7 @@ public abstract class Viewport extends Container {
     private boolean consumeRepaint = false;
     private boolean repaintAllViewport = false;
 
-    private ViewportListenerList viewportListeners = new ViewportListenerList();
+    private ViewportListener.Listeners viewportListeners = new ViewportListener.Listeners();
 
     @Override
     protected void setSkin(org.apache.pivot.wtk.Skin skin) {

@@ -71,8 +71,7 @@ public class LargeData implements Application {
 
                     CSVSerializer csvSerializer = new CSVSerializer();
                     csvSerializer.setKeys("c0", "c1", "c2", "c3");
-                    csvSerializer.getCSVSerializerListeners().add(
-                        new CSVSerializerListener.Adapter() {
+                    csvSerializer.getCSVSerializerListeners().add(new CSVSerializerListener() {
                             private ArrayList<Object> page = new ArrayList<>(pageSize);
 
                             @Override

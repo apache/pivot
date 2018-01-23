@@ -390,44 +390,6 @@ public class Element extends Node implements List<Node> {
         }
     }
 
-    private static class ElementListenerList extends ListenerList<ElementListener> implements
-        ElementListener {
-        @Override
-        public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
-            forEach(listener -> listener.defaultNamespaceURIChanged(element, previousDefaultNamespaceURI));
-        }
-
-        @Override
-        public void namespaceAdded(Element element, String prefix) {
-            forEach(listener -> listener.namespaceAdded(element, prefix));
-        }
-
-        @Override
-        public void namespaceUpdated(Element element, String prefix, String previousURI) {
-            forEach(listener -> listener.namespaceUpdated(element, prefix, previousURI));
-        }
-
-        @Override
-        public void namespaceRemoved(Element element, String prefix, String uri) {
-            forEach(listener -> listener.namespaceRemoved(element, prefix, uri));
-        }
-
-        @Override
-        public void attributeInserted(Element element, int index) {
-            forEach(listener -> listener.attributeInserted(element, index));
-        }
-
-        @Override
-        public void attributesRemoved(Element element, int index, Sequence<Attribute> attributes) {
-            forEach(listener -> listener.attributesRemoved(element, index, attributes));
-        }
-
-        @Override
-        public void attributeValueChanged(Attribute attribute, String previousValue) {
-            forEach(listener -> listener.attributeValueChanged(attribute, previousValue));
-        }
-    }
-
     /**
      * Dictionary representing the attributes declared by this element.
      */
@@ -531,7 +493,7 @@ public class Element extends Node implements List<Node> {
     private ArrayList<Node> nodes = new ArrayList<>();
 
     private ListListenerList<Node> listListeners = new ListListenerList<>();
-    private ElementListenerList elementListeners = new ElementListenerList();
+    private ElementListener.Listeners elementListeners = new ElementListener.Listeners();
 
     public Element(String localName) {
         this(null, localName);

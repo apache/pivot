@@ -30,17 +30,9 @@ public class NumberedList extends List {
         DECIMAL, LOWER_ALPHA, UPPER_ALPHA, LOWER_ROMAN, UPPER_ROMAN
     }
 
-    private static class NumberedListListenerList extends ListenerList<NumberedListListener>
-        implements NumberedListListener {
-        @Override
-        public void styleChanged(NumberedList numberedList, Style previousStyle) {
-            forEach(listener -> listener.styleChanged(numberedList, previousStyle));
-        }
-    }
-
     private Style style = Style.DECIMAL;
 
-    private NumberedListListenerList numberedListListeners = new NumberedListListenerList();
+    private NumberedListListener.Listeners numberedListListeners = new NumberedListListener.Listeners();
 
     public NumberedList() {
         super();

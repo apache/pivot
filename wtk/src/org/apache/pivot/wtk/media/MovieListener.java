@@ -16,13 +16,57 @@
  */
 package org.apache.pivot.wtk.media;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Movie listener interface.
  */
 public interface MovieListener {
     /**
-     * Movie listener adapter.
+     * Movie listener list.
      */
+    public static class Listeners extends ListenerList<MovieListener> implements MovieListener {
+        @Override
+        public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+            forEach(listener -> listener.sizeChanged(movie, previousWidth, previousHeight));
+        }
+
+        @Override
+        public void baselineChanged(Movie movie, int previousBaseline) {
+            forEach(listener -> listener.baselineChanged(movie, previousBaseline));
+        }
+
+        @Override
+        public void currentFrameChanged(Movie movie, int previousFrame) {
+            forEach(listener -> listener.currentFrameChanged(movie, previousFrame));
+        }
+
+        @Override
+        public void loopingChanged(Movie movie) {
+            forEach(listener -> listener.loopingChanged(movie));
+        }
+
+        @Override
+        public void movieStarted(Movie movie) {
+            forEach(listener -> listener.movieStarted(movie));
+        }
+
+        @Override
+        public void movieStopped(Movie movie) {
+            forEach(listener -> listener.movieStopped(movie));
+        }
+
+        @Override
+        public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+            forEach(listener -> listener.regionUpdated(movie, x, y, width, height));
+        }
+    }
+
+    /**
+     * Movie listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements MovieListener {
         @Override
         public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
@@ -67,7 +111,8 @@ public interface MovieListener {
      * @param previousWidth  The previous width of this movie.
      * @param previousHeight The previous value of the height before resizing.
      */
-    public void sizeChanged(Movie movie, int previousWidth, int previousHeight);
+    default public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+    }
 
     /**
      * Called when a movie's baseline has changed.
@@ -75,7 +120,8 @@ public interface MovieListener {
      * @param movie            The movie that has changed.
      * @param previousBaseline The previous baseline value of the movie.
      */
-    public void baselineChanged(Movie movie, int previousBaseline);
+    default public void baselineChanged(Movie movie, int previousBaseline) {
+    }
 
     /**
      * Called when the movie's current frame changed.
@@ -83,14 +129,16 @@ public interface MovieListener {
      * @param movie         The movie that has changed.
      * @param previousFrame The previous frame index of the movie.
      */
-    public void currentFrameChanged(Movie movie, int previousFrame);
+    default public void currentFrameChanged(Movie movie, int previousFrame) {
+    }
 
     /**
      * Called when the movie's looping property changed.
      *
      * @param movie The source of this event.
      */
-    public void loopingChanged(Movie movie);
+    default public void loopingChanged(Movie movie) {
+    }
 
     /**
      * Called when the movie begins playing. The frame at which the movie is
@@ -99,7 +147,8 @@ public interface MovieListener {
      *
      * @param movie The movie that has just started to play.
      */
-    public void movieStarted(Movie movie);
+    default public void movieStarted(Movie movie) {
+    }
 
     /**
      * Called when the movie stops playing. The frame at which the movie stopped
@@ -108,7 +157,8 @@ public interface MovieListener {
      *
      * @param movie The movie that has just stopped playing.
      */
-    public void movieStopped(Movie movie);
+    default public void movieStopped(Movie movie) {
+    }
 
     /**
      * Called when a region within a movie needs to be repainted.
@@ -119,5 +169,6 @@ public interface MovieListener {
      * @param width  The width of the image to repaint.
      * @param height The height to repaint.
      */
-    public void regionUpdated(Movie movie, int x, int y, int width, int height);
+    default public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+    }
 }

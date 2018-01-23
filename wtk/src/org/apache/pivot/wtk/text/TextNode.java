@@ -24,31 +24,8 @@ import org.apache.pivot.wtk.Span;
  * Node representing a sequence of characters.
  */
 public final class TextNode extends Node {
-    private static class TextNodeListenerList extends ListenerList<TextNodeListener>
-        implements TextNodeListener {
-        /**
-         * @param textNode The text node that changed.
-         * @param index    Index into this node.
-         * @param count    Count of characters inserted here.
-         */
-        @Override
-        public void charactersInserted(TextNode textNode, int index, int count) {
-            forEach(listener -> listener.charactersInserted(textNode, index, count));
-        }
-
-        /**
-         * @param textNode The text node that changed.
-         * @param index    Index into this node.
-         * @param count    Count of characters removed here.
-         */
-        @Override
-        public void charactersRemoved(TextNode textNode, int index, int count) {
-            forEach(listener -> listener.charactersRemoved(textNode, index, count));
-        }
-    }
-
     private StringBuilder characters = new StringBuilder();
-    private TextNodeListenerList textNodeListeners = new TextNodeListenerList();
+    private TextNodeListener.Listeners textNodeListeners = new TextNodeListener.Listeners();
 
     public TextNode() {
         this("");

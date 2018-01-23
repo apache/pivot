@@ -41,27 +41,6 @@ import com.kitfox.svg.SVGDiagram;
  */
 public abstract class Image implements Visual {
     /**
-     * Image listener list.
-     */
-    protected static class ImageListenerList extends ListenerList<ImageListener> implements
-        ImageListener {
-        @Override
-        public void sizeChanged(Image image, int previousWidth, int previousHeight) {
-            forEach(listener -> listener.sizeChanged(image, previousWidth, previousHeight));
-        }
-
-        @Override
-        public void baselineChanged(Image image, int previousBaseline) {
-            forEach(listener -> listener.baselineChanged(image, previousBaseline));
-        }
-
-        @Override
-        public void regionUpdated(Image image, int x, int y, int width, int height) {
-            forEach(listener -> listener.regionUpdated(image, x, y, width, height));
-        }
-    }
-
-    /**
      * Task that executes an image load operation.
      */
     public static class LoadTask extends IOTask<Image> {
@@ -106,7 +85,7 @@ public abstract class Image implements Visual {
         }
     }
 
-    protected ImageListenerList imageListeners = new ImageListenerList();
+    protected ImageListener.Listeners imageListeners = new ImageListener.Listeners();
 
     @Override
     public int getBaseline() {

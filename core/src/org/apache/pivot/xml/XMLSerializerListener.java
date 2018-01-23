@@ -16,13 +16,38 @@
  */
 package org.apache.pivot.xml;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * XML serializer listener interface.
  */
 public interface XMLSerializerListener {
     /**
-     * XML serializer listener adapter.
+     * XML Serializer listeners.
      */
+    public static class Listeners extends ListenerList<XMLSerializerListener>
+        implements XMLSerializerListener {
+        @Override
+        public void beginElement(XMLSerializer xmlSerializer, Element element) {
+            forEach(listener -> listener.beginElement(xmlSerializer, element));
+        }
+
+        @Override
+        public void endElement(XMLSerializer xmlSerializer) {
+            forEach(listener -> listener.endElement(xmlSerializer));
+        }
+
+        @Override
+        public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+            forEach(listener -> listener.readTextNode(xmlSerializer, textNode));
+        }
+    }
+
+    /**
+     * XML serializer listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements XMLSerializerListener {
         @Override
         public void beginElement(XMLSerializer xmlSerializer, Element element) {
@@ -46,14 +71,16 @@ public interface XMLSerializerListener {
      * @param xmlSerializer The active serializer.
      * @param element The element we are beginning to read.
      */
-    public void beginElement(XMLSerializer xmlSerializer, Element element);
+    default public void beginElement(XMLSerializer xmlSerializer, Element element) {
+    }
 
     /**
      * Called when the serializer has finished reading an element.
      *
      * @param xmlSerializer The active serializer.
      */
-    public void endElement(XMLSerializer xmlSerializer);
+    default public void endElement(XMLSerializer xmlSerializer) {
+    }
 
     /**
      * Called when the serializer has read a text node.
@@ -61,5 +88,6 @@ public interface XMLSerializerListener {
      * @param xmlSerializer The current serializer.
      * @param textNode The text node that was just read.
      */
-    public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode);
+    default public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+    }
 }

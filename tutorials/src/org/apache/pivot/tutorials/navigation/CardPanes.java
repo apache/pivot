@@ -60,7 +60,7 @@ public class CardPanes extends Window implements Bindable {
         zoomRadioButton = (RadioButton) namespace.get("zoomRadioButton");
         noneRadioButton = (RadioButton) namespace.get("noneRadioButton");
 
-        cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+        cardPane.getCardPaneListeners().add(new CardPaneListener() {
             @Override
             public void selectedIndexChanged(CardPane cardPaneArgument, int previousSelectedIndex) {
                 updateLinkButtonState();

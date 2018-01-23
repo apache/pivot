@@ -25,36 +25,8 @@ import org.apache.pivot.util.Vote;
  * at a time.
  */
 public class CardPane extends Container {
-    private static class CardPaneListenerList extends ListenerList<CardPaneListener> implements
-        CardPaneListener {
-        @Override
-        public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
-            Vote vote = Vote.APPROVE;
-
-            for (CardPaneListener listener : this) {
-                vote = vote.tally(listener.previewSelectedIndexChange(cardPane, selectedIndex));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
-            for (CardPaneListener listener : this) {
-                listener.selectedIndexChangeVetoed(cardPane, reason);
-            }
-        }
-
-        @Override
-        public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
-            for (CardPaneListener listener : this) {
-                listener.selectedIndexChanged(cardPane, previousSelectedIndex);
-            }
-        }
-    }
-
     private int selectedIndex = -1;
-    private CardPaneListenerList cardPaneListeners = new CardPaneListenerList();
+    private CardPaneListener.Listeners cardPaneListeners = new CardPaneListener.Listeners();
 
     public CardPane() {
         installSkin(CardPane.class);

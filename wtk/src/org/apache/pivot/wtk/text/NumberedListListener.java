@@ -16,11 +16,27 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * NumberedList listener interface.
  */
 public interface NumberedListListener {
+    /**
+     * Numbered list listeners.
+     */
+    public static class Listeners extends ListenerList<NumberedListListener>
+        implements NumberedListListener {
+        @Override
+        public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle) {
+            forEach(listener -> listener.styleChanged(numberedList, previousStyle));
+        }
+    }
 
+    /**
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public class Adapter implements NumberedListListener {
         @Override
         public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle) {
@@ -34,5 +50,6 @@ public interface NumberedListListener {
      * @param numberedList  The list whose style has changed.
      * @param previousStyle The previous style for this list.
      */
-    public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle);
+    default public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle) {
+    }
 }

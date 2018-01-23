@@ -59,7 +59,7 @@ public class CardPaneTest implements Application {
                 int selectedIndex = selection == null ? -1 : selection.getParent().indexOf(
                     selection);
 
-                cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+                cardPane.getCardPaneListeners().add(new CardPaneListener() {
                     @Override
                     public Vote previewSelectedIndexChange(CardPane cardPaneArgument,
                         int selectedIndexArgument) {

@@ -36,44 +36,6 @@ import org.apache.pivot.wtk.Theme;
  * style class property.
  */
 public abstract class Element extends Node implements Sequence<Node>, Iterable<Node> {
-    private static class ElementListenerList extends ListenerList<ElementListener> implements
-        ElementListener {
-        @Override
-        public void nodeInserted(Element element, int index) {
-            forEach(listener -> listener.nodeInserted(element, index));
-        }
-
-        @Override
-        public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
-            forEach(listener -> listener.nodesRemoved(element, index, nodes));
-        }
-
-        @Override
-        public void fontChanged(Element element, Font previousFont) {
-            forEach(listener -> listener.fontChanged(element, previousFont));
-        }
-
-        @Override
-        public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
-            forEach(listener -> listener.backgroundColorChanged(element, previousBackgroundColor));
-        }
-
-        @Override
-        public void foregroundColorChanged(Element element, Color previousForegroundColor) {
-            forEach(listener -> listener.foregroundColorChanged(element, previousForegroundColor));
-        }
-
-        @Override
-        public void underlineChanged(Element element) {
-            forEach(listener -> listener.underlineChanged(element));
-        }
-
-        @Override
-        public void strikethroughChanged(Element element) {
-            forEach(listener -> listener.strikethroughChanged(element));
-        }
-    }
-
     private int characterCount = 0;
     private ArrayList<Node> nodes = new ArrayList<>();
     private java.awt.Font font;
@@ -82,7 +44,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     private boolean underline;
     private boolean strikethrough;
 
-    private ElementListenerList elementListeners = new ElementListenerList();
+    private ElementListener.Listeners elementListeners = new ElementListener.Listeners();
 
     public Element() {
     }

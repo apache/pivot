@@ -39,7 +39,7 @@ import org.apache.pivot.wtk.util.ColorUtilities;
 public class TerraDialogSkin extends TerraFrameSkin implements DialogListener, DialogStateListener {
     private static final float GOLDEN_SECTION = 0.382f;
 
-    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseMove(Container display, int x, int y) {
             return isMouseOverOwner(display, x, y);

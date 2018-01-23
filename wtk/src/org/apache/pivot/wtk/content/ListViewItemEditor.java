@@ -39,7 +39,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
 
     private TextInput textInput = new TextInput();
 
-    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display) container;

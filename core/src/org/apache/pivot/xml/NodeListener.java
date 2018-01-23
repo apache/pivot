@@ -16,10 +16,22 @@
  */
 package org.apache.pivot.xml;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Node listener interface.
  */
 public interface NodeListener {
+    /**
+     * Node listeners.
+     */
+    public static class Listeners extends ListenerList<NodeListener> implements NodeListener {
+        @Override
+        public void parentChanged(Node node, Element previousParent) {
+            forEach(listener -> listener.parentChanged(node, previousParent));
+        }
+    }
+
     /**
      * Called when a node's parent has changed.
      *

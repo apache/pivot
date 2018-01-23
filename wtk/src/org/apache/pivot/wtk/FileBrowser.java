@@ -39,47 +39,12 @@ public class FileBrowser extends Container {
 
     private static final String USER_HOME = System.getProperty("user.home");
 
-    private static class FileBrowserListenerList extends ListenerList<FileBrowserListener>
-        implements FileBrowserListener {
-        @Override
-        public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
-            forEach(listener -> listener.rootDirectoryChanged(fileBrowser, previousRootDirectory));
-        }
-
-        @Override
-        public void selectedFileAdded(FileBrowser fileBrowser, File file) {
-            forEach(listener -> listener.selectedFileAdded(fileBrowser, file));
-        }
-
-        @Override
-        public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
-            forEach(listener -> listener.selectedFileRemoved(fileBrowser, file));
-        }
-
-        @Override
-        public void selectedFilesChanged(FileBrowser fileBrowser,
-            Sequence<File> previousSelectedFiles) {
-            forEach(listener -> listener.selectedFilesChanged(fileBrowser, previousSelectedFiles));
-        }
-
-        @Override
-        public void multiSelectChanged(FileBrowser fileBrowser) {
-            forEach(listener -> listener.multiSelectChanged(fileBrowser));
-        }
-
-        @Override
-        public void disabledFileFilterChanged(FileBrowser fileBrowser,
-            Filter<File> previousDisabledFileFilter) {
-            forEach(listener -> listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter));
-        }
-    }
-
     private File rootDirectory;
     private FileList selectedFiles = new FileList();
     private boolean multiSelect = false;
     private Filter<File> disabledFileFilter = null;
 
-    private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
+    private FileBrowserListener.Listeners fileBrowserListeners = new FileBrowserListener.Listeners();
 
     /**
      * Creates a new FileBrowser <p> Note that this version set by default mode

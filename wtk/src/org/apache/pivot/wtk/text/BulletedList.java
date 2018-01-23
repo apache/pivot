@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 
 /**
  * Element representing a bulleted list.
@@ -32,19 +33,9 @@ public class BulletedList extends List {
         CIRCLE_OUTLINE
     }
 
-    private static class BulletedListListenerList extends ListenerList<BulletedListListener>
-        implements BulletedListListener {
-        @Override
-        public void styleChanged(BulletedList bulletedList, Style previousStyle) {
-            for (BulletedListListener listener : this) {
-                listener.styleChanged(bulletedList, previousStyle);
-            }
-        }
-    }
-
     private Style style = Style.CIRCLE;
 
-    private BulletedListListenerList bulletedListListeners = new BulletedListListenerList();
+    private BulletedListListener.Listeners bulletedListListeners = new BulletedListListener.Listeners();
 
     public BulletedList() {
         super();
@@ -60,9 +51,7 @@ public class BulletedList extends List {
     }
 
     public void setStyle(Style style) {
-        if (style == null) {
-            throw new IllegalArgumentException("style is null.");
-        }
+        Utils.checkNull(style, "style");
 
         Style previousStyle = this.style;
         if (previousStyle != style) {

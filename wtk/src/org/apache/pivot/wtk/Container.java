@@ -35,71 +35,6 @@ import org.apache.pivot.wtk.effects.Decorator;
  */
 public abstract class Container extends Component implements Sequence<Component>,
     Iterable<Component> {
-    private static class ContainerListenerList extends ListenerList<ContainerListener> implements
-        ContainerListener {
-        @Override
-        public void componentInserted(Container container, int index) {
-            forEach(listener -> listener.componentInserted(container, index));
-        }
-
-        @Override
-        public void componentsRemoved(Container container, int index, Sequence<Component> components) {
-            forEach(listener -> listener.componentsRemoved(container, index, components));
-        }
-
-        @Override
-        public void componentMoved(Container container, int from, int to) {
-            forEach(listener -> listener.componentMoved(container, from, to));
-        }
-
-        @Override
-        public void focusTraversalPolicyChanged(Container container,
-            FocusTraversalPolicy previousFocusTraversalPolicy) {
-            forEach(listener -> listener.focusTraversalPolicyChanged(container, previousFocusTraversalPolicy));
-        }
-    }
-
-    private static class ContainerMouseListenerList extends ListenerList<ContainerMouseListener>
-        implements ContainerMouseListener {
-        @Override
-        public boolean mouseMove(Container container, int x, int y) {
-            BooleanResult consumed = new BooleanResult(false);
-
-            forEach(listener -> consumed.or(listener.mouseMove(container, x, y)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
-            BooleanResult consumed = new BooleanResult(false);
-
-            forEach(listener -> consumed.or(listener.mouseDown(container, button, x, y)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
-            BooleanResult consumed = new BooleanResult(false);
-
-            forEach(listener -> consumed.or(listener.mouseUp(container, button, x, y)));
-
-            return consumed.get();
-        }
-
-        @Override
-        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
-            BooleanResult consumed = new BooleanResult(false);
-
-            forEach(listener -> consumed.or(listener.mouseWheel(container, scrollType,
-                    scrollAmount, wheelRotation, x, y)));
-
-            return consumed.get();
-        }
-    }
-
     private ArrayList<Component> components = new ArrayList<>();
 
     private FocusTraversalPolicy focusTraversalPolicy = null;
@@ -116,8 +51,8 @@ public abstract class Container extends Component implements Sequence<Component>
     private java.awt.image.BufferedImage doubleBufferImage = null;
     private boolean doubleBufferedRepaintRequired = false;
 
-    private ContainerListenerList containerListeners = new ContainerListenerList();
-    private ContainerMouseListenerList containerMouseListeners = new ContainerMouseListenerList();
+    private ContainerListener.Listeners containerListeners = new ContainerListener.Listeners();
+    private ContainerMouseListener.Listeners containerMouseListeners = new ContainerMouseListener.Listeners();
 
     @Override
     public final int add(Component component) {

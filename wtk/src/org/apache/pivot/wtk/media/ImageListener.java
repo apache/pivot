@@ -16,10 +16,32 @@
  */
 package org.apache.pivot.wtk.media;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Image listener interface.
  */
 public interface ImageListener {
+    /**
+     * Image listener list.
+     */
+    public static class Listeners extends ListenerList<ImageListener> implements ImageListener {
+        @Override
+        public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+            forEach(listener -> listener.sizeChanged(image, previousWidth, previousHeight));
+        }
+
+        @Override
+        public void baselineChanged(Image image, int previousBaseline) {
+            forEach(listener -> listener.baselineChanged(image, previousBaseline));
+        }
+
+        @Override
+        public void regionUpdated(Image image, int x, int y, int width, int height) {
+            forEach(listener -> listener.regionUpdated(image, x, y, width, height));
+        }
+    }
+
     /**
      * Called when an image's size has changed.
      *

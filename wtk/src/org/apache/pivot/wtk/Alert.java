@@ -117,39 +117,6 @@ public class Alert extends Dialog {
         }
     }
 
-    private static class AlertListenerList extends ListenerList<AlertListener> implements
-        AlertListener {
-        @Override
-        public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
-            forEach(listener -> listener.messageTypeChanged(alert, previousMessageType));
-        }
-
-        @Override
-        public void messageChanged(Alert alert, String previousMessage) {
-            forEach(listener -> listener.messageChanged(alert, previousMessage));
-        }
-
-        @Override
-        public void bodyChanged(Alert alert, Component previousBody) {
-            forEach(listener -> listener.bodyChanged(alert, previousBody));
-        }
-
-        @Override
-        public void optionInserted(Alert alert, int index) {
-            forEach(listener -> listener.optionInserted(alert, index));
-        }
-
-        @Override
-        public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
-            forEach(listener -> listener.optionsRemoved(alert, index, removed));
-        }
-
-        @Override
-        public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
-            forEach(listener -> listener.selectedOptionChanged(alert, previousSelectedOption));
-        }
-    }
-
     private MessageType messageType = null;
     private String message = null;
     private Component body = null;
@@ -158,7 +125,7 @@ public class Alert extends Dialog {
     private OptionSequence optionSequence = new OptionSequence();
     private int selectedOptionIndex = -1;
 
-    private AlertListenerList alertListeners = new AlertListenerList();
+    private AlertListener.Listeners alertListeners = new AlertListener.Listeners();
 
     private static Resources resources = null;
 

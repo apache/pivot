@@ -81,7 +81,7 @@ public abstract class MenuButtonSkin extends ButtonSkin implements MenuButton.Sk
         }
     };
 
-    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display) container;

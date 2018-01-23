@@ -17,14 +17,44 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Container listener interface.
  */
 public interface ContainerListener {
     /**
-     * Container listener adapter.
+     * Container listeners.
      */
+    public static class Listeners extends ListenerList<ContainerListener> implements
+        ContainerListener {
+        @Override
+        public void componentInserted(Container container, int index) {
+            forEach(listener -> listener.componentInserted(container, index));
+        }
+
+        @Override
+        public void componentsRemoved(Container container, int index, Sequence<Component> components) {
+            forEach(listener -> listener.componentsRemoved(container, index, components));
+        }
+
+        @Override
+        public void componentMoved(Container container, int from, int to) {
+            forEach(listener -> listener.componentMoved(container, from, to));
+        }
+
+        @Override
+        public void focusTraversalPolicyChanged(Container container,
+            FocusTraversalPolicy previousFocusTraversalPolicy) {
+            forEach(listener -> listener.focusTraversalPolicyChanged(container, previousFocusTraversalPolicy));
+        }
+    }
+
+    /**
+     * Container listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ContainerListener {
         @Override
         public void componentInserted(Container container, int index) {
@@ -55,7 +85,8 @@ public interface ContainerListener {
      * @param container The container that has changed.
      * @param index     The index where the new component has been inserted.
      */
-    public void componentInserted(Container container, int index);
+    default public void componentInserted(Container container, int index) {
+    }
 
     /**
      * Called when components have been removed from a container's component
@@ -65,7 +96,8 @@ public interface ContainerListener {
      * @param index     The starting index of the components that were removed.
      * @param removed   The complete sequence of removed components.
      */
-    public void componentsRemoved(Container container, int index, Sequence<Component> removed);
+    default public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+    }
 
     /**
      * Called when a component has moved from one z-index to another within a
@@ -75,7 +107,8 @@ public interface ContainerListener {
      * @param from      The starting index of the component (in Z-order).
      * @param to        The place in the Z-order where this component ended up.
      */
-    public void componentMoved(Container container, int from, int to);
+    default public void componentMoved(Container container, int from, int to) {
+    }
 
     /**
      * Called when a container's focus traversal policy has changed.
@@ -83,6 +116,7 @@ public interface ContainerListener {
      * @param container                    The container that has changed.
      * @param previousFocusTraversalPolicy The previous value of the focus traversal policy for this container.
      */
-    public void focusTraversalPolicyChanged(Container container,
-        FocusTraversalPolicy previousFocusTraversalPolicy);
+    default public void focusTraversalPolicyChanged(Container container,
+        FocusTraversalPolicy previousFocusTraversalPolicy) {
+    }
 }

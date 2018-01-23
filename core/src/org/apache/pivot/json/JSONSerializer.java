@@ -54,72 +54,6 @@ import org.apache.pivot.util.Utils;
  * writes data to a JavaScript Object Notation (JSON) file.
  */
 public class JSONSerializer implements Serializer<Object> {
-    private static class JSONSerializerListenerList extends ListenerList<JSONSerializerListener>
-        implements JSONSerializerListener {
-        @Override
-        public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
-            for (JSONSerializerListener listener : this) {
-                listener.beginDictionary(jsonSerializer, value);
-            }
-        }
-
-        @Override
-        public void endDictionary(JSONSerializer jsonSerializer) {
-            for (JSONSerializerListener listener : this) {
-                listener.endDictionary(jsonSerializer);
-            }
-        }
-
-        @Override
-        public void readKey(JSONSerializer jsonSerializer, String key) {
-            for (JSONSerializerListener listener : this) {
-                listener.readKey(jsonSerializer, key);
-            }
-        }
-
-        @Override
-        public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
-            for (JSONSerializerListener listener : this) {
-                listener.beginSequence(jsonSerializer, value);
-            }
-        }
-
-        @Override
-        public void endSequence(JSONSerializer jsonSerializer) {
-            for (JSONSerializerListener listener : this) {
-                listener.endSequence(jsonSerializer);
-            }
-        }
-
-        @Override
-        public void readString(JSONSerializer jsonSerializer, String value) {
-            for (JSONSerializerListener listener : this) {
-                listener.readString(jsonSerializer, value);
-            }
-        }
-
-        @Override
-        public void readNumber(JSONSerializer jsonSerializer, Number value) {
-            for (JSONSerializerListener listener : this) {
-                listener.readNumber(jsonSerializer, value);
-            }
-        }
-
-        @Override
-        public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
-            for (JSONSerializerListener listener : this) {
-                listener.readBoolean(jsonSerializer, value);
-            }
-        }
-
-        @Override
-        public void readNull(JSONSerializer jsonSerializer) {
-            for (JSONSerializerListener listener : this) {
-                listener.readNull(jsonSerializer);
-            }
-        }
-    }
-
     private Charset charset;
     private Type type;
 
@@ -128,7 +62,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     private int c = -1;
 
-    private JSONSerializerListenerList jsonSerializerListeners = null;
+    private JSONSerializerListener.Listeners jsonSerializerListeners = null;
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final Type DEFAULT_TYPE = Object.class;
@@ -1192,7 +1126,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     public ListenerList<JSONSerializerListener> getJSONSerializerListeners() {
         if (jsonSerializerListeners == null) {
-            jsonSerializerListeners = new JSONSerializerListenerList();
+            jsonSerializerListeners = new JSONSerializerListener.Listeners();
         }
 
         return jsonSerializerListeners;

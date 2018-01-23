@@ -16,10 +16,37 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Text node listener interface.
  */
 public interface TextNodeListener {
+    /**
+     * Text node listeners.
+     */
+    public static class Listeners extends ListenerList<TextNodeListener> implements TextNodeListener {
+        /**
+         * @param textNode The text node that changed.
+         * @param index    Index into this node.
+         * @param count    Count of characters inserted here.
+         */
+        @Override
+        public void charactersInserted(TextNode textNode, int index, int count) {
+            forEach(listener -> listener.charactersInserted(textNode, index, count));
+        }
+
+        /**
+         * @param textNode The text node that changed.
+         * @param index    Index into this node.
+         * @param count    Count of characters removed here.
+         */
+        @Override
+        public void charactersRemoved(TextNode textNode, int index, int count) {
+            forEach(listener -> listener.charactersRemoved(textNode, index, count));
+        }
+    }
+
     /**
      * Called when characters have been inserted into a text node.
      *

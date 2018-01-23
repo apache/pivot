@@ -47,30 +47,6 @@ import org.apache.pivot.util.Utils;
  * writes data to a comma-separated value (CSV) file.
  */
 public class CSVSerializer implements Serializer<List<?>> {
-    private static class CSVSerializerListenerList extends ListenerList<CSVSerializerListener>
-        implements CSVSerializerListener {
-        @Override
-        public void beginList(CSVSerializer csvSerializer, List<?> list) {
-            for (CSVSerializerListener listener : this) {
-                listener.beginList(csvSerializer, list);
-            }
-        }
-
-        @Override
-        public void endList(CSVSerializer csvSerializer) {
-            for (CSVSerializerListener listener : this) {
-                listener.endList(csvSerializer);
-            }
-        }
-
-        @Override
-        public void readItem(CSVSerializer csvSerializer, Object item) {
-            for (CSVSerializerListener listener : this) {
-                listener.readItem(csvSerializer, item);
-            }
-        }
-    }
-
     private Charset charset;
     private Type itemType;
 
@@ -81,7 +57,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     private int c = -1;
 
-    private CSVSerializerListenerList csvSerializerListeners = null;
+    private CSVSerializerListener.Listeners csvSerializerListeners = null;
 
     public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
     public static final Type DEFAULT_ITEM_TYPE = HashMap.class;
@@ -525,7 +501,7 @@ public class CSVSerializer implements Serializer<List<?>> {
 
     public ListenerList<CSVSerializerListener> getCSVSerializerListeners() {
         if (csvSerializerListeners == null) {
-            csvSerializerListeners = new CSVSerializerListenerList();
+            csvSerializerListeners = new CSVSerializerListener.Listeners();
         }
 
         return csvSerializerListeners;

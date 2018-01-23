@@ -43,33 +43,9 @@ import org.apache.pivot.util.Utils;
  * Reads and writes XML data.
  */
 public class XMLSerializer implements Serializer<Element> {
-    private static class XMLSerializerListenerList extends ListenerList<XMLSerializerListener>
-        implements XMLSerializerListener {
-        @Override
-        public void beginElement(XMLSerializer xmlSerializer, Element element) {
-            for (XMLSerializerListener listener : this) {
-                listener.beginElement(xmlSerializer, element);
-            }
-        }
-
-        @Override
-        public void endElement(XMLSerializer xmlSerializer) {
-            for (XMLSerializerListener listener : this) {
-                listener.endElement(xmlSerializer);
-            }
-        }
-
-        @Override
-        public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
-            for (XMLSerializerListener listener : this) {
-                listener.readTextNode(xmlSerializer, textNode);
-            }
-        }
-    }
-
     private Charset charset = null;
 
-    private XMLSerializerListenerList xmlSerializerListeners = null;
+    private XMLSerializerListener.Listeners xmlSerializerListeners = null;
 
     public static final String XMLNS_ATTRIBUTE_PREFIX = "xmlns";
 
@@ -322,7 +298,7 @@ public class XMLSerializer implements Serializer<Element> {
 
     public ListenerList<XMLSerializerListener> getXMLSerializerListeners() {
         if (xmlSerializerListeners == null) {
-            xmlSerializerListeners = new XMLSerializerListenerList();
+            xmlSerializerListeners = new XMLSerializerListener.Listeners();
         }
 
         return xmlSerializerListeners;

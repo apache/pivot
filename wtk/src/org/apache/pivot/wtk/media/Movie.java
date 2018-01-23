@@ -26,68 +26,13 @@ import org.apache.pivot.wtk.Visual;
  * vector "animation".
  */
 public abstract class Movie implements Visual {
-    /**
-     * Movie listener list.
-     */
-    protected static class MovieListenerList extends ListenerList<MovieListener> implements
-        MovieListener {
-        @Override
-        public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
-            for (MovieListener listener : this) {
-                listener.sizeChanged(movie, previousWidth, previousHeight);
-            }
-        }
-
-        @Override
-        public void baselineChanged(Movie movie, int previousBaseline) {
-            for (MovieListener listener : this) {
-                listener.baselineChanged(movie, previousBaseline);
-            }
-        }
-
-        @Override
-        public void currentFrameChanged(Movie movie, int previousFrame) {
-            for (MovieListener listener : this) {
-                listener.currentFrameChanged(movie, previousFrame);
-            }
-        }
-
-        @Override
-        public void loopingChanged(Movie movie) {
-            for (MovieListener listener : this) {
-                listener.loopingChanged(movie);
-            }
-        }
-
-        @Override
-        public void movieStarted(Movie movie) {
-            for (MovieListener listener : this) {
-                listener.movieStarted(movie);
-            }
-        }
-
-        @Override
-        public void movieStopped(Movie movie) {
-            for (MovieListener listener : this) {
-                listener.movieStopped(movie);
-            }
-        }
-
-        @Override
-        public void regionUpdated(Movie movie, int x, int y, int width, int height) {
-            for (MovieListener listener : this) {
-                listener.regionUpdated(movie, x, y, width, height);
-            }
-        }
-    }
-
     private int currentFrame = -1;
     private int frameRate = 26;
     private boolean looping = false;
 
     private ApplicationContext.ScheduledCallback scheduledCallback = null;
 
-    protected MovieListenerList movieListeners = new MovieListenerList();
+    protected MovieListener.Listeners movieListeners = new MovieListener.Listeners();
 
     private final Runnable nextFrameCallback = new Runnable() {
         @Override

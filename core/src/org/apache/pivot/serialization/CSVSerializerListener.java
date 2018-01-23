@@ -17,14 +17,38 @@
 package org.apache.pivot.serialization;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * CSV serializer listener interface.
  */
 public interface CSVSerializerListener {
     /**
-     * CSV serializer listener adapter.
+     * CSV Serializer listeners.
      */
+    public static class Listeners extends ListenerList<CSVSerializerListener>
+        implements CSVSerializerListener {
+        @Override
+        public void beginList(CSVSerializer csvSerializer, List<?> list) {
+            forEach(listener -> listener.beginList(csvSerializer, list));
+        }
+
+        @Override
+        public void endList(CSVSerializer csvSerializer) {
+            forEach(listener -> listener.endList(csvSerializer));
+        }
+
+        @Override
+        public void readItem(CSVSerializer csvSerializer, Object item) {
+            forEach(listener -> listener.readItem(csvSerializer, item));
+        }
+    }
+
+    /**
+     * CSV serializer listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements CSVSerializerListener {
         @Override
         public void beginList(CSVSerializer csvSerializer, List<?> list) {
@@ -48,14 +72,16 @@ public interface CSVSerializerListener {
      * @param csvSerializer The active serializer.
      * @param list The list just begun.
      */
-    public void beginList(CSVSerializer csvSerializer, List<?> list);
+    default public void beginList(CSVSerializer csvSerializer, List<?> list) {
+    }
 
     /**
      * Called when the serializer has finished reading the list.
      *
      * @param csvSerializer The current serializer.
      */
-    public void endList(CSVSerializer csvSerializer);
+    default public void endList(CSVSerializer csvSerializer) {
+    }
 
     /**
      * Called when the serializer has read an item.
@@ -63,5 +89,6 @@ public interface CSVSerializerListener {
      * @param csvSerializer The current serializer.
      * @param item The item just read.
      */
-    public void readItem(CSVSerializer csvSerializer, Object item);
+    default public void readItem(CSVSerializer csvSerializer, Object item) {
+    }
 }

@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.text;
 
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.HorizontalAlignment;
 
 /**
@@ -25,20 +26,9 @@ import org.apache.pivot.wtk.HorizontalAlignment;
  */
 public abstract class Block extends Element {
 
-    private static class BlockListenerList extends ListenerList<BlockListener> implements
-        BlockListener {
-        @Override
-        public void horizontalAlignmentChanged(Block block,
-            HorizontalAlignment previousHorizontalAlignment) {
-            for (BlockListener listener : this) {
-                listener.horizontalAlignmentChanged(block, previousHorizontalAlignment);
-            }
-        }
-    }
-
     private HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
 
-    private BlockListenerList blockListeners = new BlockListenerList();
+    private BlockListener.Listeners blockListeners = new BlockListener.Listeners();
 
     public Block() {
         super();
@@ -54,9 +44,7 @@ public abstract class Block extends Element {
     }
 
     public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
-        if (horizontalAlignment == null) {
-            throw new IllegalArgumentException("horizontalAlignment is null.");
-        }
+        Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         HorizontalAlignment previousHorizontalAlignment = this.horizontalAlignment;
         if (previousHorizontalAlignment != horizontalAlignment) {

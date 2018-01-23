@@ -18,14 +18,68 @@ package org.apache.pivot.json;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * JSON serializer listener interface.
  */
 public interface JSONSerializerListener {
     /**
-     * JSON serializer listener adapter.
+     * JSON Serializer listeners.
      */
+    public static class Listeners extends ListenerList<JSONSerializerListener>
+        implements JSONSerializerListener {
+        @Override
+        public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+            forEach(listener -> listener.beginDictionary(jsonSerializer, value));
+        }
+
+        @Override
+        public void endDictionary(JSONSerializer jsonSerializer) {
+            forEach(listener -> listener.endDictionary(jsonSerializer));
+        }
+
+        @Override
+        public void readKey(JSONSerializer jsonSerializer, String key) {
+            forEach(listener -> listener.readKey(jsonSerializer, key));
+        }
+
+        @Override
+        public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+            forEach(listener -> listener.beginSequence(jsonSerializer, value));
+        }
+
+        @Override
+        public void endSequence(JSONSerializer jsonSerializer) {
+            forEach(listener -> listener.endSequence(jsonSerializer));
+        }
+
+        @Override
+        public void readString(JSONSerializer jsonSerializer, String value) {
+            forEach(listener -> listener.readString(jsonSerializer, value));
+        }
+
+        @Override
+        public void readNumber(JSONSerializer jsonSerializer, Number value) {
+            forEach(listener -> listener.readNumber(jsonSerializer, value));
+        }
+
+        @Override
+        public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+            forEach(listener -> listener.readBoolean(jsonSerializer, value));
+        }
+
+        @Override
+        public void readNull(JSONSerializer jsonSerializer) {
+            forEach(listener -> listener.readNull(jsonSerializer));
+        }
+    }
+
+    /**
+     * JSON serializer listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements JSONSerializerListener {
         @Override
         public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
@@ -79,14 +133,16 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The serializer in question.
      * @param value The dictionary just started.
      */
-    public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value);
+    default public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+    }
 
     /**
      * Called when the serializer has finished reading a dictionary value.
      *
      * @param jsonSerializer The serializer in operation.
      */
-    public void endDictionary(JSONSerializer jsonSerializer);
+    default public void endDictionary(JSONSerializer jsonSerializer) {
+    }
 
     /**
      * Called when the serializer has read a dictionary key.
@@ -94,7 +150,8 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The active serializer.
      * @param key The key just read.
      */
-    public void readKey(JSONSerializer jsonSerializer, String key);
+    default public void readKey(JSONSerializer jsonSerializer, String key) {
+    }
 
     /**
      * Called when the serializer has begun reading a sequence value.
@@ -102,14 +159,16 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The serializer.
      * @param value The sequence just started.
      */
-    public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value);
+    default public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+    }
 
     /**
      * Called when the serializer has finished reading a sequence value.
      *
      * @param jsonSerializer The current serializer.
      */
-    public void endSequence(JSONSerializer jsonSerializer);
+    default public void endSequence(JSONSerializer jsonSerializer) {
+    }
 
     /**
      * Called when the serializer has read a string value.
@@ -117,7 +176,8 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The active serializer.
      * @param value The string value just read.
      */
-    public void readString(JSONSerializer jsonSerializer, String value);
+    default public void readString(JSONSerializer jsonSerializer, String value) {
+    }
 
     /**
      * Called when the serializer has read a numeric value.
@@ -125,7 +185,8 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The active serializer.
      * @param value The numeric value just read.
      */
-    public void readNumber(JSONSerializer jsonSerializer, Number value);
+    default public void readNumber(JSONSerializer jsonSerializer, Number value) {
+    }
 
     /**
      * Called when the serializer has read a boolean value.
@@ -133,12 +194,14 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The serializer.
      * @param value The boolean value just read.
      */
-    public void readBoolean(JSONSerializer jsonSerializer, Boolean value);
+    default public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+    }
 
     /**
      * Called when the serializer has read a null value.
      *
      * @param jsonSerializer The currently active serializer.
      */
-    public void readNull(JSONSerializer jsonSerializer);
+    default public void readNull(JSONSerializer jsonSerializer) {
+    }
 }

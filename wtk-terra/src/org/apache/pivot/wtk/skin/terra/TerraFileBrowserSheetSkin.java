@@ -119,7 +119,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             }
         });
 
-        fileBrowser.getFileBrowserListeners().add(new FileBrowserListener.Adapter() {
+        fileBrowser.getFileBrowserListeners().add(new FileBrowserListener() {
             @Override
             public void rootDirectoryChanged(FileBrowser fileBrowserArgument,
                 File previousRootDirectory) {

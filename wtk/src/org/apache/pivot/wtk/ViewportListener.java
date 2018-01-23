@@ -16,13 +16,38 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Viewport listener interface.
  */
 public interface ViewportListener {
     /**
-     * Viewport listener adapter.
+     * Viewport listeners.
      */
+    public static class Listeners extends ListenerList<ViewportListener> implements
+        ViewportListener {
+        @Override
+        public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
+            forEach(listener -> listener.scrollTopChanged(viewport, previousScrollTop));
+        }
+
+        @Override
+        public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
+            forEach(listener -> listener.scrollLeftChanged(viewport, previousScrollLeft));
+        }
+
+        @Override
+        public void viewChanged(Viewport viewport, Component previousView) {
+            forEach(listener -> listener.viewChanged(viewport, previousView));
+        }
+    }
+
+    /**
+     * Viewport listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ViewportListener {
         @Override
         public void scrollTopChanged(Viewport scrollPane, int previousScrollTop) {
@@ -46,7 +71,8 @@ public interface ViewportListener {
      * @param scrollPane        The viewport that has scrolled.
      * @param previousScrollTop The previous top scroll position.
      */
-    public void scrollTopChanged(Viewport scrollPane, int previousScrollTop);
+    default public void scrollTopChanged(Viewport scrollPane, int previousScrollTop) {
+    }
 
     /**
      * Called when a viewport's scroll left has changed.
@@ -54,7 +80,8 @@ public interface ViewportListener {
      * @param scrollPane         The viewport that has been scrolled.
      * @param previousScrollLeft The previous left scroll position.
      */
-    public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft);
+    default public void scrollLeftChanged(Viewport scrollPane, int previousScrollLeft) {
+    }
 
     /**
      * Called when a viewport's view component has changed.
@@ -62,5 +89,6 @@ public interface ViewportListener {
      * @param scrollPane   The viewport whose view has changed.
      * @param previousView What the view (or the scrollable component) used to be.
      */
-    public void viewChanged(Viewport scrollPane, Component previousView);
+    default public void viewChanged(Viewport scrollPane, Component previousView) {
+    }
 }

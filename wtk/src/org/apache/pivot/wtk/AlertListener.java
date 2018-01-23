@@ -17,14 +17,52 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Alert listener interface.
  */
 public interface AlertListener {
     /**
-     * Alert listener adapter.
+     * Alert listeners.
      */
+    public static class Listeners extends ListenerList<AlertListener> implements AlertListener {
+        @Override
+        public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
+            forEach(listener -> listener.messageTypeChanged(alert, previousMessageType));
+        }
+
+        @Override
+        public void messageChanged(Alert alert, String previousMessage) {
+            forEach(listener -> listener.messageChanged(alert, previousMessage));
+        }
+
+        @Override
+        public void bodyChanged(Alert alert, Component previousBody) {
+            forEach(listener -> listener.bodyChanged(alert, previousBody));
+        }
+
+        @Override
+        public void optionInserted(Alert alert, int index) {
+            forEach(listener -> listener.optionInserted(alert, index));
+        }
+
+        @Override
+        public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
+            forEach(listener -> listener.optionsRemoved(alert, index, removed));
+        }
+
+        @Override
+        public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
+            forEach(listener -> listener.selectedOptionChanged(alert, previousSelectedOption));
+        }
+    }
+
+    /**
+     * Alert listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements AlertListener {
         @Override
         public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
@@ -63,7 +101,8 @@ public interface AlertListener {
      * @param alert               The alert that has changed.
      * @param previousMessageType The previous message type for the alert.
      */
-    public void messageTypeChanged(Alert alert, MessageType previousMessageType);
+    default public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
+    }
 
     /**
      * Called when an alert's message has changed.
@@ -71,7 +110,8 @@ public interface AlertListener {
      * @param alert           The alert that has changed.
      * @param previousMessage The previous message for this alert.
      */
-    public void messageChanged(Alert alert, String previousMessage);
+    default public void messageChanged(Alert alert, String previousMessage) {
+    }
 
     /**
      * Called when an alert's body has changed.
@@ -79,7 +119,8 @@ public interface AlertListener {
      * @param alert        The alert that has changed.
      * @param previousBody The previous body for this alert.
      */
-    public void bodyChanged(Alert alert, Component previousBody);
+    default public void bodyChanged(Alert alert, Component previousBody) {
+    }
 
     /**
      * Called when an option has been inserted into an alert's option sequence.
@@ -87,7 +128,8 @@ public interface AlertListener {
      * @param alert The alert that has changed.
      * @param index The index where the new option was inserted.
      */
-    public void optionInserted(Alert alert, int index);
+    default public void optionInserted(Alert alert, int index) {
+    }
 
     /**
      * Called when options have been removed from an alert's option sequence.
@@ -96,7 +138,8 @@ public interface AlertListener {
      * @param index    The starting index where the options were removed.
      * @param removed  The actual sequence of the options that were removed.
      */
-    public void optionsRemoved(Alert alert, int index, Sequence<?> removed);
+    default public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
+    }
 
     /**
      * Called when an alert's selected option has changed.
@@ -104,5 +147,6 @@ public interface AlertListener {
      * @param alert                  The alert that has changed.
      * @param previousSelectedOption The index of the previously selected option.
      */
-    public void selectedOptionChanged(Alert alert, int previousSelectedOption);
+    default public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
+    }
 }

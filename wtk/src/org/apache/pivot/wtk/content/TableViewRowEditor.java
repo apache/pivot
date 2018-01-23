@@ -84,7 +84,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
     private HashMap<String, Component> cellEditors = new HashMap<>();
 
-    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             Display display = (Display) container;
@@ -117,7 +117,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
     public TableViewRowEditor() {
         setContent(scrollPane);
         scrollPane.setView(cardPane);
-        scrollPane.getViewportListeners().add(new ViewportListener.Adapter() {
+        scrollPane.getViewportListeners().add(new ViewportListener() {
             @Override
             public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
                 if (tableViewScrollPane != null) {
@@ -128,7 +128,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
 
         cardPane.add(new ImageView(rowImage));
         cardPane.add(tablePane);
-        cardPane.getCardPaneListeners().add(new CardPaneListener.Adapter() {
+        cardPane.getCardPaneListeners().add(new CardPaneListener() {
             @Override
             public void selectedIndexChanged(CardPane cardPaneArgument, int previousSelectedIndex) {
                 if (previousSelectedIndex == IMAGE_CARD_INDEX) {

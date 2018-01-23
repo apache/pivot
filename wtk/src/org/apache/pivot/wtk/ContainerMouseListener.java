@@ -16,14 +16,63 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.BooleanResult;
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Container mouse listener interface. Container mouse events are "tunneling"
  * events that are fired as the event propagates down the component hierarchy.
  */
 public interface ContainerMouseListener {
     /**
-     * Container mouse listener adapter.
+     * Container mouse listeners.
      */
+    public static class Listeners extends ListenerList<ContainerMouseListener>
+        implements ContainerMouseListener {
+        @Override
+        public boolean mouseMove(Container container, int x, int y) {
+            BooleanResult consumed = new BooleanResult(false);
+
+            forEach(listener -> consumed.or(listener.mouseMove(container, x, y)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+            BooleanResult consumed = new BooleanResult(false);
+
+            forEach(listener -> consumed.or(listener.mouseDown(container, button, x, y)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+            BooleanResult consumed = new BooleanResult(false);
+
+            forEach(listener -> consumed.or(listener.mouseUp(container, button, x, y)));
+
+            return consumed.get();
+        }
+
+        @Override
+        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
+            int scrollAmount, int wheelRotation, int x, int y) {
+            BooleanResult consumed = new BooleanResult(false);
+
+            forEach(listener -> consumed.or(listener.mouseWheel(container, scrollType,
+                    scrollAmount, wheelRotation, x, y)));
+
+            return consumed.get();
+        }
+    }
+
+    /**
+     * Container mouse listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ContainerMouseListener {
         @Override
         public boolean mouseMove(Container container, int x, int y) {
@@ -56,7 +105,9 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean mouseMove(Container container, int x, int y);
+    default public boolean mouseMove(Container container, int x, int y) {
+        return false;
+    }
 
     /**
      * Called when the mouse is pressed over a container.
@@ -68,7 +119,9 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean mouseDown(Container container, Mouse.Button button, int x, int y);
+    default public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        return false;
+    }
 
     /**
      * Called when the mouse is released over a container.
@@ -80,7 +133,9 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean mouseUp(Container container, Mouse.Button button, int x, int y);
+    default public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+        return false;
+    }
 
     /**
      * Called when the mouse wheel is scrolled over a container.
@@ -94,6 +149,8 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    public boolean mouseWheel(Container container, Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y);
+    default public boolean mouseWheel(Container container, Mouse.ScrollType scrollType, int scrollAmount,
+        int wheelRotation, int x, int y) {
+        return false;
+    }
 }

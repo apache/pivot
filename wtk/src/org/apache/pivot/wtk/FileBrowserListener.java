@@ -20,14 +20,55 @@ import java.io.File;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * File browser listener interface.
  */
 public interface FileBrowserListener {
     /**
-     * File browser listener adapter.
+     * File browser listeners.
      */
+    public static class Listeners extends ListenerList<FileBrowserListener>
+        implements FileBrowserListener {
+        @Override
+        public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
+            forEach(listener -> listener.rootDirectoryChanged(fileBrowser, previousRootDirectory));
+        }
+
+        @Override
+        public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+            forEach(listener -> listener.selectedFileAdded(fileBrowser, file));
+        }
+
+        @Override
+        public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+            forEach(listener -> listener.selectedFileRemoved(fileBrowser, file));
+        }
+
+        @Override
+        public void selectedFilesChanged(FileBrowser fileBrowser,
+            Sequence<File> previousSelectedFiles) {
+            forEach(listener -> listener.selectedFilesChanged(fileBrowser, previousSelectedFiles));
+        }
+
+        @Override
+        public void multiSelectChanged(FileBrowser fileBrowser) {
+            forEach(listener -> listener.multiSelectChanged(fileBrowser));
+        }
+
+        @Override
+        public void disabledFileFilterChanged(FileBrowser fileBrowser,
+            Filter<File> previousDisabledFileFilter) {
+            forEach(listener -> listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter));
+        }
+    }
+
+    /**
+     * File browser listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements FileBrowserListener {
         @Override
         public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
@@ -68,7 +109,8 @@ public interface FileBrowserListener {
      * @param fileBrowser           The file browser that has changed.
      * @param previousRootDirectory The previous root directory of the browser.
      */
-    public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory);
+    default public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
+    }
 
     /**
      * Called when a file has been added to a file browser's selection.
@@ -76,7 +118,8 @@ public interface FileBrowserListener {
      * @param fileBrowser The file browser that has changed.
      * @param file        The newly selected file.
      */
-    public void selectedFileAdded(FileBrowser fileBrowser, File file);
+    default public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+    }
 
     /**
      * Called when a file has been removed from a file browser's selection.
@@ -84,7 +127,8 @@ public interface FileBrowserListener {
      * @param fileBrowser The file browser that has changed.
      * @param file        The file that was just unselected.
      */
-    public void selectedFileRemoved(FileBrowser fileBrowser, File file);
+    default public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+    }
 
     /**
      * Called when a file browser's selection state has been reset.
@@ -92,14 +136,16 @@ public interface FileBrowserListener {
      * @param fileBrowser           The file browser that has changed.
      * @param previousSelectedFiles The complete sequence of files that used to be selected.
      */
-    public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles);
+    default public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+    }
 
     /**
      * Called when a file browser's multi-select flag has changed.
      *
      * @param fileBrowser The file browser that has changed.
      */
-    public void multiSelectChanged(FileBrowser fileBrowser);
+    default public void multiSelectChanged(FileBrowser fileBrowser) {
+    }
 
     /**
      * Called when a file browser's file filter has changed.
@@ -107,6 +153,7 @@ public interface FileBrowserListener {
      * @param fileBrowser                The file browser that has changed.
      * @param previousDisabledFileFilter The previous disabled file filter.
      */
-    public void disabledFileFilterChanged(FileBrowser fileBrowser,
-        Filter<File> previousDisabledFileFilter);
+    default public void disabledFileFilterChanged(FileBrowser fileBrowser,
+        Filter<File> previousDisabledFileFilter) {
+    }
 }

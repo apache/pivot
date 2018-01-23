@@ -109,7 +109,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         public DesktopDisplayHost() {
             Display display = getDisplay();
-            display.getContainerListeners().add(new ContainerListener.Adapter() {
+            display.getContainerListeners().add(new ContainerListener() {
                 @Override
                 public void componentInserted(Container container, int index) {
                     if (index == container.getLength() - 1) {

@@ -17,14 +17,57 @@
 package org.apache.pivot.xml;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Element listener interface.
  */
 public interface ElementListener {
     /**
-     * Element listener adapter.
+     * Element listeners.
      */
+    public static class Listeners extends ListenerList<ElementListener> implements ElementListener {
+        @Override
+        public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
+            forEach(listener -> listener.defaultNamespaceURIChanged(element, previousDefaultNamespaceURI));
+        }
+
+        @Override
+        public void namespaceAdded(Element element, String prefix) {
+            forEach(listener -> listener.namespaceAdded(element, prefix));
+        }
+
+        @Override
+        public void namespaceUpdated(Element element, String prefix, String previousURI) {
+            forEach(listener -> listener.namespaceUpdated(element, prefix, previousURI));
+        }
+
+        @Override
+        public void namespaceRemoved(Element element, String prefix, String uri) {
+            forEach(listener -> listener.namespaceRemoved(element, prefix, uri));
+        }
+
+        @Override
+        public void attributeInserted(Element element, int index) {
+            forEach(listener -> listener.attributeInserted(element, index));
+        }
+
+        @Override
+        public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes) {
+            forEach(listener -> listener.attributesRemoved(element, index, attributes));
+        }
+
+        @Override
+        public void attributeValueChanged(Element.Attribute attribute, String previousValue) {
+            forEach(listener -> listener.attributeValueChanged(attribute, previousValue));
+        }
+    }
+
+    /**
+     * Element listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ElementListener {
         @Override
         public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
@@ -69,7 +112,8 @@ public interface ElementListener {
      * @param element The element that has changed.
      * @param previousDefaultNamespaceURI The previous value of the default namespace URI.
      */
-    public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI);
+    default public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
+    }
 
     /**
      * Called when a namespace has been added to an element.
@@ -77,7 +121,8 @@ public interface ElementListener {
      * @param element The element that has been changed.
      * @param prefix The new namespace prefix that has been set.
      */
-    public void namespaceAdded(Element element, String prefix);
+    default public void namespaceAdded(Element element, String prefix) {
+    }
 
     /**
      * Called when a namespace {@code URI} has been updated.
@@ -86,7 +131,8 @@ public interface ElementListener {
      * @param prefix The namespace prefix for this element.
      * @param previousURI The previous value of the namespace URI.
      */
-    public void namespaceUpdated(Element element, String prefix, String previousURI);
+    default public void namespaceUpdated(Element element, String prefix, String previousURI) {
+    }
 
     /**
      * Called when a namespace has been removed from an element.
@@ -95,7 +141,8 @@ public interface ElementListener {
      * @param prefix The namespace prefix that has been removed.
      * @param uri The {@code URI} that was removed.
      */
-    public void namespaceRemoved(Element element, String prefix, String uri);
+    default public void namespaceRemoved(Element element, String prefix, String uri) {
+    }
 
     /**
      * Called when an attribute has been added to an element.
@@ -103,7 +150,8 @@ public interface ElementListener {
      * @param element The element that has changed.
      * @param index The index where the new attribute was added.
      */
-    public void attributeInserted(Element element, int index);
+    default public void attributeInserted(Element element, int index) {
+    }
 
     /**
      * Called when attributes have been removed from an element.
@@ -112,7 +160,8 @@ public interface ElementListener {
      * @param index Starting index of the attributes that were removed.
      * @param attributes The sequence of removed attributes.
      */
-    public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes);
+    default public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes) {
+    }
 
     /**
      * Called when an attribute's value has changed.
@@ -120,5 +169,6 @@ public interface ElementListener {
      * @param attribute The attribute whose value has changed.
      * @param previousValue The previous value for this attribute.
      */
-    public void attributeValueChanged(Element.Attribute attribute, String previousValue);
+    default public void attributeValueChanged(Element.Attribute attribute, String previousValue) {
+    }
 }

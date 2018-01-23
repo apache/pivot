@@ -85,7 +85,7 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     private int closeTransitionDuration = DEFAULT_CLOSE_TRANSITION_DURATION;
     private int closeTransitionRate = DEFAULT_CLOSE_TRANSITION_RATE;
 
-    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             MenuPopup menuPopup = (MenuPopup) getComponent();

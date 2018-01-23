@@ -164,7 +164,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
     };
 
-    private ContainerMouseListener displayMouseListener = new ContainerMouseListener.Adapter() {
+    private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
         public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
             ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();

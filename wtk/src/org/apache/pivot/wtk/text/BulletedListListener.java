@@ -16,11 +16,27 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * BulletedList listener interface.
  */
 public interface BulletedListListener {
+    /**
+     * Bulleted list listeners.
+     */
+    public static class Listeners extends ListenerList<BulletedListListener>
+        implements BulletedListListener {
+        @Override
+        public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
+            forEach(listener -> listener.styleChanged(bulletedList, previousStyle));
+        }
+    }
 
+    /**
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public class Adapter implements BulletedListListener {
         @Override
         public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
@@ -34,5 +50,6 @@ public interface BulletedListListener {
      * @param bulletedList  The list whose style has changed.
      * @param previousStyle The previous list style.
      */
-    public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle);
+    default public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
+    }
 }

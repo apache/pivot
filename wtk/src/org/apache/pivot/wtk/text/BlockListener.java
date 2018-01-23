@@ -16,13 +16,28 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.HorizontalAlignment;
 
 /**
  * Block listener interface.
  */
 public interface BlockListener {
+    /**
+     * Block listeners.
+     */
+    public static class Listeners extends ListenerList<BlockListener> implements BlockListener {
+        @Override
+        public void horizontalAlignmentChanged(Block block,
+            HorizontalAlignment previousHorizontalAlignment) {
+            forEach(listener -> listener.horizontalAlignmentChanged(block, previousHorizontalAlignment));
+        }
+    }
 
+    /**
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public class Adapter implements BlockListener {
         @Override
         public void horizontalAlignmentChanged(Block block,
@@ -37,6 +52,7 @@ public interface BlockListener {
      * @param block                       The text block in question.
      * @param previousHorizontalAlignment The previous alignment value.
      */
-    public void horizontalAlignmentChanged(Block block,
-        HorizontalAlignment previousHorizontalAlignment);
+    default public void horizontalAlignmentChanged(Block block,
+        HorizontalAlignment previousHorizontalAlignment) {
+    }
 }
