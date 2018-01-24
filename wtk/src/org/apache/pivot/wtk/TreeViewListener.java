@@ -18,14 +18,64 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Tree view listener interface.
  */
 public interface TreeViewListener {
     /**
-     * Tree view listener adapter.
+     * Tree view listener list.
      */
+    public static class Listeners extends ListenerList<TreeViewListener> implements TreeViewListener {
+        @Override
+        public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
+            forEach(listener -> listener.treeDataChanged(treeView, previousTreeData));
+        }
+
+        @Override
+        public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
+            forEach(listener -> listener.nodeRendererChanged(treeView, previousNodeRenderer));
+        }
+
+        @Override
+        public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
+            forEach(listener -> listener.nodeEditorChanged(treeView, previousNodeEditor));
+        }
+
+        @Override
+        public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
+            forEach(listener -> listener.selectModeChanged(treeView, previousSelectMode));
+        }
+
+        @Override
+        public void checkmarksEnabledChanged(TreeView treeView) {
+            forEach(listener -> listener.checkmarksEnabledChanged(treeView));
+        }
+
+        @Override
+        public void showMixedCheckmarkStateChanged(TreeView treeView) {
+            forEach(listener -> listener.showMixedCheckmarkStateChanged(treeView));
+        }
+
+        @Override
+        public void disabledNodeFilterChanged(TreeView treeView,
+            Filter<?> previousDisabledNodeFilter) {
+            forEach(listener -> listener.disabledNodeFilterChanged(treeView, previousDisabledNodeFilter));
+        }
+
+        @Override
+        public void disabledCheckmarkFilterChanged(TreeView treeView,
+            Filter<?> previousDisabledCheckmarkFilter) {
+            forEach(listener -> listener.disabledCheckmarkFilterChanged(treeView, previousDisabledCheckmarkFilter));
+        }
+    }
+
+    /**
+     * Tree view listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TreeViewListener {
         @Override
         public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
@@ -77,7 +127,8 @@ public interface TreeViewListener {
      * @param treeView         The source of this event.
      * @param previousTreeData The previous data for this tree.
      */
-    public void treeDataChanged(TreeView treeView, List<?> previousTreeData);
+    default public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
+    }
 
     /**
      * Called when a tree view's node renderer has changed.
@@ -85,7 +136,8 @@ public interface TreeViewListener {
      * @param treeView             The source of this event.
      * @param previousNodeRenderer The previous renderer for tree nodes.
      */
-    public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer);
+    default public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
+    }
 
     /**
      * Called when a tree view's node editor has changed.
@@ -93,7 +145,8 @@ public interface TreeViewListener {
      * @param treeView           The source of this event.
      * @param previousNodeEditor The previous editor for tree nodes.
      */
-    public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor);
+    default public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
+    }
 
     /**
      * Called when a tree view's select mode has changed.
@@ -101,21 +154,24 @@ public interface TreeViewListener {
      * @param treeView           The source of this event.
      * @param previousSelectMode What the tree view's select mode was before the change.
      */
-    public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode);
+    default public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
+    }
 
     /**
      * Called when a tree view's checkmarks enabled flag has changed.
      *
      * @param treeView The source of this event.
      */
-    public void checkmarksEnabledChanged(TreeView treeView);
+    default public void checkmarksEnabledChanged(TreeView treeView) {
+    }
 
     /**
      * Called when a tree view's "show mixed checkmark state" flag has changed.
      *
      * @param treeView The tree view that has changed.
      */
-    public void showMixedCheckmarkStateChanged(TreeView treeView);
+    default public void showMixedCheckmarkStateChanged(TreeView treeView) {
+    }
 
     /**
      * Called when a tree view's disabled node filter has changed.
@@ -123,7 +179,8 @@ public interface TreeViewListener {
      * @param treeView                   The tree view that has changed.
      * @param previousDisabledNodeFilter The previous filter that determines the disabled nodes.
      */
-    public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter);
+    default public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
+    }
 
     /**
      * Called when a tree view's disabled checkmark filter has changed.
@@ -131,6 +188,7 @@ public interface TreeViewListener {
      * @param treeView                        The source of this event.
      * @param previousDisabledCheckmarkFilter The previous filter that determined the disabled checkmarks.
      */
-    public void disabledCheckmarkFilterChanged(TreeView treeView,
-        Filter<?> previousDisabledCheckmarkFilter);
+    default public void disabledCheckmarkFilterChanged(TreeView treeView,
+        Filter<?> previousDisabledCheckmarkFilter) {
+    }
 }

@@ -16,13 +16,32 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Text area listener interface.
  */
 public interface TextAreaListener {
     /**
-     * Text area listener adapter.
+     * Text area listeners.
      */
+    public static class Listeners extends ListenerList<TextAreaListener> implements TextAreaListener {
+        @Override
+        public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
+            forEach(listener -> listener.maximumLengthChanged(textArea, previousMaximumLength));
+        }
+
+        @Override
+        public void editableChanged(TextArea textArea) {
+            forEach(listener -> listener.editableChanged(textArea));
+        }
+    }
+
+    /**
+     * Text area listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TextAreaListener {
         @Override
         public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
@@ -41,12 +60,14 @@ public interface TextAreaListener {
      * @param textArea The source of this event.
      * @param previousMaximumLength What the maximum length used to be.
      */
-    public void maximumLengthChanged(TextArea textArea, int previousMaximumLength);
+    default public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
+    }
 
     /**
      * Called when a text area's editable state has changed.
      *
      * @param textArea The source of this event.
      */
-    public void editableChanged(TextArea textArea);
+    default public void editableChanged(TextArea textArea) {
+    }
 }

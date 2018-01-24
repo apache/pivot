@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.text.Document;
 
 /**
@@ -23,8 +24,25 @@ import org.apache.pivot.wtk.text.Document;
  */
 public interface TextPaneListener {
     /**
-     * Text pane listener adapter.
+     * Text pane listeners.
      */
+    public static class Listeners extends ListenerList<TextPaneListener> implements TextPaneListener {
+        @Override
+        public void documentChanged(TextPane textPane, Document previousText) {
+            forEach(listener -> listener.documentChanged(textPane, previousText));
+        }
+
+        @Override
+        public void editableChanged(TextPane textPane) {
+            forEach(listener -> listener.editableChanged(textPane));
+        }
+    }
+
+    /**
+     * Text pane listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TextPaneListener {
         @Override
         public void documentChanged(TextPane textPane, Document previousDocument) {
@@ -43,12 +61,14 @@ public interface TextPaneListener {
      * @param textPane         The text pane that changed.
      * @param previousDocument What the document used to be.
      */
-    public void documentChanged(TextPane textPane, Document previousDocument);
+    default public void documentChanged(TextPane textPane, Document previousDocument) {
+    }
 
     /**
      * Called when a text pane's editable state has changed.
      *
      * @param textPane The source of this event.
      */
-    public void editableChanged(TextPane textPane);
+    default public void editableChanged(TextPane textPane) {
+    }
 }

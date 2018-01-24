@@ -180,7 +180,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         // Add stocks table view event handlers
-        stocksTableView.getTableViewRowListeners().add(new TableViewRowListener.Adapter() {
+        stocksTableView.getTableViewRowListeners().add(new TableViewRowListener() {
             @Override
             public void rowsSorted(TableView tableView) {
                 List<?> tableData = stocksTableView.getTableData();
@@ -190,8 +190,7 @@ public class StockTrackerWindow extends Window implements Bindable {
             }
         });
 
-        stocksTableView.getTableViewSelectionListeners().add(
-            new TableViewSelectionListener.Adapter() {
+        stocksTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
                 @Override
                 public void selectedRangesChanged(TableView tableView,
                     Sequence<Span> previousSelectedRanges) {
@@ -202,7 +201,7 @@ public class StockTrackerWindow extends Window implements Bindable {
                 }
             });
 
-        stocksTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+        stocksTableView.getTableViewSortListeners().add(new TableViewSortListener() {
             @Override
             public void sortChanged(TableView tableView) {
                 @SuppressWarnings("unchecked")

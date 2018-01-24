@@ -17,15 +17,69 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Tab pane listener interface.
  */
 public interface TabPaneListener {
     /**
-     * Tab pane listener adapter.
+     * Tab pane listeners.
      */
+    public static class Listeners extends ListenerList<TabPaneListener> implements TabPaneListener {
+        @Override
+        public void tabInserted(TabPane tabPane, int index) {
+            forEach(listener -> listener.tabInserted(tabPane, index));
+        }
+
+        @Override
+        public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewRemoveTabs(tabPane, index, count)));
+
+            return result.get();
+        }
+
+        @Override
+        public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
+            forEach(listener -> listener.tabsRemoved(tabPane, index, tabs));
+        }
+
+        @Override
+        public void removeTabsVetoed(TabPane tabPane, Vote reason) {
+            forEach(listener -> listener.removeTabsVetoed(tabPane, reason));
+        }
+
+        @Override
+        public void cornerChanged(TabPane tabPane, Component previousCorner) {
+            forEach(listener -> listener.cornerChanged(tabPane, previousCorner));
+        }
+
+        @Override
+        public void tabDataRendererChanged(TabPane tabPane,
+            Button.DataRenderer previousTabDataRenderer) {
+            forEach(listener -> listener.tabDataRendererChanged(tabPane, previousTabDataRenderer));
+        }
+
+        @Override
+        public void closeableChanged(TabPane tabPane) {
+            forEach(listener -> listener.closeableChanged(tabPane));
+        }
+
+        @Override
+        public void collapsibleChanged(TabPane tabPane) {
+            forEach(listener -> listener.collapsibleChanged(tabPane));
+        }
+    }
+
+    /**
+     * Tab pane listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TabPaneListener {
         @Override
         public void tabInserted(TabPane tabPane, int index) {
@@ -75,7 +129,8 @@ public interface TabPaneListener {
      * @param tabPane The source of this event.
      * @param index Where the newly inserted tab was placed.
      */
-    public void tabInserted(TabPane tabPane, int index);
+    default public void tabInserted(TabPane tabPane, int index) {
+    }
 
     /**
      * Called to preview a tab removal.
@@ -85,7 +140,9 @@ public interface TabPaneListener {
      * @param count The count of tabs to remove.
      * @return Whether or not to accept this tab removal (or defer it).
      */
-    public Vote previewRemoveTabs(TabPane tabPane, int index, int count);
+    default public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a tab removal has been vetoed.
@@ -93,7 +150,8 @@ public interface TabPaneListener {
      * @param tabPane The source of this event.
      * @param reason The vote result that vetoed the tab removal.
      */
-    public void removeTabsVetoed(TabPane tabPane, Vote reason);
+    default public void removeTabsVetoed(TabPane tabPane, Vote reason) {
+    }
 
     /**
      * Called when a tab has been removed from a tab pane's tab sequence.
@@ -102,7 +160,8 @@ public interface TabPaneListener {
      * @param index The starting location of the tabs that were removed.
      * @param tabs The actual sequence of tab components that were removed.
      */
-    public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs);
+    default public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
+    }
 
     /**
      * Called when a tab pane's corner component has changed.
@@ -110,7 +169,8 @@ public interface TabPaneListener {
      * @param tabPane The component that changed.
      * @param previousCorner What the corner component used to be.
      */
-    public void cornerChanged(TabPane tabPane, Component previousCorner);
+    default public void cornerChanged(TabPane tabPane, Component previousCorner) {
+    }
 
     /**
      * Called when a tab pane's tab data renderer has changed.
@@ -118,19 +178,23 @@ public interface TabPaneListener {
      * @param tabPane The source of this event.
      * @param previousTabDataRenderer The previous renderer for the tab data.
      */
-    public void tabDataRendererChanged(TabPane tabPane, Button.DataRenderer previousTabDataRenderer);
+    default public void tabDataRendererChanged(TabPane tabPane,
+        Button.DataRenderer previousTabDataRenderer) {
+    }
 
     /**
      * Called when a tab pane's closeable property has changed.
      *
      * @param tabPane The component that changed.
      */
-    public void closeableChanged(TabPane tabPane);
+    default public void closeableChanged(TabPane tabPane) {
+    }
 
     /**
      * Called when a tab pane's collapsible property has changed.
      *
      * @param tabPane The source of this event.
      */
-    public void collapsibleChanged(TabPane tabPane);
+    default public void collapsibleChanged(TabPane tabPane) {
+    }
 }

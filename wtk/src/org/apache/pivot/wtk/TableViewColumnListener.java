@@ -17,14 +17,73 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Table view column listener interface.
  */
 public interface TableViewColumnListener {
     /**
-     * Table view column listener adapter.
+     * Table view column listeners.
      */
+    public static class Listeners extends ListenerList<TableViewColumnListener>
+        implements TableViewColumnListener {
+        @Override
+        public void columnInserted(TableView tableView, int index) {
+            forEach(listener -> listener.columnInserted(tableView, index));
+        }
+
+        @Override
+        public void columnsRemoved(TableView tableView, int index,
+            Sequence<TableView.Column> columns) {
+            forEach(listener -> listener.columnsRemoved(tableView, index, columns));
+        }
+
+        @Override
+        public void columnNameChanged(TableView.Column column, String previousName) {
+            forEach(listener -> listener.columnNameChanged(column, previousName));
+        }
+
+        @Override
+        public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
+            forEach(listener -> listener.columnHeaderDataChanged(column, previousHeaderData));
+        }
+
+        @Override
+        public void columnHeaderDataRendererChanged(TableView.Column column,
+            TableView.HeaderDataRenderer previousHeaderDataRenderer) {
+            forEach(listener -> listener.columnHeaderDataRendererChanged(column, previousHeaderDataRenderer));
+        }
+
+        @Override
+        public void columnWidthChanged(TableView.Column column, int previousWidth, boolean previousRelative) {
+            forEach(listener -> listener.columnWidthChanged(column, previousWidth, previousRelative));
+        }
+
+        @Override
+        public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+            int previousMaximumWidth) {
+            forEach(listener -> listener.columnWidthLimitsChanged(column, previousMinimumWidth,
+                    previousMaximumWidth));
+        }
+
+        @Override
+        public void columnFilterChanged(TableView.Column column, Object previousFilter) {
+            forEach(listener -> listener.columnFilterChanged(column, previousFilter));
+        }
+
+        @Override
+        public void columnCellRendererChanged(TableView.Column column,
+            TableView.CellRenderer previousCellRenderer) {
+            forEach(listener -> listener.columnCellRendererChanged(column, previousCellRenderer));
+        }
+    }
+
+    /**
+     * Table view column listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TableViewColumnListener {
         @Override
         public void columnInserted(TableView tableView, int index) {
@@ -83,7 +142,8 @@ public interface TableViewColumnListener {
      * @param tableView The table view that has changed.
      * @param index Where the new column has been inserted.
      */
-    public void columnInserted(TableView tableView, int index);
+    default public void columnInserted(TableView tableView, int index) {
+    }
 
     /**
      * Called when columns are removed from a table view's column sequence.
@@ -92,7 +152,8 @@ public interface TableViewColumnListener {
      * @param index The starting location of the removed columns.
      * @param columns The actual sequence of columns that were removed.
      */
-    public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns);
+    default public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns) {
+    }
 
     /**
      * Called when a column's name has changed.
@@ -100,7 +161,8 @@ public interface TableViewColumnListener {
      * @param column The column that changed names.
      * @param previousName What the previous name was.
      */
-    public void columnNameChanged(TableView.Column column, String previousName);
+    default public void columnNameChanged(TableView.Column column, String previousName) {
+    }
 
     /**
      * Called when a column's header data has changed.
@@ -108,7 +170,8 @@ public interface TableViewColumnListener {
      * @param column The column that changed.
      * @param previousHeaderData What the header data used to be.
      */
-    public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData);
+    default public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
+    }
 
     /**
      * Called when a column's header data renderer has changed.
@@ -116,8 +179,9 @@ public interface TableViewColumnListener {
      * @param column The column whose header data renderer has changed.
      * @param previousHeaderDataRenderer The previous renderer for header data.
      */
-    public void columnHeaderDataRendererChanged(TableView.Column column,
-        TableView.HeaderDataRenderer previousHeaderDataRenderer);
+    default public void columnHeaderDataRendererChanged(TableView.Column column,
+        TableView.HeaderDataRenderer previousHeaderDataRenderer) {
+    }
 
     /**
      * Called when a column's width has changed.
@@ -126,8 +190,9 @@ public interface TableViewColumnListener {
      * @param previousWidth The previous numeric value of the column width.
      * @param previousRelative Whether the previous width was relative or not.
      */
-    public void columnWidthChanged(TableView.Column column, int previousWidth,
-        boolean previousRelative);
+    default public void columnWidthChanged(TableView.Column column, int previousWidth,
+        boolean previousRelative) {
+    }
 
     /**
      * Called when a column's width limits have changed.
@@ -136,8 +201,9 @@ public interface TableViewColumnListener {
      * @param previousMinimumWidth The previous minimum column width.
      * @param previousMaximumWidth The previous maximum column width.
      */
-    public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
-        int previousMaximumWidth);
+    default public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+        int previousMaximumWidth) {
+    }
 
     /**
      * Called when a column's filter has changed.
@@ -145,7 +211,8 @@ public interface TableViewColumnListener {
      * @param column The source of this event.
      * @param previousFilter The previous filter value for this column.
      */
-    public void columnFilterChanged(TableView.Column column, Object previousFilter);
+    default public void columnFilterChanged(TableView.Column column, Object previousFilter) {
+    }
 
     /**
      * Called when a column's cell renderer has changed.
@@ -153,6 +220,7 @@ public interface TableViewColumnListener {
      * @param column The source of this event.
      * @param previousCellRenderer The previous cell renderer for this column.
      */
-    public void columnCellRendererChanged(TableView.Column column,
-        TableView.CellRenderer previousCellRenderer);
+    default public void columnCellRendererChanged(TableView.Column column,
+        TableView.CellRenderer previousCellRenderer) {
+    }
 }

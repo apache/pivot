@@ -140,8 +140,7 @@ public class ExpensesWindow extends Window implements Bindable {
             (String) resources.get("confirmDelete"), options);
 
         // Attach event listeners
-        expenseTableView.getTableViewSelectionListeners().add(
-            new TableViewSelectionListener.Adapter() {
+        expenseTableView.getTableViewSelectionListeners().add(new TableViewSelectionListener() {
                 @Override
                 public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
                     int selectedIndex = expenseTableView.getSelectedIndex();

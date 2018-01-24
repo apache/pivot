@@ -16,13 +16,48 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Table view row listener interface.
  */
 public interface TableViewRowListener {
     /**
-     * Table row listener adapter.
+     * Table view row listeners.
      */
+    public static class Listeners extends ListenerList<TableViewRowListener>
+        implements TableViewRowListener {
+        @Override
+        public void rowInserted(TableView tableView, int index) {
+            forEach(listener -> listener.rowInserted(tableView, index));
+        }
+
+        @Override
+        public void rowsRemoved(TableView tableView, int index, int count) {
+            forEach(listener -> listener.rowsRemoved(tableView, index, count));
+        }
+
+        @Override
+        public void rowUpdated(TableView tableView, int index) {
+            forEach(listener -> listener.rowUpdated(tableView, index));
+        }
+
+        @Override
+        public void rowsCleared(TableView tableView) {
+            forEach(listener -> listener.rowsCleared(tableView));
+        }
+
+        @Override
+        public void rowsSorted(TableView tableView) {
+            forEach(listener -> listener.rowsSorted(tableView));
+        }
+    }
+
+    /**
+     * Table row listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TableViewRowListener {
         @Override
         public void rowInserted(TableView tableView, int index) {
@@ -56,7 +91,8 @@ public interface TableViewRowListener {
      * @param tableView The source of the event.
      * @param index The index of the row that was inserted.
      */
-    public void rowInserted(TableView tableView, int index);
+    default public void rowInserted(TableView tableView, int index) {
+    }
 
     /**
      * Called when rows have been removed from the table view.
@@ -66,7 +102,8 @@ public interface TableViewRowListener {
      * @param count The number of rows that were removed, or <tt>-1</tt> if all
      * rows were removed.
      */
-    public void rowsRemoved(TableView tableView, int index, int count);
+    default public void rowsRemoved(TableView tableView, int index, int count) {
+    }
 
     /**
      * Called when an row in the table view has been updated.
@@ -74,19 +111,22 @@ public interface TableViewRowListener {
      * @param tableView The source of the event.
      * @param index The first index affected by the event.
      */
-    public void rowUpdated(TableView tableView, int index);
+    default public void rowUpdated(TableView tableView, int index) {
+    }
 
     /**
      * Called when the rows in a table view have been cleared.
      *
      * @param tableView The source of the event.
      */
-    public void rowsCleared(TableView tableView);
+    default public void rowsCleared(TableView tableView) {
+    }
 
     /**
      * Called when the rows in a table have been sorted.
      *
      * @param tableView The source of the event.
      */
-    public void rowsSorted(TableView tableView);
+    default public void rowsSorted(TableView tableView) {
+    }
 }

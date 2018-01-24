@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Button state listener interface.
  */
 public interface ButtonStateListener {
+    /**
+     * Button state listeners.
+     */
+    public static class Listeners extends ListenerList<ButtonStateListener>
+        implements ButtonStateListener {
+        @Override
+        public void stateChanged(Button button, Button.State previousState) {
+            forEach(listener -> listener.stateChanged(button, previousState));
+        }
+    }
+
     /**
      * Called when a button's state has changed.
      *

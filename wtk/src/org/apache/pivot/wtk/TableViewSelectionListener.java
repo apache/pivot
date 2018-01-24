@@ -17,14 +17,43 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Table view selection listener interface.
  */
 public interface TableViewSelectionListener {
     /**
-     * Table view selection listener adapter.
+     * Table view selection listeners.
      */
+    public static class Listeners extends ListenerList<TableViewSelectionListener>
+        implements TableViewSelectionListener {
+        @Override
+        public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+            forEach(listener -> listener.selectedRangeAdded(tableView, rangeStart, rangeEnd));
+        }
+
+        @Override
+        public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+            forEach(listener -> listener.selectedRangeRemoved(tableView, rangeStart, rangeEnd));
+        }
+
+        @Override
+        public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelection) {
+            forEach(listener -> listener.selectedRangesChanged(tableView, previousSelection));
+        }
+
+        @Override
+        public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+            forEach(listener -> listener.selectedRowChanged(tableView, previousSelectedRow));
+        }
+    }
+
+    /**
+     * Table view selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TableViewSelectionListener {
         @Override
         public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
@@ -54,7 +83,8 @@ public interface TableViewSelectionListener {
      * @param rangeStart The start index of the range that was added, inclusive.
      * @param rangeEnd The end index of the range that was added, inclusive.
      */
-    public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd);
+    default public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+    }
 
     /**
      * Called when a range has been removed from a table view's selection.
@@ -64,7 +94,8 @@ public interface TableViewSelectionListener {
      * inclusive.
      * @param rangeEnd The end index of the range that was removed, inclusive.
      */
-    public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd);
+    default public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+    }
 
     /**
      * Called when a table view's selection state has been reset.
@@ -75,7 +106,8 @@ public interface TableViewSelectionListener {
      * indirectly as a result of a model change, contains the current selection.
      * Otherwise, contains <tt>null</tt>.
      */
-    public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges);
+    default public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+    }
 
     /**
      * Called when a table view's selected item has changed.
@@ -83,5 +115,6 @@ public interface TableViewSelectionListener {
      * @param tableView The source of the event.
      * @param previousSelectedRow The row that was previously selected.
      */
-    public void selectedRowChanged(TableView tableView, Object previousSelectedRow);
+    default public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+    }
 }

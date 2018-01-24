@@ -16,13 +16,52 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Button listener interface.
  */
 public interface ButtonListener {
     /**
-     * Button listener adapter.
+     * Button listeners.
      */
+    public static class Listeners extends ListenerList<ButtonListener> implements ButtonListener {
+        @Override
+        public void buttonDataChanged(Button button, Object previousButtonData) {
+            forEach(listener -> listener.buttonDataChanged(button, previousButtonData));
+        }
+
+        @Override
+        public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
+            forEach(listener -> listener.dataRendererChanged(button, previousDataRenderer));
+        }
+
+        @Override
+        public void actionChanged(Button button, Action previousAction) {
+            forEach(listener -> listener.actionChanged(button, previousAction));
+        }
+
+        @Override
+        public void toggleButtonChanged(Button button) {
+            forEach(listener -> listener.toggleButtonChanged(button));
+        }
+
+        @Override
+        public void triStateChanged(Button button) {
+            forEach(listener -> listener.triStateChanged(button));
+        }
+
+        @Override
+        public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
+            forEach(listener -> listener.buttonGroupChanged(button, previousButtonGroup));
+        }
+    }
+
+    /**
+     * Button listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ButtonListener {
         @Override
         public void buttonDataChanged(Button button, Object previousButtonData) {
@@ -61,7 +100,8 @@ public interface ButtonListener {
      * @param button             The button that changed.
      * @param previousButtonData The previous value of the button data.
      */
-    public void buttonDataChanged(Button button, Object previousButtonData);
+    default public void buttonDataChanged(Button button, Object previousButtonData) {
+    }
 
     /**
      * Called when a button's data renderer has changed.
@@ -69,7 +109,8 @@ public interface ButtonListener {
      * @param button               The button that changed.
      * @param previousDataRenderer The previous data renderer for the button.
      */
-    public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer);
+    default public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
+    }
 
     /**
      * Called when a button's action has changed.
@@ -77,21 +118,24 @@ public interface ButtonListener {
      * @param button         The button that changed.
      * @param previousAction The previous action that was assigned to the button.
      */
-    public void actionChanged(Button button, Action previousAction);
+    default public void actionChanged(Button button, Action previousAction) {
+    }
 
     /**
      * Called when a button's toggle button flag has changed.
      *
      * @param button The button that changed.
      */
-    public void toggleButtonChanged(Button button);
+    default public void toggleButtonChanged(Button button) {
+    }
 
     /**
      * Called when a button's tri-state flag has changed.
      *
      * @param button The button that changed.
      */
-    public void triStateChanged(Button button);
+    default public void triStateChanged(Button button) {
+    }
 
     /**
      * Called when a button's button group has changed.
@@ -99,5 +143,6 @@ public interface ButtonListener {
      * @param button              The button whose group changed.
      * @param previousButtonGroup The button group the button used to belong to (can be {@code null}).
      */
-    public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup);
+    default public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
+    }
 }

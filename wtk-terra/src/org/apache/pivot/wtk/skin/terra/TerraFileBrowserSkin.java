@@ -884,7 +884,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             }
         });
 
-        fileTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+        fileTableView.getTableViewSortListeners().add(new TableViewSortListener() {
             @Override
             public void sortChanged(TableView tableView) {
                 TableView.SortDictionary sort = fileTableView.getSort();

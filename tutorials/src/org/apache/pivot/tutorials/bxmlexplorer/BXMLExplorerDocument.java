@@ -91,7 +91,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
         treeView.setSelectMode(SelectMode.SINGLE);
         treeView.setNodeRenderer(new MyTreeViewNodeRenderer());
-        treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
+        treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             private final Decorator focusDecorator = new ShadeDecorator(0.2f, Color.RED);
             private Component previousSelectedComponent = null;
 

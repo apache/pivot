@@ -17,14 +17,39 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Text area text listener interface.
  */
 public interface TextAreaContentListener {
     /**
-     * Text input text listener adapter.
+     * Text area content listeners.
      */
+    public static class Listeners extends ListenerList<TextAreaContentListener>
+        implements TextAreaContentListener {
+        @Override
+        public void paragraphInserted(TextArea textArea, int index) {
+            forEach(listener -> listener.paragraphInserted(textArea, index));
+        }
+
+        @Override
+        public void paragraphsRemoved(TextArea textArea, int index,
+            Sequence<TextArea.Paragraph> removed) {
+            forEach(listener -> listener.paragraphsRemoved(textArea, index, removed));
+        }
+
+        @Override
+        public void textChanged(TextArea textArea) {
+            forEach(listener -> listener.textChanged(textArea));
+        }
+    }
+
+    /**
+     * Text input text listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TextAreaContentListener {
         @Override
         public void paragraphInserted(TextArea textArea, int index) {
@@ -50,7 +75,8 @@ public interface TextAreaContentListener {
      * @param textArea The source of the event.
      * @param index The index at which the paragraph was inserted.
      */
-    public void paragraphInserted(TextArea textArea, int index);
+    default public void paragraphInserted(TextArea textArea, int index) {
+    }
 
     /**
      * Called when paragraphs have been removed from a text area's paragraph
@@ -60,12 +86,14 @@ public interface TextAreaContentListener {
      * @param index The starting index from which the paragraphs were removed.
      * @param removed The paragraphs that were removed.
      */
-    public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed);
+    default public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed) {
+    }
 
     /**
      * Called when a text area's text has changed.
      *
      * @param textArea The source of the event.
      */
-    public void textChanged(TextArea textArea);
+    default public void textChanged(TextArea textArea) {
+    }
 }

@@ -16,15 +16,44 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Tab pane selection listener interface.
  */
 public interface TabPaneSelectionListener {
     /**
-     * Tab pane selection listener adapter.
+     * Tab pane selection listeners.
      */
+    public static class Listeners extends ListenerList<TabPaneSelectionListener>
+        implements TabPaneSelectionListener {
+        @Override
+        public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewSelectedIndexChange(tabPane, selectedIndex)));
+
+            return result.get();
+        }
+
+        @Override
+        public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+            forEach(listener -> listener.selectedIndexChangeVetoed(tabPane, reason));
+        }
+
+        @Override
+        public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+            forEach(listener -> listener.selectedIndexChanged(tabPane, previousSelectedIndex));
+        }
+    }
+
+    /**
+     * Tab pane selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TabPaneSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
@@ -49,7 +78,9 @@ public interface TabPaneSelectionListener {
      * @param selectedIndex The index that will be selected.
      * @return The vote result as to whether to accept this selected index change.
      */
-    public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex);
+    default public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a selected index change has been vetoed.
@@ -57,7 +88,8 @@ public interface TabPaneSelectionListener {
      * @param tabPane The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason);
+    default public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+    }
 
     /**
      * Called when a tab pane's selected index has changed.
@@ -67,5 +99,6 @@ public interface TabPaneSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex);
+    default public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+    }
 }

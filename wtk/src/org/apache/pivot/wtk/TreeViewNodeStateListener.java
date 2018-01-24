@@ -17,11 +17,24 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Tree view node state listener interface.
  */
 public interface TreeViewNodeStateListener {
+    /**
+     * Tree view node state listener list.
+     */
+    public static class Listeners extends ListenerList<TreeViewNodeStateListener>
+        implements TreeViewNodeStateListener {
+        @Override
+        public void nodeCheckStateChanged(TreeView treeView, Path path,
+            TreeView.NodeCheckState previousCheckState) {
+            forEach(listener -> listener.nodeCheckStateChanged(treeView, path, previousCheckState));
+        }
+    }
+
     /**
      * Called when a node's checked state has changed.
      *

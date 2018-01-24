@@ -208,154 +208,6 @@ public class TreeView extends Component {
     }
 
     /**
-     * Tree view listener list.
-     */
-    private static class TreeViewListenerList extends ListenerList<TreeViewListener> implements
-        TreeViewListener {
-
-        @Override
-        public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
-            forEach(listener -> listener.treeDataChanged(treeView, previousTreeData));
-        }
-
-        @Override
-        public void nodeRendererChanged(TreeView treeView, NodeRenderer previousNodeRenderer) {
-            forEach(listener -> listener.nodeRendererChanged(treeView, previousNodeRenderer));
-        }
-
-        @Override
-        public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
-            forEach(listener -> listener.nodeEditorChanged(treeView, previousNodeEditor));
-        }
-
-        @Override
-        public void selectModeChanged(TreeView treeView, SelectMode previousSelectMode) {
-            forEach(listener -> listener.selectModeChanged(treeView, previousSelectMode));
-        }
-
-        @Override
-        public void checkmarksEnabledChanged(TreeView treeView) {
-            forEach(listener -> listener.checkmarksEnabledChanged(treeView));
-        }
-
-        @Override
-        public void showMixedCheckmarkStateChanged(TreeView treeView) {
-            forEach(listener -> listener.showMixedCheckmarkStateChanged(treeView));
-        }
-
-        @Override
-        public void disabledNodeFilterChanged(TreeView treeView,
-            Filter<?> previousDisabledNodeFilter) {
-            forEach(listener -> listener.disabledNodeFilterChanged(treeView, previousDisabledNodeFilter));
-        }
-
-        @Override
-        public void disabledCheckmarkFilterChanged(TreeView treeView,
-            Filter<?> previousDisabledCheckmarkFilter) {
-            forEach(listener -> listener.disabledCheckmarkFilterChanged(treeView, previousDisabledCheckmarkFilter));
-        }
-    }
-
-    /**
-     * Tree view branch listener list.
-     */
-    private static class TreeViewBranchListenerList extends ListenerList<TreeViewBranchListener>
-        implements TreeViewBranchListener {
-        @Override
-        public void branchExpanded(TreeView treeView, Path path) {
-            forEach(listener -> listener.branchExpanded(treeView, path));
-        }
-
-        @Override
-        public void branchCollapsed(TreeView treeView, Path path) {
-            forEach(listener -> listener.branchCollapsed(treeView, path));
-        }
-
-        @Override
-        public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
-            VoteResult vote = new VoteResult(Vote.APPROVE);
-
-            forEach(listener -> vote.tally(listener.previewBranchExpandedChange(treeView, path)));
-
-            return vote.get();
-        }
-
-        @Override
-        public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
-            forEach(listener -> listener.branchExpandedChangeVetoed(treeView, path, reason));
-        }
-    }
-
-    /**
-     * Tree view node listener list.
-     */
-    private static class TreeViewNodeListenerList extends ListenerList<TreeViewNodeListener>
-        implements TreeViewNodeListener {
-        @Override
-        public void nodeInserted(TreeView treeView, Path path, int index) {
-            forEach(listener -> listener.nodeInserted(treeView, path, index));
-        }
-
-        @Override
-        public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
-            forEach(listener -> listener.nodesRemoved(treeView, path, index, count));
-        }
-
-        @Override
-        public void nodeUpdated(TreeView treeView, Path path, int index) {
-            forEach(listener -> listener.nodeUpdated(treeView, path, index));
-        }
-
-        @Override
-        public void nodesCleared(TreeView treeView, Path path) {
-            forEach(listener -> listener.nodesCleared(treeView, path));
-        }
-
-        @Override
-        public void nodesSorted(TreeView treeView, Path path) {
-            forEach(listener -> listener.nodesSorted(treeView, path));
-        }
-    }
-
-    /**
-     * Tree view node state listener list.
-     */
-    private static class TreeViewNodeStateListenerList extends
-        ListenerList<TreeViewNodeStateListener> implements TreeViewNodeStateListener {
-        @Override
-        public void nodeCheckStateChanged(TreeView treeView, Path path,
-            TreeView.NodeCheckState previousCheckState) {
-            forEach(listener -> listener.nodeCheckStateChanged(treeView, path, previousCheckState));
-        }
-    }
-
-    /**
-     * Tree view selection listener list.
-     */
-    private static class TreeViewSelectionListenerList extends
-        ListenerList<TreeViewSelectionListener> implements TreeViewSelectionListener {
-        @Override
-        public void selectedPathAdded(TreeView treeView, Path path) {
-            forEach(listener -> listener.selectedPathAdded(treeView, path));
-        }
-
-        @Override
-        public void selectedPathRemoved(TreeView treeView, Path path) {
-            forEach(listener -> listener.selectedPathRemoved(treeView, path));
-        }
-
-        @Override
-        public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
-            forEach(listener -> listener.selectedPathsChanged(treeView, previousSelectedPaths));
-        }
-
-        @Override
-        public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
-            forEach(listener -> listener.selectedNodeChanged(treeView, previousSelectedNode));
-        }
-    }
-
-    /**
      * A comparator that sorts paths by the order in which they would visually
      * appear in a fully expanded tree, otherwise known as their "row order".
      */
@@ -819,11 +671,11 @@ public class TreeView extends Component {
     private NodeEditor nodeEditor = null;
 
     // Listener lists
-    private TreeViewListenerList treeViewListeners = new TreeViewListenerList();
-    private TreeViewBranchListenerList treeViewBranchListeners = new TreeViewBranchListenerList();
-    private TreeViewNodeListenerList treeViewNodeListeners = new TreeViewNodeListenerList();
-    private TreeViewNodeStateListenerList treeViewNodeStateListeners = new TreeViewNodeStateListenerList();
-    private TreeViewSelectionListenerList treeViewSelectionListeners = new TreeViewSelectionListenerList();
+    private TreeViewListener.Listeners treeViewListeners = new TreeViewListener.Listeners();
+    private TreeViewBranchListener.Listeners treeViewBranchListeners = new TreeViewBranchListener.Listeners();
+    private TreeViewNodeListener.Listeners treeViewNodeListeners = new TreeViewNodeListener.Listeners();
+    private TreeViewNodeStateListener.Listeners treeViewNodeStateListeners = new TreeViewNodeStateListener.Listeners();
+    private TreeViewSelectionListener.Listeners treeViewSelectionListeners = new TreeViewSelectionListener.Listeners();
 
     // other properties
     private String treeDataKey = null;

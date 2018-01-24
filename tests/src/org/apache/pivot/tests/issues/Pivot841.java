@@ -49,7 +49,7 @@ public class Pivot841 implements Application {
         };
 
         textArea.getParagraphs().get(0).getParagraphListeners().add(paragraphListener);
-        textArea.getTextAreaContentListeners().add(new TextAreaContentListener.Adapter() {
+        textArea.getTextAreaContentListeners().add(new TextAreaContentListener() {
             @Override
             public void paragraphInserted(TextArea textAreaArgument, int index) {
                 Paragraph paragraph = textAreaArgument.getParagraphs().get(index);

@@ -188,47 +188,6 @@ public class TextPane extends Container {
         }
     }
 
-    private static class TextPaneListenerList extends ListenerList<TextPaneListener> implements
-        TextPaneListener {
-        @Override
-        public void documentChanged(TextPane textPane, Document previousText) {
-            forEach(listener -> listener.documentChanged(textPane, previousText));
-        }
-
-        @Override
-        public void editableChanged(TextPane textPane) {
-            forEach(listener -> listener.editableChanged(textPane));
-        }
-    }
-
-    private static class TextPaneCharacterListenerList extends
-        ListenerList<TextPaneCharacterListener> implements TextPaneCharacterListener {
-        /**
-         * @param index Index into the whole document.
-         */
-        @Override
-        public void charactersInserted(TextPane textPane, int index, int count) {
-            forEach(listener -> listener.charactersInserted(textPane, index, count));
-        }
-
-        /**
-         * @param index Index into the whole document.
-         */
-        @Override
-        public void charactersRemoved(TextPane textPane, int index, int count) {
-            forEach(listener -> listener.charactersRemoved(textPane, index, count));
-        }
-    }
-
-    private static class TextPaneSelectionListenerList extends
-        ListenerList<TextPaneSelectionListener> implements TextPaneSelectionListener {
-        @Override
-        public void selectionChanged(TextPane textPane, int previousSelectionStart,
-            int previousSelectionLength) {
-            forEach(listener -> listener.selectionChanged(textPane, previousSelectionStart, previousSelectionLength));
-        }
-    }
-
     private Document document = null;
     private AttributedStringCharacterIterator composedText = null;
 
@@ -338,9 +297,9 @@ public class TextPane extends Container {
 
     private LinkedStack<Edit> editHistory = new LinkedStack<>(MAXIMUM_EDIT_HISTORY_LENGTH);
 
-    private TextPaneListenerList textPaneListeners = new TextPaneListenerList();
-    private TextPaneCharacterListenerList textPaneCharacterListeners = new TextPaneCharacterListenerList();
-    private TextPaneSelectionListenerList textPaneSelectionListeners = new TextPaneSelectionListenerList();
+    private TextPaneListener.Listeners textPaneListeners = new TextPaneListener.Listeners();
+    private TextPaneCharacterListener.Listeners textPaneCharacterListeners = new TextPaneCharacterListener.Listeners();
+    private TextPaneSelectionListener.Listeners textPaneSelectionListeners = new TextPaneSelectionListener.Listeners();
 
     private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 100;
 

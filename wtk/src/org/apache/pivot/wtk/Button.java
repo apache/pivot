@@ -141,106 +141,6 @@ public abstract class Button extends Component {
         public Object valueOf(Object buttonData);
     }
 
-    private static class ButtonListenerList extends ListenerList<ButtonListener> implements
-        ButtonListener {
-        @Override
-        public void buttonDataChanged(Button button, Object previousButtonData) {
-            forEach(listener -> listener.buttonDataChanged(button, previousButtonData));
-        }
-
-        @Override
-        public void dataRendererChanged(Button button, DataRenderer previousDataRenderer) {
-            forEach(listener -> listener.dataRendererChanged(button, previousDataRenderer));
-        }
-
-        @Override
-        public void actionChanged(Button button, Action previousAction) {
-            forEach(listener -> listener.actionChanged(button, previousAction));
-        }
-
-        @Override
-        public void toggleButtonChanged(Button button) {
-            forEach(listener -> listener.toggleButtonChanged(button));
-        }
-
-        @Override
-        public void triStateChanged(Button button) {
-            forEach(listener -> listener.triStateChanged(button));
-        }
-
-        @Override
-        public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
-            forEach(listener -> listener.buttonGroupChanged(button, previousButtonGroup));
-        }
-    }
-
-    private static class ButtonStateListenerList extends ListenerList<ButtonStateListener>
-        implements ButtonStateListener {
-        @Override
-        public void stateChanged(Button button, Button.State previousState) {
-            forEach(listener -> listener.stateChanged(button, previousState));
-        }
-    }
-
-    private static class ButtonPressListenerList extends ListenerList<ButtonPressListener>
-        implements ButtonPressListener {
-        @Override
-        public void buttonPressed(Button button) {
-            forEach(listener -> listener.buttonPressed(button));
-        }
-    }
-
-    private static class ButtonBindingListenerList extends ListenerList<ButtonBindingListener>
-        implements ButtonBindingListener {
-        @Override
-        public void buttonDataKeyChanged(Button button, String previousButtonDataKey) {
-            forEach(listener -> listener.buttonDataKeyChanged(button, previousButtonDataKey));
-        }
-
-        @Override
-        public void buttonDataBindTypeChanged(Button button, BindType previousDataBindType) {
-            forEach(listener -> listener.buttonDataBindTypeChanged(button, previousDataBindType));
-        }
-
-        @Override
-        public void buttonDataBindMappingChanged(Button button,
-            Button.ButtonDataBindMapping previousButtonDataBindMapping) {
-            forEach(listener -> listener.buttonDataBindMappingChanged(button, previousButtonDataBindMapping));
-        }
-
-        @Override
-        public void selectedKeyChanged(Button button, String previousSelectedKey) {
-            forEach(listener -> listener.selectedKeyChanged(button, previousSelectedKey));
-        }
-
-        @Override
-        public void selectedBindTypeChanged(Button button, BindType previousSelectedBindType) {
-            forEach(listener -> listener.selectedBindTypeChanged(button, previousSelectedBindType));
-        }
-
-        @Override
-        public void selectedBindMappingChanged(Button button,
-            Button.SelectedBindMapping previousSelectedBindMapping) {
-            forEach(listener -> listener.selectedBindMappingChanged(button, previousSelectedBindMapping));
-        }
-
-        @Override
-        public void stateKeyChanged(Button button, String previousStateKey) {
-            forEach(listener -> listener.stateKeyChanged(button, previousStateKey));
-        }
-
-        @Override
-        public void stateBindTypeChanged(Button button, BindType previousStateBindType) {
-            forEach(listener -> listener.stateBindTypeChanged(button, previousStateBindType));
-        }
-
-        @Override
-        public void stateBindMappingChanged(Button button,
-            Button.StateBindMapping previousStateBindMapping) {
-            forEach(listener -> listener.stateBindMappingChanged(button, previousStateBindMapping));
-        }
-    }
-
     private Object buttonData = null;
     private DataRenderer dataRenderer = null;
 
@@ -274,10 +174,10 @@ public abstract class Button extends Component {
     private BindType buttonDataBindType = BindType.BOTH;
     private ButtonDataBindMapping buttonDataBindMapping = null;
 
-    private ButtonListenerList buttonListeners = new ButtonListenerList();
-    private ButtonStateListenerList buttonStateListeners = new ButtonStateListenerList();
-    private ButtonPressListenerList buttonPressListeners = new ButtonPressListenerList();
-    private ButtonBindingListenerList buttonBindingListeners = new ButtonBindingListenerList();
+    private ButtonListener.Listeners buttonListeners = new ButtonListener.Listeners();
+    private ButtonStateListener.Listeners buttonStateListeners = new ButtonStateListener.Listeners();
+    private ButtonPressListener.Listeners buttonPressListeners = new ButtonPressListener.Listeners();
+    private ButtonBindingListener.Listeners buttonBindingListeners = new ButtonBindingListener.Listeners();
 
     public Button() {
         this(null);

@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Table view header press listener.
  */
 public interface TableViewHeaderPressListener {
+    /**
+     * Table view header press listeners.
+     */
+    public static class Listeners extends ListenerList<TableViewHeaderPressListener>
+        implements TableViewHeaderPressListener {
+        @Override
+        public void headerPressed(TableViewHeader tableViewHeader, int index) {
+            forEach(listener -> listener.headerPressed(tableViewHeader, index));
+        }
+    }
+
     /**
      * Called when a table view header has been pressed.
      *

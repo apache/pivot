@@ -203,7 +203,7 @@ public class LargeData implements Application {
             statusLabel.setText("");
         });
 
-        tableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+        tableView.getTableViewSortListeners().add(new TableViewSortListener() {
             @Override
             public void sortChanged(TableView tableViewArgument) {
                 @SuppressWarnings("unchecked")

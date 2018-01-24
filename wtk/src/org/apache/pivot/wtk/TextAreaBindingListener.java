@@ -16,13 +16,39 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Text area binding listener interface.
  */
 public interface TextAreaBindingListener {
     /**
-     * Text area binding listener adapter.
+     * Text area binding listeners.
      */
+    public static class Listeners extends ListenerList<TextAreaBindingListener>
+        implements TextAreaBindingListener {
+        @Override
+        public void textKeyChanged(TextArea textArea, String previousTextKey) {
+            forEach(listener -> listener.textKeyChanged(textArea, previousTextKey));
+        }
+
+        @Override
+        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+            forEach(listener -> listener.textBindTypeChanged(textArea, previousTextBindType));
+        }
+
+        @Override
+        public void textBindMappingChanged(TextArea textArea,
+            TextArea.TextBindMapping previousTextBindMapping) {
+            forEach(listener -> listener.textBindMappingChanged(textArea, previousTextBindMapping));
+        }
+    }
+
+    /**
+     * Text area binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TextAreaBindingListener {
         @Override
         public void textKeyChanged(TextArea textArea, String previousTextKey) {
@@ -47,7 +73,8 @@ public interface TextAreaBindingListener {
      * @param textArea The component that has changed.
      * @param previousTextKey What the text key used to be for this component.
      */
-    public void textKeyChanged(TextArea textArea, String previousTextKey);
+    default public void textKeyChanged(TextArea textArea, String previousTextKey) {
+    }
 
     /**
      * Called when a text area's text bind type has changed.
@@ -55,7 +82,8 @@ public interface TextAreaBindingListener {
      * @param textArea The source of this event.
      * @param previousTextBindType The previous bind type for this component.
      */
-    public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType);
+    default public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+    }
 
     /**
      * Called when a text area's text bind mapping has changed.
@@ -63,6 +91,7 @@ public interface TextAreaBindingListener {
      * @param textArea The source of this event.
      * @param previousTextBindMapping The previous bind mapping for this component.
      */
-    public void textBindMappingChanged(TextArea textArea,
-        TextArea.TextBindMapping previousTextBindMapping);
+    default public void textBindMappingChanged(TextArea textArea,
+        TextArea.TextBindMapping previousTextBindMapping) {
+    }
 }

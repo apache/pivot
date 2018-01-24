@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Button press listener interface.
  */
 public interface ButtonPressListener {
+    /**
+     * Button press listeners.
+     */
+    public static class Listeners extends ListenerList<ButtonPressListener>
+        implements ButtonPressListener {
+        @Override
+        public void buttonPressed(Button button) {
+            forEach(listener -> listener.buttonPressed(button));
+        }
+    }
+
     /**
      * Called when a button is pressed.
      *

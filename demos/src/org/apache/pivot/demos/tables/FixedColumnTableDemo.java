@@ -113,7 +113,7 @@ public class FixedColumnTableDemo extends Window implements Bindable {
         });
 
         // Keep header state in sync
-        primaryTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+        primaryTableView.getTableViewSortListeners().add(new TableViewSortListener() {
             @Override
             public void sortChanged(TableView tableView) {
                 if (!tableView.getSort().isEmpty()) {
@@ -126,7 +126,7 @@ public class FixedColumnTableDemo extends Window implements Bindable {
             }
         });
 
-        fixedTableView.getTableViewSortListeners().add(new TableViewSortListener.Adapter() {
+        fixedTableView.getTableViewSortListeners().add(new TableViewSortListener() {
             @Override
             public void sortChanged(TableView tableView) {
                 if (!tableView.getSort().isEmpty()) {

@@ -16,10 +16,24 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Text pane selection listener interface.
  */
 public interface TextPaneSelectionListener {
+    /**
+     * Text pane selection listeners.
+     */
+    public static class Listeners extends ListenerList<TextPaneSelectionListener>
+        implements TextPaneSelectionListener {
+        @Override
+        public void selectionChanged(TextPane textPane, int previousSelectionStart,
+            int previousSelectionLength) {
+            forEach(listener -> listener.selectionChanged(textPane, previousSelectionStart, previousSelectionLength));
+        }
+    }
+
     /**
      * Called when a text pane's selection state has changed.
      *

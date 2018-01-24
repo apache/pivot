@@ -56,7 +56,7 @@ public class TabPanes extends Window implements Bindable {
         verticalRadioButton = (RadioButton) namespace.get("verticalRadioButton");
         cornerBoxPane = (BoxPane) namespace.get("cornerBoxPane");
 
-        tabPane.getTabPaneListeners().add(new TabPaneListener.Adapter() {
+        tabPane.getTabPaneListeners().add(new TabPaneListener() {
             @Override
             public Vote previewRemoveTabs(final TabPane tabPaneArgument, final int index,
                 final int count) {

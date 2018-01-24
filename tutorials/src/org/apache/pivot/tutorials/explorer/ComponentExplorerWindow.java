@@ -98,7 +98,7 @@ public class ComponentExplorerWindow extends Window implements Bindable {
         verticalNeverButton = (Button) namespace.get("verticalNeverButton");
         verticalAlwaysButton = (Button) namespace.get("verticalAlwaysButton");
 
-        treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener.Adapter() {
+        treeView.getTreeViewSelectionListeners().add(new TreeViewSelectionListener() {
             @Override
             public void selectedPathsChanged(TreeView treeViewArgument,
                 Sequence<Path> previousSelectedPaths) {

@@ -480,65 +480,6 @@ public class TextArea extends Component {
         }
     }
 
-    private static class TextAreaListenerList extends ListenerList<TextAreaListener> implements
-        TextAreaListener {
-        @Override
-        public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
-            forEach(listener -> listener.maximumLengthChanged(textArea, previousMaximumLength));
-        }
-
-        @Override
-        public void editableChanged(TextArea textArea) {
-            forEach(listener -> listener.editableChanged(textArea));
-        }
-    }
-
-    private static class TextAreaContentListenerList extends
-        ListenerList<TextAreaContentListener> implements TextAreaContentListener {
-        @Override
-        public void paragraphInserted(TextArea textArea, int index) {
-            forEach(listener -> listener.paragraphInserted(textArea, index));
-        }
-
-        @Override
-        public void paragraphsRemoved(TextArea textArea, int index,
-            Sequence<TextArea.Paragraph> removed) {
-            forEach(listener -> listener.paragraphsRemoved(textArea, index, removed));
-        }
-
-        @Override
-        public void textChanged(TextArea textArea) {
-            forEach(listener -> listener.textChanged(textArea));
-        }
-    }
-
-    private static class TextAreaSelectionListenerList extends
-        ListenerList<TextAreaSelectionListener> implements TextAreaSelectionListener {
-        @Override
-        public void selectionChanged(TextArea textArea, int previousSelectionStart,
-            int previousSelectionLength) {
-            forEach(listener -> listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength));
-        }
-    }
-
-    private static class TextAreaBindingListenerList extends
-        ListenerList<TextAreaBindingListener> implements TextAreaBindingListener {
-        @Override
-        public void textKeyChanged(TextArea textArea, String previousTextKey) {
-            forEach(listener -> listener.textKeyChanged(textArea, previousTextKey));
-        }
-
-        @Override
-        public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
-            forEach(listener -> listener.textBindTypeChanged(textArea, previousTextBindType));
-        }
-
-        @Override
-        public void textBindMappingChanged(TextArea textArea, TextBindMapping previousTextBindMapping) {
-            forEach(listener -> listener.textBindMappingChanged(textArea, previousTextBindMapping));
-        }
-    }
-
     private ArrayList<Paragraph> paragraphs = new ArrayList<>();
     private ParagraphSequence paragraphSequence = new ParagraphSequence();
 
@@ -558,10 +499,10 @@ public class TextArea extends Component {
 
     private LinkedStack<Edit> editHistory = new LinkedStack<>(MAXIMUM_EDIT_HISTORY_LENGTH);
 
-    private TextAreaListenerList textAreaListeners = new TextAreaListenerList();
-    private TextAreaContentListenerList textAreaContentListeners = new TextAreaContentListenerList();
-    private TextAreaSelectionListenerList textAreaSelectionListeners = new TextAreaSelectionListenerList();
-    private TextAreaBindingListenerList textAreaBindingListeners = new TextAreaBindingListenerList();
+    private TextAreaListener.Listeners textAreaListeners = new TextAreaListener.Listeners();
+    private TextAreaContentListener.Listeners textAreaContentListeners = new TextAreaContentListener.Listeners();
+    private TextAreaSelectionListener.Listeners textAreaSelectionListeners = new TextAreaSelectionListener.Listeners();
+    private TextAreaBindingListener.Listeners textAreaBindingListeners = new TextAreaBindingListener.Listeners();
 
     private static final int INITIAL_PARAGRAPH_CAPACITY = 256;
     private static final int MAXIMUM_EDIT_HISTORY_LENGTH = 30;

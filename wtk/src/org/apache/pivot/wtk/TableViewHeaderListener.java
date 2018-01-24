@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.wtk.TableViewHeader.SortMode;
 
 /**
@@ -23,8 +24,26 @@ import org.apache.pivot.wtk.TableViewHeader.SortMode;
  */
 public interface TableViewHeaderListener {
     /**
-     * Table view header listener adapter.
+     * Table view header listeners.
      */
+    public static class Listeners extends ListenerList<TableViewHeaderListener>
+        implements TableViewHeaderListener {
+        @Override
+        public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
+            forEach(listener -> listener.tableViewChanged(tableViewHeader, previousTableView));
+        }
+
+        @Override
+        public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+            forEach(listener -> listener.sortModeChanged(tableViewHeader, previousSortMode));
+        }
+    }
+
+    /**
+     * Table view header listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TableViewHeaderListener {
         @Override
         public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
@@ -43,7 +62,8 @@ public interface TableViewHeaderListener {
      * @param tableViewHeader The source of this event.
      * @param previousTableView The table view that used to be associated with this header.
      */
-    public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView);
+    default public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
+    }
 
     /**
      * Called when a table view header's sort mode has changed.
@@ -51,5 +71,6 @@ public interface TableViewHeaderListener {
      * @param tableViewHeader The source of this event.
      * @param previousSortMode The previous sort mode for this header.
      */
-    public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode);
+    default public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+    }
 }

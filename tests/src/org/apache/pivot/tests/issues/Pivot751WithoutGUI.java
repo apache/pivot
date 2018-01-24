@@ -26,7 +26,7 @@ public class Pivot751WithoutGUI implements Application {
     public static void main(String[] args) {
         final TabPane tabPane = new TabPane();
 
-        tabPane.getTabPaneSelectionListeners().add(new TabPaneSelectionListener.Adapter() {
+        tabPane.getTabPaneSelectionListeners().add(new TabPaneSelectionListener() {
             @Override
             public void selectedIndexChanged(TabPane tabPaneArgument, int previousSelectedIndex) {
                 System.out.println(String.format("tabs     : %-16d actual selectedIndex    : %d",

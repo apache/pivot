@@ -18,14 +18,43 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Tree view selection listener.
  */
 public interface TreeViewSelectionListener {
     /**
-     * Tree view selection listener adapter.
+     * Tree view selection listener list.
      */
+    public static class Listeners extends ListenerList<TreeViewSelectionListener>
+        implements TreeViewSelectionListener {
+        @Override
+        public void selectedPathAdded(TreeView treeView, Path path) {
+            forEach(listener -> listener.selectedPathAdded(treeView, path));
+        }
+
+        @Override
+        public void selectedPathRemoved(TreeView treeView, Path path) {
+            forEach(listener -> listener.selectedPathRemoved(treeView, path));
+        }
+
+        @Override
+        public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
+            forEach(listener -> listener.selectedPathsChanged(treeView, previousSelectedPaths));
+        }
+
+        @Override
+        public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+            forEach(listener -> listener.selectedNodeChanged(treeView, previousSelectedNode));
+        }
+    }
+
+    /**
+     * Tree view selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TreeViewSelectionListener {
         @Override
         public void selectedPathAdded(TreeView treeView, Path path) {
@@ -54,7 +83,8 @@ public interface TreeViewSelectionListener {
      * @param treeView The source of this event.
      * @param path     The path that has been added to the selection.
      */
-    public void selectedPathAdded(TreeView treeView, Path path);
+    default public void selectedPathAdded(TreeView treeView, Path path) {
+    }
 
     /**
      * Called when a selected path has been removed from a tree view.
@@ -62,7 +92,8 @@ public interface TreeViewSelectionListener {
      * @param treeView The source of this event.
      * @param path     The path that was removed from the selection.
      */
-    public void selectedPathRemoved(TreeView treeView, Path path);
+    default public void selectedPathRemoved(TreeView treeView, Path path) {
+    }
 
     /**
      * Called when a tree view's selection state has been reset.
@@ -70,7 +101,8 @@ public interface TreeViewSelectionListener {
      * @param treeView              The source of this event.
      * @param previousSelectedPaths The list of paths that were previously selected.
      */
-    public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths);
+    default public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
+    }
 
     /**
      * Called when a tree view's selected node has changed.
@@ -78,5 +110,6 @@ public interface TreeViewSelectionListener {
      * @param treeView             The source of this event.
      * @param previousSelectedNode The node that used to be selected.
      */
-    public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode);
+    default public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+    }
 }

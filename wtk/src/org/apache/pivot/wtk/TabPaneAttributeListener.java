@@ -16,13 +16,34 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Tab pane attribute listener interface.
  */
 public interface TabPaneAttributeListener {
     /**
-     * Tab pane attribute listener adapter.
+     * Tab pane attribute listeners.
      */
+    public static class Listeners extends ListenerList<TabPaneAttributeListener>
+        implements TabPaneAttributeListener {
+        @Override
+        public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
+            forEach(listener -> listener.tabDataChanged(tabPane, component, previousTabData));
+        }
+
+        @Override
+        public void tooltipTextChanged(TabPane tabPane, Component component,
+            String previousTooltipText) {
+            forEach(listener -> listener.tooltipTextChanged(tabPane, component, previousTooltipText));
+        }
+    }
+
+    /**
+     * Tab pane attribute listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TabPaneAttributeListener {
         @Override
         public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
@@ -43,7 +64,8 @@ public interface TabPaneAttributeListener {
      * @param component The component whose tab pane data has changed.
      * @param previousTabData What the tab data attribute used to be.
      */
-    public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData);
+    default public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
+    }
 
     /**
      * Called when a tab's tooltipText attribute has changed.
@@ -52,5 +74,6 @@ public interface TabPaneAttributeListener {
      * @param component The actual tab component whose tooltip was changed.
      * @param previousTooltipText What the text used to be.
      */
-    public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText);
+    default public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+    }
 }

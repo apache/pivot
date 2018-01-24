@@ -17,14 +17,48 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Tree view node listener interface.
  */
 public interface TreeViewNodeListener {
     /**
-     * Tree view node listener adapter.
+     * Tree view node listener list.
      */
+    public static class Listeners extends ListenerList<TreeViewNodeListener>
+        implements TreeViewNodeListener {
+        @Override
+        public void nodeInserted(TreeView treeView, Path path, int index) {
+            forEach(listener -> listener.nodeInserted(treeView, path, index));
+        }
+
+        @Override
+        public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
+            forEach(listener -> listener.nodesRemoved(treeView, path, index, count));
+        }
+
+        @Override
+        public void nodeUpdated(TreeView treeView, Path path, int index) {
+            forEach(listener -> listener.nodeUpdated(treeView, path, index));
+        }
+
+        @Override
+        public void nodesCleared(TreeView treeView, Path path) {
+            forEach(listener -> listener.nodesCleared(treeView, path));
+        }
+
+        @Override
+        public void nodesSorted(TreeView treeView, Path path) {
+            forEach(listener -> listener.nodesSorted(treeView, path));
+        }
+    }
+
+    /**
+     * Tree view node listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TreeViewNodeListener {
         @Override
         public void nodeInserted(TreeView treeView, Path path, int index) {
@@ -59,7 +93,8 @@ public interface TreeViewNodeListener {
      * @param path     The path to the branch where the node was inserted.
      * @param index    The index of the newly inserted node within the branch.
      */
-    public void nodeInserted(TreeView treeView, Path path, int index);
+    default public void nodeInserted(TreeView treeView, Path path, int index) {
+    }
 
     /**
      * Called when nodes have been removed from the tree view.
@@ -70,7 +105,8 @@ public interface TreeViewNodeListener {
      * @param count    The number of nodes that were removed, or <tt>-1</tt> if all
      * nodes were removed.
      */
-    public void nodesRemoved(TreeView treeView, Path path, int index, int count);
+    default public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
+    }
 
     /**
      * Called when a node in the tree view has been updated.
@@ -79,7 +115,8 @@ public interface TreeViewNodeListener {
      * @param path     Path to the branch that is the parent of the updated node.
      * @param index    Index of the updated node within the branch.
      */
-    public void nodeUpdated(TreeView treeView, Path path, int index);
+    default public void nodeUpdated(TreeView treeView, Path path, int index) {
+    }
 
     /**
      * Called when the nodes in a branch have been cleared.
@@ -87,7 +124,8 @@ public interface TreeViewNodeListener {
      * @param treeView The source of this event.
      * @param path     Path to the branch where the nodes were cleared.
      */
-    public void nodesCleared(TreeView treeView, Path path);
+    default public void nodesCleared(TreeView treeView, Path path) {
+    }
 
     /**
      * Called when the nodes in a branch have been sorted.
@@ -95,5 +133,6 @@ public interface TreeViewNodeListener {
      * @param treeView The source of this event.
      * @param path     Path to the branch where the nodes were sorted.
      */
-    public void nodesSorted(TreeView treeView, Path path);
+    default public void nodesSorted(TreeView treeView, Path path) {
+    }
 }

@@ -164,116 +164,6 @@ public class TabPane extends Container {
         TAB_DATA, TOOLTIP_TEXT;
     }
 
-    private static class TabPaneListenerList extends ListenerList<TabPaneListener> implements
-        TabPaneListener {
-        @Override
-        public void tabInserted(TabPane tabPane, int index) {
-            for (TabPaneListener listener : this) {
-                listener.tabInserted(tabPane, index);
-            }
-        }
-
-        @Override
-        public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
-            Vote vote = Vote.APPROVE;
-
-            for (TabPaneListener listener : this) {
-                vote = vote.tally(listener.previewRemoveTabs(tabPane, index, count));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
-            for (TabPaneListener listener : this) {
-                listener.tabsRemoved(tabPane, index, tabs);
-            }
-        }
-
-        @Override
-        public void removeTabsVetoed(TabPane tabPane, Vote reason) {
-            for (TabPaneListener listener : this) {
-                listener.removeTabsVetoed(tabPane, reason);
-            }
-        }
-
-        @Override
-        public void cornerChanged(TabPane tabPane, Component previousCorner) {
-            for (TabPaneListener listener : this) {
-                listener.cornerChanged(tabPane, previousCorner);
-            }
-        }
-
-        @Override
-        public void tabDataRendererChanged(TabPane tabPane,
-            Button.DataRenderer previousTabDataRenderer) {
-            for (TabPaneListener listener : this) {
-                listener.tabDataRendererChanged(tabPane, previousTabDataRenderer);
-            }
-        }
-
-        @Override
-        public void closeableChanged(TabPane tabPane) {
-            for (TabPaneListener listener : this) {
-                listener.closeableChanged(tabPane);
-            }
-        }
-
-        @Override
-        public void collapsibleChanged(TabPane tabPane) {
-            for (TabPaneListener listener : this) {
-                listener.collapsibleChanged(tabPane);
-            }
-        }
-    }
-
-    private static class TabPaneSelectionListenerList extends
-        ListenerList<TabPaneSelectionListener> implements TabPaneSelectionListener {
-        @Override
-        public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
-            Vote vote = Vote.APPROVE;
-
-            for (TabPaneSelectionListener listener : this) {
-                vote = vote.tally(listener.previewSelectedIndexChange(tabPane, selectedIndex));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
-            for (TabPaneSelectionListener listener : this) {
-                listener.selectedIndexChangeVetoed(tabPane, reason);
-            }
-        }
-
-        @Override
-        public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
-            for (TabPaneSelectionListener listener : this) {
-                listener.selectedIndexChanged(tabPane, previousSelectedIndex);
-            }
-        }
-    }
-
-    private static class TabPaneAttributeListenerList extends
-        ListenerList<TabPaneAttributeListener> implements TabPaneAttributeListener {
-        @Override
-        public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
-            for (TabPaneAttributeListener listener : this) {
-                listener.tabDataChanged(tabPane, component, previousTabData);
-            }
-        }
-
-        @Override
-        public void tooltipTextChanged(TabPane tabPane, Component component,
-            String previousTooltipText) {
-            for (TabPaneAttributeListener listener : this) {
-                listener.tooltipTextChanged(tabPane, component, previousTooltipText);
-            }
-        }
-    }
-
     private ArrayList<Component> tabs = new ArrayList<>();
     private TabSequence tabSequence = new TabSequence();
     private Component corner = null;
@@ -282,9 +172,9 @@ public class TabPane extends Container {
     private boolean closeable = false;
     private boolean collapsible = false;
 
-    private TabPaneListenerList tabPaneListeners = new TabPaneListenerList();
-    private TabPaneSelectionListenerList tabPaneSelectionListeners = new TabPaneSelectionListenerList();
-    private TabPaneAttributeListenerList tabPaneAttributeListeners = new TabPaneAttributeListenerList();
+    private TabPaneListener.Listeners tabPaneListeners = new TabPaneListener.Listeners();
+    private TabPaneSelectionListener.Listeners tabPaneSelectionListeners = new TabPaneSelectionListener.Listeners();
+    private TabPaneAttributeListener.Listeners tabPaneAttributeListeners = new TabPaneAttributeListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_TAB_DATA_RENDERER = new ButtonDataRenderer();
 

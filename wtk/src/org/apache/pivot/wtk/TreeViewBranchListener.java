@@ -17,15 +17,49 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Tree view branch listener interface.
  */
 public interface TreeViewBranchListener {
     /**
-     * Tree view branch listener adapter.
+     * Tree view branch listener list.
      */
+    public static class Listeners extends ListenerList<TreeViewBranchListener>
+        implements TreeViewBranchListener {
+        @Override
+        public void branchExpanded(TreeView treeView, Path path) {
+            forEach(listener -> listener.branchExpanded(treeView, path));
+        }
+
+        @Override
+        public void branchCollapsed(TreeView treeView, Path path) {
+            forEach(listener -> listener.branchCollapsed(treeView, path));
+        }
+
+        @Override
+        public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
+            VoteResult vote = new VoteResult(Vote.APPROVE);
+
+            forEach(listener -> vote.tally(listener.previewBranchExpandedChange(treeView, path)));
+
+            return vote.get();
+        }
+
+        @Override
+        public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
+            forEach(listener -> listener.branchExpandedChangeVetoed(treeView, path, reason));
+        }
+    }
+
+    /**
+     * Tree view branch listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TreeViewBranchListener {
         @Override
         public void branchExpanded(TreeView treeView, Path path) {
@@ -55,7 +89,8 @@ public interface TreeViewBranchListener {
      * @param treeView The source of the event.
      * @param path The path of the node that was shown.
      */
-    public void branchExpanded(TreeView treeView, Path path);
+    default public void branchExpanded(TreeView treeView, Path path) {
+    }
 
     /**
      * Called when a tree node is collapsed.
@@ -63,7 +98,8 @@ public interface TreeViewBranchListener {
      * @param treeView The source of the event.
      * @param path The path of the node that was collapsed.
      */
-    public void branchCollapsed(TreeView treeView, Path path);
+    default public void branchCollapsed(TreeView treeView, Path path) {
+    }
 
     /**
      * Called before a tree node is expanded or collapsed to allow the application
@@ -73,7 +109,9 @@ public interface TreeViewBranchListener {
      * @param path The path of the node about to be collapsed or expanded.
      * @return The accumulated vote as to whether to allow this expansion or collapse.
      */
-    public Vote previewBranchExpandedChange(TreeView treeView, Path path);
+    default public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when the {@link #previewBranchExpandedChange previewBranchExpandedChange()}
@@ -85,6 +123,7 @@ public interface TreeViewBranchListener {
      * @param path The path of the node whose state will remain the same.
      * @param reason The tallied vote result that caused the veto.
      */
-    public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason);
+    default public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
+    }
 
 }

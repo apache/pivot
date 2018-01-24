@@ -16,10 +16,24 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Text area selection listener interface.
  */
 public interface TextAreaSelectionListener {
+    /**
+     * Text area selection listeners.
+     */
+    public static class Listeners extends ListenerList<TextAreaSelectionListener>
+        implements TextAreaSelectionListener {
+        @Override
+        public void selectionChanged(TextArea textArea, int previousSelectionStart,
+            int previousSelectionLength) {
+            forEach(listener -> listener.selectionChanged(textArea, previousSelectionStart, previousSelectionLength));
+        }
+    }
+
     /**
      * Called when a text area's selection state has changed.
      *

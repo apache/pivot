@@ -16,13 +16,39 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Text pane character listener interface.
  */
 public interface TextPaneCharacterListener {
     /**
-     * Text pane character listener adapter.
+     * Text pane character listeners.
      */
+    public static class Listeners extends ListenerList<TextPaneCharacterListener>
+        implements TextPaneCharacterListener {
+        /**
+         * @param index Index into the whole document.
+         */
+        @Override
+        public void charactersInserted(TextPane textPane, int index, int count) {
+            forEach(listener -> listener.charactersInserted(textPane, index, count));
+        }
+
+        /**
+         * @param index Index into the whole document.
+         */
+        @Override
+        public void charactersRemoved(TextPane textPane, int index, int count) {
+            forEach(listener -> listener.charactersRemoved(textPane, index, count));
+        }
+    }
+
+    /**
+     * Text pane character listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TextPaneCharacterListener {
         @Override
         public void charactersInserted(TextPane textPane, int index, int count) {
@@ -42,7 +68,8 @@ public interface TextPaneCharacterListener {
      * @param index    The starting point of the text insertion.
      * @param count    The count of characters inserted there.
      */
-    public void charactersInserted(TextPane textPane, int index, int count);
+    default public void charactersInserted(TextPane textPane, int index, int count) {
+    }
 
     /**
      * Called when characters have been removed from a text pane.
@@ -51,5 +78,6 @@ public interface TextPaneCharacterListener {
      * @param index    The starting point where text was removed.
      * @param count    Number of characters removed starting from there.
      */
-    public void charactersRemoved(TextPane textPane, int index, int count);
+    default public void charactersRemoved(TextPane textPane, int index, int count) {
+    }
 }

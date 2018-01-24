@@ -40,32 +40,11 @@ public class TableViewHeader extends Component {
         public Bounds getHeaderBounds(int index);
     }
 
-    private static class TableViewHeaderListenerList extends
-        ListenerList<TableViewHeaderListener> implements TableViewHeaderListener {
-        @Override
-        public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
-            forEach(listener -> listener.tableViewChanged(tableViewHeader, previousTableView));
-        }
-
-        @Override
-        public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
-            forEach(listener -> listener.sortModeChanged(tableViewHeader, previousSortMode));
-        }
-    }
-
-    private static class TableViewHeaderPressListenerList extends
-        ListenerList<TableViewHeaderPressListener> implements TableViewHeaderPressListener {
-        @Override
-        public void headerPressed(TableViewHeader tableViewHeader, int index) {
-            forEach(listener -> listener.headerPressed(tableViewHeader, index));
-        }
-    }
-
     private TableView tableView;
     private SortMode sortMode = SortMode.NONE;
 
-    private TableViewHeaderListenerList tableViewHeaderListeners = new TableViewHeaderListenerList();
-    private TableViewHeaderPressListenerList tableViewHeaderPressListeners = new TableViewHeaderPressListenerList();
+    private TableViewHeaderListener.Listeners tableViewHeaderListeners = new TableViewHeaderListener.Listeners();
+    private TableViewHeaderPressListener.Listeners tableViewHeaderPressListeners = new TableViewHeaderPressListener.Listeners();
 
     public TableViewHeader() {
         this(null);
