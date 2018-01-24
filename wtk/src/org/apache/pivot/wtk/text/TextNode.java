@@ -129,7 +129,8 @@ public final class TextNode extends Node {
     @Override
     public void insertRange(Node range, int offset) {
         if (!(range instanceof TextNode)) {
-            throw new IllegalArgumentException("range is not a text node.");
+            throw new IllegalArgumentException("Range node (" +
+                range.getClass().getSimpleName() + ") is not a text node.");
         }
 
         TextNode textNode = (TextNode) range;

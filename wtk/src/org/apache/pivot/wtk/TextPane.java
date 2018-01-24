@@ -44,6 +44,7 @@ import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtk.text.TextNode;
+import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Component that allows a user to enter and edit multiple lines of (optionally
@@ -116,58 +117,12 @@ public class TextPane extends Container {
         public void undo();
     }
 
-    private static class NodesRemovedEdit implements Edit {
-        private final Node node;
-        private final int offset;
-        private final Sequence<Node> removed;
-
-        public NodesRemovedEdit(Node node, Sequence<Node> removed, int offset) {
-            this.node = node;
-            this.offset = offset;
-            this.removed = removed;
-        }
-
-        @Override
-        public void undo() {
-            int currentOffset = this.offset;
-            for (int i = 0; i < removed.getLength(); i++) {
-                Node removedNode = removed.get(i);
-                node.insertRange(removedNode, currentOffset);
-                currentOffset += removedNode.getCharacterCount();
-            }
-        }
-    }
-
-    private class RangeRemovedEdit implements Edit {
-        private final Node node;
-        private final int offset;
-        private final int characterCount;
-        private final CharSequence removedChars;
-
-        public RangeRemovedEdit(Node node, int offset, int characterCount, CharSequence removedChars) {
-            this.node = node;
-            this.offset = offset;
-            this.characterCount = characterCount;
-            this.removedChars = removedChars;
-        }
-
-        @Override
-        public void undo() {
-            if (!(node instanceof TextNode)) {
-                // TODO: can we / should we handle this?
-                throw new IllegalArgumentException("Undo of removed characters must be to a TextNode.");
-            }
-            TextNode textNode = (TextNode)node;
-            textNode.insertText(removedChars, offset - textNode.getDocumentOffset());
-        }
-    }
-
-    private class RangeInsertedEdit implements Edit {
+    private class TextInsertedEdit implements Edit {
         private final Node node;
         private final int offset;
         private final int characterCount;
 
-        public RangeInsertedEdit(Node node, int offset, int characterCount) {
+        public TextInsertedEdit(Node node, int offset, int characterCount) {
             this.node = node;
             this.offset = offset;
             this.characterCount = characterCount;
@@ -176,15 +131,28 @@ public class TextPane extends Container {
         @Override
         public void undo() {
             node.removeRange(offset, characterCount);
-            int newSelectionStart = selectionStart;
-            int newSelectionLength = selectionLength;
-            if (newSelectionStart >= document.getCharacterCount()) {
-                newSelectionStart = document.getCharacterCount() - 1;
+            setSelection(offset, 0);
+        }
+    }
+
+    private class TextRemovedEdit implements Edit {
+        private final Node node;
+        private final int offset;
+        private final CharSequence removedChars;
+
+        public TextRemovedEdit(Node node, int offset, CharSequence removedChars) {
+            this.node = node;
+            this.offset = offset;
+            this.removedChars = removedChars;
+        }
+
+        @Override
+        public void undo() {
+            if (offset != selectionStart) {
+                setSelection(offset, 0);
             }
-            if (newSelectionStart + newSelectionLength > document.getCharacterCount()) {
-                newSelectionLength = document.getCharacterCount() - newSelectionStart;
-            }
-            setSelection(newSelectionStart, newSelectionLength);
+            insert(removedChars.toString());
+            setSelection(offset + removedChars.length(), 0);
         }
     }
 
@@ -224,7 +192,7 @@ public class TextPane extends Container {
             }
 
             if (!undoingHistory) {
-                editHistory.push(new RangeInsertedEdit(node, offset, characterCount));
+                editHistory.push(new TextInsertedEdit(node, offset, characterCount));
             }
 
             if (!bulkOperation) {
@@ -244,10 +212,6 @@ public class TextPane extends Container {
                     componentNode.getComponentNodeListeners().remove(componentNodeListener);
                     TextPane.super.remove(componentNode.getComponent());
                 }
-            }
-
-            if (!undoingHistory) {
-                editHistory.push(new NodesRemovedEdit(node, removed, offset));
             }
         }
 
@@ -286,7 +250,7 @@ public class TextPane extends Container {
             }
 
             if (!undoingHistory && removedChars != null) {
-                editHistory.push(new RangeRemovedEdit(node, offset, characterCount, removedChars));
+                editHistory.push(new TextRemovedEdit(node, offset, removedChars));
             }
 
             if (!bulkOperation) {
@@ -386,6 +350,16 @@ public class TextPane extends Container {
                 add(((ComponentNode) childNode).getComponent());
             }
         }
+    }
+
+    /**
+     * Some document rearrangements might not be suitable for undoing,
+     * so allow users to specify when to do so.
+     *
+     * @param save Whether or not to save history at this time.
+     */
+    public void setSaveHistory(boolean save) {
+        this.undoingHistory = !save;
     }
 
     private Node getRightmostDescendant(Element element) {

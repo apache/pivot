@@ -370,6 +370,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         // Remove the nodes
         Sequence<Node> removed = nodes.remove(index, count);
         count = removed.getLength();
+        StringBuilder removedChars = new StringBuilder();
 
         if (count > 0) {
             int removedCharacterCount = 0;
@@ -377,6 +378,11 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 Node node = removed.get(i);
                 node.setParent(null);
                 removedCharacterCount += node.getCharacterCount();
+                if (node instanceof Element) {
+                    removedChars.append(((Element)node).getText());
+                } else if (node instanceof TextNode) {
+                    removedChars.append(((TextNode)node).getText());
+                }
             }
 
             // Update the character count
@@ -399,7 +405,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
             }
 
             // Notify parent
-            super.rangeRemoved(this, offset, removedCharacterCount, null);
+            super.rangeRemoved(this, offset, removedCharacterCount, removedChars);
             super.nodesRemoved(this, removed, offset);
 
             // Fire event
