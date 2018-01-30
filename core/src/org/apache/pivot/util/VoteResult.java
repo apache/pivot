@@ -26,6 +26,14 @@ public class VoteResult {
     private Vote result;
 
     /**
+     * Construct one of these and set the initial vote value to
+     * {@link Vote#APPROVE} (which is the usual starting point).
+     */
+    public VoteResult() {
+        this(Vote.APPROVE);
+    }
+
+    /**
      * Construct one of these and set the initial vote to the given value.
      *
      * @param initialVote The initial vote value.
@@ -35,20 +43,13 @@ public class VoteResult {
     }
 
     /**
-     * Construct one of these and set the initial vote value to
-     * {@link Vote#APPROVE} (which is the usual starting point).
-     */
-    public VoteResult() {
-        this(Vote.APPROVE);
-    }
-
-    /**
      * Tally the internal vote with the next vote in line.
      * <p> The internal <tt>Vote</tt> is updated with the
      * result of the vote tally.
      *
      * @param vote The next vote to tally against all the
      * previous ones.
+     * @see Vote#tally
      */
     public void tally(Vote vote) {
         result = result.tally(vote);
