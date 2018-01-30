@@ -538,8 +538,14 @@ limitations under the License.
         </compile>
         <copy todir="tests/${folder.bin}">
             <fileset dir="tests/src" includes="**/*.bxml"/>
+            <fileset dir="tests/src" includes="**/*.dib"/>
+            <fileset dir="tests/src" includes="**/*.js"/>
+            <fileset dir="tests/src" includes="**/*.jpg"/>
             <fileset dir="tests/src" includes="**/*.json"/>
             <fileset dir="tests/src" includes="**/*.png"/>
+            <fileset dir="tests/src" includes="**/*.sql"/>
+            <fileset dir="tests/src" includes="**/*.svg"/>
+            <fileset dir="tests/src" includes="**/*.txt"/>
         </copy>
     </target>
 
@@ -547,8 +553,12 @@ limitations under the License.
         <compile project="tutorials"/>
         <copy todir="tutorials/${folder.bin}">
             <fileset dir="tutorials/src" includes="**/*.bxml"/>
+            <fileset dir="tutorials/src" includes="**/*.jpg"/>
+            <fileset dir="tutorials/src" includes="**/*.js"/>
             <fileset dir="tutorials/src" includes="**/*.json"/>
             <fileset dir="tutorials/src" includes="**/*.png"/>
+            <fileset dir="tutorials/src" includes="**/*.svg"/>
+            <fileset dir="tutorials/src" includes="**/*.txt"/>
         </copy>
     </target>
 
