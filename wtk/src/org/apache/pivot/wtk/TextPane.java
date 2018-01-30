@@ -131,7 +131,7 @@ public class TextPane extends Container {
         @Override
         public void undo() {
             node.removeRange(offset, characterCount);
-            setSelection(offset, 0);
+            changeSelection(offset);
         }
     }
 
@@ -149,10 +149,10 @@ public class TextPane extends Container {
         @Override
         public void undo() {
             if (offset != selectionStart) {
-                setSelection(offset, 0);
+                changeSelection(offset);
             }
             insert(removedChars.toString());
-            setSelection(offset + removedChars.length(), 0);
+            changeSelection(offset + removedChars.length());
         }
     }
 
@@ -1034,6 +1034,27 @@ public class TextPane extends Container {
         Utils.checkNull(selection, "selection");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
+    }
+
+    /**
+     * Change the selection to the given location (and length 0),
+     * with checks to make sure the selection doesn't go out of bounds.
+     * <p> Meant to be called from {@link #undo} (that is, internally).
+     *
+     * @param start The new selection start to check and set.
+     * @see #setSelection(int, int)
+     */
+    private void changeSelection(int start) {
+        int docCount = document.getCharacterCount();
+        if (start >= 0) {
+            if (start >= docCount) {
+                setSelection(docCount - 1, 0);
+            } else {
+                setSelection(start, 0);
+            }
+        } else {
+            setSelection(0, 0);
+        }
     }
 
     /**
