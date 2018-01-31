@@ -553,12 +553,8 @@ limitations under the License.
         <compile project="tutorials"/>
         <copy todir="tutorials/${folder.bin}">
             <fileset dir="tutorials/src" includes="**/*.bxml"/>
-            <fileset dir="tutorials/src" includes="**/*.jpg"/>
-            <fileset dir="tutorials/src" includes="**/*.js"/>
             <fileset dir="tutorials/src" includes="**/*.json"/>
             <fileset dir="tutorials/src" includes="**/*.png"/>
-            <fileset dir="tutorials/src" includes="**/*.svg"/>
-            <fileset dir="tutorials/src" includes="**/*.txt"/>
         </copy>
     </target>
 
