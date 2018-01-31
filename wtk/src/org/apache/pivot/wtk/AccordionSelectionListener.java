@@ -16,15 +16,44 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Accordion selection listener interface.
  */
 public interface AccordionSelectionListener {
     /**
-     * Accordion selection listener adapter.
+     * Accordion selection listeners.
      */
+    public static class Listeners extends ListenerList<AccordionSelectionListener>
+        implements AccordionSelectionListener {
+        @Override
+        public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewSelectedIndexChange(accordion, selectedIndex)));
+
+            return result.get();
+        }
+
+        @Override
+        public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+            forEach(listener -> listener.selectedIndexChangeVetoed(accordion, reason));
+        }
+
+        @Override
+        public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+            forEach(listener -> listener.selectedIndexChanged(accordion, previousSelectedIndex));
+        }
+    }
+
+    /**
+     * Accordion selection listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements AccordionSelectionListener {
         @Override
         public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
@@ -49,7 +78,9 @@ public interface AccordionSelectionListener {
      * @param selectedIndex The index that will be selected.
      * @return The consensus vote as to whether to allow the selected index change.
      */
-    public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex);
+    default public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a selected index change has been vetoed.
@@ -57,7 +88,8 @@ public interface AccordionSelectionListener {
      * @param accordion The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    public void selectedIndexChangeVetoed(Accordion accordion, Vote reason);
+    default public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+    }
 
     /**
      * Called when an accordion's selected index has changed.
@@ -67,5 +99,6 @@ public interface AccordionSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex);
+    default public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+    }
 }

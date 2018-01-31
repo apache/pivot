@@ -20,14 +20,58 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Commons VFS browser sheet listener interface.
  */
 public interface VFSBrowserSheetListener {
     /**
-     * Commons VFS browser sheet listener adapter.
+     * VFS Browser sheet listeners.
      */
+    public static class Listeners extends ListenerList<VFSBrowserSheetListener>
+        implements VFSBrowserSheetListener {
+        @Override
+        public void managerChanged(VFSBrowserSheet fileBrowserSheet,
+            FileSystemManager previousManager) {
+            forEach(listener -> listener.managerChanged(fileBrowserSheet, previousManager));
+        }
+
+        @Override
+        public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode) {
+            forEach(listener -> listener.modeChanged(fileBrowserSheet, previousMode));
+        }
+
+        @Override
+        public void rootDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+            FileObject previousRootDirectory) {
+            forEach(listener -> listener.rootDirectoryChanged(fileBrowserSheet, previousRootDirectory));
+        }
+
+        @Override
+        public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+            FileObject previousHomeDirectory) {
+            forEach(listener -> listener.homeDirectoryChanged(fileBrowserSheet, previousHomeDirectory));
+        }
+
+        @Override
+        public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
+            Sequence<FileObject> previousSelectedFiles) {
+            forEach(listener -> listener.selectedFilesChanged(fileBrowserSheet, previousSelectedFiles));
+        }
+
+        @Override
+        public void disabledFileFilterChanged(VFSBrowserSheet fileBrowserSheet,
+            Filter<FileObject> previousDisabledFileFilter) {
+            forEach(listener -> listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter));
+        }
+    }
+
+    /**
+     * Commons VFS browser sheet listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements VFSBrowserSheetListener {
         @Override
         public void managerChanged(VFSBrowserSheet fileBrowserSheet,
@@ -72,7 +116,8 @@ public interface VFSBrowserSheetListener {
      * @param fileBrowserSheet The source of this event.
      * @param previousManager  The previous file manager that was set.
      */
-    public void managerChanged(VFSBrowserSheet fileBrowserSheet, FileSystemManager previousManager);
+    default public void managerChanged(VFSBrowserSheet fileBrowserSheet, FileSystemManager previousManager) {
+    }
 
     /**
      * Called when a file browser sheet's mode has changed.
@@ -80,7 +125,8 @@ public interface VFSBrowserSheetListener {
      * @param fileBrowserSheet The source of this event.
      * @param previousMode     The previous mode for this browser.
      */
-    public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode);
+    default public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode) {
+    }
 
     /**
      * Called when a file browser sheet's root directory has changed.
@@ -88,8 +134,9 @@ public interface VFSBrowserSheetListener {
      * @param fileBrowserSheet      The browser sheet that has changed.
      * @param previousRootDirectory The previously set root directory for this browser.
      */
-    public void rootDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
-        FileObject previousRootDirectory);
+    default public void rootDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+        FileObject previousRootDirectory) {
+    }
 
     /**
      * Called when a file browser sheet's home directory has changed.
@@ -98,8 +145,9 @@ public interface VFSBrowserSheetListener {
      * @param fileBrowserSheet      The browser sheet that has changed.
      * @param previousHomeDirectory The previously set home directory for this browser.
      */
-    public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
-        FileObject previousHomeDirectory);
+    default public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
+        FileObject previousHomeDirectory) {
+    }
 
     /**
      * Called when a file browser sheet's selection state has been reset.
@@ -107,8 +155,9 @@ public interface VFSBrowserSheetListener {
      * @param fileBrowserSheet      The source of this event.
      * @param previousSelectedFiles The previous sequence of selected files.
      */
-    public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
-        Sequence<FileObject> previousSelectedFiles);
+    default public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
+        Sequence<FileObject> previousSelectedFiles) {
+    }
 
     /**
      * Called when a file browser sheet's disabled file filter has changed.
@@ -116,6 +165,7 @@ public interface VFSBrowserSheetListener {
      * @param fileBrowserSheet           The source of this event.
      * @param previousDisabledFileFilter The previous filter for disabled files.
      */
-    public void disabledFileFilterChanged(VFSBrowserSheet fileBrowserSheet,
-        Filter<FileObject> previousDisabledFileFilter);
+    default public void disabledFileFilterChanged(VFSBrowserSheet fileBrowserSheet,
+        Filter<FileObject> previousDisabledFileFilter) {
+    }
 }

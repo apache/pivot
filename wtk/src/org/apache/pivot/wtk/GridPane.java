@@ -269,45 +269,12 @@ public class GridPane extends Container {
         }
     }
 
-    private static class GridPaneListenerList extends ListenerList<GridPaneListener> implements
-        GridPaneListener {
-        @Override
-        public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
-            forEach(listener -> listener.columnCountChanged(gridPane, previousColumnCount));
-        }
-
-        @Override
-        public void rowInserted(GridPane gridPane, int index) {
-            forEach(listener -> listener.rowInserted(gridPane, index));
-        }
-
-        @Override
-        public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
-            forEach(listener -> listener.rowsRemoved(gridPane, index, rows));
-        }
-
-        @Override
-        public void cellInserted(GridPane.Row row, int column) {
-            forEach(listener -> listener.cellInserted(row, column));
-        }
-
-        @Override
-        public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
-            forEach(listener -> listener.cellsRemoved(row, column, removed));
-        }
-
-        @Override
-        public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
-            forEach(listener -> listener.cellUpdated(row, column, previousComponent));
-        }
-    }
-
     private int columnCount;
 
     private ArrayList<Row> rows = new ArrayList<>();
     private RowSequence rowSequence = new RowSequence();
 
-    private GridPaneListenerList gridPaneListeners = new GridPaneListenerList();
+    private GridPaneListener.Listeners gridPaneListeners = new GridPaneListener.Listeners();
 
     /**
      * Creates a new grid pane.

@@ -16,10 +16,22 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Fill pane listener interface.
  */
 public interface FillPaneListener {
+    /**
+     * Fill pane listeners.
+     */
+    public static class Listeners extends ListenerList<FillPaneListener> implements FillPaneListener {
+        @Override
+        public void orientationChanged(FillPane fillPane) {
+            forEach(listener -> listener.orientationChanged(fillPane));
+        }
+    }
+
     /**
      * Called when a fill pane's orientation has changed.
      *

@@ -143,63 +143,8 @@ public class Accordion extends Container {
     }
 
     private enum Attribute {
-        HEADER_DATA, TOOLTIP_TEXT;
-    }
-
-    private static class AccordionListenerList extends ListenerList<AccordionListener> implements
-        AccordionListener {
-        @Override
-        public void panelInserted(Accordion accordion, int index) {
-            forEach(listener -> listener.panelInserted(accordion, index));
-        }
-
-        @Override
-        public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
-            forEach(listener -> listener.panelsRemoved(accordion, index, panels));
-        }
-
-        @Override
-        public void headerDataRendererChanged(Accordion accordion,
-            Button.DataRenderer previousHeaderDataRenderer) {
-            forEach(listener -> listener.headerDataRendererChanged(accordion, previousHeaderDataRenderer));
-        }
-    }
-
-    private static class AccordionSelectionListenerList extends
-        ListenerList<AccordionSelectionListener> implements AccordionSelectionListener {
-        @Override
-        public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
-            VoteResult result = new VoteResult();
-
-            forEach(listener -> result.tally(listener.previewSelectedIndexChange(accordion, selectedIndex)));
-
-            return result.get();
-        }
-
-        @Override
-        public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
-            forEach(listener -> listener.selectedIndexChangeVetoed(accordion, reason));
-        }
-
-        @Override
-        public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
-            forEach(listener -> listener.selectedIndexChanged(accordion, previousSelectedIndex));
-        }
-    }
-
-    private static class AccordionAttributeListenerList extends
-        ListenerList<AccordionAttributeListener> implements AccordionAttributeListener {
-        @Override
-        public void headerDataChanged(Accordion accordion, Component component,
-            Object previousHeaderData) {
-            forEach(listener -> listener.headerDataChanged(accordion, component, previousHeaderData));
-        }
-
-        @Override
-        public void tooltipTextChanged(Accordion accordion, Component component,
-            String previousTooltipText) {
-            forEach(listener -> listener.tooltipTextChanged(accordion, component, previousTooltipText));
-        }
+        HEADER_DATA,
+        TOOLTIP_TEXT;
     }
 
     private ArrayList<Component> panels = new ArrayList<>();
@@ -207,9 +152,9 @@ public class Accordion extends Container {
     private int selectedIndex = -1;
     private Button.DataRenderer headerDataRenderer = DEFAULT_HEADER_DATA_RENDERER;
 
-    private AccordionListenerList accordionListeners = new AccordionListenerList();
-    private AccordionSelectionListenerList accordionSelectionListeners = new AccordionSelectionListenerList();
-    private AccordionAttributeListenerList accordionAttributeListeners = new AccordionAttributeListenerList();
+    private AccordionListener.Listeners accordionListeners = new AccordionListener.Listeners();
+    private AccordionSelectionListener.Listeners accordionSelectionListeners = new AccordionSelectionListener.Listeners();
+    private AccordionAttributeListener.Listeners accordionAttributeListeners = new AccordionAttributeListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_HEADER_DATA_RENDERER = new AccordionHeaderDataRenderer();
 

@@ -25,34 +25,13 @@ import org.apache.pivot.util.Utils;
  * Allows a user to select one of a range of values.
  */
 public class Slider extends Container {
-    private static class SliderListenerList extends ListenerList<SliderListener> implements
-        SliderListener {
-        @Override
-        public void orientationChanged(Slider slider) {
-            forEach(listener -> listener.orientationChanged(slider));
-        }
-
-        @Override
-        public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
-            forEach(listener -> listener.rangeChanged(slider, previousStart, previousEnd));
-        }
-    }
-
-    private static class SliderValueListenerList extends ListenerList<SliderValueListener>
-        implements SliderValueListener {
-        @Override
-        public void valueChanged(Slider slider, int previousValue) {
-            forEach(listener -> listener.valueChanged(slider, previousValue));
-        }
-    }
-
     private int start = DEFAULT_START;
     private int end = DEFAULT_END;
     private int value = DEFAULT_VALUE;
     private Orientation orientation = null;
 
-    private SliderListenerList sliderListeners = new SliderListenerList();
-    private SliderValueListenerList sliderValueListeners = new SliderValueListenerList();
+    private SliderListener.Listeners sliderListeners = new SliderListener.Listeners();
+    private SliderValueListener.Listeners sliderValueListeners = new SliderValueListener.Listeners();
 
     public static final int DEFAULT_START = 0;
     public static final int DEFAULT_END = 100;

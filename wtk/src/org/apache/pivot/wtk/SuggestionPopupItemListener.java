@@ -16,13 +16,48 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Suggestion popup item listener interface.
  */
 public interface SuggestionPopupItemListener {
     /**
-     * Suggestion popup item listener adapter.
+     * Suggestion popup item listeners.
      */
+    public static class Listeners extends ListenerList<SuggestionPopupItemListener>
+        implements SuggestionPopupItemListener {
+        @Override
+        public void itemInserted(SuggestionPopup suggestionPopup, int index) {
+            forEach(listener -> listener.itemInserted(suggestionPopup, index));
+        }
+
+        @Override
+        public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
+            forEach(listener -> listener.itemsRemoved(suggestionPopup, index, count));
+        }
+
+        @Override
+        public void itemUpdated(SuggestionPopup suggestionPopup, int index) {
+            forEach(listener -> listener.itemUpdated(suggestionPopup, index));
+        }
+
+        @Override
+        public void itemsCleared(SuggestionPopup suggestionPopup) {
+            forEach(listener -> listener.itemsCleared(suggestionPopup));
+        }
+
+        @Override
+        public void itemsSorted(SuggestionPopup suggestionPopup) {
+            forEach(listener -> listener.itemsSorted(suggestionPopup));
+        }
+    }
+
+    /**
+     * Suggestion popup item listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SuggestionPopupItemListener {
         @Override
         public void itemInserted(SuggestionPopup suggestionPopup, int index) {
@@ -56,7 +91,8 @@ public interface SuggestionPopupItemListener {
      * @param suggestionPopup The source of this event.
      * @param index The location where the item was inserted.
      */
-    public void itemInserted(SuggestionPopup suggestionPopup, int index);
+    default public void itemInserted(SuggestionPopup suggestionPopup, int index) {
+    }
 
     /**
      * Called when items are removed from the suggestion popup's data list.
@@ -65,7 +101,8 @@ public interface SuggestionPopupItemListener {
      * @param index The starting index where items were removed.
      * @param count The number of items that were removed.
      */
-    public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count);
+    default public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
+    }
 
     /**
      * Called when an item is updated within a suggestion popup's data list.
@@ -73,19 +110,22 @@ public interface SuggestionPopupItemListener {
      * @param suggestionPopup The source of this event.
      * @param index Which item was updated.
      */
-    public void itemUpdated(SuggestionPopup suggestionPopup, int index);
+    default public void itemUpdated(SuggestionPopup suggestionPopup, int index) {
+    }
 
     /**
      * Called when a list button's list data has been cleared.
      *
      * @param suggestionPopup The source of this event.
      */
-    public void itemsCleared(SuggestionPopup suggestionPopup);
+    default public void itemsCleared(SuggestionPopup suggestionPopup) {
+    }
 
     /**
      * Called when a list button's list data is sorted.
      *
      * @param suggestionPopup The source of this event.
      */
-    public void itemsSorted(SuggestionPopup suggestionPopup);
+    default public void itemsSorted(SuggestionPopup suggestionPopup) {
+    }
 }

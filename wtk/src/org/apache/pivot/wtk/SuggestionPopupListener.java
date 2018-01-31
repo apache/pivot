@@ -17,14 +17,40 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Suggestion popup listener interface.
  */
 public interface SuggestionPopupListener {
     /**
-     * Suggestion popup listener adapter.
+     * Suggestion popup listeners.
      */
+    public static class Listeners extends ListenerList<SuggestionPopupListener>
+        implements SuggestionPopupListener {
+        @Override
+        public void suggestionDataChanged(SuggestionPopup suggestionPopup,
+            List<?> previousSuggestionData) {
+            forEach(listener -> listener.suggestionDataChanged(suggestionPopup, previousSuggestionData));
+        }
+
+        @Override
+        public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
+            ListView.ItemRenderer previousSuggestionRenderer) {
+            forEach(listener -> listener.suggestionRendererChanged(suggestionPopup, previousSuggestionRenderer));
+        }
+
+        @Override
+        public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+            forEach(listener -> listener.listSizeChanged(suggestionPopup, previousListSize));
+        }
+    }
+
+    /**
+     * Suggestion popup listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SuggestionPopupListener {
         @Override
         public void suggestionDataChanged(SuggestionPopup suggestionPopup,
@@ -50,8 +76,9 @@ public interface SuggestionPopupListener {
      * @param suggestionPopup The source of this event.
      * @param previousSuggestionData The previous data that was being shown.
      */
-    public void suggestionDataChanged(SuggestionPopup suggestionPopup,
-        List<?> previousSuggestionData);
+    default public void suggestionDataChanged(SuggestionPopup suggestionPopup,
+        List<?> previousSuggestionData) {
+    }
 
     /**
      * Called when a suggestion popup's item renderer has changed.
@@ -59,8 +86,9 @@ public interface SuggestionPopupListener {
      * @param suggestionPopup The source of this event.
      * @param previousSuggestionRenderer The previous item renderer.
      */
-    public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-        ListView.ItemRenderer previousSuggestionRenderer);
+    default public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
+        ListView.ItemRenderer previousSuggestionRenderer) {
+    }
 
     /**
      * Called when a suggestion popup's list size has changed.
@@ -68,5 +96,6 @@ public interface SuggestionPopupListener {
      * @param suggestionPopup The source of this event.
      * @param previousListSize The previous value of the visible window.
      */
-    public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize);
+    default public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
+    }
 }

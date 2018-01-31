@@ -642,88 +642,14 @@ public class TablePane extends Container {
         ROW_SPAN, COLUMN_SPAN;
     }
 
-    private static class TablePaneListenerList extends ListenerList<TablePaneListener> implements
-        TablePaneListener {
-        @Override
-        public void rowInserted(TablePane tablePane, int index) {
-            forEach(listener -> listener.rowInserted(tablePane, index));
-        }
-
-        @Override
-        public void rowsRemoved(TablePane tablePane, int index, Sequence<TablePane.Row> rows) {
-            forEach(listener -> listener.rowsRemoved(tablePane, index, rows));
-        }
-
-        @Override
-        public void rowHeightChanged(TablePane.Row row, int previousHeight, boolean previousRelative) {
-            forEach(listener -> listener.rowHeightChanged(row, previousHeight, previousRelative));
-        }
-
-        @Override
-        public void rowHighlightedChanged(TablePane.Row row) {
-            forEach(listener -> listener.rowHighlightedChanged(row));
-        }
-
-        @Override
-        public void columnInserted(TablePane tablePane, int index) {
-            forEach(listener -> listener.columnInserted(tablePane, index));
-        }
-
-        @Override
-        public void columnsRemoved(TablePane tablePane, int index,
-            Sequence<TablePane.Column> columns) {
-            forEach(listener -> listener.columnsRemoved(tablePane, index, columns));
-        }
-
-        @Override
-        public void columnWidthChanged(TablePane.Column column, int previousWidth,
-            boolean previousRelative) {
-            forEach(listener -> listener.columnWidthChanged(column, previousWidth, previousRelative));
-        }
-
-        @Override
-        public void columnHighlightedChanged(TablePane.Column column) {
-            forEach(listener -> listener.columnHighlightedChanged(column));
-        }
-
-        @Override
-        public void cellInserted(TablePane.Row row, int column) {
-            forEach(listener -> listener.cellInserted(row, column));
-        }
-
-        @Override
-        public void cellsRemoved(TablePane.Row row, int column, Sequence<Component> removed) {
-            forEach(listener -> listener.cellsRemoved(row, column, removed));
-        }
-
-        @Override
-        public void cellUpdated(TablePane.Row row, int column, Component previousComponent) {
-            forEach(listener -> listener.cellUpdated(row, column, previousComponent));
-        }
-    }
-
-    private static class TablePaneAttributeListenerList extends
-        ListenerList<TablePaneAttributeListener> implements TablePaneAttributeListener {
-        @Override
-        public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
-            forEach(listener -> listener.rowSpanChanged(tablePane, component, previousRowSpan));
-        }
-
-        @Override
-        public void columnSpanChanged(TablePane tablePane, Component component,
-            int previousColumnSpan) {
-            forEach(listener -> listener.columnSpanChanged(tablePane, component, previousColumnSpan));
-        }
-    }
-
     private ArrayList<Row> rows = null;
     private RowSequence rowSequence = new RowSequence();
 
     private ArrayList<Column> columns = null;
     private ColumnSequence columnSequence = new ColumnSequence();
 
-    private TablePaneListenerList tablePaneListeners = new TablePaneListenerList();
-    private TablePaneAttributeListenerList tablePaneAttributeListeners = new TablePaneAttributeListenerList();
+    private TablePaneListener.Listeners tablePaneListeners = new TablePaneListener.Listeners();
+    private TablePaneAttributeListener.Listeners tablePaneAttributeListeners = new TablePaneAttributeListener.Listeners();
 
     public static final String RELATIVE_SIZE_INDICATOR = "*";
 

@@ -16,13 +16,38 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Form attribute listener interface.
  */
 public interface FormAttributeListener {
     /**
-     * Form attribute listener adapter.
+     * Form attribute listeners.
      */
+    public static class Listeners extends ListenerList<FormAttributeListener>
+        implements FormAttributeListener {
+        @Override
+        public void labelChanged(Form form, Component component, String previousLabel) {
+            forEach(listener -> listener.labelChanged(form, component, previousLabel));
+        }
+
+        @Override
+        public void requiredChanged(Form form, Component field) {
+            forEach(listener -> listener.requiredChanged(form, field));
+        }
+
+        @Override
+        public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
+            forEach(listener -> listener.flagChanged(form, component, previousFlag));
+        }
+    }
+
+    /**
+     * Form attribute listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public class Adapter implements FormAttributeListener {
         @Override
         public void labelChanged(Form form, Component field, String previousLabel) {
@@ -47,7 +72,8 @@ public interface FormAttributeListener {
      * @param field         The field whose form label has changed.
      * @param previousLabel The previous form label for this field.
      */
-    public void labelChanged(Form form, Component field, String previousLabel);
+    default public void labelChanged(Form form, Component field, String previousLabel) {
+    }
 
     /**
      * Called when a fields's required attribute has changed.
@@ -55,7 +81,8 @@ public interface FormAttributeListener {
      * @param form  The enclosing form.
      * @param field The field that is or is not now required.
      */
-    public void requiredChanged(Form form, Component field);
+    default public void requiredChanged(Form form, Component field) {
+    }
 
     /**
      * Called when a field's flag attribute has changed.
@@ -64,5 +91,6 @@ public interface FormAttributeListener {
      * @param field        The field whose flag attribute has changed.
      * @param previousFlag The previous flag value for this field.
      */
-    public void flagChanged(Form form, Component field, Form.Flag previousFlag);
+    default public void flagChanged(Form form, Component field, Form.Flag previousFlag) {
+    }
 }

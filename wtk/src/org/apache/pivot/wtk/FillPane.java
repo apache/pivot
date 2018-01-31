@@ -64,16 +64,8 @@ import org.apache.pivot.util.Utils;
  * +--------------------------------------------------+</pre>
  */
 public class FillPane extends Container {
-    private static class FillPaneListenerList extends ListenerList<FillPaneListener> implements
-        FillPaneListener {
-        @Override
-        public void orientationChanged(FillPane fillPane) {
-            forEach(listener -> listener.orientationChanged(fillPane));
-        }
-    }
-
     private Orientation orientation = null;
-    private FillPaneListenerList fillPaneListeners = new FillPaneListenerList();
+    private FillPaneListener.Listeners fillPaneListeners = new FillPaneListener.Listeners();
 
     public FillPane() {
         this(Orientation.HORIZONTAL);

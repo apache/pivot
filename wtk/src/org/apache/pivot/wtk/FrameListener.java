@@ -16,10 +16,22 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Frame listener interface.
  */
 public interface FrameListener {
+    /**
+     * Frame listeners.
+     */
+    public static class Listeners extends ListenerList<FrameListener> implements FrameListener {
+        @Override
+        public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
+            forEach(listener -> listener.menuBarChanged(frame, previousMenuBar));
+        }
+    }
+
     /**
      * Called when a frame's menu bar has changed.
      *

@@ -17,14 +17,33 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Image view listener interface.
  */
 public interface ImageViewListener {
     /**
-     * Image view listener adapter.
+     * Image view listeners.
      */
+    public static class Listeners extends ListenerList<ImageViewListener> implements
+        ImageViewListener {
+        @Override
+        public void imageChanged(ImageView imageView, Image previousImage) {
+            forEach(listener -> listener.imageChanged(imageView, previousImage));
+        }
+
+        @Override
+        public void asynchronousChanged(ImageView imageView) {
+            forEach(listener -> listener.asynchronousChanged(imageView));
+        }
+    }
+
+    /**
+     * Image view listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ImageViewListener {
         @Override
         public void imageChanged(ImageView imageView, Image previousImage) {
@@ -43,12 +62,14 @@ public interface ImageViewListener {
      * @param imageView     The image view whose image has changed.
      * @param previousImage The previous image associated with this image view.
      */
-    public void imageChanged(ImageView imageView, Image previousImage);
+    default public void imageChanged(ImageView imageView, Image previousImage) {
+    }
 
     /**
      * Called when an image view's asynchronous flag has changed.
      *
      * @param imageView The image view whose asynchronous flag has changed.
      */
-    public void asynchronousChanged(ImageView imageView);
+    default public void asynchronousChanged(ImageView imageView) {
+    }
 }

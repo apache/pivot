@@ -16,13 +16,57 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Split pane listener interface.
  */
 public interface SplitPaneListener {
     /**
-     * Split pane listener adapter.
+     * Split pane listeners.
      */
+    public static class Listeners extends ListenerList<SplitPaneListener> implements SplitPaneListener {
+        @Override
+        public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
+            forEach(listener -> listener.topLeftChanged(splitPane, previousTopLeft));
+        }
+
+        @Override
+        public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
+            forEach(listener -> listener.bottomRightChanged(splitPane, previousBottomRight));
+        }
+
+        @Override
+        public void orientationChanged(SplitPane splitPane) {
+            forEach(listener -> listener.orientationChanged(splitPane));
+        }
+
+        @Override
+        public void primaryRegionChanged(SplitPane splitPane) {
+            forEach(listener -> listener.primaryRegionChanged(splitPane));
+        }
+
+        @Override
+        public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
+            forEach(listener -> listener.splitRatioChanged(splitPane, previousSplitRatio));
+        }
+
+        @Override
+        public void lockedChanged(SplitPane splitPane) {
+            forEach(listener -> listener.lockedChanged(splitPane));
+        }
+
+        @Override
+        public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode) {
+            forEach(listener -> listener.resizeModeChanged(splitPane, previousResizeMode));
+        }
+    }
+
+    /**
+     * Split pane listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SplitPaneListener {
         @Override
         public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
@@ -67,7 +111,8 @@ public interface SplitPaneListener {
      * @param previousTopLeft The previous component. The new component can be
      * found inside the splitPane.
      */
-    public void topLeftChanged(SplitPane splitPane, Component previousTopLeft);
+    default public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
+    }
 
     /**
      * Called when a split pane's bottom right component has changed.
@@ -76,21 +121,24 @@ public interface SplitPaneListener {
      * @param previousBottomRight The previous component. The new component can
      * be found inside the splitPane.
      */
-    public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight);
+    default public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
+    }
 
     /**
      * Called when a split pane's orientation has changed.
      *
      * @param splitPane The source of the event.
      */
-    public void orientationChanged(SplitPane splitPane);
+    default public void orientationChanged(SplitPane splitPane) {
+    }
 
     /**
      * Called when a split pane's primary region has changed.
      *
      * @param splitPane The source of the event.
      */
-    public void primaryRegionChanged(SplitPane splitPane);
+    default public void primaryRegionChanged(SplitPane splitPane) {
+    }
 
     /**
      * Called when a split pane's split location has changed.
@@ -98,14 +146,16 @@ public interface SplitPaneListener {
      * @param splitPane The source of the event.
      * @param previousSplitRatio The previous setting of the splitRatio.
      */
-    public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio);
+    default public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
+    }
 
     /**
      * Called when a split pane's locked flag has changed.
      *
      * @param splitPane The source of the event.
      */
-    public void lockedChanged(SplitPane splitPane);
+    default public void lockedChanged(SplitPane splitPane) {
+    }
 
     /**
      * Called when a split pane's split location has changed.
@@ -113,5 +163,6 @@ public interface SplitPaneListener {
      * @param splitPane The source of the event.
      * @param previousResizeMode The previous setting of the resizeMode.
      */
-    public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode);
+    default public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode) {
+    }
 }

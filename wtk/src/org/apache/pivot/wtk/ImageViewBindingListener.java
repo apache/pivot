@@ -16,13 +16,39 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Image view binding listener.
  */
 public interface ImageViewBindingListener {
     /**
-     * Image view binding listener adapter.
+     * Image view binding listeners.
      */
+    public static class Listeners extends ListenerList<ImageViewBindingListener>
+        implements ImageViewBindingListener {
+        @Override
+        public void imageKeyChanged(ImageView imageView, String previousImageKey) {
+            forEach(listener -> listener.imageKeyChanged(imageView, previousImageKey));
+        }
+
+        @Override
+        public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType) {
+            forEach(listener -> listener.imageBindTypeChanged(imageView, previousImageBindType));
+        }
+
+        @Override
+        public void imageBindMappingChanged(ImageView imageView,
+            ImageView.ImageBindMapping previousImageBindMapping) {
+            forEach(listener -> listener.imageBindMappingChanged(imageView, previousImageBindMapping));
+        }
+    }
+
+    /**
+     * Image view binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ImageViewBindingListener {
         @Override
         public void imageKeyChanged(ImageView imageView, String previousImageKey) {

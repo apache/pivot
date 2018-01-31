@@ -16,13 +16,35 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Accordion attribute listener interface.
  */
 public interface AccordionAttributeListener {
     /**
-     * Accordion attribute listener adapter.
+     * Accordion attribute listeners.
      */
+    public static class Listeners extends ListenerList<AccordionAttributeListener>
+        implements AccordionAttributeListener {
+        @Override
+        public void headerDataChanged(Accordion accordion, Component component,
+            Object previousHeaderData) {
+            forEach(listener -> listener.headerDataChanged(accordion, component, previousHeaderData));
+        }
+
+        @Override
+        public void tooltipTextChanged(Accordion accordion, Component component,
+            String previousTooltipText) {
+            forEach(listener -> listener.tooltipTextChanged(accordion, component, previousTooltipText));
+        }
+    }
+
+    /**
+     * Accordion attribute listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements AccordionAttributeListener {
         @Override
         public void headerDataChanged(Accordion accordion, Component component,
@@ -44,8 +66,9 @@ public interface AccordionAttributeListener {
      * @param component           The child component in question.
      * @param previousHeaderData  The previous header data for this component.
      */
-    public void headerDataChanged(Accordion accordion, Component component,
-        Object previousHeaderData);
+    default public void headerDataChanged(Accordion accordion, Component component,
+        Object previousHeaderData) {
+    }
 
     /**
      * Called when a panel's tooltip text has changed.
@@ -54,6 +77,7 @@ public interface AccordionAttributeListener {
      * @param component           The child component in question.
      * @param previousTooltipText The previous tooltip text for the component.
      */
-    public void tooltipTextChanged(Accordion accordion, Component component,
-        String previousTooltipText);
+    default public void tooltipTextChanged(Accordion accordion, Component component,
+        String previousTooltipText) {
+    }
 }

@@ -24,19 +24,9 @@ import org.apache.pivot.util.ListenerList;
  * Container class representing a decorated frame window.
  */
 public class Frame extends Window {
-    private static class FrameListenerList extends ListenerList<FrameListener> implements
-        FrameListener {
-        @Override
-        public void menuBarChanged(Frame frame, MenuBar previousMenuBar) {
-            for (FrameListener listener : this) {
-                listener.menuBarChanged(frame, previousMenuBar);
-            }
-        }
-    }
-
     private MenuBar menuBar = null;
 
-    private FrameListenerList frameListeners = new FrameListenerList();
+    private FrameListener.Listeners frameListeners = new FrameListener.Listeners();
 
     public Frame() {
         this(null, null);

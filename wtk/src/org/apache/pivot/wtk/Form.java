@@ -343,60 +343,17 @@ public class Form extends Container {
     }
 
     private enum Attribute {
-        SECTION, LABEL, REQUIRED, FLAG;
-    }
-
-    private static class FormListenerList extends ListenerList<FormListener> implements
-        FormListener {
-        @Override
-        public void sectionInserted(Form form, int index) {
-            forEach(listener -> listener.sectionInserted(form, index));
-        }
-
-        @Override
-        public void sectionsRemoved(Form form, int index, Sequence<Section> removed) {
-            forEach(listener -> listener.sectionsRemoved(form, index, removed));
-        }
-
-        @Override
-        public void sectionHeadingChanged(Form.Section section) {
-            forEach(listener -> listener.sectionHeadingChanged(section));
-        }
-
-        @Override
-        public void fieldInserted(Section section, int index) {
-            forEach(listener -> listener.fieldInserted(section, index));
-        }
-
-        @Override
-        public void fieldsRemoved(Section section, int index, Sequence<Component> fields) {
-            forEach(listener -> listener.fieldsRemoved(section, index, fields));
-        }
-    }
-
-    private static class FormAttributeListenerList extends ListenerList<FormAttributeListener>
-        implements FormAttributeListener {
-        @Override
-        public void labelChanged(Form form, Component component, String previousLabel) {
-            forEach(listener -> listener.labelChanged(form, component, previousLabel));
-        }
-
-        @Override
-        public void requiredChanged(Form form, Component field) {
-            forEach(listener -> listener.requiredChanged(form, field));
-        }
-
-        @Override
-        public void flagChanged(Form form, Component component, Form.Flag previousFlag) {
-            forEach(listener -> listener.flagChanged(form, component, previousFlag));
-        }
+        SECTION,
+        LABEL,
+        REQUIRED,
+        FLAG;
     }
 
     private ArrayList<Section> sections = new ArrayList<>();
     private SectionSequence sectionSequence = new SectionSequence();
 
-    private FormListenerList formListeners = new FormListenerList();
-    private FormAttributeListenerList formAttributeListeners = new FormAttributeListenerList();
+    private FormListener.Listeners formListeners = new FormListener.Listeners();
+    private FormAttributeListener.Listeners formAttributeListeners = new FormAttributeListener.Listeners();
 
     /**
      * Creates a new form.

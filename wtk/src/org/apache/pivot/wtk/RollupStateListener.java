@@ -16,7 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Defines event listener methods that pertain to rollup state. Developers
@@ -25,8 +27,34 @@ import org.apache.pivot.util.Vote;
  */
 public interface RollupStateListener {
     /**
-     * Rollup state listener adapter.
+     * Rollup state listeners.
      */
+    public static class Listeners extends ListenerList<RollupStateListener> implements RollupStateListener {
+        @Override
+        public Vote previewExpandedChange(Rollup rollup) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewExpandedChange(rollup)));
+
+            return result.get();
+        }
+
+        @Override
+        public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+            forEach(listener -> listener.expandedChangeVetoed(rollup, reason));
+        }
+
+        @Override
+        public void expandedChanged(Rollup rollup) {
+            forEach(listener -> listener.expandedChanged(rollup));
+        }
+    }
+
+    /**
+     * Rollup state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements RollupStateListener {
         @Override
         public Vote previewExpandedChange(Rollup rollup) {
@@ -50,7 +78,9 @@ public interface RollupStateListener {
      * @param rollup The rollup that might change.
      * @return The result of this listener voting on the expansion.
      */
-    public Vote previewExpandedChange(Rollup rollup);
+    default public Vote previewExpandedChange(Rollup rollup) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a rollup expansion event has been vetoed.
@@ -58,12 +88,14 @@ public interface RollupStateListener {
      * @param rollup The rollup that didn't change.
      * @param reason The reason the expansion was vetoed.
      */
-    public void expandedChangeVetoed(Rollup rollup, Vote reason);
+    default public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+    }
 
     /**
      * Called when a rollup's expanded state changed.
      *
      * @param rollup The rollup that did change.
      */
-    public void expandedChanged(Rollup rollup);
+    default public void expandedChanged(Rollup rollup) {
+    }
 }

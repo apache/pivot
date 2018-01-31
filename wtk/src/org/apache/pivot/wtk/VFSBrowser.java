@@ -49,67 +49,6 @@ public class VFSBrowser extends Container {
 
     private static final URI USER_HOME = new File(System.getProperty("user.home")).toURI();
 
-    private static class FileBrowserListenerList extends ListenerList<VFSBrowserListener>
-        implements VFSBrowserListener {
-        @Override
-        public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {
-            for (VFSBrowserListener listener : this) {
-                listener.managerChanged(fileBrowser, previousManager);
-            }
-        }
-
-        @Override
-        public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
-            for (VFSBrowserListener listener : this) {
-                listener.rootDirectoryChanged(fileBrowser, previousRootDirectory);
-            }
-        }
-
-        @Override
-        public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
-            for (VFSBrowserListener listener : this) {
-                listener.homeDirectoryChanged(fileBrowser, previousHomeDirectory);
-            }
-        }
-
-        @Override
-        public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
-            for (VFSBrowserListener listener : this) {
-                listener.selectedFileAdded(fileBrowser, file);
-            }
-        }
-
-        @Override
-        public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
-            for (VFSBrowserListener listener : this) {
-                listener.selectedFileRemoved(fileBrowser, file);
-            }
-        }
-
-        @Override
-        public void selectedFilesChanged(VFSBrowser fileBrowser,
-            Sequence<FileObject> previousSelectedFiles) {
-            for (VFSBrowserListener listener : this) {
-                listener.selectedFilesChanged(fileBrowser, previousSelectedFiles);
-            }
-        }
-
-        @Override
-        public void multiSelectChanged(VFSBrowser fileBrowser) {
-            for (VFSBrowserListener listener : this) {
-                listener.multiSelectChanged(fileBrowser);
-            }
-        }
-
-        @Override
-        public void disabledFileFilterChanged(VFSBrowser fileBrowser,
-            Filter<FileObject> previousDisabledFileFilter) {
-            for (VFSBrowserListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter);
-            }
-        }
-    }
-
     private FileSystemManager manager;
     private FileName baseFileName;
     private FileObject rootDirectory;
@@ -118,7 +57,7 @@ public class VFSBrowser extends Container {
     private boolean multiSelect = false;
     private Filter<FileObject> disabledFileFilter = null;
 
-    private FileBrowserListenerList fileBrowserListeners = new FileBrowserListenerList();
+    private VFSBrowserListener.Listeners fileBrowserListeners = new VFSBrowserListener.Listeners();
 
     /**
      * Creates a new VFSBrowser <p> Note that this version sets, by default,

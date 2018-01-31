@@ -31,117 +31,6 @@ import org.apache.pivot.wtk.content.ListViewItemRenderer;
  * Popup that presents a list of text suggestions to the user.
  */
 public class SuggestionPopup extends Window {
-    private static class SuggestionPopupListenerList extends
-        ListenerList<SuggestionPopupListener> implements SuggestionPopupListener {
-        @Override
-        public void suggestionDataChanged(SuggestionPopup suggestionPopup,
-            List<?> previousSuggestionData) {
-            for (SuggestionPopupListener listener : this) {
-                listener.suggestionDataChanged(suggestionPopup, previousSuggestionData);
-            }
-        }
-
-        @Override
-        public void suggestionRendererChanged(SuggestionPopup suggestionPopup,
-            ListView.ItemRenderer previousSuggestionRenderer) {
-            for (SuggestionPopupListener listener : this) {
-                listener.suggestionRendererChanged(suggestionPopup, previousSuggestionRenderer);
-            }
-        }
-
-        @Override
-        public void listSizeChanged(SuggestionPopup suggestionPopup, int previousListSize) {
-            for (SuggestionPopupListener listener : this) {
-                listener.listSizeChanged(suggestionPopup, previousListSize);
-            }
-        }
-    }
-
-    private static class SuggestionPopupItemListenerList extends
-        ListenerList<SuggestionPopupItemListener> implements SuggestionPopupItemListener {
-        @Override
-        public void itemInserted(SuggestionPopup suggestionPopup, int index) {
-            for (SuggestionPopupItemListener listener : this) {
-                listener.itemInserted(suggestionPopup, index);
-            }
-        }
-
-        @Override
-        public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
-            for (SuggestionPopupItemListener listener : this) {
-                listener.itemsRemoved(suggestionPopup, index, count);
-            }
-        }
-
-        @Override
-        public void itemUpdated(SuggestionPopup suggestionPopup, int index) {
-            for (SuggestionPopupItemListener listener : this) {
-                listener.itemUpdated(suggestionPopup, index);
-            }
-        }
-
-        @Override
-        public void itemsCleared(SuggestionPopup suggestionPopup) {
-            for (SuggestionPopupItemListener listener : this) {
-                listener.itemsCleared(suggestionPopup);
-            }
-        }
-
-        @Override
-        public void itemsSorted(SuggestionPopup suggestionPopup) {
-            for (SuggestionPopupItemListener listener : this) {
-                listener.itemsSorted(suggestionPopup);
-            }
-        }
-    }
-
-    private static class SuggestionPopupSelectionListenerList extends
-        ListenerList<SuggestionPopupSelectionListener> implements
-        SuggestionPopupSelectionListener {
-        @Override
-        public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
-            for (SuggestionPopupSelectionListener listener : this) {
-                listener.selectedIndexChanged(suggestionPopup, previousSelectedIndex);
-            }
-        }
-
-        @Override
-        public void selectedSuggestionChanged(SuggestionPopup suggestionPopup,
-            Object previousSelectedSuggestion) {
-            for (SuggestionPopupSelectionListener listener : this) {
-                listener.selectedSuggestionChanged(suggestionPopup, previousSelectedSuggestion);
-            }
-        }
-    }
-
-    private static class SuggestionPopupStateListenerList extends
-        ListenerList<SuggestionPopupStateListener> implements SuggestionPopupStateListener {
-        @Override
-        public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
-            Vote vote = Vote.APPROVE;
-
-            for (SuggestionPopupStateListener listener : this) {
-                vote = vote.tally(listener.previewSuggestionPopupClose(suggestionPopup, result));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
-            for (SuggestionPopupStateListener listener : this) {
-                listener.suggestionPopupCloseVetoed(suggestionPopup, reason);
-            }
-        }
-
-        @Override
-        public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
-            for (SuggestionPopupStateListener listener : this) {
-                listener.suggestionPopupClosed(suggestionPopup);
-            }
-        }
-    }
-
     private TextInput textInput = null;
     private SuggestionPopupCloseListener suggestionPopupCloseListener = null;
 
@@ -236,10 +125,10 @@ public class SuggestionPopup extends Window {
         }
     };
 
-    private SuggestionPopupListenerList suggestionPopupListeners = new SuggestionPopupListenerList();
-    private SuggestionPopupItemListenerList suggestionPopupItemListeners = new SuggestionPopupItemListenerList();
-    private SuggestionPopupSelectionListenerList suggestionPopupSelectionListeners = new SuggestionPopupSelectionListenerList();
-    private SuggestionPopupStateListenerList suggestionPopupStateListeners = new SuggestionPopupStateListenerList();
+    private SuggestionPopupListener.Listeners suggestionPopupListeners = new SuggestionPopupListener.Listeners();
+    private SuggestionPopupItemListener.Listeners suggestionPopupItemListeners = new SuggestionPopupItemListener.Listeners();
+    private SuggestionPopupSelectionListener.Listeners suggestionPopupSelectionListeners = new SuggestionPopupSelectionListener.Listeners();
+    private SuggestionPopupStateListener.Listeners suggestionPopupStateListeners = new SuggestionPopupStateListener.Listeners();
 
     private static final ListView.ItemRenderer DEFAULT_SUGGESTION_RENDERER = new ListViewItemRenderer();
 

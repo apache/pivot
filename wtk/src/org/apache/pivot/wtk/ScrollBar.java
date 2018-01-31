@@ -29,7 +29,7 @@ import org.apache.pivot.util.Utils;
  */
 public class ScrollBar extends Container {
     /**
-     * Class representing a scroll bar's scope.
+     * Class representing a scroll bar's scope (that is, the start, end and extent values).
      */
     public static final class Scope {
         public final int start;
@@ -112,38 +112,6 @@ public class ScrollBar extends Container {
         }
     }
 
-    private static class ScrollBarListenerList extends ListenerList<ScrollBarListener> implements
-        ScrollBarListener {
-        @Override
-        public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
-            forEach(listener -> listener.orientationChanged(scrollBar, previousOrientation));
-        }
-
-        @Override
-        public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
-            int previousExtent) {
-            forEach(listener -> listener.scopeChanged(scrollBar, previousStart, previousEnd, previousExtent));
-        }
-
-        @Override
-        public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
-            forEach(listener -> listener.unitIncrementChanged(scrollBar, previousUnitIncrement));
-        }
-
-        @Override
-        public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
-            forEach(listener -> listener.blockIncrementChanged(scrollBar, previousBlockIncrement));
-        }
-    }
-
-    private static class ScrollBarValueListenerList extends ListenerList<ScrollBarValueListener>
-        implements ScrollBarValueListener {
-        @Override
-        public void valueChanged(ScrollBar scrollBar, int previousValue) {
-            forEach(listener -> listener.valueChanged(scrollBar, previousValue));
-        }
-    }
-
     private Orientation orientation;
     private int start = 0;
     private int end = 100;
@@ -152,8 +120,8 @@ public class ScrollBar extends Container {
     private int unitIncrement = 1;
     private int blockIncrement = 1;
 
-    private ScrollBarListenerList scrollBarListeners = new ScrollBarListenerList();
-    private ScrollBarValueListenerList scrollBarValueListeners = new ScrollBarValueListenerList();
+    private ScrollBarListener.Listeners scrollBarListeners = new ScrollBarListener.Listeners();
+    private ScrollBarValueListener.Listeners scrollBarValueListeners = new ScrollBarValueListener.Listeners();
 
     public ScrollBar() {
         this(Orientation.HORIZONTAL);
@@ -213,6 +181,10 @@ public class ScrollBar extends Container {
     }
 
     public final void setRange(Dictionary<String, ?> range) {
+        setRange(new Span(range));
+    }
+
+    public final void setRange(Sequence<?> range) {
         setRange(new Span(range));
     }
 

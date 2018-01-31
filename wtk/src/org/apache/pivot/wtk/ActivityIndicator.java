@@ -22,19 +22,9 @@ import org.apache.pivot.util.ListenerList;
  * Component representing an activity indicator.
  */
 public class ActivityIndicator extends Component {
-    private static class ActivityIndicatorListenerList extends
-        ListenerList<ActivityIndicatorListener> implements ActivityIndicatorListener {
-        @Override
-        public void activeChanged(ActivityIndicator activityIndicator) {
-            for (ActivityIndicatorListener listener : this) {
-                listener.activeChanged(activityIndicator);
-            }
-        }
-    }
-
     private boolean active;
 
-    private ActivityIndicatorListenerList activityIndicatorListeners = new ActivityIndicatorListenerList();
+    private ActivityIndicatorListener.Listeners activityIndicatorListeners = new ActivityIndicatorListener.Listeners();
 
     public ActivityIndicator() {
         installSkin(ActivityIndicator.class);

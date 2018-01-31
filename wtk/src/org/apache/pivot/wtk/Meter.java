@@ -23,28 +23,10 @@ import org.apache.pivot.util.Utils;
  * Component that displays progress information.
  */
 public class Meter extends Component {
-    private static class MeterListenerList extends ListenerList<MeterListener> implements
-        MeterListener {
-        @Override
-        public void orientationChanged(Meter meter) {
-            forEach(listener -> listener.orientationChanged(meter));
-        }
-
-        @Override
-        public void percentageChanged(Meter meter, double oldPercentage) {
-            forEach(listener -> listener.percentageChanged(meter, oldPercentage));
-        }
-
-        @Override
-        public void textChanged(Meter meter, String oldText) {
-            forEach(listener -> listener.textChanged(meter, oldText));
-        }
-    }
-
     private double percentage = 0.0;
     private String text = null;
     private Orientation orientation = null;
-    private MeterListenerList meterListeners = new MeterListenerList();
+    private MeterListener.Listeners meterListeners = new MeterListener.Listeners();
 
     public Meter() {
         this(Orientation.HORIZONTAL);

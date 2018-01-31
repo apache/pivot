@@ -48,56 +48,6 @@ public class VFSBrowserSheet extends Sheet {
 
     private static final String USER_HOME = System.getProperty("user.home");
 
-    private static class FileBrowserSheetListenerList extends
-        ListenerList<VFSBrowserSheetListener> implements VFSBrowserSheetListener {
-        @Override
-        public void managerChanged(VFSBrowserSheet fileBrowserSheet,
-            FileSystemManager previousManager) {
-            for (VFSBrowserSheetListener listener : this) {
-                listener.managerChanged(fileBrowserSheet, previousManager);
-            }
-        }
-
-        @Override
-        public void modeChanged(VFSBrowserSheet fileBrowserSheet, VFSBrowserSheet.Mode previousMode) {
-            for (VFSBrowserSheetListener listener : this) {
-                listener.modeChanged(fileBrowserSheet, previousMode);
-            }
-        }
-
-        @Override
-        public void rootDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
-            FileObject previousRootDirectory) {
-            for (VFSBrowserSheetListener listener : this) {
-                listener.rootDirectoryChanged(fileBrowserSheet, previousRootDirectory);
-            }
-        }
-
-        @Override
-        public void homeDirectoryChanged(VFSBrowserSheet fileBrowserSheet,
-            FileObject previousHomeDirectory) {
-            for (VFSBrowserSheetListener listener : this) {
-                listener.homeDirectoryChanged(fileBrowserSheet, previousHomeDirectory);
-            }
-        }
-
-        @Override
-        public void selectedFilesChanged(VFSBrowserSheet fileBrowserSheet,
-            Sequence<FileObject> previousSelectedFiles) {
-            for (VFSBrowserSheetListener listener : this) {
-                listener.selectedFilesChanged(fileBrowserSheet, previousSelectedFiles);
-            }
-        }
-
-        @Override
-        public void disabledFileFilterChanged(VFSBrowserSheet fileBrowserSheet,
-            Filter<FileObject> previousDisabledFileFilter) {
-            for (VFSBrowserSheetListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter);
-            }
-        }
-    }
-
     private Mode mode;
     private FileSystemManager manager;
     private FileName baseFileName;
@@ -106,7 +56,7 @@ public class VFSBrowserSheet extends Sheet {
     private FileObjectList selectedFiles = new FileObjectList();
     private Filter<FileObject> disabledFileFilter = null;
 
-    private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
+    private VFSBrowserSheetListener.Listeners fileBrowserSheetListeners = new VFSBrowserSheetListener.Listeners();
 
     /**
      * Creates a new VFSBrowserSheet <p> Note that this version set by default

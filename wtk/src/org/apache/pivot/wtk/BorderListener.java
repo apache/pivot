@@ -16,13 +16,32 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Border listener interface.
  */
 public interface BorderListener {
     /**
-     * Border listener adapter.
+     * Border listeners.
      */
+    public static class Listeners extends ListenerList<BorderListener> implements BorderListener {
+        @Override
+        public void titleChanged(Border border, String previousTitle) {
+            forEach(listener -> listener.titleChanged(border, previousTitle));
+        }
+
+        @Override
+        public void contentChanged(Border border, Component previousContent) {
+            forEach(listener -> listener.contentChanged(border, previousContent));
+        }
+    }
+
+    /**
+     * Border listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements BorderListener {
         @Override
         public void titleChanged(Border border, String previousTitle) {
@@ -41,7 +60,8 @@ public interface BorderListener {
      * @param border        The border component that has changed.
      * @param previousTitle The previous title for the border.
      */
-    public void titleChanged(Border border, String previousTitle);
+    default public void titleChanged(Border border, String previousTitle) {
+    }
 
     /**
      * Called when a border's content component has changed.
@@ -49,5 +69,6 @@ public interface BorderListener {
      * @param border          The border that has changed.
      * @param previousContent The previous content of the border.
      */
-    public void contentChanged(Border border, Component previousContent);
+    default public void contentChanged(Border border, Component previousContent) {
+    }
 }

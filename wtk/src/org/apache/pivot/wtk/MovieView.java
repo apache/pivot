@@ -25,19 +25,9 @@ import org.apache.pivot.wtk.media.Movie;
  */
 @DefaultProperty("movie")
 public class MovieView extends Component {
-    private static class MovieViewListenerList extends ListenerList<MovieViewListener> implements
-        MovieViewListener {
-        @Override
-        public void movieChanged(MovieView movieView, Movie previousMovie) {
-            for (MovieViewListener listener : this) {
-                listener.movieChanged(movieView, previousMovie);
-            }
-        }
-    }
-
     private Movie movie = null;
 
-    private MovieViewListenerList movieViewListeners = new MovieViewListenerList();
+    private MovieViewListener.Listeners movieViewListeners = new MovieViewListener.Listeners();
 
     /**
      * Creates an empty movie view.

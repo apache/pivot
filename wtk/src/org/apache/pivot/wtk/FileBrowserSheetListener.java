@@ -20,14 +20,47 @@ import java.io.File;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * File browser sheet listener interface.
  */
 public interface FileBrowserSheetListener {
     /**
-     * File browser sheet listener adapter.
+     * File browser sheet listeners.
      */
+    public static class Listeners extends ListenerList<FileBrowserSheetListener>
+        implements FileBrowserSheetListener {
+        @Override
+        public void modeChanged(FileBrowserSheet fileBrowserSheet,
+            FileBrowserSheet.Mode previousMode) {
+            forEach(listener -> listener.modeChanged(fileBrowserSheet, previousMode));
+        }
+
+        @Override
+        public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
+            File previousRootDirectory) {
+            forEach(listener -> listener.rootDirectoryChanged(fileBrowserSheet, previousRootDirectory));
+        }
+
+        @Override
+        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+            Sequence<File> previousSelectedFiles) {
+            forEach(listener -> listener.selectedFilesChanged(fileBrowserSheet, previousSelectedFiles));
+        }
+
+        @Override
+        public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+            Filter<File> previousDisabledFileFilter) {
+            forEach(listener -> listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter));
+        }
+    }
+
+    /**
+     * File browser sheet listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements FileBrowserSheetListener {
         @Override
         public void modeChanged(FileBrowserSheet fileBrowserSheet,
@@ -60,7 +93,8 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet The browser sheet that has changed.
      * @param previousMode     The previous mode that was in effect.
      */
-    public void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode);
+    default public void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode) {
+    }
 
     /**
      * Called when a file browser sheet's root directory has changed.
@@ -68,7 +102,8 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet      The browser sheet that has changed.
      * @param previousRootDirectory The previous root directory that was being browsed.
      */
-    public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory);
+    default public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory) {
+    }
 
     /**
      * Called when a file browser sheet's selection state has been reset.
@@ -76,8 +111,9 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet      The browser sheet that has changed.
      * @param previousSelectedFiles The complete sequence of files that used to be selected.
      */
-    public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
-        Sequence<File> previousSelectedFiles);
+    default public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+        Sequence<File> previousSelectedFiles) {
+    }
 
     /**
      * Called when a file browser sheet's disabled file filter has changed.
@@ -85,6 +121,7 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet           The browser sheet that has changed.
      * @param previousDisabledFileFilter The previous disabled file filter.
      */
-    public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
-        Filter<File> previousDisabledFileFilter);
+    default public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+        Filter<File> previousDisabledFileFilter) {
+    }
 }

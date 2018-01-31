@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Scroll bar value listener interface.
  */
 public interface ScrollBarValueListener {
+    /**
+     * Scroll bar value listeners.
+     */
+    public static class Listeners extends ListenerList<ScrollBarValueListener>
+        implements ScrollBarValueListener {
+        @Override
+        public void valueChanged(ScrollBar scrollBar, int previousValue) {
+            forEach(listener -> listener.valueChanged(scrollBar, previousValue));
+        }
+    }
+
     /**
      * Called when a scroll bar's value has changed.
      *

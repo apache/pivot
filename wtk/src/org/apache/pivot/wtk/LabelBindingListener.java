@@ -16,13 +16,39 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Label binding listener interface.
  */
 public interface LabelBindingListener {
     /**
-     * Label binding listener adapter.
+     * Label binding listeners.
      */
+    public static class Listeners extends ListenerList<LabelBindingListener>
+        implements LabelBindingListener {
+        @Override
+        public void textKeyChanged(Label label, String previousTextKey) {
+            forEach(listener -> listener.textKeyChanged(label, previousTextKey));
+        }
+
+        @Override
+        public void textBindTypeChanged(Label label, BindType previousTextBindType) {
+            forEach(listener -> listener.textBindTypeChanged(label, previousTextBindType));
+        }
+
+        @Override
+        public void textBindMappingChanged(Label label,
+            Label.TextBindMapping previousTextBindMapping) {
+            forEach(listener -> listener.textBindMappingChanged(label, previousTextBindMapping));
+        }
+    }
+
+    /**
+     * Label binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements LabelBindingListener {
         @Override
         public void textKeyChanged(Label label, String previousTextKey) {
@@ -47,7 +73,8 @@ public interface LabelBindingListener {
      * @param label           The label whose binding has changed.
      * @param previousTextKey The previous binding key for the label text.
      */
-    public void textKeyChanged(Label label, String previousTextKey);
+    default public void textKeyChanged(Label label, String previousTextKey) {
+    }
 
     /**
      * Called when a label's text bind type has changed.
@@ -55,7 +82,8 @@ public interface LabelBindingListener {
      * @param label                The label whose binding has changed.
      * @param previousTextBindType The previous bind type for the label text.
      */
-    public void textBindTypeChanged(Label label, BindType previousTextBindType);
+    default public void textBindTypeChanged(Label label, BindType previousTextBindType) {
+    }
 
     /**
      * Called when a label's text bind mapping has changed.
@@ -63,5 +91,6 @@ public interface LabelBindingListener {
      * @param label                   The label whose binding has changed.
      * @param previousTextBindMapping The previous bind mapping for the label text.
      */
-    public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping);
+    default public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
+    }
 }

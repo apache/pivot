@@ -16,13 +16,33 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Table pane attribute listener interface.
  */
 public interface TablePaneAttributeListener {
     /**
-     * Table pane attribute listener adapter.
+     * Table pane attribute listeners.
      */
+    public static class Listeners extends ListenerList<TablePaneAttributeListener> implements TablePaneAttributeListener {
+        @Override
+        public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
+            forEach(listener -> listener.rowSpanChanged(tablePane, component, previousRowSpan));
+        }
+
+        @Override
+        public void columnSpanChanged(TablePane tablePane, Component component,
+            int previousColumnSpan) {
+            forEach(listener -> listener.columnSpanChanged(tablePane, component, previousColumnSpan));
+        }
+    }
+
+    /**
+     * Table pane attribute listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements TablePaneAttributeListener {
         @Override
         public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
@@ -43,7 +63,8 @@ public interface TablePaneAttributeListener {
      * @param component The component that changed.
      * @param previousRowSpan What the row span value used to be.
      */
-    public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan);
+    default public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
+    }
 
     /**
      * Called when a component's column span attribute has changed.
@@ -52,5 +73,6 @@ public interface TablePaneAttributeListener {
      * @param component THe component that changed.
      * @param previousColumnSpan What the column span for this component used to be.
      */
-    public void columnSpanChanged(TablePane tablePane, Component component, int previousColumnSpan);
+    default public void columnSpanChanged(TablePane tablePane, Component component, int previousColumnSpan) {
+    }
 }

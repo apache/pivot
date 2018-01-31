@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Defines event listener methods that pertain to rollups. Developers register
  * for such events by adding themselves to a rollup's list of "rollup listeners"
@@ -23,8 +25,30 @@ package org.apache.pivot.wtk;
  */
 public interface RollupListener {
     /**
-     * Rollup listener adapter.
+     * Rollup listeners.
      */
+    public static class Listeners extends ListenerList<RollupListener> implements RollupListener {
+        @Override
+        public void headingChanged(Rollup rollup, Component previousHeading) {
+            forEach(listener -> listener.headingChanged(rollup, previousHeading));
+        }
+
+        @Override
+        public void contentChanged(Rollup rollup, Component previousContent) {
+            forEach(listener -> listener.contentChanged(rollup, previousContent));
+        }
+
+        @Override
+        public void collapsibleChanged(Rollup rollup) {
+            forEach(listener -> listener.collapsibleChanged(rollup));
+        }
+    }
+
+    /**
+     * Rollup listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements RollupListener {
         @Override
         public void headingChanged(Rollup rollup, Component previousHeading) {
@@ -48,7 +72,8 @@ public interface RollupListener {
      * @param rollup The rollup whose heading changed.
      * @param previousHeading What the heading used to be.
      */
-    public void headingChanged(Rollup rollup, Component previousHeading);
+    default public void headingChanged(Rollup rollup, Component previousHeading) {
+    }
 
     /**
      * Called when a rollup's content component changed.
@@ -56,12 +81,14 @@ public interface RollupListener {
      * @param rollup The rollup that has new content.
      * @param previousContent What the content used to be.
      */
-    public void contentChanged(Rollup rollup, Component previousContent);
+    default public void contentChanged(Rollup rollup, Component previousContent) {
+    }
 
     /**
      * Called when a rollup's collapsible flag has changed.
      *
      * @param rollup The rollup that changed.
      */
-    public void collapsibleChanged(Rollup rollup);
+    default public void collapsibleChanged(Rollup rollup) {
+    }
 }

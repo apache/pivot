@@ -25,26 +25,9 @@ import org.apache.pivot.util.ListenerList;
  */
 @DefaultProperty("content")
 public class Border extends Container {
-    private static class BorderListenerList extends ListenerList<BorderListener> implements
-        BorderListener {
-        @Override
-        public void titleChanged(Border border, String previousTitle) {
-            for (BorderListener listener : this) {
-                listener.titleChanged(border, previousTitle);
-            }
-        }
-
-        @Override
-        public void contentChanged(Border border, Component previousContent) {
-            for (BorderListener listener : this) {
-                listener.contentChanged(border, previousContent);
-            }
-        }
-    }
-
     private String title = null;
     private Component content = null;
-    private BorderListenerList borderListeners = new BorderListenerList();
+    private BorderListener.Listeners borderListeners = new BorderListener.Listeners();
 
     public Border() {
         this(null);

@@ -16,13 +16,32 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Slider listener interface.
  */
 public interface SliderListener {
     /**
-     * Slider listener adapter.
+     * Slider listeners.
      */
+    public static class Listeners extends ListenerList<SliderListener> implements SliderListener {
+        @Override
+        public void orientationChanged(Slider slider) {
+            forEach(listener -> listener.orientationChanged(slider));
+        }
+
+        @Override
+        public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
+            forEach(listener -> listener.rangeChanged(slider, previousStart, previousEnd));
+        }
+    }
+
+    /**
+     * Slider listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SliderListener {
         @Override
         public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
@@ -42,12 +61,14 @@ public interface SliderListener {
      * @param previousStart The previous start of the slider's range.
      * @param previousEnd The previous end value.
      */
-    public void rangeChanged(Slider slider, int previousStart, int previousEnd);
+    default public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
+    }
 
     /**
      * Called when a sliders's orientation has changed.
      *
      * @param slider The source of the event.
      */
-    public void orientationChanged(Slider slider);
+    default public void orientationChanged(Slider slider) {
+    }
 }

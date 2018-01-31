@@ -38,7 +38,8 @@ public class SplitPane extends Container {
      * Enumeration defining split pane regions.
      */
     public enum Region {
-        TOP_LEFT, BOTTOM_RIGHT
+        TOP_LEFT,
+        BOTTOM_RIGHT
     }
 
     /**
@@ -56,44 +57,6 @@ public class SplitPane extends Container {
         PRIMARY_REGION
     }
 
-    private static class SplitPaneListenerList extends ListenerList<SplitPaneListener> implements
-        SplitPaneListener {
-        @Override
-        public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
-            forEach(listener -> listener.topLeftChanged(splitPane, previousTopLeft));
-        }
-
-        @Override
-        public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
-            forEach(listener -> listener.bottomRightChanged(splitPane, previousBottomRight));
-        }
-
-        @Override
-        public void orientationChanged(SplitPane splitPane) {
-            forEach(listener -> listener.orientationChanged(splitPane));
-        }
-
-        @Override
-        public void primaryRegionChanged(SplitPane splitPane) {
-            forEach(listener -> listener.primaryRegionChanged(splitPane));
-        }
-
-        @Override
-        public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
-            forEach(listener -> listener.splitRatioChanged(splitPane, previousSplitRatio));
-        }
-
-        @Override
-        public void lockedChanged(SplitPane splitPane) {
-            forEach(listener -> listener.lockedChanged(splitPane));
-        }
-
-        @Override
-        public void resizeModeChanged(SplitPane splitPane, ResizeMode previousResizeMode) {
-            forEach(listener -> listener.resizeModeChanged(splitPane, previousResizeMode));
-        }
-    }
-
     private Component topLeft = null;
     private Component bottomRight = null;
     private Orientation orientation = null;
@@ -102,7 +65,7 @@ public class SplitPane extends Container {
     private float splitRatio = 0.5f;
     private boolean locked = false;
 
-    private SplitPaneListenerList splitPaneListeners = new SplitPaneListenerList();
+    private SplitPaneListener.Listeners splitPaneListeners = new SplitPaneListener.Listeners();
 
     public SplitPane() {
         this(Orientation.HORIZONTAL);
@@ -139,7 +102,7 @@ public class SplitPane extends Container {
 
             if (topLeft != null) {
                 if (topLeft.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
+                    throw new IllegalArgumentException("Top/left component already has a parent.");
                 }
 
                 // Add the component
@@ -168,7 +131,7 @@ public class SplitPane extends Container {
 
             if (bottomRight != null) {
                 if (bottomRight.getParent() != null) {
-                    throw new IllegalArgumentException("Component already has a parent.");
+                    throw new IllegalArgumentException("Bottom/right component already has a parent.");
                 }
 
                 // Add the component
@@ -179,6 +142,10 @@ public class SplitPane extends Container {
         }
     }
 
+    /**
+     * @return The "top" component of the split pane, which only applies in vertical mode;
+     * otherwise it is <tt>null</tt>.
+     */
     public Component getTop() {
         return (orientation == Orientation.HORIZONTAL) ? null : getTopLeft();
     }
@@ -187,6 +154,10 @@ public class SplitPane extends Container {
         setTopLeft(component);
     }
 
+    /**
+     * @return The "bottom" component of the split pane, which only applies in vertical mode;
+     * otherwise it is <tt>null</tt>.
+     */
     public Component getBottom() {
         return (orientation == Orientation.HORIZONTAL) ? null : getBottomRight();
     }
@@ -195,6 +166,10 @@ public class SplitPane extends Container {
         setBottomRight(component);
     }
 
+    /**
+     * @return The "left" component of the split pane, which only applies in horizontal mode;
+     * otherwise it is <tt>null</tt>.
+     */
     public Component getLeft() {
         return (orientation == Orientation.VERTICAL) ? null : getTopLeft();
     }
@@ -203,6 +178,10 @@ public class SplitPane extends Container {
         setTopLeft(component);
     }
 
+    /**
+     * @return The "right" component of the split pane, which only applies in horizontal mode;
+     * otherwise it is <tt>null</tt>.
+     */
     public Component getRight() {
         return (orientation == Orientation.VERTICAL) ? null : getBottomRight();
     }

@@ -17,11 +17,23 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.wtk.media.Movie;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Movie view listener interface.
  */
 public interface MovieViewListener {
+    /**
+     * Movie view listeners.
+     */
+    public static class Listeners extends ListenerList<MovieViewListener> implements
+        MovieViewListener {
+        @Override
+        public void movieChanged(MovieView movieView, Movie previousMovie) {
+            forEach(listener -> listener.movieChanged(movieView, previousMovie));
+        }
+    }
+
     /**
      * Called when an movie view's movie has changed.
      *

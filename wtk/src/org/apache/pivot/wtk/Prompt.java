@@ -117,39 +117,6 @@ public class Prompt extends Sheet {
         }
     }
 
-    private static class PromptListenerList extends ListenerList<PromptListener> implements
-        PromptListener {
-        @Override
-        public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
-            forEach(listener -> listener.messageTypeChanged(prompt, previousMessageType));
-        }
-
-        @Override
-        public void messageChanged(Prompt prompt, String previousMessage) {
-            forEach(listener -> listener.messageChanged(prompt, previousMessage));
-        }
-
-        @Override
-        public void bodyChanged(Prompt prompt, Component previousBody) {
-            forEach(listener -> listener.bodyChanged(prompt, previousBody));
-        }
-
-        @Override
-        public void optionInserted(Prompt prompt, int index) {
-            forEach(listener -> listener.optionInserted(prompt, index));
-        }
-
-        @Override
-        public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
-            forEach(listener -> listener.optionsRemoved(prompt, index, removed));
-        }
-
-        @Override
-        public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
-            forEach(listener -> listener.selectedOptionChanged(prompt, previousSelectedOption));
-        }
-    }
-
     private MessageType messageType = null;
     private String message = null;
     private Component body = null;
@@ -158,7 +125,7 @@ public class Prompt extends Sheet {
     private OptionSequence optionSequence = new OptionSequence();
     private int selectedOptionIndex = -1;
 
-    private PromptListenerList promptListeners = new PromptListenerList();
+    private PromptListener.Listeners promptListeners = new PromptListener.Listeners();
 
     private static Resources resources = null;
 

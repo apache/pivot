@@ -17,14 +17,38 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Accordion listener interface.
  */
 public interface AccordionListener {
     /**
-     * Accordion listener adapter.
+     * Accordion listeners.
      */
+    public static class Listeners extends ListenerList<AccordionListener> implements AccordionListener {
+        @Override
+        public void panelInserted(Accordion accordion, int index) {
+            forEach(listener -> listener.panelInserted(accordion, index));
+        }
+
+        @Override
+        public void panelsRemoved(Accordion accordion, int index, Sequence<Component> panels) {
+            forEach(listener -> listener.panelsRemoved(accordion, index, panels));
+        }
+
+        @Override
+        public void headerDataRendererChanged(Accordion accordion,
+            Button.DataRenderer previousHeaderDataRenderer) {
+            forEach(listener -> listener.headerDataRendererChanged(accordion, previousHeaderDataRenderer));
+        }
+    }
+
+    /**
+     * Accordion listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements AccordionListener {
         @Override
         public void panelInserted(Accordion accordion, int index) {
@@ -49,7 +73,8 @@ public interface AccordionListener {
      * @param accordion The accordion that has changed.
      * @param index     The index of the newly inserted panel.
      */
-    public void panelInserted(Accordion accordion, int index);
+    default public void panelInserted(Accordion accordion, int index) {
+    }
 
     /**
      * Called when a panel has been removed from an accordion's panel sequence.
@@ -58,7 +83,8 @@ public interface AccordionListener {
      * @param index     The starting index of the panel(s) that were removed.
      * @param removed   The sequence of removed panels.
      */
-    public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed);
+    default public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
+    }
 
     /**
      * Called when an accordion's header data renderer has changed.
@@ -66,6 +92,7 @@ public interface AccordionListener {
      * @param accordion                  The accordion that was changed.
      * @param previousHeaderDataRenderer The previous version of the header data renderer.
      */
-    public void headerDataRendererChanged(Accordion accordion,
-        Button.DataRenderer previousHeaderDataRenderer);
+    default public void headerDataRendererChanged(Accordion accordion,
+        Button.DataRenderer previousHeaderDataRenderer) {
+    }
 }

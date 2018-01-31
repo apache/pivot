@@ -29,66 +29,14 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("content")
 public class Rollup extends Container {
-    private static class RollupListenerList extends ListenerList<RollupListener> implements
-        RollupListener {
-        @Override
-        public void headingChanged(Rollup rollup, Component previousHeading) {
-            for (RollupListener listener : this) {
-                listener.headingChanged(rollup, previousHeading);
-            }
-        }
-
-        @Override
-        public void contentChanged(Rollup rollup, Component previousContent) {
-            for (RollupListener listener : this) {
-                listener.contentChanged(rollup, previousContent);
-            }
-        }
-
-        @Override
-        public void collapsibleChanged(Rollup rollup) {
-            for (RollupListener listener : this) {
-                listener.collapsibleChanged(rollup);
-            }
-        }
-    }
-
-    private static class RollupStateListenerList extends ListenerList<RollupStateListener>
-        implements RollupStateListener {
-        @Override
-        public Vote previewExpandedChange(Rollup rollup) {
-            Vote vote = Vote.APPROVE;
-
-            for (RollupStateListener listener : this) {
-                vote = vote.tally(listener.previewExpandedChange(rollup));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void expandedChangeVetoed(Rollup rollup, Vote reason) {
-            for (RollupStateListener listener : this) {
-                listener.expandedChangeVetoed(rollup, reason);
-            }
-        }
-
-        @Override
-        public void expandedChanged(Rollup rollup) {
-            for (RollupStateListener listener : this) {
-                listener.expandedChanged(rollup);
-            }
-        }
-    }
-
     private Component heading = null;
     private Component content = null;
 
     private boolean expanded = true;
     private boolean collapsible = true;
 
-    private RollupListenerList rollupListeners = new RollupListenerList();
-    private RollupStateListenerList rollupStateListeners = new RollupStateListenerList();
+    private RollupListener.Listeners rollupListeners = new RollupListener.Listeners();
+    private RollupStateListener.Listeners rollupStateListeners = new RollupStateListener.Listeners();
 
     public Rollup() {
         this(false, null);

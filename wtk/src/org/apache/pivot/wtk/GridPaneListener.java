@@ -17,14 +17,53 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Grid pane listener interface.
  */
 public interface GridPaneListener {
     /**
-     * Grid pane listener adapter.
+     * Grid pane listeners.
      */
+    public static class Listeners extends ListenerList<GridPaneListener> implements
+        GridPaneListener {
+        @Override
+        public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+            forEach(listener -> listener.columnCountChanged(gridPane, previousColumnCount));
+        }
+
+        @Override
+        public void rowInserted(GridPane gridPane, int index) {
+            forEach(listener -> listener.rowInserted(gridPane, index));
+        }
+
+        @Override
+        public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
+            forEach(listener -> listener.rowsRemoved(gridPane, index, rows));
+        }
+
+        @Override
+        public void cellInserted(GridPane.Row row, int column) {
+            forEach(listener -> listener.cellInserted(row, column));
+        }
+
+        @Override
+        public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
+            forEach(listener -> listener.cellsRemoved(row, column, removed));
+        }
+
+        @Override
+        public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
+            forEach(listener -> listener.cellUpdated(row, column, previousComponent));
+        }
+    }
+
+    /**
+     * Grid pane listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements GridPaneListener {
         @Override
         public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
@@ -63,7 +102,8 @@ public interface GridPaneListener {
      * @param gridPane            The grid pane that has changed.
      * @param previousColumnCount The previous column count for the grid.
      */
-    public void columnCountChanged(GridPane gridPane, int previousColumnCount);
+    default public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+    }
 
     /**
      * Called when a row has been inserted into a grid pane.
@@ -71,7 +111,8 @@ public interface GridPaneListener {
      * @param gridPane The grid pane that has changed.
      * @param index    The index of the row that was just inserted.
      */
-    public void rowInserted(GridPane gridPane, int index);
+    default public void rowInserted(GridPane gridPane, int index) {
+    }
 
     /**
      * Called when rows have been removed from a grid pane.
@@ -80,7 +121,8 @@ public interface GridPaneListener {
      * @param index    The starting index of the row(s) that were removed.
      * @param rows     The complete sequence of removed rows.
      */
-    public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows);
+    default public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
+    }
 
     /**
      * Called when a cell has been inserted into a grid pane.
@@ -88,7 +130,8 @@ public interface GridPaneListener {
      * @param row    The parent row of the cell that was inserted.
      * @param column The column index of the inserted cell.
      */
-    public void cellInserted(GridPane.Row row, int column);
+    default public void cellInserted(GridPane.Row row, int column) {
+    }
 
     /**
      * Called when cells have been removed from a grid pane.
@@ -97,7 +140,8 @@ public interface GridPaneListener {
      * @param column  The starting column index of the removed cells.
      * @param removed The complete sequence of removed cells.
      */
-    public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed);
+    default public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
+    }
 
     /**
      * Called when a cell has been updated in a grid pane.
@@ -106,5 +150,6 @@ public interface GridPaneListener {
      * @param column            The column index of the updated cell.
      * @param previousComponent The previous contents of this cell.
      */
-    public void cellUpdated(GridPane.Row row, int column, Component previousComponent);
+    default public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
+    }
 }

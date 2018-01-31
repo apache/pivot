@@ -43,7 +43,9 @@ public class ImageView extends Component {
          * Defines the supported load type mappings.
          */
         public enum Type {
-            IMAGE, URL, NAME
+            IMAGE,
+            URL,
+            NAME
         }
 
         /**
@@ -93,46 +95,14 @@ public class ImageView extends Component {
         public Object valueOf(Image image);
     }
 
-    private static class ImageViewListenerList extends ListenerList<ImageViewListener> implements
-        ImageViewListener {
-        @Override
-        public void imageChanged(ImageView imageView, Image previousImage) {
-            forEach(listener -> listener.imageChanged(imageView, previousImage));
-        }
-
-        @Override
-        public void asynchronousChanged(ImageView imageView) {
-            forEach(listener -> listener.asynchronousChanged(imageView));
-        }
-    }
-
-    private static class ImageViewBindingListenerList extends
-        ListenerList<ImageViewBindingListener> implements ImageViewBindingListener {
-        @Override
-        public void imageKeyChanged(ImageView imageView, String previousImageKey) {
-            forEach(listener -> listener.imageKeyChanged(imageView, previousImageKey));
-        }
-
-        @Override
-        public void imageBindTypeChanged(ImageView imageView, BindType previousImageBindType) {
-            forEach(listener -> listener.imageBindTypeChanged(imageView, previousImageBindType));
-        }
-
-        @Override
-        public void imageBindMappingChanged(ImageView imageView,
-            ImageView.ImageBindMapping previousImageBindMapping) {
-            forEach(listener -> listener.imageBindMappingChanged(imageView, previousImageBindMapping));
-        }
-    }
-
     private Image image = null;
     private boolean asynchronous = false;
     private String imageKey = null;
     private BindType imageBindType = BindType.BOTH;
     private ImageBindMapping imageBindMapping = null;
 
-    private ImageViewListenerList imageViewListeners = new ImageViewListenerList();
-    private ImageViewBindingListenerList imageViewBindingListeners = new ImageViewBindingListenerList();
+    private ImageViewListener.Listeners imageViewListeners = new ImageViewListener.Listeners();
+    private ImageViewBindingListener.Listeners imageViewBindingListeners = new ImageViewBindingListener.Listeners();
 
     // Maintains a mapping of image URL to image views that should be notified when
     // an asynchronously loaded image is available

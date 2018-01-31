@@ -27,61 +27,12 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("content")
 public class Expander extends Container {
-    private static class ExpanderListenerList extends ListenerList<ExpanderListener> implements
-        ExpanderListener {
-        @Override
-        public void titleChanged(Expander expander, String previousTitle) {
-            for (ExpanderListener listener : this) {
-                listener.titleChanged(expander, previousTitle);
-            }
-        }
-
-        @Override
-        public void collapsibleChanged(Expander expander) {
-            for (ExpanderListener listener : this) {
-                listener.collapsibleChanged(expander);
-            }
-        }
-
-        @Override
-        public Vote previewExpandedChange(Expander expander) {
-            Vote vote = Vote.APPROVE;
-
-            for (ExpanderListener listener : this) {
-                vote = vote.tally(listener.previewExpandedChange(expander));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void expandedChangeVetoed(Expander expander, Vote reason) {
-            for (ExpanderListener listener : this) {
-                listener.expandedChangeVetoed(expander, reason);
-            }
-        }
-
-        @Override
-        public void expandedChanged(Expander expander) {
-            for (ExpanderListener listener : this) {
-                listener.expandedChanged(expander);
-            }
-        }
-
-        @Override
-        public void contentChanged(Expander expander, Component previousContent) {
-            for (ExpanderListener listener : this) {
-                listener.contentChanged(expander, previousContent);
-            }
-        }
-    }
-
     private String title = null;
     private boolean collapsible = true;
     private boolean expanded = true;
     private Component content = null;
 
-    private ExpanderListenerList expanderListeners = new ExpanderListenerList();
+    private ExpanderListener.Listeners expanderListeners = new ExpanderListener.Listeners();
 
     public Expander() {
         installSkin(Expander.class);
@@ -127,7 +78,7 @@ public class Expander extends Container {
     public void setCollapsible(boolean collapsible) {
         if (collapsible != this.collapsible) {
             if (!collapsible && !expanded) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Expander cannot be collapsed and yet not collapsible.");
             }
 
             this.collapsible = collapsible;
@@ -142,7 +93,7 @@ public class Expander extends Container {
     public void setExpanded(boolean expanded) {
         if (expanded != this.expanded) {
             if (!collapsible && !expanded) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Expander cannot be collapsed and yet not collapsible.");
             }
 
             Vote vote = expanderListeners.previewExpandedChange(this);

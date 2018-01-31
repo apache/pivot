@@ -16,13 +16,43 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Scroll bar listener interface.
  */
 public interface ScrollBarListener {
     /**
-     * Scroll bar listener adapter.
+     * Scroll bar listeners.
      */
+    public static class Listeners extends ListenerList<ScrollBarListener> implements ScrollBarListener {
+        @Override
+        public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
+            forEach(listener -> listener.orientationChanged(scrollBar, previousOrientation));
+        }
+
+        @Override
+        public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+            int previousExtent) {
+            forEach(listener -> listener.scopeChanged(scrollBar, previousStart, previousEnd, previousExtent));
+        }
+
+        @Override
+        public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
+            forEach(listener -> listener.unitIncrementChanged(scrollBar, previousUnitIncrement));
+        }
+
+        @Override
+        public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
+            forEach(listener -> listener.blockIncrementChanged(scrollBar, previousBlockIncrement));
+        }
+    }
+
+    /**
+     * Scroll bar listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ScrollBarListener {
         @Override
         public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
@@ -52,7 +82,8 @@ public interface ScrollBarListener {
      * @param scrollBar The scroll bar that changed orientation.
      * @param previousOrientation The previous orientation.
      */
-    public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation);
+    default public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
+    }
 
     /**
      * Called when a scroll bar's scope has changed.
@@ -62,8 +93,9 @@ public interface ScrollBarListener {
      * @param previousEnd The previous end value.
      * @param previousExtent The previous scroll bar extent value.
      */
-    public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
-        int previousExtent);
+    default public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+        int previousExtent) {
+    }
 
     /**
      * Called when a scroll bar's unit increment has changed.
@@ -71,7 +103,8 @@ public interface ScrollBarListener {
      * @param scrollBar The scroll bar that changed.
      * @param previousUnitIncrement The previous unit increment value.
      */
-    public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement);
+    default public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
+    }
 
     /**
      * Called when a scroll bar's block increment has changed.
@@ -79,5 +112,6 @@ public interface ScrollBarListener {
      * @param scrollBar The scroll bar that changed.
      * @param previousBlockIncrement The previous block increment value.
      */
-    public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement);
+    default public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
+    }
 }

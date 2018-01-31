@@ -20,14 +20,65 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Commons VFS browser listener interface.
  */
 public interface VFSBrowserListener {
     /**
-     * Commons VFS browser listener adapter.
+     * VFS Browser listeners.
      */
+    public static class Listeners extends ListenerList<VFSBrowserListener>
+        implements VFSBrowserListener {
+        @Override
+        public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {
+            forEach(listener -> listener.managerChanged(fileBrowser, previousManager));
+        }
+
+        @Override
+        public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
+            forEach(listener -> listener.rootDirectoryChanged(fileBrowser, previousRootDirectory));
+        }
+
+        @Override
+        public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
+            forEach(listener -> listener.homeDirectoryChanged(fileBrowser, previousHomeDirectory));
+        }
+
+        @Override
+        public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
+            forEach(listener -> listener.selectedFileAdded(fileBrowser, file));
+        }
+
+        @Override
+        public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
+            forEach(listener -> listener.selectedFileRemoved(fileBrowser, file));
+        }
+
+        @Override
+        public void selectedFilesChanged(VFSBrowser fileBrowser,
+            Sequence<FileObject> previousSelectedFiles) {
+            forEach(listener -> listener.selectedFilesChanged(fileBrowser, previousSelectedFiles));
+        }
+
+        @Override
+        public void multiSelectChanged(VFSBrowser fileBrowser) {
+            forEach(listener -> listener.multiSelectChanged(fileBrowser));
+        }
+
+        @Override
+        public void disabledFileFilterChanged(VFSBrowser fileBrowser,
+            Filter<FileObject> previousDisabledFileFilter) {
+            forEach(listener -> listener.disabledFileFilterChanged(fileBrowser, previousDisabledFileFilter));
+        }
+    }
+
+    /**
+     * Commons VFS browser listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements VFSBrowserListener {
         @Override
         public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {
@@ -79,7 +130,8 @@ public interface VFSBrowserListener {
      * @param fileBrowser     The browser that has changed.
      * @param previousManager The previous file manager for this browser.
      */
-    public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager);
+    default public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {
+    }
 
     /**
      * Called when a file browser's root directory has changed.
@@ -87,7 +139,8 @@ public interface VFSBrowserListener {
      * @param fileBrowser           The browser that has changed.
      * @param previousRootDirectory The previous root directory that we were browsing.
      */
-    public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory);
+    default public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
+    }
 
     /**
      * Called when a file browser's home directory has changed.
@@ -95,7 +148,8 @@ public interface VFSBrowserListener {
      * @param fileBrowser           The browser that has changed.
      * @param previousHomeDirectory The previous home directory.
      */
-    public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory);
+    default public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
+    }
 
     /**
      * Called when a file has been added to a file browser's selection.
@@ -103,7 +157,8 @@ public interface VFSBrowserListener {
      * @param fileBrowser The source of this event.
      * @param file        The file newly added to the selection.
      */
-    public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file);
+    default public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
+    }
 
     /**
      * Called when a file has been removed from a file browser's selection.
@@ -111,7 +166,8 @@ public interface VFSBrowserListener {
      * @param fileBrowser The source of this event.
      * @param file        The file just removed from the selection.
      */
-    public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file);
+    default public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
+    }
 
     /**
      * Called when a file browser's selection state has been reset.
@@ -119,15 +175,17 @@ public interface VFSBrowserListener {
      * @param fileBrowser           The source of this event.
      * @param previousSelectedFiles The sequence of files that were previously selected.
      */
-    public void selectedFilesChanged(VFSBrowser fileBrowser,
-        Sequence<FileObject> previousSelectedFiles);
+    default public void selectedFilesChanged(VFSBrowser fileBrowser,
+        Sequence<FileObject> previousSelectedFiles) {
+    }
 
     /**
      * Called when a file browser's multi-select flag has changed.
      *
      * @param fileBrowser The browser that has changed selection modes.
      */
-    public void multiSelectChanged(VFSBrowser fileBrowser);
+    default public void multiSelectChanged(VFSBrowser fileBrowser) {
+    }
 
     /**
      * Called when a file browser's file filter has changed.
@@ -135,6 +193,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser                The source of this event.
      * @param previousDisabledFileFilter The previous filter for disabled files (if any).
      */
-    public void disabledFileFilterChanged(VFSBrowser fileBrowser,
-        Filter<FileObject> previousDisabledFileFilter);
+    default public void disabledFileFilterChanged(VFSBrowser fileBrowser,
+        Filter<FileObject> previousDisabledFileFilter) {
+    }
 }

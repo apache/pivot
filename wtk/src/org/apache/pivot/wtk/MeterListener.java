@@ -16,13 +16,38 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Meter listener interface.
  */
 public interface MeterListener {
     /**
-     * Meter listener adapter.
+     * Meter listeners.
      */
+    public static class Listeners extends ListenerList<MeterListener> implements
+        MeterListener {
+        @Override
+        public void orientationChanged(Meter meter) {
+            forEach(listener -> listener.orientationChanged(meter));
+        }
+
+        @Override
+        public void percentageChanged(Meter meter, double oldPercentage) {
+            forEach(listener -> listener.percentageChanged(meter, oldPercentage));
+        }
+
+        @Override
+        public void textChanged(Meter meter, String oldText) {
+            forEach(listener -> listener.textChanged(meter, oldText));
+        }
+    }
+
+    /**
+     * Meter listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements MeterListener {
         @Override
         public void percentageChanged(Meter meter, double previousPercentage) {
@@ -46,7 +71,8 @@ public interface MeterListener {
      * @param meter The meter that is changing.
      * @param previousPercentage What the meter's percentage value used to be.
      */
-    public void percentageChanged(Meter meter, double previousPercentage);
+    default public void percentageChanged(Meter meter, double previousPercentage) {
+    }
 
     /**
      * Called when a meter's text has changed.
@@ -54,12 +80,14 @@ public interface MeterListener {
      * @param meter The meter that has changed.
      * @param previousText The previous meter text.
      */
-    public void textChanged(Meter meter, String previousText);
+    default public void textChanged(Meter meter, String previousText) {
+    }
 
     /**
      * Called when a sliders's orientation has changed.
      *
      * @param meter The source of the event.
      */
-    public void orientationChanged(Meter meter);
+    default public void orientationChanged(Meter meter) {
+    }
 }

@@ -17,14 +17,47 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Form listener interface.
  */
 public interface FormListener {
     /**
-     * Form listener adapter.
+     * Form listeners.
      */
+    public static class Listeners extends ListenerList<FormListener> implements FormListener {
+        @Override
+        public void sectionInserted(Form form, int index) {
+            forEach(listener -> listener.sectionInserted(form, index));
+        }
+
+        @Override
+        public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
+            forEach(listener -> listener.sectionsRemoved(form, index, removed));
+        }
+
+        @Override
+        public void sectionHeadingChanged(Form.Section section) {
+            forEach(listener -> listener.sectionHeadingChanged(section));
+        }
+
+        @Override
+        public void fieldInserted(Form.Section section, int index) {
+            forEach(listener -> listener.fieldInserted(section, index));
+        }
+
+        @Override
+        public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
+            forEach(listener -> listener.fieldsRemoved(section, index, fields));
+        }
+    }
+
+    /**
+     * Form listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements FormListener {
         @Override
         public void sectionInserted(Form form, int index) {
@@ -58,7 +91,8 @@ public interface FormListener {
      * @param form  The form that has changed.
      * @param index The index where the new section has been inserted.
      */
-    public void sectionInserted(Form form, int index);
+    default public void sectionInserted(Form form, int index) {
+    }
 
     /**
      * Called when form sections have been removed.
@@ -67,14 +101,16 @@ public interface FormListener {
      * @param index   The starting index where sections were removed.
      * @param removed The complete sequence of the removed sections.
      */
-    public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed);
+    default public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
+    }
 
     /**
      * Called when a form section's heading has changed.
      *
      * @param section The form section whose heading changed.
      */
-    public void sectionHeadingChanged(Form.Section section);
+    default public void sectionHeadingChanged(Form.Section section) {
+    }
 
     /**
      * Called when a form field has been inserted.
@@ -82,7 +118,8 @@ public interface FormListener {
      * @param section The enclosing form section that has changed.
      * @param index   The index where a new field has been inserted.
      */
-    public void fieldInserted(Form.Section section, int index);
+    default public void fieldInserted(Form.Section section, int index) {
+    }
 
     /**
      * Called when form fields have been removed.
@@ -91,5 +128,6 @@ public interface FormListener {
      * @param index   The starting index where fields were removed.
      * @param fields  The complete sequence of fields that were removed.
      */
-    public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields);
+    default public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
+    }
 }

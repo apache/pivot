@@ -34,52 +34,20 @@ public class FileBrowserSheet extends Sheet {
      * Enumeration defining supported modes.
      */
     public enum Mode {
-        OPEN, OPEN_MULTIPLE, SAVE_AS, SAVE_TO
+        OPEN,
+        OPEN_MULTIPLE,
+        SAVE_AS,
+        SAVE_TO
     }
 
     private static final String USER_HOME = System.getProperty("user.home");
-
-    private static class FileBrowserSheetListenerList extends
-        ListenerList<FileBrowserSheetListener> implements FileBrowserSheetListener {
-        @Override
-        public void modeChanged(FileBrowserSheet fileBrowserSheet,
-            FileBrowserSheet.Mode previousMode) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.modeChanged(fileBrowserSheet, previousMode);
-            }
-        }
-
-        @Override
-        public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet,
-            File previousRootDirectory) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.rootDirectoryChanged(fileBrowserSheet, previousRootDirectory);
-            }
-        }
-
-        @Override
-        public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
-            Sequence<File> previousSelectedFiles) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.selectedFilesChanged(fileBrowserSheet, previousSelectedFiles);
-            }
-        }
-
-        @Override
-        public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
-            Filter<File> previousDisabledFileFilter) {
-            for (FileBrowserSheetListener listener : this) {
-                listener.disabledFileFilterChanged(fileBrowserSheet, previousDisabledFileFilter);
-            }
-        }
-    }
 
     private Mode mode;
     private File rootDirectory;
     private FileList selectedFiles = new FileList();
     private Filter<File> disabledFileFilter = null;
 
-    private FileBrowserSheetListenerList fileBrowserSheetListeners = new FileBrowserSheetListenerList();
+    private FileBrowserSheetListener.Listeners fileBrowserSheetListeners = new FileBrowserSheetListener.Listeners();
 
     /**
      * Creates a new FileBrowserSheet <p> Note that this version set by default

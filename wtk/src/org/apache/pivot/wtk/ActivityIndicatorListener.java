@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Activity indicator listener interface.
  */
 public interface ActivityIndicatorListener {
+    /**
+     * Activity indicator listeners.
+     */
+    public static class Listeners extends ListenerList<ActivityIndicatorListener>
+        implements ActivityIndicatorListener {
+        @Override
+        public void activeChanged(ActivityIndicator activityIndicator) {
+            forEach(listener -> listener.activeChanged(activityIndicator));
+        }
+    }
+
     /**
      * Called when an activity indicator's active state has changed.
      *

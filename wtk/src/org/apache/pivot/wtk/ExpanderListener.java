@@ -16,15 +16,60 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
+import org.apache.pivot.util.ListenerList;
 
 /**
- * Expander listener interface..
+ * Expander listener interface.
  */
 public interface ExpanderListener {
     /**
-     * Expander listener adapter.
+     * Expander listeners.
      */
+    public static class Listeners extends ListenerList<ExpanderListener> implements
+        ExpanderListener {
+        @Override
+        public void titleChanged(Expander expander, String previousTitle) {
+            forEach(listener -> listener.titleChanged(expander, previousTitle));
+        }
+
+        @Override
+        public void collapsibleChanged(Expander expander) {
+            forEach(listener -> listener.collapsibleChanged(expander));
+        }
+
+        @Override
+        public Vote previewExpandedChange(Expander expander) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewExpandedChange(expander)));
+
+            return result.get();
+        }
+
+        @Override
+        public void expandedChangeVetoed(Expander expander, Vote reason) {
+            forEach(listener -> listener.expandedChangeVetoed(expander, reason));
+        }
+
+        @Override
+        public void expandedChanged(Expander expander) {
+            forEach(listener -> listener.expandedChanged(expander));
+        }
+
+        @Override
+        public void contentChanged(Expander expander, Component previousContent) {
+            forEach(listener -> listener.contentChanged(expander, previousContent));
+        }
+    }
+
+    /**
+     * Expander listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements ExpanderListener {
         @Override
         public void titleChanged(Expander expander, String previousTitle) {
@@ -63,14 +108,16 @@ public interface ExpanderListener {
      * @param expander      The expander that has changed.
      * @param previousTitle The previous title for the expander.
      */
-    public void titleChanged(Expander expander, String previousTitle);
+    default public void titleChanged(Expander expander, String previousTitle) {
+    }
 
     /**
      * Called when an expander's collapsible flag has changed.
      *
      * @param expander The expander that has changed.
      */
-    public void collapsibleChanged(Expander expander);
+    default public void collapsibleChanged(Expander expander) {
+    }
 
     /**
      * Called to preview an expanded change event.
@@ -78,7 +125,9 @@ public interface ExpanderListener {
      * @param expander The expander that is about to expand or collapse.
      * @return The consensus vote as to whether to allow the change.
      */
-    public Vote previewExpandedChange(Expander expander);
+    default public Vote previewExpandedChange(Expander expander) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when an expanded change event has been vetoed.
@@ -86,14 +135,16 @@ public interface ExpanderListener {
      * @param expander The expander that is not going to change.
      * @param reason   The consensus vote that disallowed the change.
      */
-    public void expandedChangeVetoed(Expander expander, Vote reason);
+    default public void expandedChangeVetoed(Expander expander, Vote reason) {
+    }
 
     /**
      * Called when an expander's expanded state has changed.
      *
      * @param expander The expander that has now expanded or collapsed.
      */
-    public void expandedChanged(Expander expander);
+    default public void expandedChanged(Expander expander) {
+    }
 
     /**
      * Called when an expander's content component has changed.
@@ -101,5 +152,6 @@ public interface ExpanderListener {
      * @param expander        The expander that has changed content.
      * @param previousContent The previous content of the expander.
      */
-    public void contentChanged(Expander expander, Component previousContent);
+    default public void contentChanged(Expander expander, Component previousContent) {
+    }
 }

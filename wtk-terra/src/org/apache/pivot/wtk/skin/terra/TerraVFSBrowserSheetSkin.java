@@ -173,7 +173,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
             }
         });
 
-        fileBrowser.getFileBrowserListeners().add(new VFSBrowserListener.Adapter() {
+        fileBrowser.getFileBrowserListeners().add(new VFSBrowserListener() {
             @Override
             public void rootDirectoryChanged(VFSBrowser fileBrowserArgument,
                 FileObject previousRootDirectory) {

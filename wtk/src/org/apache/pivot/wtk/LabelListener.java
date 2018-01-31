@@ -16,15 +16,33 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Label listener interface.
  */
 public interface LabelListener {
     /**
-     * Label listener adapter.
+     * Label listeners.
      */
-    public static class Adapter implements LabelListener {
+    public static class Listeners extends ListenerList<LabelListener> implements LabelListener {
+        @Override
+        public void textChanged(Label label, String previousText) {
+            forEach(listener -> listener.textChanged(label, previousText));
+        }
 
+        @Override
+        public void maximumLengthChanged(Label label, int previousMaximumLength) {
+            forEach(listener -> listener.maximumLengthChanged(label, previousMaximumLength));
+        }
+    }
+
+    /**
+     * Label listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
+    public static class Adapter implements LabelListener {
         @Override
         public void textChanged(Label label, String previousText) {
             // empty block
@@ -42,7 +60,8 @@ public interface LabelListener {
      * @param label        The label that has changed.
      * @param previousText The previous text associated with the label.
      */
-    public void textChanged(Label label, String previousText);
+    default public void textChanged(Label label, String previousText) {
+    }
 
     /**
      * Called when a label text maximum length has changed.
@@ -50,6 +69,6 @@ public interface LabelListener {
      * @param label                 The label that has changed.
      * @param previousMaximumLength The previous maximum text length for the label.
      */
-    public void maximumLengthChanged(Label label, int previousMaximumLength);
-
+    default public void maximumLengthChanged(Label label, int previousMaximumLength) {
+    }
 }

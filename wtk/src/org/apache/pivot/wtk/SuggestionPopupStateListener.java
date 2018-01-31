@@ -16,15 +16,44 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Suggestion popup state listener interface.
  */
 public interface SuggestionPopupStateListener extends SuggestionPopupCloseListener {
     /**
-     * Suggestion popup state listener adapter.
+     * Suggestion popup state listeners.
      */
+    public static class Listeners extends ListenerList<SuggestionPopupStateListener>
+        implements SuggestionPopupStateListener {
+        @Override
+        public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
+            VoteResult vote = new VoteResult();
+
+            forEach(listener -> vote.tally(listener.previewSuggestionPopupClose(suggestionPopup, result)));
+
+            return vote.get();
+        }
+
+        @Override
+        public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
+            forEach(listener -> listener.suggestionPopupCloseVetoed(suggestionPopup, reason));
+        }
+
+        @Override
+        public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+            forEach(listener -> listener.suggestionPopupClosed(suggestionPopup));
+        }
+    }
+
+    /**
+     * Suggestion popup state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements SuggestionPopupStateListener {
         @Override
         public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
@@ -49,7 +78,9 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
      * @param result What the result would be.
      * @return What this listener thinks about closing the popup with this result.
      */
-    public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result);
+    default public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a suggestion popup close event has been vetoed.
@@ -57,5 +88,6 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
      * @param suggestionPopup The source of this event.
      * @param reason The accumulated vote that forced the veto.
      */
-    public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason);
+    default public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
+    }
 }

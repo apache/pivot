@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Slider value listener interface.
  */
 public interface SliderValueListener {
+    /**
+     * Slider value listeners.
+     */
+    public static class Listeners extends ListenerList<SliderValueListener>
+        implements SliderValueListener {
+        @Override
+        public void valueChanged(Slider slider, int previousValue) {
+            forEach(listener -> listener.valueChanged(slider, previousValue));
+        }
+    }
+
     /**
      * Called when a slider's value has changed.
      *
