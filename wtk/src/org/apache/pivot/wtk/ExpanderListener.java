@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.util.VoteResult;
-import org.apache.pivot.util.ListenerList;
 
 /**
  * Expander listener interface.
