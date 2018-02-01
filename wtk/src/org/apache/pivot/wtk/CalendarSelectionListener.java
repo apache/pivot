@@ -17,11 +17,23 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.CalendarDate;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Calendar selection listener interface.
  */
 public interface CalendarSelectionListener {
+    /**
+     * Calendar selection listeners.
+     */
+    public static class Listeners extends ListenerList<CalendarSelectionListener>
+        implements CalendarSelectionListener {
+        @Override
+        public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
+            forEach(listener -> listener.selectedDateChanged(calendar, previousSelectedDate));
+        }
+    }
+
     /**
      * Called when a calendar's selected date has changed.
      *

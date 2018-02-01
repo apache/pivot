@@ -17,11 +17,47 @@
 package org.apache.pivot.charts;
 
 import org.apache.pivot.collections.List;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Chart view listener interface.
  */
 public interface ChartViewListener {
+    /**
+     * Chart view listener list.
+     */
+    public static class Listeners extends ListenerList<ChartViewListener> implements ChartViewListener {
+        @Override
+        public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
+            forEach(listener -> listener.chartDataChanged(chartView, previousChartData));
+        }
+
+        @Override
+        public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
+            forEach(listener -> listener.seriesNameKeyChanged(chartView, previousSeriesNameKey));
+        }
+
+        @Override
+        public void titleChanged(ChartView chartView, String previousTitle) {
+            forEach(listener -> listener.titleChanged(chartView, previousTitle));
+        }
+
+        @Override
+        public void horizontalAxisLabelChanged(ChartView chartView, String previousXAxisLabel) {
+            forEach(listener -> listener.horizontalAxisLabelChanged(chartView, previousXAxisLabel));
+        }
+
+        @Override
+        public void verticalAxisLabelChanged(ChartView chartView, String previousYAxisLabel) {
+            forEach(listener -> listener.verticalAxisLabelChanged(chartView, previousYAxisLabel));
+        }
+
+        @Override
+        public void showLegendChanged(ChartView chartView) {
+            forEach(listener -> listener.showLegendChanged(chartView));
+        }
+    }
+
     /**
      * Fired when a chart view's data changes.
      *

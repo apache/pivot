@@ -16,13 +16,40 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Calendar binding listener interface.
  */
 public interface CalendarBindingListener {
     /**
-     * Calendar binding listener adapter.
+     * Calendar binding listeners.
      */
+    public static class Listeners extends ListenerList<CalendarBindingListener>
+        implements CalendarBindingListener {
+        @Override
+        public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
+            forEach(listener -> listener.selectedDateKeyChanged(calendar, previousSelectedDateKey));
+        }
+
+        @Override
+        public void selectedDateBindTypeChanged(Calendar calendar,
+            BindType previousSelectedDateBindType) {
+            forEach(listener -> listener.selectedDateBindTypeChanged(calendar, previousSelectedDateBindType));
+        }
+
+        @Override
+        public void selectedDateBindMappingChanged(Calendar calendar,
+            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
+            forEach(listener -> listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping));
+        }
+    }
+
+    /**
+     * Calendar binding listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements CalendarBindingListener {
         @Override
         public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
@@ -48,7 +75,8 @@ public interface CalendarBindingListener {
      * @param calendar                The calendar that was updated.
      * @param previousSelectedDateKey The previous bind key for the calendar's selected date.
      */
-    public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey);
+    default public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
+    }
 
     /**
      * Called when a calendar's selected date bind type has changed.
@@ -56,7 +84,8 @@ public interface CalendarBindingListener {
      * @param calendar                     The calendar that has changed.
      * @param previousSelectedDateBindType The previous bind type for the selected date.
      */
-    public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType);
+    default public void selectedDateBindTypeChanged(Calendar calendar, BindType previousSelectedDateBindType) {
+    }
 
     /**
      * Called when a calendar's selected date bind mapping has changed.
@@ -64,7 +93,8 @@ public interface CalendarBindingListener {
      * @param calendar                        The calendar that changed.
      * @param previousSelectedDateBindMapping The previous bind mapping for the selected date.
      */
-    public void selectedDateBindMappingChanged(Calendar calendar,
-        Calendar.SelectedDateBindMapping previousSelectedDateBindMapping);
+    default public void selectedDateBindMappingChanged(Calendar calendar,
+        Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
+    }
 
 }

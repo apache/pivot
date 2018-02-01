@@ -16,15 +16,44 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Vote;
+import org.apache.pivot.util.VoteResult;
 
 /**
  * Menu popup state listener interface.
  */
 public interface MenuPopupStateListener {
     /**
-     * Menu popup state listener adapter.
+     * Menu popup state listeners.
      */
+    public static class Listeners extends ListenerList<MenuPopupStateListener>
+        implements MenuPopupStateListener {
+        @Override
+        public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
+            VoteResult result = new VoteResult();
+
+            forEach(listener -> result.tally(listener.previewMenuPopupClose(menuPopup, immediate)));
+
+            return result.get();
+        }
+
+        @Override
+        public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+            forEach(listener -> listener.menuPopupCloseVetoed(menuPopup, reason));
+        }
+
+        @Override
+        public void menuPopupClosed(MenuPopup menuPopup) {
+            forEach(listener -> listener.menuPopupClosed(menuPopup));
+        }
+    }
+
+    /**
+     * Menu popup state listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements MenuPopupStateListener {
         @Override
         public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
@@ -49,7 +78,9 @@ public interface MenuPopupStateListener {
      * @param immediate Whether the close is meant to be immediate.
      * @return The verdict as to whether to close from this listener.
      */
-    public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate);
+    default public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
+        return Vote.APPROVE;
+    }
 
     /**
      * Called when a menu popup close event has been vetoed.
@@ -57,12 +88,14 @@ public interface MenuPopupStateListener {
      * @param menuPopup The source of the event.
      * @param reason The accumulated vote that caused the veto.
      */
-    public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason);
+    default public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+    }
 
     /**
      * Called when a menu popup has closed.
      *
      * @param menuPopup The menu popup that closed.
      */
-    public void menuPopupClosed(MenuPopup menuPopup);
+    default public void menuPopupClosed(MenuPopup menuPopup) {
+    }
 }

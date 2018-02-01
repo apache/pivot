@@ -35,10 +35,8 @@ import org.apache.pivot.wtk.Window;
 public class CalendarTest implements Application {
     private Window window = null;
 
-    @BXML
-    private Calendar calendar = null;
-    @BXML
-    private CalendarButton calendarButton = null;
+    @BXML private Calendar calendar = null;
+    @BXML private CalendarButton calendarButton = null;
 
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -57,7 +55,7 @@ public class CalendarTest implements Application {
 
         calendar.setDisabledDateFilter(todayFilter);
 
-        calendarButton.getCalendarButtonListeners().add(new CalendarButtonListener.Adapter() {
+        calendarButton.getCalendarButtonListeners().add(new CalendarButtonListener() {
             @Override
             public void yearChanged(CalendarButton calendarButtonArgument, int previousYear) {
                 disable();

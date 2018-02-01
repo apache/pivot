@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Menu button listener interface.
  */
 public interface MenuButtonListener {
+    /**
+     * Menu button listeners.
+     */
+    public static class Listeners extends ListenerList<MenuButtonListener>
+        implements MenuButtonListener {
+        @Override
+        public void menuChanged(MenuButton menuButton, Menu previousMenu) {
+            forEach(listener -> listener.menuChanged(menuButton, previousMenu));
+        }
+    }
+
     /**
      * Called when a menu button's menu has changed.
      *

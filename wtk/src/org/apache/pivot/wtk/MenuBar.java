@@ -35,27 +35,10 @@ public class MenuBar extends Container {
      */
     @DefaultProperty("menu")
     public static class Item extends Button {
-        private static class ItemListenerList extends ListenerList<ItemListener> implements
-            ItemListener {
-            @Override
-            public void menuChanged(Item item, Menu previousMenu) {
-                for (ItemListener listener : this) {
-                    listener.menuChanged(item, previousMenu);
-                }
-            }
-
-            @Override
-            public void activeChanged(Item item) {
-                for (ItemListener listener : this) {
-                    listener.activeChanged(item);
-                }
-            }
-        }
-
         private Menu menu = null;
         private boolean active = false;
 
-        private ItemListenerList itemListeners = new ItemListenerList();
+        private ItemListener.Listeners itemListeners = new ItemListener.Listeners();
 
         private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new MenuBarItemDataRenderer();
 
@@ -97,7 +80,7 @@ public class MenuBar extends Container {
 
         public void setMenu(Menu menu) {
             if (menu != null && menu.getItem() != null) {
-                throw new IllegalArgumentException("menu already belongs to an item.");
+                throw new IllegalArgumentException("Menu already belongs to an item.");
             }
 
             Menu previousMenu = this.menu;
@@ -165,6 +148,21 @@ public class MenuBar extends Container {
      * Item listener interface.
      */
     public interface ItemListener {
+        /**
+         * Item listeners.
+         */
+        public static class Listeners extends ListenerList<ItemListener> implements ItemListener {
+            @Override
+            public void menuChanged(Item item, Menu previousMenu) {
+                forEach(listener -> listener.menuChanged(item, previousMenu));
+            }
+
+            @Override
+            public void activeChanged(Item item) {
+                forEach(listener -> listener.activeChanged(item));
+            }
+        }
+
         /**
          * Called when an item's menu has changed.
          *
@@ -253,36 +251,12 @@ public class MenuBar extends Container {
         }
     }
 
-    private static class MenuBarListenerList extends ListenerList<MenuBarListener> implements
-        MenuBarListener {
-        @Override
-        public void itemInserted(MenuBar menuBar, int index) {
-            for (MenuBarListener listener : this) {
-                listener.itemInserted(menuBar, index);
-            }
-        }
-
-        @Override
-        public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
-            for (MenuBarListener listener : this) {
-                listener.itemsRemoved(menuBar, index, removed);
-            }
-        }
-
-        @Override
-        public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
-            for (MenuBarListener listener : this) {
-                listener.activeItemChanged(menuBar, previousActiveItem);
-            }
-        }
-    }
-
     private ArrayList<Item> items = new ArrayList<>();
     private ItemSequence itemSequence = new ItemSequence();
 
     private Item activeItem = null;
 
-    private MenuBarListenerList menuBarListeners = new MenuBarListenerList();
+    private MenuBarListener.Listeners menuBarListeners = new MenuBarListener.Listeners();
 
     public MenuBar() {
         installSkin(MenuBar.class);

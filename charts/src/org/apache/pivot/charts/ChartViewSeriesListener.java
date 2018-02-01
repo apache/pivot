@@ -16,10 +16,43 @@
  */
 package org.apache.pivot.charts;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Chart view series listener interface.
  */
 public interface ChartViewSeriesListener {
+    /**
+     * Chart view series listener list.
+     */
+    public static class Listeners extends ListenerList<ChartViewSeriesListener>
+        implements ChartViewSeriesListener {
+        @Override
+        public void seriesInserted(ChartView chartView, int index) {
+            forEach(listener -> listener.seriesInserted(chartView, index));
+        }
+
+        @Override
+        public void seriesRemoved(ChartView chartView, int index, int count) {
+            forEach(listener -> listener.seriesRemoved(chartView, index, count));
+        }
+
+        @Override
+        public void seriesUpdated(ChartView chartView, int index) {
+            forEach(listener -> listener.seriesUpdated(chartView, index));
+        }
+
+        @Override
+        public void seriesCleared(ChartView chartView) {
+            forEach(listener -> listener.seriesCleared(chartView));
+        }
+
+        @Override
+        public void seriesSorted(ChartView chartView) {
+            forEach(listener -> listener.seriesSorted(chartView));
+        }
+    }
+
     /**
      * Fired when a series is inserted into a chart view's data set.
      *

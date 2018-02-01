@@ -17,14 +17,37 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Menu listener interface.
  */
 public interface MenuListener {
     /**
-     * Menu listener adapter.
+     * Menu listeners.
      */
+    public static class Listeners extends ListenerList<MenuListener> implements MenuListener {
+        @Override
+        public void sectionInserted(Menu menu, int index) {
+            forEach(listener -> listener.sectionInserted(menu, index));
+        }
+
+        @Override
+        public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
+            forEach(listener -> listener.sectionsRemoved(menu, index, removed));
+        }
+
+        @Override
+        public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+            forEach(listener -> listener.activeItemChanged(menu, previousActiveItem));
+        }
+    }
+
+    /**
+     * Menu listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements MenuListener {
         @Override
         public void sectionInserted(Menu menu, int index) {
@@ -48,7 +71,8 @@ public interface MenuListener {
      * @param menu The source of the event.
      * @param index Where the menu section was inserted.
      */
-    public void sectionInserted(Menu menu, int index);
+    default public void sectionInserted(Menu menu, int index) {
+    }
 
     /**
      * Called when menu sections have been removed.
@@ -57,7 +81,8 @@ public interface MenuListener {
      * @param index The starting index of the removal.
      * @param removed The actual menu sections that were removed from the menu.
      */
-    public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed);
+    default public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
+    }
 
     /**
      * Called when a menu's active item has changed.
@@ -65,5 +90,6 @@ public interface MenuListener {
      * @param menu The menu that changed.
      * @param previousActiveItem What the previously active menu item was.
      */
-    public void activeItemChanged(Menu menu, Menu.Item previousActiveItem);
+    default public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+    }
 }

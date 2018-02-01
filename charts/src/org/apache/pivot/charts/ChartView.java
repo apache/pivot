@@ -164,7 +164,7 @@ public abstract class ChartView extends Component {
 
             if (category.getChartView() != null) {
                 throw new IllegalArgumentException(
-                    "category is already in use by another chart view.");
+                    "Category is already in use by another chart view.");
             }
 
             categories.insert(category, index);
@@ -280,130 +280,6 @@ public abstract class ChartView extends Component {
         }
     }
 
-    /**
-     * Chart view listener list.
-     */
-    private static class ChartViewListenerList extends ListenerList<ChartViewListener> implements
-        ChartViewListener {
-        @Override
-        public void chartDataChanged(ChartView chartView, List<?> previousChartData) {
-            for (ChartViewListener listener : this) {
-                listener.chartDataChanged(chartView, previousChartData);
-            }
-        }
-
-        @Override
-        public void seriesNameKeyChanged(ChartView chartView, String previousSeriesNameKey) {
-            for (ChartViewListener listener : this) {
-                listener.seriesNameKeyChanged(chartView, previousSeriesNameKey);
-            }
-        }
-
-        @Override
-        public void titleChanged(ChartView chartView, String previousTitle) {
-            for (ChartViewListener listener : this) {
-                listener.titleChanged(chartView, previousTitle);
-            }
-        }
-
-        @Override
-        public void horizontalAxisLabelChanged(ChartView chartView, String previousXAxisLabel) {
-            for (ChartViewListener listener : this) {
-                listener.horizontalAxisLabelChanged(chartView, previousXAxisLabel);
-            }
-        }
-
-        @Override
-        public void verticalAxisLabelChanged(ChartView chartView, String previousYAxisLabel) {
-            for (ChartViewListener listener : this) {
-                listener.verticalAxisLabelChanged(chartView, previousYAxisLabel);
-            }
-        }
-
-        @Override
-        public void showLegendChanged(ChartView chartView) {
-            for (ChartViewListener listener : this) {
-                listener.showLegendChanged(chartView);
-            }
-        }
-    }
-
-    /**
-     * Chart view category listener list.
-     */
-    private static class ChartViewCategoryListenerList extends
-        ListenerList<ChartViewCategoryListener> implements ChartViewCategoryListener {
-        @Override
-        public void categoryInserted(ChartView chartView, int index) {
-            for (ChartViewCategoryListener listener : this) {
-                listener.categoryInserted(chartView, index);
-            }
-        }
-
-        @Override
-        public void categoriesRemoved(ChartView chartView, int index,
-            Sequence<ChartView.Category> categories) {
-            for (ChartViewCategoryListener listener : this) {
-                listener.categoriesRemoved(chartView, index, categories);
-            }
-        }
-
-        @Override
-        public void categoryKeyChanged(ChartView chartView, int index, String previousKey) {
-            for (ChartViewCategoryListener listener : this) {
-                listener.categoryKeyChanged(chartView, index, previousKey);
-            }
-        }
-
-        @Override
-        public void categoryLabelChanged(ChartView chartView, int index, String previousLabel) {
-            for (ChartViewCategoryListener listener : this) {
-                listener.categoryLabelChanged(chartView, index, previousLabel);
-            }
-        }
-    }
-
-    /**
-     * Chart view series listener list.
-     */
-    private static class ChartViewSeriesListenerList extends ListenerList<ChartViewSeriesListener>
-        implements ChartViewSeriesListener {
-        @Override
-        public void seriesInserted(ChartView chartView, int index) {
-            for (ChartViewSeriesListener listener : this) {
-                listener.seriesInserted(chartView, index);
-            }
-        }
-
-        @Override
-        public void seriesRemoved(ChartView chartView, int index, int count) {
-            for (ChartViewSeriesListener listener : this) {
-                listener.seriesRemoved(chartView, index, count);
-            }
-        }
-
-        @Override
-        public void seriesUpdated(ChartView chartView, int index) {
-            for (ChartViewSeriesListener listener : this) {
-                listener.seriesUpdated(chartView, index);
-            }
-        }
-
-        @Override
-        public void seriesCleared(ChartView chartView) {
-            for (ChartViewSeriesListener listener : this) {
-                listener.seriesCleared(chartView);
-            }
-        }
-
-        @Override
-        public void seriesSorted(ChartView chartView) {
-            for (ChartViewSeriesListener listener : this) {
-                listener.seriesSorted(chartView);
-            }
-        }
-    }
-
     protected List<?> chartData;
     private String seriesNameKey;
 
@@ -418,9 +294,9 @@ public abstract class ChartView extends Component {
     private ListHandler chartDataHandler = new ListHandler();
     private ValueMarkersHandler valueMarkersHandler = new ValueMarkersHandler();
 
-    private ChartViewListenerList chartViewListeners = new ChartViewListenerList();
-    private ChartViewCategoryListenerList chartViewCategoryListeners = new ChartViewCategoryListenerList();
-    private ChartViewSeriesListenerList chartViewSeriesListeners = new ChartViewSeriesListenerList();
+    private ChartViewListener.Listeners chartViewListeners = new ChartViewListener.Listeners();
+    private ChartViewCategoryListener.Listeners chartViewCategoryListeners = new ChartViewCategoryListener.Listeners();
+    private ChartViewSeriesListener.Listeners chartViewSeriesListeners = new ChartViewSeriesListener.Listeners();
 
     private List<ValueMarker> valueMarkers;
 

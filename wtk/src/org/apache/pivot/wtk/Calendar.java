@@ -52,59 +52,6 @@ public class Calendar extends Container {
         public Object valueOf(CalendarDate calendarDate);
     }
 
-    private static class CalendarListenerList extends ListenerList<CalendarListener> implements
-        CalendarListener {
-        @Override
-        public void yearChanged(Calendar calendar, int previousYear) {
-            forEach(listener -> listener.yearChanged(calendar, previousYear));
-        }
-
-        @Override
-        public void monthChanged(Calendar calendar, int previousMonth) {
-            forEach(listener -> listener.monthChanged(calendar, previousMonth));
-        }
-
-        @Override
-        public void localeChanged(Calendar calendar, Locale previousLocale) {
-            forEach(listener -> listener.localeChanged(calendar, previousLocale));
-        }
-
-        @Override
-        public void disabledDateFilterChanged(Calendar calendar,
-            Filter<CalendarDate> previousDisabledDateFilter) {
-            forEach(listener -> listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter));
-        }
-    }
-
-    private static class CalendarSelectionListenerList extends
-        ListenerList<CalendarSelectionListener> implements CalendarSelectionListener {
-
-        @Override
-        public void selectedDateChanged(Calendar calendar, CalendarDate previousSelectedDate) {
-            forEach(listener -> listener.selectedDateChanged(calendar, previousSelectedDate));
-        }
-    }
-
-    private static class CalendarBindingListenerList extends
-        ListenerList<CalendarBindingListener> implements CalendarBindingListener {
-        @Override
-        public void selectedDateKeyChanged(Calendar calendar, String previousSelectedDateKey) {
-            forEach(listener -> listener.selectedDateKeyChanged(calendar, previousSelectedDateKey));
-        }
-
-        @Override
-        public void selectedDateBindTypeChanged(Calendar calendar,
-            BindType previousSelectedDateBindType) {
-            forEach(listener -> listener.selectedDateBindTypeChanged(calendar, previousSelectedDateBindType));
-        }
-
-        @Override
-        public void selectedDateBindMappingChanged(Calendar calendar,
-            SelectedDateBindMapping previousSelectedDateBindMapping) {
-            forEach(listener -> listener.selectedDateBindMappingChanged(calendar, previousSelectedDateBindMapping));
-        }
-    }
-
     private int year;
     private int month;
 
@@ -116,9 +63,9 @@ public class Calendar extends Container {
     private BindType selectedDateBindType = BindType.BOTH;
     private SelectedDateBindMapping selectedDateBindMapping = null;
 
-    private CalendarListenerList calendarListeners = new CalendarListenerList();
-    private CalendarSelectionListenerList calendarSelectionListeners = new CalendarSelectionListenerList();
-    private CalendarBindingListenerList calendarBindingListeners = new CalendarBindingListenerList();
+    private CalendarListener.Listeners calendarListeners = new CalendarListener.Listeners();
+    private CalendarSelectionListener.Listeners calendarSelectionListeners = new CalendarSelectionListener.Listeners();
+    private CalendarBindingListener.Listeners calendarBindingListeners = new CalendarBindingListener.Listeners();
 
     public static final String LANGUAGE_KEY = "language";
     public static final String COUNTRY_KEY = "country";

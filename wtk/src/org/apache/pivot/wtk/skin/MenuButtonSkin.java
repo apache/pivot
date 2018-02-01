@@ -63,7 +63,7 @@ public abstract class MenuButtonSkin extends ButtonSkin implements MenuButton.Sk
         }
     };
 
-    private MenuPopupStateListener menuPopupStateListener = new MenuPopupStateListener.Adapter() {
+    private MenuPopupStateListener menuPopupStateListener = new MenuPopupStateListener() {
         @Override
         public Vote previewMenuPopupClose(MenuPopup menuPopupArgument, boolean immediate) {
             if (menuPopupArgument.containsFocus()) {

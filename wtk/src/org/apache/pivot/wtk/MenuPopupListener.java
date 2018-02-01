@@ -16,10 +16,22 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Menu popup listener interface.
  */
 public interface MenuPopupListener {
+    /**
+     * Menu popup listeners.
+     */
+    public static class Listeners extends ListenerList<MenuPopupListener> implements MenuPopupListener {
+        @Override
+        public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
+            forEach(listener -> listener.menuChanged(menuPopup, previousMenu));
+        }
+    }
+
     /**
      * Called when a menu popup's menu has changed.
      *

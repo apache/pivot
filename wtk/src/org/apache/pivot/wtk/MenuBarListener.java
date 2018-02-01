@@ -17,14 +17,37 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Menu bar listener interface.
  */
 public interface MenuBarListener {
     /**
-     * Menu bar listener adapter.
+     * Menu bar listeners.
      */
+    public static class Listeners extends ListenerList<MenuBarListener> implements MenuBarListener {
+        @Override
+        public void itemInserted(MenuBar menuBar, int index) {
+            forEach(listener -> listener.itemInserted(menuBar, index));
+        }
+
+        @Override
+        public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
+            forEach(listener -> listener.itemsRemoved(menuBar, index, removed));
+        }
+
+        @Override
+        public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
+            forEach(listener -> listener.activeItemChanged(menuBar, previousActiveItem));
+        }
+    }
+
+    /**
+     * Menu bar listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements MenuBarListener {
         @Override
         public void itemInserted(MenuBar menuBar, int index) {
@@ -48,7 +71,8 @@ public interface MenuBarListener {
      * @param menuBar The menu bar that changed.
      * @param index The index where a new item was inserted.
      */
-    public void itemInserted(MenuBar menuBar, int index);
+    default public void itemInserted(MenuBar menuBar, int index) {
+    }
 
     /**
      * Called when menu bar items have been removed.
@@ -57,7 +81,8 @@ public interface MenuBarListener {
      * @param index The starting index where items were removed.
      * @param removed The sequence of removed items.
      */
-    public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed);
+    default public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
+    }
 
     /**
      * Called when a menu bar's active item has changed.
@@ -65,5 +90,6 @@ public interface MenuBarListener {
      * @param menuBar The source of the event.
      * @param previousActiveItem Which item was active previously.
      */
-    public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem);
+    default public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
+    }
 }

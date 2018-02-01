@@ -31,14 +31,6 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  */
 @DefaultProperty("menu")
 public class MenuButton extends Button {
-    private static class MenuButtonListenerList extends ListenerList<MenuButtonListener>
-        implements MenuButtonListener {
-        @Override
-        public void menuChanged(MenuButton menuButton, Menu previousMenu) {
-            forEach(listener -> listener.menuChanged(menuButton, previousMenu));
-        }
-    }
-
     /**
      * MenuButton skin interface. MenuButton skins must implement this interface
      * to facilitate additional communication between the component and the
@@ -50,7 +42,7 @@ public class MenuButton extends Button {
 
     private Menu menu = null;
 
-    private MenuButtonListenerList menuButtonListeners = new MenuButtonListenerList();
+    private MenuButtonListener.Listeners menuButtonListeners = new MenuButtonListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
@@ -86,7 +78,7 @@ public class MenuButton extends Button {
 
     public void setMenu(Menu menu) {
         if (menu != null && menu.getItem() != null) {
-            throw new IllegalArgumentException("menu already belongs to an item.");
+            throw new IllegalArgumentException("Menu already belongs to an item.");
         }
 
         Menu previousMenu = this.menu;

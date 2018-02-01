@@ -16,10 +16,23 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.util.ListenerList;
+
 /**
  * Menu item selection listener interface.
  */
 public interface MenuItemSelectionListener {
+    /**
+     * Menu item selection listeners.
+     */
+    public static class Listeners extends ListenerList<MenuItemSelectionListener>
+        implements MenuItemSelectionListener {
+        @Override
+        public void itemSelected(Menu.Item menuItem) {
+            forEach(listener -> listener.itemSelected(menuItem));
+        }
+    }
+
     /**
      * Called when a descendant item of this menu has been selected.
      *

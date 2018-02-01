@@ -35,29 +35,12 @@ public class Menu extends Container {
      */
     @DefaultProperty("menu")
     public static class Item extends Button {
-        private static class ItemListenerList extends ListenerList<ItemListener> implements
-            ItemListener {
-            @Override
-            public void menuChanged(Item item, Menu previousMenu) {
-                for (ItemListener listener : this) {
-                    listener.menuChanged(item, previousMenu);
-                }
-            }
-
-            @Override
-            public void activeChanged(Item item) {
-                for (ItemListener listener : this) {
-                    listener.activeChanged(item);
-                }
-            }
-        }
-
         private Section section = null;
 
         private Menu menu = null;
         private boolean active = false;
 
-        private ItemListenerList itemListeners = new ItemListenerList();
+        private ItemListener.Listeners itemListeners = new ItemListener.Listeners();
 
         private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new MenuItemDataRenderer();
 
@@ -103,7 +86,7 @@ public class Menu extends Container {
 
         public void setMenu(Menu menu) {
             if (menu != null && menu.getItem() != null) {
-                throw new IllegalArgumentException("menu already belongs to an item.");
+                throw new IllegalArgumentException("Menu already belongs to an item.");
             }
 
             Menu previousMenu = this.menu;
@@ -129,7 +112,7 @@ public class Menu extends Container {
 
         public void setActive(boolean active) {
             if (active && (getParent() == null || !isEnabled())) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Cannot set menu active when it has no parent, or it is disabled.");
             }
 
             if (this.active != active) {
@@ -150,8 +133,7 @@ public class Menu extends Container {
                         activeItem.setActive(false);
                     }
                 } else {
-                    // If this item is currently active, clear the
-                    // selection
+                    // If this item is currently active, clear the selection
                     if (activeItem == this) {
                         menuLocal.setActiveItem(null);
                     }
@@ -200,6 +182,21 @@ public class Menu extends Container {
      */
     public interface ItemListener {
         /**
+         * Item listeners.
+         */
+        public static class Listeners extends ListenerList<ItemListener> implements ItemListener {
+            @Override
+            public void menuChanged(Item item, Menu previousMenu) {
+                forEach(listener -> listener.menuChanged(item, previousMenu));
+            }
+
+            @Override
+            public void activeChanged(Item item) {
+                forEach(listener -> listener.activeChanged(item));
+            }
+        }
+
+        /**
          * Called when an item's menu has changed.
          *
          * @param item The item that has been moved.
@@ -220,36 +217,12 @@ public class Menu extends Container {
      * within a menu.
      */
     public static class Section implements Sequence<Item>, Iterable<Item> {
-        private static class SectionListenerList extends ListenerList<SectionListener> implements
-            SectionListener {
-            @Override
-            public void itemInserted(Menu.Section section, int index) {
-                for (SectionListener listener : this) {
-                    listener.itemInserted(section, index);
-                }
-            }
-
-            @Override
-            public void itemsRemoved(Menu.Section section, int index, Sequence<Item> removed) {
-                for (SectionListener listener : this) {
-                    listener.itemsRemoved(section, index, removed);
-                }
-            }
-
-            @Override
-            public void nameChanged(Menu.Section section, String previousName) {
-                for (SectionListener listener : this) {
-                    listener.nameChanged(section, previousName);
-                }
-            }
-        }
-
         private Menu menu = null;
 
         private String name = null;
         private ArrayList<Item> items = new ArrayList<>();
 
-        private SectionListenerList sectionListeners = new SectionListenerList();
+        private SectionListener.Listeners sectionListeners = new SectionListener.Listeners();
 
         public Menu getMenu() {
             return menu;
@@ -279,7 +252,7 @@ public class Menu extends Container {
         @Override
         public void insert(Item item, int index) {
             if (item.getSection() != null) {
-                throw new IllegalArgumentException("item already has a section.");
+                throw new IllegalArgumentException("Menu.Item already has a section.");
             }
 
             items.insert(item, index);
@@ -355,6 +328,26 @@ public class Menu extends Container {
      */
     public interface SectionListener {
         /**
+         * Section listeners.
+         */
+        public static class Listeners extends ListenerList<SectionListener> implements SectionListener {
+            @Override
+            public void itemInserted(Menu.Section section, int index) {
+                forEach(listener -> listener.itemInserted(section, index));
+            }
+
+            @Override
+            public void itemsRemoved(Menu.Section section, int index, Sequence<Item> removed) {
+                forEach(listener -> listener.itemsRemoved(section, index, removed));
+            }
+
+            @Override
+            public void nameChanged(Menu.Section section, String previousName) {
+                forEach(listener -> listener.nameChanged(section, previousName));
+            }
+        }
+
+        /**
          * Called when a menu item has been inserted.
          *
          * @param section The section that is changing.
@@ -398,7 +391,7 @@ public class Menu extends Container {
         @Override
         public void insert(Section section, int index) {
             if (section.menu != null) {
-                throw new IllegalArgumentException("section already has a menu.");
+                throw new IllegalArgumentException("Menu.Section already has a menu.");
             }
 
             sections.insert(section, index);
@@ -469,40 +462,6 @@ public class Menu extends Container {
         }
     }
 
-    private static class MenuListenerList extends ListenerList<MenuListener> implements
-        MenuListener {
-        @Override
-        public void sectionInserted(Menu menu, int index) {
-            for (MenuListener listener : this) {
-                listener.sectionInserted(menu, index);
-            }
-        }
-
-        @Override
-        public void sectionsRemoved(Menu menu, int index, Sequence<Section> removed) {
-            for (MenuListener listener : this) {
-                listener.sectionsRemoved(menu, index, removed);
-            }
-        }
-
-        @Override
-        public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
-            for (MenuListener listener : this) {
-                listener.activeItemChanged(menu, previousActiveItem);
-            }
-        }
-    }
-
-    private static class MenuItemSelectionListenerList extends
-        ListenerList<MenuItemSelectionListener> implements MenuItemSelectionListener {
-        @Override
-        public void itemSelected(Menu.Item menuItem) {
-            for (MenuItemSelectionListener listener : this) {
-                listener.itemSelected(menuItem);
-            }
-        }
-    }
-
     private Item item = null;
 
     private ArrayList<Section> sections = new ArrayList<>();
@@ -510,8 +469,8 @@ public class Menu extends Container {
 
     private Item activeItem = null;
 
-    private MenuListenerList menuListeners = new MenuListenerList();
-    private MenuItemSelectionListenerList menuItemSelectionListeners = new MenuItemSelectionListenerList();
+    private MenuListener.Listeners menuListeners = new MenuListener.Listeners();
+    private MenuItemSelectionListener.Listeners menuItemSelectionListeners = new MenuItemSelectionListener.Listeners();
 
     public Menu() {
         installSkin(Menu.class);

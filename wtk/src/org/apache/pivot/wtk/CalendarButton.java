@@ -33,62 +33,6 @@ import org.apache.pivot.wtk.content.CalendarButtonDataRenderer;
  * hidden until the user pushes the button.
  */
 public class CalendarButton extends Button {
-    private static class CalendarButtonListenerList extends ListenerList<CalendarButtonListener>
-        implements CalendarButtonListener {
-        @Override
-        public void yearChanged(CalendarButton calendarButton, int previousYear) {
-            forEach(listener -> listener.yearChanged(calendarButton, previousYear));
-        }
-
-        @Override
-        public void monthChanged(CalendarButton calendarButton, int previousMonth) {
-            forEach(listener -> listener.monthChanged(calendarButton, previousMonth));
-        }
-
-        @Override
-        public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
-            forEach(listener -> listener.localeChanged(calendarButton, previousLocale));
-        }
-
-        @Override
-        public void disabledDateFilterChanged(CalendarButton calendarButton,
-            Filter<CalendarDate> previousDisabledDateFilter) {
-            forEach(listener -> listener.disabledDateFilterChanged(calendarButton, previousDisabledDateFilter));
-        }
-    }
-
-    private static class CalendarButtonSelectionListenerList extends
-        ListenerList<CalendarButtonSelectionListener> implements CalendarButtonSelectionListener {
-
-        @Override
-        public void selectedDateChanged(CalendarButton calendarButton,
-            CalendarDate previousSelectedDate) {
-            forEach(listener -> listener.selectedDateChanged(calendarButton, previousSelectedDate));
-        }
-    }
-
-    private static class CalendarButtonBindingListenerList extends
-        ListenerList<CalendarButtonBindingListener> implements CalendarButtonBindingListener {
-        @Override
-        public void selectedDateKeyChanged(CalendarButton calendarButton,
-            String previousSelectedDateKey) {
-            forEach(listener -> listener.selectedDateKeyChanged(calendarButton, previousSelectedDateKey));
-        }
-
-        @Override
-        public void selectedDateBindTypeChanged(CalendarButton calendarButton,
-            BindType previousSelectedDateBindType) {
-            forEach(listener -> listener.selectedDateBindTypeChanged(calendarButton, previousSelectedDateBindType));
-        }
-
-        @Override
-        public void selectedDateBindMappingChanged(CalendarButton calendarButton,
-            Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
-            forEach(listener -> listener.selectedDateBindMappingChanged(calendarButton,
-                previousSelectedDateBindMapping));
-        }
-    }
-
     /**
      * CalendarButton skin interface. CalendarButton skins must implement this
      * interface to facilitate additional communication between the component
@@ -109,9 +53,9 @@ public class CalendarButton extends Button {
     private BindType selectedDateBindType = BindType.BOTH;
     private Calendar.SelectedDateBindMapping selectedDateBindMapping = null;
 
-    private CalendarButtonListenerList calendarButtonListeners = new CalendarButtonListenerList();
-    private CalendarButtonSelectionListenerList calendarButtonSelectionListeners = new CalendarButtonSelectionListenerList();
-    private CalendarButtonBindingListenerList calendarButtonBindingListeners = new CalendarButtonBindingListenerList();
+    private CalendarButtonListener.Listeners calendarButtonListeners = new CalendarButtonListener.Listeners();
+    private CalendarButtonSelectionListener.Listeners calendarButtonSelectionListeners = new CalendarButtonSelectionListener.Listeners();
+    private CalendarButtonBindingListener.Listeners calendarButtonBindingListeners = new CalendarButtonBindingListener.Listeners();
 
     public static final String LANGUAGE_KEY = "language";
     public static final String COUNTRY_KEY = "country";
@@ -431,5 +375,12 @@ public class CalendarButton extends Button {
      */
     public ListenerList<CalendarButtonSelectionListener> getCalendarButtonSelectionListeners() {
         return calendarButtonSelectionListeners;
+    }
+
+    /**
+     * @return The calendar button binding listener list.
+     */
+    public ListenerList<CalendarButtonBindingListener> getCalendarButtonBindingListeners() {
+        return calendarButtonBindingListeners;
     }
 }

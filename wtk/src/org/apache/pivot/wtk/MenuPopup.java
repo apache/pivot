@@ -26,51 +26,13 @@ import org.apache.pivot.util.Vote;
  */
 @DefaultProperty("menu")
 public class MenuPopup extends Window {
-    private static class MenuPopupListenerList extends ListenerList<MenuPopupListener> implements
-        MenuPopupListener {
-        @Override
-        public void menuChanged(MenuPopup menuPopup, Menu previousMenu) {
-            for (MenuPopupListener listener : this) {
-                listener.menuChanged(menuPopup, previousMenu);
-            }
-        }
-    }
-
-    private static class MenuPopupStateListenerList extends ListenerList<MenuPopupStateListener>
-        implements MenuPopupStateListener {
-        @Override
-        public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
-            Vote vote = Vote.APPROVE;
-
-            for (MenuPopupStateListener listener : this) {
-                vote = vote.tally(listener.previewMenuPopupClose(menuPopup, immediate));
-            }
-
-            return vote;
-        }
-
-        @Override
-        public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
-            for (MenuPopupStateListener listener : this) {
-                listener.menuPopupCloseVetoed(menuPopup, reason);
-            }
-        }
-
-        @Override
-        public void menuPopupClosed(MenuPopup menuPopup) {
-            for (MenuPopupStateListener listener : this) {
-                listener.menuPopupClosed(menuPopup);
-            }
-        }
-    }
-
     private Menu menu;
     private boolean contextMenu = false;
 
     private boolean closing = false;
 
-    private MenuPopupListenerList menuPopupListeners = new MenuPopupListenerList();
-    private MenuPopupStateListenerList menuPopupStateListeners = new MenuPopupStateListenerList();
+    private MenuPopupListener.Listeners menuPopupListeners = new MenuPopupListener.Listeners();
+    private MenuPopupStateListener.Listeners menuPopupStateListeners = new MenuPopupStateListener.Listeners();
 
     public MenuPopup() {
         this(null);

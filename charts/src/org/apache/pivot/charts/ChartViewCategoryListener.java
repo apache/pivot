@@ -17,11 +17,39 @@
 package org.apache.pivot.charts;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Chart view category listener interface.
  */
 public interface ChartViewCategoryListener {
+    /**
+     * Chart view category listener list.
+     */
+    public static class Listeners extends ListenerList<ChartViewCategoryListener>
+        implements ChartViewCategoryListener {
+        @Override
+        public void categoryInserted(ChartView chartView, int index) {
+            forEach(listener -> listener.categoryInserted(chartView, index));
+        }
+
+        @Override
+        public void categoriesRemoved(ChartView chartView, int index,
+            Sequence<ChartView.Category> categories) {
+            forEach(listener -> listener.categoriesRemoved(chartView, index, categories));
+        }
+
+        @Override
+        public void categoryKeyChanged(ChartView chartView, int index, String previousKey) {
+            forEach(listener -> listener.categoryKeyChanged(chartView, index, previousKey));
+        }
+
+        @Override
+        public void categoryLabelChanged(ChartView chartView, int index, String previousLabel) {
+            forEach(listener -> listener.categoryLabelChanged(chartView, index, previousLabel));
+        }
+    }
+
     /**
      * Fired when a category is inserted into a chart view.
      *

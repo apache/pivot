@@ -20,14 +20,43 @@ import java.util.Locale;
 
 import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.util.Filter;
+import org.apache.pivot.util.ListenerList;
 
 /**
  * Calendar listener interface.
  */
 public interface CalendarListener {
     /**
-     * Calendar listener adapter.
+     * Calendar listeners.
      */
+    public static class Listeners extends ListenerList<CalendarListener> implements CalendarListener {
+        @Override
+        public void yearChanged(Calendar calendar, int previousYear) {
+            forEach(listener -> listener.yearChanged(calendar, previousYear));
+        }
+
+        @Override
+        public void monthChanged(Calendar calendar, int previousMonth) {
+            forEach(listener -> listener.monthChanged(calendar, previousMonth));
+        }
+
+        @Override
+        public void localeChanged(Calendar calendar, Locale previousLocale) {
+            forEach(listener -> listener.localeChanged(calendar, previousLocale));
+        }
+
+        @Override
+        public void disabledDateFilterChanged(Calendar calendar,
+            Filter<CalendarDate> previousDisabledDateFilter) {
+            forEach(listener -> listener.disabledDateFilterChanged(calendar, previousDisabledDateFilter));
+        }
+    }
+
+    /**
+     * Calendar listener adapter.
+     * @deprecated Since 2.1 and Java 8 the interface itself has default implementations.
+     */
+    @Deprecated
     public static class Adapter implements CalendarListener {
         @Override
         public void yearChanged(Calendar calendar, int previousYear) {
@@ -57,7 +86,8 @@ public interface CalendarListener {
      * @param calendar     The calendar that changed.
      * @param previousYear The previously selected year.
      */
-    public void yearChanged(Calendar calendar, int previousYear);
+    default public void yearChanged(Calendar calendar, int previousYear) {
+    }
 
     /**
      * Called when a calendar's month value has changed.
@@ -65,7 +95,8 @@ public interface CalendarListener {
      * @param calendar      The calendar that changed.
      * @param previousMonth The previously selected month value.
      */
-    public void monthChanged(Calendar calendar, int previousMonth);
+    default public void monthChanged(Calendar calendar, int previousMonth) {
+    }
 
     /**
      * Called when a calendar's locale has changed.
@@ -73,7 +104,8 @@ public interface CalendarListener {
      * @param calendar       The calendar that changed.
      * @param previousLocale The previously selected locale for the calendar.
      */
-    public void localeChanged(Calendar calendar, Locale previousLocale);
+    default public void localeChanged(Calendar calendar, Locale previousLocale) {
+    }
 
     /**
      * Called when a calendar's disabled date filter has changed.
@@ -81,6 +113,7 @@ public interface CalendarListener {
      * @param calendar                   The calendar that changed.
      * @param previousDisabledDateFilter The previous disabled date filter.
      */
-    public void disabledDateFilterChanged(Calendar calendar,
-        Filter<CalendarDate> previousDisabledDateFilter);
+    default public void disabledDateFilterChanged(Calendar calendar,
+        Filter<CalendarDate> previousDisabledDateFilter) {
+    }
 }
