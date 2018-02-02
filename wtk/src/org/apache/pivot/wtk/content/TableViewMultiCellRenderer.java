@@ -23,6 +23,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.TableView;
 
@@ -71,9 +72,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         }
 
         public void setValueClass(Class<?> valueClass) {
-            if (valueClass == null) {
-                throw new IllegalArgumentException("valueClass is null.");
-            }
+            Utils.checkNull(valueClass, "valueClass");
 
             Class<?> previousValueClass = this.valueClass;
 
@@ -88,9 +87,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         }
 
         public void setValueClass(String valueClass) {
-            if (valueClass == null) {
-                throw new IllegalArgumentException("valueClass is null.");
-            }
+            Utils.checkNullOrEmpty(valueClass, "valueClass");
 
             try {
                 setValueClass(Class.forName(valueClass));
@@ -104,9 +101,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         }
 
         public void setCellRenderer(TableView.CellRenderer cellRenderer) {
-            if (cellRenderer == null) {
-                throw new IllegalArgumentException("cellRenderer is null.");
-            }
+            Utils.checkNull(cellRenderer, "cellRenderer");
 
             TableView.CellRenderer previousCellRenderer = this.cellRenderer;
 
@@ -136,9 +131,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
         @Override
         public void insert(RendererMapping item, int index) {
-            if (item == null) {
-                throw new IllegalArgumentException("item is null.");
-            }
+            Utils.checkNull(item, "item");
 
             Class<?> valueClass = item.getValueClass();
 
@@ -157,13 +150,9 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
 
         @Override
         public RendererMapping update(int index, RendererMapping item) {
-            if (item == null) {
-                throw new IllegalArgumentException("item is null.");
-            }
+            Utils.checkNull(item, "item");
 
-            if (index >= getLength()) {
-                throw new IndexOutOfBoundsException();
-            }
+            Utils.checkZeroBasedIndex(index, getLength());
 
             RendererMapping previousItem = mappings.get(index);
 
@@ -367,9 +356,7 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
     }
 
     public void setDefaultRenderer(TableView.CellRenderer defaultRenderer) {
-        if (defaultRenderer == null) {
-            throw new IllegalArgumentException("defaultRenderer is null.");
-        }
+        Utils.checkNull(defaultRenderer, "defaultRenderer");
 
         this.defaultRenderer = defaultRenderer;
     }

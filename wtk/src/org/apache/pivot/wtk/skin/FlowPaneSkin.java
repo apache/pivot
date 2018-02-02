@@ -18,6 +18,8 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FlowPane;
@@ -66,7 +68,7 @@ public class FlowPaneSkin extends ContainerSkin {
         }
 
         // Include left and right padding values
-        preferredWidth += padding.left + padding.right;
+        preferredWidth += padding.getWidth();
 
         return preferredWidth;
     }
@@ -99,7 +101,7 @@ public class FlowPaneSkin extends ContainerSkin {
             // Break the components into multiple rows
             preferredHeight = 0;
 
-            int contentWidth = Math.max(width - (padding.left + padding.right), 0);
+            int contentWidth = Math.max(width - padding.getWidth(), 0);
 
             int rowCount = 0;
 
@@ -151,7 +153,7 @@ public class FlowPaneSkin extends ContainerSkin {
         }
 
         // Include top and bottom padding values
-        preferredHeight += padding.top + padding.bottom;
+        preferredHeight += padding.getHeight();
 
         return preferredHeight;
     }
@@ -191,9 +193,9 @@ public class FlowPaneSkin extends ContainerSkin {
         }
 
         // Include padding
-        preferredWidth += padding.left + padding.right;
+        preferredWidth += padding.getWidth();
 
-        return new Dimensions(preferredWidth, ascent + descent + padding.top + padding.bottom);
+        return new Dimensions(preferredWidth, ascent + descent + padding.getHeight());
     }
 
     @Override
@@ -203,11 +205,10 @@ public class FlowPaneSkin extends ContainerSkin {
         int baseline = -1;
 
         if (alignToBaseline) {
-            int contentWidth = Math.max(width - (padding.left + padding.right), 0);
+            int contentWidth = Math.max(width - padding.getWidth(), 0);
 
             // Break the components into multiple rows, and calculate the
-            // baseline of the
-            // first row
+            // baseline of the first row
             int rowWidth = 0;
             for (int i = 0, n = flowPane.getLength(); i < n; i++) {
                 Component component = flowPane.get(i);
@@ -216,8 +217,7 @@ public class FlowPaneSkin extends ContainerSkin {
                     Dimensions size = component.getPreferredSize();
 
                     if (rowWidth + size.width > contentWidth && rowWidth > 0) {
-                        // The component is too big to fit in the remaining
-                        // space,
+                        // The component is too big to fit in the remaining space,
                         // and it is not the only component in this row; wrap
                         break;
                     }
@@ -238,7 +238,7 @@ public class FlowPaneSkin extends ContainerSkin {
     public void layout() {
         FlowPane flowPane = (FlowPane) getComponent();
         int width = getWidth();
-        int contentWidth = Math.max(width - (padding.left + padding.right), 0);
+        int contentWidth = Math.max(width - padding.getWidth(), 0);
 
         // Break the components into multiple rows
         ArrayList<ArrayList<Component>> rows = new ArrayList<>();
@@ -335,9 +335,7 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     public void setAlignment(HorizontalAlignment alignment) {
-        if (alignment == null) {
-            throw new IllegalArgumentException("alignment is null.");
-        }
+        Utils.checkNull(alignment, "alignment");
 
         this.alignment = alignment;
         invalidateComponent();
@@ -358,9 +356,7 @@ public class FlowPaneSkin extends ContainerSkin {
      * @param padding The individual padding values for each edge.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -370,14 +366,19 @@ public class FlowPaneSkin extends ContainerSkin {
      * Sets the amount of space to leave between the edge of the FlowPane and
      * its components.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FlowPane and
+     * its components.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom, right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -398,11 +399,7 @@ public class FlowPaneSkin extends ContainerSkin {
      * @param padding The single padding value for all four sides.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -413,10 +410,6 @@ public class FlowPaneSkin extends ContainerSkin {
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -425,17 +418,14 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     public void setHorizontalSpacing(int horizontalSpacing) {
-        if (horizontalSpacing < 0) {
-            throw new IllegalArgumentException("horizontalSpacing is negative.");
-        }
+        Utils.checkNonNegative(horizontalSpacing, "horizontalSpacing");
+
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
     }
 
     public final void setHorizontalSpacing(Number horizontalSpacing) {
-        if (horizontalSpacing == null) {
-            throw new IllegalArgumentException("horizontalSpacing is null.");
-        }
+        Utils.checkNull(horizontalSpacing, "horizontalSpacing");
 
         setHorizontalSpacing(horizontalSpacing.intValue());
     }
@@ -445,17 +435,14 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     public void setVerticalSpacing(int verticalSpacing) {
-        if (verticalSpacing < 0) {
-            throw new IllegalArgumentException("verticalSpacing is negative.");
-        }
+        Utils.checkNonNegative(verticalSpacing, "verticalSpacing");
+
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
     }
 
     public final void setVerticalSpacing(Number verticalSpacing) {
-        if (verticalSpacing == null) {
-            throw new IllegalArgumentException("verticalSpacing is null.");
-        }
+        Utils.checkNull(verticalSpacing, "verticalSpacing");
 
         setVerticalSpacing(verticalSpacing.intValue());
     }

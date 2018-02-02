@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 
@@ -45,14 +46,14 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     }
 
     public void setNumberFormat(NumberFormat numberFormat) {
-        if (numberFormat == null) {
-            throw new IllegalArgumentException("numberFormat is null.");
-        }
+        Utils.checkNull(numberFormat, "numberFormat");
 
         this.numberFormat = numberFormat;
     }
 
     public void setNumberFormat(String numberFormat) {
+        Utils.checkNullOrEmpty(numberFormat, "numberFormat");
+
         setNumberFormat(new DecimalFormat(numberFormat));
     }
 

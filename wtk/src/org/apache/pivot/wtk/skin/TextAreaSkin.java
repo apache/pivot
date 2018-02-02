@@ -530,8 +530,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
     public final void setFont(String font) {
-        Utils.checkNull(font, "font");
-
         setFont(decodeFont(font));
     }
 
@@ -541,8 +539,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setFont(Dictionary<String, ?> font) {
-        Utils.checkNull(font, "font");
-
         setFont(Theme.deriveFont(font));
     }
 
@@ -559,9 +555,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param color The new foreground text color.
      */
     public void setColor(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
+        Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
@@ -574,11 +568,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * values recognized by Pivot}.
      */
     public final void setColor(String color) {
-        if (color == null) {
-            throw new IllegalArgumentException("color is null.");
-        }
-
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getBackgroundColor() {
@@ -592,7 +582,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public Color getInactiveColor() {
@@ -607,7 +597,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public final void setInactiveColor(String inactiveColor) {
-        setColor(GraphicsUtilities.decodeColor(inactiveColor));
+        setColor(GraphicsUtilities.decodeColor(inactiveColor, "inactiveColor"));
     }
 
     public Color getSelectionColor() {
@@ -615,16 +605,14 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setSelectionColor(Color selectionColor) {
-        if (selectionColor == null) {
-            throw new IllegalArgumentException("selectionColor is null.");
-        }
+        Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
     public final void setSelectionColor(String selectionColor) {
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor,  "selectionColor"));
     }
 
     public Color getSelectionBackgroundColor() {
@@ -632,20 +620,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
+        Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        if (selectionBackgroundColor == null) {
-            throw new IllegalArgumentException("selectionBackgroundColor is null.");
-        }
-
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor,
+            "selectionBackgroundColor"));
     }
 
     public Color getInactiveSelectionColor() {
@@ -653,20 +636,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setInactiveSelectionColor(Color inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        if (inactiveSelectionColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionColor is null.");
-        }
-
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor,
+            "inactiveSelectionColor"));
     }
 
     public Color getInactiveSelectionBackgroundColor() {
@@ -674,20 +652,15 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
+        Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        if (inactiveSelectionBackgroundColor == null) {
-            throw new IllegalArgumentException("inactiveSelectionBackgroundColor is null.");
-        }
-
-        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor,
+            "inactiveSelectionBackgroundColor"));
     }
 
     /**
@@ -703,9 +676,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param margin The individual margin values for all edges.
      */
     public void setMargin(Insets margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
+        Utils.checkNull(margin, "margin");
 
         this.margin = margin;
         invalidateComponent();
@@ -714,14 +685,18 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     /**
      * Sets the amount of space between the edge of the TextArea and its text.
      *
-     * @param margin A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param margin A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setMargin(Dictionary<String, ?> margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
+        setMargin(new Insets(margin));
+    }
 
+    /**
+     * Sets the amount of space between the edge of the TextArea and its text.
+     *
+     * @param margin A sequence with values in the order [top, left, bottom, right].
+     */
+    public final void setMargin(Sequence<?> margin) {
         setMargin(new Insets(margin));
     }
 
@@ -740,11 +715,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * @param margin The single value to use for all the margins.
      */
     public final void setMargin(Number margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
-
-        setMargin(margin.intValue());
+        setMargin(new Insets(margin));
     }
 
     /**
@@ -754,10 +725,6 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
      * keys left, top, bottom, and/or right.
      */
     public final void setMargin(String margin) {
-        if (margin == null) {
-            throw new IllegalArgumentException("margin is null.");
-        }
-
         setMargin(Insets.decode(margin));
     }
 
@@ -810,9 +777,7 @@ public class TextAreaSkin extends ComponentSkin implements TextArea.Skin, TextAr
     }
 
     public void setTabWidth(int tabWidth) {
-        if (tabWidth < 0) {
-            throw new IllegalArgumentException("tabWidth is negative.");
-        }
+        Utils.checkNonNegative(tabWidth, "tabWidth");
 
         this.tabWidth = tabWidth;
     }

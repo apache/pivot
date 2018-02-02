@@ -770,7 +770,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     /**
      * Sets the amount of space between the edge of the TextPane and its Document.
      *
-     * @param margin A sequence with values in the order {top, left, bottom, right}.
+     * @param margin A sequence with values in the order [top, left, bottom, right].
      */
     public final void setMargin(Sequence<?> margin) {
         setMargin(new Insets(margin));

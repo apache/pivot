@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -341,7 +342,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
 
     @SuppressWarnings("unused")
     public TerraColorChooserSkin() {
-        tablePane.getStyles().put("horizontalSpacing", Integer.valueOf(6));
+        setSpacing(6);
         new TablePane.Column(tablePane, 31, true);  // note: this is useful, even if not used directly
         new TablePane.Column(tablePane, 4, true);  // note: this is useful, even if not used directly
 
@@ -386,21 +387,17 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     }
 
     public int getSpacing() {
-        return ((Integer) tablePane.getStyles().get("horizontalSpacing")).intValue();
+        return tablePane.getStyles().getInt("horizontalSpacing");
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
 
-        tablePane.getStyles().put("horizontalSpacing", Integer.valueOf(spacing));
+        tablePane.getStyles().putInt("horizontalSpacing", spacing);
     }
 
     public final void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         tablePane.getStyles().put("horizontalSpacing", spacing);
     }
@@ -417,8 +414,7 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
             float value = 0f;
 
             if (color != null) {
-                float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(),
-                    null);
+                float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
                 hue = hsb[0];
                 saturation = hsb[1];
                 value = hsb[2];

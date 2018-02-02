@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -150,8 +151,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         // The preferred width of the grid pane is the sum of the column
         // widths, plus padding and spacing
 
-        int preferredWidth = padding.left + padding.right + metadata.visibleColumnCount
-            * preferredCellWidth;
+        int preferredWidth = (metadata.visibleColumnCount * preferredCellWidth) +
+            padding.getWidth();
 
         if (metadata.visibleColumnCount > 1) {
             preferredWidth += (metadata.visibleColumnCount - 1) * horizontalSpacing;
@@ -190,8 +191,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         // The preferred height of the grid pane is the sum of the row
         // heights, plus padding and spacing
 
-        int preferredHeight = padding.top + padding.bottom + metadata.visibleRowCount
-            * preferredCellHeight;
+        int preferredHeight = (metadata.visibleRowCount * preferredCellHeight) +
+            padding.getHeight();
 
         if (metadata.visibleRowCount > 1) {
             preferredHeight += (metadata.visibleRowCount - 1) * verticalSpacing;
@@ -231,8 +232,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         // The preferred width of the grid pane is the sum of the column
         // widths, plus padding and spacing
 
-        int preferredWidth = padding.left + padding.right + metadata.visibleColumnCount
-            * preferredCellWidth;
+        int preferredWidth = (metadata.visibleColumnCount * preferredCellWidth) +
+            padding.getWidth();
 
         if (metadata.visibleColumnCount > 1) {
             preferredWidth += (metadata.visibleColumnCount - 1) * horizontalSpacing;
@@ -241,8 +242,8 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         // The preferred height of the grid pane is the sum of the row
         // heights, plus padding and spacing
 
-        int preferredHeight = padding.top + padding.bottom + metadata.visibleRowCount
-            * preferredCellHeight;
+        int preferredHeight = (metadata.visibleRowCount * preferredCellHeight) +
+            padding.getHeight();
 
         if (metadata.visibleRowCount > 1) {
             preferredHeight += (metadata.visibleRowCount - 1) * verticalSpacing;
@@ -390,7 +391,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         int cellWidthLocal = -1;
 
         if (width != -1) {
-            int clientWidth = width - padding.left - padding.right;
+            int clientWidth = width - padding.getWidth();
 
             if (metadata.visibleColumnCount > 1) {
                 clientWidth -= (metadata.visibleColumnCount - 1) * horizontalSpacing;
@@ -412,7 +413,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
         int cellHeightLocal = -1;
 
         if (height != -1) {
-            int clientHeight = height - padding.top - padding.bottom;
+            int clientHeight = height - padding.getHeight();
 
             if (metadata.visibleRowCount > 1) {
                 clientHeight -= (metadata.visibleRowCount - 1) * verticalSpacing;
@@ -442,9 +443,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param padding The individual padding values for each side.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -468,10 +467,16 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * {@code "bottom"}, {@code "left}, and {@code "right"} entries.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the padding that will be reserved around the grid pane during
+     * layout.
+     *
+     * @param padding A sequence with values in the order {top, left, bottom, right}.
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -482,11 +487,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param padding The single value to use for all sides.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -496,10 +497,6 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param padding A JSON-format string containing the padding values.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -518,9 +515,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param horizontalSpacing The non-negative spacing value between columns.
      */
     public void setHorizontalSpacing(int horizontalSpacing) {
-        if (horizontalSpacing < 0) {
-            throw new IllegalArgumentException("horizontalSpacing is negative");
-        }
+        Utils.checkNonNegative(horizontalSpacing, "horizontalSpacing");
 
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
@@ -541,9 +536,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param verticalSpacing The non-negative spacing value between rows.
      */
     public void setVerticalSpacing(int verticalSpacing) {
-        if (verticalSpacing < 0) {
-            throw new IllegalArgumentException("verticalSpacing is negative");
-        }
+        Utils.checkNonNegative(verticalSpacing, "verticalSpacing");
 
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
@@ -600,9 +593,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param horizontalGridColor The new color for the horizontal grid lines.
      */
     public void setHorizontalGridColor(Color horizontalGridColor) {
-        if (horizontalGridColor == null) {
-            throw new IllegalArgumentException("horizontalGridColor is null.");
-        }
+        Utils.checkNull(horizontalGridColor, "horizontalGridColor");
 
         this.horizontalGridColor = horizontalGridColor;
 
@@ -619,11 +610,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * Pivot}.
      */
     public final void setHorizontalGridColor(String horizontalGridColor) {
-        if (horizontalGridColor == null) {
-            throw new IllegalArgumentException("horizontalGridColor is null.");
-        }
-
-        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor));
+        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor, "horizontalGridColor"));
     }
 
     /**
@@ -639,9 +626,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * @param verticalGridColor The new color for vertical grid lines.
      */
     public void setVerticalGridColor(Color verticalGridColor) {
-        if (verticalGridColor == null) {
-            throw new IllegalArgumentException("verticalGridColor is null.");
-        }
+        Utils.checkNull(verticalGridColor, "verticalGridColor");
 
         this.verticalGridColor = verticalGridColor;
 
@@ -658,11 +643,7 @@ public class GridPaneSkin extends ContainerSkin implements GridPane.Skin, GridPa
      * Pivot}.
      */
     public final void setVerticalGridColor(String verticalGridColor) {
-        if (verticalGridColor == null) {
-            throw new IllegalArgumentException("verticalGridColor is null.");
-        }
-
-        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor));
+        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor, "verticalGridColor"));
     }
 
     // GridPane.Skin methods

@@ -25,6 +25,9 @@ import com.kitfox.svg.SVGException;
 import com.kitfox.svg.SVGRoot;
 import com.kitfox.svg.animation.AnimationElement;
 
+import org.apache.pivot.util.Utils;
+import org.apache.pivot.wtk.GraphicsUtilities;
+
 /**
  * Image encapsulating an SVG diagram.
  */
@@ -32,9 +35,7 @@ public class Drawing extends Image {
     private SVGDiagram diagram;
 
     public Drawing(SVGDiagram diagram) {
-        if (diagram == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(diagram, "diagram");
 
         this.diagram = diagram;
     }
@@ -77,8 +78,7 @@ public class Drawing extends Image {
     @Override
     public void paint(Graphics2D graphics) {
         try {
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
             diagram.render(graphics);
         } catch (SVGException exception) {
             throw new RuntimeException(exception);

@@ -410,8 +410,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
      * Sets the amount of space to leave between the edge of the Border and its
      * content.
      *
-     * @param padding A dictionary with keys in the set {top, left, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
@@ -421,8 +420,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
      * Sets the amount of space to leave between the edge of the Border and its
      * content.
      *
-     * @param padding A sequence with values in the order [top, left, bottom,
-     * right].
+     * @param padding A sequence with values in the order [top, left, bottom, right].
      */
     public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));

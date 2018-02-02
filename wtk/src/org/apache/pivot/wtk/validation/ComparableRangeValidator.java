@@ -15,6 +15,8 @@ package org.apache.pivot.wtk.validation;
 
 import java.util.Locale;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Generic validator version for a Comparable value limited in a range.
  */
@@ -51,9 +53,7 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
     }
 
     public void setMinimum(T minValue) {
-        if (minValue == null) {
-            throw new IllegalArgumentException("minValue must be not null");
-        }
+        Utils.checkNull(minValue, "minValue");
         this.minValue = minValue;
     }
 
@@ -62,9 +62,7 @@ public class ComparableRangeValidator<T extends Comparable<T>> extends Comparabl
     }
 
     public void setMaximum(T maxValue) {
-        if (maxValue == null) {
-            throw new IllegalArgumentException("maxValue must be not null");
-        }
+        Utils.checkNull(maxValue, "maxValue");
         this.maxValue = maxValue;
     }
 

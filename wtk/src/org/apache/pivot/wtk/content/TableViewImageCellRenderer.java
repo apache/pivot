@@ -72,7 +72,7 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
                 if (cellData == null || cellData instanceof Image) {
                     image = (Image) cellData;
                 } else {
-                    System.err.println("Data for \"" + columnName + "\" is not an instance of "
+                    throw new IllegalArgumentException("Data for \"" + columnName + "\" is not an instance of "
                         + Image.class.getName());
                 }
             }

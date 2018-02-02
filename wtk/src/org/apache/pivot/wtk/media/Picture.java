@@ -22,6 +22,8 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * Image representing a bitmapped picture.
  */
@@ -30,7 +32,9 @@ public class Picture extends Image {
      * Enum defining the algorithms to apply when resizing a picture.
      */
     public enum Interpolation {
-        NEAREST_NEIGHBOR, BILINEAR, BICUBIC
+        NEAREST_NEIGHBOR,
+        BILINEAR,
+        BICUBIC
     }
 
     private BufferedImage bufferedImage = null;
@@ -38,9 +42,7 @@ public class Picture extends Image {
     private int baseline = -1;
 
     public Picture(BufferedImage bufferedImage) {
-        if (bufferedImage == null) {
-            throw new IllegalArgumentException("bufferedImage is null.");
-        }
+        Utils.checkNull(bufferedImage, "bufferedImage");
 
         this.bufferedImage = bufferedImage;
     }
@@ -84,9 +86,7 @@ public class Picture extends Image {
     }
 
     public void resample(int width, int height, Interpolation interpolation) {
-        if (interpolation == null) {
-            throw new IllegalArgumentException("interpolation is null.");
-        }
+        Utils.checkNull(interpolation, "interpolation");
 
         int previousWidth = getWidth();
         int previousHeight = getHeight();

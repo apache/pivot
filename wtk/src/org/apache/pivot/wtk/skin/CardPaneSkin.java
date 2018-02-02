@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.CardPane;
 import org.apache.pivot.wtk.CardPaneListener;
@@ -345,7 +346,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 preferredWidth = Math.max(preferredWidth, card.getPreferredWidth(height));
             }
 
-            preferredWidth += (padding.left + padding.right);
+            preferredWidth += padding.getWidth();
         }
 
         return preferredWidth;
@@ -389,7 +390,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
                 preferredHeight = Math.max(preferredHeight, card.getPreferredHeight(width));
             }
 
-            preferredHeight += (padding.top + padding.bottom);
+            preferredHeight += padding.getHeight();
         }
 
         return preferredHeight;
@@ -449,8 +450,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             }
         }
 
-        preferredWidth += (padding.left + padding.right);
-        preferredHeight += (padding.top + padding.bottom);
+        preferredWidth += padding.getWidth();
+        preferredHeight += padding.getHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -464,8 +465,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             Component selectedCard = cardPane.getSelectedCard();
 
             if (selectedCard != null) {
-                int cardWidth = Math.max(width - (padding.left + padding.right), 0);
-                int cardHeight = Math.max(height - (padding.top + padding.bottom), 0);
+                int cardWidth = Math.max(width - padding.getWidth(), 0);
+                int cardHeight = Math.max(height - padding.getHeight(), 0);
 
                 baseline = selectedCard.getBaseline(cardWidth, cardHeight);
 
@@ -483,8 +484,8 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         // Set the size of all components to match the size of the card pane,
         // minus padding
         CardPane cardPane = (CardPane) getComponent();
-        int width = Math.max(getWidth() - (padding.left + padding.right), 0);
-        int height = Math.max(getHeight() - (padding.top + padding.bottom), 0);
+        int width = Math.max(getWidth() - padding.getWidth(), 0);
+        int height = Math.max(getHeight() - padding.getHeight(), 0);
 
         for (Component card : cardPane) {
             card.setLocation(padding.left, padding.top);
@@ -507,9 +508,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @param padding The new padding values for all edges.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -519,14 +518,19 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * Sets the amount of space to leave between the edge of the CardPane and
      * its content.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the amount of space to leave between the edge of the CardPane and
+     * its content.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom, right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -547,11 +551,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @param padding The new integer value to use for the padding on all edges.
      */
     public void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -559,13 +559,9 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * its content.
      *
      * @param padding A string containing an integer or a JSON dictionary with
-     * keys left, top, bottom, and/or right.
+     * keys top, left, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 

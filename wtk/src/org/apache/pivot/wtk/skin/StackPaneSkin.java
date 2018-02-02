@@ -17,6 +17,8 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Insets;
@@ -37,7 +39,7 @@ public class StackPaneSkin extends ContainerSkin {
             preferredWidth = Math.max(preferredWidth, component.getPreferredWidth(height));
         }
 
-        preferredWidth += (padding.left + padding.right);
+        preferredWidth += padding.getWidth();
 
         return preferredWidth;
     }
@@ -51,7 +53,7 @@ public class StackPaneSkin extends ContainerSkin {
             preferredHeight = Math.max(preferredHeight, component.getPreferredHeight(width));
         }
 
-        preferredHeight += (padding.top + padding.bottom);
+        preferredHeight += padding.getHeight();
 
         return preferredHeight;
     }
@@ -67,12 +69,11 @@ public class StackPaneSkin extends ContainerSkin {
             Dimensions preferredCardSize = component.getPreferredSize();
 
             preferredWidth = Math.max(preferredWidth, preferredCardSize.width);
-
             preferredHeight = Math.max(preferredHeight, preferredCardSize.height);
         }
 
-        preferredWidth += (padding.left + padding.right);
-        preferredHeight += (padding.top + padding.bottom);
+        preferredWidth += padding.getWidth();
+        preferredHeight += padding.getHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -88,8 +89,8 @@ public class StackPaneSkin extends ContainerSkin {
         // minus padding
         StackPane stackPane = (StackPane) getComponent();
 
-        int width = Math.max(getWidth() - (padding.left + padding.right), 0);
-        int height = Math.max(getHeight() - (padding.top + padding.bottom), 0);
+        int width = Math.max(getWidth() - padding.getWidth(), 0);
+        int height = Math.max(getHeight() - padding.getHeight(), 0);
 
         for (Component component : stackPane) {
             component.setLocation(padding.left, padding.top);
@@ -112,9 +113,7 @@ public class StackPaneSkin extends ContainerSkin {
      * @param padding The individual padding amounts for each edge.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -124,14 +123,19 @@ public class StackPaneSkin extends ContainerSkin {
      * Sets the amount of space to leave between the edge of the StackPane and
      * its components.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the amount of space to leave between the edge of the StackPane and
+     * its components.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom, right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -152,11 +156,7 @@ public class StackPaneSkin extends ContainerSkin {
      * @param padding The single padding value for all four edges.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -167,10 +167,6 @@ public class StackPaneSkin extends ContainerSkin {
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 }

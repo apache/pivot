@@ -569,17 +569,18 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      * @param sortDirection Ascending or Descending sort order.
      */
     public static FileComparator getFileComparator(String columnName, SortDirection sortDirection) {
-        if (columnName.equals("name")) {
-            return sortDirection == SortDirection.ASCENDING ? new FileNameAscendingComparator()
-                : new FileNameDescendingComparator();
-        } else if (columnName.equals("size")) {
-            return sortDirection == SortDirection.ASCENDING ? new FileSizeAscendingComparator()
-                : new FileSizeDescendingComparator();
-        } else if (columnName.equals("lastModified")) {
-            return sortDirection == SortDirection.ASCENDING ? new FileDateAscendingComparator()
-                : new FileDateDescendingComparator();
-        } else {
-            throw new IllegalArgumentException();
+        switch (columnName) {
+            case "name":
+                return sortDirection == SortDirection.ASCENDING ? new FileNameAscendingComparator()
+                    : new FileNameDescendingComparator();
+            case "size":
+                return sortDirection == SortDirection.ASCENDING ? new FileSizeAscendingComparator()
+                    : new FileSizeDescendingComparator();
+            case "lastModified":
+                return sortDirection == SortDirection.ASCENDING ? new FileDateAscendingComparator()
+                    : new FileDateDescendingComparator();
+            default:
+                throw new IllegalArgumentException("Unable to sort files on \"" + columnName + "\" column.");
         }
     }
 

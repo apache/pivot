@@ -25,6 +25,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
@@ -228,7 +229,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
         boolean[][] occupiedCells = getOccupiedCells();
         int visibleColumnCount = 0;
 
-        int preferredWidth = padding.left + padding.right;
+        int preferredWidth = padding.getWidth();
 
         for (int j = 0; j < columnCount; j++) {
             boolean columnVisible = false;
@@ -421,7 +422,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
         boolean[][] occupiedCells = getOccupiedCells();
         int visibleRowCount = 0;
 
-        int preferredHeight = padding.top + padding.bottom;
+        int preferredHeight = padding.getHeight();
 
         for (int i = 0; i < rowCount; i++) {
             boolean rowVisible = false;
@@ -768,9 +769,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param padding The individual padding amounts for each edge.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -790,14 +789,19 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * Sets the amount of space that will be reserved around the inside edges of
      * the table pane.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the amount of space that will be reserved around the inside edges of
+     * the table pane.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom, right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -808,11 +812,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param padding The single padding value to use for all the edges.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -823,10 +823,6 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -845,9 +841,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param horizontalSpacing The new spacing value.
      */
     public void setHorizontalSpacing(int horizontalSpacing) {
-        if (horizontalSpacing < 0) {
-            throw new IllegalArgumentException("horizontalSpacing is negative");
-        }
+        Utils.checkNonNegative(horizontalSpacing, "horizontalSpacing");
 
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
@@ -868,9 +862,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param verticalSpacing The new spacing value.
      */
     public void setVerticalSpacing(int verticalSpacing) {
-        if (verticalSpacing < 0) {
-            throw new IllegalArgumentException("verticalSpacing is negative");
-        }
+        Utils.checkNonNegative(verticalSpacing, "verticalSpacing");
 
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
@@ -927,9 +919,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param horizontalGridColor The new grid line color.
      */
     public void setHorizontalGridColor(Color horizontalGridColor) {
-        if (horizontalGridColor == null) {
-            throw new IllegalArgumentException("horizontalGridColor is null.");
-        }
+        Utils.checkNull(horizontalGridColor, "horizontalGridColor");
 
         this.horizontalGridColor = horizontalGridColor;
 
@@ -946,11 +936,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * Pivot}.
      */
     public final void setHorizontalGridColor(String horizontalGridColor) {
-        if (horizontalGridColor == null) {
-            throw new IllegalArgumentException("horizontalGridColor is null.");
-        }
-
-        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor));
+        setHorizontalGridColor(GraphicsUtilities.decodeColor(horizontalGridColor,
+            "horizontalGridColor"));
     }
 
     /**
@@ -966,9 +953,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param verticalGridColor The new grid line color.
      */
     public void setVerticalGridColor(Color verticalGridColor) {
-        if (verticalGridColor == null) {
-            throw new IllegalArgumentException("verticalGridColor is null.");
-        }
+        Utils.checkNull(verticalGridColor, "verticalGridColor");
 
         this.verticalGridColor = verticalGridColor;
 
@@ -985,11 +970,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * Pivot}.
      */
     public final void setVerticalGridColor(String verticalGridColor) {
-        if (verticalGridColor == null) {
-            throw new IllegalArgumentException("verticalGridColor is null.");
-        }
-
-        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor));
+        setVerticalGridColor(GraphicsUtilities.decodeColor(verticalGridColor, "verticalGridColor"));
     }
 
     /**
@@ -1005,9 +986,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * @param highlightBackgroundColor The new highlight color.
      */
     public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
+        Utils.checkNull(highlightBackgroundColor, "highlightBackgroundColor");
 
         this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
@@ -1021,11 +1000,8 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * Pivot}.
      */
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        if (highlightBackgroundColor == null) {
-            throw new IllegalArgumentException("highlightBackgroundColor is null.");
-        }
-
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor,
+            "highlightBackgroundColor"));
     }
 
     /**
@@ -1146,9 +1122,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * to the columns of the table pane
      */
     private int getPreferredRowHeight(int rowIndex, int[] columnWidthsArgument) {
-        if (columnWidthsArgument == null) {
-            throw new IllegalArgumentException("columnWidths is null");
-        }
+        Utils.checkNull(columnWidthsArgument, "columnWidths");
 
         TablePane tablePane = (TablePane) getComponent();
 
@@ -1216,7 +1190,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
         int totalRelativeWeight = 0;
         int visibleColumnCount = 0;
 
-        int reservedWidth = padding.left + padding.right;
+        int reservedWidth = padding.getWidth();
 
         // First, we allocate the widths of non-relative columns. We store the
         // widths of relative columns as negative values for later processing
@@ -1366,9 +1340,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
      * the specified constraints
      */
     private int[] getRowHeights(int height, int[] columnWidthsArgument) {
-        if (columnWidthsArgument == null) {
-            throw new IllegalArgumentException("columnWidths is null");
-        }
+        Utils.checkNull(columnWidthsArgument, "columnWidths");
 
         TablePane tablePane = (TablePane) getComponent();
         TablePane.RowSequence rows = tablePane.getRows();
@@ -1382,7 +1354,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
         int totalRelativeWeight = 0;
         int visibleRowCount = 0;
 
-        int reservedHeight = padding.top + padding.bottom;
+        int reservedHeight = padding.getHeight();
 
         // First, we allocate the heights of non-relative rows. We store the
         // heights of relative rows as negative values for later processing

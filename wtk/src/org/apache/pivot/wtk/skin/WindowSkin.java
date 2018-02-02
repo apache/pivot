@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
@@ -46,9 +47,7 @@ public class WindowSkin extends ContainerSkin implements Window.Skin, WindowList
             FocusTraversalDirection direction) {
             assert (container instanceof Window) : "container is not a Window";
 
-            if (direction == null) {
-                throw new IllegalArgumentException("direction is null.");
-            }
+            Utils.checkNull(direction, "direction");
 
             Window window = (Window) container;
 

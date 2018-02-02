@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.TableView;
 
@@ -30,9 +31,7 @@ public class TableViewRowComparator implements Comparator<Object> {
     private TableView tableView;
 
     public TableViewRowComparator(TableView tableView) {
-        if (tableView == null) {
-            throw new IllegalArgumentException();
-        }
+        Utils.checkNull(tableView, "tableView");
 
         this.tableView = tableView;
     }

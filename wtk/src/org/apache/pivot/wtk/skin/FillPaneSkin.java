@@ -17,6 +17,8 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.collections.Dictionary;
+import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.FillPane;
@@ -50,7 +52,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
             int heightUpdated = height;
             // Include padding in constraint
             if (heightUpdated != -1) {
-                heightUpdated = Math.max(heightUpdated - (padding.top + padding.bottom), 0);
+                heightUpdated = Math.max(heightUpdated - padding.getHeight(), 0);
             }
 
             // Preferred width is the sum of the preferred widths of all
@@ -81,7 +83,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         }
 
         // Include left and right padding values
-        preferredWidth += padding.left + padding.right;
+        preferredWidth += padding.getWidth();
 
         return preferredWidth;
     }
@@ -107,7 +109,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
             int widthUpdated = width;
             // Include padding in constraint
             if (widthUpdated != -1) {
-                widthUpdated = Math.max(widthUpdated - (padding.left + padding.right), 0);
+                widthUpdated = Math.max(widthUpdated - padding.getWidth(), 0);
             }
 
             // Preferred height is the sum of the preferred heights of all
@@ -129,7 +131,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         }
 
         // Include top and bottom padding values
-        preferredHeight += padding.top + padding.bottom;
+        preferredHeight += padding.getHeight();
 
         return preferredHeight;
     }
@@ -194,8 +196,8 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         }
 
         // Include padding
-        preferredWidth += padding.left + padding.right;
-        preferredHeight += padding.top + padding.bottom;
+        preferredWidth += padding.getWidth();
+        preferredHeight += padding.getHeight();
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -209,7 +211,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
 
         switch (fillPane.getOrientation()) {
             case HORIZONTAL: {
-                int clientHeight = Math.max(height - (padding.top + padding.bottom), 0);
+                int clientHeight = Math.max(height - padding.getHeight(), 0);
 
                 for (Component component : fillPane) {
                     if (component.isVisible()) {
@@ -223,7 +225,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
             }
 
             case VERTICAL: {
-                int clientWidth = Math.max(width - (padding.left + padding.right), 0);
+                int clientWidth = Math.max(width - padding.getWidth(), 0);
 
                 for (Component component : fillPane) {
                     if (component.isVisible()) {
@@ -283,7 +285,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         if (orientation == Orientation.HORIZONTAL) {
             // Determine the starting x-coordinate
             int x = padding.left;
-            int totalWidth = width - (padding.left + padding.right);
+            int totalWidth = width - padding.getWidth();
             if (n > 1) {
                 totalWidth -= spacing * (n - 1);
             }
@@ -300,7 +302,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                         componentWidth += leftoverWidth;
                     }
 
-                    int componentHeight = Math.max(height - (padding.top + padding.bottom), 0);
+                    int componentHeight = Math.max(height - padding.getHeight(), 0);
 
                     int y = padding.top;
 
@@ -316,7 +318,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         } else {
             // Determine the starting y-coordinate
             int y = padding.top;
-            int totalHeight = height - (padding.top + padding.bottom);
+            int totalHeight = height - padding.getHeight();
             if (n > 1) {
                 totalHeight -= spacing * (n - 1);
             }
@@ -333,7 +335,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                         componentHeight += leftoverHeight;
                     }
 
-                    int componentWidth = Math.max(width - (padding.left + padding.right), 0);
+                    int componentWidth = Math.max(width - padding.getWidth(), 0);
 
                     int x = padding.left;
 
@@ -364,9 +366,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
      * @param padding The new values for padding.
      */
     public void setPadding(Insets padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
@@ -376,14 +376,19 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
      * Sets the amount of space to leave between the edge of the FillPane and
      * its components.
      *
-     * @param padding A dictionary with keys in the set {left, top, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
+        setPadding(new Insets(padding));
+    }
 
+    /**
+     * Sets the amount of space to leave between the edge of the FillPane and
+     * its components.
+     *
+     * @param padding A sequence with values in the order [top, left, bottom, right].
+     */
+    public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -404,11 +409,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
      * @param padding The new value for padding on all sides.
      */
     public final void setPadding(Number padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
-        setPadding(padding.intValue());
+        setPadding(new Insets(padding));
     }
 
     /**
@@ -419,10 +420,6 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
      * keys left, top, bottom, and/or right.
      */
     public final void setPadding(String padding) {
-        if (padding == null) {
-            throw new IllegalArgumentException("padding is null.");
-        }
-
         setPadding(Insets.decode(padding));
     }
 
@@ -431,17 +428,14 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     }
 
     public void setSpacing(int spacing) {
-        if (spacing < 0) {
-            throw new IllegalArgumentException("spacing is negative.");
-        }
+        Utils.checkNonNegative(spacing, "spacing");
+
         this.spacing = spacing;
         invalidateComponent();
     }
 
     public final void setSpacing(Number spacing) {
-        if (spacing == null) {
-            throw new IllegalArgumentException("spacing is null.");
-        }
+        Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
     }

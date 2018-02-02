@@ -18,6 +18,8 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.apache.pivot.util.Utils;
+
 /**
  * A validator for a {@link java.text.Format}'ed value. <p> This class is mostly
  * intended to be a base-class for other validators. Subclasses will set a
@@ -33,9 +35,7 @@ public class FormattedValidator<F extends Format> implements Validator {
     }
 
     public FormattedValidator(F format, Locale locale) {
-        if (format == null) {
-            throw new IllegalArgumentException("format is null.");
-        }
+        Utils.checkNull(format, "format");
         this.format = format;
 
         if (locale == null) {

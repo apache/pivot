@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Utils;
 
 /**
  * Implementation of the {@link Serializer} interface that reads and writes
@@ -81,9 +82,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * @param outputFormat The new format to use for output.
      */
     public void setOutputFormat(Format outputFormat) {
-        if (outputFormat == null) {
-            throw new IllegalArgumentException("Output format is null.");
-        }
+        Utils.checkNull(outputFormat, "outputFormat");
 
         this.outputFormat = outputFormat;
     }
@@ -97,9 +96,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     @Override
     public BufferedImage readObject(InputStream inputStream) throws IOException,
         SerializationException {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream is null.");
-        }
+        Utils.checkNull(inputStream, "inputStream");
 
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         return bufferedImage;
@@ -114,13 +111,8 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     @Override
     public void writeObject(BufferedImage bufferedImage, OutputStream outputStream)
         throws IOException, SerializationException {
-        if (bufferedImage == null) {
-            throw new IllegalArgumentException("bufferedImage is null.");
-        }
-
-        if (outputStream == null) {
-            throw new IllegalArgumentException("outputStream is null.");
-        }
+        Utils.checkNull(bufferedImage, "bufferedImage");
+        Utils.checkNull(outputStream, "outputStream");
 
         ImageIO.write(bufferedImage, outputFormat.getName(), outputStream);
     }

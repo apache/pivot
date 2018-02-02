@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.effects;
 
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Theme;
 
@@ -95,9 +96,7 @@ public abstract class Transition {
      * <tt>false</tt> otherwise.
      */
     public Transition(int duration, int rate, boolean repeating, boolean reversed) {
-        if (duration < 0) {
-            throw new IllegalArgumentException("duration must be positive.");
-        }
+        Utils.checkNonNegative(duration, "duration");
 
         if (!themeHasTransitionEnabled()) {
             // System.out.println("transitions not enabled, overriding transition values");
@@ -129,9 +128,7 @@ public abstract class Transition {
      * @param duration The duration of the transition, in milliseconds.
      */
     public void setDuration(int duration) {
-        if (duration < 0) {
-            throw new IllegalArgumentException("duration is negative.");
-        }
+        Utils.checkNonNegative(duration, "duration");
 
         if (transitionCallback != null) {
             throw new IllegalStateException("Transition is currently running.");
@@ -157,9 +154,7 @@ public abstract class Transition {
      * @param rate The transition rate, in frames per second.
      */
     public void setRate(int rate) {
-        if (rate < 0) {
-            throw new IllegalArgumentException("rate is negative.");
-        }
+        Utils.checkNonNegative(rate, "rate");
 
         if (transitionCallback != null) {
             throw new IllegalStateException("Transition is currently running.");

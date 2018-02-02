@@ -641,8 +641,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Sets the amount of space to leave between the edge of the Label and its
      * text.
      *
-     * @param padding A dictionary with keys in the set {top, left, bottom,
-     * right}.
+     * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
     public final void setPadding(Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
@@ -652,8 +651,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Sets the amount of space to leave between the edge of the Label and its
      * text.
      *
-     * @param padding A sequence with values in the order [top, left, bottom,
-     * right].
+     * @param padding A sequence with values in the order [top, left, bottom, right].
      */
     public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
