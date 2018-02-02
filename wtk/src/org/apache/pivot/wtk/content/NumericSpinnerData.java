@@ -21,6 +21,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
@@ -145,26 +146,51 @@ public class NumericSpinnerData implements List<Integer> {
         this.increment = increment;
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public int add(Integer item) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public void insert(Integer item, int index) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public Integer update(int index, Integer item) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public int remove(Integer item) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public Sequence<Integer> remove(int index, int count) {
         throw new UnsupportedOperationException();
@@ -195,6 +221,11 @@ public class NumericSpinnerData implements List<Integer> {
         return index;
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public void clear() {
         throw new UnsupportedOperationException();
@@ -210,11 +241,20 @@ public class NumericSpinnerData implements List<Integer> {
         return ((upperBound - lowerBound) / increment) + 1;
     }
 
+    /**
+     * Not supported in this class.
+     * @return {@code null} always (comparators are not supported)
+     */
     @Override
     public Comparator<Integer> getComparator() {
         return null;
     }
 
+    /**
+     * Not supported in this class.
+     * @throws UnsupportedOperationException always.
+     */
+    @UnsupportedOperation
     @Override
     public void setComparator(Comparator<Integer> comparator) {
         throw new UnsupportedOperationException();
