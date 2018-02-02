@@ -320,6 +320,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         triggerGraphics.setPaint(colorLocal);
 
         Bounds triggerBounds = new Bounds(Math.max(width - (padding.right + TRIGGER_WIDTH), 0), 0,
+            // TODO: this calculation doesn't look right \\// (should be + not -?)
             TRIGGER_WIDTH, Math.max(height - (padding.top - padding.bottom), 0));
         int tx = triggerBounds.x + (triggerBounds.width - triggerIconShape.getBounds().width) / 2;
         int ty = triggerBounds.y + (triggerBounds.height - triggerIconShape.getBounds().height) / 2;
@@ -373,7 +374,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -393,7 +394,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -415,7 +416,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -436,7 +437,8 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
-        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor));
+        setDisabledBackgroundColor(GraphicsUtilities.decodeColor(disabledBackgroundColor,
+            "disabledBackgroundColor"));
     }
 
     public final void setDisabledBackgroundColor(int disabledBackgroundColor) {
@@ -457,7 +459,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {
@@ -477,7 +479,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public final void setDisabledBorderColor(String disabledBorderColor) {
-        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor));
+        setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor, "disabledBorderColor"));
     }
 
     public final void setDisabledBorderColor(int disabledBorderColor) {

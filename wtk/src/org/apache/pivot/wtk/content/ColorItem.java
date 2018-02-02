@@ -45,7 +45,7 @@ public class ColorItem {
     }
 
     public ColorItem(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
         setName(color);
     }
 

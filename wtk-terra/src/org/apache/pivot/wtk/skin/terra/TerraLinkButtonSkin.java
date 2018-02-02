@@ -127,7 +127,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -147,7 +147,7 @@ public class TerraLinkButtonSkin extends LinkButtonSkin {
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {

@@ -183,7 +183,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public float getScale() {

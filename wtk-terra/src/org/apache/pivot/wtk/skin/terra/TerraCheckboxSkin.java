@@ -280,7 +280,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public Color getDisabledColor() {
@@ -295,7 +295,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public int getSpacing() {

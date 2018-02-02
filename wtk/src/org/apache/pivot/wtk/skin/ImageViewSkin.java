@@ -293,7 +293,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     /**

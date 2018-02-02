@@ -215,7 +215,8 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
     }
 
     public final void setBorderBackgroundColor(String borderBackgroundColor) {
-        setBorderBackgroundColor(GraphicsUtilities.decodeColor(borderBackgroundColor));
+        setBorderBackgroundColor(GraphicsUtilities.decodeColor(borderBackgroundColor,
+            "borderBackgroundColor"));
     }
 
     public final void setBorderBackgroundColor(int borderBackgroundColor) {
@@ -238,7 +239,7 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
     }
 
     public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor));
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
     public final void setBorderColor(int borderColor) {

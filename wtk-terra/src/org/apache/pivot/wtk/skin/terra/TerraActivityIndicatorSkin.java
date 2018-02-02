@@ -111,7 +111,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -130,7 +130,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     }
 
     public void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {

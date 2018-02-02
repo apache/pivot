@@ -522,7 +522,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public final void setColor(String color) {
         Utils.checkNull(color, "color");
 
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     /**
@@ -553,7 +553,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     public final void setDisabledColor(String color) {
         Utils.checkNull(color, "disabledColor");
 
-        setDisabledColor(GraphicsUtilities.decodeColor(color));
+        setDisabledColor(GraphicsUtilities.decodeColor(color, "disabledColor"));
     }
 
     /**
@@ -582,7 +582,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public TextDecoration getTextDecoration() {

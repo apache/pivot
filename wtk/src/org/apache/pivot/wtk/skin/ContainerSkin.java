@@ -233,7 +233,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * Pivot}.
      */
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     /**

@@ -530,7 +530,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -550,7 +550,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int disabledColor) {
@@ -569,7 +569,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setBackgroundColor(String backgroundColor) {
-        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor));
+        setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     public final void setBackgroundColor(int backgroundColor) {
@@ -589,7 +589,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setSelectionColor(String selectionColor) {
-        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor));
+        setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
     public final void setSelectionColor(int selectionColor) {
@@ -609,7 +609,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor));
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor,
+            "selectionBackgroundColor"));
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
@@ -629,7 +630,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setInactiveSelectionColor(String inactiveSelectionColor) {
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor));
+        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor,
+            "inactiveSelectionColor"));
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
@@ -649,7 +651,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
-        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor));
+        setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor,
+            "inactiveSelectionBackgroundColor"));
     }
 
     public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
@@ -669,7 +672,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor));
+        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor,
+            "highlightBackgroundColor"));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
@@ -689,7 +693,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     public final void setAlternateItemBackgroundColor(String alternateItemBackgroundColor) {
-        setAlternateItemBackgroundColor(GraphicsUtilities.decodeColor(alternateItemBackgroundColor));
+        setAlternateItemBackgroundColor(GraphicsUtilities.decodeColor(alternateItemBackgroundColor,
+            "alternateItemBackgroundColor"));
     }
 
     public final void setAlternateItemColor(int alternateItemBackgroundColor) {

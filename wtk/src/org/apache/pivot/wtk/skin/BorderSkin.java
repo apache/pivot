@@ -352,7 +352,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     public final void setTitleColor(String titleColor) {
-        setTitleColor(GraphicsUtilities.decodeColor(titleColor));
+        setTitleColor(GraphicsUtilities.decodeColor(titleColor, "titleColor"));
     }
 
     /**

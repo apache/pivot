@@ -172,7 +172,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setColor(String color) {
-        setColor(GraphicsUtilities.decodeColor(color));
+        setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
     public final void setColor(int color) {
@@ -192,7 +192,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setDisabledColor(String disabledColor) {
-        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor));
+        setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
     public final void setDisabledColor(int color) {
@@ -212,7 +212,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setActiveColor(String activeColor) {
-        setActiveColor(GraphicsUtilities.decodeColor(activeColor));
+        setActiveColor(GraphicsUtilities.decodeColor(activeColor, "activeColor"));
     }
 
     public final void setActiveColor(int color) {
@@ -232,7 +232,8 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     public final void setActiveBackgroundColor(String activeBackgroundColor) {
-        setActiveBackgroundColor(GraphicsUtilities.decodeColor(activeBackgroundColor));
+        setActiveBackgroundColor(GraphicsUtilities.decodeColor(activeBackgroundColor,
+            "activeBackgroundColor"));
     }
 
     public final void setActiveBackgroundColor(int color) {
