@@ -126,7 +126,7 @@ limitations under the License.
                     libraries.push("lib/svgSalamander-tiny.jar");
                 </xsl:otherwise>
             </xsl:choose>
-      
+
             attributes.archive = libraries.join(",");
 
             <!-- Base parameters -->
@@ -144,7 +144,7 @@ limitations under the License.
                     javaArguments.push("-D<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
                 </xsl:for-each>
             </xsl:if>
-            
+
             parameters.java_arguments = javaArguments.join(" ");
 
             <!-- Startup properties -->

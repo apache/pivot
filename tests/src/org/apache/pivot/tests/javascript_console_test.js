@@ -21,39 +21,39 @@ importPackage(org.apache.pivot.wtk);   // required to use Pivot WTK classes
 
 
 function log(msg) {
-	if (msg == undefined || msg == null || typeof msg != "string")
-		return ;
+    if (msg == undefined || msg == null || typeof msg != "string")
+        return ;
 
     System.out.println(msg);
 }
 
 function logObject(msg) {
-	if (msg == undefined || msg == null)
-		return ;
+    if (msg == undefined || msg == null)
+        return ;
 
-	application.logObject(msg);
+    application.logObject(msg);
 }
 
 function updateStatus(msg) {
-	if (msg == undefined || msg == null || typeof msg != "string")
-		return ;
+    if (msg == undefined || msg == null || typeof msg != "string")
+        return ;
 
-	if (msg.length < 50)
-		textStatus.text = msg;
+    if (msg.length < 50)
+        textStatus.text = msg;
 }
 
 function clearStatus() {
-	updateStatus("");
+    updateStatus("");
 }
 
 function clearConsole() {
-	templateButton.selectedIndex = 0;
-	textJSSource.text = "";
-	textJSOutput.text = "";
-	// runButton.enabled = false;  // ok
-	runButton.setEnabled(false);   // explicit usage of the setter
-	log("Console cleared");
-	clearStatus();
+    templateButton.selectedIndex = 0;
+    textJSSource.text = "";
+    textJSOutput.text = "";
+    // runButton.enabled = false;  // ok
+    runButton.setEnabled(false);   // explicit usage of the setter
+    log("Console cleared");
+    clearStatus();
 }
 
 function decodeLabel(name) {
@@ -68,7 +68,7 @@ function buildListDataFromLabels() {
     logObject(numValues);
     log("Expected " + numValues + " number of values for list");
     if (numValues != null && numValues.length() > 0) {
-    	for (var i = 0; i < numValues; i++) {
+        for (var i = 0; i < numValues; i++) {
             templateButtonListData.add(decodeLabel("valuesTemplates_" + i));
         }
     }
@@ -78,18 +78,18 @@ function buildListDataFromLabels() {
 
 
 function runConsole() {
-	var text = textJSSource.text;
-	log("Console Text length = " + text.length());
-	if (text.length() < 1)
-		return ;
-	// else
-	var msg = "Run JS Code in Console";
-	log(msg);
-	updateStatus(msg + " ...");
-	textJSOutput.text = "";
+    var text = textJSSource.text;
+    log("Console Text length = " + text.length());
+    if (text.length() < 1)
+        return ;
+    // else
+    var msg = "Run JS Code in Console";
+    log(msg);
+    updateStatus(msg + " ...");
+    textJSOutput.text = "";
 
 // TODO: continue here, but calling a Java method inside the application, with the stuff inside ...
-	;
+    ;
 }
 
 //TODO: temp ...

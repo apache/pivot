@@ -87,7 +87,7 @@ public class SheetSlideDirectionWindow extends Window implements Bindable {
         tablePane = null;
 
         // Mouse handler to enable users to quickly close the sheet
-        final ContainerMouseListener displayMouseHandler = new ContainerMouseListener.Adapter() {
+        final ContainerMouseListener displayMouseHandler = new ContainerMouseListener() {
             @Override
             public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
                 Display display = (Display) container;

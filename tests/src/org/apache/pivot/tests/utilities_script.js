@@ -21,16 +21,16 @@ importPackage(org.apache.pivot.wtk);   // required to use Pivot WTK classes
 
 
 function log(msg) {
-	if (msg == undefined || msg == null || typeof msg != "string")
-		return ;
+    if (msg == undefined || msg == null || typeof msg != "string")
+        return ;
 
     System.out.println(msg);
 }
 
 function logObject(msg) {
-	if (msg == undefined || msg == null)
-		return ;
+    if (msg == undefined || msg == null)
+        return ;
 
-	application.logObject(msg);
+    application.logObject(msg);
 }
 

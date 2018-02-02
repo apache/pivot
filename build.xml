@@ -409,7 +409,7 @@ limitations under the License.
 
     <!-- Compile all classes (not including tests, because they depend on packaged .jar files) -->
     <target name="compile" description="Compiles all projects"
-        depends="environment-info, charts, core, demos, demos-server, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
+        depends="environment-info, charts, core, demos, demos-server, examples, tutorials, tutorials-server, web, web-server, wtk, wtk-terra"/>
 
     <!-- Compile all classes (tests included) -->
     <target name="compile-tests" description="Compiles tests after compiling everything else"
@@ -462,6 +462,7 @@ limitations under the License.
         <test project="core"/>
         <test project="demos"/>
         <test project="demos-server"/>
+        <test project="examples"/>
         <test project="tests"/>
         <test project="tutorials"/>
         <test project="tutorials-server"/>
@@ -478,6 +479,7 @@ limitations under the License.
         <clean project="core"/>
         <clean project="demos"/>
         <clean project="demos-server"/>
+        <clean project="examples"/>
         <clean project="tests"/>
         <clean project="tutorials"/>
         <clean project="tutorials-server"/>
@@ -534,6 +536,21 @@ limitations under the License.
         <compile project="demos-server">
             <fileset dir="web-server" includes="lib/**/*.jar"/>
         </compile>
+    </target>
+
+    <target name="examples" depends="core, wtk, wtk-terra, web">
+        <compile project="examples"/>
+        <copy todir="examples/${folder.bin}">
+            <fileset dir="examples/src" includes="**/*.bxml"/>
+            <fileset dir="examples/src" includes="**/*.html"/>
+            <fileset dir="examples/src" includes="**/*.icns"/>
+            <fileset dir="examples/src" includes="**/*.ico"/>
+            <fileset dir="examples/src" includes="**/*.json"/>
+            <fileset dir="examples/src" includes="**/*.png"/>
+            <fileset dir="examples/src" includes="**/*.svg"/>
+            <fileset dir="examples/src" includes="**/*.txt"/>
+            <fileset dir="examples/src" includes="**/*.xml"/>
+        </copy>
     </target>
 
     <target name="tests" depends="core, web, wtk, wtk-terra">
@@ -950,14 +967,19 @@ limitations under the License.
             <include name="RELEASE-NOTES"/>
             <include name="**/*.java"/>
             <include name="**/*.html"/>
+            <include name="**/*.css"/>
+            <include name="**/*.csv"/>
+            <include name="**/*.js"/>
             <include name="**/*.jsp"/>
             <include name="**/*.txt"/>
             <include name="**/*.properties"/>
             <include name="**/*.xml"/>
             <include name="**/*.bxml"/>
+            <include name="**/*.xsl"/>
             <include name="**/*.json"/>
             <include name="**/*.groovy"/>
             <include name="**/*.scala"/>
+            <include name="**/*.sql"/>
         </fileset>
         <replaceregexp match="[\t]" replace="    " flags="gm" byline="true">
             <fileset refid="trimfiles"/>

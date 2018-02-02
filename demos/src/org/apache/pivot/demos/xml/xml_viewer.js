@@ -36,7 +36,7 @@ var treeViewDropTarget = new DropTarget() {
         return (dragContent.containsFileList() ? DropAction.COPY : null);
     },
 
-    userDropActionChange: function(component, dragContent, supportedDropActions, x, y, 
+    userDropActionChange: function(component, dragContent, supportedDropActions, x, y,
         userDropAction) {
         return (dragContent.containsFileList() ? DropAction.COPY : null);
     },
@@ -45,7 +45,7 @@ var treeViewDropTarget = new DropTarget() {
         var dropAction = null;
 
         if (dragContent.containsFileList()) {
-            return application.drop(dragContent);                
+            return application.drop(dragContent);
         }
 
         dragExit(component);

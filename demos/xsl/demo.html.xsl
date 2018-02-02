@@ -117,25 +117,25 @@ limitations under the License.
             };
 
             <!-- Java arguments -->
-	<xsl:choose>
-		<xsl:when test="/document/properties/java_memory_options_huge">
+    <xsl:choose>
+        <xsl:when test="/document/properties/java_memory_options_huge">
             var javaArguments = ["-Dsun.awt.noerasebackground=true",
                 "-Dsun.awt.erasebackgroundonresize=true",
                 "-Xms256M -Xmx1024M"
                 ];
-		</xsl:when>
-		<xsl:otherwise>
+        </xsl:when>
+        <xsl:otherwise>
             var javaArguments = ["-Dsun.awt.noerasebackground=true",
                 "-Dsun.awt.erasebackgroundonresize=true"];
-		</xsl:otherwise>
-	</xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
 
             <xsl:if test="java-arguments">
                 <xsl:for-each select="java-arguments/*">
                     javaArguments.push("-D<xsl:value-of select="name(.)"/>=<xsl:apply-templates/>");
                 </xsl:for-each>
             </xsl:if>
-            
+
             parameters.java_arguments = javaArguments.join(" ");
 
             <!-- Startup properties -->

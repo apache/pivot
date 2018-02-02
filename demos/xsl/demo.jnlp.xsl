@@ -90,16 +90,16 @@ limitations under the License.
                 <property name="sun.awt.erasebackgroundonresize=true" value="true"/>
             </xsl:if>
 
-	<xsl:choose>
-		<xsl:when test="/document/properties/java_memory_options_huge">
+    <xsl:choose>
+        <xsl:when test="/document/properties/java_memory_options_huge">
             <java version="1.7+" href="http://java.sun.com/products/autodl/j2se"
-				initial-heap-size="256M" max-heap-size="1024M"
-			/>
-		</xsl:when>
-		<xsl:otherwise>
+                initial-heap-size="256M" max-heap-size="1024M"
+            />
+        </xsl:when>
+        <xsl:otherwise>
             <java version="1.7+" href="http://java.sun.com/products/autodl/j2se"/>
-		</xsl:otherwise>
-	</xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
 
             <xsl:variable name="signed" select="libraries/@signed"/>
             <xsl:for-each select="libraries/library">
@@ -122,10 +122,10 @@ limitations under the License.
 
             <xsl:choose>
                 <xsl:when test='$signed'>
-					<jar href="lib/svgSalamander-tiny.signed.jar"/>
+                    <jar href="lib/svgSalamander-tiny.signed.jar"/>
                 </xsl:when>
                 <xsl:otherwise>
-					<jar href="lib/svgSalamander-tiny.jar"/>
+                    <jar href="lib/svgSalamander-tiny.jar"/>
                 </xsl:otherwise>
             </xsl:choose>
         </resources>

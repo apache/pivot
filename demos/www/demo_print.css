@@ -16,31 +16,31 @@ limitations under the License.
 */
 
 body {
-	background: white;
-	font-family: Georgia, ‘Times New Roman’, serif;
-	font-size: small;
-	color: #000000;
+    background: white;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: small;
+    color: #000000;
 }
 
 #content, .content {
-	background: transparent;
-	width: 100%;
-	margin: 0;
-	float: none;
+    background: transparent;
+    width: 100%;
+    margin: 0;
+    float: none;
 }
 
 #nav, #sidebar {
-	display: none;
+    display: none;
 }
 
 a:link {
-	color: #252525;
-	font-weight: bold;
-	text-decoration: underline;
+    color: #252525;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 
 .noprint {
-	display: none;
+    display: none;
 }
 

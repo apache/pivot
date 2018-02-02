@@ -28,14 +28,14 @@ function copy() {
     Clipboard.setContent(content);
 
     // Diagnostic info
-	// Alert("Copy Image").open(window);
+    // Alert("Copy Image").open(window);
 }
 
 function paste() {
     // Diagnostic info
-	// Prompt("Paste Image").open(window);
+    // Prompt("Paste Image").open(window);
 
-	// Paste any available image from the clipboard
+    // Paste any available image from the clipboard
     var content = Clipboard.getContent();
 
     if (content != null) {

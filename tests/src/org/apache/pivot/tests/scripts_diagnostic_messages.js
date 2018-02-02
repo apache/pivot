@@ -19,34 +19,34 @@ importPackage(org.apache.pivot.util);  // required to use Pivot Utility class Co
 importPackage(org.apache.pivot.wtk);   // required to use Pivot WTK classes
 
 function alert1() {
-	Alert.alert("Alert message", window);
+    Alert.alert("Alert message", window);
 }
 
 function alert2() {
-	Alert("Alert message").open(window);
+    Alert("Alert message").open(window);
 }
 
 function prompt1() {
-	Prompt.prompt("Prompt message", window);
+    Prompt.prompt("Prompt message", window);
 }
 
 function prompt2() {
-	Prompt("Prompt message").open(window);
+    Prompt("Prompt message").open(window);
 }
 
 function logDirectMessage() {
-	System.out.println("Log message via direct call to System.out");
+    System.out.println("Log message via direct call to System.out");
 }
 
 function logDirectError() {
-	System.err.println("Log error via direct call to System.err");
+    System.err.println("Log error via direct call to System.err");
 }
 
 function logConsoleMessage() {
-	Console.log("Log message via Console");
+    Console.log("Log message via Console");
 }
 
 function logConsoleError() {
-	Console.logError("Log error via Console");
+    Console.logError("Log error via Console");
 }
 
