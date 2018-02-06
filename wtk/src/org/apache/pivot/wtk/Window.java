@@ -23,6 +23,7 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -632,16 +633,10 @@ public class Window extends Container {
      *
      * @param iconName The resource name of the icon to set.
      * @see #setIcon(URL)
+     * @see ImageUtils#findByName(String,String)
      */
     public void setIcon(String iconName) {
-        Utils.checkNull(iconName, "iconName");
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(iconName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("Cannot find icon resource " + iconName);
-        }
-        setIcon(url);
+        setIcon(ImageUtils.findByName(iconName, "icon"));
     }
 
     public Component getContent() {

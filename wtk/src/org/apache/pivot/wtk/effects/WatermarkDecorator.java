@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.FontUtilities;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
@@ -89,7 +90,7 @@ public class WatermarkDecorator implements Decorator {
         boxPane.add(imageView);
         boxPane.add(label);
 
-        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        boxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
         imageView.getStyles().put("opacity", opacity);
 
         Font font = (Font) label.getStyles().get("font");
@@ -186,10 +187,10 @@ public class WatermarkDecorator implements Decorator {
      *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
-     * @see ImageUtils#findByName(String)
+     * @see ImageUtils#findByName(String,String)
      */
     public void setImage(String imageName) {
-        setImage(ImageUtils.findByName(imageName));
+        setImage(ImageUtils.findByName(imageName, "image"));
     }
 
     /**

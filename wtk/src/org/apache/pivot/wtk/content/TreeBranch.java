@@ -24,6 +24,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -90,15 +91,7 @@ public class TreeBranch extends TreeNode implements List<TreeNode> {
      * @see #setExpandedIcon(URL)
      */
     public void setExpandedIcon(String expandedIconName) {
-        Utils.checkNullOrEmpty(expandedIconName, "expandedIconName");
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL url = classLoader.getResource(expandedIconName.substring(1));
-        if (url == null) {
-            throw new IllegalArgumentException("Cannot find expandedIcon resource: "
-                + expandedIconName);
-        }
-        setExpandedIcon(url);
+        setExpandedIcon(ImageUtils.findByName(expandedIconName, "expanded icon"));
     }
 
     private void checkNode(TreeNode treeNode) {

@@ -28,17 +28,19 @@ public class ImageUtils {
      *
      * @param imageName The name of the image resource to find (whose
      * leading character is stripped off -- likely "@" or "/").
+     * @param imageType A user-friendly name of what this resource is (for
+     * error messages).
      * @return The URL from which to load the image if it is found.
      * @throws IllegalArgumentException if the image resource cannot be found,
      * or if the {@code imageName} is null or empty.
      */
-    public static URL findByName(String imageName) {
+    public static URL findByName(String imageName, String imageType) {
         Utils.checkNullOrEmpty(imageName, "imageName");
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         URL url = classLoader.getResource(imageName.substring(1));
         if (url == null) {
-            throw new IllegalArgumentException("Cannot find image resource: " + imageName);
+            throw new IllegalArgumentException("Cannot find " + imageType + " resource: " + imageName);
         }
         return url;
     }

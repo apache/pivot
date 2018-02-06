@@ -71,10 +71,10 @@ public class BaseContent {
      *
      * @param iconName The resource name of the icon to set.
      * @see #setIcon(URL)
-     * @see ImageUtils#findByName(String)
+     * @see ImageUtils#findByName(String,String)
      */
     public void setIcon(String iconName) {
-        setIcon(ImageUtils.findByName(iconName));
+        setIcon(ImageUtils.findByName(iconName, "icon"));
     }
 
     public String getText() {

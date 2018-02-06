@@ -215,10 +215,10 @@ public class ImageView extends Component {
      *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
-     * @see ImageUtils#findByName(String)
+     * @see ImageUtils#findByName(String,String)
      */
     public final void setImage(String imageName) {
-        setImage(ImageUtils.findByName(imageName));
+        setImage(ImageUtils.findByName(imageName, "image"));
     }
 
     /**
