@@ -182,14 +182,14 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin() {
-        listView.getStyles().putBoolean("variableItemHeight", true);
+        listView.getStyles().put("variableItemHeight", true);
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
         listView.getComponentKeyListeners().add(listViewKeyListener);
 
         listViewPanorama = new Panorama(listView);
         listViewPanorama.getStyles().put("buttonBackgroundColor",
             listView.getStyles().getColor("backgroundColor"));
-        listViewPanorama.getStyles().putBoolean("alwaysShowScrollButtons", true);
+        listViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
 
         listViewBorder = new Border(listViewPanorama);
     }

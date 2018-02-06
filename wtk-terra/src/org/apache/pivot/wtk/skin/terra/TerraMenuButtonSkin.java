@@ -594,7 +594,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setCloseTransitionDuration(int closeTransitionDuration) {
-        menuPopup.getStyles().putInt("closeTransitionDuration", closeTransitionDuration);
+        menuPopup.getStyles().put("closeTransitionDuration", closeTransitionDuration);
         MenuButton menuButton = (MenuButton) getComponent();
         menuButton.setQueuedActionDelay(closeTransitionDuration + 50);
     }
@@ -604,7 +604,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public void setCloseTransitionRate(int closeTransitionRate) {
-        menuPopup.getStyles().putInt("closeTransitionRate", closeTransitionRate);
+        menuPopup.getStyles().put("closeTransitionRate", closeTransitionRate);
     }
 
     @Override

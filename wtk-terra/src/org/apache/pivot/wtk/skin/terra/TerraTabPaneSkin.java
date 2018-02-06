@@ -47,6 +47,7 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TabPaneAttributeListener;
 import org.apache.pivot.wtk.TabPaneListener;
@@ -601,10 +602,10 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
 
-        tabButtonBoxPane.getStyles().put("fill", new Boolean(true));
+        tabButtonBoxPane.getStyles().put(Style.fill, new Boolean(true));
 
         tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        tabButtonPanorama.getStyles().putInt("buttonPadding", 6);
+        tabButtonPanorama.getStyles().put("buttonPadding", 6);
         tabButtonPanorama.setView(tabButtonBoxPane);
 
         tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
@@ -1340,7 +1341,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        tabButtonBoxPane.getStyles().putInt("spacing", buttonSpacing);
+        tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
     }
 
     public final void setButtonCornerRadius(int buttonCornerRadius) {
@@ -1377,11 +1378,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
 
         switch (tabOrientation) {
             case HORIZONTAL: {
-                tabButtonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+                tabButtonBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
                 break;
             }
             case VERTICAL: {
-                tabButtonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
+                tabButtonBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.TOP);
                 break;
             }
             default: {
