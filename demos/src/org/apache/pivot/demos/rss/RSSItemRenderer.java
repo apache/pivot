@@ -40,15 +40,15 @@ public class RSSItemRenderer extends BoxPane implements ListView.ItemRenderer {
         super(Orientation.VERTICAL);
 
         getStyles().put(Style.padding, new Insets(2, 2, 8, 2));
-        getStyles().putBoolean(Style.fill, true);
+        getStyles().put(Style.fill, true);
 
-        titleLabel.getStyles().putBoolean(Style.wrapText, true);
+        titleLabel.getStyles().put(Style.wrapText, true);
         add(titleLabel);
 
-        categoriesLabel.getStyles().putBoolean(Style.wrapText, true);
+        categoriesLabel.getStyles().put(Style.wrapText, true);
         add(categoriesLabel);
 
-        submitterLabel.getStyles().putBoolean(Style.wrapText, true);
+        submitterLabel.getStyles().put(Style.wrapText, true);
         add(submitterLabel);
     }
 

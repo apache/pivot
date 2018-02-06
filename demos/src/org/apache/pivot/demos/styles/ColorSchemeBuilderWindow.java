@@ -43,6 +43,7 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -81,7 +82,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
             NumericSpinnerData colorSpinnerData = new NumericSpinnerData(0, 255);
             SpinnerItemRenderer colorSpinnerItemRenderer = new SpinnerItemRenderer();
-            colorSpinnerItemRenderer.getStyles().put("horizontalAlignment",
+            colorSpinnerItemRenderer.getStyles().put(Style.horizontalAlignment,
                 HorizontalAlignment.RIGHT);
 
             final Spinner redSpinner = new Spinner();
@@ -103,8 +104,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             blueSpinner.setSelectedIndex(0);
 
             BoxPane colorBoxPane = new BoxPane();
-            colorBoxPane.getStyles().put("fill", new Boolean(true));
-            colorBoxPane.getStyles().put("padding", "{left:4}");
+            colorBoxPane.getStyles().put(Style.fill, true);
+            colorBoxPane.getStyles().put(Style.padding, "{left:4}");
             colorBoxPane.add(redSpinner);
             colorBoxPane.add(greenSpinner);
             colorBoxPane.add(blueSpinner);
@@ -133,7 +134,7 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                     int offset = iLocal * 3;
                     for (int j = 0; j < 3; j++) {
                         Component colorPaletteCell = colorPaletteTablePane.getRows().get(iLocal).get(j);
-                        colorPaletteCell.getStyles().putInt("backgroundColor", offset + j);
+                        colorPaletteCell.getStyles().put(Style.backgroundColor, offset + j);
                     }
 
                     // Reload the sample part of the content (but not all the application),
@@ -204,26 +205,26 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             row.add(createColorPaletteCell(offset + 2));
         }
 
-        colorPaletteTablePane.getStyles().putInt("horizontalSpacing", 4);
-        colorPaletteTablePane.getStyles().putInt("verticalSpacing", 4);
+        colorPaletteTablePane.getStyles().put(Style.horizontalSpacing, 4);
+        colorPaletteTablePane.getStyles().put(Style.verticalSpacing, 4);
     }
 
     private static Component createColorPaletteCell(int index) {
         Border border = new Border();
-        border.getStyles().putInt("backgroundColor", index);
+        border.getStyles().put(Style.backgroundColor, index);
 
         Theme theme = Theme.getTheme();
 
         Label label = new Label();
         label.setText(Integer.toString(index));
-        label.getStyles().put("font", "{size:'80%'}");
-        label.getStyles().put("backgroundColor", theme.getColor(4));
-        label.getStyles().putInt("padding", 1);
+        label.getStyles().put(Style.font, "{size:'80%'}");
+        label.getStyles().put(Style.backgroundColor, 4);
+        label.getStyles().put(Style.padding, 1);
 
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().putInt("padding", 2);
-        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        boxPane.getStyles().put(Style.padding, 2);
+        boxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        boxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         boxPane.add(new Border(label));
         border.setContent(boxPane);
