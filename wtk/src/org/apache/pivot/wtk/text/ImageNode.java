@@ -82,10 +82,10 @@ public class ImageNode extends Block {
      *
      * @param imageName The resource name of the image to set.
      * @see #setImage(URL)
-     * @see ImageUtils#findByName(String)
+     * @see ImageUtils#findByName(String,String)
      */
     public void setImage(String imageName) {
-        setImage(ImageUtils.findByName(imageName));
+        setImage(ImageUtils.findByName(imageName, "image"));
     }
 
     @Override
