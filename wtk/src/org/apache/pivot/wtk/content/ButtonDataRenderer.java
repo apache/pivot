@@ -143,8 +143,8 @@ public class ButtonDataRenderer extends BoxPane implements Button.DataRenderer {
     }
 
     public void setFillIcon(boolean fillIcon) {
-        imageView.getStyles().putBoolean(Style.fill, fillIcon);
-        getStyles().putBoolean(Style.fill, fillIcon);
+        imageView.getStyles().put(Style.fill, fillIcon);
+        getStyles().put(Style.fill, fillIcon);
     }
 
     @Override
