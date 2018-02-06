@@ -159,19 +159,6 @@ public interface Dictionary<K, V> {
     }
 
     /**
-     * Using the other methods in this interface, put an integer value
-     * into this dictionary.
-     *
-     * @param key The key for the <tt>Integer</tt> value to save.
-     * @param value The int value to be saved.
-     * @return The previous value for this key.
-     */
-    @SuppressWarnings("unchecked")
-    default V putInt(K key, int value) {
-        return put(key, (V)Integer.valueOf(value));
-    }
-
-    /**
      * Using the other methods in this interface, retrieve a boolean value
      * from this dictionary; returning false if the key does not exist.
      *
@@ -197,19 +184,6 @@ public interface Dictionary<K, V> {
             return ((Boolean)get(key)).booleanValue();
         }
         return defaultValue;
-    }
-
-    /**
-     * Using the other methods in this interface, put a boolean value
-     * into this dictionary.
-     *
-     * @param key The key for the <tt>Boolean</tt> value to save.
-     * @param value The value to be saved.
-     * @return The previous value for this key.
-     */
-    @SuppressWarnings("unchecked")
-    default V putBoolean(K key, boolean value) {
-        return put(key, (V)Boolean.valueOf(value));
     }
 
     /**
@@ -246,4 +220,16 @@ public interface Dictionary<K, V> {
             put(key, map.get(key));
         }
     }
+
+    /**
+     * Copy the value from one dictionary to this one.
+     *
+     * @param key Key for value to be copied.
+     * @param source The source to copy from.
+     * @return The previous value in the target dictionary.
+     */
+    default Object copy(K key, Dictionary<K, V> source) {
+        return put(key, source.get(key));
+    }
+
 }

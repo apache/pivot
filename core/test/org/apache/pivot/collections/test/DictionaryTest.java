@@ -28,9 +28,9 @@ public class DictionaryTest {
     @Test
     public void test() {
         HashMap<String, Integer> map = new HashMap<>();
-        map.putInt("one", 1);
-        map.putInt("two", 2);
-        map.putInt("three", 300);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 300);
         assertEquals(map.getInt("one"), 1);
         assertEquals(map.getInt("two"), 2);
         assertEquals(map.getInt("three"), 300);
@@ -39,9 +39,9 @@ public class DictionaryTest {
     @Test
     public void boolTest() {
         HashMap<String, Boolean> map = new HashMap<>();
-        map.putBoolean("true", false);
-        map.putBoolean("false", true);
-        map.putBoolean("other", true);
+        map.put("true", false);
+        map.put("false", true);
+        map.put("other", true);
         assertEquals(map.getBoolean("true"), false);
         assertEquals(map.getBoolean("false"), true);
         assertEquals(map.getBoolean("other"), true);

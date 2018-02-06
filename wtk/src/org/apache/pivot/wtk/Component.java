@@ -118,12 +118,16 @@ public abstract class Component implements ConstrainedVisual {
             return previousValue;
         }
 
-        public Object putInt(Style key, int value) {
-            return putInt(key.toString(), value);
-        }
-
-        public Object putBoolean(Style key, boolean value) {
-            return putBoolean(key.toString(), value);
+        /**
+         * Copy the named style from one style dictionary to this one.
+         *
+         * @param key Style value to be copied.
+         * @param source The source to copy from.
+         * @return The previous value in the target dictionary (but note
+         * the caveats from the {@link #put(String,Object)} method.
+         */
+        public Object copy(Style key, Dictionary<String,Object> source) {
+            return copy(key.toString(), source);
         }
 
         /**
