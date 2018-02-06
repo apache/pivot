@@ -25,7 +25,7 @@ import org.apache.pivot.wtk.Style;
  */
 public class WrappingButtonDataRenderer extends Label implements Button.DataRenderer {
     public WrappingButtonDataRenderer() {
-        getStyles().putBoolean(Style.wrapText, true);
+        getStyles().put(Style.wrapText, true);
     }
 
     @Override
