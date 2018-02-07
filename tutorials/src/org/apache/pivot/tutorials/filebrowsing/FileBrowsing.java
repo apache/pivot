@@ -35,13 +35,12 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 
 public class FileBrowsing extends Window implements Bindable {
-    @BXML
-    private ButtonGroup fileBrowserSheetModeGroup = null;
-    @BXML
-    private PushButton openSheetButton = null;
+    @BXML private ButtonGroup fileBrowserSheetModeGroup = null;
+    @BXML private PushButton openSheetButton = null;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
@@ -69,7 +68,7 @@ public class FileBrowsing extends Window implements Bindable {
                             ListView listView = new ListView();
                             listView.setListData(new ArrayList<>(selectedFiles));
                             listView.setSelectMode(ListView.SelectMode.NONE);
-                            listView.getStyles().put("backgroundColor", null);
+                            listView.getStyles().put(Style.backgroundColor, null);
 
                             Alert.alert(MessageType.INFO, "You selected:", listView,
                                 FileBrowsing.this);

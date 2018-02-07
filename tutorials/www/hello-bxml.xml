@@ -140,10 +140,10 @@ limitations under the License.
                     function windowOpened(window) {
                         var label = new Label();
                         label.setText("Hello JavaScript!");
-                        label.getStyles().put("font", "Arial BOLD 24");
-                        label.getStyles().put("color", "#ff0000");
-                        label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-                        label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+                        label.getStyles().put(Style.font, "Arial BOLD 24");
+                        label.getStyles().put(Style.color, "#ff0000");
+                        label.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+                        label.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
                         window.setContent(label);
                     }

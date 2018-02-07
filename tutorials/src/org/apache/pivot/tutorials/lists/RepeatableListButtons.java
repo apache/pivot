@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.ButtonStateListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ColorItem;
 
@@ -49,7 +50,7 @@ public class RepeatableListButtons extends Window implements Bindable {
             for (Component component : checkboxBoxPane) {
                 Checkbox checkbox = (Checkbox) component;
                 if (checkbox.isSelected()) {
-                    checkbox.getStyles().put("color", color);
+                    checkbox.getStyles().put(Style.color, color);
                     checkbox.setSelected(false);
                 }
             }

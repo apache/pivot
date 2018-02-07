@@ -35,6 +35,8 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.Style;
+import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.VFSBrowserSheet;
 
 public class VFSBrowserTest implements Application {
@@ -47,11 +49,13 @@ public class VFSBrowserTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane windowContent = new BoxPane();
+        windowContent.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
-        final Checkbox showHiddenFiles = new Checkbox("Show hidden files");
-        windowContent.add(showHiddenFiles);
+        final Checkbox showHiddenCheckbox = new Checkbox("Show hidden files");
+        windowContent.add(showHiddenCheckbox);
 
-        PushButton button = new PushButton("Open Sheet");
+        PushButton button = new PushButton("Open File Browser");
+        button.getStyles().put(Style.padding, "[2, 4, 2, 4]");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button buttonArgument) {
@@ -59,7 +63,7 @@ public class VFSBrowserTest implements Application {
                     final VFSBrowserSheet vfsBrowserSheet = new VFSBrowserSheet(
                         VFSBrowserSheet.Mode.OPEN);
 
-                    vfsBrowserSheet.getStyles().put("showHiddenFiles", showHiddenFiles.isSelected());
+                    vfsBrowserSheet.getStyles().put(Style.showHiddenFiles, showHiddenCheckbox.isSelected());
 
                     vfsBrowserSheet.open(frame, new SheetCloseListener() {
                         @Override
@@ -70,7 +74,7 @@ public class VFSBrowserTest implements Application {
                                 ListView listView = new ListView();
                                 listView.setListData(new ArrayList<>(selectedFiles));
                                 listView.setSelectMode(ListView.SelectMode.NONE);
-                                listView.getStyles().put("backgroundColor", null);
+                                listView.getStyles().put(Style.backgroundColor, null);
 
                                 Alert.alert(MessageType.INFO, "You selected:", listView, frame);
                             } else {

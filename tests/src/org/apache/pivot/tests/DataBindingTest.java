@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
@@ -129,7 +130,7 @@ public class DataBindingTest implements Application {
                 window.getContent().store(context);
                 try {
                     textLabel.setText(JSONSerializer.toString(context));
-                    textLabel.getStyles().put("color", getNextColor());
+                    textLabel.getStyles().put(Style.color, getNextColor());
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

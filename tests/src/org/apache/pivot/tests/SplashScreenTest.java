@@ -19,6 +19,7 @@ package org.apache.pivot.tests;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.SplashScreen;
+import java.io.File;
 import java.util.Date;
 import java.util.Random;
 
@@ -34,6 +35,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Meter;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 
@@ -102,7 +104,7 @@ public class SplashScreenTest implements Application {
         private void configureMeter(final int width, final int height) {
             meter.setSize(width, height);
             meter.setPercentage(0);
-            meter.getStyles().put("gridFrequency", 1);
+            meter.getStyles().put(Style.gridFrequency, 1);
         }
 
         // Align the Meter on the SplashScreen, centered horizontally,
@@ -119,11 +121,11 @@ public class SplashScreenTest implements Application {
     @Override
     public void startup(final Display display, Map<String, String> properties) throws Exception {
 
+        File splashFile = new File("org/apache/pivot/tests/splash.png");
         System.out.println("Startup the application at " + new Date());
-        System.out.println("To show the Splash Screen, remember to run as a Standard Java Application, and with the arguments: "
-            + "-splash:/org/apache/pivot/tests/splash.png "
-            + "--preserveSplashScreen=true "
-            + ", or no splash screen will be shown");
+        System.out.println("To show the Splash Screen, remember to run as a Standard Java Application this way:\n"
+            + "java -splash:" + splashFile.getPath() + " <mainclassname> --preserveSplashScreen=true\n"
+            + "or no splash screen will be shown.");
 
         // Create a Task that will load a BXML file and simulate some other
         // processing while updating a progress meter on the SplashScreen

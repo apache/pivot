@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.FlowPane;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 
 public class FlowPanes extends Window implements Bindable {
@@ -71,9 +72,9 @@ public class FlowPanes extends Window implements Bindable {
         }
 
         if (alignment != null) {
-            flowPane.getStyles().put("alignment", alignment);
+            flowPane.getStyles().put(Style.alignment, alignment);
         }
 
-        flowPane.getStyles().put("alignToBaseline", alignToBaselineCheckbox.isSelected());
+        flowPane.getStyles().put(Style.alignToBaseline, alignToBaselineCheckbox.isSelected());
     }
 }

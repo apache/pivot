@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.ComponentMouseListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.LinkButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ButtonData;
@@ -35,8 +36,8 @@ public class LinkButtonTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        boxPane.getStyles().put("spacing", 8);
+        boxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        boxPane.getStyles().put(Style.spacing, 8);
         boxPane.getComponentMouseListeners().add(new ComponentMouseListener() {
             @Override
             public boolean mouseMove(Component component, int x, int y) {

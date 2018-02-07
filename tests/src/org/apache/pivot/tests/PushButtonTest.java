@@ -23,6 +23,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 
 public class PushButtonTest implements Application {
@@ -32,10 +33,10 @@ public class PushButtonTest implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         window = new Window();
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        boxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
 
         PushButton uploadButton = new PushButton("Upload");
-        uploadButton.getStyles().put("minimumAspectRatio", 3.0f);
+        uploadButton.getStyles().put(Style.minimumAspectRatio, 3.0f);
         boxPane.add(uploadButton);
 
         window.setContent(boxPane);

@@ -50,6 +50,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.Span;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ListButtonDataRenderer;
@@ -105,12 +106,12 @@ public class TextPaneDemo implements Application {
         window.setTitle("Apache Pivot Rich Text Editor Demo");
 
         // make the text on the "bold" button bold
-        Font boldButtonFont = (Font) boldButton.getStyles().get("font");
-        boldButton.getStyles().put("font", boldButtonFont.deriveFont(Font.BOLD));
+        Font boldButtonFont = boldButton.getStyles().getFont(Style.font);
+        boldButton.getStyles().put(Style.font, boldButtonFont.deriveFont(Font.BOLD));
 
         // make the text on the "italic" button italic
-        Font italicButtonFont = (Font) italicButton.getStyles().get("font");
-        italicButton.getStyles().put("font", italicButtonFont.deriveFont(Font.ITALIC));
+        Font italicButtonFont = italicButton.getStyles().getFont(Style.font);
+        italicButton.getStyles().put(Style.font, italicButtonFont.deriveFont(Font.ITALIC));
 
         fontFamilyListButton.setListData(new ArrayList<>(
             GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
@@ -122,7 +123,7 @@ public class TextPaneDemo implements Application {
                 super.render(item, index, listView, selected, state, highlighted, disabled);
                 if (item != null) {
                     String fontFamilyName = (String) item;
-                    label.getStyles().put("font", Font.decode(fontFamilyName + "-12"));
+                    label.getStyles().put(Style.font, Font.decode(fontFamilyName + "-12"));
                 }
             }
         });
@@ -132,7 +133,7 @@ public class TextPaneDemo implements Application {
                 super.render(data, button, highlight);
                 if (data != null) {
                     String fontFamilyName = (String) data;
-                    label.getStyles().put("font", Font.decode(fontFamilyName + "-12"));
+                    label.getStyles().put(Style.font, Font.decode(fontFamilyName + "-12"));
                 }
             }
         });
@@ -332,7 +333,7 @@ public class TextPaneDemo implements Application {
         wrapTextCheckbox.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {
-                textPane.getStyles().put("wrapText", new Boolean(wrapTextCheckbox.isSelected()));
+                textPane.getStyles().put(Style.wrapText, wrapTextCheckbox.isSelected());
                 requestTextPaneFocus();
             }
         });

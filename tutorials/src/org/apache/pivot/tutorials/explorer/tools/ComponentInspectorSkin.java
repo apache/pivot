@@ -47,6 +47,7 @@ import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.ScrollBar.Scope;
 import org.apache.pivot.wtk.Span;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.ContainerSkin;
@@ -463,8 +464,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -493,12 +494,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("x");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -527,7 +528,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("y");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;
@@ -556,8 +557,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -586,12 +587,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("width");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -620,7 +621,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("height");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;
@@ -649,8 +650,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -679,12 +680,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("min");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -713,7 +714,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("max");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;
@@ -742,8 +743,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -773,12 +774,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("top");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -808,12 +809,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("left");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -843,12 +844,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("bottom");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -878,7 +879,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("right");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;
@@ -893,8 +894,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -925,12 +926,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("start");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -961,7 +962,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("end");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;
@@ -990,8 +991,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -1021,12 +1022,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("topLeft");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -1056,12 +1057,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("topRight");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -1091,12 +1092,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("bottomLeft");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -1126,7 +1127,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("bottomRight");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;
@@ -1141,8 +1142,8 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Form.setLabel(boxPane, key);
 
         FlowPane flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         TextInput textInput = new TextInput();
@@ -1173,12 +1174,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         Label label = new Label("start");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -1209,12 +1210,12 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("end");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         flowPane = new FlowPane();
-        flowPane.getStyles().put("alignToBaseline", true);
-        flowPane.getStyles().put("horizontalSpacing", 5);
+        flowPane.getStyles().put(Style.alignToBaseline, true);
+        flowPane.getStyles().put(Style.horizontalSpacing, 5);
         boxPane.add(flowPane);
 
         textInput = new TextInput();
@@ -1246,7 +1247,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         });
 
         label = new Label("extent");
-        label.getStyles().put("font", "{italic:true}");
+        label.getStyles().put(Style.font, "{italic:true}");
         flowPane.add(label);
 
         return boxPane;

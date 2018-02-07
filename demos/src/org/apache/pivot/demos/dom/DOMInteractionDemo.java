@@ -28,6 +28,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 
 public class DOMInteractionDemo implements Application {
@@ -55,7 +56,7 @@ public class DOMInteractionDemo implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+        boxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
 
         helloButton = new PushButton("Say Hello");
         boxPane.add(helloButton);
@@ -69,8 +70,8 @@ public class DOMInteractionDemo implements Application {
         });
 
         Border border = new Border(boxPane);
-        border.getStyles().put("color", 7);
-        border.getStyles().put("padding", 5);
+        border.getStyles().put(Style.color, 7);
+        border.getStyles().put(Style.padding, 5);
         window = new Window(border);
         window.setMaximized(true);
         window.open(display);

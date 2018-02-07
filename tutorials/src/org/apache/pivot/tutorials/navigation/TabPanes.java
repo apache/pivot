@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.RadioButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TabPaneListener;
 import org.apache.pivot.wtk.Window;
@@ -122,12 +123,12 @@ public class TabPanes extends Window implements Bindable {
         tabPane.setCollapsible(collapsibleCheckbox.isSelected());
 
         if (horizontalRadioButton.isSelected()) {
-            tabPane.getStyles().put("tabOrientation", Orientation.HORIZONTAL);
+            tabPane.getStyles().put(Style.tabOrientation, Orientation.HORIZONTAL);
             if (tabPane.getCorner() == null) {
                 tabPane.setCorner(cornerBoxPane);
             }
         } else {
-            tabPane.getStyles().put("tabOrientation", Orientation.VERTICAL);
+            tabPane.getStyles().put(Style.tabOrientation, Orientation.VERTICAL);
             if (tabPane.getCorner() == cornerBoxPane) {
                 tabPane.setCorner(null);
             }

@@ -220,7 +220,7 @@ limitations under the License.
                     }
 
                     if (horizontalAlignment != null) {
-                        boxPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+                        boxPane.getStyles().put(Style.horizontalAlignment, horizontalAlignment);
                     }
 
                     VerticalAlignment verticalAlignment = null;
@@ -233,10 +233,10 @@ limitations under the License.
                     }
 
                     if (verticalAlignment != null) {
-                        boxPane.getStyles().put("verticalAlignment", verticalAlignment);
+                        boxPane.getStyles().put(Style.verticalAlignment, verticalAlignment);
                     }
 
-                    boxPane.getStyles().put("fill", fillCheckbox.isSelected());
+                    boxPane.getStyles().put(Style.fill, fillCheckbox.isSelected());
                 }
             }
             ]]>

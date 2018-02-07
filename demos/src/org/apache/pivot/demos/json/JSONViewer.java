@@ -38,6 +38,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Manifest;
 import org.apache.pivot.wtk.Prompt;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
@@ -69,8 +70,8 @@ public class JSONViewer implements Application {
         bxmlSerializer.bind(this);
 
         Label prompt = new Label("Drag or paste JSON here");
-        prompt.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        prompt.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        prompt.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        prompt.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
         promptDecorator.setOverlay(prompt);
         treeView.getDecorators().add(promptDecorator);
 

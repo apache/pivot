@@ -34,19 +34,26 @@ import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.ListButtonSelectionListener;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.terra.TerraFileBrowserSheetSkin;
 
 public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Application {
-    private ArrayList<String> choices = new ArrayList<>();
-    private ListButton lb = new ListButton();
+    private ArrayList<String> choices;
+    private ListButton lb;
 
+    private void addCharsetChoice(String name) {
+        if (choices.indexOf(name) < 0) {
+            choices.add(name);
+        }
+    }
     public FileBrowserWithCharsetTest() {
         this(Mode.OPEN);
     }
@@ -55,18 +62,24 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         super(mode);
         TerraFileBrowserSheetSkin skin = (TerraFileBrowserSheetSkin) getSkin();
         BoxPane box = new BoxPane();
-        box.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        box.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
         box.add(new Label("Character set:"));
+        choices = new ArrayList<>(String.CASE_INSENSITIVE_ORDER);
+        lb = new ListButton();
         Charset defaultCS = Charset.defaultCharset();
-        choices.add("US-ASCII");
-        choices.add(defaultCS.name());
-        choices.add("ISO-8859-1");
-        if (!"UTF-8".equals(defaultCS.name())) {
-            choices.add("UTF-8");
-        }
+        addCharsetChoice(defaultCS.name());
+        addCharsetChoice("UTF-8");
+        addCharsetChoice("ISO-8859-1");
+        addCharsetChoice("US-ASCII");
 
         lb.setListData(choices);
         lb.setSelectedIndex(1);
+        lb.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
+            @Override
+            public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+                System.out.println(listButton.toString() + "; New character set selection: " + listButton.getSelectedItem());
+            }
+        });
         box.add(lb);
         skin.addComponent(box);
     }
@@ -80,16 +93,18 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BoxPane windowContent = new BoxPane();
+        windowContent.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
         final Checkbox showHiddenCheckbox = new Checkbox("Show hidden files");
         windowContent.add(showHiddenCheckbox);
-        PushButton button = new PushButton("Open Sheet");
+        PushButton button = new PushButton("Open File Browser");
+        button.getStyles().put(Style.padding, "[2, 4, 2, 4]");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button buttonArgument) {
                 final Window window = Window.getActiveWindow();
-                final FileBrowserSheet fileBrowserSheet = new FileBrowserWithCharsetTest(
+                final FileBrowserWithCharsetTest fileBrowserSheet = new FileBrowserWithCharsetTest(
                     FileBrowserSheet.Mode.OPEN);
-                fileBrowserSheet.getStyles().put("showHiddenFiles", showHiddenCheckbox.isSelected());
+                fileBrowserSheet.getStyles().put(Style.showHiddenFiles, showHiddenCheckbox.isSelected());
 
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
@@ -100,9 +115,10 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
                             ListView listView = new ListView();
                             listView.setListData(new ArrayList<>(selectedFiles));
                             listView.setSelectMode(ListView.SelectMode.NONE);
-                            listView.getStyles().put("backgroundColor", null);
+                            listView.getStyles().put(Style.backgroundColor, null);
 
-                            Alert.alert(MessageType.INFO, "You selected:", listView, window);
+                            Alert.alert(MessageType.INFO,
+                                "You selected (charset " + fileBrowserSheet.getCharsetName() + "):", listView, window);
                         } else {
                             Alert.alert(MessageType.INFO, "You didn't select anything.", window);
                         }
@@ -126,16 +142,6 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         }
 
         return false;
-    }
-
-    @Override
-    public void resume() {
-        // empty block
-    }
-
-    @Override
-    public void suspend() {
-        // empty block
     }
 
     public static void main(String[] args) {

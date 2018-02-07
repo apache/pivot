@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -192,32 +193,32 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, 1, true);
+        new TablePane.Column(titleBarTablePane, -1);
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
-        titleBarTablePane.getStyles().put("padding", new Insets(2));
+        titleBarTablePane.getStyles().put(Style.padding, new Insets(2));
 
         // Initialize the title box pane
         titleBoxPane.add(iconImageView);
         titleBoxPane.add(titleLabel);
-        titleBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 2));
+        titleBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        titleBoxPane.getStyles().put(Style.padding, new Insets(0, 0, 0, 2));
 
         Font titleFont = theme.getFont().deriveFont(Font.BOLD);
-        titleLabel.getStyles().put("font", titleFont);
+        titleLabel.getStyles().put(Style.font, titleFont);
 
         iconImageView.setPreferredSize(16, 16);
-        iconImageView.getStyles().put("fill", true);
-        iconImageView.getStyles().put("backgroundColor", null);
+        iconImageView.getStyles().put(Style.fill, true);
+        iconImageView.getStyles().put(Style.backgroundColor, null);
 
         // Initialize the button box pane
-        buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        buttonBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
+        buttonBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
     }
 
     @Override
@@ -270,7 +271,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
             if (heightMutable != -1) {
                 // Subtract padding, top/bottom content borders, and content
                 // bevel from height constraint
-                heightMutable -= (padding.top + padding.bottom) + (1) + 2;
+                heightMutable -= padding.getHeight() + (1) + 2;
                 heightMutable = Math.max(heightMutable, 0);
             }
 
@@ -278,7 +279,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
         }
 
         // Add padding and left/right content borders
-        preferredWidth += (padding.left + padding.right) + 2;
+        preferredWidth += padding.getWidth() + 2;
 
         return preferredWidth;
     }
@@ -298,7 +299,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
             if (widthMutable != -1) {
                 // Subtract padding and left/right content borders from
                 // constraint
-                widthMutable -= (padding.left + padding.right) + 2;
+                widthMutable -= padding.getWidth() + 2;
                 widthMutable = Math.max(widthMutable, 0);
             }
 
@@ -306,7 +307,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
         }
 
         // Add padding, top/bottom content borders, and content bevel
-        preferredHeight += (padding.top + padding.bottom) + (1) + 2;
+        preferredHeight += padding.getHeight() + (1) + 2;
 
         return preferredHeight;
     }
@@ -334,8 +335,8 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
         }
 
         // Add padding, borders, and content bevel
-        preferredWidth += (padding.left + padding.right) + 2;
-        preferredHeight += (padding.top + padding.bottom) + (1) + 2;
+        preferredWidth += padding.getWidth() + 2;
+        preferredHeight += padding.getHeight() + (1) + 2;
 
         return new Dimensions(preferredWidth, preferredHeight);
     }
@@ -365,9 +366,8 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
         if (content != null) {
             int contentX = clientX + padding.left;
             int contentY = clientY + padding.top;
-            int contentWidth = Math.max(clientWidth - (padding.left + padding.right), 0);
-            int contentHeight = Math.max(clientHeight - (clientY + padding.top + padding.bottom)
-                + (1), 0);
+            int contentWidth = Math.max(clientWidth - padding.getWidth(), 0);
+            int contentHeight = Math.max(clientHeight - (clientY + padding.getHeight()) + (1), 0);
 
             content.setLocation(contentX, contentY);
             content.setSize(contentWidth, contentHeight);

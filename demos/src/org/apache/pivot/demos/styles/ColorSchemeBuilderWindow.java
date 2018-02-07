@@ -191,9 +191,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
 
     @SuppressWarnings("unused")
     private void createColorPalette() {
-        new TablePane.Column(colorPaletteTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(colorPaletteTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(colorPaletteTablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(colorPaletteTablePane, 1, true);
+        new TablePane.Column(colorPaletteTablePane, 1, true);
+        new TablePane.Column(colorPaletteTablePane, 1, true);
 
         int numberOfPaletteColors = getNumberOfPaletteColors();
         for (int i = 0; i < numberOfPaletteColors; i++) {

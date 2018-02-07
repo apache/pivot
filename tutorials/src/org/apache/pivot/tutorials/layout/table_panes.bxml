@@ -100,8 +100,9 @@ limitations under the License.
                         <Checkbox Form.label="Show horizontal grid lines" selected="true">
                             <buttonStateListeners>
                                 <![CDATA[
+                                importClass(org.apache.pivot.wtk.Style);
                                 function stateChanged(button, previousState) {
-                                    tablePane.getStyles().put("showHorizontalGridLines",
+                                    tablePane.getStyles().put(Style.showHorizontalGridLines,
                                         button.isSelected());
                                 }
                                 ]]>
@@ -111,8 +112,9 @@ limitations under the License.
                         <Checkbox Form.label="Show vertical grid lines" selected="true">
                             <buttonStateListeners>
                                 <![CDATA[
+                                importClass(org.apache.pivot.wtk.Style);
                                 function stateChanged(button, previousState) {
-                                    tablePane.getStyles().put("showVerticalGridLines",
+                                    tablePane.getStyles().put(Style.showVerticalGridLines,
                                         button.isSelected());
                                 }
                                 ]]>
@@ -127,8 +129,9 @@ limitations under the License.
 
                             <spinnerSelectionListeners>
                                 <![CDATA[
+                                importClass(org.apache.pivot.wtk.Style);
                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                    tablePane.getStyles().put("horizontalSpacing",
+                                    tablePane.getStyles().put(Style.horizontalSpacing,
                                         spinner.getSelectedItem());
                                 }
                                 ]]>
@@ -143,8 +146,9 @@ limitations under the License.
 
                             <spinnerSelectionListeners>
                                 <![CDATA[
+                                importClass(org.apache.pivot.wtk.Style);
                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                    tablePane.getStyles().put("verticalSpacing",
+                                    tablePane.getStyles().put(Style.verticalSpacing,
                                         spinner.getSelectedItem());
                                 }
                                 ]]>
@@ -159,8 +163,9 @@ limitations under the License.
 
                             <spinnerSelectionListeners>
                                 <![CDATA[
+                                importClass(org.apache.pivot.wtk.Style);
                                 function selectedIndexChanged(spinner, previousSelectedIndex) {
-                                    tablePane.getStyles().put("padding",
+                                    tablePane.getStyles().put(Style.padding,
                                         spinner.getSelectedItem());
                                 }
                                 ]]>

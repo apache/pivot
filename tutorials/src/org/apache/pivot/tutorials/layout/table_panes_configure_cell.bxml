@@ -74,9 +74,10 @@ limitations under the License.
 
                                     <listButtonSelectionListeners>
                                         <![CDATA[
+                                        importClass(org.apache.pivot.wtk.Style);
                                         function selectedIndexChanged(listButton, previousSelectedIndex) {
                                             var colorItem = backgroundColorListButton.getSelectedItem();
-                                            component.getStyles().put("backgroundColor", colorItem.getColor());
+                                            component.getStyles().put(Style.backgroundColor, colorItem.getColor());
                                         }
                                         ]]>
                                     </listButtonSelectionListeners>
@@ -111,7 +112,7 @@ limitations under the License.
     importPackage(org.apache.pivot.wtk);
     importPackage(org.apache.pivot.wtk.content);
 
-    var backgroundColor = component.getStyles().get("backgroundColor");
+    var backgroundColor = component.getStyles().get(Style.backgroundColor);
 
     rowSpanSpinner.setSelectedIndex(TablePane.getRowSpan(component) - 1);
     columnSpanSpinner.setSelectedIndex(TablePane.getColumnSpan(component) - 1);

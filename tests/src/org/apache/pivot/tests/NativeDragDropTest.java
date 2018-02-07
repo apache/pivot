@@ -33,6 +33,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LocalManifest;
 import org.apache.pivot.wtk.Manifest;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Visual;
 
@@ -42,9 +43,9 @@ public class NativeDragDropTest implements Application {
     @Override
     public void startup(final Display display, Map<String, String> properties) throws Exception {
         final Label label = new Label("http://pivot.apache.org/");
-        label.getStyles().put("font", new Font("Arial", Font.PLAIN, 24));
-        label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        label.getStyles().put(Style.font, new Font("Arial", Font.PLAIN, 24));
+        label.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        label.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         label.setDragSource(new DragSource() {
             private LocalManifest content = null;
@@ -94,7 +95,7 @@ public class NativeDragDropTest implements Application {
                 DropAction dropAction = null;
 
                 if (dragContent.containsText()) {
-                    frame.getStyles().put("backgroundColor", "#ffcccc");
+                    frame.getStyles().put(Style.backgroundColor, "#ffcccc");
                     dropAction = DropAction.COPY;
                 }
 
@@ -103,7 +104,7 @@ public class NativeDragDropTest implements Application {
 
             @Override
             public void dragExit(Component component) {
-                frame.getStyles().put("backgroundColor", "#ffffff");
+                frame.getStyles().put(Style.backgroundColor, "#ffffff");
             }
 
             @Override

@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
@@ -49,10 +50,10 @@ public class Pivot811 implements Application {
         listFrame.setTitle("List Frame");
         listFrame.setPreferredSize(400, 300);
         listFrame.setLocation(20, 20);
-        listFrame.getStyles().put("padding", new Insets(0, 0, 0, 0));
+        listFrame.getStyles().put(Style.padding, Insets.NONE);
 
         BoxPane boxPane = new BoxPane();
-        boxPane.getStyles().put("fill", true);
+        boxPane.getStyles().put(Style.fill, true);
         boxPane.setOrientation(Orientation.VERTICAL);
         listFrame.setContent(boxPane);
 
@@ -95,10 +96,10 @@ public class Pivot811 implements Application {
                     detailFrame.setPreferredSize(400, 300);
                     int selectedIndex = listView.getSelectedIndex();
                     detailFrame.setLocation(80 + (selectedIndex * 10), 80 + (selectedIndex * 10));
-                    detailFrame.getStyles().put("padding", new Insets(0, 0, 0, 0));
+                    detailFrame.getStyles().put(Style.padding, Insets.NONE);
 
                     BoxPane boxPaneLocal = new BoxPane();
-                    boxPaneLocal.getStyles().put("fill", true);
+                    boxPaneLocal.getStyles().put(Style.fill, true);
                     boxPaneLocal.setOrientation(Orientation.VERTICAL);
                     detailFrame.setContent(boxPaneLocal);
 

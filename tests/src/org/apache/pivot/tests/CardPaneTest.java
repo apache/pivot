@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.Style;
 
 public class CardPaneTest implements Application {
     private Frame frame = null;
@@ -42,7 +43,7 @@ public class CardPaneTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         frame = new Frame(new BoxPane());
-        frame.getStyles().put("padding", 0);
+        frame.getStyles().put(Style.padding, 0);
         frame.setTitle("Component Pane Test");
         frame.setPreferredSize(800, 600);
         frame.setLocation(20, 20);

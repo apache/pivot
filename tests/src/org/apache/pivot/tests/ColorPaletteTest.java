@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.StackPane;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -43,9 +44,9 @@ public class ColorPaletteTest implements Application {
         Theme theme = Theme.getTheme();
 
         TablePane tablePane = new TablePane();
-        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(tablePane, 1, true);
+        new TablePane.Column(tablePane, 1, true);
+        new TablePane.Column(tablePane, 1, true);
 
         int numberOfPaletteColors = theme.getNumberOfPaletteColors();
         // ArrayList<String> colors = new ArrayList<>(numberOfPaletteColors);
@@ -57,11 +58,11 @@ public class ColorPaletteTest implements Application {
             row.add(createCell(i * 3 + 2));
         }
 
-        tablePane.getStyles().put("horizontalSpacing", 4);
-        tablePane.getStyles().put("verticalSpacing", 4);
+        tablePane.getStyles().put(Style.horizontalSpacing, 4);
+        tablePane.getStyles().put(Style.verticalSpacing, 4);
 
         Border border = new Border(tablePane);
-        border.getStyles().put("padding", 6);
+        border.getStyles().put(Style.padding, 6);
 
         this.window = new Window(border);
         this.window.setTitle("Color Palette");
@@ -82,25 +83,25 @@ public class ColorPaletteTest implements Application {
         StackPane stackPane = new StackPane();
 
         Border border = new Border();
-        border.getStyles().put("backgroundColor", index);
+        border.getStyles().put(Style.backgroundColor, index);
 
         stackPane.add(border);
 
         Label label = new Label();
         label.setText(Integer.toString(index));
-        label.getStyles().put("backgroundColor", Color.WHITE);
-        label.getStyles().put("padding", 2);
+        label.getStyles().put(Style.backgroundColor, Color.WHITE);
+        label.getStyles().put(Style.padding, 2);
 
-        Color themeColor = (Color)border.getStyles().get("backgroundColor");
+        Color themeColor = border.getStyles().getColor(Style.backgroundColor);
         Label colorLabel = new Label();
         colorLabel.setText(String.format("R:%1$d,G:%2$d,B:%3$d",
              themeColor.getRed(), themeColor.getGreen(), themeColor.getBlue()));
-        colorLabel.getStyles().put("backgroundColor", Color.WHITE);
-        colorLabel.getStyles().put("padding", 2);
+        colorLabel.getStyles().put(Style.backgroundColor, Color.WHITE);
+        colorLabel.getStyles().put(Style.padding, 2);
 
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
-        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        boxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        boxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        boxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         boxPane.add(new Border(label));
         boxPane.add(new Border(colorLabel));

@@ -53,6 +53,7 @@ limitations under the License.
             import org.apache.pivot.wtk.Display;
             import org.apache.pivot.wtk.HorizontalAlignment;
             import org.apache.pivot.wtk.Label;
+            import org.apache.pivot.wtk.Style;
             import org.apache.pivot.wtk.VerticalAlignment;
             import org.apache.pivot.wtk.Window;
 
@@ -65,11 +66,11 @@ limitations under the License.
 
                     Label label = new Label();
                     label.setText("Hello World!");
-                    label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));
-                    label.getStyles().put("color", Color.RED);
-                    label.getStyles().put("horizontalAlignment",
+                    label.getStyles().put(Style.font, new Font("Arial", Font.BOLD, 24));
+                    label.getStyles().put(Style.color, Color.RED);
+                    label.getStyles().put(Style.horizontalAlignment,
                         HorizontalAlignment.CENTER);
-                    label.getStyles().put("verticalAlignment",
+                    label.getStyles().put(Style.verticalAlignment,
                         VerticalAlignment.CENTER);
 
                     window.setContent(label);

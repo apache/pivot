@@ -29,6 +29,7 @@ import org.apache.pivot.wtk.CardPaneListener;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
@@ -112,28 +113,28 @@ public class CardPanes extends Window implements Bindable {
     }
 
     private void updateCardPane() {
-        cardPane.getStyles().put("sizeToSelection", sizeToSelectionCheckbox.isSelected());
+        cardPane.getStyles().put(Style.sizeToSelection, sizeToSelectionCheckbox.isSelected());
 
         if (crossfadeRadioButton.isSelected()) {
-            cardPane.getStyles().put("selectionChangeEffect",
+            cardPane.getStyles().put(Style.selectionChangeEffect,
                 CardPaneSkin.SelectionChangeEffect.CROSSFADE);
         } else if (horizontalSlideRadioButton.isSelected()) {
-            cardPane.getStyles().put("selectionChangeEffect",
+            cardPane.getStyles().put(Style.selectionChangeEffect,
                 CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
         } else if (verticalSlideRadioButton.isSelected()) {
-            cardPane.getStyles().put("selectionChangeEffect",
+            cardPane.getStyles().put(Style.selectionChangeEffect,
                 CardPaneSkin.SelectionChangeEffect.VERTICAL_SLIDE);
         } else if (horizontalFlipRadioButton.isSelected()) {
-            cardPane.getStyles().put("selectionChangeEffect",
+            cardPane.getStyles().put(Style.selectionChangeEffect,
                 CardPaneSkin.SelectionChangeEffect.HORIZONTAL_FLIP);
         } else if (verticalFlipRadioButton.isSelected()) {
-            cardPane.getStyles().put("selectionChangeEffect",
+            cardPane.getStyles().put(Style.selectionChangeEffect,
                 CardPaneSkin.SelectionChangeEffect.VERTICAL_FLIP);
         } else if (zoomRadioButton.isSelected()) {
-            cardPane.getStyles().put("selectionChangeEffect",
+            cardPane.getStyles().put(Style.selectionChangeEffect,
                 CardPaneSkin.SelectionChangeEffect.ZOOM);
         } else {
-            cardPane.getStyles().put("selectionChangeEffect", null);
+            cardPane.getStyles().put(Style.selectionChangeEffect, null);
         }
     }
 

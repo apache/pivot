@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextDecoration;
 
 public class LabelTest implements Application {
@@ -53,24 +54,24 @@ public class LabelTest implements Application {
         BoxPane boxPane = new BoxPane(Orientation.VERTICAL);
 
         Label label1 = new Label(line1);
-        label1.getStyles().put("wrapText", true);
-        label1.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        label1.getStyles().put(Style.wrapText, true);
+        label1.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
         boxPane.add(label1);
 
         Label label2 = new Label(line2); // strikethrough
-        label2.getStyles().put("wrapText", true);
-        label2.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        label2.getStyles().put("textDecoration", TextDecoration.STRIKETHROUGH);
+        label2.getStyles().put(Style.wrapText, true);
+        label2.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
+        label2.getStyles().put(Style.textDecoration, TextDecoration.STRIKETHROUGH);
         boxPane.add(label2);
 
         Label label3 = new Label(line2); // disabled
-        label3.getStyles().put("wrapText", true);
-        label3.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        label3.getStyles().put(Style.wrapText, true);
+        label3.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
         label3.setEnabled(false);
         boxPane.add(label3);
 
-        boxPane.getStyles().put("fill", true);
-        boxPane.getStyles().put("padding", new Insets(10));
+        boxPane.getStyles().put(Style.fill, true);
+        boxPane.getStyles().put(Style.padding, new Insets(10));
 
         frame.setContent(boxPane);
         frame.setPreferredSize(340, 400);

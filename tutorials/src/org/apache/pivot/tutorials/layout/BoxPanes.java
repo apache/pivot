@@ -28,6 +28,7 @@ import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.RadioButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
@@ -98,7 +99,7 @@ public class BoxPanes extends Window implements Bindable {
         }
 
         if (horizontalAlignment != null) {
-            boxPane.getStyles().put("horizontalAlignment", horizontalAlignment);
+            boxPane.getStyles().put(Style.horizontalAlignment, horizontalAlignment);
         }
 
         VerticalAlignment verticalAlignment = null;
@@ -111,9 +112,9 @@ public class BoxPanes extends Window implements Bindable {
         }
 
         if (verticalAlignment != null) {
-            boxPane.getStyles().put("verticalAlignment", verticalAlignment);
+            boxPane.getStyles().put(Style.verticalAlignment, verticalAlignment);
         }
 
-        boxPane.getStyles().put("fill", fillCheckbox.isSelected());
+        boxPane.getStyles().put(Style.fill, fillCheckbox.isSelected());
     }
 }

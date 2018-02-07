@@ -21,6 +21,7 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.xml.Element;
 import org.apache.pivot.xml.TextNode;
@@ -64,25 +65,25 @@ public class NodeRenderer extends Label implements TreeView.NodeRenderer {
 
             setText(text);
 
-            Font font = treeView.getStyles().getFont("font");
-            getStyles().put("font", font);
+            Font font = treeView.getStyles().getFont(Style.font);
+            getStyles().put(Style.font, font);
 
             Color color;
             if (treeView.isEnabled() && !disabled) {
                 if (selected) {
                     if (treeView.isFocused()) {
-                        color = treeView.getStyles().getColor("selectionColor");
+                        color = treeView.getStyles().getColor(Style.selectionColor);
                     } else {
-                        color = treeView.getStyles().getColor("inactiveSelectionColor");
+                        color = treeView.getStyles().getColor(Style.inactiveSelectionColor);
                     }
                 } else {
-                    color = treeView.getStyles().getColor("color");
+                    color = treeView.getStyles().getColor(Style.color);
                 }
             } else {
-                color = treeView.getStyles().getColor("disabledColor");
+                color = treeView.getStyles().getColor(Style.disabledColor);
             }
 
-            getStyles().put("color", color);
+            getStyles().put(Style.color, color);
         }
     }
 

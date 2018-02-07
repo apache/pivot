@@ -68,6 +68,7 @@ import org.apache.pivot.wtk.Slider;
 import org.apache.pivot.wtk.SliderValueListener;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSortListener;
 import org.apache.pivot.wtk.TreeView;
@@ -111,19 +112,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         }
 
         public void setB(URL bURL) {
-            Image imageFromURL = (Image) ApplicationContext.getResourceCache().get(bURL);
-
-            if (imageFromURL == null) {
-                try {
-                    imageFromURL = Image.load(bURL);
-                } catch (TaskExecutionException exception) {
-                    throw new RuntimeException(exception);
-                }
-
-                ApplicationContext.getResourceCache().put(bURL, imageFromURL);
-            }
-
-            setB(imageFromURL);
+            setB(Image.loadFromCache(bURL));
         }
 
         public String getC() {
@@ -473,23 +462,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         String imageName = (String) selectedItem.getUserData().get("image");
                         URL imageURL = getClass().getResource(imageName);
 
-                        // If the image has not been added to the resource cache
-                        // yet,
-                        // add it
-                        Image image = (Image) ApplicationContext.getResourceCache().get(imageURL);
-
-                        if (image == null) {
-                            try {
-                                image = Image.load(imageURL);
-                            } catch (TaskExecutionException exception) {
-                                throw new RuntimeException(exception);
-                            }
-
-                            ApplicationContext.getResourceCache().put(imageURL, image);
-                        }
-
                         // Update the image
-                        MenusRollupStateHandler.this.menuImageView.setImage(image);
+                        MenusRollupStateHandler.this.menuImageView.setImage(Image.loadFromCache(imageURL));
                     }
                 });
 
@@ -644,7 +618,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             SpinnersRollupStateHandler.this.greenSlider.getValue(),
                             SpinnersRollupStateHandler.this.blueSlider.getValue());
                         SpinnersRollupStateHandler.this.colorBorder.getStyles().put(
-                            "backgroundColor", color);
+                            Style.backgroundColor, color);
                     }
                 };
 
@@ -654,7 +628,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                 Color color = new Color(this.redSlider.getValue(), this.greenSlider.getValue(),
                     this.blueSlider.getValue());
-                this.colorBorder.getStyles().put("backgroundColor", color);
+                this.colorBorder.getStyles().put(Style.backgroundColor, color);
             }
 
             return Vote.APPROVE;
@@ -946,7 +920,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
                         if (imageView.getImage() == null && dragContent.containsImage()
                             && DropAction.MOVE.isSelected(supportedDropActions)) {
                             dropAction = DropAction.MOVE;
-                            comp.getStyles().put("backgroundColor", "#f0e68c");
+                            comp.getStyles().put(Style.backgroundColor, "#f0e68c");
                         }
 
                         return dropAction;
@@ -954,7 +928,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
 
                     @Override
                     public void dragExit(Component comp) {
-                        comp.getStyles().put("backgroundColor", null);
+                        comp.getStyles().put(Style.backgroundColor, null);
                     }
 
                     @Override
@@ -1225,17 +1199,7 @@ public class KitchenSink implements Application, Application.AboutHandler {
         return false;
     }
 
-    @Override
-    public void suspend() {
-        // empty block
-    }
-
-    @Override
-    public void resume() {
-        // empty block
-    }
-
-    // useful to run this as a Java Application in a simpler way (directly)
+    // Useful to run this as a Java Application directly from the desktop
     public static void main(String[] args) {
         DesktopApplicationContext.main(KitchenSink.class, args);
     }

@@ -26,6 +26,7 @@ import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.TreeViewSelectionListener;
 import org.apache.pivot.wtk.Window;
@@ -37,6 +38,7 @@ public class Pivot734 implements Application {
     private TreeView tree;
     private PushButton treeButtonAdd;
     private PushButton treeButtonRemove;
+    private TreeBranch newBranch = new TreeBranch("new branch");
 
     public Pivot734() {
 
@@ -54,8 +56,8 @@ public class Pivot734 implements Application {
         treeButtonAdd = (PushButton) bxmlSerializer.getNamespace().get("treeButtonAdd");
         treeButtonRemove = (PushButton) bxmlSerializer.getNamespace().get("treeButtonRemove");
         tree = (TreeView) bxmlSerializer.getNamespace().get("tree");
-        String treeStyleForShowEmptyBranchControls = ((Boolean) tree.getStyles().get(
-            "showEmptyBranchControls")).toString();
+        boolean treeStyleForShowEmptyBranchControls = tree.getStyles().getBoolean(
+            Style.showEmptyBranchControls);
         System.out.println("tree style for showEmptyBranchControls is "
             + treeStyleForShowEmptyBranchControls);
 
@@ -88,8 +90,7 @@ public class Pivot734 implements Application {
                 System.out.println("add a 'new branch' element to the selected element :: " + x);
 
                 if (x != null && x instanceof TreeBranch) {
-                    TreeBranch treeBranch = new TreeBranch("new branch");
-                    ((TreeBranch) x).add(treeBranch);
+                    ((TreeBranch) x).add(newBranch);
                 }
 
             }
@@ -103,8 +104,7 @@ public class Pivot734 implements Application {
                     + x);
 
                 if (x != null && x instanceof TreeBranch) {
-                    TreeBranch treeBranch = new TreeBranch("new branch");
-                    ((TreeBranch) x).remove(treeBranch);
+                    ((TreeBranch) x).remove(newBranch);
                 }
 
             }

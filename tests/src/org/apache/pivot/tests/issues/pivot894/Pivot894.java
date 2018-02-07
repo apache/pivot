@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GridPane;
 import org.apache.pivot.wtk.GridPane.Row;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.ButtonData;
 import org.apache.pivot.wtk.media.Image;
@@ -56,7 +57,7 @@ public class Pivot894 implements Application {
         Thread.sleep(2000);
 
         final CardPane cardPane = new CardPane();
-        cardPane.getStyles().put("selectionChangeEffect",
+        cardPane.getStyles().put(Style.selectionChangeEffect,
             CardPaneSkin.SelectionChangeEffect.HORIZONTAL_SLIDE);
 
         final Window window = new Window(cardPane);

@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 
@@ -37,10 +38,10 @@ public class HelloJava implements Application {
 
         Label label = new Label();
         label.setText("Hello World!");
-        label.getStyles().put("font", new Font("Arial", Font.BOLD, 24));
-        label.getStyles().put("color", Color.RED);
-        label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        label.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        label.getStyles().put(Style.font, new Font("Arial", Font.BOLD, 24));
+        label.getStyles().put(Style.color, Color.RED);
+        label.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        label.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         this.window.setContent(label);
         this.window.setTitle("Hello World!");
@@ -58,17 +59,7 @@ public class HelloJava implements Application {
         return false;
     }
 
-    @Override
-    public void suspend() {
-        // empty block
-    }
-
-    @Override
-    public void resume() {
-        // empty block
-    }
-
-    // useful to run this as a Java Application in a simpler way (directly)
+    // Useful to run this as a Java Application directly from the desktop
     public static void main(String[] args) {
         DesktopApplicationContext.main(HelloJava.class, args);
     }

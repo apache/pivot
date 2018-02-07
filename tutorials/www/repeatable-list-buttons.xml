@@ -137,6 +137,7 @@ limitations under the License.
             import org.apache.pivot.wtk.Checkbox;
             import org.apache.pivot.wtk.Component;
             import org.apache.pivot.wtk.ListButton;
+            import org.apache.pivot.wtk.Style;
             import org.apache.pivot.wtk.Window;
             import org.apache.pivot.wtk.Button.State;
             import org.apache.pivot.wtk.content.ColorItem;
@@ -156,7 +157,7 @@ limitations under the License.
                         for (Component component : checkboxBoxPane) {
                             Checkbox checkbox = (Checkbox)component;
                             if (checkbox.isSelected()) {
-                                checkbox.getStyles().put("color", color);
+                                checkbox.getStyles().put(Style.color, color);
                                 checkbox.setSelected(false);
                             }
                         }

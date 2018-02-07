@@ -24,15 +24,25 @@ import java.awt.geom.AffineTransform;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtk.SpinnerSelectionListener;
+import org.apache.pivot.wtk.Style;
+import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.content.NumericSpinnerData;
 
 public class LabelAntialiasTest implements Application {
     private Window window = null;
+    private TablePane.Row labelRow = null;
+    private Spinner rotationAngleSpinner = null;
+    private int currentRotationAngle = 0;
 
     private Label buildLabel(double rotation) {
         Label label = new Label();
@@ -44,11 +54,11 @@ public class LabelAntialiasTest implements Application {
         fontAT.rotate(rotation * java.lang.Math.PI / 180.0d);
         Font fontDerived = font.deriveFont(fontAT);
 
-        label.setText("Hello at " + rotation + " degree.");
-        label.getStyles().put("color", Color.RED);
-        label.getStyles().put("font", fontDerived);
-        label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        label.getStyles().put("verticalAlignment", VerticalAlignment.TOP);
+        label.setText("Hello at " + rotation + " degrees.");
+        label.getStyles().put(Style.color, Color.RED);
+        label.getStyles().put(Style.font, fontDerived);
+        label.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        label.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         return label;
     }
@@ -93,11 +103,36 @@ public class LabelAntialiasTest implements Application {
         showFontDesktopHints();
         showFontFamilies();
 
-        Label label = buildLabel(45);
-        window.setContent(label);
+        TablePane content = new TablePane();
+        new TablePane.Column(content, 1, true);
+        BoxPane topBox = new BoxPane(Orientation.HORIZONTAL);
+        topBox.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        topBox.add(new Label("Rotation angle:"));
+        rotationAngleSpinner = new Spinner(new NumericSpinnerData(0, 359));
+        rotationAngleSpinner.setCircular(true);
+        rotationAngleSpinner.setPreferredWidth(40);
+        topBox.add(rotationAngleSpinner);
+        TablePane.Row topRow = new TablePane.Row(content, -1);
+        topRow.add(topBox);
+        labelRow = new TablePane.Row(content, 1, true);
+
+        window.setContent(content);
 
         window.setTitle("Label Antialiasing Test");
         window.setMaximized(true);
+
+        rotationAngleSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
+            @Override
+            public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+                currentRotationAngle = (Integer)spinner.getSelectedItem();
+                if (labelRow.getLength() > 0) {
+                    labelRow.remove(0, labelRow.getLength());
+                }
+                labelRow.add(buildLabel(currentRotationAngle));
+            }
+        });
+        rotationAngleSpinner.setSelectedItem(45);
+
         window.open(display);
     }
 

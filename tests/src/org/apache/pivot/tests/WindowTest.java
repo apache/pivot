@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Palette;
 import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
@@ -56,7 +57,7 @@ public class WindowTest implements Application {
             }
         });
 
-        display.getStyles().put("backgroundColor", new Color(0, 127, 127));
+        display.getStyles().put(Style.backgroundColor, new Color(0, 127, 127));
         window1.setContent(new Label("Hello Bar"));
         window1.open(display);
 

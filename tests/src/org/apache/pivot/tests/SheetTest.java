@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
@@ -53,36 +54,36 @@ public class SheetTest implements Application {
 
         BoxPane windowContent = new BoxPane();
         PushButton button = new PushButton(picture);
-        button.getStyles().put("toolbar", true);
+        button.getStyles().put(Style.toolbar, true);
 
         windowContent.add(button);
 
         frame = new Frame(windowContent);
         frame.setPreferredSize(480, 360);
-        frame.getStyles().put("padding", 0);
+        frame.getStyles().put(Style.padding, 0);
         frame.open(display);
 
         final TablePane tablePane = new TablePane();
         tablePane.setPreferredSize(320, 240);
-        new TablePane.Column(tablePane, 1, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(tablePane, 1, true);
         TablePane.Row row0 = new TablePane.Row(tablePane, 1, true);
         TablePane.Row row1 = new TablePane.Row(tablePane, -1);
 
         final Label sheetContent = new Label("Sheet Content");
-        sheetContent.getStyles().put("wrapText", true);
-        sheetContent.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-        sheetContent.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        sheetContent.getStyles().put(Style.wrapText, true);
+        sheetContent.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+        sheetContent.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         row0.add(sheetContent);
 
         Label promptBody = new Label(
             "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
-        promptBody.getStyles().put("wrapText", true);
+        promptBody.getStyles().put(Style.wrapText, true);
 
         final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<>("OK"),
             promptBody);
         prompt.setTitle("Prompt");
-        prompt.getStyles().put("resizable", true);
+        prompt.getStyles().put(Style.resizable, true);
 
         prompt.getComponentMouseListeners().add(new ComponentMouseListener() {
             @Override
@@ -98,7 +99,7 @@ public class SheetTest implements Application {
 
         Label alertBody = new Label(
             "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
-        alertBody.getStyles().put("wrapText", true);
+        alertBody.getStyles().put(Style.wrapText, true);
 
         final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<>("OK"), alertBody);
         alert.setTitle("Alert");
@@ -106,10 +107,10 @@ public class SheetTest implements Application {
         BoxPane boxPane = new BoxPane();
         row1.add(boxPane);
 
-        boxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        boxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
 
         final PushButton closeButton = new PushButton("Close");
-        closeButton.getStyles().put("minimumAspectRatio", 3);
+        closeButton.getStyles().put(Style.minimumAspectRatio, 3);
         boxPane.add(closeButton);
 
         sheet = new Sheet(tablePane);

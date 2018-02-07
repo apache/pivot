@@ -68,8 +68,9 @@ limitations under the License.
                     <Checkbox buttonData="Use Shadow">
                         <buttonStateListeners>
                             <![CDATA[
+                            importClass(org.apache.pivot.wtk.Style);
                             function stateChanged(button, previousState) {
-                                splitPane.getStyles().put("useShadow", button.isSelected());
+                                splitPane.getStyles().put(Style.useShadow, button.isSelected());
                             }
                             ]]>
                         </buttonStateListeners>
