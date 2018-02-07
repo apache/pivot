@@ -30,6 +30,7 @@ import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Menu;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.MenuItemSkin;
 
@@ -56,12 +57,11 @@ public class TerraMenuItemSkin extends MenuItemSkin {
             Menu.Item menuItem = (Menu.Item) getComponent();
             Menu menu = (Menu) menuItem.getParent();
 
-            Color color = (Color) menu.getStyles().get("color");
+            Color color = menu.getStyles().getColor(Style.color);
             graphics.setColor(color);
             graphics.setStroke(new BasicStroke(2.5f));
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             // Draw a checkmark
             int n = CHECKMARK_SIZE / 2;
@@ -139,7 +139,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         // Paint highlight state
         if (highlight) {
-            Color activeBackgroundColor = (Color) menu.getStyles().get("activeBackgroundColor");
+            Color activeBackgroundColor = menu.getStyles().getColor(Style.activeBackgroundColor);
             graphics.setPaint(new GradientPaint(width / 2f, 0,
                 TerraTheme.brighten(activeBackgroundColor), width / 2f, height,
                 activeBackgroundColor));
@@ -154,13 +154,11 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         // Paint the expander
         if (menuItem.getMenu() != null) {
-            Color color = (Color) (highlight ? menu.getStyles().get("activeColor")
-                : menu.getStyles().get("color"));
+            Color color = menu.getStyles().getColor(highlight ? Style.activeColor : Style.color);
             graphics.setColor(color);
             graphics.setStroke(new BasicStroke(0));
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.translate(dataRenderer.getWidth() + (EXPANDER_SIZE - EXPANDER_ICON_SIZE) / 2,
                 (height - EXPANDER_ICON_SIZE) / 2);
@@ -180,7 +178,7 @@ public class TerraMenuItemSkin extends MenuItemSkin {
 
         if (menuItem.isActive()) {
             Menu menu = (Menu) menuItem.getParent();
-            Color activeBackgroundColor = (Color) menu.getStyles().get("activeBackgroundColor");
+            Color activeBackgroundColor = menu.getStyles().getColor(Style.activeBackgroundColor);
             opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }
 
@@ -192,11 +190,11 @@ public class TerraMenuItemSkin extends MenuItemSkin {
     }
 
     public Color getPopupBorderColor() {
-        return (Color) menuPopup.getStyles().get("borderColor");
+        return menuPopup.getStyles().getColor(Style.borderColor);
     }
 
     public void setPopupBorderColor(Color popupBorderColor) {
-        menuPopup.getStyles().put("borderColor", popupBorderColor);
+        menuPopup.getStyles().put(Style.borderColor, popupBorderColor);
     }
 
     public void setPopupBorderColor(String popupBorderColor) {

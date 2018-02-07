@@ -23,13 +23,14 @@ import org.apache.pivot.util.CalendarDate;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.CalendarButton;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Style;
 
 /**
  * Default calendar button data renderer.
  */
 public class CalendarButtonDataRenderer extends ButtonDataRenderer {
     public CalendarButtonDataRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
     }
 
     @Override

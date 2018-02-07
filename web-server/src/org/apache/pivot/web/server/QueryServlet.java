@@ -340,10 +340,10 @@ public abstract class QueryServlet extends HttpServlet {
             try {
                 URL url = new URL(request.getRequestURL().toString());
                 hostname.set(url.getHost());
-                port.set(new Integer(request.getLocalPort()));
+                port.set(Integer.valueOf(request.getLocalPort()));
                 contextPath.set(request.getContextPath());
                 servletPath.set(request.getServletPath());
-                secure.set(new Boolean(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL)));
+                secure.set(Boolean.valueOf(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL)));
             } catch (MalformedURLException exception) {
                 throw new ServletException(exception);
             }

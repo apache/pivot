@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.MenuButton;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -454,7 +455,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-        menuPopup.getStyles().put("borderColor", borderColor);
+        menuPopup.getStyles().put(Style.borderColor, borderColor);
         repaintComponent();
     }
 
@@ -590,21 +591,21 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
     }
 
     public int getCloseTransitionDuration() {
-        return menuPopup.getStyles().getInt("closeTransitionDuration");
+        return menuPopup.getStyles().getInt(Style.closeTransitionDuration);
     }
 
     public void setCloseTransitionDuration(int closeTransitionDuration) {
-        menuPopup.getStyles().put("closeTransitionDuration", closeTransitionDuration);
+        menuPopup.getStyles().put(Style.closeTransitionDuration, closeTransitionDuration);
         MenuButton menuButton = (MenuButton) getComponent();
         menuButton.setQueuedActionDelay(closeTransitionDuration + 50);
     }
 
     public int getCloseTransitionRate() {
-        return menuPopup.getStyles().getInt("closeTransitionRate");
+        return menuPopup.getStyles().getInt(Style.closeTransitionRate);
     }
 
     public void setCloseTransitionRate(int closeTransitionRate) {
-        menuPopup.getStyles().put("closeTransitionRate", closeTransitionRate);
+        menuPopup.getStyles().put(Style.closeTransitionRate, closeTransitionRate);
     }
 
     @Override

@@ -70,6 +70,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.SortDirection;
 import org.apache.pivot.wtk.Span;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableViewSelectionListener;
 import org.apache.pivot.wtk.TableViewSortListener;
@@ -114,13 +115,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         public FileRenderer() {
-            getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+            getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
             add(imageView);
             add(label);
 
             imageView.setPreferredSize(ICON_WIDTH, ICON_HEIGHT);
-            imageView.getStyles().put("backgroundColor", null);
+            imageView.getStyles().put(Style.backgroundColor, null);
         }
 
         @Override
@@ -154,7 +155,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      */
     public static class ListButtonFileRenderer extends FileRenderer implements Button.DataRenderer {
         public ListButtonFileRenderer() {
-            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+            getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
         }
 
         @Override
@@ -165,7 +166,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 // Update the image view
                 imageView.setImage(getIcon(file));
-                imageView.getStyles().put("opacity", button.isEnabled() && !hidden ? 1.0f : 0.5f);
+                imageView.getStyles().put(Style.opacity, button.isEnabled() && !hidden ? 1.0f : 0.5f);
 
                 // Update the label
                 String text = file.getName();
@@ -177,12 +178,12 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 Object color = null;
                 if (button.isEnabled() && !hidden) {
-                    color = button.getStyles().get("color");
+                    color = button.getStyles().get(Style.color);
                 } else {
-                    color = button.getStyles().get("disabledColor");
+                    color = button.getStyles().get(Style.disabledColor);
                 }
 
-                label.getStyles().put("color", color);
+                label.getStyles().put(Style.color, color);
             }
         }
 
@@ -203,8 +204,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
      */
     public static class ListViewFileRenderer extends FileRenderer implements ListView.ItemRenderer {
         public ListViewFileRenderer() {
-            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-            getStyles().put("padding", new Insets(2, 3, 2, 3));
+            getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
+            getStyles().put(Style.padding, new Insets(2, 3, 2, 3));
         }
 
         @Override
@@ -212,7 +213,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             Button.State state, boolean highlighted, boolean disabled) {
             boolean hidden = false;
 
-            label.getStyles().put("font", listView.getStyles().get("font"));
+            label.getStyles().copy(Style.font, listView.getStyles());
 
             if (item != null) {
                 File file = (File) item;
@@ -220,7 +221,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 // Update the image view
                 imageView.setImage(getIcon(file));
-                imageView.getStyles().put("opacity",
+                imageView.getStyles().put(Style.opacity,
                     (listView.isEnabled() && !disabled && !hidden) ? 1.0f : 0.5f);
 
                 // Update the label
@@ -236,18 +237,18 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             if (listView.isEnabled() && !disabled && !hidden) {
                 if (selected) {
                     if (listView.isFocused()) {
-                        color = listView.getStyles().get("selectionColor");
+                        color = listView.getStyles().get(Style.selectionColor);
                     } else {
-                        color = listView.getStyles().get("inactiveSelectionColor");
+                        color = listView.getStyles().get(Style.inactiveSelectionColor);
                     }
                 } else {
-                    color = listView.getStyles().get("color");
+                    color = listView.getStyles().get(Style.color);
                 }
             } else {
-                color = listView.getStyles().get("disabledColor");
+                color = listView.getStyles().get(Style.disabledColor);
             }
 
-            label.getStyles().put("color", color);
+            label.getStyles().put(Style.color, color);
         }
 
         @Override
@@ -272,8 +273,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         public static final String LAST_MODIFIED_KEY = "lastModified";
 
         public TableViewFileRenderer() {
-            getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
-            getStyles().put("padding", new Insets(2));
+            getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
+            getStyles().put(Style.padding, new Insets(2));
         }
 
         @Override
@@ -291,16 +292,16 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 if (columnName.equals(NAME_KEY)) {
                     text = file.getName();
                     icon = getIcon(file);
-                    getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+                    getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
                 } else if (columnName.equals(SIZE_KEY)) {
                     long length = file.length();
                     text = FileSizeFormat.getInstance().format(length);
-                    getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+                    getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
                 } else if (columnName.equals(LAST_MODIFIED_KEY)) {
                     long lastModified = file.lastModified();
                     Date lastModifiedDate = new Date(lastModified);
                     text = DATE_FORMAT.format(lastModifiedDate);
-                    getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+                    getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
                 } else {
                     System.err.println("Unexpected column name in " + getClass().getName() + ": "
                         + columnName);
@@ -309,29 +310,28 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 label.setText(text);
                 imageView.setImage(icon);
-                imageView.getStyles().put("opacity",
+                imageView.getStyles().put(Style.opacity,
                     (tableView.isEnabled() && !disabled && !hidden) ? 1.0f : 0.5f);
             }
 
-            Font font = (Font) tableView.getStyles().get("font");
-            label.getStyles().put("font", font);
+            label.getStyles().copy(Style.font, tableView.getStyles());
 
             Color color;
             if (tableView.isEnabled() && !disabled && !hidden) {
                 if (selected) {
                     if (tableView.isFocused()) {
-                        color = (Color) tableView.getStyles().get("selectionColor");
+                        color = tableView.getStyles().getColor(Style.selectionColor);
                     } else {
-                        color = (Color) tableView.getStyles().get("inactiveSelectionColor");
+                        color = tableView.getStyles().getColor(Style.inactiveSelectionColor);
                     }
                 } else {
-                    color = (Color) tableView.getStyles().get("color");
+                    color = tableView.getStyles().getColor(Style.color);
                 }
             } else {
-                color = (Color) tableView.getStyles().get("disabledColor");
+                color = tableView.getStyles().getColor(Style.disabledColor);
             }
 
-            label.getStyles().put("color", color);
+            label.getStyles().put(Style.color, color);
         }
 
         @Override
@@ -379,13 +379,13 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
 
         public DriveRenderer() {
-            getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+            getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
             add(imageView);
             add(label);
 
             imageView.setPreferredSize(ICON_WIDTH, ICON_HEIGHT);
-            imageView.getStyles().put("backgroundColor", null);
+            imageView.getStyles().put(Style.backgroundColor, null);
         }
 
         @Override
@@ -404,7 +404,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public static class ListButtonDriveRenderer extends DriveRenderer implements
         Button.DataRenderer {
         public ListButtonDriveRenderer() {
-            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+            getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
         }
 
         @Override
@@ -414,7 +414,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 // Update the image view
                 imageView.setImage(DRIVE_IMAGE);
-                imageView.getStyles().put("opacity", button.isEnabled() ? 1.0f : 0.5f);
+                imageView.getStyles().put(Style.opacity, button.isEnabled() ? 1.0f : 0.5f);
 
                 // Update the label
                 label.setText(file.toString());
@@ -433,38 +433,38 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     public static class ListViewDriveRenderer extends DriveRenderer implements
         ListView.ItemRenderer {
         public ListViewDriveRenderer() {
-            getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-            getStyles().put("padding", new Insets(2, 3, 2, 3));
+            getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
+            getStyles().put(Style.padding, new Insets(2, 3, 2, 3));
         }
 
         @Override
         public void render(Object item, int index, ListView listView, boolean selected,
             Button.State state, boolean highlighted, boolean disabled) {
-            label.getStyles().put("font", listView.getStyles().get("font"));
+            label.getStyles().copy(Style.font, listView.getStyles());
 
             Object color = null;
             if (listView.isEnabled() && !disabled) {
                 if (selected) {
                     if (listView.isFocused()) {
-                        color = listView.getStyles().get("selectionColor");
+                        color = listView.getStyles().get(Style.selectionColor);
                     } else {
-                        color = listView.getStyles().get("inactiveSelectionColor");
+                        color = listView.getStyles().get(Style.inactiveSelectionColor);
                     }
                 } else {
-                    color = listView.getStyles().get("color");
+                    color = listView.getStyles().get(Style.color);
                 }
             } else {
-                color = listView.getStyles().get("disabledColor");
+                color = listView.getStyles().get(Style.disabledColor);
             }
 
-            label.getStyles().put("color", color);
+            label.getStyles().put(Style.color, color);
 
             if (item != null) {
                 File file = (File) item;
 
                 // Update the image view
                 imageView.setImage(DRIVE_IMAGE);
-                imageView.getStyles().put("opacity",
+                imageView.getStyles().put(Style.opacity,
                     (listView.isEnabled() && !disabled) ? 1.0f : 0.5f);
 
                 // Update the label
@@ -976,8 +976,8 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 TextArea toolTipTextArea = new TextArea();
 
                 toolTipTextArea.setText(text);
-                toolTipTextArea.getStyles().put("wrapText", true);
-                toolTipTextArea.getStyles().put("backgroundColor", null);
+                toolTipTextArea.getStyles().put(Style.wrapText, true);
+                toolTipTextArea.getStyles().put(Style.backgroundColor, null);
 
                 tooltip.setContent(toolTipTextArea);
 

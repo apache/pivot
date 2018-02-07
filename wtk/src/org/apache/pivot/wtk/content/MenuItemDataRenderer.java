@@ -43,8 +43,8 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
     public MenuItemDataRenderer() {
         getStyles().put(Style.padding, new Insets(2));
 
-        new TablePane.Column(this, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(this);  // note: this is useful, even if not used directly
+        new TablePane.Column(this, 1, true);
+        new TablePane.Column(this);
 
         BoxPane boxPane = new BoxPane();
         boxPane.add(imageView);

@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Form;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
@@ -63,18 +64,12 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
         }
     }
 
-    @BXML
-    private TablePane tablePane = null;
-    @BXML
-    private BoxPane saveAsBoxPane = null;
-    @BXML
-    private TextInput saveAsTextInput = null;
-    @BXML
-    private FileBrowser fileBrowser = null;
-    @BXML
-    private PushButton okButton = null;
-    @BXML
-    private PushButton cancelButton = null;
+    @BXML private TablePane tablePane = null;
+    @BXML private BoxPane saveAsBoxPane = null;
+    @BXML private TextInput saveAsTextInput = null;
+    @BXML private FileBrowser fileBrowser = null;
+    @BXML private PushButton okButton = null;
+    @BXML private PushButton cancelButton = null;
 
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
@@ -232,19 +227,19 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     }
 
     public boolean isHideDisabledFiles() {
-        return (Boolean) fileBrowser.getStyles().get("hideDisabledFiles");
+        return fileBrowser.getStyles().getBoolean(Style.hideDisabledFiles);
     }
 
     public void setHideDisabledFiles(boolean hideDisabledFiles) {
-        fileBrowser.getStyles().put("hideDisabledFiles", hideDisabledFiles);
+        fileBrowser.getStyles().put(Style.hideDisabledFiles, hideDisabledFiles);
     }
 
     public boolean isShowHiddenFiles() {
-        return (Boolean) fileBrowser.getStyles().get("showHiddenFiles");
+        return fileBrowser.getStyles().getBoolean(Style.showHiddenFiles);
     }
 
     public void setShowHiddenFiles(boolean showHiddenFiles) {
-        fileBrowser.getStyles().put("showHiddenFiles", showHiddenFiles);
+        fileBrowser.getStyles().put(Style.showHiddenFiles, showHiddenFiles);
     }
 
     public boolean getShowOKButtonFirst() {
@@ -299,12 +294,10 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                         String fileName = saveAsTextInput.getText();
                         // Contents of the entry field could be:
                         // 1. Just a new file name in the current root directory
-                        // 2. A relative or absolute path that is an existing
-                        // directory
-                        // to navigate to
-                        // 3. A relative or absolute path including the new file
-                        // name
-                        // in an existing directory
+                        // 2. A relative or absolute path that is an existing directory
+                        //    to navigate to
+                        // 3. A relative or absolute path including the new file name
+                        //    in an existing directory
                         // So, first make it an absolute path
                         File selectedFile = new File(fileName);
                         if (!selectedFile.isAbsolute() && !fileName.startsWith(File.separator)) {
@@ -367,7 +360,7 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
     public void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode) {
         FileBrowserSheet.Mode mode = fileBrowserSheet.getMode();
 
-        fileBrowser.getStyles().put("keyboardFolderTraversalEnabled",
+        fileBrowser.getStyles().put(Style.keyboardFolderTraversalEnabled,
             (mode != FileBrowserSheet.Mode.SAVE_TO));
 
         switch (mode) {

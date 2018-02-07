@@ -48,6 +48,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -262,32 +263,32 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, 1, true);
+        new TablePane.Column(titleBarTablePane, -1);
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
-        titleBarTablePane.getStyles().put("padding", new Insets(2));
+        titleBarTablePane.getStyles().put(Style.padding, new Insets(2));
 
         // Initialize the title box pane
         titleBoxPane.add(iconImageView);
         titleBoxPane.add(titleLabel);
-        titleBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 2));
+        titleBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        titleBoxPane.getStyles().put(Style.padding, new Insets(0, 0, 0, 2));
 
         Font titleFont = theme.getFont().deriveFont(Font.BOLD);
-        titleLabel.getStyles().put("font", titleFont);
+        titleLabel.getStyles().put(Style.font, titleFont);
 
         iconImageView.setPreferredSize(16, 16);
-        iconImageView.getStyles().put("fill", new Boolean(true));
-        iconImageView.getStyles().put("backgroundColor", null);
+        iconImageView.getStyles().put(Style.fill, true);
+        iconImageView.getStyles().put(Style.backgroundColor, null);
 
         // Initialize the button box pane
-        buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        buttonBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
+        buttonBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
     }
 
     @Override
@@ -849,8 +850,8 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     public void activeChanged(Window window, Window obverseWindow) {
         boolean active = window.isActive();
 
-        titleLabel.getStyles().put("color", active ? titleBarColor : inactiveTitleBarColor);
-        iconImageView.getStyles().put("opacity", active ? new Float(1.0f) : new Float(INACTIVE_ICON_OPACITY));
+        titleLabel.getStyles().put(Style.color, active ? titleBarColor : inactiveTitleBarColor);
+        iconImageView.getStyles().put(Style.opacity, active ? new Float(1.0f) : new Float(INACTIVE_ICON_OPACITY));
 
         updateButtonStyles(minimizeButton, active);
         updateButtonStyles(maximizeButton, active);
@@ -871,10 +872,10 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     private void updateButtonStyles(FrameButton frameButton, boolean active) {
-        frameButton.getStyles().put("color", active ? titleBarColor : inactiveTitleBarColor);
-        frameButton.getStyles().put("backgroundColor",
+        frameButton.getStyles().put(Style.color, active ? titleBarColor : inactiveTitleBarColor);
+        frameButton.getStyles().put(Style.backgroundColor,
             active ? titleBarBackgroundColor : inactiveTitleBarBackgroundColor);
-        frameButton.getStyles().put("borderColor",
+        frameButton.getStyles().put(Style.borderColor,
             active ? titleBarBorderColor : inactiveTitleBarBorderColor);
     }
 }

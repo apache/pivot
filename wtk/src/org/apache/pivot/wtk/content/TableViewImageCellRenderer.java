@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.ImageView;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TableView.CellRenderer;
 import org.apache.pivot.wtk.media.Image;
@@ -78,7 +79,7 @@ public class TableViewImageCellRenderer extends ImageView implements CellRendere
             }
 
             setImage(image);
-            getStyles().put("opacity", disabled ? 0.5f : 1.0f);
+            getStyles().put(Style.opacity, disabled ? 0.5f : 1.0f);
         }
     }
 

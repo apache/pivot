@@ -41,6 +41,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.LinkButton;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -239,27 +240,27 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     public TerraExpanderSkin() {
         // Create the title bar components
         titleBarTablePane = new TablePane();
-        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, 1, true);
+        new TablePane.Column(titleBarTablePane, -1);
 
-        titleBarTablePane.getStyles().put("padding", new Insets(3));
-        titleBarTablePane.getStyles().put("horizontalSpacing", Integer.valueOf(3));
+        titleBarTablePane.getStyles().put(Style.padding, new Insets(3));
+        titleBarTablePane.getStyles().put(Style.horizontalSpacing, 3);
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
         titleBoxPane = new BoxPane(Orientation.HORIZONTAL);
-        titleBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        titleBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
 
         buttonBoxPane = new BoxPane(Orientation.HORIZONTAL);
-        buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        buttonBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
+        buttonBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
         Theme theme = currentTheme();
         Font titleFont = theme.getFont().deriveFont(Font.BOLD);
-        titleLabel.getStyles().put("font", titleFont);
+        titleLabel.getStyles().put(Style.font, titleFont);
         titleBoxPane.add(titleLabel);
 
         // Listen for click events on the title bar
@@ -463,11 +464,11 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public Font getTitleBarFont() {
-        return (Font) titleLabel.getStyles().get("font");
+        return titleLabel.getStyles().getFont(Style.font);
     }
 
     public void setTitleBarFont(Font titleBarFont) {
-        titleLabel.getStyles().put("font", titleBarFont);
+        titleLabel.getStyles().put(Style.font, titleBarFont);
     }
 
     public final void setTitleBarFont(String titleBarFont) {
@@ -484,7 +485,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
 
     public void setTitleBarColor(Color titleBarColor) {
         this.titleBarColor = titleBarColor;
-        titleLabel.getStyles().put("color", titleBarColor);
+        titleLabel.getStyles().put(Style.color, titleBarColor);
     }
 
     public final void setTitleBarColor(String titleBarColor) {
@@ -659,9 +660,9 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     @Override
     public void enabledChanged(Component component) {
         if (component.isEnabled()) {
-            titleLabel.getStyles().put("color", titleBarColor);
+            titleLabel.getStyles().put(Style.color, titleBarColor);
         } else {
-            titleLabel.getStyles().put("color", disabledShadeButtonColor);
+            titleLabel.getStyles().put(Style.color, disabledShadeButtonColor);
         }
     }
 

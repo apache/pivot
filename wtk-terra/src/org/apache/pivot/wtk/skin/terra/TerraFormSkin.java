@@ -43,6 +43,7 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Separator;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -74,11 +75,10 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
             arrow.lineTo(POPUP_FIELD_INDICATOR_OFFSET + POPUP_FIELD_INDICATOR_WIDTH, 0);
             arrow.closePath();
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.setStroke(new BasicStroke(0));
-            graphics.setColor((Color) flagMessageWindow.getStyles().get("backgroundColor"));
+            graphics.setColor(flagMessageWindow.getStyles().getColor(Style.backgroundColor));
 
             graphics.draw(arrow);
             graphics.fill(arrow);
@@ -162,8 +162,8 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                                 flagMessageLabel.setText(message);
                                 flagMessageLabel.setSize(flagMessageLabel.getPreferredSize());
                                 flagMessageLabel.validate();
-                                flagMessageLabel.getStyles().put("color", messageColor);
-                                flagMessageLabel.getStyles().put("backgroundColor",
+                                flagMessageLabel.getStyles().put(Style.color, messageColor);
+                                flagMessageLabel.getStyles().put(Style.backgroundColor,
                                     messageBackgroundColor);
 
                                 int flagMessageX = field.getX() + field.getWidth()
@@ -293,8 +293,8 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                             }
                         }
 
-                        flagMessageLabel.getStyles().put("color", color);
-                        flagMessageWindow.getStyles().put("backgroundColor", backgroundColor);
+                        flagMessageLabel.getStyles().put(Style.color, color);
+                        flagMessageWindow.getStyles().put(Style.backgroundColor, backgroundColor);
 
                         // Open the window
                         Point location = component.mapPointToAncestor(component.getDisplay(), 0,
@@ -374,7 +374,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
         maximumFlagImageWidth = Math.max(maximumFlagImageWidth, infoIcon.getWidth());
 
         // Create the flag message popup
-        flagMessageLabel.getStyles().put("padding", new Insets(3, 4, 3, 4));
+        flagMessageLabel.getStyles().put(Style.padding, new Insets(3, 4, 3, 4));
 
         if (!themeIsFlat()) {
             flagMessageWindow.getDecorators().add(new DropShadowDecorator());
@@ -1065,7 +1065,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
         this.separatorColor = separatorColor;
 
         for (Separator separator : separators) {
-            separator.getStyles().put("color", separatorColor);
+            separator.getStyles().put(Style.color, separatorColor);
         }
     }
 
@@ -1081,7 +1081,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
         this.separatorHeadingColor = separatorHeadingColor;
 
         for (Separator separator : separators) {
-            separator.getStyles().put("headingColor", separatorHeadingColor);
+            separator.getStyles().put(Style.headingColor, separatorHeadingColor);
         }
     }
 
@@ -1142,8 +1142,8 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
 
         // Insert separator
         Separator separator = new Separator(section.getHeading());
-        separator.getStyles().put("color", separatorColor);
-        separator.getStyles().put("headingColor", separatorHeadingColor);
+        separator.getStyles().put(Style.color, separatorColor);
+        separator.getStyles().put(Style.headingColor, separatorHeadingColor);
 
         separators.insert(separator, index);
         form.add(separator);

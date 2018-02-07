@@ -208,7 +208,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
 
     private Component addBooleanControl(final Dictionary<String, Object> dictionary,
         final String key, Form.Section section) {
-        boolean value = (Boolean) dictionary.get(key);
+        boolean value = dictionary.getBoolean(key);
 
         Checkbox checkbox = new Checkbox();
         checkbox.setSelected(value);
@@ -241,7 +241,7 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
         Checkbox checkbox = (Checkbox) controls.get(key);
 
         if (checkbox != null) {
-            boolean value = (Boolean) dictionary.get(key);
+            boolean value = dictionary.getBoolean(key);
             checkbox.setSelected(value);
         }
     }

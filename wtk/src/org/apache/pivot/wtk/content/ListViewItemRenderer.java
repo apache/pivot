@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 
@@ -42,9 +43,9 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     public static boolean DEFAULT_SHOW_ICON = false;
 
     public ListViewItemRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", new Insets(2, 3, 2, 3));
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        getStyles().put(Style.padding, new Insets(2, 3, 2, 3));
 
         add(imageView);
         add(label);
@@ -84,27 +85,26 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
 
     protected void renderStyles(ListView listView, boolean selected, @SuppressWarnings("unused")
     boolean highlighted, boolean disabled) {
-        imageView.getStyles().put("opacity", listView.isEnabled() ? 1.0f : 0.5f);
+        imageView.getStyles().put(Style.opacity, listView.isEnabled() ? 1.0f : 0.5f);
 
-        Font font = (Font) listView.getStyles().get("font");
-        label.getStyles().put("font", font);
+        label.getStyles().copy(Style.font, listView.getStyles());
 
         Color color;
         if (listView.isEnabled() && !disabled) {
             if (selected) {
                 if (listView.isFocused()) {
-                    color = (Color) listView.getStyles().get("selectionColor");
+                    color = listView.getStyles().getColor(Style.selectionColor);
                 } else {
-                    color = (Color) listView.getStyles().get("inactiveSelectionColor");
+                    color = listView.getStyles().getColor(Style.inactiveSelectionColor);
                 }
             } else {
-                color = (Color) listView.getStyles().get("color");
+                color = listView.getStyles().getColor(Style.color);
             }
         } else {
-            color = (Color) listView.getStyles().get("disabledColor");
+            color = listView.getStyles().getColor(Style.disabledColor);
         }
 
-        label.getStyles().put("color", color);
+        label.getStyles().put(Style.color, color);
     }
 
     @Override
@@ -148,11 +148,11 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
     }
 
     public boolean getFillIcon() {
-        return (Boolean) imageView.getStyles().get("fill");
+        return imageView.getStyles().getBoolean(Style.fill);
     }
 
     public void setFillIcon(boolean fillIcon) {
-        imageView.getStyles().put("fill", fillIcon);
+        imageView.getStyles().put(Style.fill, fillIcon);
     }
 
     /**

@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.ColorChooser;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Mouse;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.skin.ColorChooserSkin;
 import org.apache.pivot.wtk.skin.ComponentSkin;
@@ -343,8 +344,8 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     @SuppressWarnings("unused")
     public TerraColorChooserSkin() {
         setSpacing(6);
-        new TablePane.Column(tablePane, 31, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(tablePane, 4, true);  // note: this is useful, even if not used directly
+        new TablePane.Column(tablePane, 31, true);
+        new TablePane.Column(tablePane, 4, true);
 
         TablePane.Row row = new TablePane.Row(tablePane, 1, true);
 
@@ -387,19 +388,19 @@ public class TerraColorChooserSkin extends ColorChooserSkin {
     }
 
     public int getSpacing() {
-        return tablePane.getStyles().getInt("horizontalSpacing");
+        return tablePane.getStyles().getInt(Style.horizontalSpacing);
     }
 
     public void setSpacing(int spacing) {
         Utils.checkNonNegative(spacing, "spacing");
 
-        tablePane.getStyles().put("horizontalSpacing", spacing);
+        tablePane.getStyles().put(Style.horizontalSpacing, spacing);
     }
 
     public final void setSpacing(Number spacing) {
         Utils.checkNull(spacing, "spacing");
 
-        tablePane.getStyles().put("horizontalSpacing", spacing);
+        tablePane.getStyles().put(Style.horizontalSpacing, spacing);
     }
 
     @Override

@@ -17,6 +17,7 @@
 package org.apache.pivot.wtk;
 
 import org.apache.pivot.beans.DefaultProperty;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
 /**
@@ -24,10 +25,10 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  */
 @DefaultProperty("buttonData")
 public class RadioButton extends Button {
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+    private static final ButtonDataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     static {
-        DEFAULT_DATA_RENDERER.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        DEFAULT_DATA_RENDERER.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
     }
 
     public RadioButton() {

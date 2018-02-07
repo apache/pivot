@@ -22,6 +22,7 @@ import java.awt.Font;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Spinner;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
@@ -30,8 +31,8 @@ import org.apache.pivot.wtk.VerticalAlignment;
  */
 public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     public SpinnerItemRenderer() {
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", new Insets(2));
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        getStyles().put(Style.padding, new Insets(2));
     }
 
     @Override
@@ -52,17 +53,16 @@ public class SpinnerItemRenderer extends Label implements Spinner.ItemRenderer {
     }
 
     protected void renderStyles(Spinner spinner) {
-        Font font = (Font) spinner.getStyles().get("font");
-        getStyles().put("font", font);
+        getStyles().copy(Style.font, spinner.getStyles());
 
         Color color;
         if (spinner.isEnabled()) {
-            color = (Color) spinner.getStyles().get("color");
+            color = spinner.getStyles().getColor(Style.color);
         } else {
-            color = (Color) spinner.getStyles().get("disabledColor");
+            color = spinner.getStyles().getColor(Style.disabledColor);
         }
 
-        getStyles().put("color", color);
+        getStyles().put(Style.color, color);
     }
 
     @Override

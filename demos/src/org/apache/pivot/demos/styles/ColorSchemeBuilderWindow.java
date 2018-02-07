@@ -120,9 +120,9 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
                 public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
                     Color previousSelectedColor) {
                     Color selectedColor = colorChooserButtonArgument.getSelectedColor();
-                    redSpinner.setSelectedItem(Integer.valueOf(selectedColor.getRed()));
-                    greenSpinner.setSelectedItem(Integer.valueOf(selectedColor.getGreen()));
-                    blueSpinner.setSelectedItem(Integer.valueOf(selectedColor.getBlue()));
+                    redSpinner.setSelectedItem(selectedColor.getRed());
+                    greenSpinner.setSelectedItem(selectedColor.getGreen());
+                    blueSpinner.setSelectedItem(selectedColor.getBlue());
 
                     // Update the theme
                     Theme themeLocal = Theme.getTheme();

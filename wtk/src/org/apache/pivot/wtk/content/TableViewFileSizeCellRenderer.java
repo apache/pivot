@@ -20,18 +20,19 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.text.FileSizeFormat;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Style;
 
 /**
  * Default renderer for table view cells that contain file size data. Renders
- * cell contents as a formatted file size.
+ * cell contents as a formatted file size, right-justified in the cell.
  */
 public class TableViewFileSizeCellRenderer extends TableViewCellRenderer {
     public TableViewFileSizeCellRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
 
         // Apply more padding on the right so the right-aligned cells don't
         // appear to run into left-aligned cells in the next column
-        getStyles().put("padding", new Insets(2, 2, 2, 6));
+        getStyles().put(Style.padding, new Insets(2, 2, 2, 6));
     }
 
     @Override

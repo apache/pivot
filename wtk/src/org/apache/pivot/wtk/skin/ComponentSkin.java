@@ -48,6 +48,7 @@ import org.apache.pivot.wtk.MenuHandler;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.Skin;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextInputMethodListener;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Tooltip;
@@ -313,7 +314,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
         if (tooltipText != null) {
             Label tooltipLabel = new Label(tooltipText);
             boolean tooltipWrapText = component.getTooltipWrapText();
-            tooltipLabel.getStyles().put("wrapText", new Boolean(tooltipWrapText));
+            tooltipLabel.getStyles().put(Style.wrapText, tooltipWrapText);
             Tooltip tooltip = new Tooltip(tooltipLabel);
 
             Display display = component.getDisplay();

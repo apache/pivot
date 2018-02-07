@@ -46,6 +46,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Palette;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
@@ -79,8 +80,7 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.setPaint(titleBarColor);
             graphics.setStroke(new BasicStroke(2));
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.draw(new Line2D.Double(0.5, 0.5, 5.5, 5.5));
             graphics.draw(new Line2D.Double(0.5, 5.5, 5.5, 0.5));
@@ -179,30 +179,30 @@ public class TerraPaletteSkin extends WindowSkin {
 
         // The title bar table pane contains two nested box panes: one for
         // the title contents and the other for the buttons
-        new TablePane.Column(titleBarTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(titleBarTablePane, -1);  // note: this is useful, even if not used directly
+        new TablePane.Column(titleBarTablePane, 1, true);
+        new TablePane.Column(titleBarTablePane, -1);
 
         TablePane.Row titleRow = new TablePane.Row(titleBarTablePane, -1);
 
         titleRow.add(titleBoxPane);
         titleRow.add(buttonBoxPane);
 
-        titleBarTablePane.getStyles().put("padding", new Insets(2, 3, 2, 3));
+        titleBarTablePane.getStyles().put(Style.padding, new Insets(2, 3, 2, 3));
 
         // Initialize the title box pane
-        titleBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        titleBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
         titleBoxPane.add(titleLabel);
-        titleBoxPane.getStyles().put("padding", new Insets(0, 0, 0, 3));
+        titleBoxPane.getStyles().put(Style.padding, new Insets(0, 0, 0, 3));
 
         Font titleFont = theme.getFont();
         titleFont = titleFont.deriveFont(Font.BOLD,
             Math.round(titleFont.getSize2D() * titleFontScale));
-        titleLabel.getStyles().put("font", titleFont);
-        titleLabel.getStyles().put("color", titleBarColor);
+        titleLabel.getStyles().put(Style.font, titleFont);
+        titleLabel.getStyles().put(Style.color, titleBarColor);
 
         // Initialize the button box pane
-        buttonBoxPane.getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
-        buttonBoxPane.getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
+        buttonBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
+        buttonBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
         buttonBoxPane.add(closeButton);
 
         closeButton.getComponentMouseButtonListeners().add(
@@ -455,7 +455,7 @@ public class TerraPaletteSkin extends WindowSkin {
      * specification}
      */
     public final void setTitleFont(String font) {
-        titleLabel.getStyles().put("font", decodeFont(font));
+        titleLabel.getStyles().put(Style.font, decodeFont(font));
     }
 
     /**
@@ -464,7 +464,7 @@ public class TerraPaletteSkin extends WindowSkin {
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
     public final void setTitleFont(Dictionary<String, ?> font) {
-        titleLabel.getStyles().put("font", Theme.deriveFont(font));
+        titleLabel.getStyles().put(Style.font, Theme.deriveFont(font));
     }
 
     public final float getTitleFontScale() {
@@ -477,7 +477,7 @@ public class TerraPaletteSkin extends WindowSkin {
         Theme theme = currentTheme();
         Font titleFont = theme.getFont();
         titleFont = titleFont.deriveFont(Font.BOLD, Math.round(titleFont.getSize2D() * scale));
-        titleLabel.getStyles().put("font", titleFont);
+        titleLabel.getStyles().put(Style.font, titleFont);
         invalidateComponent();
     }
 

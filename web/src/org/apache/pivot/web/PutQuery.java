@@ -72,6 +72,6 @@ public class PutQuery extends Query<Boolean> {
     public Boolean execute() throws QueryException {
         execute(METHOD, value);
 
-        return new Boolean(getStatus() == Status.CREATED);
+        return Boolean.valueOf(getStatus() == Status.CREATED);
     }
 }

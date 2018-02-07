@@ -726,7 +726,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         }
 
                         // Invoke setHandled()
-                        setHandledMethod.invoke(args[0], new Object[] { new Boolean(handled) });
+                        setHandledMethod.invoke(args[0], new Object[] { Boolean.valueOf(handled) });
 
                         return null;
                     }
@@ -735,7 +735,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 Object eawtApplication = eawtApplicationClass.newInstance();
 
                 setEnabledAboutMenuMethod.invoke(eawtApplication,
-                    new Boolean(application instanceof Application.AboutHandler));
+                    Boolean.valueOf(application instanceof Application.AboutHandler));
 
                 Object eawtApplicationListener = Proxy.newProxyInstance(
                     DesktopApplicationContext.class.getClassLoader(),

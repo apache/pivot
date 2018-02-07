@@ -35,6 +35,7 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MessageType;
 import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.util.ColorUtilities;
@@ -210,7 +211,7 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
         this.borderBackgroundColor = borderBackgroundColor;
 
         if (messageBorder != null){
-            messageBorder.getStyles().put("backgroundColor", borderBackgroundColor);
+            messageBorder.getStyles().put(Style.backgroundColor, borderBackgroundColor);
         }
     }
 
@@ -234,7 +235,7 @@ public class TerraAlertSkin extends TerraDialogSkin implements AlertListener {
         this.borderColor = borderColor;
 
         if (messageBorder != null){
-            messageBorder.getStyles().put("color", borderColor);
+            messageBorder.getStyles().put(Style.color, borderColor);
         }
     }
 

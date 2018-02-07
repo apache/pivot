@@ -51,6 +51,7 @@ import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Spinner;
 import org.apache.pivot.wtk.SpinnerSelectionListener;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
@@ -369,7 +370,7 @@ public class TerraCalendarSkin extends CalendarSkin {
             super.render(Integer.valueOf(date.day + 1), button, highlighted);
 
             if (button.isSelected()) {
-                label.getStyles().put("color", button.getStyles().get("selectionColor"));
+                label.getStyles().put(Style.color, button.getStyles().get(Style.selectionColor));
             }
         }
     }
@@ -416,7 +417,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         // Create the table pane
         calendarTablePane = new TablePane();
         for (int i = 0; i < 7; i++) {
-            new TablePane.Column(calendarTablePane, 1, true);  // note: this is useful, even if not used directly
+            new TablePane.Column(calendarTablePane, 1, true);
         }
 
         // Month spinner
@@ -424,7 +425,7 @@ public class TerraCalendarSkin extends CalendarSkin {
         monthSpinner.setSpinnerData(new NumericSpinnerData(0, 11));
         monthSpinner.setItemRenderer(new MonthSpinnerItemRenderer());
         monthSpinner.setCircular(true);
-        monthSpinner.getStyles().put("sizeToContent", new Boolean(true));
+        monthSpinner.getStyles().put(Style.sizeToContent, true);
 
         monthSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             @Override
@@ -461,11 +462,11 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         // Add the month/year table pane
         TablePane monthYearTablePane = new TablePane();
-        monthYearTablePane.getStyles().put("padding", Integer.valueOf(3));
-        monthYearTablePane.getStyles().put("horizontalSpacing", Integer.valueOf(4));
+        monthYearTablePane.getStyles().put(Style.padding, 3);
+        monthYearTablePane.getStyles().put(Style.horizontalSpacing, 4);
 
-        new TablePane.Column(monthYearTablePane, 1, true);  // note: this is useful, even if not used directly
-        new TablePane.Column(monthYearTablePane, -1);  // note: this is useful, even if not used directly
+        new TablePane.Column(monthYearTablePane, 1, true);
+        new TablePane.Column(monthYearTablePane, -1);
 
         TablePane.Row monthYearRow = new TablePane.Row(monthYearTablePane, -1);
         monthYearRow.add(monthSpinner);
@@ -484,9 +485,9 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         for (int i = 0; i < 7; i++) {
             Label label = new Label();
-            label.getStyles().put("font", labelFont);
-            label.getStyles().put("padding", new Insets(2, 2, 4, 2));
-            label.getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+            label.getStyles().put(Style.font, labelFont);
+            label.getStyles().put(Style.padding, new Insets(2, 2, 4, 2));
+            label.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
             calendarRow.add(label);
         }
 
@@ -737,13 +738,13 @@ public class TerraCalendarSkin extends CalendarSkin {
 
         this.font = font;
 
-        monthSpinner.getStyles().put("font", font);
-        yearSpinner.getStyles().put("font", font);
+        monthSpinner.getStyles().put(Style.font, font);
+        yearSpinner.getStyles().put(Style.font, font);
 
         TablePane.Row row = calendarTablePane.getRows().get(1);
         for (int i = 0; i < 7; i++) {
             Label label = (Label) row.get(i);
-            label.getStyles().put("font", font);
+            label.getStyles().put(Style.font, font);
         }
 
         invalidateComponent();

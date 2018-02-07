@@ -16,7 +16,9 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
 /**
@@ -24,10 +26,10 @@ import org.apache.pivot.wtk.content.ButtonDataRenderer;
  */
 @DefaultProperty("buttonData")
 public class Checkbox extends Button {
-    private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
+    private static final ButtonDataRenderer DEFAULT_DATA_RENDERER = new ButtonDataRenderer();
 
     static {
-        DEFAULT_DATA_RENDERER.getStyles().put("horizontalAlignment", HorizontalAlignment.LEFT);
+        DEFAULT_DATA_RENDERER.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
     }
 
     public Checkbox() {
@@ -58,12 +60,24 @@ public class Checkbox extends Button {
         super.press();
     }
 
+    /**
+     * This operation is not supported for checkboxes
+     *
+     * @throws UnsupportedOperationException always since this is unsupported.
+     */
     @Override
+    @UnsupportedOperation
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Checkboxes are always toggle buttons.");
     }
 
+    /**
+     * This operation is not supported for checkboxes
+     *
+     * @throws UnsupportedOperationException always since this is unsupported.
+     */
     @Override
+    @UnsupportedOperation
     public void setButtonGroup(ButtonGroup buttonGroup) {
         throw new UnsupportedOperationException("Checkboxes can't be added to a group.");
     }

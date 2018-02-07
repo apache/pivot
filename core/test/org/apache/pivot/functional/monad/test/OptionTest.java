@@ -84,7 +84,7 @@ public class OptionTest {
         OptionCompanion<Number> o = OptionCompanion.getInstance();
         assertNotNull(o);
 
-        Option<Number> on = o.fromValue(new Double(3.14149));
+        Option<Number> on = o.fromValue(new Double(3.141592653589793));
         assertNotNull(on);
         assertTrue(on instanceof Some);
         assertTrue(on.hasValue() == true);

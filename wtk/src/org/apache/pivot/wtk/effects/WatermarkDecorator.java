@@ -91,10 +91,10 @@ public class WatermarkDecorator implements Decorator {
         boxPane.add(label);
 
         boxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
-        imageView.getStyles().put("opacity", opacity);
+        imageView.getStyles().put(Style.opacity, opacity);
 
-        Font font = (Font) label.getStyles().get("font");
-        label.getStyles().put("font", font.deriveFont(Font.BOLD, 60));
+        Font font = label.getStyles().getFont(Style.font);
+        label.getStyles().put(Style.font, font.deriveFont(Font.BOLD, 60));
 
         label.setText(text != null ? text : "");
         imageView.setImage(image);
@@ -127,7 +127,7 @@ public class WatermarkDecorator implements Decorator {
      * @return This decorator's font
      */
     public Font getFont() {
-        return (Font) label.getStyles().get("font");
+        return label.getStyles().getFont(Style.font);
     }
 
     /**
@@ -138,7 +138,7 @@ public class WatermarkDecorator implements Decorator {
     public void setFont(Font font) {
         Utils.checkNull(font, "font");
 
-        label.getStyles().put("font", font);
+        label.getStyles().put(Style.font, font);
         validate();
     }
 
@@ -209,7 +209,7 @@ public class WatermarkDecorator implements Decorator {
      */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
-        imageView.getStyles().put("opacity", opacity);
+        imageView.getStyles().put(Style.opacity, opacity);
     }
 
     /**

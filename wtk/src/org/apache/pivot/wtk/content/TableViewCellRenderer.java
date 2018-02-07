@@ -23,16 +23,17 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.VerticalAlignment;
 
 /**
- * Default table cell renderer. Renders cell contents as a string.
+ * Default table cell renderer. Renders cell contents as a string, vertically centered.
  */
 public class TableViewCellRenderer extends Label implements TableView.CellRenderer {
     public TableViewCellRenderer() {
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("padding", new Insets(2));
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        getStyles().put(Style.padding, new Insets(2));
     }
 
     @Override
@@ -61,25 +62,24 @@ public class TableViewCellRenderer extends Label implements TableView.CellRender
         Component.StyleDictionary tableViewStyles = tableView.getStyles();
         Component.StyleDictionary styles = getStyles();
 
-        Font font = (Font) tableViewStyles.get("font");
-        styles.put("font", font);
+        styles.copy(Style.font, tableViewStyles);
 
         Color color;
         if (tableView.isEnabled() && !rowDisabled) {
             if (rowSelected) {
                 if (tableView.isFocused()) {
-                    color = (Color) tableViewStyles.get("selectionColor");
+                    color = tableViewStyles.getColor(Style.selectionColor);
                 } else {
-                    color = (Color) tableViewStyles.get("inactiveSelectionColor");
+                    color = tableViewStyles.getColor(Style.inactiveSelectionColor);
                 }
             } else {
-                color = (Color) tableViewStyles.get("color");
+                color = tableViewStyles.getColor(Style.color);
             }
         } else {
-            color = (Color) tableViewStyles.get("disabledColor");
+            color = tableViewStyles.getColor(Style.disabledColor);
         }
 
-        styles.put("color", color);
+        styles.put(Style.color, color);
     }
 
     @Override

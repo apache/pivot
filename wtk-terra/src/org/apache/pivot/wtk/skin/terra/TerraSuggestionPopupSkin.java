@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.ListViewSelectionListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.SuggestionPopup;
 import org.apache.pivot.wtk.SuggestionPopupListener;
 import org.apache.pivot.wtk.SuggestionPopupSelectionListener;
@@ -182,14 +183,14 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin() {
-        listView.getStyles().put("variableItemHeight", true);
+        listView.getStyles().put(Style.variableItemHeight, true);
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
         listView.getComponentKeyListeners().add(listViewKeyListener);
 
         listViewPanorama = new Panorama(listView);
-        listViewPanorama.getStyles().put("buttonBackgroundColor",
-            listView.getStyles().getColor("backgroundColor"));
-        listViewPanorama.getStyles().put("alwaysShowScrollButtons", true);
+        listViewPanorama.getStyles().put(Style.buttonBackgroundColor,
+            listView.getStyles().getColor(Style.backgroundColor));
+        listViewPanorama.getStyles().put(Style.alwaysShowScrollButtons, true);
 
         listViewBorder = new Border(listViewPanorama);
     }
@@ -216,11 +217,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public Font getFont() {
-        return (Font) listView.getStyles().get("font");
+        return listView.getStyles().getFont(Style.font);
     }
 
     public void setFont(Font font) {
-        listView.getStyles().put("font", font);
+        listView.getStyles().put(Style.font, font);
     }
 
     public final void setFont(String font) {
@@ -232,11 +233,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public Color getColor() {
-        return listView.getStyles().getColor("color");
+        return listView.getStyles().getColor(Style.color);
     }
 
     public void setColor(Color color) {
-        listView.getStyles().put("color", color);
+        listView.getStyles().put(Style.color, color);
     }
 
     public final void setColor(String color) {
@@ -244,11 +245,11 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     }
 
     public Color getBorderColor() {
-        return listViewBorder.getStyles().getColor("color");
+        return listViewBorder.getStyles().getColor(Style.color);
     }
 
     public void setBorderColor(Color borderColor) {
-        listViewBorder.getStyles().put("color", borderColor);
+        listViewBorder.getStyles().put(Style.color, borderColor);
     }
 
     public final void setBorderColor(String borderColor) {

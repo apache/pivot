@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.MenuPopupStateListener;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.effects.DropShadowDecorator;
@@ -140,12 +141,12 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
         setBackgroundColor((Color) null);
 
         panorama = new Panorama();
-        panorama.getStyles().put("buttonBackgroundColor", defaultBackgroundColor());
+        panorama.getStyles().put(Style.buttonBackgroundColor, defaultBackgroundColor());
 
         border = new Border(panorama);
-        border.getStyles().put("color", theme.getColor(7));
-        border.getStyles().put("backgroundColor", null);
-        border.getStyles().put("padding", Integer.valueOf(0));
+        border.getStyles().put(Style.color, theme.getColor(7));
+        border.getStyles().put(Style.backgroundColor, null);
+        border.getStyles().put(Style.padding, 0);
     }
 
     @Override
@@ -172,15 +173,15 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
     }
 
     public Color getBorderColor() {
-        return (Color) border.getStyles().get("color");
+        return border.getStyles().getColor(Style.color);
     }
 
     public void setBorderColor(Color borderColor) {
-        border.getStyles().put("color", borderColor);
+        border.getStyles().put(Style.color, borderColor);
     }
 
     public void setBorderColor(String borderColor) {
-        border.getStyles().put("color", borderColor);
+        border.getStyles().put(Style.color, borderColor);
     }
 
     public int getCloseTransitionDuration() {

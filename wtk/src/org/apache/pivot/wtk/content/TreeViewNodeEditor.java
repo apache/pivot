@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.Window;
@@ -108,7 +109,7 @@ public class TreeViewNodeEditor extends Window implements TreeView.NodeEditor {
         Bounds textBounds = nodeRenderer.getTextBounds();
 
         // Calculate the bounds of what is being edited
-        Insets padding = (Insets) textInput.getStyles().get("padding");
+        Insets padding = (Insets) textInput.getStyles().get(Style.padding);
         Bounds editBounds = new Bounds(nodeBounds.x + textBounds.x - (padding.left + 1),
             nodeBounds.y, nodeBounds.width - textBounds.x + (padding.left + 1), nodeBounds.height);
 

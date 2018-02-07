@@ -23,6 +23,7 @@ import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
+import org.apache.pivot.wtk.Style;
 
 /**
  * Default renderer for table view cells that contain numeric data. Renders cell
@@ -34,11 +35,11 @@ public class TableViewNumberCellRenderer extends TableViewCellRenderer {
     public static final NumberFormat DEFAULT_NUMBER_FORMAT = NumberFormat.getNumberInstance();
 
     public TableViewNumberCellRenderer() {
-        getStyles().put("horizontalAlignment", HorizontalAlignment.RIGHT);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
 
         // Apply more padding on the right so the right-aligned cells don't
         // appear to run into left-aligned cells in the next column
-        getStyles().put("padding", new Insets(2, 2, 2, 6));
+        getStyles().put(Style.padding, new Insets(2, 2, 2, 6));
     }
 
     public NumberFormat getNumberFormat() {

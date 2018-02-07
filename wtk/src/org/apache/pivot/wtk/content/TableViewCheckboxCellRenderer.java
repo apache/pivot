@@ -20,6 +20,7 @@ import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.HorizontalAlignment;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.VerticalAlignment;
 
@@ -34,9 +35,9 @@ public class TableViewCheckboxCellRenderer extends BoxPane implements TableView.
     public TableViewCheckboxCellRenderer() {
         add(checkbox);
 
-        getStyles().put("padding", 3);
-        getStyles().put("verticalAlignment", VerticalAlignment.CENTER);
-        getStyles().put("horizontalAlignment", HorizontalAlignment.CENTER);
+        getStyles().put(Style.padding, 3);
+        getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
+        getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
     }
 
     @Override

@@ -139,7 +139,7 @@ public class TextPaneDemo implements Application {
         });
 
         fontSizeListButton.setListData(new NumericSpinnerData(12, 30, 1));
-        fontSizeListButton.setSelectedItem(new Integer(12));
+        fontSizeListButton.setSelectedItem(12);
 
         openFileButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override

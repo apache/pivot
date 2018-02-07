@@ -174,7 +174,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
     }
 
     public boolean getFillIcon() {
-        return (Boolean) imageView.getStyles().get(Style.fill);
+        return imageView.getStyles().getBoolean(Style.fill);
     }
 
     public void setFillIcon(boolean fillIcon) {

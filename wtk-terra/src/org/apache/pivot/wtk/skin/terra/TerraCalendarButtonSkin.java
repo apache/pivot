@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -169,8 +170,8 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
 
         // Create the border
         calendarBorder = new Border(calendar);
-        calendarBorder.getStyles().put("padding", Integer.valueOf(0));
-        calendarBorder.getStyles().put("color", borderColor);
+        calendarBorder.getStyles().put(Style.padding, Insets.NONE);
+        calendarBorder.getStyles().put(Style.color, borderColor);
 
         // Set the popup content
         calendarPopup.setContent(calendarBorder);
@@ -458,7 +459,7 @@ public class TerraCalendarButtonSkin extends CalendarButtonSkin {
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-        calendarBorder.getStyles().put("color", borderColor);
+        calendarBorder.getStyles().put(Style.color, borderColor);
         repaintComponent();
     }
 

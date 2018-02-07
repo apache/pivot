@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
@@ -107,7 +108,7 @@ public class ListViewItemEditor extends Window implements ListView.ItemEditor {
         Bounds textBounds = itemRenderer.getTextBounds();
 
         // Calculate the bounds of what is being edited
-        Insets padding = (Insets) textInput.getStyles().get("padding");
+        Insets padding = (Insets) textInput.getStyles().get(Style.padding);
         Bounds editBounds = new Bounds(itemBounds.x + textBounds.x - (padding.left + 1),
             itemBounds.y, itemBounds.width - textBounds.x + (padding.left + 1), itemBounds.height);
 

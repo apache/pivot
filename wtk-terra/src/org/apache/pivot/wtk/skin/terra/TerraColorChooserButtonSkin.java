@@ -39,6 +39,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -169,8 +170,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         // Create the border
         colorChooserBorder = new Border(colorChooser);
-        colorChooserBorder.getStyles().put("color", borderColor);
-        colorChooserBorder.getStyles().put("padding", Integer.valueOf(2));
+        colorChooserBorder.getStyles().put(Style.color, borderColor);
+        colorChooserBorder.getStyles().put(Style.padding, 2);
 
         // Set the popup content
         colorChooserPopup.setContent(colorChooserBorder);
@@ -439,7 +440,7 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-        colorChooserBorder.getStyles().put("color", borderColor);
+        colorChooserBorder.getStyles().put(Style.color, borderColor);
         repaintComponent();
     }
 

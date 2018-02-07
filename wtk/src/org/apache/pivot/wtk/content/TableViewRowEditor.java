@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Point;
 import org.apache.pivot.wtk.ScrollPane;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.TablePane;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TextInput;
@@ -48,7 +49,7 @@ import org.apache.pivot.wtk.skin.CardPaneSkin;
  */
 public class TableViewRowEditor extends Window implements TableView.RowEditor {
     private class RowImage extends Image {
-        private Bounds bounds = new Bounds(0, 0, 0, 0);
+        private Bounds bounds = Bounds.EMPTY;
 
         @Override
         public int getWidth() {
@@ -139,7 +140,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
             }
         });
 
-        tablePane.getStyles().put("horizontalSpacing", new Integer(1));
+        tablePane.getStyles().put(Style.horizontalSpacing, 1);
         tablePane.getRows().add(editorRow);
     }
 
@@ -298,7 +299,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      */
     public CardPaneSkin.SelectionChangeEffect getEditEffect() {
         return (CardPaneSkin.SelectionChangeEffect) cardPane.getStyles().get(
-            "selectionChangeEffect");
+            Style.selectionChangeEffect);
     }
 
     /**
@@ -307,7 +308,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * @param editEffect The edit effect, or <tt>null</tt> for no effect.
      */
     public void setEditEffect(CardPaneSkin.SelectionChangeEffect editEffect) {
-        cardPane.getStyles().put("selectionChangeEffect", editEffect);
+        cardPane.getStyles().put(Style.selectionChangeEffect, editEffect);
     }
 
     /**
@@ -316,7 +317,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * @return The effect duration in milliseconds.
      */
     public int getEditEffectDuration() {
-        return ((Integer) cardPane.getStyles().get("selectionChangeDuration")).intValue();
+        return cardPane.getStyles().getInt(Style.selectionChangeDuration);
     }
 
     /**
@@ -325,7 +326,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * @param effectDuration The effect duration in milliseconds.
      */
     public void setEditEffectDuration(int effectDuration) {
-        cardPane.getStyles().put("selectionChangeDuration", new Integer(effectDuration));
+        cardPane.getStyles().put(Style.selectionChangeDuration, effectDuration);
     }
 
     /**
@@ -334,7 +335,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * @return The effect rate.
      */
     public int getEditEffectRate() {
-        return ((Integer) cardPane.getStyles().get("selectionChangeRate")).intValue();
+        return cardPane.getStyles().getInt(Style.selectionChangeRate);
     }
 
     /**
@@ -343,7 +344,7 @@ public class TableViewRowEditor extends Window implements TableView.RowEditor {
      * @param effectRate The effect rate.
      */
     public void setEditEffectRate(int effectRate) {
-        cardPane.getStyles().put("selectionChangeRate", new Integer(effectRate));
+        cardPane.getStyles().put(Style.selectionChangeRate, effectRate);
     }
 
     @Override

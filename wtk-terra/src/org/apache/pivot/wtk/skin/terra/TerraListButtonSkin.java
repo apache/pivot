@@ -45,6 +45,7 @@ import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.Panorama;
 import org.apache.pivot.wtk.Point;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.WindowStateListener;
@@ -205,13 +206,13 @@ public class TerraListButtonSkin extends ListButtonSkin {
 
         // Create the panorama and border
         listViewPanorama = new Panorama(listView);
-        listViewPanorama.getStyles().put("buttonBackgroundColor",
-            listView.getStyles().get("backgroundColor"));
-        listViewPanorama.getStyles().put("alwaysShowScrollButtons", new Boolean(true));
+        listViewPanorama.getStyles().put(Style.buttonBackgroundColor,
+            listView.getStyles().get(Style.backgroundColor));
+        listViewPanorama.getStyles().put(Style.alwaysShowScrollButtons, true);
 
         listViewBorder = new Border(listViewPanorama);
-        listViewBorder.getStyles().put("padding", Integer.valueOf(0));
-        listViewBorder.getStyles().put("color", borderColor);
+        listViewBorder.getStyles().put(Style.padding, 0);
+        listViewBorder.getStyles().put(Style.color, borderColor);
 
         // Set the popup content
         listViewPopup.setContent(listViewBorder);
@@ -553,7 +554,7 @@ public class TerraListButtonSkin extends ListButtonSkin {
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-        listViewBorder.getStyles().put("color", borderColor);
+        listViewBorder.getStyles().put(Style.color, borderColor);
         repaintComponent();
     }
 
@@ -635,85 +636,85 @@ public class TerraListButtonSkin extends ListButtonSkin {
     }
 
     public Object getListFont() {
-        return listView.getStyles().get("font");
+        return listView.getStyles().get(Style.font);
     }
 
     public void setListFont(Object listFont) {
-        listView.getStyles().put("font", listFont);
+        listView.getStyles().put(Style.font, listFont);
     }
 
     public Object getListColor() {
-        return listView.getStyles().get("color");
+        return listView.getStyles().get(Style.color);
     }
 
     public void setListColor(Object listColor) {
-        listView.getStyles().put("color", listColor);
+        listView.getStyles().put(Style.color, listColor);
     }
 
     public Object getListDisabledColor() {
-        return listView.getStyles().get("disabledColor");
+        return listView.getStyles().get(Style.disabledColor);
     }
 
     public void setListDisabledColor(Object listDisabledColor) {
-        listView.getStyles().put("disabledColor", listDisabledColor);
+        listView.getStyles().put(Style.disabledColor, listDisabledColor);
     }
 
     public Object getListBackgroundColor() {
-        return listView.getStyles().get("backgroundColor");
+        return listView.getStyles().get(Style.backgroundColor);
     }
 
     public void setListBackgroundColor(Object listBackgroundColor) {
-        listView.getStyles().put("backgroundColor", listBackgroundColor);
-        listViewPanorama.getStyles().put("buttonBackgroundColor", listBackgroundColor);
+        listView.getStyles().put(Style.backgroundColor, listBackgroundColor);
+        listViewPanorama.getStyles().put(Style.buttonBackgroundColor, listBackgroundColor);
     }
 
     public Object getListSelectionColor() {
-        return listView.getStyles().get("selectionColor");
+        return listView.getStyles().get(Style.selectionColor);
     }
 
     public void setListSelectionColor(Object listSelectionColor) {
-        listView.getStyles().put("selectionColor", listSelectionColor);
+        listView.getStyles().put(Style.selectionColor, listSelectionColor);
     }
 
     public Object getListSelectionBackgroundColor() {
-        return listView.getStyles().get("selectionBackgroundColor");
+        return listView.getStyles().get(Style.selectionBackgroundColor);
     }
 
     public void setListSelectionBackgroundColor(Object listSelectionBackgroundColor) {
-        listView.getStyles().put("selectionBackgroundColor", listSelectionBackgroundColor);
+        listView.getStyles().put(Style.selectionBackgroundColor, listSelectionBackgroundColor);
     }
 
     public Object getListInactiveSelectionColor() {
-        return listView.getStyles().get("inactiveSelectionColor");
+        return listView.getStyles().get(Style.inactiveSelectionColor);
     }
 
     public void setListInactiveSelectionColor(Object listInactiveSelectionColor) {
-        listView.getStyles().put("inactiveSelectionColor", listInactiveSelectionColor);
+        listView.getStyles().put(Style.inactiveSelectionColor, listInactiveSelectionColor);
     }
 
     public Object getListInactiveSelectionBackgroundColor() {
-        return listView.getStyles().get("inactiveSelectionBackgroundColor");
+        return listView.getStyles().get(Style.inactiveSelectionBackgroundColor);
     }
 
     public void setListInactiveSelectionBackgroundColor(Object listInactiveSelectionBackgroundColor) {
-        listView.getStyles().put("inactiveSelectionBackgroundColor",
+        listView.getStyles().put(Style.inactiveSelectionBackgroundColor,
             listInactiveSelectionBackgroundColor);
     }
 
     public Object getListHighlightColor() {
-        return listView.getStyles().get("highlightColor");
+        return listView.getStyles().get(Style.highlightColor);
     }
 
     public void setListHighlightColor(Object listHighlightColor) {
-        listView.getStyles().put("highlightColor", listHighlightColor);
+        listView.getStyles().put(Style.highlightColor, listHighlightColor);
     }
 
     public Object getListHighlightBackgroundColor() {
-        return listView.getStyles().get("highlightBackgroundColor");
+        return listView.getStyles().get(Style.highlightBackgroundColor);
     }
 
     public void setListHighlightBackgroundColor(Object listHighlightBackgroundColor) {
-        listView.getStyles().put("highlightBackgroundColor", listHighlightBackgroundColor);
+        listView.getStyles().put(Style.highlightBackgroundColor, listHighlightBackgroundColor);
     }
 
     @Override

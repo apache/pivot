@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.ScrollPane;
 import org.apache.pivot.wtk.ScrollPane.Corner;
 import org.apache.pivot.wtk.ScrollPane.ScrollBarPolicy;
 import org.apache.pivot.wtk.ScrollPaneListener;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.Viewport;
 import org.apache.pivot.wtk.ViewportListener;
 
@@ -754,7 +755,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
                 topLeftCorner.setVisible(true);
                 topLeftCorner.setSize(rowHeaderWidth, columnHeaderHeight);
                 topLeftCorner.setLocation(0, 0);
-                topLeftCorner.getStyles().put("backgroundColor", backColor);
+                topLeftCorner.getStyles().put(Style.backgroundColor, backColor);
             }
         } else {
             if (corner != null) {
@@ -768,7 +769,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             bottomLeftCorner.setVisible(true);
             bottomLeftCorner.setSize(rowHeaderWidth, horizontalScrollBarHeight);
             bottomLeftCorner.setLocation(0, height - horizontalScrollBarHeight);
-            bottomLeftCorner.getStyles().put("backgroundColor", backColor);
+            bottomLeftCorner.getStyles().put(Style.backgroundColor, backColor);
         } else {
             bottomLeftCorner.setVisible(false);
         }
@@ -778,7 +779,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             bottomRightCorner.setSize(verticalScrollBarWidth, horizontalScrollBarHeight);
             bottomRightCorner.setLocation(width - verticalScrollBarWidth, height
                 - horizontalScrollBarHeight);
-            bottomRightCorner.getStyles().put("backgroundColor", backColor);
+            bottomRightCorner.getStyles().put(Style.backgroundColor, backColor);
         } else {
             bottomRightCorner.setVisible(false);
         }
@@ -787,7 +788,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             topRightCorner.setVisible(true);
             topRightCorner.setSize(verticalScrollBarWidth, columnHeaderHeight);
             topRightCorner.setLocation(width - verticalScrollBarWidth, 0);
-            topRightCorner.getStyles().put("backgroundColor", backColor);
+            topRightCorner.getStyles().put(Style.backgroundColor, backColor);
         } else {
             topRightCorner.setVisible(false);
         }

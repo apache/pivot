@@ -602,10 +602,10 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         activeButtonBevelColor = TerraTheme.brighten(activeTabColor);
         inactiveButtonBevelColor = TerraTheme.brighten(inactiveTabColor);
 
-        tabButtonBoxPane.getStyles().put(Style.fill, new Boolean(true));
+        tabButtonBoxPane.getStyles().put(Style.fill, true);
 
-        tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
-        tabButtonPanorama.getStyles().put("buttonPadding", 6);
+        tabButtonPanorama.getStyles().put(Style.buttonBackgroundColor, borderColor);
+        tabButtonPanorama.getStyles().put(Style.buttonPadding, 6);
         tabButtonPanorama.setView(tabButtonBoxPane);
 
         tabButtonGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
@@ -1201,7 +1201,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
-        tabButtonPanorama.getStyles().put("buttonBackgroundColor", borderColor);
+        tabButtonPanorama.getStyles().put(Style.buttonBackgroundColor, borderColor);
         repaintComponent();
     }
 
@@ -1322,14 +1322,16 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         setButtonPadding(new Insets(padding));
     }
 
+    public final void setButtonPadding(Sequence<?> padding) {
+        setButtonPadding(new Insets(padding));
+    }
+
     public final void setButtonPadding(int buttonPadding) {
         setButtonPadding(new Insets(buttonPadding));
     }
 
     public final void setButtonPadding(Number padding) {
-        Utils.checkNull(padding, "padding");
-
-        setButtonPadding(padding.intValue());
+        setButtonPadding(new Insets(padding));
     }
 
     public final void setButtonPadding(String padding) {
@@ -1337,11 +1339,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
     }
 
     public int getButtonSpacing() {
-        return tabButtonBoxPane.getStyles().getInt("spacing");
+        return tabButtonBoxPane.getStyles().getInt(Style.spacing);
     }
 
     public void setButtonSpacing(int buttonSpacing) {
-        tabButtonBoxPane.getStyles().put("spacing", buttonSpacing);
+        tabButtonBoxPane.getStyles().put(Style.spacing, buttonSpacing);
     }
 
     public final void setButtonCornerRadius(int buttonCornerRadius) {

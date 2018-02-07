@@ -705,7 +705,7 @@ public abstract class Button extends Component {
                 // Bind using selected key
                 if (selectedKey != null && selectedBindType != BindType.LOAD) {
                     JSON.put(context, selectedKey, (selectedBindMapping == null) ?
-                        new Boolean(isSelected()) : selectedBindMapping.valueOf(isSelected()));
+                        Boolean.valueOf(isSelected()) : selectedBindMapping.valueOf(isSelected()));
                 }
             }
         }

@@ -25,6 +25,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.MenuBar;
+import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.skin.MenuBarItemSkin;
 
 /**
@@ -86,7 +87,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
         // Paint highlight state
         if (highlight) {
             MenuBar menuBar = (MenuBar) menuBarItem.getParent();
-            Color activeBackgroundColor = (Color) menuBar.getStyles().get("activeBackgroundColor");
+            Color activeBackgroundColor = menuBar.getStyles().getColor(Style.activeBackgroundColor);
             graphics.setColor(activeBackgroundColor);
             graphics.fillRect(0, 0, width, height);
         }
@@ -107,7 +108,7 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
 
         if (menuBarItem.isActive()) {
             MenuBar menuBar = (MenuBar) menuBarItem.getParent();
-            Color activeBackgroundColor = (Color) menuBar.getStyles().get("activeBackgroundColor");
+            Color activeBackgroundColor = menuBar.getStyles().getColor(Style.activeBackgroundColor);
             opaque = (activeBackgroundColor.getTransparency() == Transparency.OPAQUE);
         }
 
@@ -115,14 +116,14 @@ public class TerraMenuBarItemSkin extends MenuBarItemSkin {
     }
 
     public Color getPopupBorderColor() {
-        return (Color) menuPopup.getStyles().get("borderColor");
+        return menuPopup.getStyles().getColor(Style.borderColor);
     }
 
     public void setPopupBorderColor(Color popupBorderColor) {
-        menuPopup.getStyles().put("borderColor", popupBorderColor);
+        menuPopup.getStyles().put(Style.borderColor, popupBorderColor);
     }
 
     public void setPopupBorderColor(String popupBorderColor) {
-        menuPopup.getStyles().put("borderColor", popupBorderColor);
+        menuPopup.getStyles().put(Style.borderColor, popupBorderColor);
     }
 }
