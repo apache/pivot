@@ -63,6 +63,7 @@ public class BoundsTest {
         Bounds bnd6 = Bounds.decode("2, 3;  4,  5");
         Bounds bnd6a = new Bounds(2, 3, 4, 5);
 
+        assertEquals(Bounds.EMPTY, bnd0);
         assertNotEquals(bnd_1, bnd0);
         assertNotEquals(bnd0, bnd1);
         assertEquals(bnd10a, bnd10b);

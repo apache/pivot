@@ -42,6 +42,8 @@ public final class Bounds implements Serializable {
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
 
+    public static final Bounds EMPTY = new Bounds(0, 0, 0, 0);
+
     /**
      * Construct a bounds object given all four values for it.
      * @param x      The starting X-position of the area.
