@@ -1209,6 +1209,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     @Override
     public void itemsRemoved(ListView listView, int index, int count) {
+        if (highlightIndex >= index) {
+            highlightIndex = -1;
+        }
         invalidateComponent();
     }
 
@@ -1219,6 +1222,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     @Override
     public void itemsCleared(ListView listView) {
+        highlightIndex = -1;
         invalidateComponent();
     }
 
