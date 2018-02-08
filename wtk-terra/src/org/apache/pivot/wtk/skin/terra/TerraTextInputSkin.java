@@ -1359,29 +1359,41 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
             if (Keyboard.isPressed(wordNavigationModifier)) {
-                selectDirection = null;
-                // Move the caret to the start of the next word to the left
-                if (start > 0) {
+                int wordStart = (selectDirection == SelectDirection.RIGHT) ? start + length : start;
+                // Find the start of the next word to the left
+                if (wordStart > 0) {
                     // Skip over any space immediately to the left
-                    int index = start;
-                    while (index > 0 && Character.isWhitespace(textInput.getCharacterAt(index - 1))) {
-                        index--;
+                    while (wordStart > 0 && Character.isWhitespace(textInput.getCharacterAt(wordStart - 1))) {
+                        wordStart--;
                     }
 
                     // Skip over any word-letters to the left
-                    while (index > 0
-                        && !Character.isWhitespace(textInput.getCharacterAt(index - 1))) {
-                        index--;
+                    while (wordStart > 0
+                        && !Character.isWhitespace(textInput.getCharacterAt(wordStart - 1))) {
+                        wordStart--;
                     }
 
                     if (isShiftPressed) {
-                        length += start - index;
-                        selectDirection = SelectDirection.LEFT;
+                        if (wordStart >= start) {
+                            // We've just reduced the previous right selection, so leave the anchor alone
+                            length = wordStart - start;
+                            wordStart = start;
+                        } else {
+                            if (selectDirection == SelectDirection.RIGHT) {
+                                // We've "crossed over" the start, so reverse direction
+                                length = start - wordStart;
+                            } else {
+                                // Just increase the selection in the same direction
+                                length += start - wordStart;
+                            }
+                            selectDirection = SelectDirection.LEFT;
+                        }
                     } else {
                         length = 0;
+                        selectDirection = null;
                     }
 
-                    start = index;
+                    start = wordStart;
                 }
             } else if (isShiftPressed) {
                 // If the previous direction was LEFT, then increase the selection
@@ -1405,7 +1417,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                                 if (--length == 0) {
                                     if (start > 0) {
                                         start--;
-                                         length++;
+                                        length++;
                                         selectDirection = SelectDirection.LEFT;
                                     }
                                 }
@@ -1439,29 +1451,41 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             }
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
             if (Keyboard.isPressed(wordNavigationModifier)) {
-                selectDirection = null;
-                // Move the caret to the start of the next word to the right
-                if (start < textInput.getCharacterCount()) {
-                    int index = start + length;
-
+                int wordStart = (selectDirection == SelectDirection.LEFT) ? start : start + length;
+                // Find the start of the next word to the right
+                if (wordStart < textInput.getCharacterCount()) {
                     // Skip over any space immediately to the right
-                    while (index < textInput.getCharacterCount()
-                        && Character.isWhitespace(textInput.getCharacterAt(index))) {
-                        index++;
+                    while (wordStart < textInput.getCharacterCount()
+                        && Character.isWhitespace(textInput.getCharacterAt(wordStart))) {
+                        wordStart++;
                     }
 
                     // Skip over any word-letters to the right
-                    while (index < textInput.getCharacterCount()
-                        && !Character.isWhitespace(textInput.getCharacterAt(index))) {
-                        index++;
+                    while (wordStart < textInput.getCharacterCount()
+                        && !Character.isWhitespace(textInput.getCharacterAt(wordStart))) {
+                        wordStart++;
                     }
 
                     if (isShiftPressed) {
-                        length = index - start;
-                        selectDirection = SelectDirection.RIGHT;
+                        if (wordStart <= start + length) {
+                            // We've just reduced the previous left selection, so leave the anchor alone
+                            length -= wordStart - start;
+                            start = wordStart;
+                        } else {
+                            if (selectDirection == SelectDirection.LEFT) {
+                                // We've "crossed over" the start, so reverse direction
+                                start += length;
+                                length = wordStart - start;
+                            } else {
+                                // Just increase the selection in the same direction
+                                length = wordStart - start;
+                            }
+                            selectDirection = SelectDirection.RIGHT;
+                        }
                     } else {
-                        start = index;
+                        start = wordStart;
                         length = 0;
+                        selectDirection = null;
                     }
                 }
             } else if (isShiftPressed) {
