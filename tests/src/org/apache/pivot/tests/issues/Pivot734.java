@@ -100,8 +100,7 @@ public class Pivot734 implements Application {
             @Override
             public void buttonPressed(Button button) {
                 Object x = tree.getSelectedNode();
-                System.out.println("remove a 'new branch' element under the selected element :: "
-                    + x);
+                System.out.println("remove a 'new branch' element under the selected element :: " + x);
 
                 if (x != null && x instanceof TreeBranch) {
                     ((TreeBranch) x).remove(newBranch);

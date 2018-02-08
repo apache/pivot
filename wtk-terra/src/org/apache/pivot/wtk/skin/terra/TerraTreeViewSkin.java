@@ -388,7 +388,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
          */
         @SuppressWarnings("unchecked")
         public void loadChildren() {
-            if (children == null) {
+            if (children == null || children.isEmpty()) {
                 List<Object> dataLocal = (List<Object>) this.data;
                 int count = dataLocal.getLength();
 
@@ -658,7 +658,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     boolean showBranchControl = true;
                     if (!showEmptyBranchControls) {
                         branchInfo.loadChildren();
-                        showBranchControl = !branchInfo.children.isEmpty();
+                        showBranchControl = !(branchInfo.children == null || branchInfo.children.isEmpty());
                     }
 
                     if (showBranchControl) {
@@ -2072,6 +2072,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
         // Add the node to the visible nodes list
         addVisibleNode(branchInfo, index);
+
+        // If the empty branch controls are not shown, then this event might
+        // need a repaint of the parent
+        if (!showEmptyBranchControls) {
+            repaintNode(branchInfo);
+        }
     }
 
     @Override
@@ -2084,6 +2090,12 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
         // Update our internal branch info
         if (branchInfo.children != null) {
             branchInfo.children.remove(index, count);
+        }
+
+        // If the empty branch controls are not shown, then this event might
+        // need a repaint of the parent
+        if (!showEmptyBranchControls) {
+            repaintNode(branchInfo);
         }
     }
 

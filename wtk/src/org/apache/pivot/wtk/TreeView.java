@@ -305,13 +305,9 @@ public class TreeView extends Component {
         private Path getPath() {
             Path path = new Path();
 
-            BranchHandler handler = this;
-
-            while (handler.parent != null) {
+            for (BranchHandler handler = this; handler.parent != null; handler = handler.parent) {
                 int index = ((List<Object>) handler.parent.branchData).indexOf(handler.branchData);
                 path.insert(index, 0);
-
-                handler = handler.parent;
             }
 
             return path;
@@ -910,7 +906,7 @@ public class TreeView extends Component {
         }
 
         if (selectMode == SelectMode.SINGLE && selectedPaths.getLength() > 1) {
-            throw new IllegalArgumentException("Selection length is greater than 1.");
+            throw new IllegalArgumentException("Cannot select more than one path in SINGLE select mode.");
         }
 
         Sequence<Path> previousSelectedPaths = this.selectedPaths;
@@ -924,8 +920,9 @@ public class TreeView extends Component {
             for (int i = 0, n = selectedPaths.getLength(); i < n; i++) {
                 Path path = selectedPaths.get(i);
 
-                // Monitor the path's parent
-                monitorBranch(new Path(path, path.getLength() - 1));
+                // Monitor the branch itself, because if showEmptyBranchControls is false
+                // we need repaints as children are added/removed from this branch.
+                monitorBranch(path, true);
 
                 // Update the selection
                 this.selectedPaths.add(new ImmutablePath(path));
@@ -1016,7 +1013,7 @@ public class TreeView extends Component {
         int index = selectedPaths.indexOf(path);
         if (index < 0) {
             // Monitor the path's parent
-            monitorBranch(new Path(path, path.getLength() - 1));
+            monitorBranch(path, false);
 
             // Update the selection
             selectedPaths.add(new ImmutablePath(path));
@@ -1328,7 +1325,7 @@ public class TreeView extends Component {
 
             if (checked) {
                 // Monitor the path's parent
-                monitorBranch(new Path(path, path.getLength() - 1));
+                monitorBranch(path, false);
 
                 // Update the checked paths
                 checkedPaths.add(new ImmutablePath(path));
@@ -1432,8 +1429,8 @@ public class TreeView extends Component {
             int index = expandedPaths.indexOf(path);
 
             if (expanded && index < 0) {
-                // Monitor the branch
-                monitorBranch(path);
+                // Monitor the branch itself
+                monitorBranch(path, true);
 
                 // Update the expanded paths
                 expandedPaths.add(new ImmutablePath(path));
@@ -1542,13 +1539,17 @@ public class TreeView extends Component {
      * node along the specified path.
      *
      * @param path A path leading to a nested branch node.
+     * @param includeSelf If <tt>true</tt> then include the last path element (if
+     * it is a branch), or <tt>false</tt> to just iterate to the parent branch in
+     * the path.
      * @throws IndexOutOfBoundsException If a path element is out of bounds.
      * @throws IllegalArgumentException If the path contains any leaf nodes.
      */
-    private void monitorBranch(Path path) {
+    private void monitorBranch(Path path, boolean includeSelf) {
         BranchHandler parent = rootBranchHandler;
 
-        for (int i = 0, n = path.getLength(); i < n; i++) {
+        int n = includeSelf ? path.getLength() : path.getLength() - 1;
+        for (int i = 0; i < n; i++) {
             int index = path.get(i);
             if (index < 0 || index >= parent.getLength()) {
                 throw new IndexOutOfBoundsException("Branch path out of bounds: " + path);
@@ -1560,7 +1561,10 @@ public class TreeView extends Component {
                 List<?> parentBranchData = parent.getBranchData();
                 Object childData = parentBranchData.get(index);
 
-                if (!(childData instanceof List<?>)) {
+                if (childData == null || !(childData instanceof List<?>)) {
+                    if (includeSelf && i == n - 1) {
+                        return;
+                    }
                     throw new IllegalArgumentException("Unexpected leaf in branch path: " + path);
                 }
 
