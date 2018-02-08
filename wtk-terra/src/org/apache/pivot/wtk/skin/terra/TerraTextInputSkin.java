@@ -1180,12 +1180,12 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 selectionLength++;
             } while (selectionStart + selectionLength < length
                 && Character.isWhitespace(textInput.getCharacterAt(selectionStart + selectionLength)));
-        } else if (Character.isJavaIdentifierPart(ch)) {
+        } else if (Character.isUnicodeIdentifierPart(ch)) {
             // Move backward to beginning of identifier block
             do {
                 selectionStart--;
             } while (selectionStart >= 0
-                && Character.isJavaIdentifierPart(textInput.getCharacterAt(selectionStart)));
+                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(selectionStart)));
             selectionStart++;
             selectionLength = start - selectionStart;
             // Move forward to end of identifier block
@@ -1367,10 +1367,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                         wordStart--;
                     }
 
-                    // Skip over any word-letters to the left
-                    while (wordStart > 0
-                        && !Character.isWhitespace(textInput.getCharacterAt(wordStart - 1))) {
-                        wordStart--;
+                    // Skip over any word-letters to the left, or just skip one character for other stuff
+                    if (wordStart > 0) {
+                        if (Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart - 1))) {
+                            while (wordStart > 0
+                                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart - 1))) {
+                                wordStart--;
+                            }
+                        } else {
+                            wordStart--;
+                        }
                     }
 
                     if (isShiftPressed) {
@@ -1460,10 +1466,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                         wordStart++;
                     }
 
-                    // Skip over any word-letters to the right
-                    while (wordStart < textInput.getCharacterCount()
-                        && !Character.isWhitespace(textInput.getCharacterAt(wordStart))) {
-                        wordStart++;
+                    // Skip over any word-letters to the right, or move one character for other stuff
+                    if (wordStart < textInput.getCharacterCount()) {
+                        if (Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart))) {
+                            while (wordStart < textInput.getCharacterCount()
+                                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart))) {
+                                wordStart++;
+                            }
+                        } else {
+                            wordStart++;
+                        }
                     }
 
                     if (isShiftPressed) {
