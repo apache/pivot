@@ -1193,7 +1193,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             do {
                 selectionLength++;
             } while (selectionStart + selectionLength < length
-                && Character.isJavaIdentifierPart(textInput.getCharacterAt(selectionStart
+                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(selectionStart
                     + selectionLength)));
         } else {
             return;
