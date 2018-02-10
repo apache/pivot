@@ -265,8 +265,8 @@ public class Utils {
                 + end + "].");
         }
         if (index + count > end) {
-            throw new IndexOutOfBoundsException("Index + count " + index + "," + count
-                + " out of bounds [" + start + "," + end + "].");
+            throw new IndexOutOfBoundsException("Index + count (" + index + " + " + count
+                + ") out of bounds [" + start + "," + end + "].");
         }
     }
 
