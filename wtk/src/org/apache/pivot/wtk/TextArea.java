@@ -29,6 +29,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -540,9 +541,26 @@ public class TextArea extends Component {
      * @return A string containing a copy of the text area's text content.
      */
     public String getText(int beginIndex, int endIndex) {
-        Utils.checkTwoIndexBounds(beginIndex, endIndex, 0, characterCount);
+        return getCharacters(beginIndex, endIndex).toString();
+    }
 
-        int count = endIndex - beginIndex;
+    /**
+     * @return A character sequence representing the text input's content.
+     */
+    public CharSequence getCharacters() {
+        return getCharacters(0, getCharacterCount());
+    }
+
+    /**
+     * @return A (sub) character sequence representing the contents between
+     * the given indices.
+     * @param start The start of the sequence (inclusive).
+     * @param end The end of the sequence (exclusive).
+     */
+    public CharSequence getCharacters(int start, int end) {
+        Utils.checkTwoIndexBounds(start, end, 0, characterCount);
+
+        int count = end - start;
         if (count == 0) {
             return "";
         }
@@ -550,12 +568,12 @@ public class TextArea extends Component {
         StringBuilder textBuilder = new StringBuilder(count);
 
         // Get paragraph and character offset at beginIndex
-        int paragraphIndex = getParagraphAt(beginIndex);
+        int paragraphIndex = getParagraphAt(start);
         Paragraph paragraph = paragraphs.get(paragraphIndex);
 
-        int characterOffset = beginIndex - paragraph.offset;
+        int characterOffset = start - paragraph.offset;
 
-        // Read characters until endIndex is reached, appending to text builder
+        // Read characters until end is reached, appending to text builder
         // and moving to next paragraph as needed
         int i = 0;
         while (i < count) {
@@ -570,7 +588,7 @@ public class TextArea extends Component {
             i++;
         }
 
-        return textBuilder.toString();
+        return textBuilder;
     }
 
     /**
@@ -899,6 +917,15 @@ public class TextArea extends Component {
     }
 
     /**
+     * Returns a character span (start, length) representing the current selection.
+     *
+     * @return A char span with the start and length values.
+     */
+    public CharSpan getCharSelection() {
+        return new CharSpan(selectionStart, selectionLength);
+    }
+
+    /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text area's content.
      *
@@ -930,6 +957,19 @@ public class TextArea extends Component {
         Utils.checkNull(selection, "Selection span");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
+    }
+
+    /**
+     * Sets the selection.
+     *
+     * @param selection The character span (start and length) for the selection.
+     * @see #setSelection(int, int)
+     * @throws IllegalArgumentException if the character span is {@code null}.
+     */
+    public final void setSelection(CharSpan selection) {
+        Utils.checkNull(selection, "selection");
+
+        setSelection(selection.start, selection.length);
     }
 
     /**
@@ -1136,6 +1176,13 @@ public class TextArea extends Component {
     public int getRowLength(int index) {
         TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
         return textAreaSkin.getRowLength(index);
+    }
+
+    public CharSequence getRowCharacters(int index) {
+        TextArea.Skin textAreaSkin = (TextArea.Skin) getSkin();
+        int offset = textAreaSkin.getRowOffset(index);
+        int length = textAreaSkin.getRowLength(index);
+        return getCharacters(offset, offset + length);
     }
 
     public int getRowCount() {

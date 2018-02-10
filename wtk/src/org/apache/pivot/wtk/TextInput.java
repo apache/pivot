@@ -22,6 +22,7 @@ import java.io.IOException;
 import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
@@ -443,6 +444,15 @@ public class TextInput extends Component {
     }
 
     /**
+     * Returns a character span (start, length) representing the current selection.
+     *
+     * @return A char span with the start and length values.
+     */
+    public CharSpan getCharSelection() {
+        return new CharSpan(selectionStart, selectionLength);
+    }
+
+    /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text input's content.
      *
@@ -480,6 +490,19 @@ public class TextInput extends Component {
         Utils.checkNull(selection, "selection");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
+    }
+
+    /**
+     * Sets the selection.
+     *
+     * @param selection The character span (start and length) for the selection.
+     * @see #setSelection(int, int)
+     * @throws IllegalArgumentException if the character span is {@code null}.
+     */
+    public final void setSelection(CharSpan selection) {
+        Utils.checkNull(selection, "selection");
+
+        setSelection(selection.start, selection.length);
     }
 
     /**

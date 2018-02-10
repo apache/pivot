@@ -36,7 +36,9 @@ import java.text.AttributedCharacterIterator;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.text.CompositeIterator;
+import org.apache.pivot.util.CharUtils;
 import org.apache.pivot.util.StringUtils;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
@@ -1147,66 +1149,15 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return consumed;
     }
 
-    private void selectSpan(TextInput textInput, int start) {
-        int length = textInput.getCharacterCount();
-        if (start >= length) {
-            start = length - 1;
-            if (start < 0) {
-                return;
-            }
-            char ch = textInput.getCharacterAt(start);
-            if (ch == '\r' || ch == '\n') {
-                start--;
-            }
-        }
-        if (start < 0) {
-            return;
-        }
-        char ch = textInput.getCharacterAt(start);
-        int selectionStart = start;
-        int selectionLength = 1;
-        if (Character.isWhitespace(ch)) {
-            // Move backward to beginning of whitespace block
-            // but not before the beginning of the text.
-            do {
-                selectionStart--;
-            } while (selectionStart >= 0
-                && Character.isWhitespace(textInput.getCharacterAt(selectionStart)));
-            selectionStart++;
-            selectionLength = start - selectionStart;
-            // Move forward to end of whitespace block
-            // but not past the end of the text.
-            do {
-                selectionLength++;
-            } while (selectionStart + selectionLength < length
-                && Character.isWhitespace(textInput.getCharacterAt(selectionStart + selectionLength)));
-        } else if (Character.isUnicodeIdentifierPart(ch)) {
-            // Move backward to beginning of identifier block
-            do {
-                selectionStart--;
-            } while (selectionStart >= 0
-                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(selectionStart)));
-            selectionStart++;
-            selectionLength = start - selectionStart;
-            // Move forward to end of identifier block
-            // but not past end of text.
-            do {
-                selectionLength++;
-            } while (selectionStart + selectionLength < length
-                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(selectionStart
-                    + selectionLength)));
-        } else {
-            return;
-        }
-        textInput.setSelection(selectionStart, selectionLength);
-    }
-
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         if (button == Mouse.Button.LEFT && count > 1) {
             TextInput textInput = (TextInput) getComponent();
             if (count == 2) {
-                selectSpan(textInput, getInsertionPoint(x));
+                CharSpan charSpan = CharUtils.selectWord(textInput.getCharacters(), getInsertionPoint(x));
+                if (charSpan != null) {
+                    textInput.setSelection(charSpan);
+                }
             } else if (count == 3) {
                 textInput.selectAll();
             }
@@ -1332,11 +1283,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         } else if (keyCode == Keyboard.KeyCode.HOME
             || (keyCode == Keyboard.KeyCode.LEFT && isMetaPressed)) {
             if (isShiftPressed) {
-                // Select from the beginning of the text to the current position
-                textInput.setSelection(0, start);
+                // Select from the beginning of the text to the current pivot position
+                if (selectDirection == SelectDirection.LEFT) {
+                    textInput.setSelection(0, start + length);
+                } else {
+                    textInput.setSelection(0, start);
+                }
+                selectDirection = SelectDirection.LEFT;
             } else {
                 // Move the caret to the beginning of the text
                 textInput.setSelection(0, 0);
+                selectDirection = null;
             }
 
             scrollCharacterToVisible(0);
@@ -1347,11 +1304,16 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             int n = textInput.getCharacterCount();
 
             if (isShiftPressed) {
-                // Select from current position to the end of the text
+                // Select from current pivot position to the end of the text
+                if (selectDirection == SelectDirection.LEFT) {
+                    start += length;
+                }
                 textInput.setSelection(start, n - start);
+                selectDirection = SelectDirection.RIGHT;
             } else {
                 // Move the caret to the end of the text
                 textInput.setSelection(n, 0);
+                selectDirection = null;
             }
 
             scrollCharacterToVisible(n);
@@ -1362,22 +1324,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 int wordStart = (selectDirection == SelectDirection.RIGHT) ? start + length : start;
                 // Find the start of the next word to the left
                 if (wordStart > 0) {
-                    // Skip over any space immediately to the left
-                    while (wordStart > 0 && Character.isWhitespace(textInput.getCharacterAt(wordStart - 1))) {
-                        wordStart--;
-                    }
-
-                    // Skip over any word-letters to the left, or just skip one character for other stuff
-                    if (wordStart > 0) {
-                        if (Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart - 1))) {
-                            while (wordStart > 0
-                                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart - 1))) {
-                                wordStart--;
-                            }
-                        } else {
-                            wordStart--;
-                        }
-                    }
+                    wordStart = CharUtils.findPriorWord(textInput.getCharacters(), wordStart);
 
                     if (isShiftPressed) {
                         if (wordStart >= start) {
@@ -1460,23 +1407,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 int wordStart = (selectDirection == SelectDirection.LEFT) ? start : start + length;
                 // Find the start of the next word to the right
                 if (wordStart < textInput.getCharacterCount()) {
-                    // Skip over any space immediately to the right
-                    while (wordStart < textInput.getCharacterCount()
-                        && Character.isWhitespace(textInput.getCharacterAt(wordStart))) {
-                        wordStart++;
-                    }
-
-                    // Skip over any word-letters to the right, or move one character for other stuff
-                    if (wordStart < textInput.getCharacterCount()) {
-                        if (Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart))) {
-                            while (wordStart < textInput.getCharacterCount()
-                                && Character.isUnicodeIdentifierPart(textInput.getCharacterAt(wordStart))) {
-                                wordStart++;
-                            }
-                        } else {
-                            wordStart++;
-                        }
-                    }
+                    wordStart = CharUtils.findNextWord(textInput.getCharacters(), wordStart);
 
                     if (isShiftPressed) {
                         if (wordStart <= start + length) {
