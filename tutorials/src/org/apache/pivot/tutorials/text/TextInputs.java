@@ -22,6 +22,7 @@ import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
@@ -128,6 +129,6 @@ public class TextInputs extends Window implements Bindable {
     @Override
     public void open(Display display, Window owner) {
         super.open(display, owner);
-        stateTextInput.requestFocus();
+        ApplicationContext.queueCallback( () -> stateTextInput.requestFocus() );
     }
 }

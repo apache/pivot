@@ -1080,6 +1080,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 if (scheduledScrollSelectionCallback == null) {
                     scrollDirection = (x < 0) ? FocusTraversalDirection.BACKWARD
                         : FocusTraversalDirection.FORWARD;
+                    selectDirection = (x < 0) ? SelectDirection.LEFT : SelectDirection.RIGHT;
 
                     // Run the callback once now to scroll the selection immediately
                     scheduledScrollSelectionCallback = ApplicationContext.runAndScheduleRecurringCallback(
@@ -1090,6 +1091,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             if (Mouse.isPressed(Mouse.Button.LEFT) && Mouse.getCapturer() == null && anchor != -1) {
                 // Capture the mouse so we can select text
                 Mouse.capture(component);
+                selectDirection = null;
             }
         }
 
@@ -1119,6 +1121,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 } else {
                     // Move the caret to the insertion point
                     textInput.setSelection(anchor, 0);
+                    selectDirection = null;
                     consumed = true;
                 }
             }
@@ -1161,6 +1164,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             } else if (count == 3) {
                 textInput.selectAll();
             }
+            selectDirection = null;
         }
 
         return super.mouseClick(component, button, x, y, count);
@@ -1320,6 +1324,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             consumed = true;
         } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            // Sometimes while selecting we need to make the opposite end visible
+            SelectDirection visiblePosition = SelectDirection.LEFT;
+
             if (Keyboard.isPressed(wordNavigationModifier)) {
                 int wordStart = (selectDirection == SelectDirection.RIGHT) ? start + length : start;
                 // Find the start of the next word to the left
@@ -1331,6 +1338,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                             // We've just reduced the previous right selection, so leave the anchor alone
                             length = wordStart - start;
                             wordStart = start;
+                            visiblePosition = selectDirection;
                         } else {
                             if (selectDirection == SelectDirection.RIGHT) {
                                 // We've "crossed over" the start, so reverse direction
@@ -1373,6 +1381,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                                         length++;
                                         selectDirection = SelectDirection.LEFT;
                                     }
+                                } else {
+                                    visiblePosition = selectDirection;
                                 }
                             }
                             break;
@@ -1398,11 +1408,21 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             if (start >= 0) {
                 textInput.setSelection(start, length);
-                scrollCharacterToVisible(start);
+                switch (visiblePosition) {
+                    case LEFT:
+                        scrollCharacterToVisible(start);
+                        break;
+                    case RIGHT:
+                        scrollCharacterToVisible(start + length);
+                        break;
+                }
 
                 consumed = true;
             }
         } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+            // Sometimes while selecting we need to make the opposite end visible
+            SelectDirection visiblePosition = SelectDirection.RIGHT;
+
             if (Keyboard.isPressed(wordNavigationModifier)) {
                 int wordStart = (selectDirection == SelectDirection.LEFT) ? start : start + length;
                 // Find the start of the next word to the right
@@ -1414,6 +1434,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                             // We've just reduced the previous left selection, so leave the anchor alone
                             length -= wordStart - start;
                             start = wordStart;
+                            visiblePosition = selectDirection;
                         } else {
                             if (selectDirection == SelectDirection.LEFT) {
                                 // We've "crossed over" the start, so reverse direction
@@ -1448,6 +1469,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                                 if (--length == 0) {
                                     length++;
                                     selectDirection = SelectDirection.RIGHT;
+                                } else {
+                                    visiblePosition = selectDirection;
                                 }
                             }
                             break;
@@ -1472,7 +1495,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             if (start + length <= textInput.getCharacterCount()) {
                 textInput.setSelection(start, length);
-                scrollCharacterToVisible(start + length);
+                switch (visiblePosition) {
+                    case LEFT:
+                        scrollCharacterToVisible(start);
+                        break;
+                    case RIGHT:
+                        scrollCharacterToVisible(start + length);
+                        break;
+                }
 
                 consumed = true;
             }
