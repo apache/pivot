@@ -190,6 +190,7 @@ limitations under the License.
             <junit fork="true" failureproperty="unit.tests.failed">
                 <classpath>
                     <path refid="classpath.general"/>
+                    <fileset dir="${basedir}" includes="lib/*.jar"/>
                     <dirset dir="${basedir}" includes="**/${folder.bin}"/>
                     <dirset dir="@{project}" includes="test"/>
                     <fileset dir="@{project}" includes="lib/**/*.jar"/>

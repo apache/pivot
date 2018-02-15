@@ -300,6 +300,11 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
         setGridColor(GraphicsUtilities.decodeColor(gridColor, "gridColor"));
     }
 
+    public final void setGridColor(int gridColor) {
+        Theme theme = currentTheme();
+        setGridColor(theme.getColor(gridColor));
+    }
+
     public Color getTextColor() {
         return textColor;
     }
@@ -311,6 +316,11 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
 
     public final void setTextColor(String color) {
         setTextColor(GraphicsUtilities.decodeColor(color, "textColor"));
+    }
+
+    public final void setTextColor(int color) {
+        Theme theme = currentTheme();
+        setTextColor(theme.getColor(color));
     }
 
     public Color getTextFillColor() {
@@ -325,6 +335,11 @@ public class TerraMeterSkin extends ComponentSkin implements MeterListener {
 
     public final void setTextFillColor(String color) {
         setTextFillColor(GraphicsUtilities.decodeColor(color, "textFillColor"));
+    }
+
+    public final void setTextFillColor(int color) {
+        Theme theme = currentTheme();
+        setTextFillColor(theme.getColor(color));
     }
 
     public float getGridFrequency() {
