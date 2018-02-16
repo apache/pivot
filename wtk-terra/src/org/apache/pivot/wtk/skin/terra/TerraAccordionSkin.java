@@ -325,19 +325,17 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     public TerraAccordionSkin() {
+        setBackgroundColor(4);
+        setBorderColor(7);
+        setButtonColor(12);
+        setDisabledButtonColor(7);
+        setButtonBackgroundColor(10);
+
         Theme theme = currentTheme();
-        setBackgroundColor(theme.getColor(4));
-
-        borderColor = theme.getColor(7);
-        padding = new Insets(4);
         buttonFont = theme.getFont().deriveFont(Font.BOLD);
-        buttonColor = theme.getColor(12);
-        disabledButtonColor = theme.getColor(7);
-        buttonBackgroundColor = theme.getColor(10);
-        buttonPadding = new Insets(6, 8);   // height, width
 
-        // Set the derived colors
-        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
+        padding = new Insets(4);
+        buttonPadding = new Insets(6, 8);   // height, width
 
         panelHeaderGroup.getButtonGroupListeners().add(new ButtonGroupListener() {
             @Override
@@ -387,7 +385,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
 
         int preferredWidth = Math.max(maxPanelHeaderWidth, maxPanelWidth
-            + (padding.left + padding.right + 2));
+            + (padding.getWidth() + 2));
 
         return preferredWidth;
     }
@@ -558,21 +556,6 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
     }
 
-    public Color getBorderColor() {
-        return borderColor;
-    }
-
-    public void setBorderColor(Color borderColor) {
-        Utils.checkNull(borderColor, "borderColor");
-
-        this.borderColor = borderColor;
-        repaintComponent();
-    }
-
-    public final void setBorderColor(String borderColor) {
-        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
-    }
-
     public Insets getPadding() {
         return padding;
     }
@@ -621,6 +604,26 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
 
     public final void setButtonFont(Dictionary<String, ?> buttonFont) {
         setButtonFont(Theme.deriveFont(buttonFont));
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        Utils.checkNull(borderColor, "borderColor");
+
+        this.borderColor = borderColor;
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
+    }
+
+    public final void setBorderColor(int borderColor) {
+        Theme theme = currentTheme();
+        setBorderColor(theme.getColor(borderColor));
     }
 
     public Color getButtonColor() {
@@ -696,6 +699,10 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
     }
 
     public final void setButtonPadding(Dictionary<String, ?> buttonPadding) {
+        setButtonPadding(new Insets(buttonPadding));
+    }
+
+    public final void setButtonPadding(Sequence<?> buttonPadding) {
         setButtonPadding(new Insets(buttonPadding));
     }
 
