@@ -231,8 +231,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
                 graphics.setStroke(dashStroke);
                 graphics.setColor(borderColor);
 
-                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+                GraphicsUtilities.setAntialiasingOn(graphics);
 
                 graphics.draw(new Rectangle2D.Double(1, 1.5, Math.max(width - 2.5, 0), Math.max(
                     height - 3, 0)));

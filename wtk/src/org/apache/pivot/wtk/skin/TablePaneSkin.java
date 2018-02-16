@@ -630,8 +630,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
             Graphics2D gridGraphics = (Graphics2D) graphics.create();
 
             gridGraphics.setStroke(new BasicStroke());
-            gridGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             // Find any components that span multiple rows or columns, and
             // ensure that the grid lines don't get painted through their

@@ -694,8 +694,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                         shape.closePath();
 
                         Graphics2D branchControlGraphics = (Graphics2D) graphics.create();
-                        branchControlGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_ON);
+                        GraphicsUtilities.setAntialiasingOn(branchControlGraphics);
                         if (!treeView.isEnabled() || disabled) {
                             branchControlGraphics.setComposite(AlphaComposite.getInstance(
                                 AlphaComposite.SRC_OVER, 0.5f));

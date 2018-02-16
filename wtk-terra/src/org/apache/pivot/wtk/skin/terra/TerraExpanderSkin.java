@@ -159,8 +159,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
             } else {
                 graphics.setPaint(disabledShadeButtonColor);
             }
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             int[] xPoints = { 3, 6, 9 };
             int[] yPoints = { 9, 3, 9 };
@@ -180,8 +179,7 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
             } else {
                 graphics.setPaint(disabledShadeButtonColor);
             }
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             int[] xPoints = { 3, 6, 9 };
             int[] yPoints = { 3, 9, 3 };

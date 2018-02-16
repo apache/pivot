@@ -344,8 +344,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
             int height = getHeight();
 
             graphics.setPaint(scrollButtonImageColor);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             GeneralPath arrow = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
@@ -374,8 +373,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
             int height = getHeight();
 
             graphics.setPaint(scrollButtonImageColor);
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             GeneralPath arrow = new GeneralPath(Path2D.WIND_EVEN_ODD);
 

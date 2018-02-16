@@ -96,8 +96,7 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
 
             shape.closePath();
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(borderColor);

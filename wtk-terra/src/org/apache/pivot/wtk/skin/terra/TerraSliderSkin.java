@@ -256,14 +256,14 @@ public class TerraSliderSkin extends SliderSkin {
     Point dragOffset = null;
 
     private Color trackColor;
-    private int trackWidth;
     private Color buttonBackgroundColor;
     private Color buttonBorderColor;
+    private int trackWidth;
     private int thumbWidth;
     private int thumbHeight;
     private int tickSpacing;
 
-    // Derived colors
+    // Derived color
     private Color buttonBevelColor;
 
     public static final int DEFAULT_WIDTH = 120;
@@ -271,15 +271,11 @@ public class TerraSliderSkin extends SliderSkin {
     public static final int MINIMUM_THUMB_HEIGHT = 4;
 
     public TerraSliderSkin() {
-        Theme theme = currentTheme();
+        setTrackColor(6);
+        setButtonBackgroundColor(10);
+        setButtonBorderColor(7);
 
-        trackColor = theme.getColor(6);
         trackWidth = 2;
-        buttonBackgroundColor = theme.getColor(10);
-        buttonBorderColor = theme.getColor(7);
-
-        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
-
         thumbWidth = 8;
         thumbHeight = 16;
 
@@ -363,8 +359,8 @@ public class TerraSliderSkin extends SliderSkin {
         int height = getHeight();
 
         graphics.setColor(trackColor);
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
+
         if (slider.getOrientation() == Orientation.HORIZONTAL) {
             graphics.fillRect(0, (height - trackWidth) / 2, width, trackWidth);
             if (tickSpacing > 0) {
@@ -397,9 +393,6 @@ public class TerraSliderSkin extends SliderSkin {
             graphics.setStroke(dashStroke);
             graphics.setColor(buttonBorderColor);
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
             graphics.drawRect(0, 0, width - 1, height - 1);
         }
     }
@@ -419,21 +412,9 @@ public class TerraSliderSkin extends SliderSkin {
         setTrackColor(GraphicsUtilities.decodeColor(trackColor, "trackColor"));
     }
 
-    public int getTrackWidth() {
-        return trackWidth;
-    }
-
-    public void setTrackWidth(int trackWidth) {
-        Utils.checkNonNegative(trackWidth, "trackWidth");
-
-        this.trackWidth = trackWidth;
-        repaintComponent();
-    }
-
-    public void setTrackWidth(Number trackWidth) {
-        Utils.checkNull(trackWidth, "trackWidth");
-
-        setTrackWidth(trackWidth.intValue());
+    public final void setTrackColor(int trackColor) {
+        Theme theme = currentTheme();
+        setTrackColor(theme.getColor(trackColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -452,6 +433,11 @@ public class TerraSliderSkin extends SliderSkin {
         setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor, "buttonBackgroundColor"));
     }
 
+    public final void setButtonBackgroundColor(int buttonBackgroundColor) {
+        Theme theme = currentTheme();
+        setButtonBackgroundColor(theme.getColor(buttonBackgroundColor));
+    }
+
     public Color getButtonBorderColor() {
         return buttonBorderColor;
     }
@@ -465,6 +451,28 @@ public class TerraSliderSkin extends SliderSkin {
 
     public final void setButtonBorderColor(String buttonBorderColor) {
         setButtonBorderColor(GraphicsUtilities.decodeColor(buttonBorderColor, "buttonBorderColor"));
+    }
+
+    public final void setButtonBorderColor(int buttonBorderColor) {
+        Theme theme = currentTheme();
+        setButtonBorderColor(theme.getColor(buttonBorderColor));
+    }
+
+    public int getTrackWidth() {
+        return trackWidth;
+    }
+
+    public void setTrackWidth(int trackWidth) {
+        Utils.checkNonNegative(trackWidth, "trackWidth");
+
+        this.trackWidth = trackWidth;
+        repaintComponent();
+    }
+
+    public void setTrackWidth(Number trackWidth) {
+        Utils.checkNull(trackWidth, "trackWidth");
+
+        setTrackWidth(trackWidth.intValue());
     }
 
     public int getThumbWidth() {

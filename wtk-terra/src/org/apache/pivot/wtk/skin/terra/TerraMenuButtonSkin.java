@@ -258,8 +258,7 @@ public class TerraMenuButtonSkin extends MenuButtonSkin {
 
         // Paint the background
         if (backgroundColorLocal != null && bevelColorLocal != null) {
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             if (!themeIsFlat()) {
                 graphics.setPaint(new GradientPaint(width / 2f, 0, bevelColorLocal, width / 2f,

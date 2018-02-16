@@ -160,8 +160,7 @@ public final class GraphicsUtilities {
 
         if ((graphics.getTransform().getType() & AffineTransform.TYPE_MASK_SCALE) != 0) {
             rectGraphics = (Graphics2D) graphics.create();
-            rectGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            setAntialiasingOn(rectGraphics);
         }
 
         if (width > 0 && height > 0 && thickness > 0) {

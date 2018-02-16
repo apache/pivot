@@ -237,8 +237,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
             int height = getHeight();
 
             // Draw the background
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             if (!themeIsFlat()) {
                 switch (tabOrientation) {
@@ -1094,8 +1093,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         if (activeTabButton != null) {
             Bounds contentBounds = new Bounds(x, y, width, height);
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             // Paint the background
             graphics.setPaint(activeTabColor);

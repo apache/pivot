@@ -110,8 +110,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
             graphics.setPaint(titleBarColor);
             graphics.setStroke(new BasicStroke(2));
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.draw(new Line2D.Double(0.5, 0.5, 7.5, 7.5));
             graphics.draw(new Line2D.Double(0.5, 7.5, 7.5, 0.5));
@@ -180,7 +179,7 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
     @SuppressWarnings("unused")
     public FakeWindowSkin() {
         Theme theme = currentTheme();
-        setBackgroundColor(theme.getColor(10));
+        setBackgroundColor(10);
 
         titleBarColor = theme.getColor(4);
         titleBarBackgroundColor = theme.getColor(14);

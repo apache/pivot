@@ -161,8 +161,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             graphics.setPaint(frame.isActive() ? titleBarColor : inactiveTitleBarColor);
             graphics.setStroke(new BasicStroke(2));
 
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.draw(new Line2D.Double(0.5, 0.5, 7.5, 7.5));
             graphics.draw(new Line2D.Double(0.5, 7.5, 7.5, 0.5));

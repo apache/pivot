@@ -38,9 +38,8 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     private ApplicationContext.ScheduledCallback updateCallback = null;
 
     public TerraActivityIndicatorSkin() {
-        Theme theme = currentTheme();
-        setColor(theme.getColor(2));
-        backgroundColor = null;
+        setColor(2);
+        setBackgroundColor((Color)null);
     }
 
     @Override
@@ -66,8 +65,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
         }
 
         if (activityIndicator.isActive()) {
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             // Translate/scale to fit
             if (width > height) {
@@ -141,12 +139,9 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
     @Override
     public void activeChanged(ActivityIndicator activityIndicator) {
         if (activityIndicator.isActive()) {
-            updateCallback = ApplicationContext.scheduleRecurringCallback(new Runnable() {
-                @Override
-                public void run() {
-                    angle = (angle + 30) % 360;
-                    repaintComponent();
-                }
+            updateCallback = ApplicationContext.scheduleRecurringCallback(() -> {
+                angle = (angle + 30) % 360;
+                repaintComponent();
             }, 100);
         } else {
             updateCallback.cancel();

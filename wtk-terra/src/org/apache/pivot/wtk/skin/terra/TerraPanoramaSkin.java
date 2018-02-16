@@ -60,8 +60,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
         @Override
         public void paint(Graphics2D graphics) {
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            GraphicsUtilities.setAntialiasingOn(graphics);
 
             graphics.setStroke(new BasicStroke(0));
             graphics.setPaint(buttonColor);

@@ -212,8 +212,7 @@ public class TerraPushButtonSkin extends PushButtonSkin {
         }
 
         // Paint the background
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         if (backgroundColorLocal != null && bevelColorLocal != null) {
             if (!themeIsFlat()) {

@@ -182,8 +182,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                                 arrow.lineTo(0, flagMessageLabel.getHeight());
                                 arrow.closePath();
 
-                                graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                    RenderingHints.VALUE_ANTIALIAS_ON);
+                                GraphicsUtilities.setAntialiasingOn(graphics);
 
                                 graphics.setColor(messageBackgroundColor);
                                 graphics.fill(arrow);
@@ -809,8 +808,7 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
     public void paint(Graphics2D graphics) {
         super.paint(graphics);
 
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        GraphicsUtilities.setAntialiasingOn(graphics);
 
         Form form = (Form) getComponent();
         Form.SectionSequence sections = form.getSections();
