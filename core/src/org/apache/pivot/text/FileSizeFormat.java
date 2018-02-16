@@ -29,7 +29,7 @@ public class FileSizeFormat extends Format {
     private static final long serialVersionUID = 9126510513247641698L;
 
     public static final int KILOBYTE = 1024;
-    public static final String[] ABBREVIATIONS = { "K", "M", "G", "T", "P", "E", "Z", "Y" };
+    public static final String[] ABBREVIATIONS = { "", "K", "M", "G", "T", "P", "E", "Z", "Y" };
 
     private static final FileSizeFormat FILE_SIZE_FORMAT = new FileSizeFormat();
 
@@ -54,15 +54,14 @@ public class FileSizeFormat extends Format {
 
         if (length >= 0) {
             double size = length;
-
-            int i = -1;
-            do {
+            int i = 0;
+            while (size >= KILOBYTE) {
                 size /= KILOBYTE;
                 i++;
-            } while (size > KILOBYTE);
+            }
 
             NumberFormat numberFormat = NumberFormat.getNumberInstance();
-            if (i == 0 && size > 1) {
+            if (i > 0 && size >= 10) {
                 numberFormat.setMaximumFractionDigits(0);
             } else {
                 numberFormat.setMaximumFractionDigits(1);

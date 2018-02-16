@@ -294,7 +294,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                     icon = getIcon(file);
                     getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
                 } else if (columnName.equals(SIZE_KEY)) {
-                    long length = file.length();
+                    long length = file.isDirectory() ? -1 : file.length();
                     text = FileSizeFormat.getInstance().format(length);
                     getStyles().put(Style.horizontalAlignment, HorizontalAlignment.RIGHT);
                 } else if (columnName.equals(LAST_MODIFIED_KEY)) {
@@ -342,7 +342,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
             if (columnName.equals(NAME_KEY)) {
                 string = file.getName();
             } else if (columnName.equals(SIZE_KEY)) {
-                long length = file.length();
+                long length = file.isDirectory() ? -1 : file.length();
                 string = FileSizeFormat.getInstance().format(length);
             } else if (columnName.equals(LAST_MODIFIED_KEY)) {
                 long lastModified = file.lastModified();
