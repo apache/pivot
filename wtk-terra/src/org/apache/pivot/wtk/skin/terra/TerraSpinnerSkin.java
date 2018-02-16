@@ -79,12 +79,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
             this.direction = directionArgument;
 
             // Run once to register we've started, then wait a timeout period and begin rapidly spinning
-            scheduledSpinnerCallback = ApplicationContext.runAndScheduleRecurringCallback(new Runnable() {
-                @Override
-                public void run() {
-                    spin();
-                }
-            }, 400, 30);
+            scheduledSpinnerCallback = ApplicationContext.runAndScheduleRecurringCallback(() -> spin(), 400, 30);
         }
 
         private void spin() {
@@ -531,17 +526,15 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     public static final int BUTTON_IMAGE_SIZE = 5;
 
     public TerraSpinnerSkin() {
+        setColor(1);
         setBackgroundColor(4);
+        setDisabledColor(7);
+        setBorderColor(7);
+        setButtonColor(1);
+        setButtonBackgroundColor(10);
 
         Theme theme = currentTheme();
-        font = theme.getFont();
-        color = theme.getColor(1);
-        disabledColor = theme.getColor(7);
-        borderColor = theme.getColor(7);
-        buttonColor = theme.getColor(1);
-        buttonBackgroundColor = theme.getColor(10);
-
-        buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
+        setFont(theme.getFont());
     }
 
     @Override
@@ -712,6 +705,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
+    public final void setColor(int color) {
+        Theme theme = currentTheme();
+        setColor(theme.getColor(color));
+    }
+
     public Color getDisabledColor() {
         return disabledColor;
     }
@@ -725,6 +723,11 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
 
     public final void setDisabledColor(String disabledColor) {
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
+    }
+
+    public final void setDisabledColor(int disabledColor) {
+        Theme theme = currentTheme();
+        setDisabledColor(theme.getColor(disabledColor));
     }
 
     public Color getBorderColor() {
@@ -742,18 +745,28 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
         setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
+    public final void setBorderColor(int borderColor) {
+        Theme theme = currentTheme();
+        setBorderColor(theme.getColor(borderColor));
+    }
+
     public Color getButtonColor() {
         return buttonColor;
     }
 
-    public void setButtonImageColor(Color buttonColor) {
+    public void setButtonColor(Color buttonColor) {
         // TODO: is null acceptable here?
         this.buttonColor = buttonColor;
         repaintComponent();
     }
 
     public final void setButtonColor(String buttonColor) {
-        setButtonImageColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
+        setButtonColor(GraphicsUtilities.decodeColor(buttonColor, "buttonColor"));
+    }
+
+    public final void setButtonColor(int buttonColor) {
+        Theme theme = currentTheme();
+        setButtonColor(theme.getColor(buttonColor));
     }
 
     public Color getButtonBackgroundColor() {
@@ -763,11 +776,17 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
     public void setButtonBackgroundColor(Color buttonBackgroundColor) {
         // TODO: not sure if null is acceptable here (certainly if theme is flat)
         this.buttonBackgroundColor = buttonBackgroundColor;
+        this.buttonBevelColor = TerraTheme.brighten(buttonBackgroundColor);
         repaintComponent();
     }
 
     public final void setButtonBackgroundColor(String buttonBackgroundColor) {
         setButtonBackgroundColor(GraphicsUtilities.decodeColor(buttonBackgroundColor, "buttonBackgroundColor"));
+    }
+
+    public final void setButtonBackgroundColor(int buttonBackgroundColor) {
+        Theme theme = currentTheme();
+        setButtonBackgroundColor(theme.getColor(buttonBackgroundColor));
     }
 
     public Font getFont() {
