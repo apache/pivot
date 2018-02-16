@@ -82,12 +82,7 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
             this.stopValue = stopValueArgument;
 
             // Run once to register we've started, then wait a timeout period and begin scrolling rapidly
-            scheduledScrollCallback = ApplicationContext.runAndScheduleRecurringCallback(new Runnable() {
-                @Override
-                public void run() {
-                    scroll();
-                }
-            }, 400, 30);
+            scheduledScrollCallback = ApplicationContext.runAndScheduleRecurringCallback(() -> scroll(), 400, 30);
         }
 
         /**

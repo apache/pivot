@@ -276,12 +276,7 @@ public class StockTrackerWindow extends Window implements Bindable {
     public void open(Display display, Window owner) {
         super.open(display, owner);
 
-        ApplicationContext.runAndScheduleRecurringCallback(new Runnable() {
-            @Override
-            public void run() {
-                refreshTable();
-            }
-        }, REFRESH_INTERVAL);
+        ApplicationContext.runAndScheduleRecurringCallback(() -> refreshTable(), REFRESH_INTERVAL);
 
         symbolTextInput.requestFocus();
     }
