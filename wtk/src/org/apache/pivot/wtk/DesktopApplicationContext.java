@@ -676,16 +676,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 windowedHostFrame.setExtendedState(MAXIMIZED_BOTH);
             }
 
-            // Start the application in a callback to allow the host window to
-            // open first
-            queueCallback(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        application.startup(primaryDisplayHost.getDisplay(), new ImmutableMap<>(properties));
-                    } catch (Throwable exception) {
-                        handleUncaughtException(exception);
-                    }
+            // Start the application in a callback to allow the host window to open first
+            queueCallback( () -> {
+                try {
+                    application.startup(primaryDisplayHost.getDisplay(), new ImmutableMap<>(properties));
+                } catch (Throwable exception) {
+                    handleUncaughtException(exception);
                 }
             });
         }
@@ -880,12 +876,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Open the window in a callback; otherwise, if it is modal, it will
         // block the calling thread
-        ApplicationContext.queueCallback(new Runnable() {
-            @Override
-            public void run() {
-                hostDialog.setVisible(true);
-            }
-        });
+        ApplicationContext.queueCallback( () -> hostDialog.setVisible(true) );
 
         return hostDialog.getDisplay();
     }
