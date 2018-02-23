@@ -16,6 +16,10 @@
  */
 package org.apache.pivot.util;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+
 /**
  * A set of static methods that perform various string manipulation
  * functions.
@@ -65,6 +69,58 @@ public class StringUtils {
         }
         builder.append(']');
         return builder.toString();
+    }
+
+    /**
+     * Convert a string to a {@link Number}, with a possible known type to
+     * convert to.
+     * <p> If there isn't a known type, this is tricky, so go with Integer first,
+     * then try Double, or finally BigDecimal.
+     *
+     * @param <T> The numeric type to return.
+     * @param string The string representation of a number.
+     * @param type The desired numeric type of this value, or {@code null} to
+     * figure out the appropriate type ourselves.
+     * @return Either an {@link Integer}, {@link Double} or {@link BigDecimal}
+     * value, depending on the format of the input string (if the input type
+     * is {@code null}), or a value of the given type.
+     * @throws NumberFormatException if the input string doesn't contain a value
+     * parseable by one of these methods.
+     */
+    public static <T extends Number> Number toNumber(String string, Class<? extends Number> type) {
+        Utils.checkNullOrEmpty(string, "string");
+
+        if (type == null) {
+            try {
+                return Integer.valueOf(string);
+            } catch (NumberFormatException nfe) {
+                try {
+                    return Double.valueOf(string);
+                } catch (NumberFormatException nfe2) {
+                    return new BigDecimal(string);
+                }
+            }
+        } else {
+            if (type == Byte.class || type == byte.class) {
+                return Byte.valueOf(string);
+            } else if (type == Short.class || type == short.class) {
+                return Short.valueOf(string);
+            } else if (type == Integer.class || type == int.class) {
+                return Integer.valueOf(string);
+            } else if (type == Long.class || type == long.class) {
+                return Long.valueOf(string);
+            } else if (type == Float.class || type == float.class) {
+                return Float.valueOf(string);
+            } else if (type == Double.class || type == double.class) {
+                return Double.valueOf(string);
+            } else if (type == BigDecimal.class) {
+                return new BigDecimal(string);
+            } else if (type == BigInteger.class) {
+                return new BigInteger(string);
+            }
+            // TODO: maybe throw exception
+            return null;
+        }
     }
 
 }
