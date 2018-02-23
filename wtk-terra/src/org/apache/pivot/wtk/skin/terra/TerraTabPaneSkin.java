@@ -579,7 +579,6 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         }
     };
 
-    public static final int GRADIENT_BEVEL_THICKNESS = 8;
     private static final int CLOSE_TRIGGER_SIZE = 6;
     private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
     private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;

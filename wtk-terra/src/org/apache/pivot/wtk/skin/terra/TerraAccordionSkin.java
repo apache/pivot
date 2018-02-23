@@ -319,8 +319,6 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
     };
 
-    public static final int GRADIENT_BEVEL_THICKNESS = 4;
-
     private static final int DEFAULT_SELECTION_CHANGE_DURATION = 250;
     private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
