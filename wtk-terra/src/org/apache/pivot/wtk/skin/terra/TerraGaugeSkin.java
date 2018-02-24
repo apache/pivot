@@ -43,6 +43,11 @@ import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ComponentSkin;
 
 
+/**
+ * Skin class for the {@link Gauge} component, which draws a circular gauge with possible text
+ * in the center.
+ * <p> The gauge colors, as well as colors for the warning and/or critical colors can be set.
+ */
 public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements GaugeListener<T> {
     private static final float STROKE_WIDTH = 6.0f;
 
@@ -71,8 +76,13 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     public TerraGaugeSkin() {
         // TODO: set the rest of the default stuff (colors, etc.)
         font = currentTheme().getFont().deriveFont(Font.BOLD, 24.0f);
-        backgroundColor = defaultBackgroundColor();
-        padding = Insets.NONE;
+        setBackgroundColor(defaultBackgroundColor());
+        setGaugeColor(8);
+        setColor(Color.green);
+        setWarningColor(20);
+        setCriticalColor(23);
+        setTextColor(8);
+        setPadding(Insets.NONE);
     }
 
     @Override
@@ -84,6 +94,9 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         gauge.getGaugeListeners().add(this);
     }
 
+    /**
+     * This is a "display-only" component, so as such will not accept focus.
+     */
     @Override
     public boolean isFocusable() {
         return false;
@@ -140,11 +153,11 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
 
         Rectangle2D rect = new Rectangle2D.Float(x, y, diameter, diameter);
 
-        float minValue = minLevel.floatValue();
-        float maxValue = maxLevel.floatValue();
+        float minValue = minLevel == null ? 0.0f : minLevel.floatValue();
+        float maxValue = maxLevel == null ? 100.0f : maxLevel.floatValue();
         float fullRange = maxValue - minValue;
         float toAngle = 360.0f / fullRange;
-        float activeValue = value.floatValue() - minValue;
+        float activeValue = (value == null ? 0.0f : value.floatValue()) - minValue;
         float activeAngle = activeValue * toAngle;
 
         if (backgroundColor != null) {
@@ -317,6 +330,15 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         return this.warningColor;
     }
 
+    /**
+     * Set the warning color to use for the portion of the value display when the
+     * value exceeds the gauge's warning level.
+     * <p> Note: one, two, or three colors may be displayed depending on the warning
+     * and critical levels (and whether they are set), and the warning and critical
+     * colors (and whether they are set) (and of course what the value is).
+     * @param warningColor A color for the warning levels, or {@code null} to disable
+     * the warning level checks.
+     */
     public final void setWarningColor(Color warningColor) {
         // Note: null is okay here to effectively disable using the warning color logic
         this.warningColor = warningColor;
@@ -336,6 +358,15 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         return this.criticalColor;
     }
 
+    /**
+     * Set the critical color to use for the portion of the value display when the
+     * value exceeds the gauge's critical level.
+     * <p> Note: one, two, or three colors may be displayed depending on the warning
+     * and critical levels (and whether they are set), and the warning and critical
+     * colors (and whether they are set) (and of course what the value is).
+     * @param criticalColor A color for the critical levels, or {@code null} to disable
+     * the critical level checks.
+     */
     public final void setCriticalColor(Color criticalColor) {
         // Note: null is okay here to disable using the critical color logic
         this.criticalColor = criticalColor;
@@ -361,26 +392,66 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         invalidateComponent();
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the gauge area and
+     * the actual drawing.
+     *
+     * @param padding A dictionary containing the keys {top ,left, bottom, and/or right}.
+     */
     public final void setPadding(Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the gauge area and
+     * the actual drawing.
+     *
+     * @param padding A sequence containing the values [top left, bottom, right].
+     */
     public final void setPadding(Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the gauge area and
+     * the actual drawing.
+     *
+     * @param padding A single value to use for the padding on all sides.
+     */
     public final void setPadding(int padding) {
         setPadding(new Insets(padding));
     }
 
+    /**
+     * Sets the amount of space to leave between the edge of the gauge area and
+     * the actual drawing.
+     *
+     * @param padding A single value to use for the padding on all sides.
+     */
     public void setPadding(Number padding) {
         setPadding(new Insets(padding));
+    }
+
+    /**
+     * Sets the amount of space to leave between the edge of the gauge area and
+     * the actual drawing.
+     *
+     * @param padding A string containing an integer or a JSON map or list with
+     * keys/values top, left, bottom, and/or right.
+     */
+    public final void setPadding(String padding) {
+        setPadding(Insets.decode(padding));
     }
 
     public float getThickness() {
         return thickness;
     }
 
+    /**
+     * Set the thickness of the value display.
+     * @param thickness The new value (default is {@link #STROKE_WIDTH}).
+     * @throws IllegalArgumentException if the value is 0.0 or less.
+     */
     public final void setThickness(float thickness) {
         Utils.checkPositive(thickness, "thickness");
 
@@ -396,17 +467,6 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     public final void setThickness(String thickness) {
         Utils.checkNullOrEmpty(thickness, "thickness");
         setThickness(StringUtils.toNumber(thickness, Float.class));
-    }
-
-    /**
-     * Sets the amount of space to leave between the edge of the Border and its
-     * content.
-     *
-     * @param padding A string containing an integer or a JSON dictionary with
-     * keys left, top, bottom, and/or right.
-     */
-    public final void setPadding(String padding) {
-        setPadding(Insets.decode(padding));
     }
 
     @Override

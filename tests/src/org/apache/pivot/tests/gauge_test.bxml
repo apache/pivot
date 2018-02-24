@@ -27,7 +27,7 @@ limitations under the License.
             <TablePane.Row height="-1">
                 <Border title="Speed" styles="{backgroundColor:10}">
                     <Gauge bxml:id="speedGauge" origin="SOUTH" type="Integer" minValue="0" maxValue="200" value="0" warningLevel="120" criticalLevel="180"
-                        styles="{gaugeColor:8, backgroundColor:10, color:'green', warningColor:20, criticalColor:23, font:{size:20}}, thickness:10.0"/>
+                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}}, thickness:10.0"/>
                 </Border>
             </TablePane.Row>
             <TablePane.Row height="-1">
