@@ -146,8 +146,10 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         Dimensions size = gauge.getSize();
         Origin origin = gauge.getOrigin();
 
+        // The pen thickness is centered on the path, so we need to calculate the path diameter for the
+        // center of the stroke width (basically 1/2 the thickness on each side, or the thickness itself)
         float diameter = (float)(Math.min(size.width - padding.getWidth(), size.height - padding.getHeight()))
-            - (thickness * 2.0f);
+            - thickness;
         float x = ((float)size.width - diameter) / 2.0f;
         float y = ((float)size.height - diameter) / 2.0f;
 
