@@ -251,7 +251,12 @@ public class Gauge<T extends Number> extends Component {
             setOrCheckClass(warningLevel);
         }
 
-        this.warningLevel = warningLevel;
+        T previousWarningLevel = this.warningLevel;
+
+        if (previousWarningLevel != warningLevel) {
+            this.warningLevel = warningLevel;
+            gaugeListeners.warningCriticalLevelChanged(this, previousWarningLevel, this.criticalLevel);
+        }
     }
 
     /**
@@ -285,7 +290,12 @@ public class Gauge<T extends Number> extends Component {
             setOrCheckClass(criticalLevel);
         }
 
-        this.criticalLevel = criticalLevel;
+        T previousCriticalLevel = this.criticalLevel;
+
+        if (previousCriticalLevel != criticalLevel) {
+            this.criticalLevel = criticalLevel;
+            gaugeListeners.warningCriticalLevelChanged(this, this.warningLevel, previousCriticalLevel);
+        }
     }
 
     /**
@@ -312,7 +322,7 @@ public class Gauge<T extends Number> extends Component {
 
         if ((previousText == null && text != null) ||
             (previousText != null && text == null) ||
-            (!previousText.equals(text))) {
+            (previousText != null && !previousText.equals(text))) {
             this.text = text;
             gaugeListeners.textChanged(this, previousText);
         }

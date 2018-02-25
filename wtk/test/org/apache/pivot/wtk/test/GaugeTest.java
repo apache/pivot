@@ -32,6 +32,7 @@ public class GaugeTest implements GaugeListener<Integer> {
     private int valueChangeCount = 0;
     private int textChangeCount = 0;
     private int minMaxChangeCount = 0;
+    private int warningCriticalChangeCount = 0;
 
     @Override
     public void originChanged(Gauge<Integer> gauge, Origin previousOrigin) {
@@ -57,6 +58,12 @@ public class GaugeTest implements GaugeListener<Integer> {
         minMaxChangeCount++;
     }
 
+    @Override
+    public void warningCriticalLevelChanged(Gauge<Integer> gauge, Integer previousWarningLevel, Integer previousCriticalLevel) {
+        System.out.println("Warning or Critical level changed: warning=" + gauge.getWarningLevel() + ", critical=" + gauge.getCriticalLevel());
+        warningCriticalChangeCount++;
+    }
+
     @Test
     public void testListeners() {
         Gauge<Integer> gauge = new Gauge<>();
@@ -75,6 +82,22 @@ public class GaugeTest implements GaugeListener<Integer> {
         gauge.setMinValue(0);
         gauge.setMaxValue(100);
 
+        gauge.setWarningLevel(10);
+        gauge.setWarningLevel(80);
+        gauge.setWarningLevel(80);
+        gauge.setCriticalLevel(10);
+        gauge.setCriticalLevel(10);
+        gauge.setCriticalLevel(90);
+
+        gauge.setText(null);
+        gauge.setText("");
+        gauge.setText("");
+        gauge.setText("20%");
+        gauge.setText("20%");
+        gauge.setText("100%");
+        gauge.setText(null);
+        gauge.setText("100%");
+
         gauge.setValue(0);
         gauge.setValue(2);
         gauge.setValue(10);
@@ -83,6 +106,8 @@ public class GaugeTest implements GaugeListener<Integer> {
         // Now check for proper listener event counts
         assertEquals(originChangeCount, 4);
         assertEquals(minMaxChangeCount, 2);
+        assertEquals(warningCriticalChangeCount, 4);
+        assertEquals(textChangeCount, 5);
         assertEquals(valueChangeCount, 4);
     }
 }
