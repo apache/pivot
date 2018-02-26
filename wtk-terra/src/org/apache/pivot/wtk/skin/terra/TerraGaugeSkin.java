@@ -55,6 +55,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     /** This is the color of the circle part of the gauge, where the value "is not". */
     private Color gaugeColor;
     private Color textColor;
+    private Color tickColor;
     /** This is the color for the "value" if it is below the warning or critical levels. */
     private Color color;
     private Color warningColor;
@@ -63,6 +64,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     private Insets padding;
     private Font font;
     private float thickness = STROKE_WIDTH;
+    private T tickFrequency;
     private float textAscent;
 
     private static final RenderingHints renderingHints = new RenderingHints(null);
@@ -82,6 +84,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         setWarningColor(20);
         setCriticalColor(23);
         setTextColor(8);
+        setTickColor(6);
         setPadding(Insets.NONE);
     }
 
@@ -218,6 +221,52 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             drawArc(graphics, rect, origin, activeAngle, 360.0f - activeAngle, gaugeColor);
         }
 
+        // On top of the arcs, draw the tick marks (if requested)
+        if (showTickMarks && tickFrequency != null && tickColor != null) {
+            // frequency is how many gauge values between marks
+            float frequency = tickFrequency.floatValue();
+            int numMarks = (int)Math.floor(fullRange / frequency);
+            graphics.setColor(tickColor == null ? backgroundColor : tickColor);
+            // Note: VALUE_STROKE_PURE tends to make the arcs fine but the lines non-uniform,
+            // while VALUE_STROKE_NORMALIZE works well for the lines but makes the arcs "wobble" around a bit
+            graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+            graphics.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
+            float radius = diameter / 2.0f;
+            float innerRadius = radius - (thickness / 2.0f);
+            float outerRadius = radius + (thickness / 2.0f);
+            float xCenter = x + radius;
+            float yCenter = y + radius;
+            // Draw the "0" mark at the origin
+            switch (origin) {
+                case NORTH:
+                    graphics.drawLine((int)xCenter, (int)(yCenter - innerRadius), (int)xCenter, (int)(yCenter - outerRadius));
+                    break;
+                case EAST:
+                    graphics.drawLine((int)(xCenter + innerRadius), (int)yCenter, (int)(xCenter + outerRadius), (int)yCenter);
+                    break;
+                case SOUTH:
+                    graphics.drawLine((int)xCenter, (int)(yCenter + innerRadius), (int)xCenter, (int)(yCenter + outerRadius));
+                    break;
+                case WEST:
+                    graphics.drawLine((int)(xCenter - innerRadius), (int)yCenter, (int)(xCenter - outerRadius), (int)yCenter);
+                    break;
+            }
+            // Draw clockwise from the origin, subtracting the frequency each time
+            double startAngleRadians = origin.getOriginAngle() * Math.PI / 180.0;
+            double frequencyAngleRadians = frequency / fullRange * Math.PI * 2.0;
+            double angleRadians = startAngleRadians - frequencyAngleRadians;
+            for (int i = 0; i < numMarks; i++) {
+                float cosAngle = (float)Math.cos(angleRadians);
+                float sinAngle = (float)Math.sin(angleRadians);
+                float xInner = xCenter + (innerRadius * cosAngle);
+                float yInner = yCenter + (innerRadius * sinAngle);
+                float xOuter = xCenter + (outerRadius * cosAngle);
+                float yOuter = yCenter + (outerRadius * sinAngle);
+                graphics.drawLine((int)xInner, (int)yInner, (int)xOuter, (int)yOuter);
+                angleRadians -= frequencyAngleRadians;
+            }
+        }
+
         // Draw the text in the middle (if any)
         if (!Utils.isNullOrEmpty(text)) {
             FontRenderContext fontRenderContext = GraphicsUtilities.prepareForText(graphics, font, textColor);
@@ -229,9 +278,6 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             graphics.drawString(text, (int) textX, (int) textY);
         }
     }
-
-    // TODO: possible other styles to implement:
-    // show radial marks
 
     public Font getFont() {
         return font;
@@ -326,6 +372,30 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     public final void setTextColor(int textColor) {
         Theme theme = currentTheme();
         setTextColor(theme.getColor(textColor));
+    }
+
+    public Color getTickColor() {
+        return tickColor;
+    }
+
+    /**
+     * Set the color for the radial "tick" marks along the arc of the gauge.
+     * <p> Note: to disable tick drawing, use a style of "showTickMarks:false".
+     * @param tickColor Any color value, or {@code null} to use the background color.
+     */
+    public final void setTickColor(Color tickColor) {
+        // Tick color can be null to use the background color.
+        this.tickColor = tickColor;
+        repaintComponent();
+    }
+
+    public final void setTickColor(String tickColor) {
+        setTickColor(GraphicsUtilities.decodeColor(tickColor, "tickColor"));
+    }
+
+    public final void setTickColor(int tickColor) {
+        Theme theme = currentTheme();
+        setTickColor(theme.getColor(tickColor));
     }
 
     public Color getWarningColor() {
@@ -469,6 +539,25 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     public final void setThickness(String thickness) {
         Utils.checkNullOrEmpty(thickness, "thickness");
         setThickness(StringUtils.toNumber(thickness, Float.class));
+    }
+
+    public boolean getShowTickMarks() {
+        return showTickMarks;
+    }
+
+    public final void setShowTickMarks(boolean showTickMarks) {
+        this.showTickMarks = showTickMarks;
+        repaintComponent();
+    }
+
+    public T getTickFrequency() {
+        return tickFrequency;
+    }
+
+    public final void setTickFrequency(T frequency) {
+        Utils.checkNull(frequency, "frequency");
+        this.tickFrequency = frequency;
+        repaintComponent();
     }
 
     @Override
