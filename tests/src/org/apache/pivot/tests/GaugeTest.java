@@ -62,7 +62,7 @@ public class GaugeTest implements Application {
             color = warningColor;
         }
         speedGauge.getStyles().put("textColor", color);
-        speedGauge.setText(Integer.toString(speed) + " mph");
+        speedGauge.setText(Integer.toString(speed) + " MpH");
     }
 
     private void hitTheGas() {

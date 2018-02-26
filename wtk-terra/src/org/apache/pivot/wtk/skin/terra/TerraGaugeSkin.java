@@ -65,7 +65,6 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     private Font font;
     private float thickness = STROKE_WIDTH;
     private T tickFrequency;
-    private float textAscent;
 
     private static final RenderingHints renderingHints = new RenderingHints(null);
 
@@ -257,11 +256,11 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             for (int i = 0; i < numMarks; i++) {
                 float cosAngle = (float)Math.cos(angleRadians);
                 float sinAngle = (float)Math.sin(angleRadians);
-                float xInner = xCenter + (innerRadius * cosAngle);
-                float yInner = yCenter + (innerRadius * sinAngle);
-                float xOuter = xCenter + (outerRadius * cosAngle);
-                float yOuter = yCenter + (outerRadius * sinAngle);
-                graphics.drawLine((int)xInner, (int)yInner, (int)xOuter, (int)yOuter);
+                int xInner = (int)(xCenter + (innerRadius * cosAngle) + 0.5f);
+                int yInner = (int)(yCenter + (innerRadius * sinAngle) + 0.5f);
+                int xOuter = (int)(xCenter + (outerRadius * cosAngle) + 0.5f);
+                int yOuter = (int)(yCenter + (outerRadius * sinAngle) + 0.5f);
+                graphics.drawLine(xInner, yInner, xOuter, yOuter);
                 angleRadians -= frequencyAngleRadians;
             }
         }
@@ -269,10 +268,13 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         // Draw the text in the middle (if any)
         if (!Utils.isNullOrEmpty(text)) {
             FontRenderContext fontRenderContext = GraphicsUtilities.prepareForText(graphics, font, textColor);
-
+            LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
             Rectangle2D textBounds = font.getStringBounds(text, fontRenderContext);
+
+            // Since this is only a single line, ignore the text leading in the height
+            double textHeight = lm.getAscent() + lm.getDescent();
             double textX = x + (diameter - textBounds.getWidth()) / 2.0;
-            double textY = y + (diameter - textBounds.getHeight()) / 2.0 + textAscent;
+            double textY = y + (diameter - textHeight) / 2.0 + lm.getAscent();
 
             graphics.drawString(text, (int) textX, (int) textY);
         }
@@ -286,7 +288,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         Utils.checkNull(font, "font");
 
         this.font = font;
-        invalidateComponent();
+        repaintComponent();
     }
 
     public final void setFont(String font) {
@@ -571,12 +573,6 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
 
     @Override
     public void textChanged(Gauge<T> gauge, String previousText) {
-        String text = gauge.getText();
-        if (!Utils.isNullOrEmpty(text)) {
-            FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            LineMetrics lm = font.getLineMetrics(text, fontRenderContext);
-            textAscent = lm.getAscent();
-        }
         repaintComponent();
     }
 

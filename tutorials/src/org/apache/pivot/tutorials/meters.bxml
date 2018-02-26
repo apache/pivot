@@ -46,26 +46,32 @@ limitations under the License.
 
         <BoxPane orientation="vertical" styles="{padding:6, spacing:8, horizontalAlignment:'center'}">
             <Label text="Gauges" styles="{font:{bold:true}}"/>
-            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
-                <Gauge origin="NORTH" type="Integer" minValue="0" maxValue="100" value="50" warningLevel="70" criticalLevel="90" text="50%"
-                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4, showTickMarks:true, tickFrequency:10}"/>
-                <Label text="North origin: ticks at 10"/>
-            </BoxPane>
-            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
-                <Gauge origin="EAST" type="Integer" minValue="0" maxValue="100" value="40" warningLevel="70" criticalLevel="90" text="40%"
-                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4, showTickMarks:true, tickFrequency:25}"/>
-                <Label text="East origin: ticks at 25"/>
-            </BoxPane>
-            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
-                <Gauge origin="SOUTH" type="Integer" minValue="0" maxValue="100" value="75" warningLevel="70" criticalLevel="90" text="75%"
-                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4}"/>
-                <Label text="South origin: no ticks, warning at 70%"/>
-            </BoxPane>
-            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
-                <Gauge origin="WEST" type="Integer" minValue="0" maxValue="100" value="95" warningLevel="70" criticalLevel="90" text="95%"
-                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4}"/>
-                <Label text="West origin: no ticks, critical at 90%"/>
-            </BoxPane>
+            <GridPane columnCount="2" styles="{horizontalSpacing:4,verticalSpacing:2,showVerticalGridLines:true,showHorizontalGridLines:true}">
+                <GridPane.Row>
+                    <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                        <Gauge origin="NORTH" preferredWidth="80" preferredHeight="80" type="Integer" minValue="0" maxValue="100" value="50" warningLevel="70" criticalLevel="90" text="50%"
+                                styles="{backgroundColor:null, criticalColor:23, font:{size:20}, thickness:10.0, padding:4, showTickMarks:true, tickFrequency:10}"/>
+                        <Label text="North origin: ticks at 10"/>
+                    </BoxPane>
+                    <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                        <Gauge origin="SOUTH" preferredWidth="80" preferredHeight="80" type="Integer" minValue="0" maxValue="100" value="75" warningLevel="70" criticalLevel="90" text="75%"
+                                styles="{backgroundColor:null, criticalColor:23, font:{size:20}, thickness:10.0, padding:4}"/>
+                        <Label text="South origin: warning at 70%"/>
+                    </BoxPane>
+                </GridPane.Row>
+                <GridPane.Row>
+                    <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                        <Gauge origin="EAST" preferredWidth="80" preferredHeight="80" type="Integer" minValue="0" maxValue="100" value="40" warningLevel="70" criticalLevel="90" text="40%"
+                                styles="{backgroundColor:null, criticalColor:23, font:{size:20}, thickness:10.0, padding:4, showTickMarks:true, tickFrequency:25}"/>
+                        <Label text="East origin: ticks at 25"/>
+                    </BoxPane>
+                    <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                        <Gauge origin="WEST" preferredWidth="80" preferredHeight="80" type="Integer" minValue="0" maxValue="100" value="95" warningLevel="70" criticalLevel="90" text="95%"
+                                styles="{backgroundColor:null, criticalColor:23, font:{size:20}, thickness:10.0, padding:4}"/>
+                        <Label text="West origin: critical at 90%"/>
+                    </BoxPane>
+                </GridPane.Row>
+            </GridPane>
         </BoxPane>
 
         <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
