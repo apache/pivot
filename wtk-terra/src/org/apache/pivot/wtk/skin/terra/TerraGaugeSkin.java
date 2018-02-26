@@ -76,7 +76,6 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     };
 
     public TerraGaugeSkin() {
-        // TODO: set the rest of the default stuff (colors, etc.)
         font = currentTheme().getFont().deriveFont(Font.BOLD, 24.0f);
         setBackgroundColor(defaultBackgroundColor());
         setGaugeColor(8);

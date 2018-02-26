@@ -44,6 +44,30 @@ limitations under the License.
             </BoxPane>
         </BoxPane>
 
+        <BoxPane orientation="vertical" styles="{padding:6, spacing:8, horizontalAlignment:'center'}">
+            <Label text="Gauges" styles="{font:{bold:true}}"/>
+            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                <Gauge origin="NORTH" type="Integer" minValue="0" maxValue="100" value="50" warningLevel="70" criticalLevel="90" text="50%"
+                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4, showTickMarks:true, tickFrequency:10}"/>
+                <Label text="North origin: ticks at 10"/>
+            </BoxPane>
+            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                <Gauge origin="EAST" type="Integer" minValue="0" maxValue="100" value="40" warningLevel="70" criticalLevel="90" text="40%"
+                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4, showTickMarks:true, tickFrequency:25}"/>
+                <Label text="East origin: ticks at 25"/>
+            </BoxPane>
+            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                <Gauge origin="SOUTH" type="Integer" minValue="0" maxValue="100" value="75" warningLevel="70" criticalLevel="90" text="75%"
+                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4}"/>
+                <Label text="South origin: no ticks, warning at 70%"/>
+            </BoxPane>
+            <BoxPane orientation="vertical" styles="{spacing:6, horizontalAlignment:'center'}">
+                <Gauge origin="WEST" type="Integer" minValue="0" maxValue="100" value="95" warningLevel="70" criticalLevel="90" text="95%"
+                        styles="{backgroundColor:10, criticalColor:23, font:{size:20}, thickness:10.0, padding:4}"/>
+                <Label text="West origin: no ticks, critical at 90%"/>
+            </BoxPane>
+        </BoxPane>
+
         <BoxPane orientation="vertical" styles="{padding:6, spacing:8}">
             <Label text="Activity Indicators" styles="{font:{bold:true}}"/>
             <BoxPane>

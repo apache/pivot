@@ -74,7 +74,7 @@ limitations under the License.
                     </Rollup>
                     <Rollup bxml:id="metersRollup" styles="{buttonColor:13}">
                         <heading>
-                            <Label text="Meters &amp; Activity Indicators" styles="{font:{size:'110%', bold:true}, color:13}"/>
+                            <Label text="Meters, Gauges &amp; Activity Indicators" styles="{font:{size:'110%', bold:true}, color:13}"/>
                         </heading>
                     </Rollup>
                     <Rollup bxml:id="spinnersRollup" styles="{buttonColor:13}">
