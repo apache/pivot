@@ -17,6 +17,7 @@
 package org.apache.pivot.tutorials.explorer.tools;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -150,6 +151,18 @@ abstract class ComponentInspectorSkin extends ContainerSkin implements Component
             control = addColorControl(dictionary, key, section);
         } else if (type == CalendarDate.class) {
             control = addCalendarDateControl(dictionary, key, section);
+        } else if (type == Font.class || type == Number.class) {
+            Object value = dictionary.get(key);
+            String strValue;
+            if (value instanceof Font) {
+                // Remove the "java.awt.Font" part at the beginning
+                strValue = value.toString().substring(13);
+            } else {
+                strValue = value.toString();
+            }
+            Label label = new Label(strValue);
+            section.add(label);
+            Form.setLabel(label, key);
         }
 
         if (control != null) {

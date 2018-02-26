@@ -252,6 +252,12 @@ limitations under the License.
                                                 horizontalScrollBarPolicy="auto"
                                                 verticalScrollBarPolicy="auto"/>
                                             <explorer:ComponentNode
+                                                text="Gauge"
+                                                icon="@../page_white.png"
+                                                src="@gauge.bxml"
+                                                horizontalScrollBarPolicy="auto"
+                                                verticalScrollBarPolicy="auto"/>
+                                            <explorer:ComponentNode
                                                 text="ActivityIndicator"
                                                 icon="@../page_white.png"
                                                 src="@activity_indicator.bxml"

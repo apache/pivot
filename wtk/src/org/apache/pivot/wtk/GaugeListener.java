@@ -42,13 +42,23 @@ public interface GaugeListener<T extends Number> {
         }
 
         @Override
-        public void minMaxValueChanged(Gauge<T> gauge, T previousMinValue, T previousMaxValue) {
-            forEach(listener -> listener.minMaxValueChanged(gauge, previousMinValue, previousMaxValue));
+        public void minValueChanged(Gauge<T> gauge, T previousMinValue) {
+            forEach(listener -> listener.minValueChanged(gauge, previousMinValue));
         }
 
         @Override
-        public void warningCriticalLevelChanged(Gauge<T> gauge, T previousWarningLevel, T previousCriticalLevel) {
-            forEach(listener -> listener.warningCriticalLevelChanged(gauge, previousWarningLevel, previousCriticalLevel));
+        public void maxValueChanged(Gauge<T> gauge, T previousMaxValue) {
+            forEach(listener -> listener.maxValueChanged(gauge, previousMaxValue));
+        }
+
+        @Override
+        public void warningLevelChanged(Gauge<T> gauge, T previousWarningLevel) {
+            forEach(listener -> listener.warningLevelChanged(gauge, previousWarningLevel));
+        }
+
+        @Override
+        public void criticalLevelChanged(Gauge<T> gauge, T previousCriticalLevel) {
+            forEach(listener -> listener.criticalLevelChanged(gauge, previousCriticalLevel));
         }
     }
 
@@ -80,23 +90,39 @@ public interface GaugeListener<T extends Number> {
     }
 
     /**
-     * Called when min or max values change.
+     * Called when min value changes.
      *
      * @param gauge The gauge that is changing.
      * @param previousMinValue The previous minimum.
-     * @param previousMaxValue The previous maximum.
      */
-    default public void minMaxValueChanged(Gauge<T> gauge, T previousMinValue, T previousMaxValue) {
+    default public void minValueChanged(Gauge<T> gauge, T previousMinValue) {
     }
 
     /**
-     * Called when the warning or critical levels for the gauge have changed.
+     * Called when max value changes.
+     *
+     * @param gauge The gauge that is changing.
+     * @param previousMaxValue The previous maximum.
+     */
+    default public void maxValueChanged(Gauge<T> gauge, T previousMaxValue) {
+    }
+
+    /**
+     * Called when the warning level for the gauge has changed.
      *
      * @param gauge The gauge we're talking about.
      * @param previousWarningLevel The previous value for the warning level.
+     */
+    default public void warningLevelChanged(Gauge<T> gauge, T previousWarningLevel) {
+    }
+
+    /**
+     * Called when the critical level for the gauge has changed.
+     *
+     * @param gauge The gauge we're talking about.
      * @param previousCriticalLevel The previous value for the critical level.
      */
-    default public void warningCriticalLevelChanged(Gauge<T> gauge, T previousWarningLevel, T previousCriticalLevel) {
+    default public void criticalLevelChanged(Gauge<T> gauge, T previousCriticalLevel) {
     }
 }
 

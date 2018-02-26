@@ -577,12 +577,22 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     }
 
     @Override
-    public void minMaxValueChanged(Gauge<T> gauge, T previousMinValue, T previousMaxValue) {
+    public void minValueChanged(Gauge<T> gauge, T previousMinValue) {
         repaintComponent();
     }
 
     @Override
-    public void warningCriticalLevelChanged(Gauge<T> gauge, T previousWarningLevel, T previousCriticalLevel) {
+    public void maxValueChanged(Gauge<T> gauge, T previousMaxValue) {
+        repaintComponent();
+    }
+
+    @Override
+    public void warningLevelChanged(Gauge<T> gauge, T previousWarningLevel) {
+        repaintComponent();
+    }
+
+    @Override
+    public void criticalLevelChanged(Gauge<T> gauge, T previousCriticalLevel) {
         repaintComponent();
     }
 }

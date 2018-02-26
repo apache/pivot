@@ -75,6 +75,10 @@ public class Gauge<T extends Number> extends Component {
         }
     }
 
+    public Class<? extends Number> getType() {
+        return this.clazz;
+    }
+
     /**
      * Since this is a generic component that can take any numeric type, for BXML we need
      * to specify the specific type of the value (which is also needed for the min/max and
@@ -179,7 +183,7 @@ public class Gauge<T extends Number> extends Component {
 
         if (minValue != previousMinValue) {
             this.minValue = minValue;
-            gaugeListeners.minMaxValueChanged(this, previousMinValue, this.maxValue);
+            gaugeListeners.minValueChanged(this, previousMinValue);
         }
     }
 
@@ -215,7 +219,7 @@ public class Gauge<T extends Number> extends Component {
 
         if (previousMaxValue != maxValue) {
             this.maxValue = maxValue;
-            gaugeListeners.minMaxValueChanged(this, this.minValue, previousMaxValue);
+            gaugeListeners.maxValueChanged(this, previousMaxValue);
         }
     }
 
@@ -255,7 +259,7 @@ public class Gauge<T extends Number> extends Component {
 
         if (previousWarningLevel != warningLevel) {
             this.warningLevel = warningLevel;
-            gaugeListeners.warningCriticalLevelChanged(this, previousWarningLevel, this.criticalLevel);
+            gaugeListeners.warningLevelChanged(this, previousWarningLevel);
         }
     }
 
@@ -294,7 +298,7 @@ public class Gauge<T extends Number> extends Component {
 
         if (previousCriticalLevel != criticalLevel) {
             this.criticalLevel = criticalLevel;
-            gaugeListeners.warningCriticalLevelChanged(this, this.warningLevel, previousCriticalLevel);
+            gaugeListeners.criticalLevelChanged(this, previousCriticalLevel);
         }
     }
 

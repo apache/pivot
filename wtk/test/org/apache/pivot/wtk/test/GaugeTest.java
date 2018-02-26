@@ -53,14 +53,26 @@ public class GaugeTest implements GaugeListener<Integer> {
     }
 
     @Override
-    public void minMaxValueChanged(Gauge<Integer> gauge, Integer previousMinValue, Integer previousMaxValue) {
-        System.out.println("Min or max changed: min=" + gauge.getMinValue() + ", max=" + gauge.getMaxValue());
+    public void minValueChanged(Gauge<Integer> gauge, Integer previousMinValue) {
+        System.out.println("Min changed: min=" + gauge.getMinValue());
         minMaxChangeCount++;
     }
 
     @Override
-    public void warningCriticalLevelChanged(Gauge<Integer> gauge, Integer previousWarningLevel, Integer previousCriticalLevel) {
-        System.out.println("Warning or Critical level changed: warning=" + gauge.getWarningLevel() + ", critical=" + gauge.getCriticalLevel());
+    public void maxValueChanged(Gauge<Integer> gauge, Integer previousMaxValue) {
+        System.out.println("Max changed: max=" + gauge.getMaxValue());
+        minMaxChangeCount++;
+    }
+
+    @Override
+    public void warningLevelChanged(Gauge<Integer> gauge, Integer previousWarningLevel) {
+        System.out.println("Warning level changed: warning=" + gauge.getWarningLevel());
+        warningCriticalChangeCount++;
+    }
+
+    @Override
+    public void criticalLevelChanged(Gauge<Integer> gauge, Integer previousCriticalLevel) {
+        System.out.println("Critical level changed: critical=" + gauge.getCriticalLevel());
         warningCriticalChangeCount++;
     }
 

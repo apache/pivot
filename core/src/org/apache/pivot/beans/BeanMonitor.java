@@ -116,7 +116,14 @@ public class BeanMonitor {
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
+                    Type type = typeArguments[0];
+                    Class<?> listenerInterface;
+                    if (type instanceof ParameterizedType) {
+                        ParameterizedType paramType = (ParameterizedType)type;
+                        listenerInterface = (Class<?>) paramType.getRawType();
+                    } else {
+                        listenerInterface = (Class<?>) type;
+                    }
 
                     if (!listenerInterface.isInterface()) {
                         throw new RuntimeException(listenerInterface.getName() + " is not an interface.");
@@ -163,7 +170,14 @@ public class BeanMonitor {
                 Type[] typeArguments = genericType.getActualTypeArguments();
 
                 if (typeArguments.length == 1) {
-                    Class<?> listenerInterface = (Class<?>) typeArguments[0];
+                    Type type = typeArguments[0];
+                    Class<?> listenerInterface;
+                    if (type instanceof ParameterizedType) {
+                        ParameterizedType paramType = (ParameterizedType)type;
+                        listenerInterface = (Class<?>) paramType.getRawType();
+                    } else {
+                        listenerInterface = (Class<?>) type;
+                    }
 
                     // Get the listener list
                     Object listenerList;
