@@ -644,7 +644,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
 
     /**
      * Set the thickness of the border around the gauge.
-     * @param thickness The new value (default is 1.0f).
+     * @param borderThickness The new value (default is 1.0f).
      * @throws IllegalArgumentException if the value is 0.0 or less.
      */
     public final void setBorderThickness(float borderThickness) {
