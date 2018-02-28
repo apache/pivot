@@ -22,6 +22,8 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.Checkbox;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
@@ -35,6 +37,7 @@ public class GaugeTest implements Application {
     private PushButton gasPedal;
     private PushButton brakePedal;
     private Gauge<Integer> speedGauge;
+    private Checkbox maxCheck;
     private int speed;
     private Color textColor;
     private Color warningColor;
@@ -82,6 +85,10 @@ public class GaugeTest implements Application {
         }
     }
 
+    private void toggleMax(Button.State state) {
+        speedGauge.getStyles().put("onlyMaxColor", state == Button.State.SELECTED);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void startup(Display display, Map<String, String> properties) throws Exception {
@@ -90,12 +97,14 @@ public class GaugeTest implements Application {
         gasPedal = (PushButton)bxmlSerializer.getNamespace().get("gasPedal");
         brakePedal = (PushButton)bxmlSerializer.getNamespace().get("brakePedal");
         speedGauge = (Gauge<Integer>)bxmlSerializer.getNamespace().get("speedGauge");
+        maxCheck = (Checkbox)bxmlSerializer.getNamespace().get("maxCheck");
         warningColor = speedGauge.getStyles().getColor("warningColor");
         criticalColor = speedGauge.getStyles().getColor("criticalColor");
         textColor = Theme.getTheme().getColor(6);
         setSpeed(speedGauge.getValue());
         gasPedal.getButtonPressListeners().add((button) -> hitTheGas());
         brakePedal.getButtonPressListeners().add((button) -> hitTheBrakes());
+        maxCheck.getButtonStateListeners().add((button, previous) -> toggleMax(button.getState()));
         ApplicationContext.scheduleRecurringCallback(() -> varyTheSpeed(), 500L);
         window.open(display);
     }

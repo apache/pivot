@@ -58,13 +58,17 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     private Color tickColor;
     /** This is the color for the "value" if it is below the warning or critical levels. */
     private Color color;
+    private Color borderColor;
     private Color warningColor;
     private Color criticalColor;
+    private boolean onlyMaxColor = false;
     private boolean showTickMarks = false;
     private Insets padding;
     private Font font;
     private float thickness = STROKE_WIDTH;
     private T tickFrequency;
+    private boolean showBorder = false;
+    private float borderThickness = 1.0f;
 
     private static final RenderingHints renderingHints = new RenderingHints(null);
 
@@ -83,6 +87,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         setCriticalColor(23);
         setTextColor(8);
         setTickColor(6);
+        setBorderColor(6);
         setPadding(Insets.NONE);
     }
 
@@ -149,8 +154,11 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
 
         // The pen thickness is centered on the path, so we need to calculate the path diameter for the
         // center of the stroke width (basically 1/2 the thickness on each side, or the thickness itself)
+        // And only account for the border thickness (the outer part) if > 1.0
+        boolean showingBorder = showBorder && borderColor != null;
+        float borderAdjust = (showingBorder ? (borderThickness > 1.0f ? borderThickness : 0.0f) : 0.0f);
         float diameter = (float)(Math.min(size.width - padding.getWidth(), size.height - padding.getHeight()))
-            - thickness;
+            - thickness - (borderAdjust * 2.0f);
         float x = ((float)size.width - diameter) / 2.0f;
         float y = ((float)size.height - diameter) / 2.0f;
 
@@ -172,6 +180,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         graphics.setStroke(new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
 
         // Note: presume that critical > warning if both are set
+        Color maxColor = null;
         if (warningLevel != null && warningColor != null) {
             float warningValue = warningLevel.floatValue() - minValue;
             if (activeValue >= warningValue) {
@@ -179,20 +188,32 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
                 if (criticalLevel != null && criticalColor != null) {
                     float criticalValue = criticalLevel.floatValue() - minValue;
                     if (activeValue >= criticalValue) {
-                        // Three segments here: min->warning (normal color), warning->critical (warning color), critical->active (critical color)
-                        float criticalAngle = criticalValue * toAngle;
-                        drawArc(graphics, rect, origin, 0.0f, warningAngle, color);
-                        drawArc(graphics, rect, origin, warningAngle, criticalAngle - warningAngle, warningColor);
-                        drawArc(graphics, rect, origin, criticalAngle, activeAngle - criticalAngle, criticalColor);
+                        if (onlyMaxColor) {
+                            maxColor = criticalColor;
+                        } else {
+                            // Three segments here: min->warning (normal color), warning->critical (warning color), critical->active (critical color)
+                            float criticalAngle = criticalValue * toAngle;
+                            drawArc(graphics, rect, origin, 0.0f, warningAngle, color);
+                            drawArc(graphics, rect, origin, warningAngle, criticalAngle - warningAngle, warningColor);
+                            drawArc(graphics, rect, origin, criticalAngle, activeAngle - criticalAngle, criticalColor);
+                        }
                     } else {
-                        // Two segments here: min->warning (normal), warning->active (warning)
+                        if (onlyMaxColor) {
+                            maxColor = warningColor;
+                        } else {
+                            // Two segments here: min->warning (normal), warning->active (warning)
+                            drawArc(graphics, rect, origin, 0.0f, warningAngle, color);
+                            drawArc(graphics, rect, origin, warningAngle, activeAngle - warningAngle, warningColor);
+                        }
+                    }
+                } else {
+                    if (onlyMaxColor) {
+                        maxColor = warningColor;
+                    } else {
+                        // Two segments here: min->warning (normal), warning->active (warning color)
                         drawArc(graphics, rect, origin, 0.0f, warningAngle, color);
                         drawArc(graphics, rect, origin, warningAngle, activeAngle - warningAngle, warningColor);
                     }
-                } else {
-                    // Two segments here: min->warning (normal), warning->active (warning color)
-                    drawArc(graphics, rect, origin, 0.0f, warningAngle, color);
-                    drawArc(graphics, rect, origin, warningAngle, activeAngle - warningAngle, warningColor);
                 }
             } else {
                 // Just one segment, the normal value
@@ -201,10 +222,14 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         } else if (criticalLevel != null && criticalColor != null) {
             float criticalValue = criticalLevel.floatValue() - minValue;
             if (activeValue > criticalValue) {
-                // Two here: min->critical (normal color), critical->active (critical color)
-                float criticalAngle = criticalValue * toAngle;
-                drawArc(graphics, rect, origin, 0.0f, criticalAngle, color);
-                drawArc(graphics, rect, origin, criticalAngle, activeAngle - criticalAngle, criticalColor);
+                if (onlyMaxColor) {
+                    maxColor = criticalColor;
+                } else {
+                    // Two here: min->critical (normal color), critical->active (critical color)
+                    float criticalAngle = criticalValue * toAngle;
+                    drawArc(graphics, rect, origin, 0.0f, criticalAngle, color);
+                    drawArc(graphics, rect, origin, criticalAngle, activeAngle - criticalAngle, criticalColor);
+                }
             } else {
                 // One, min->active (normal color)
                 drawArc(graphics, rect, origin, 0.0f, activeAngle, color);
@@ -214,9 +239,27 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             drawArc(graphics, rect, origin, 0.0f, activeAngle, color);
         }
 
+        // Now if we didn't draw the multiple segments because of "onlyMaxColor" do it now
+        if (onlyMaxColor && maxColor != null) {
+            drawArc(graphics, rect, origin, 0.0f, activeAngle, maxColor);
+        }
+
         // Now draw the "inactive" part the rest of the way
         if (activeAngle < 360.0f) {
             drawArc(graphics, rect, origin, activeAngle, 360.0f - activeAngle, gaugeColor);
+        }
+
+        // Now draw the border strokes if requested around the whole circle
+        if (showingBorder) {
+            graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+            graphics.setStroke(new BasicStroke(borderThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
+            float border = borderThickness > 1.0f ? borderThickness : 0.0f;
+            float halfStroke = (thickness + border) / 2.0f;
+            float thicknessAdjust = thickness + border;
+            Rectangle2D rectOuter = new Rectangle2D.Float(x - halfStroke, y - halfStroke, diameter + thicknessAdjust, diameter + thicknessAdjust);
+            Rectangle2D rectInner = new Rectangle2D.Float(x + halfStroke, y + halfStroke, diameter - thicknessAdjust, diameter - thicknessAdjust);
+            drawArc(graphics, rectInner, origin, 360.0f, 360.0f, borderColor);
+            drawArc(graphics, rectOuter, origin, 360.0f, 360.0f, borderColor);
         }
 
         // On top of the arcs, draw the tick marks (if requested)
@@ -399,6 +442,31 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         setTickColor(theme.getColor(tickColor));
     }
 
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    /**
+     * Set the color for the borders around the arcs.
+     * <p> Note: to disable border drawing, use a style of "showBorder:false",
+     * or set this color to null.
+     * @param borderColor Any color value, or {@code null} to disable border drawing.
+     */
+    public final void setBorderColor(Color borderColor) {
+        // Border color can be null to not draw the border.
+        this.borderColor = borderColor;
+        repaintComponent();
+    }
+
+    public final void setBorderColor(String borderColor) {
+        setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
+    }
+
+    public final void setBorderColor(int borderColor) {
+        Theme theme = currentTheme();
+        setBorderColor(theme.getColor(borderColor));
+    }
+
     public Color getWarningColor() {
         return this.warningColor;
     }
@@ -558,6 +626,57 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     public final void setTickFrequency(T frequency) {
         Utils.checkNull(frequency, "frequency");
         this.tickFrequency = frequency;
+        repaintComponent();
+    }
+
+    public boolean getShowBorder() {
+        return showBorder;
+    }
+
+    public final void setShowBorder(boolean showBorder) {
+        this.showBorder = showBorder;
+        repaintComponent();
+    }
+
+    public float getBorderThickness() {
+        return borderThickness;
+    }
+
+    /**
+     * Set the thickness of the border around the gauge.
+     * @param thickness The new value (default is 1.0f).
+     * @throws IllegalArgumentException if the value is 0.0 or less.
+     */
+    public final void setBorderThickness(float borderThickness) {
+        Utils.checkPositive(borderThickness, "borderThickness");
+
+        this.borderThickness = borderThickness;
+        invalidateComponent();
+    }
+
+    public final void setBorderThickness(Number borderThickness) {
+        Utils.checkNull(borderThickness, "borderThickness");
+        setBorderThickness(borderThickness.floatValue());
+    }
+
+    public final void setBorderThickness(String borderThickness) {
+        Utils.checkNullOrEmpty(borderThickness, "borderThickness");
+        setBorderThickness(StringUtils.toNumber(borderThickness, Float.class));
+    }
+
+    public boolean getOnlyMaxColor() {
+        return onlyMaxColor;
+    }
+
+    /**
+     * Set whether or not to only show the maximum color for the entire gauge.
+     * @param onlyMaxColor <tt>true</tt> to show the entire gauge in the normal,
+     * warning, or critical color (if set) which is appropriate for the value
+     * and the warning or critical levels (again if set), <tt>false</tt> to
+     * show multiple segments.
+     */
+    public final void setOnlyMaxColor(boolean onlyMaxColor) {
+        this.onlyMaxColor = onlyMaxColor;
         repaintComponent();
     }
 

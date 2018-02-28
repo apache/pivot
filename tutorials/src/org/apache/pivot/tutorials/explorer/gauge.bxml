@@ -17,8 +17,8 @@ limitations under the License.
 -->
 
 <Gauge origin="NORTH" preferredWidth="80" preferredHeight="80"
-       type="Integer" minValue="0" maxValue="100" value="60"
-       warningLevel="70" criticalLevel="90" text="60%"
+       type="Integer" minValue="0" maxValue="100" value="95"
+       warningLevel="70" criticalLevel="90" text="95%"
        styles="{backgroundColor:null, criticalColor:23,
            font:{size:20}, thickness:10.0, padding:4,
            showTickMarks:true, tickFrequency:10}"
