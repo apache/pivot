@@ -19,8 +19,6 @@ package org.apache.pivot.wtk.test;
 import java.awt.Color;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -50,7 +48,8 @@ public class ColorUtilitiesTest {
             fail("almostBlack should not be a CSS color!");
         } catch (IllegalArgumentException iae) {
             System.out.println("Valid exception: " + iae.getMessage());
-            assertEquals(iae.getMessage(), "Incorrect Color value.  " + almostBlack.toString() + " does not match any CSS color.");
+            assertEquals(iae.getMessage(), "Incorrect Color value.  "
+                    + almostBlack.toString() + " does not match any CSS color.");
         }
 
         Color translucentOrange = ColorUtilities.setTransparencyInColor(CSSColor.Orange, 128);
@@ -78,15 +77,18 @@ public class ColorUtilitiesTest {
             fail("Decode of \"lightGray\" should succeed!");
         }
 
-        assertEquals((Color)null, GraphicsUtilities.decodeColor("null"));
+        assertEquals((Color) null, GraphicsUtilities.decodeColor("null"));
 
         int transparency = -1;
         for (CSSColor color : CSSColor.values()) {
             transparency = (transparency + 1) % 256;
             Color originalColor = color.getColor();
             Color translucentColor = ColorUtilities.setTransparencyInColor(color, transparency);
-            String value = transparency == 255 ? String.format("#%02X%02X%02X", originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue()) :
-                                                 String.format("0x%02X%02X%02X%02X", originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue(), transparency);
+            String value = (transparency == 255)
+                ? String.format("#%02X%02X%02X",
+                    originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue())
+                : String.format("0x%02X%02X%02X%02X",
+                    originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue(), transparency);
             String testValue = ColorUtilities.toStringValue(translucentColor);
             assertEquals(value, testValue);
         }

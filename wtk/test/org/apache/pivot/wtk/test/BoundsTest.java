@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.test;
 
-import java.awt.Rectangle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,7 +36,7 @@ public class BoundsTest {
 
     @Test
     public void test() {
-        Bounds bnd_1 = new Bounds(-1, -1, 0, 0);
+        Bounds bndMinus1 = new Bounds(-1, -1, 0, 0);
         Bounds bnd0 = new Bounds(0, 0, 0, 0);
         Bounds bnd1 = new Bounds(1, 1, 1, 1);
 
@@ -64,7 +63,7 @@ public class BoundsTest {
         Bounds bnd6a = new Bounds(2, 3, 4, 5);
 
         assertEquals(Bounds.EMPTY, bnd0);
-        assertNotEquals(bnd_1, bnd0);
+        assertNotEquals(bndMinus1, bnd0);
         assertNotEquals(bnd0, bnd1);
         assertEquals(bnd10a, bnd10b);
 
@@ -73,13 +72,13 @@ public class BoundsTest {
         assertEquals(bnd2, bnd3);
         assertEquals(bnd3, bnd3a);
 
-        assertEquals(bnd_1.getSize(), dim0);
+        assertEquals(bndMinus1.getSize(), dim0);
         assertEquals(bnd0.getSize(), dim0);
         assertEquals(bnd1.getSize(), dim1);
 
         assertFalse(bnd1.contains(bnd0));
 
-        assertFalse(bnd_1.intersects(bnd0));
+        assertFalse(bndMinus1.intersects(bnd0));
         assertFalse(bnd0.intersects(bnd1));
         assertEquals(bnd0.intersect(bnd1), new Bounds(1, 1, -1, -1));
         assertTrue(bnd5a.intersects(bnd5b));

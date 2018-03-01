@@ -17,8 +17,6 @@
 package org.apache.pivot.wtk.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -27,23 +25,23 @@ import org.apache.pivot.wtk.MeterListener;
 import org.apache.pivot.wtk.Orientation;
 
 
-public class MeterTest implements MeterListener {
+public final class MeterTest implements MeterListener {
     private int percentChangeCount = 0;
     private int textChangeCount = 0;
     private int orientationChangeCount = 0;
 
     @Override
-    public void percentageChanged(Meter meter, double previousPercentage) {
+    public void percentageChanged(final Meter meter, final double previousPercentage) {
         percentChangeCount++;
     }
 
     @Override
-    public void textChanged(Meter meter, String previousText) {
+    public void textChanged(final Meter meter, final String previousText) {
         textChangeCount++;
     }
 
     @Override
-    public void orientationChanged(Meter meter) {
+    public void orientationChanged(final Meter meter) {
         orientationChangeCount++;
     }
 

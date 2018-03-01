@@ -17,8 +17,6 @@
 package org.apache.pivot.wtk.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -27,7 +25,7 @@ import org.apache.pivot.wtk.GaugeListener;
 import org.apache.pivot.wtk.Origin;
 
 
-public class GaugeTest implements GaugeListener<Integer> {
+public final class GaugeTest implements GaugeListener<Integer> {
     private int originChangeCount = 0;
     private int valueChangeCount = 0;
     private int textChangeCount = 0;
@@ -35,43 +33,43 @@ public class GaugeTest implements GaugeListener<Integer> {
     private int warningCriticalChangeCount = 0;
 
     @Override
-    public void originChanged(Gauge<Integer> gauge, Origin previousOrigin) {
+    public void originChanged(final Gauge<Integer> gauge, final Origin previousOrigin) {
         System.out.println("Origin changed to " + gauge.getOrigin());
         originChangeCount++;
     }
 
     @Override
-    public void valueChanged(Gauge<Integer> gauge, Integer previousValue) {
+    public void valueChanged(final Gauge<Integer> gauge, final Integer previousValue) {
         System.out.println("Value changed to " + gauge.getValue());
         valueChangeCount++;
     }
 
     @Override
-    public void textChanged(Gauge<Integer> gauge, String previousText) {
+    public void textChanged(final Gauge<Integer> gauge, final String previousText) {
         System.out.println("Text changed to " + gauge.getText());
         textChangeCount++;
     }
 
     @Override
-    public void minValueChanged(Gauge<Integer> gauge, Integer previousMinValue) {
+    public void minValueChanged(final Gauge<Integer> gauge, final Integer previousMinValue) {
         System.out.println("Min changed: min=" + gauge.getMinValue());
         minMaxChangeCount++;
     }
 
     @Override
-    public void maxValueChanged(Gauge<Integer> gauge, Integer previousMaxValue) {
+    public void maxValueChanged(final Gauge<Integer> gauge, final Integer previousMaxValue) {
         System.out.println("Max changed: max=" + gauge.getMaxValue());
         minMaxChangeCount++;
     }
 
     @Override
-    public void warningLevelChanged(Gauge<Integer> gauge, Integer previousWarningLevel) {
+    public void warningLevelChanged(final Gauge<Integer> gauge, final Integer previousWarningLevel) {
         System.out.println("Warning level changed: warning=" + gauge.getWarningLevel());
         warningCriticalChangeCount++;
     }
 
     @Override
-    public void criticalLevelChanged(Gauge<Integer> gauge, Integer previousCriticalLevel) {
+    public void criticalLevelChanged(final Gauge<Integer> gauge, final Integer previousCriticalLevel) {
         System.out.println("Critical level changed: critical=" + gauge.getCriticalLevel());
         warningCriticalChangeCount++;
     }

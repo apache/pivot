@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.CSSColor;
 public final class ColorUtilities {
 
     /**
-     * Private constructor
+     * Private constructor.
      */
     private ColorUtilities() {
     }

@@ -24,7 +24,6 @@ import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Checkbox;
-import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Gauge;
@@ -32,7 +31,7 @@ import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.Window;
 
-public class GaugeTest implements Application {
+public final class GaugeTest implements Application {
     private Window window;
     private PushButton gasPedal;
     private PushButton brakePedal;
@@ -43,18 +42,18 @@ public class GaugeTest implements Application {
     private Color warningColor;
     private Color criticalColor;
 
-    private int randomInt(int bound) {
+    private int randomInt(final int bound) {
         double variant = Math.random();
         int value;
         if (variant >= 0.5) {
-            value = (int)Math.floor((variant - 0.5) * (double)bound);
+            value = (int) Math.floor((variant - 0.5) * (double) bound);
         } else {
-            value = (int)Math.ceil((variant * -1.0) * (double)bound);
+            value = (int) Math.ceil((variant * -1.0) * (double) bound);
         }
         return value;
     }
 
-    private void setSpeed(int value) {
+    private void setSpeed(final int value) {
         speed = Math.min(value, speedGauge.getMaxValue());
         speed = Math.max(speed, speedGauge.getMinValue());
         speedGauge.setValue(speed);
@@ -85,19 +84,19 @@ public class GaugeTest implements Application {
         }
     }
 
-    private void toggleMax(Button.State state) {
+    private void toggleMax(final Button.State state) {
         speedGauge.getStyles().put("onlyMaxColor", state == Button.State.SELECTED);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(getClass().getResource("gauge_test.bxml"));
-        gasPedal = (PushButton)bxmlSerializer.getNamespace().get("gasPedal");
-        brakePedal = (PushButton)bxmlSerializer.getNamespace().get("brakePedal");
-        speedGauge = (Gauge<Integer>)bxmlSerializer.getNamespace().get("speedGauge");
-        maxCheck = (Checkbox)bxmlSerializer.getNamespace().get("maxCheck");
+        gasPedal = (PushButton) bxmlSerializer.getNamespace().get("gasPedal");
+        brakePedal = (PushButton) bxmlSerializer.getNamespace().get("brakePedal");
+        speedGauge = (Gauge<Integer>) bxmlSerializer.getNamespace().get("speedGauge");
+        maxCheck = (Checkbox) bxmlSerializer.getNamespace().get("maxCheck");
         warningColor = speedGauge.getStyles().getColor("warningColor");
         criticalColor = speedGauge.getStyles().getColor("criticalColor");
         textColor = Theme.getTheme().getColor(6);
@@ -109,7 +108,7 @@ public class GaugeTest implements Application {
         window.open(display);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(GaugeTest.class, args);
     }
 }
