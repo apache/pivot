@@ -33,47 +33,47 @@ public class DimensionsTest {
     @Test
     public void test() {
         Dimensions zero = Dimensions.ZERO;
-        Dimensions zero_a = new Dimensions(0, 0);
-        Dimensions zero_b = new Dimensions(0);
+        Dimensions zeroA = new Dimensions(0, 0);
+        Dimensions zeroB = new Dimensions(0);
         Dimensions one = new Dimensions(1, 1);
-        Dimensions one_a = zero.expand(1);
-        Dimensions zero_c = one_a.expand(-1, -1);
+        Dimensions oneA = zero.expand(1);
+        Dimensions zeroC = oneA.expand(-1, -1);
 
         Dimensions seven = new Dimensions(7);
-        Dimensions seven_a = new Dimensions(7, 7);
-        Dimensions seven_b = zero.expand(7);
-        Dimensions seven_c = zero_a.expand(7, 7);
+        Dimensions sevenA = new Dimensions(7, 7);
+        Dimensions sevenB = zero.expand(7);
+        Dimensions sevenC = zeroA.expand(7, 7);
 
         Dimensions a = Dimensions.decode("2 x 3");
-        Dimensions a_1 = new Dimensions(2, 3);
+        Dimensions a1 = new Dimensions(2, 3);
         Dimensions b = Dimensions.decode("{width:4, height:5}");
-        Dimensions b_1 = new Dimensions(4, 5);
+        Dimensions b1 = new Dimensions(4, 5);
         Dimensions c = Dimensions.decode("1  ,  2");
-        Dimensions c_1 = new Dimensions(1, 2);
+        Dimensions c1 = new Dimensions(1, 2);
         Dimensions d = Dimensions.decode("[  17,   23]");
-        Dimensions d_1 = new Dimensions(17, 23);
+        Dimensions d1 = new Dimensions(17, 23);
         Dimensions e = Dimensions.decode("23 ; 45");
-        Dimensions e_1 = new Dimensions(23, 45);
+        Dimensions e1 = new Dimensions(23, 45);
 
-        Insets i_1 = new Insets(1, 2, 1, 2);
-        Dimensions f = e_1.expand(i_1);
-        Dimensions f_1 = new Dimensions(27, 47);
+        Insets i1 = new Insets(1, 2, 1, 2);
+        Dimensions f = e1.expand(i1);
+        Dimensions f1 = new Dimensions(27, 47);
 
-        assertEquals(zero, zero_a);
-        assertEquals(one, one_a);
-        assertEquals(zero_a, zero_b);
-        assertEquals(zero, zero_c);
+        assertEquals(zero, zeroA);
+        assertEquals(one, oneA);
+        assertEquals(zeroA, zeroB);
+        assertEquals(zero, zeroC);
 
-        assertEquals(seven, seven_a);
-        assertEquals(seven, seven_b);
-        assertEquals(seven_b, seven_c);
+        assertEquals(seven, sevenA);
+        assertEquals(seven, sevenB);
+        assertEquals(sevenB, sevenC);
 
-        assertEquals(a, a_1);
-        assertEquals(b, b_1);
-        assertEquals(c, c_1);
-        assertEquals(d, d_1);
-        assertEquals(e, e_1);
-        assertEquals(f, f_1);
+        assertEquals(a, a1);
+        assertEquals(b, b1);
+        assertEquals(c, c1);
+        assertEquals(d, d1);
+        assertEquals(e, e1);
+        assertEquals(f, f1);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -87,3 +87,4 @@ public class DimensionsTest {
     }
 
 }
+

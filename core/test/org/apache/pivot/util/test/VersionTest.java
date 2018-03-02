@@ -51,25 +51,26 @@ public class VersionTest {
         }
     }
 
+    private static final String S1_8_131 = "1.8.0_131";
+    private static final Version V1 = Version.decode(S1_8_131);
+    private static final Version V8_131 = new Version(1, 8, 0, 131);
+    private static final String S1_0_0 = "1.0.0_00";
+    private static final Version V0 = Version.decode(S1_0_0);
+    private static final Version V1_0 = new Version(1, 0, 0, 0);
+
     @Test
     public void testVersionParsing() {
-        String s1_8_131 = "1.8.0_131";
-        Version v1 = Version.decode(s1_8_131);
-        Version v8_131 = new Version(1, 8, 0, 131);
-        assertEquals("version decode", v1, v8_131);
-        assertEquals("version to string", s1_8_131, v8_131.toString());
+        assertEquals("version decode", V1, V8_131);
+        assertEquals("version to string", S1_8_131, V8_131.toString());
 
-        String s1_0_0 = "1.0.0_00";
-        Version v0 = Version.decode(s1_0_0);
-        Version v1_0 = new Version(1, 0, 0, 0);
-        assertEquals("version 0 decode", v0, v1_0);
-        assertEquals("version 0 to string", v1_0.toString(), s1_0_0);
+        assertEquals("version 0 decode", V0, V1_0);
+        assertEquals("version 0 to string", V1_0.toString(), S1_0_0);
 
         // New Java 9 version number scheme
         String j9 = "9.0.1+11";
         Version vj9 = Version.decode(j9);
-        Version vj9_0 = new Version(9, 0, 1, 0);
-        assertEquals("Java version 9 decode", vj9, vj9_0);
+        Version vj90 = new Version(9, 0, 1, 0);
+        assertEquals("Java version 9 decode", vj9, vj90);
         assertEquals("Java version 9 to string", vj9.toString(), "9.0.1_00-11");
     }
 
@@ -81,12 +82,12 @@ public class VersionTest {
         IllegalArgumentException argFailure = null;
         try {
             Version vOverflow = new Version(32768, 0, 1, 0);
-        }
-        catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             argFailure = iae;
         }
         assertNotNull("illegal argument exception", argFailure);
-        assertEquals("exception message", argFailure.getMessage(), "majorRevision must be less than or equal 32767.");
+        assertEquals("exception message", argFailure.getMessage(),
+            "majorRevision must be less than or equal 32767.");
     }
 
     @Test
@@ -97,37 +98,41 @@ public class VersionTest {
         assertEquals("long number", num, 562954248454244L);
     }
 
+    // Taken from PIVOT-996 test case
+    private static final String PIVOT_996_SUFFIX = "25.51-b14";
+    private static final String PIVOT_996_INPUT  = "8.1.028 " + PIVOT_996_SUFFIX;
+    private static final String PIVOT_996_OUTPUT = "8.1.28_00-" + PIVOT_996_SUFFIX;
+
     @Test
     public void testOtherVersions() {
-        // Taken from PIVOT-996 test case
-        final String PIVOT_996_SUFFIX = "25.51-b14";
-        final String PIVOT_996_INPUT  = "8.1.028 " + PIVOT_996_SUFFIX;
-        final String PIVOT_996_OUTPUT = "8.1.28_00-" + PIVOT_996_SUFFIX;
-
         Version jvmVersionParsed = Version.decode(PIVOT_996_INPUT);
         Version jvmVersionExplicit = new Version(8, 1, 28, 0, PIVOT_996_SUFFIX);
         String parsedToString = jvmVersionParsed.toString();
 
         assertEquals("PIVOT-996 test case", jvmVersionParsed, jvmVersionExplicit);
-        System.out.format("PIVOT-996 parsed/toString: %1$s, expected: %2$s%n", parsedToString, PIVOT_996_OUTPUT);
+        System.out.format("PIVOT-996 parsed/toString: %1$s, expected: %2$s%n",
+            parsedToString, PIVOT_996_OUTPUT);
         assertEquals("PIVOT-996 toString", parsedToString, PIVOT_996_OUTPUT);
 
         String sysJavaVersion = System.getProperty("java.runtime.version");
         Version javaVersion = Version.decode(sysJavaVersion);
         String formattedJavaVersion = javaVersion.toString();
-        System.out.format("Java Runtime version (parsed and formatted): %1$s, raw: %2$s%n", formattedJavaVersion, sysJavaVersion);
+        System.out.format("Java Runtime version (parsed and formatted): %1$s, raw: %2$s%n",
+            formattedJavaVersion, sysJavaVersion);
         assertEquals("Java Runtime version", sysJavaVersion, formattedJavaVersion);
 
         String newJava9Version = "9-ea+19";
         Version newJava9 = Version.decode(newJava9Version);
         String newJava9Formatted = newJava9.toString();
-        System.out.format("Potential new Java version: %1$s, parsed and formatted: %2$s%n", newJava9Version, newJava9Formatted);
+        System.out.format("Potential new Java version: %1$s, parsed and formatted: %2$s%n",
+            newJava9Version, newJava9Formatted);
         assertEquals(newJava9Formatted, "9.0.0_00-ea+19");
 
         String newJava10Version = "10+-ea";
         Version newJava10 = Version.decode(newJava10Version);
         String newJava10Formatted = newJava10.toString();
-        System.out.format("Potential new Java 10 version: %1$s, parsed and formatted: %2$s%n", newJava10Version, newJava10Formatted);
+        System.out.format("Potential new Java 10 version: %1$s, parsed and formatted: %2$s%n",
+            newJava10Version, newJava10Formatted);
         assertEquals(newJava10Formatted, "10.0.0_00--ea");
     }
 

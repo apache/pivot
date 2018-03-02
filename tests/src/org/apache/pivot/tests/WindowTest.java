@@ -35,12 +35,12 @@ import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.ReflectionDecorator;
 
-public class WindowTest implements Application {
+public final class WindowTest implements Application {
     private Frame window1 = new Frame();
     private Frame dialogOwner = new Frame();
 
     @Override
-    public void startup(Display display, Map<String, String> properties) {
+    public void startup(final Display display, final Map<String, String> properties) {
         window1.setTitle("Window 1");
         window1.setPreferredSize(640, 480);
         window1.setMaximumWidth(640);
@@ -50,7 +50,8 @@ public class WindowTest implements Application {
 
         window1.getComponentListeners().add(new ComponentListener() {
             @Override
-            public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+            public void sizeChanged(final Component component, final int previousWidth,
+                    final int previousHeight) {
                 window1.align(window1.getDisplay().getBounds(), HorizontalAlignment.CENTER,
                     VerticalAlignment.CENTER);
                 window1.getComponentListeners().remove(this);
@@ -61,22 +62,16 @@ public class WindowTest implements Application {
         window1.setContent(new Label("Hello Bar"));
         window1.open(display);
 
-        ApplicationContext.queueCallback(new Runnable() {
-            @Override
-            public void run() {
-                final Sheet sheet = new Sheet();
-                sheet.setPreferredSize(120, 60);
-                sheet.open(window1);
+        ApplicationContext.queueCallback(() -> {
+            final Sheet sheet = new Sheet();
+            sheet.setPreferredSize(120, 60);
+            sheet.open(window1);
 
-                ApplicationContext.queueCallback(new Runnable() {
-                    @Override
-                    public void run() {
-                        Sheet sheet2 = new Sheet();
-                        sheet2.setPreferredSize(60, 30);
-                        sheet2.open(sheet);
-                    }
-                });
-            }
+            ApplicationContext.queueCallback(() -> {
+                Sheet sheet2 = new Sheet();
+                sheet2.setPreferredSize(60, 30);
+                sheet2.open(sheet);
+            });
         });
 
         Frame window1a = new Frame();
@@ -138,29 +133,23 @@ public class WindowTest implements Application {
 
         // window1bii.requestFocus();
 
-        ApplicationContext.queueCallback(new Runnable() {
-            @Override
-            public void run() {
-                final Dialog dialog = new Dialog();
-                dialog.setTitle("Dialog 1");
-                dialog.setPreferredSize(280, 100);
-                dialog.open(dialogOwner);
+        ApplicationContext.queueCallback(() -> {
+            final Dialog dialog = new Dialog();
+            dialog.setTitle("Dialog 1");
+            dialog.setPreferredSize(280, 100);
+            dialog.open(dialogOwner);
 
-                ApplicationContext.queueCallback(new Runnable() {
-                    @Override
-                    public void run() {
-                        Dialog dialog2 = new Dialog();
-                        dialog2.setTitle("Dialog 2");
-                        dialog2.setPreferredSize(220, 80);
-                        dialog2.open(dialog);
-                    }
-                });
-            }
+            ApplicationContext.queueCallback(() -> {
+                Dialog dialog2 = new Dialog();
+                dialog2.setTitle("Dialog 2");
+                dialog2.setPreferredSize(220, 80);
+                dialog2.open(dialog);
+            });
         });
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window1 != null) {
             window1.close();
         }
@@ -168,7 +157,7 @@ public class WindowTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(WindowTest.class, args);
     }
 

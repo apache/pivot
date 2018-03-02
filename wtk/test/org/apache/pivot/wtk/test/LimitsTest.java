@@ -33,7 +33,7 @@ public class LimitsTest {
 
     @Test
     public void test() {
-        Limits lm_1 = new Limits(-1, 0);
+        Limits lmMinus1 = new Limits(-1, 0);
         Limits lm0 = new Limits(0);
         Limits lm1 = new Limits(0, 1);
         Limits lm2 = Limits.decode("[0, 1]");
@@ -49,7 +49,7 @@ public class LimitsTest {
         Limits lm7 = Limits.decode("9 - 10");
         Limits lm7a = new Limits(9, 10);
 
-        assertEquals(lm_1.range(), 2);
+        assertEquals(lmMinus1.range(), 2);
         assertEquals(lm0.range(), 1);
 
         assertTrue(lm1.contains(0));

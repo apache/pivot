@@ -25,12 +25,12 @@ import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.TextInput;
 
-public class WindowFocusTest implements Application {
+public final class WindowFocusTest implements Application {
     private Frame frame1;
     private Frame frame2;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BoxPane boxPane1 = new BoxPane(Orientation.VERTICAL);
         TextInput textInput1 = new TextInput();
         textInput1.setText("ABCD");
@@ -55,7 +55,7 @@ public class WindowFocusTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) throws Exception {
+    public boolean shutdown(final boolean optional) throws Exception {
         if (frame1 != null) {
             frame1.close();
         }
@@ -67,7 +67,7 @@ public class WindowFocusTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(WindowFocusTest.class, args);
     }
 

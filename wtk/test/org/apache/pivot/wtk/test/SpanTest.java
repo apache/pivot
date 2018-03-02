@@ -33,7 +33,7 @@ public class SpanTest {
 
     @Test
     public void test() {
-        Span sp_1 = new Span(-1, 0);
+        Span spMinus1 = new Span(-1, 0);
         Span sp0 = new Span(0);
         Span sp1 = new Span(0, 1);
         Span sp2 = Span.decode("[1, 0]");
@@ -48,12 +48,12 @@ public class SpanTest {
         Span sp6 = Span.decode("4, 6");
         Span sp6a = new Span(4, 6);
 
-        assertEquals(sp_1.getLength(), 2);
+        assertEquals(spMinus1.getLength(), 2);
         assertEquals(sp0.getLength(), 1);
 
         assertTrue(sp1.contains(sp0));
 
-        assertTrue(sp_1.intersects(sp0));
+        assertTrue(spMinus1.intersects(sp0));
         assertTrue(sp0.intersects(sp1));
         assertEquals(sp0.intersect(sp1), sp0);
         assertTrue(sp5b.intersects(sp3a));
@@ -85,3 +85,4 @@ public class SpanTest {
     }
 
 }
+
