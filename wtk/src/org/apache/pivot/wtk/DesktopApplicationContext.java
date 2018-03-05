@@ -644,10 +644,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Load the application
         try {
             Class<?> applicationClass = Class.forName(applicationClassName);
-            if (useApplicationInstance == false) {
-                application = (Application) applicationClass.newInstance();
+            if (useApplicationInstance) {
+                // application has already been set, before calling this method
             } else {
-                // application has already been set, before call this method
+                application = (Application) applicationClass.newInstance();
             }
         } catch (ClassNotFoundException exception) {
             exception.printStackTrace();

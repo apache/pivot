@@ -39,12 +39,17 @@ public class ScriptApplication implements Application {
     public static final String RESOURCES_KEY = "resources";
     public static final String STYLESHEET_KEY = "stylesheet";
 
+    private String sourceDefault = null;
+
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         // Get the location of the source file
         String src = properties.get(SRC_KEY);
         if (src == null) {
-            throw new IllegalArgumentException(SRC_KEY + " argument is required.");
+            if (sourceDefault == null) {
+                throw new IllegalArgumentException(SRC_KEY + " argument is required.");
+            }
+            src = sourceDefault;
         }
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -110,7 +115,7 @@ public class ScriptApplication implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (this.window != null) {
             this.window.close();
         }
@@ -118,17 +123,22 @@ public class ScriptApplication implements Application {
         return false;
     }
 
-    @Override
-    public void resume() {
-        // empty block
+    /**
+     * Constructor for subclasses to preset the "SRC" argument for completely
+     * automatic application startup (mainly used for tests, demos, etc.).
+     *
+     * @param srcArgument The name of a source file that will be used if
+     * the <tt>--src=...</tt> argument is missing from the command line.
+     */
+    public ScriptApplication(String srcArgument) {
+        if (srcArgument.startsWith("@")) {
+            this.sourceDefault = srcArgument;
+        } else {
+            this.sourceDefault = getClass().getPackage().getName().replace('.', '/') + "/" + srcArgument;
+        }
     }
 
-    @Override
-    public void suspend() {
-        // empty block
-    }
-
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(ScriptApplication.class, args);
     }
 

@@ -16,38 +16,15 @@
  */
 package org.apache.pivot.tests;
 
-import org.apache.pivot.beans.BXMLSerializer;
-import org.apache.pivot.collections.Map;
-import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.DesktopApplicationContext;
-import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.ScriptApplication;
 
-public class SplitPaneTest implements Application {
-    private Window window = null;
-
-    @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
-        BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = new Window((Component) bxmlSerializer.readObject(getClass().getResource(
-            "splitpane_test.bxml")));
-
-        window.setTitle("SplitPane Test");
-        window.setMaximized(true);
-        window.open(display);
+public final class SplitPaneTest extends ScriptApplication {
+    private SplitPaneTest() {
+        super("splitpane_test.bxml");
     }
 
-    @Override
-    public boolean shutdown(boolean optional) {
-        if (window != null) {
-            window.close();
-        }
-
-        return false;
-    }
-
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(SplitPaneTest.class, args);
+    public static void main(final String[] args) {
+        DesktopApplicationContext.main(new SplitPaneTest(), args);
     }
 }
