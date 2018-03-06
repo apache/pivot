@@ -22,20 +22,20 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 /**
  * Minimal sample for a customized version of table cell renderer. Renders cell
  * contents as a string, but in this case, transformed. <br/> Note that here
- * it's possible to extends Label implements TableView.CellRenderer, or even to
- * extends directly TableViewCellRenderer (because it extends Label and
- * implements TableView.CellRenderer).
+ * it's possible to &quot;extends Label implements TableView.CellRenderer&quot;, 
+ * or even to extend directly TableViewCellRenderer (because it already extends
+ * Label and implements TableView.CellRenderer).
  */
-public class TableViewCellRendererCustom extends TableViewCellRenderer {
+public final class TableViewCellRendererCustom extends TableViewCellRenderer {
 
     @Override
-    public String toString(Object row, String columnName) {
+    public String toString(final Object row, final String columnName) {
         Object cellData = JSON.get(row, columnName);
-        String text = (cellData == null) ? null : cellData.toString();
-        if (text == null) {
-            return text;
+        if (cellData == null) {
+            return null;
         }
 
+        String text = cellData.toString();
         // return new StringBuffer(text).reverse().toString(); // reverse text
         return text.toUpperCase(); // to upper text
     }

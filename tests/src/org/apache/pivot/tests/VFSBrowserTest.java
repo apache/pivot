@@ -39,7 +39,7 @@ import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.VFSBrowserSheet;
 
-public class VFSBrowserTest implements Application {
+public final class VFSBrowserTest implements Application {
 
     public VFSBrowserTest() {
     }
@@ -47,7 +47,7 @@ public class VFSBrowserTest implements Application {
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BoxPane windowContent = new BoxPane();
         windowContent.getStyles().put(Style.verticalAlignment, VerticalAlignment.CENTER);
 
@@ -58,7 +58,7 @@ public class VFSBrowserTest implements Application {
         button.getStyles().put(Style.padding, "[2, 4, 2, 4]");
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button buttonArgument) {
+            public void buttonPressed(final Button buttonArgument) {
                 try {
                     final VFSBrowserSheet vfsBrowserSheet = new VFSBrowserSheet(
                         VFSBrowserSheet.Mode.OPEN);
@@ -67,7 +67,7 @@ public class VFSBrowserTest implements Application {
 
                     vfsBrowserSheet.open(frame, new SheetCloseListener() {
                         @Override
-                        public void sheetClosed(Sheet sheet) {
+                        public void sheetClosed(final Sheet sheet) {
                             if (sheet.getResult()) {
                                 Sequence<FileObject> selectedFiles = vfsBrowserSheet.getSelectedFiles();
 
@@ -97,7 +97,7 @@ public class VFSBrowserTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (frame != null) {
             frame.close();
         }
@@ -105,7 +105,7 @@ public class VFSBrowserTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(VFSBrowserTest.class, args);
     }
 

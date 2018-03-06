@@ -30,18 +30,16 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextInputContentListener;
 import org.apache.pivot.wtk.Window;
 
-public class SuggestionPopupTest implements Application {
+public final class SuggestionPopupTest implements Application {
     private Window window = null;
 
-    @BXML
-    private TextInput textInput = null;
-    @BXML
-    private Label selectedIndexLabel = null;
+    @BXML private TextInput textInput = null;
+    @BXML private Label selectedIndexLabel = null;
 
     private SuggestionPopup suggestionPopup = new SuggestionPopup();
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(SuggestionPopupTest.class,
             "suggestion_popup_test.bxml");
@@ -49,13 +47,12 @@ public class SuggestionPopupTest implements Application {
 
         textInput.getTextInputContentListeners().add(new TextInputContentListener() {
             @Override
-            public void textInserted(TextInput textInputArgument, int index, int count) {
-                ArrayList<String> suggestions = new ArrayList<>("One", "Two", "Three", "Four",
-                    "Five");
+            public void textInserted(final TextInput textInputArgument, final int index, final int count) {
+                ArrayList<String> suggestions = new ArrayList<>("One", "Two", "Three", "Four", "Five");
                 suggestionPopup.setSuggestionData(suggestions);
                 suggestionPopup.open(textInputArgument, new SuggestionPopupCloseListener() {
                     @Override
-                    public void suggestionPopupClosed(SuggestionPopup suggestionPopupArgument) {
+                    public void suggestionPopupClosed(final SuggestionPopup suggestionPopupArgument) {
                         if (suggestionPopupArgument.getResult()) {
                             selectedIndexLabel.setText("You selected suggestion number "
                                 + suggestionPopupArgument.getSelectedIndex() + ".");
@@ -67,7 +64,7 @@ public class SuggestionPopupTest implements Application {
             }
 
             @Override
-            public void textRemoved(TextInput textInputArgument, int index, int count) {
+            public void textRemoved(final TextInput textInputArgument, final int index, final int count) {
                 suggestionPopup.close();
             }
         });
@@ -76,7 +73,7 @@ public class SuggestionPopupTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -84,7 +81,7 @@ public class SuggestionPopupTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(SuggestionPopupTest.class, args);
     }
 }

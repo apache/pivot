@@ -64,9 +64,9 @@ import org.apache.pivot.wtk.Window;
  * @see DesktopApplicationContext#replaceSplashScreen(Display)
  * @see DesktopApplicationContext#PRESERVE_SPLASH_SCREEN_ARGUMENT
  */
-public class SplashScreenTest implements Application {
+public final class SplashScreenTest implements Application {
 
-    private static class SplashScreenProgressOverlay {
+    private static final class SplashScreenProgressOverlay {
         private final SplashScreen splashScreen;
         private final Meter meter = new Meter(Orientation.HORIZONTAL);
         private Graphics2D graphics;
@@ -119,11 +119,12 @@ public class SplashScreenTest implements Application {
     }
 
     @Override
-    public void startup(final Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
 
         File splashFile = new File("org/apache/pivot/tests/splash.png");
         System.out.println("Startup the application at " + new Date());
-        System.out.println("To show the Splash Screen, remember to run as a Standard Java Application this way:\n"
+        System.out.println(
+            "To show the Splash Screen, remember to run as a Standard Java Application this way:\n"
             + "java -splash:" + splashFile.getPath() + " <mainclassname> --preserveSplashScreen=true\n"
             + "or no splash screen will be shown.");
 
@@ -156,20 +157,17 @@ public class SplashScreenTest implements Application {
             // Load the Pivot UI
             private void loadBXML(final Display displayArgument, final double weight) {
                 try {
-                    ApplicationContext.queueCallback(new Runnable() {
-                        @Override
-                        public void run() {
-                            Window window = null;
-                            try {
-                                window = (Window) new BXMLSerializer().readObject(this.getClass().getResource(
-                                    "splash.bxml"));
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                            if (window != null) {
-                                window.open(displayArgument);
-                                progressOverlay.increment(weight);
-                            }
+                    ApplicationContext.queueCallback(() -> {
+                        Window window = null;
+                        try {
+                            window = (Window) new BXMLSerializer().readObject(this.getClass().getResource(
+                                "splash.bxml"));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (window != null) {
+                            window.open(displayArgument);
+                            progressOverlay.increment(weight);
                         }
                     });
                 } catch (Exception e) {
@@ -182,12 +180,12 @@ public class SplashScreenTest implements Application {
         // window visible.
         final TaskListener<Void> taskListener = new TaskListener<Void>() {
             @Override
-            public void taskExecuted(Task<Void> task) {
+            public void taskExecuted(final Task<Void> task) {
                 finished();
             }
 
             @Override
-            public void executeFailed(Task<Void> task) {
+            public void executeFailed(final Task<Void> task) {
                 System.err.println(String.format("Failed\n%s", task.getFault()));
                 task.getFault().printStackTrace();
                 finished();
@@ -203,12 +201,12 @@ public class SplashScreenTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) throws Exception {
+    public boolean shutdown(final boolean optional) throws Exception {
         System.out.println("Shutdown the application at " + new Date());
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         // Allow the BXML to be loaded on a background thread
         Container.setEventDispatchThreadChecker(null);
 

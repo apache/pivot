@@ -26,11 +26,11 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.effects.TagDecorator;
 import org.apache.pivot.wtk.media.Image;
 
-public class TagDecoratorTest implements Application {
+public final class TagDecoratorTest implements Application {
     private Frame frame = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         frame = new Frame();
         frame.setTitle("Tag Decorator Test");
         frame.setPreferredSize(480, 360);
@@ -44,7 +44,7 @@ public class TagDecoratorTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (frame != null) {
             frame.close();
         }
@@ -52,7 +52,7 @@ public class TagDecoratorTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(TagDecoratorTest.class, args);
     }
 }

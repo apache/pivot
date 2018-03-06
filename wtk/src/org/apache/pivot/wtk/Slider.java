@@ -41,29 +41,33 @@ public class Slider extends Container {
         this(Orientation.HORIZONTAL);
     }
 
-    public Slider(Orientation orientation) {
+    public Slider(final Orientation orientation) {
         this.orientation = orientation;
 
         installSkin(Slider.class);
     }
 
-    public int getStart() {
+    public final int getStart() {
         return start;
     }
 
-    public void setStart(int start) {
+    public final void setStart(final int start) {
         setRange(start, end);
     }
 
-    public int getEnd() {
+    public final int getEnd() {
         return end;
     }
 
-    public void setEnd(int end) {
+    public final void setEnd(final int end) {
         setRange(start, end);
     }
 
-    public void setRange(int start, int end) {
+    public final Span getRange() {
+        return new Span(start, end);
+    }
+
+    public final void setRange(final int start, final int end) {
         if (start > end) {
             throw new IllegalArgumentException("start " + start + " is greater than maximum " + end + ".");
         }
@@ -91,29 +95,29 @@ public class Slider extends Container {
         }
     }
 
-    public final void setRange(Span range) {
+    public final void setRange(final Span range) {
         Utils.checkNull(range, "range");
 
         setRange(range.start, range.end);
     }
 
-    public final void setRange(Dictionary<String, ?> range) {
+    public final void setRange(final Dictionary<String, ?> range) {
         setRange(new Span(range));
     }
 
-    public final void setRange(Sequence<?> range) {
+    public final void setRange(final Sequence<?> range) {
         setRange(new Span(range));
     }
 
-    public final void setRange(String range) {
+    public final void setRange(final String range) {
         setRange(Span.decode(range));
     }
 
-    public int getValue() {
+    public final int getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public final void setValue(final int value) {
         if (value < start) {
             throw new IllegalArgumentException("value " + value + " is less than minimum " + start + ".");
         }
@@ -130,11 +134,11 @@ public class Slider extends Container {
         }
     }
 
-    public Orientation getOrientation() {
+    public final Orientation getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(Orientation orientation) {
+    public final void setOrientation(final Orientation orientation) {
         Utils.checkNull(orientation, "orientation");
 
         if (this.orientation != orientation) {
@@ -143,11 +147,11 @@ public class Slider extends Container {
         }
     }
 
-    public ListenerList<SliderListener> getSliderListeners() {
+    public final ListenerList<SliderListener> getSliderListeners() {
         return sliderListeners;
     }
 
-    public ListenerList<SliderValueListener> getSliderValueListeners() {
+    public final ListenerList<SliderValueListener> getSliderValueListeners() {
         return sliderValueListeners;
     }
 }

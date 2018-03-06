@@ -27,13 +27,13 @@ import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.TableViewRowEditor;
 import org.apache.pivot.wtk.skin.CardPaneSkin;
 
-public class TableViewTest2 implements Application {
+public final class TableViewTest2 implements Application {
     private Window window = null;
     private TableView tableView = null;
     private Window menu = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
 
         System.out.println("Double Click on Table elements to open the Row Editor");
@@ -57,7 +57,7 @@ public class TableViewTest2 implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -65,7 +65,7 @@ public class TableViewTest2 implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(TableViewTest2.class, args);
     }
 }

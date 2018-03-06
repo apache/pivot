@@ -23,11 +23,11 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class WatermarkDecoratorTest implements Application {
+public final class WatermarkDecoratorTest implements Application {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(WatermarkDecoratorTest.class,
             "watermark_decorator_test.bxml");
@@ -36,7 +36,7 @@ public class WatermarkDecoratorTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -44,7 +44,7 @@ public class WatermarkDecoratorTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(WatermarkDecoratorTest.class, args);
     }
 }

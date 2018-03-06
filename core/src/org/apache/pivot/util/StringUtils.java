@@ -24,7 +24,9 @@ import java.math.BigInteger;
  * A set of static methods that perform various string manipulation
  * functions.
  */
-public class StringUtils {
+public final class StringUtils {
+    private StringUtils() {
+    }
 
     /**
      * Make a string the consists of "n" copies of the given character.
@@ -34,7 +36,7 @@ public class StringUtils {
      * @param n  The number of times to copy this character.
      * @return   The resulting string.
      */
-    public static String fromNChars(char ch, int n) {
+    public static String fromNChars(final char ch, final int n) {
         if (n == 0) {
             return "";
         }
@@ -61,11 +63,11 @@ public class StringUtils {
      * @return A string in the form of <tt>"[xx,xx,xx...]"</tt>
      * where the "xx" are the hex representations of each character.
     */
-    public static String toHexString(CharSequence charSequence) {
-        StringBuilder builder = new StringBuilder(charSequence.length()*3+1);
+    public static String toHexString(final CharSequence charSequence) {
+        StringBuilder builder = new StringBuilder(charSequence.length() * 3 + 1);
         for (int i = 0; i < charSequence.length(); i++) {
             builder.append((i == 0) ? '[' : ',');
-            builder.append(Integer.toHexString((int)charSequence.charAt(i)));
+            builder.append(Integer.toHexString((int) charSequence.charAt(i)));
         }
         builder.append(']');
         return builder.toString();
@@ -87,7 +89,8 @@ public class StringUtils {
      * @throws NumberFormatException if the input string doesn't contain a value
      * parseable by one of these methods.
      */
-    public static <T extends Number> Number toNumber(String string, Class<? extends Number> type) {
+    public static <T extends Number> Number toNumber(final String string,
+        final Class<? extends Number> type) {
         Utils.checkNullOrEmpty(string, "string");
 
         if (type == null) {
@@ -120,6 +123,50 @@ public class StringUtils {
             }
             // TODO: maybe throw exception
             return null;
+        }
+    }
+
+    /**
+     * Extension of {@link Boolean#parseBoolean} that is both more exact
+     * and supports more features.  Specifically it will recognize:
+     * <ul>
+     * <li><tt>true</tt> or <tt>false</tt> in mixed case.
+     * <li><tt>yes</tt> or <tt>no</tt> in mixed case.
+     * <li><tt>on</tt> or <tt>off</tt> in mixed case.
+     * <li><tt>T</tt> or <tt>F</tt> in mixed case.
+     * <li><tt>Y</tt> or <tt>N</tt> in mixed case.
+     * <li><tt>1</tt> or <tt>0</tt>.
+     * </ul>
+     *
+     * @param input The string value to convert to a boolean.
+     * @return The boolean value.
+     * @throws IllegalArgumentException if the value can't be converted according to the
+     * above rules.
+     */
+    public static boolean toBoolean(final String input) {
+        Utils.checkNullOrEmpty(input, "input");
+
+        if (input.equalsIgnoreCase("true") || input.equalsIgnoreCase("T")
+         || input.equalsIgnoreCase("yes")  || input.equalsIgnoreCase("Y")
+         || input.equalsIgnoreCase("on")) {
+            return true;
+        } else if (input.equalsIgnoreCase("false") || input.equalsIgnoreCase("F")
+                || input.equalsIgnoreCase("no")    || input.equalsIgnoreCase("N")
+                || input.equalsIgnoreCase("off")) {
+            return false;
+        } else {
+            try {
+                double d = Double.parseDouble(input);
+                if (d == 1.0d) {
+                    return true;
+                } else if (d == 0.0d) {
+                    return false;
+                }
+                throw new IllegalArgumentException("Unable to convert \"" + input + "\""
+                    + " to a boolean value.");
+            } catch (NumberFormatException nfe) {
+                throw nfe;
+            }
         }
     }
 

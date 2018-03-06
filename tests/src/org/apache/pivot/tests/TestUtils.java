@@ -19,11 +19,11 @@ package org.apache.pivot.tests;
 /**
  * Test utilities methods.
  */
-public class TestUtils {
+public final class TestUtils {
 
     private static final String NA = "not available";
 
-    public TestUtils() {
+    private TestUtils() {
     }
 
     static final void testJavaSecurity() {

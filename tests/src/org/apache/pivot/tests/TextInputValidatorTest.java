@@ -44,7 +44,7 @@ import org.apache.pivot.wtk.validation.Validator;
 /**
  * Text input validator test.
  */
-public class TextInputValidatorTest implements Application {
+public final class TextInputValidatorTest implements Application {
     private Locale locale = Locale.getDefault(); // the default locale
 
     private Window window = null;
@@ -62,8 +62,12 @@ public class TextInputValidatorTest implements Application {
     private TextInput textinputNotEmptyText = null;
     private TextInput textinputEmptyText = null;
 
+    private String validText(final TextInput textInput) {
+        return (textInput.isTextValid() ? "valid" : "invalid");
+    }
+
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         System.out.println("Starting TextInputValidatorTest ...");
         System.out.println("current Locale is " + locale);
 
@@ -79,7 +83,8 @@ public class TextInputValidatorTest implements Application {
         //
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = new Window((Component) bxmlSerializer.readObject(getClass().getResource("text_input_validator_test.bxml")));
+        window = new Window((Component) bxmlSerializer.readObject(
+            getClass().getResource("text_input_validator_test.bxml")));
 
         Map<String, Object> namespace = bxmlSerializer.getNamespace();
 
@@ -117,8 +122,8 @@ public class TextInputValidatorTest implements Application {
         textinputComparableRange.setValidator(bdCompRange);
         textinputComparableRange.getTextInputListeners().add(new TextInputListener() {
             @Override
-            public void textValidChanged(TextInput textInput) {
-                invalidComparableRangeLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
+            public void textValidChanged(final TextInput textInput) {
+                invalidComparableRangeLabel.setText(validText(textInput));
             }
         });
         invalidComparableRangeLabel = (Label) namespace.get("invalidComparableRangeLabel");
@@ -147,8 +152,8 @@ public class TextInputValidatorTest implements Application {
         // test the listener by updating a label
         textinputFloatRange.getTextInputListeners().add(new TextInputListener() {
             @Override
-            public void textValidChanged(TextInput textInput) {
-                invalidLabel.setText(textInput.isTextValid() ? "valid" : "invalid");
+            public void textValidChanged(final TextInput textInput) {
+                invalidLabel.setText(validText(textInput));
             }
         });
 
@@ -167,7 +172,7 @@ public class TextInputValidatorTest implements Application {
         textinputCustomBoolean.setText("true");
         textinputCustomBoolean.setValidator(new Validator() {
             @Override
-            public boolean isValid(String s) {
+            public boolean isValid(final String s) {
                 return "true".equals(s) || "false".equals(s);
             }
         });
@@ -186,7 +191,7 @@ public class TextInputValidatorTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -194,8 +199,10 @@ public class TextInputValidatorTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
-        DesktopApplicationContext.main(new String[] { TextInputValidatorTest.class.getName() });
+    public static void main(final String[] args) {
+        DesktopApplicationContext.main(new String[] {
+            TextInputValidatorTest.class.getName()
+        });
     }
 
 }

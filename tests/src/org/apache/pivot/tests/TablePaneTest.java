@@ -23,18 +23,18 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
 
-public class TablePaneTest implements Application {
+public final class TablePaneTest implements Application {
     private Window window = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(TablePaneTest.class, "table_pane_test.bxml");
         window.open(display);
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -42,7 +42,7 @@ public class TablePaneTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(TablePaneTest.class, args);
     }
 }

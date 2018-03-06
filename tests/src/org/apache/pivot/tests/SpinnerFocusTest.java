@@ -27,12 +27,12 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
 import org.apache.pivot.wtk.Spinner;
 
-public class SpinnerFocusTest implements Application {
+public final class SpinnerFocusTest implements Application {
     private Frame frame = null;
     private Spinner spinner = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         Action action = new Action() {
             @Override
             public String getDescription() {
@@ -40,7 +40,7 @@ public class SpinnerFocusTest implements Application {
             }
 
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 String msg = "Selected: " + spinner.getSelectedItem().toString();
                 Alert.alert(msg, frame);
 
@@ -64,7 +64,7 @@ public class SpinnerFocusTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (frame != null) {
             frame.close();
         }
@@ -72,7 +72,7 @@ public class SpinnerFocusTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(SpinnerFocusTest.class, args);
     }
 }
