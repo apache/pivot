@@ -40,6 +40,7 @@ import java.util.prefs.Preferences;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.util.StringUtils;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
@@ -538,28 +539,28 @@ public final class DesktopApplicationContext extends ApplicationContext {
                                 height = Integer.parseInt(value);
                                 break;
                             case CENTER_ARGUMENT:
-                                center = Boolean.parseBoolean(value);
+                                center = StringUtils.toBoolean(value);
                                 break;
                             case RESIZABLE_ARGUMENT:
-                                resizable = Boolean.parseBoolean(value);
+                                resizable = StringUtils.toBoolean(value);
                                 break;
                             case MAXIMIZED_ARGUMENT:
-                                maximized = Boolean.parseBoolean(value);
+                                maximized = StringUtils.toBoolean(value);
                                 break;
                             case UNDECORATED_ARGUMENT:
-                                undecorated = Boolean.parseBoolean(value);
+                                undecorated = StringUtils.toBoolean(value);
                                 break;
                             case FULL_SCREEN_ARGUMENT:
-                                fullScreen = Boolean.parseBoolean(value);
+                                fullScreen = StringUtils.toBoolean(value);
                                 break;
                             case PRESERVE_SPLASH_SCREEN_ARGUMENT:
-                                preserveSplashScreen = Boolean.parseBoolean(value);
+                                preserveSplashScreen = StringUtils.toBoolean(value);
                                 break;
                             case ORIGIN_ARGUMENT:
                                 origin = new URL(value);
                                 break;
                             case USE_APPLICATION_INSTANCE_ARGUMENT:
-                                useApplicationInstance = Boolean.parseBoolean(value);
+                                useApplicationInstance = StringUtils.toBoolean(value);
                                 break;
                             default:
                                 properties.put(key, value);
