@@ -69,6 +69,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
     private int closeTransitionDuration = DEFAULT_CLOSE_TRANSITION_DURATION;
     private int closeTransitionRate = DEFAULT_CLOSE_TRANSITION_RATE;
+    private boolean variableItemHeight = true;    // This is the historical default
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
@@ -183,7 +184,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
     private static final int DEFAULT_CLOSE_TRANSITION_RATE = 30;
 
     public TerraSuggestionPopupSkin() {
-        listView.getStyles().put(Style.variableItemHeight, true);
+        listView.getStyles().put(Style.variableItemHeight, variableItemHeight);
         listView.getListViewSelectionListeners().add(listViewSelectionListener);
         listView.getComponentKeyListeners().add(listViewKeyListener);
 
@@ -270,6 +271,15 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
 
     public void setCloseTransitionRate(int closeTransitionRate) {
         this.closeTransitionRate = closeTransitionRate;
+    }
+
+    public boolean isVariableItemHeight() {
+        return variableItemHeight;
+    }
+
+    public void setVariableItemHeight(boolean variableItemHeight) {
+        this.variableItemHeight = variableItemHeight;
+        listView.getStyles().put(Style.variableItemHeight, variableItemHeight);
     }
 
     @Override
