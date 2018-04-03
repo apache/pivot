@@ -28,6 +28,7 @@ import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.StringUtils;
 import org.apache.pivot.util.Utils;
@@ -428,9 +429,11 @@ public class TextPane extends Container {
                 Paragraph paragraph = (Paragraph) descendant;
 
                 Node node = getRightmostDescendant(paragraph);
+dumpNode("insertText, paragraph", paragraph, 0);
                 if (node instanceof TextNode) {
                     // Insert the text into the existing node
                     TextNode textNode = (TextNode) node;
+System.out.format("textNode insert: index=%1$d, textNode.doc offset=%2$d, paragraph.doc offset=%3$d%n", index, textNode.getDocumentOffset(), paragraph.getDocumentOffset());
                     textNode.insertText(text, index - textNode.getDocumentOffset());
                 } else if (node instanceof Element) {
                     // Append a new text node
@@ -586,12 +589,11 @@ public class TextPane extends Container {
 
         if (offset >= 0 && offset < document.getCharacterCount()) {
             Node descendant = document.getDescendantAt(offset);
-
+dumpNode("removeText, grandparent", descendant.getParent().getParent(), 0);
             // Used to be: if (selectionLength == 0 && ...
             if (characterCount <= 1 && descendant instanceof Paragraph) {
                 // We are deleting a paragraph terminator
                 Paragraph paragraph = (Paragraph) descendant;
-
                 Element parent = paragraph.getParent();
                 int index = parent.indexOf(paragraph);
 
@@ -710,8 +712,9 @@ public class TextPane extends Container {
                 int start = selectionStart;
                 int tabWidth = ((TextPane.Skin) getSkin()).getTabWidth();
                 Node currentNode = document.getDescendantAt(start);
-                while (!(currentNode instanceof Paragraph))
+                while (!(currentNode instanceof Paragraph)) {
                     currentNode = currentNode.getParent();
+                }
                 int paragraphStartOffset = start - currentNode.getDocumentOffset();
 
                 bulkOperation = true;
@@ -993,6 +996,15 @@ public class TextPane extends Container {
     }
 
     /**
+     * Returns a character span (start, length) representing the current selection.
+     *
+     * @return A char span with the start and length values.
+     */
+    public CharSpan getCharSelection() {
+        return new CharSpan(selectionStart, selectionLength);
+    }
+
+    /**
      * Sets the selection. The sum of the selection start and length must be
      * less than the length of the text input's content.
      *
@@ -1029,11 +1041,25 @@ public class TextPane extends Container {
      *
      * @param selection The new span describing the selection.
      * @see #setSelection(int, int)
+     * @throws IllegalArgumentException if the span is {@code null}.
      */
     public final void setSelection(Span selection) {
         Utils.checkNull(selection, "selection");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
+    }
+
+    /**
+     * Sets the selection.
+     *
+     * @param selection The character span (start and length) for the selection.
+     * @see #setSelection(int, int)
+     * @throws IllegalArgumentException if the character span is {@code null}.
+     */
+    public final void setSelection(CharSpan selection) {
+        Utils.checkNull(selection, "selection");
+
+        setSelection(selection.start, selection.length);
     }
 
     /**
@@ -1168,5 +1194,19 @@ public class TextPane extends Container {
 
     public ListenerList<TextPaneSelectionListener> getTextPaneSelectionListeners() {
         return textPaneSelectionListeners;
+    }
+
+    private static final String FORMAT = "%1$s%2$s: doc=%3$d, count=%4$d%n";
+
+    public static void dumpNode(String msg, Node node, int indent) {
+        if (msg != null && !msg.isEmpty()) {
+            System.out.println(msg + ":");
+        }
+        System.out.format(FORMAT, StringUtils.fromNChars(' ', indent*2), node.getClass().getSimpleName(), node.getDocumentOffset(), node.getCharacterCount());
+        if (node instanceof Element) {
+            for (Node n : (Element)node) {
+                dumpNode("", n, indent + 1);
+            }
+        }
     }
 }

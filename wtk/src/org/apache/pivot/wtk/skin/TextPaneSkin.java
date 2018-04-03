@@ -31,7 +31,9 @@ import java.text.AttributedCharacterIterator;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.text.CompositeIterator;
+import org.apache.pivot.util.CharUtils;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
@@ -43,6 +45,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
+import org.apache.pivot.wtk.SelectDirection;
 import org.apache.pivot.wtk.TextInputMethodListener;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.TextPaneListener;
@@ -277,6 +280,7 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
     protected boolean doingCaretCalculations = false;
 
     private int anchor = -1;
+    private SelectDirection selectDirection = null;
     private TextPane.ScrollDirection scrollDirection = null;
     private int mouseX = -1;
 
@@ -924,61 +928,6 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         return consumed;
     }
 
-    private void selectSpan(TextPane textPane, Document document, int start) {
-        int rowStart = getRowOffset(document, start);
-        int rowLength = getRowLength(document, start);
-        if (start - rowStart >= rowLength) {
-            start = rowStart + rowLength - 1;
-            if (start < 0) {
-                return;
-            }
-            char ch = document.getCharacterAt(start);
-            if (ch == '\r' || ch == '\n') {
-                start--;
-            }
-        }
-        if (start < 0) {
-            return;
-        }
-        char ch = document.getCharacterAt(start);
-        int selectionStart = start;
-        int selectionLength = 1;
-        if (Character.isWhitespace(ch)) {
-            // Move backward to beginning of whitespace block
-            // but not before the beginning of the line.
-            do {
-                selectionStart--;
-            } while (selectionStart >= rowStart
-                && Character.isWhitespace(document.getCharacterAt(selectionStart)));
-            selectionStart++;
-            selectionLength = start - selectionStart;
-            // Move forward to end of whitespace block
-            // but not past the end of the text or the end of line
-            do {
-                selectionLength++;
-            } while (selectionStart + selectionLength - rowStart < rowLength
-                && Character.isWhitespace(document.getCharacterAt(selectionStart + selectionLength)));
-        } else if (Character.isJavaIdentifierPart(ch)) {
-            // Move backward to beginning of identifier block
-            do {
-                selectionStart--;
-            } while (selectionStart >= rowStart
-                && Character.isJavaIdentifierPart(document.getCharacterAt(selectionStart)));
-            selectionStart++;
-            selectionLength = start - selectionStart;
-            // Move forward to end of identifier block
-            // but not past end of text
-            do {
-                selectionLength++;
-            } while (selectionStart + selectionLength - rowStart < rowLength
-                && Character.isJavaIdentifierPart(document.getCharacterAt(selectionStart
-                    + selectionLength)));
-        } else {
-            return;
-        }
-        textPane.setSelection(selectionStart, selectionLength);
-    }
-
     @Override
     public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
@@ -990,7 +939,10 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
             int index = getInsertionPoint(x, y);
             if (index != -1) {
                 if (count == 2) {
-                    selectSpan(textPane, document, index);
+                    CharSpan charSpan = CharUtils.selectWord(getRowCharacters(document, index), index);
+                    if (charSpan != null) {
+                        textPane.setSelection(charSpan);
+                    }
                 } else if (count == 3) {
                     textPane.setSelection(getRowOffset(document, index), getRowLength(document, index));
                 }
@@ -1022,33 +974,43 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         return consumed;
     }
 
-    private int getRowOffset(Document document, int index) {
+    private Node getParagraphAt(Document document, int index) {
         if (document != null) {
             Node node = document.getDescendantAt(index);
             while (node != null && !(node instanceof Paragraph)) {
                 node = node.getParent();
             }
-            // TODO: doesn't take into account the line wrapping within a paragraph
-            if (node != null) {
-                return node.getDocumentOffset();
-            }
+            return node;
+        }
+        return null;
+    }
+
+    private int getRowOffset(Document document, int index) {
+        Node node = getParagraphAt(document, index);
+        // TODO: doesn't take into account the line wrapping within a paragraph
+        if (node != null) {
+            return node.getDocumentOffset();
         }
         return 0;
     }
 
     private int getRowLength(Document document, int index) {
-        if (document != null) {
-            Node node = document.getDescendantAt(index);
-            while (node != null && !(node instanceof Paragraph)) {
-                node = node.getParent();
-            }
-            // TODO: doesn't take into account the line wrapping within a paragraph
-            // Assuming the node is a Paragraph, the count includes the trailing \n, so discount it
-            if (node != null) {
-                return node.getCharacterCount() - 1;
-            }
+        Node node = getParagraphAt(document, index);
+        // TODO: doesn't take into account the line wrapping within a paragraph
+        // Assuming the node is a Paragraph, the count includes the trailing \n, so discount it
+        if (node != null) {
+            return node.getCharacterCount() - 1;
         }
         return 0;
+    }
+
+    private CharSequence getRowCharacters(Document document, int index) {
+        Node node = getParagraphAt(document, index);
+        // TODO: doesn't take into account the line wrapping within a paragraph
+        if (node != null) {
+            return node.getCharacters();
+        }
+        return null;
     }
 
     @Override
@@ -1062,11 +1024,9 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         int selectionStart = textPane.getSelectionStart();
         int selectionLength = textPane.getSelectionLength();
 
-        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-        boolean commandPressed = Keyboard.isPressed(commandModifier);
+        boolean commandPressed = Keyboard.isPressed(Platform.getCommandModifier());
         boolean wordNavPressed = Keyboard.isPressed(Platform.getWordNavigationModifier());
         boolean shiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
-        // boolean ctrlPressed = Keyboard.isPressed(Keyboard.Modifier.CTRL);
         boolean metaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
         boolean isEditable = textPane.isEditable();
 
@@ -1095,12 +1055,15 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                 }
 
                 if (shiftPressed) {
+
+                    // TODO: if last direction was left, then extend further left
+                    // but if right, then reverse selection from the pivot point
                     selectionLength += selectionStart - start;
                 } else {
                     selectionLength = 0;
                 }
 
-                if (selectionStart >= 0) {
+                if (start >= 0) {
                     textPane.setSelection(start, selectionLength);
                     scrollCharacterToVisible(start);
 
@@ -1122,6 +1085,8 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                 }
 
                 if (shiftPressed) {
+                    // TODO: if last direction was right, then extend further right
+                    // but if left, then reverse selection from the pivot point
                     selectionLength += end - index;
                 } else {
                     selectionStart = end;
@@ -1135,16 +1100,11 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                     consumed = true;
                 }
             } else if (keyCode == Keyboard.KeyCode.LEFT) {
-                if (shiftPressed) {
-                    // TODO: undo last right select depending... see TextInput skin
-                    // Add the previous character to the selection
-                    if (selectionStart > 0) {
-                        selectionStart--;
-                        selectionLength++;
-                    }
-                } else if (wordNavPressed) {
+                if (wordNavPressed) {
                     // Move the caret to the start of the next word to our left
                     if (selectionStart > 0) {
+                        int originalStart = selectionStart;
+                        // TODO: what if last select direction was to the right?
                         // first, skip over any space immediately to our left
                         while (selectionStart > 0
                             && Character.isWhitespace(document.getCharacterAt(selectionStart - 1))) {
@@ -1156,7 +1116,18 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
                             selectionStart--;
                         }
 
-                        selectionLength = 0;
+                        if (shiftPressed) {
+                            selectionLength += (originalStart - selectionStart);
+                        } else {
+                            selectionLength = 0;
+                        }
+                    }
+                } else if (shiftPressed) {
+                    // TODO: undo last right select depending... see TextInput skin
+                    // Add the previous character to the selection
+                    if (selectionStart > 0) {
+                        selectionStart--;
+                        selectionLength++;
                     }
                 } else {
                     // Clear the selection and move the caret back by one character

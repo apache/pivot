@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Span;
@@ -47,6 +48,18 @@ public final class TextNode extends Node {
 
     public String getText(int beginIndex, int endIndex) {
         return characters.substring(beginIndex, endIndex);
+    }
+
+    public String getText(Span span) {
+        Utils.checkNull(span, "span");
+
+        return characters.substring(span.normalStart(), span.normalEnd() + 1);
+    }
+
+    public String getText(CharSpan charSpan) {
+        Utils.checkNull(charSpan, "charSpan");
+
+        return characters.substring(charSpan.start, charSpan.start + charSpan.length);
     }
 
     public void setText(String text) {
@@ -94,11 +107,17 @@ public final class TextNode extends Node {
     }
 
     public String getSubstring(Span range) {
+        Utils.checkNull(range, "range");
         return characters.substring(range.start, range.end + 1);
     }
 
     public String getSubstring(int start, int end) {
         return characters.substring(start, end);
+    }
+
+    public String getSubstring(CharSpan charSpan) {
+        Utils.checkNull(charSpan, "charSpan");
+        return characters.substring(charSpan.start, charSpan.start + charSpan.length);
     }
 
     public CharSequence getCharacters() {
@@ -110,7 +129,13 @@ public final class TextNode extends Node {
     }
 
     public CharSequence getCharacters(Span range) {
+        Utils.checkNull(range, "range");
         return characters.subSequence(range.start, range.end + 1);
+    }
+
+    public CharSequence getCharacters(CharSpan charSpan) {
+        Utils.checkNull(charSpan, "charSpan");
+        return characters.subSequence(charSpan.start, charSpan.start + charSpan.length);
     }
 
     @Override

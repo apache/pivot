@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.text;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
@@ -111,6 +112,14 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         }
     }
 
+    private Paragraph getParagraphParent(Node node) {
+        Element parent = node.getParent();
+        while ((parent != null) && !(parent instanceof Paragraph)) {
+            parent = parent.getParent();
+        }
+        return (Paragraph)parent;
+    }
+
     @Override
     public Node removeRange(int offset, int charCount) {
         Utils.checkIndexBounds(offset, charCount, 0, characterCount);
@@ -121,8 +130,9 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         if (charCount > 0) {
             Element element = (Element) range;
 
+            int endOffset = offset + charCount - 1;
             int start = getNodeAt(offset);
-            int end = getNodeAt(offset + charCount - 1);
+            int end = (endOffset == offset) ? start : getNodeAt(endOffset);
 
             if (start == end) {
                 // The range is entirely contained by one child node
@@ -136,8 +146,9 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                     // underneath a paragraph to allow for composed text on an
                     // empty line, so check that condition and don't remove the
                     // entire node.
-                    if (node instanceof TextNode && node.getParent() instanceof Paragraph &&
-                        node.getParent().getLength() == 1) {
+                    Paragraph paragraph;
+                    if (node instanceof TextNode && (paragraph = getParagraphParent(node)) != null &&
+                        paragraph.getLength() == 1) {
                         segment = node.removeRange(0, charCount);
                     } else {
                         // Remove the entire node
@@ -205,8 +216,9 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
         if (charCount > 0) {
 
+            int endOffset = offset + charCount - 1;
             int start = getNodeAt(offset);
-            int end = getNodeAt(offset + charCount - 1);
+            int end = (endOffset == offset) ? start : getNodeAt(endOffset);
 
             if (start == end) {
                 // The range is entirely contained by one child node
@@ -274,27 +286,31 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         return characterCount;
     }
 
-    private void addText(StringBuilder buf, Element element) {
-        for (Node child : element.nodes) {
-            if (child instanceof TextNode) {
-                TextNode textNode = (TextNode)child;
-                buf.append(textNode.getText());
-            } else if (child instanceof ComponentNode) {
-                ComponentNode compNode = (ComponentNode)child;
-                buf.append(compNode.getText());
-            } else if (child instanceof Paragraph) {
-                addText(buf, (Element)child);
-                buf.append('\n');
-            } else if (child instanceof Element) {
-                addText(buf, (Element)child);
+    private void addCharacters(Appendable buf, Element element) {
+        try {
+            for (Node child : element.nodes) {
+                if (child instanceof Element) {
+                    addCharacters(buf, (Element)child);
+                } else {
+                    buf.append(child.getCharacters());
+                }
             }
+            if (element instanceof Paragraph) {
+                buf.append('\n');
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
         }
     }
 
     public String getText() {
+        return getCharacters().toString();
+    }
+
+    public CharSequence getCharacters() {
         StringBuilder buf = new StringBuilder(characterCount);
-        addText(buf, this);
-        return buf.toString();
+        addCharacters(buf, this);
+        return buf;
     }
 
     @Override
@@ -511,8 +527,6 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
 
     @Override
     protected void rangeRemoved(Node originalNode, int offset, int charCount, CharSequence removedChars) {
-        this.characterCount -= charCount;
-
         // Update the offsets of consecutive nodes, if any
         if (offset < this.characterCount) {
             int index = getNodeAt(offset);
@@ -522,6 +536,8 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 node.setOffset(node.getOffset() - charCount);
             }
         }
+        // Adjust our count last, so we make sure to get all our children updated
+        this.characterCount -= charCount;
 
         super.rangeRemoved(originalNode, offset, charCount, removedChars);
     }

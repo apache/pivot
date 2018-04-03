@@ -16,7 +16,9 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ListenerList;
+import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
@@ -64,34 +66,11 @@ public class ComponentNode extends Block {
     }
 
     private String getText(Component comp) {
-        if (comp instanceof TextInput) {
-            return ((TextInput)comp).getText();
-        } else if (comp instanceof TextArea) {
-            return ((TextArea)comp).getText();
-        } else if (comp instanceof TextPane) {
-            return ((TextPane)comp).getText();
-        } else if (comp instanceof Label) {
-            return ((Label)comp).getText();
-        } else if (comp instanceof Button) {
-            Object buttonData = ((Button)comp).getButtonData();
-            if (buttonData instanceof BaseContent) {
-                return ((BaseContent)buttonData).getText();
-            } else if (buttonData instanceof String) {
-                return (String)buttonData;
-            } else {
-                return buttonData.toString();
-            }
-        } else if (comp instanceof Container) {
-            StringBuilder buf = new StringBuilder();
-            for (Component child : (Container)comp) {
-                buf.append(getText(child));
-            }
-            return buf.toString();
-        }
-        return "";
+        return getCharacters(comp).toString();
     }
 
     public String getSubstring(Span range) {
+        Utils.checkNull(range, "range");
         return getText(this.component).substring(range.start, range.end + 1);
     }
 
@@ -99,22 +78,64 @@ public class ComponentNode extends Block {
         return getText(this.component).substring(start, end);
     }
 
+    public String getSubstring(CharSpan charSpan) {
+        Utils.checkNull(charSpan, "charSpan");
+        return getText(this.component).substring(charSpan.start, charSpan.start + charSpan.length);
+    }
+
+    public CharSequence getCharacters(Component comp) {
+        if (comp instanceof TextInput) {
+            return ((TextInput)comp).getCharacters();
+        } else if (comp instanceof TextArea) {
+            return ((TextArea)comp).getCharacters();
+        } else if (comp instanceof TextPane) {
+            return ((TextPane)comp).getText();   // TODO: use getCharacters when it is available
+        } else if (comp instanceof Label) {
+            return ((Label)comp).getText();
+        } else if (comp instanceof Button) {
+            Object buttonData = ((Button)comp).getButtonData();
+            if (buttonData instanceof BaseContent) {
+                return ((BaseContent)buttonData).getText();
+            } else if (buttonData instanceof CharSequence) {
+                return (CharSequence)buttonData;
+            } else {
+                return buttonData.toString();
+            }
+        } else if (comp instanceof Container) {
+            StringBuilder buf = new StringBuilder();
+            for (Component child : (Container)comp) {
+                buf.append(getCharacters(child));
+            }
+            return buf;
+        }
+        return "";
+    }
+
+    public CharSequence getCharacters() {
+        return getCharacters(this.component);
+    }
+
     public CharSequence getCharacters(Span range) {
-        return getText(this.component).subSequence(range.start, range.end + 1);
+        Utils.checkNull(range, "range");
+        return getCharacters(this.component).subSequence(range.start, range.end + 1);
     }
 
     public CharSequence getCharacters(int start, int end) {
-        return getText(this.component).subSequence(start, end);
+        return getCharacters(this.component).subSequence(start, end);
+    }
+
+    public CharSequence getCharacters(CharSpan charSpan) {
+        return getCharacters(this.component).subSequence(charSpan.start, charSpan.start + charSpan.length);
     }
 
     @Override
     public char getCharacterAt(int offset) {
-        return getText(this.component).charAt(offset);
+        return getCharacters(this.component).charAt(offset);
     }
 
     @Override
     public int getCharacterCount() {
-        return getText(this.component).length();
+        return getCharacters(this.component).length();
     }
 
     @Override

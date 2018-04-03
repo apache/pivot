@@ -78,7 +78,7 @@ public abstract class Node {
      * offset of our parent (if any) added to our own offset.
      */
     public int getDocumentOffset() {
-        return (parent == null) ? 0 : parent.getDocumentOffset() + offset;
+        return ((parent == null) ? 0 : parent.getDocumentOffset()) + offset;
     }
 
     /**
@@ -148,6 +148,11 @@ public abstract class Node {
      * @return The number of characters in this node.
      */
     public abstract int getCharacterCount();
+
+    /**
+     * @return The character sequence in this node.
+     */
+    public abstract CharSequence getCharacters();
 
     /**
      * Creates a copy of this node.
