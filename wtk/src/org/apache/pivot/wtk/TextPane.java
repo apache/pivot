@@ -429,11 +429,9 @@ public class TextPane extends Container {
                 Paragraph paragraph = (Paragraph) descendant;
 
                 Node node = getRightmostDescendant(paragraph);
-dumpNode("insertText, paragraph", paragraph, 0);
                 if (node instanceof TextNode) {
                     // Insert the text into the existing node
                     TextNode textNode = (TextNode) node;
-System.out.format("textNode insert: index=%1$d, textNode.doc offset=%2$d, paragraph.doc offset=%3$d%n", index, textNode.getDocumentOffset(), paragraph.getDocumentOffset());
                     textNode.insertText(text, index - textNode.getDocumentOffset());
                 } else if (node instanceof Element) {
                     // Append a new text node
@@ -589,7 +587,7 @@ System.out.format("textNode insert: index=%1$d, textNode.doc offset=%2$d, paragr
 
         if (offset >= 0 && offset < document.getCharacterCount()) {
             Node descendant = document.getDescendantAt(offset);
-dumpNode("removeText, grandparent", descendant.getParent().getParent(), 0);
+
             // Used to be: if (selectionLength == 0 && ...
             if (characterCount <= 1 && descendant instanceof Paragraph) {
                 // We are deleting a paragraph terminator
