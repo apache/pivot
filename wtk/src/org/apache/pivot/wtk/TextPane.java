@@ -32,7 +32,6 @@ import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.StringUtils;
 import org.apache.pivot.util.Utils;
-import org.apache.pivot.wtk.Span;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.text.Block;
 import org.apache.pivot.wtk.text.ComponentNode;

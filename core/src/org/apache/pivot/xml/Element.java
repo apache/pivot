@@ -173,7 +173,7 @@ public class Element extends Node implements List<Node> {
     /**
      * Sequence representing the attributes declared by this element.
      */
-    public class AttributeSequence implements Sequence<Attribute>, Iterable<Attribute> {
+    public final class AttributeSequence implements Sequence<Attribute>, Iterable<Attribute> {
         private AttributeSequence() {
         }
 
@@ -312,7 +312,7 @@ public class Element extends Node implements List<Node> {
     /**
      * Dictionary representing the namespaces declared by this element.
      */
-    public class NamespaceDictionary implements Dictionary<String, String>, Iterable<String> {
+    public final class NamespaceDictionary implements Dictionary<String, String>, Iterable<String> {
         private NamespaceDictionary() {
         }
 
@@ -393,7 +393,7 @@ public class Element extends Node implements List<Node> {
     /**
      * Dictionary representing the attributes declared by this element.
      */
-    public class ElementDictionary implements Dictionary<String, String> {
+    public final class ElementDictionary implements Dictionary<String, String> {
         private ElementDictionary() {
         }
 

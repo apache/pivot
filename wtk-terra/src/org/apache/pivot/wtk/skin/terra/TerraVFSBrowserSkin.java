@@ -164,8 +164,9 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         try {
             boolean hidden = false;
             if (file != null) {
-                if (file.getName().getBaseName().length() != 0 && file.isHidden())
+                if (file.getName().getBaseName().length() != 0 && file.isHidden()) {
                     hidden = true;
+                }
             }
             return hidden;
         }

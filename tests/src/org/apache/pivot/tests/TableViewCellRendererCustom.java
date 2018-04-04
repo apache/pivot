@@ -22,7 +22,7 @@ import org.apache.pivot.wtk.content.TableViewCellRenderer;
 /**
  * Minimal sample for a customized version of table cell renderer. Renders cell
  * contents as a string, but in this case, transformed. <br/> Note that here
- * it's possible to &quot;extends Label implements TableView.CellRenderer&quot;, 
+ * it's possible to &quot;extends Label implements TableView.CellRenderer&quot;,
  * or even to extend directly TableViewCellRenderer (because it already extends
  * Label and implements TableView.CellRenderer).
  */

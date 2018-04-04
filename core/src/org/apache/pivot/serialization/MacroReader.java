@@ -77,9 +77,9 @@ public class MacroReader extends Reader {
     private String getNextWord() throws IOException {
         StringBuilder buf = new StringBuilder();
         int ch;
-        while ((ch = getNextChar(true)) != -1 && Character.isWhitespace(ch)) {
-            ;
-        }
+        do {
+            ch = getNextChar(true);
+        } while (ch != -1 && Character.isWhitespace(ch));
         if (ch != -1) {
             buf.append((char)ch);
             while ((ch = getNextChar(true)) != -1 &&
@@ -95,9 +95,9 @@ public class MacroReader extends Reader {
 
     private void skipToEol() throws IOException {
         int ch;
-        while ((ch = getNextChar(true)) != -1 && ch != '\n') {
-            ;
-        }
+        do {
+            ch = getNextChar(true);
+        } while (ch != -1 && ch != '\n');
     }
 
     /**
@@ -144,9 +144,9 @@ public class MacroReader extends Reader {
             String name = getNextWord();
             StringBuilder buf = new StringBuilder();
             int ch;
-            while ((ch = getNextChar(true)) != -1 && Character.isWhitespace(ch) && ch != '\\' && ch != '\n') {
-                ;
-            }
+            do {
+                ch = getNextChar(true);
+            } while (ch != -1 && Character.isWhitespace(ch) && ch != '\\' && ch != '\n');
             queue(ch);
             do {
                 while ((ch = getNextChar(true)) != -1 && ch != '\\' && ch != '\n') {

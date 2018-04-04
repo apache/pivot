@@ -18,7 +18,6 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.wtk.Style;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
 /**

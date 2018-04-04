@@ -16,11 +16,22 @@
  */
 package org.apache.pivot.tests;
 
-public class IterationTest {
-    public static void main(String[] args) {
-        long t0 = System.currentTimeMillis();
+/**
+ * Test the speed of doing integer increments.
+ */
+public final class IterationTest {
+    /** Private constructor since we use only static methods. */
+    private IterationTest() {
+    }
 
-        final int COUNT = 100000000;
+    /** The number of iterations we want to perform. */
+    static final int COUNT = 100000000;
+
+    /** Run the test.
+     * @param args The command line arguments (which are ignored here).
+     */
+    public static void main(final String[] args) {
+        long t0 = System.currentTimeMillis();
 
         int i = 0;
         while (i < COUNT) {

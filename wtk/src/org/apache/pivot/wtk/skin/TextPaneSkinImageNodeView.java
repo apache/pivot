@@ -159,3 +159,4 @@ class TextPaneSkinImageNodeView extends TextPaneSkinNodeView implements ImageNod
         repaint(x, y, width, height);
     }
 }
+

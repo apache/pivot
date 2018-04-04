@@ -1782,7 +1782,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
     /**
      * Class representing a queued callback.
      */
-    public static class QueuedCallback implements Runnable {
+    public static final class QueuedCallback implements Runnable {
         private Runnable callback;
         private volatile boolean executed = false;
         private volatile boolean cancelled = false;

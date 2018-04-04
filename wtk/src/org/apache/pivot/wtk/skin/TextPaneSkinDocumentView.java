@@ -41,3 +41,4 @@ class TextPaneSkinDocumentView extends TextPaneSkinVerticalElementView {
     }
 
 }
+

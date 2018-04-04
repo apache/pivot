@@ -80,3 +80,4 @@ class TextPaneSkinListItemView extends TextPaneSkinVerticalElementView {
         return indexTextNodeView.getWidth();
     }
 }
+

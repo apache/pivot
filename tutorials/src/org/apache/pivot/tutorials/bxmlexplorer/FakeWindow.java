@@ -41,10 +41,10 @@ public class FakeWindow extends Container {
 
     public final Window window;
 
-    public FakeWindow(Window _window) {
-        Component contentLocal = _window.getContent();
-        _window.setContent(null);
-        this.window = _window;
+    public FakeWindow(Window realWindow) {
+        Component contentLocal = realWindow.getContent();
+        realWindow.setContent(null);
+        this.window = realWindow;
         window.getWindowListeners().add(new WindowListener() {
 
             @Override

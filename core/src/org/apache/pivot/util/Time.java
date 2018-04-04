@@ -29,7 +29,6 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.Utils;
 
 /**
  * Class representing a time of day, independent of any particular time zone.

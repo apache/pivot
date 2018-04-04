@@ -25,7 +25,7 @@ import java.text.ParsePosition;
  * Converts a file size into a human-readable representation using binary
  * prefixes (1KB = 1024 bytes).
  */
-public class FileSizeFormat extends Format {
+public final class FileSizeFormat extends Format {
     private static final long serialVersionUID = 9126510513247641698L;
 
     public static final int KILOBYTE = 1024;

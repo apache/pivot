@@ -18,8 +18,6 @@ package org.apache.pivot.wtk;
 
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
-import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.Orientation;
 
 /**
  * A viewport header that displays a ruler along either the top or left side.

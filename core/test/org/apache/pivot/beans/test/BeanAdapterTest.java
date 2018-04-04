@@ -38,11 +38,11 @@ public class BeanAdapterTest {
 
     private static Random rnd;
 
-    BeanAdapterSampleObject src_test;
+    BeanAdapterSampleObject srcTest;
     JSONSerializer jsonSerializer;
     StringWriter writer;
     StringReader reader;
-    BeanAdapterSampleObject target_test;
+    BeanAdapterSampleObject targetTest;
 
     @BeforeClass
     public static void setUpClass() {
@@ -58,87 +58,87 @@ public class BeanAdapterTest {
 
     @Before
     public void setUp() {
-        src_test = new BeanAdapterSampleObject();
+        srcTest = new BeanAdapterSampleObject();
         jsonSerializer = new JSONSerializer(BeanAdapterSampleObject.class);
         writer = new StringWriter();
     }
 
     @After
     public void tearDown() {
-        src_test = null;
+        srcTest = null;
         jsonSerializer = null;
         writer = null;
         reader = null;
-        target_test = null;
+        targetTest = null;
     }
 
     @Test
     public void testSerializeBigDecimal() {
         System.out.println("testSerializeBigDecimal");
 
-        double random_double = rnd.nextDouble();
-        System.out.println("random_double = " + random_double
+        double randomDouble = rnd.nextDouble();
+        System.out.println("randomDouble = " + randomDouble
             + " (value will be truncated to 4 digits in this test)");
 
-        src_test.setBd(new BigDecimal(random_double, new MathContext(4)));
+        srcTest.setBd(new BigDecimal(randomDouble, new MathContext(4)));
 
         try {
-            jsonSerializer.writeObject(src_test, writer);
+            jsonSerializer.writeObject(srcTest, writer);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
             return;
         }
 
-        System.out.println("json string from src_test = " + writer.toString());
-        System.out.println("src_test.getBd()    = " + src_test.getBd());
+        System.out.println("json string from srcTest = " + writer.toString());
+        System.out.println("srcTest.getBd()    = " + srcTest.getBd());
 
         reader = new StringReader(writer.toString());
 
         try {
-            target_test = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
+            targetTest = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
             return;
         }
 
-        System.out.println("target_test.getBd() = " + target_test.getBd());
-        assertEquals(src_test.getBd().doubleValue(), target_test.getBd().doubleValue(), 0.0001);
+        System.out.println("targetTest.getBd() = " + targetTest.getBd());
+        assertEquals(srcTest.getBd().doubleValue(), targetTest.getBd().doubleValue(), 0.0001);
     }
 
     @Test
     public void testSerializeBigInteger() {
         System.out.println("testSerializeBigInteger");
 
-        int random_int = rnd.nextInt();
-        System.out.println("random_int = " + random_int);
+        int randomInt = rnd.nextInt();
+        System.out.println("randomInt = " + randomInt);
 
-        src_test.setBi(new BigInteger(String.valueOf(random_int)));
+        srcTest.setBi(new BigInteger(String.valueOf(randomInt)));
 
         try {
-            jsonSerializer.writeObject(src_test, writer);
+            jsonSerializer.writeObject(srcTest, writer);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
             return;
         }
 
-        System.out.println("json string from src_test = " + writer.toString());
-        System.out.println("src_test.getBi()    = " + src_test.getBi());
+        System.out.println("json string from srcTest = " + writer.toString());
+        System.out.println("srcTest.getBi()    = " + srcTest.getBi());
 
         reader = new StringReader(writer.toString());
 
         try {
-            target_test = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
+            targetTest = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
             return;
         }
 
-        System.out.println("target_test.getBi() = " + target_test.getBi());
-        assertEquals(src_test.getBi(), target_test.getBi());
+        System.out.println("targetTest.getBi() = " + targetTest.getBi());
+        assertEquals(srcTest.getBi(), targetTest.getBi());
     }
 
     @Test
@@ -148,31 +148,31 @@ public class BeanAdapterTest {
         String value = "A test String";
         System.out.println("String value = \"" + value + "\"");
 
-        src_test.setString(value);
+        srcTest.setString(value);
 
         try {
-            jsonSerializer.writeObject(src_test, writer);
+            jsonSerializer.writeObject(srcTest, writer);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
             return;
         }
 
-        System.out.println("json string from src_test = " + writer.toString());
-        System.out.println("src_test.getString()    = \"" + src_test.getString() + "\"");
+        System.out.println("json string from srcTest = " + writer.toString());
+        System.out.println("srcTest.getString()    = \"" + srcTest.getString() + "\"");
 
         reader = new StringReader(writer.toString());
 
         try {
-            target_test = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
+            targetTest = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
             return;
         }
 
-        System.out.println("target_test.getString() = \"" + target_test.getString() + "\"");
-        assertEquals(src_test.getString(), target_test.getString());
+        System.out.println("targetTest.getString() = \"" + targetTest.getString() + "\"");
+        assertEquals(srcTest.getString(), targetTest.getString());
     }
 
 }

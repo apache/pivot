@@ -1486,15 +1486,17 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 case Keyboard.KeyCode.TAB:
                     selectedIndex = tabPane.getSelectedIndex();
                     if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
-                        if (selectedIndex <= 0)
+                        if (selectedIndex <= 0) {
                             selectedIndex = tabs.getLength() - 1;
-                        else
+                        } else {
                            selectedIndex--;
+                        }
                     } else {
-                        if (selectedIndex >= tabs.getLength() - 1)
+                        if (selectedIndex >= tabs.getLength() - 1) {
                             selectedIndex = 0;
-                        else
+                        } else {
                             selectedIndex++;
+                        }
                     }
                     break;
 

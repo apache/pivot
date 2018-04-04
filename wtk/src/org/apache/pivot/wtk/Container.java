@@ -816,7 +816,7 @@ public abstract class Container extends Component implements Sequence<Component>
         return containerMouseListeners;
     }
 
-    public interface EDT_Checker {
+    public interface EDTChecker {
         public void check(Component component);
     }
 
@@ -824,7 +824,7 @@ public abstract class Container extends Component implements Sequence<Component>
         assertEventDispatchThread(this);
     }
 
-    private static EDT_Checker EDT_CHECKER = new EDT_Checker() {
+    private static EDTChecker EDT_CHECKER = new EDTChecker() {
         @Override
         public void check(Component component) {
             String threadName = Thread.currentThread().getName();
@@ -861,7 +861,7 @@ public abstract class Container extends Component implements Sequence<Component>
         }
     }
 
-    public static final void setEventDispatchThreadChecker(EDT_Checker runnable) {
+    public static final void setEventDispatchThreadChecker(EDTChecker runnable) {
         EDT_CHECKER = runnable;
     }
 }

@@ -392,7 +392,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         long t1 = c1.getTimeInMillis();
         long t2 = c2.getTimeInMillis();
 
-        return (int) ((t1 - t2) / (1000l * 60 * 60 * 24));
+        return (int) ((t1 - t2) / (1000L * 60 * 60 * 24));
     }
 
     /**

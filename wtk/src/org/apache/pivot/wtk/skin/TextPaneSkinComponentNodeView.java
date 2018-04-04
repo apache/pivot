@@ -156,3 +156,4 @@ class TextPaneSkinComponentNodeView extends TextPaneSkinNodeView implements Comp
         }
     }
 }
+

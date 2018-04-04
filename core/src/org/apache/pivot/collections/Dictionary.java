@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.Serializable;
 
-import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Utils;
 
 /**

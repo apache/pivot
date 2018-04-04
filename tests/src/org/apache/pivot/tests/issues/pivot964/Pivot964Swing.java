@@ -45,7 +45,7 @@ public class Pivot964Swing extends javax.swing.JFrame {
     /** Creates new form SVGIconDemo */
     public Pivot964Swing() {
         initComponents();
-        panel_display.add(panel, BorderLayout.CENTER);
+        panelDisplay.add(panel, BorderLayout.CENTER);
         pack();
     }
 
@@ -56,14 +56,14 @@ public class Pivot964Swing extends javax.swing.JFrame {
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">
     private void initComponents() {
-        panel_display = new javax.swing.JPanel();
+        panelDisplay = new javax.swing.JPanel();
         button1 = new javax.swing.JButton();
         button2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        panel_display.setLayout(new java.awt.BorderLayout());
+        panelDisplay.setLayout(new java.awt.BorderLayout());
 
-        getContentPane().add(panel_display, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panelDisplay, java.awt.BorderLayout.CENTER);
 
         button1.setText("Visible");
         button1.addActionListener(new java.awt.event.ActionListener() {
@@ -99,8 +99,8 @@ public class Pivot964Swing extends javax.swing.JFrame {
             }
         });
 
-        panel_display.add(button1, java.awt.BorderLayout.EAST);
-        panel_display.add(button2, java.awt.BorderLayout.WEST);
+        panelDisplay.add(button1, java.awt.BorderLayout.EAST);
+        panelDisplay.add(button2, java.awt.BorderLayout.WEST);
 
         pack();
     } // </editor-fold>
@@ -117,7 +117,7 @@ public class Pivot964Swing extends javax.swing.JFrame {
     // Variables declaration - do not modify
     private javax.swing.JButton button1;
     private javax.swing.JButton button2;
-    private javax.swing.JPanel panel_display;
+    private javax.swing.JPanel panelDisplay;
     // End of variables declaration
 
 }

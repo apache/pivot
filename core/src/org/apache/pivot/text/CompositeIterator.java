@@ -55,26 +55,26 @@ public class CompositeIterator implements AttributedCharacterIterator {
             fullLength += range;
         }
         this.endIndex = fullLength;
-        __setIndex(0);
+        setIndex0(0);
     }
 
     // CharacterIterator implementations
 
     public char first() {
-        return __setIndex(0);
+        return setIndex0(0);
     }
 
     public char last() {
         if (endIndex == 0) {
-            return __setIndex(endIndex);
+            return setIndex0(endIndex);
         } else {
-            return __setIndex(endIndex - 1);
+            return setIndex0(endIndex - 1);
         }
     }
 
     public char next() {
         if (currentIndex < endIndex) {
-            return __setIndex(currentIndex + 1);
+            return setIndex0(currentIndex + 1);
         } else {
             return DONE;
         }
@@ -82,7 +82,7 @@ public class CompositeIterator implements AttributedCharacterIterator {
 
     public char previous() {
         if (currentIndex > 0) {
-            return __setIndex(currentIndex - 1);
+            return setIndex0(currentIndex - 1);
         } else {
             return DONE;
         }
@@ -96,10 +96,10 @@ public class CompositeIterator implements AttributedCharacterIterator {
         // Note: this is a (0 < position <= endIndex) check, since "endIndex" is a valid value here
         Utils.checkIndexBounds(position, 0, endIndex);
 
-        return __setIndex(position);
+        return setIndex0(position);
     }
 
-    private char __setIndex(int position) {
+    private char setIndex0(int position) {
         currentIndex = position;
         int cumLength = 0;
         for (AttributedCharacterIterator iter : iterators) {

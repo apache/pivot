@@ -22,5 +22,5 @@ package org.apache.pivot.functional.functions;
  */
 public interface ProcedureN<T> {
     @SuppressWarnings("unchecked")
-    public void apply(T ... a);
+    public void apply(T... a);
 }
