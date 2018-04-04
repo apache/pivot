@@ -258,7 +258,7 @@ public class Utils {
      */
     public static void checkZeroBasedIndex(int index, int size) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index " + index + " out of bounds [0," + (size-1) + "].");
+            throw new IndexOutOfBoundsException("Index " + index + " out of bounds [0," + (size - 1) + "].");
         }
     }
 

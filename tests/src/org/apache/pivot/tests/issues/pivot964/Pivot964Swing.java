@@ -103,7 +103,7 @@ public class Pivot964Swing extends javax.swing.JFrame {
         panel_display.add(button2, java.awt.BorderLayout.WEST);
 
         pack();
-    }// </editor-fold>
+    } // </editor-fold>
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

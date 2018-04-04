@@ -219,7 +219,7 @@ public class ScrollBar extends Container {
 
             if (end < value + extent) {
                 throw new IllegalArgumentException(
-                    "end (" + end + ") is less than value ("+ value + ") + extent (" + extent + ")");
+                    "end (" + end + ") is less than value (" + value + ") + extent (" + extent + ")");
             }
 
             this.start = start;

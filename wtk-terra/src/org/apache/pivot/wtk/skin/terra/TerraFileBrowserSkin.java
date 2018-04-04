@@ -965,7 +965,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
 
                 String text = null;
 
-                if (file != null){
+                if (file != null) {
                     text = file.getName();
                 }
 

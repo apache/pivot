@@ -1200,7 +1200,8 @@ public class TextPane extends Container {
         if (msg != null && !msg.isEmpty()) {
             System.out.println(msg + ":");
         }
-        System.out.format(FORMAT, StringUtils.fromNChars(' ', indent*2), node.getClass().getSimpleName(), node.getDocumentOffset(), node.getCharacterCount());
+        String indenting = StringUtils.fromNChars(' ', indent * 2);
+        System.out.format(FORMAT, indenting, node.getClass().getSimpleName(), node.getDocumentOffset(), node.getCharacterCount());
         if (node instanceof Element) {
             for (Node n : (Element)node) {
                 dumpNode("", n, indent + 1);

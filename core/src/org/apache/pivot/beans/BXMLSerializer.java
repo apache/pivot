@@ -1531,7 +1531,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     private void reportException(ScriptException exception, String script) {
-        reportException(new SerializationException("Failed to execute script:\n"+script, exception));
+        reportException(new SerializationException("Failed to execute script:\n" + script, exception));
     }
 
     /**

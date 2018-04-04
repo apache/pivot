@@ -37,7 +37,7 @@ public class OptionTest {
         assertNotNull(o);
     }
 
-    @Test(expected=NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class)
     public void companionNoneTest() {
         OptionCompanion<Object> o = OptionCompanion.getInstance();
         assertNotNull(o);

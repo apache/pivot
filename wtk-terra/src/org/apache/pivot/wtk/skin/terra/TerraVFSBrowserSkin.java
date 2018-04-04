@@ -1118,7 +1118,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
 
                 String text = null;
 
-                if (file != null){
+                if (file != null) {
                     text = file.getName().getBaseName();
                 }
 
