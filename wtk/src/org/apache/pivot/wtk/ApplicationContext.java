@@ -1879,11 +1879,24 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
     /**
      * Adds the styles from a named stylesheet to the named or typed style
      * collections.
+     * <p> Does not allow macros (standard behavior) which can also be 25x
+     * faster than allowing macros.
      *
      * @param resourceName The resource name of the stylesheet to apply.
      */
-    @SuppressWarnings("unchecked")
     public static void applyStylesheet(String resourceName) {
+        applyStylesheet(resourceName, false);
+    }
+
+    /**
+     * Adds the styles from a named stylesheet to the named or typed style
+     * collections.
+     *
+     * @param resourceName The resource name of the stylesheet to apply.
+     * @param allowMacros Whether or not there will be macros in the stylesheet.
+     */
+    @SuppressWarnings("unchecked")
+    public static void applyStylesheet(String resourceName, boolean allowMacros) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         URL stylesheetLocation = classLoader.getResource(resourceName.substring(1));
@@ -1893,6 +1906,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
 
         try (InputStream inputStream = stylesheetLocation.openStream()) {
             JSONSerializer serializer = new JSONSerializer();
+            serializer.setAllowMacros(allowMacros);
             Map<String, ?> stylesheet = (Map<String, ?>) serializer.readObject(inputStream);
 
             for (String name : stylesheet) {

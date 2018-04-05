@@ -83,6 +83,7 @@ public class JSONSerializerTest {
     @Test
     public void testEquals() throws IOException, SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
+        jsonSerializer.setAllowMacros(true);
         JSONSerializerListener jsonSerializerListener = new JSONSerializerListener() {
             @Override
             public void beginDictionary(JSONSerializer jsonSerializerArgument,

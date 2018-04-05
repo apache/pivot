@@ -59,7 +59,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     private boolean alwaysDelimitMapKeys = false;
     private boolean verbose = false;
-    private boolean macros = true;
+    private boolean macros = false;
 
     private int c = -1;
 
@@ -162,9 +162,9 @@ public class JSONSerializer implements Serializer<Object> {
      * a non-standard feature.  See the documentation in {@link MacroReader} for more details
      * on the specification of macros.
      * <p> Note: must be called before {@link #readObject} is called.
-     * @param macros Flag indicating whether macros are allowed (default is {@code true}).
-     * Setting the flag to false will maintain standards-compliant behavior and possibly
-     * speed up operation as well.
+     * @param macros Flag indicating whether macros are allowed (default is {@code false}).
+     * The flag must be set to true in order to activate this feature, because there is a
+     * definitely measured 25x slowdown when using it, even if no macros are defined.
      */
     public void setAllowMacros(boolean macros) {
         this.macros = macros;
