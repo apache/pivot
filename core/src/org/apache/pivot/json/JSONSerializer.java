@@ -59,6 +59,7 @@ public class JSONSerializer implements Serializer<Object> {
 
     private boolean alwaysDelimitMapKeys = false;
     private boolean verbose = false;
+    private boolean macros = true;
 
     private int c = -1;
 
@@ -112,7 +113,7 @@ public class JSONSerializer implements Serializer<Object> {
      * Returns a flag indicating whether or not map keys will always be
      * quote-delimited.
      * <p> Note: the JSON "standard" requires keys to be delimited.
-     * @return <tt>true</tt> if map keys must always be delmited (that is,
+     * @return <tt>true</tt> if map keys must always be delimited (that is,
      * enclosed in double quotes), <tt>false</tt> for the default behavior
      * that does not require double quotes.
      */
@@ -146,6 +147,27 @@ public class JSONSerializer implements Serializer<Object> {
      */
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+    }
+
+    /**
+     * Returns the flag indicating whether this serializer will allow macros in the text.
+     * @return The "macros allowed" flag.
+     */
+    public boolean getAllowMacros() {
+        return macros;
+    }
+
+    /**
+     * Sets the flag indicating whether macros are allowed in the text.  This is definitely
+     * a non-standard feature.  See the documentation in {@link MacroReader} for more details
+     * on the specification of macros.
+     * <p> Note: must be called before {@link #readObject} is called.
+     * @param macros Flag indicating whether macros are allowed (default is {@code true}).
+     * Setting the flag to false will maintain standards-compliant behavior and possibly
+     * speed up operation as well.
+     */
+    public void setAllowMacros(boolean macros) {
+        this.macros = macros;
     }
 
     /**
@@ -189,20 +211,23 @@ public class JSONSerializer implements Serializer<Object> {
     public Object readObject(Reader reader) throws IOException, SerializationException {
         Utils.checkNull(reader, "reader");
 
-        // Move to the first character
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
-        MacroReader macroReader = new MacroReader(lineNumberReader);
-        c = macroReader.read();
+        Reader realReader = lineNumberReader;
+        if (macros) {
+            realReader = new MacroReader(realReader);
+        }
+        // Move to the first character
+        c = realReader.read();
 
         // Ignore BOM (if present)
         if (c == 0xFEFF) {
-            c = macroReader.read();
+            c = realReader.read();
         }
 
         // Read the root value
         Object object;
         try {
-            object = readValue(macroReader, type, type.getTypeName());
+            object = readValue(realReader, type, type.getTypeName());
         } catch (SerializationException exception) {
             System.err.println("An error occurred while processing input at line number "
                 + (lineNumberReader.getLineNumber() + 1));
