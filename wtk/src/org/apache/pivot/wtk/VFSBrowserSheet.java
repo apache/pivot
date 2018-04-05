@@ -35,7 +35,7 @@ import org.apache.pivot.util.Utils;
  * to be able to browse local and remote file systems, and browse inside of
  * .zip, .tar, etc. archives as well.
  */
-public final class VFSBrowserSheet extends Sheet {
+public class VFSBrowserSheet extends Sheet {
     /**
      * Enumeration defining supported modes.
      */
