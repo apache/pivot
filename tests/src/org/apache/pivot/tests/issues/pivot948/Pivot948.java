@@ -16,9 +16,21 @@
  */
 package org.apache.pivot.tests.issues.pivot948;
 
-import org.apache.pivot.beans.*;
-import org.apache.pivot.collections.*;
-import org.apache.pivot.wtk.*;
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BXMLSerializer;
+import org.apache.pivot.collections.List;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.BindType;
+import org.apache.pivot.wtk.Button;
+import org.apache.pivot.wtk.ButtonPressListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.ListButton;
+import org.apache.pivot.wtk.ListView;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.TextInput;
+import org.apache.pivot.wtk.Window;
 
 public class Pivot948 implements Application, ButtonPressListener, ListView.ItemBindMapping {
     private Window window = null;
@@ -99,13 +111,11 @@ public class Pivot948 implements Application, ButtonPressListener, ListView.Item
             String text = outputResult.getText();
             if (text == null || text.trim().isEmpty()) {
                 listIndex = null;
-            }
-            else {
+            } else {
                 listIndex = Integer.valueOf(text);
             }
             inputList.load(this);
-        }
-        else if (button == storeButton) {
+        } else if (button == storeButton) {
             inputList.store(this);
             outputResult.setText(listIndex == null ? "" : listIndex.toString());
         }

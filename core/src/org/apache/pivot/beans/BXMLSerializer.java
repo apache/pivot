@@ -361,9 +361,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
     }
 
-    private ScriptEngine newEngineByName(String scriptLanguage)
-        throws SerializationException
-    {
+    private ScriptEngine newEngineByName(String scriptLanguage) throws SerializationException {
         ScriptEngine engine = scriptEngineManager.getEngineByName(scriptLanguage);
 
         if (engine == null) {
@@ -398,9 +396,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @return Either an existing engine for that name, or a new one found by the
      * {@link #scriptEngineManager} and then cached (in the {@link #scriptEngines} map).
      */
-    private ScriptEngine getEngineByName(String scriptLanguage)
-        throws SerializationException
-    {
+    private ScriptEngine getEngineByName(String scriptLanguage) throws SerializationException {
         String languageKey = scriptLanguage.toLowerCase();
         ScriptEngine engine = scriptEngines.get(languageKey);
         if (engine != null) {
@@ -435,9 +431,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @return Either an existing engine for that extension, or a new one found by the
      * {@link #scriptEngineManager} and then cached (in the {@link #scriptEnginesExts} map).
      */
-    private ScriptEngine getEngineByExtension(String extension)
-        throws SerializationException
-    {
+    private ScriptEngine getEngineByExtension(String extension) throws SerializationException {
         String extensionKey = extension.toLowerCase();
         ScriptEngine engine = scriptEnginesExts.get(extensionKey);
         if (engine != null) {
@@ -1251,7 +1245,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                 getEngineByName(language), attribute.name, (String) attribute.value);
 
                             Object listener = Proxy.newProxyInstance(classLoader,
-                                new Class<?>[] { attribute.propertyClass }, handler);
+                                new Class<?>[] {attribute.propertyClass}, handler);
 
                             // Add the listener
                             Class<?> listenerListClass = listenerList.getClass();
@@ -1401,7 +1395,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 Object listener = Proxy.newProxyInstance(classLoader,
-                    new Class<?>[] { listenerClass }, handler);
+                    new Class<?>[] {listenerClass}, handler);
 
                 try {
                     addMethod.invoke(listenerList, listener);

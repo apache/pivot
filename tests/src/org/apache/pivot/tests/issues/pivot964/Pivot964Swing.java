@@ -105,7 +105,7 @@ public class Pivot964Swing extends javax.swing.JFrame {
         pack();
     } // </editor-fold>
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

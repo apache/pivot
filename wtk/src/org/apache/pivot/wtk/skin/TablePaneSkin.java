@@ -1347,7 +1347,7 @@ public class TablePaneSkin extends ContainerSkin implements TablePane.Skin, Tabl
         int rowCount = rows.getLength();
         int columnCount = tablePane.getColumns().getLength();
 
-        int rowHeightsLocal[] = new int[rowCount];
+        int[] rowHeightsLocal = new int[rowCount];
 
         boolean[] defaultHeightRows = new boolean[rowCount];
         int totalRelativeWeight = 0;

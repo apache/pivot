@@ -35,7 +35,7 @@ import org.apache.pivot.util.Utils;
  * to be able to browse local and remote file systems, and browse inside of
  * .zip, .tar, etc. archives as well.
  */
-public class VFSBrowserSheet extends Sheet {
+public final class VFSBrowserSheet extends Sheet {
     /**
      * Enumeration defining supported modes.
      */
@@ -56,7 +56,8 @@ public class VFSBrowserSheet extends Sheet {
     private FileObjectList selectedFiles = new FileObjectList();
     private Filter<FileObject> disabledFileFilter = null;
 
-    private VFSBrowserSheetListener.Listeners fileBrowserSheetListeners = new VFSBrowserSheetListener.Listeners();
+    private VFSBrowserSheetListener.Listeners fileBrowserSheetListeners =
+        new VFSBrowserSheetListener.Listeners();
 
     /**
      * Creates a new VFSBrowserSheet <p> Note that this version set by default
@@ -123,8 +124,7 @@ public class VFSBrowserSheet extends Sheet {
      * @see Mode
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, String rootFolder, String homeFolder)
-            throws FileSystemException
-    {
+            throws FileSystemException {
         Utils.checkNull(mode, "Mode");
         Utils.checkNull(rootFolder, "Root folder");
 
@@ -154,8 +154,7 @@ public class VFSBrowserSheet extends Sheet {
      * @see Mode
      */
     public VFSBrowserSheet(FileSystemManager manager, Mode mode, FileObject rootFolder, FileObject homeFolder)
-            throws FileSystemException
-    {
+            throws FileSystemException {
         Utils.checkNull(mode, "Mode");
         Utils.checkNull(rootFolder, "Root folder");
 
@@ -249,15 +248,11 @@ public class VFSBrowserSheet extends Sheet {
         return homeDirectory;
     }
 
-    public void setHomeDirectory(String homeDirectory)
-            throws FileSystemException
-    {
+    public void setHomeDirectory(String homeDirectory) throws FileSystemException {
         setHomeDirectory(manager.resolveFile(homeDirectory));
     }
 
-    public void setHomeDirectory(FileObject homeDirectory)
-            throws FileSystemException
-    {
+    public void setHomeDirectory(FileObject homeDirectory) throws FileSystemException {
         Utils.checkNull(homeDirectory, "Home directory");
 
         // Give some grace to set the home folder to an actual file and

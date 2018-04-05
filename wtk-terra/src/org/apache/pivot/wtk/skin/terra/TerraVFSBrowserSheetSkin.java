@@ -107,8 +107,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
             } else {
                 hostNameBoxPane.setVisible(false);
             }
-        }
-        catch (FileSystemException ex) {
+        } catch (FileSystemException ex) {
             throw new RuntimeException(ex);
         }
     }

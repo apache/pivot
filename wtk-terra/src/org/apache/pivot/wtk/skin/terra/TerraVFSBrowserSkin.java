@@ -169,8 +169,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                 }
             }
             return hidden;
-        }
-        catch (FileSystemException fse) {
+        } catch (FileSystemException fse) {
             throw new RuntimeException(fse);
         }
     }

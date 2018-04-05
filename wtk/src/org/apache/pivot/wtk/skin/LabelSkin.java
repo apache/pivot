@@ -90,11 +90,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         int preferredWidth = 0;
         if (text != null && text.length() > 0) {
             FontRenderContext fontRenderContext = Platform.getFontRenderContext();
-            String str[];
+            String[] str;
             if (wrapText) {
                 str = text.split("\n");
             } else {
-                str = new String[] { text };
+                str = new String[] {text};
             }
 
             for (String line : str) {
@@ -187,11 +187,11 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         int preferredWidth = 0;
 
         if (text != null && text.length() > 0) {
-            String str[];
+            String[] str;
             if (wrapText) {
                 str = text.split("\n");
             } else {
-                str = new String[] { text };
+                str = new String[] {text};
             }
 
             for (String line : str) {

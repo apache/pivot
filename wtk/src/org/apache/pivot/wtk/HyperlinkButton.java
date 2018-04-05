@@ -183,9 +183,7 @@ public class HyperlinkButton extends LinkButton {
      * @throws URISyntaxException if the string is not a valid {@link URI}.
      * @see #setUri(URI)
      */
-    public void setUri(String uriString)
-        throws URISyntaxException
-    {
+    public void setUri(String uriString) throws URISyntaxException {
         Utils.checkNullOrEmpty(uriString, "URI string");
         setUri(new URI(uriString));
     }
@@ -196,9 +194,7 @@ public class HyperlinkButton extends LinkButton {
      * @throws URISyntaxException if the <code>URL</code> does not specify
      * a valid {@link URI}.
      */
-    public void setUrl(URL url)
-        throws URISyntaxException
-    {
+    public void setUrl(URL url) throws URISyntaxException {
         setUri(url == null ? null : url.toURI());
     }
 
@@ -210,9 +206,7 @@ public class HyperlinkButton extends LinkButton {
      * @throws MalformedURLException if the string cannot be converted to a <code>URL</code>
      * @throws URISyntaxException if the <code>URL</code> does not specify a valid {@link URI}.
      */
-    public void setUrl(String urlString)
-        throws MalformedURLException, URISyntaxException
-    {
+    public void setUrl(String urlString) throws MalformedURLException, URISyntaxException {
         Utils.checkNullOrEmpty(urlString, "URL string");
         setUrl(new URL(urlString));
     }

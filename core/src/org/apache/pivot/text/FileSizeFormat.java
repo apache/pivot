@@ -28,11 +28,15 @@ import java.text.ParsePosition;
 public final class FileSizeFormat extends Format {
     private static final long serialVersionUID = 9126510513247641698L;
 
+    /** The binary value of a "kilo"byte. */
     public static final int KILOBYTE = 1024;
-    public static final String[] ABBREVIATIONS = { "", "K", "M", "G", "T", "P", "E", "Z", "Y" };
+    /** The list of first letter abbreviations for each kilobyte power. */
+    public static final String[] ABBREVIATIONS = {"", "K", "M", "G", "T", "P", "E", "Z", "Y"};
 
+    /** The singleton instance of this class. */
     private static final FileSizeFormat FILE_SIZE_FORMAT = new FileSizeFormat();
 
+    /** Private constructor since this is a singleton accessed by the {@link #getInstance} method. */
     private FileSizeFormat() {
     }
 
@@ -47,7 +51,8 @@ public final class FileSizeFormat extends Format {
      * @return The original string buffer, with the formatted value appended.
      */
     @Override
-    public StringBuffer format(Object object, StringBuffer stringBuffer, FieldPosition fieldPosition) {
+    public StringBuffer format(final Object object, final StringBuffer stringBuffer,
+            final FieldPosition fieldPosition) {
         Number number = (Number) object;
 
         long length = number.longValue();
@@ -79,7 +84,7 @@ public final class FileSizeFormat extends Format {
      * @throws UnsupportedOperationException always.
      */
     @Override
-    public Object parseObject(String arg0, ParsePosition arg1) {
+    public Object parseObject(final String arg0, final ParsePosition arg1) {
         throw new UnsupportedOperationException();
     }
 

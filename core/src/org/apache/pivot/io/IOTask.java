@@ -59,7 +59,7 @@ public abstract class IOTask<V> extends Task<V> {
         }
 
         @Override
-        public int read(byte b[]) throws IOException {
+        public int read(byte[] b) throws IOException {
             if (abort) {
                 throw new AbortException();
             }
@@ -74,7 +74,7 @@ public abstract class IOTask<V> extends Task<V> {
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             if (abort) {
                 throw new AbortException();
             }

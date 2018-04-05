@@ -116,7 +116,7 @@ public class Version implements Comparable<Version>, Serializable {
         String revision;
         // Some "version" strings separate fields with a space
         // While Java 9 uses a new scheme where "build" uses a "+"
-        String parts[] = string.split("[ +\\-]");
+        String[] parts = string.split("[ +\\-]");
         if (parts.length == 1) {
             revision = string;
         } else {

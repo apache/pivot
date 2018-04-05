@@ -6,7 +6,7 @@
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSEPERCENT_SCALE.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,14 +16,29 @@
  */
 package org.apache.pivot.tutorials.calculator;
 
-import java.io.*;
-import java.math.*;
-import org.apache.pivot.beans.*;
-import org.apache.pivot.collections.*;
-import org.apache.pivot.serialization.*;
-import org.apache.pivot.wtk.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import org.apache.pivot.beans.BXML;
+import org.apache.pivot.beans.BXMLSerializer;
+import org.apache.pivot.collections.Map;
+import org.apache.pivot.serialization.SerializationException;
+import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.ApplicationContext;
+import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentKeyListener;
+import org.apache.pivot.wtk.DesktopApplicationContext;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Label;
+import org.apache.pivot.wtk.PushButton;
+import org.apache.pivot.wtk.Window;
 
-public class Calculator implements Application {
+/**
+ * Calculator demonstration program that mimics the look and feel
+ * of the iOS calculator app (pre iOS-11 that is).
+ */
+public final class Calculator implements Application {
     private BXMLSerializer serializer;
 
     @BXML private Window mainWindow;
@@ -49,7 +64,8 @@ public class Calculator implements Application {
     @BXML private PushButton nineButton;
     @BXML private PushButton dotButton;
 
-    private static MathContext MC = MathContext.DECIMAL64;
+    private static final MathContext MC = MathContext.DECIMAL64;
+    private static final int PERCENT_SCALE = -2;
 
     private static StringBuilder resultBuffer = new StringBuilder("0");
     private static BigDecimal result = BigDecimal.ZERO;
@@ -64,14 +80,14 @@ public class Calculator implements Application {
     private static Calculator instance;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) {
+    public void startup(final Display display, final Map<String, String> properties) {
         try {
             serializer.readObject(Calculator.class, "calculator.bxml");
             serializer.bind(this);
 
             mainWindow.getComponentKeyListeners().add(new ComponentKeyListener() {
                 @Override
-                public boolean keyTyped(Component comp, char ch) {
+                public boolean keyTyped(final Component comp, final char ch) {
                     // Some keys don't give us virtual key mappings, so we need to
                     // listen here for the relevant keys typed
                     switch (ch) {
@@ -102,8 +118,7 @@ public class Calculator implements Application {
 
             mainWindow.open(display);
             mainWindow.requestFocus();
-        }
-        catch (IOException | SerializationException ex) {
+        } catch (IOException | SerializationException ex) {
         }
     }
 
@@ -113,18 +128,18 @@ public class Calculator implements Application {
         instance.resultText.setText(resultBuffer.toString());
     }
 
-    private static void setClearAll(boolean all) {
+    private static void setClearAll(final boolean all) {
         instance.clearButton.setButtonData(all ? "AC" : "C");
         clearingAll = all;
     }
 
-    private static void setOperatorButton(boolean on) {
+    private static void setOperatorButton(final boolean on) {
         if (currentOperatorButton != null) {
             currentOperatorButton.setStyleName(on ? "buttonBorderHighlight" : "buttonBorderNormal");
         }
     }
 
-    private static void digit(char digit) {
+    private static void digit(final char digit) {
         setClearAll(false);
         setOperatorButton(false);
         justSeenOperator = false;
@@ -150,13 +165,14 @@ public class Calculator implements Application {
                 return;
             }
             break;
+          default:
+            break;
         }
         result = new BigDecimal(resultBuffer.toString());
         updateResult();
     }
 
-    private enum Operator
-    {
+    private enum Operator {
         ADD,
         SUBTRACT,
         MULTIPLY,
@@ -165,7 +181,7 @@ public class Calculator implements Application {
 
         private PushButton button;
 
-        public void setButton(PushButton button) {
+        public void setButton(final PushButton button) {
             this.button = button;
         }
 
@@ -174,7 +190,7 @@ public class Calculator implements Application {
         }
     }
 
-    private static void changeOperator(Operator newOperator) {
+    private static void changeOperator(final Operator newOperator) {
         if (currentOperator == null) {
             currentOperator = newOperator;
             accumulator = result;
@@ -203,6 +219,8 @@ public class Calculator implements Application {
               case DIVIDE:
                 result = accumulator.divide(result, MC);
                 break;
+              default:
+                break;
             }
             if (newOperator == Operator.EQUALS) {
                 setOperatorButton(false);
@@ -221,133 +239,131 @@ public class Calculator implements Application {
         }
     }
 
-    private interface ActionDoer
-    {
+    private interface ActionDoer {
         void perform(Component source);
     }
 
-    private enum ACTION implements ActionDoer
-    {
+    private enum ACTION implements ActionDoer {
         DOT {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('.');
             }
         },
         ZERO {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('0');
             }
         },
         ONE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('1');
             }
         },
         TWO {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('2');
             }
         },
         THREE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('3');
             }
         },
         FOUR {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('4');
             }
         },
         FIVE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('5');
             }
         },
         SIX {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('6');
             }
         },
         SEVEN {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('7');
             }
         },
         EIGHT {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('8');
             }
         },
         NINE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 digit('9');
             }
         },
         ADD {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 changeOperator(Operator.ADD);
             }
         },
         SUBTRACT {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 changeOperator(Operator.SUBTRACT);
             }
         },
         MULTIPLY {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 changeOperator(Operator.MULTIPLY);
             }
         },
         DIVIDE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 changeOperator(Operator.DIVIDE);
             }
         },
         EQUALS {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 changeOperator(Operator.EQUALS);
             }
         },
         NEGATE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 result = result.negate(MC);
                 updateResult();
             }
         },
         PERCENT {
             @Override
-            public void perform(Component source) {
-                if (currentOperator == null ||
-                    currentOperator == Operator.MULTIPLY ||
-                    currentOperator == Operator.DIVIDE ||
-                    accumulator == null) {
-                    result = result.scaleByPowerOfTen(-2);
+            public void perform(final Component source) {
+                if (currentOperator == null
+                 || currentOperator == Operator.MULTIPLY
+                 || currentOperator == Operator.DIVIDE
+                 || accumulator == null) {
+                    result = result.scaleByPowerOfTen(PERCENT_SCALE);
                 } else {
-                    result = accumulator.multiply(result, MC).scaleByPowerOfTen(-2);
+                    result = accumulator.multiply(result, MC).scaleByPowerOfTen(PERCENT_SCALE);
                 }
                 updateResult();
             }
         },
         BACKSPACE {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 if (resultBuffer.length() > 0 && !resultBuffer.toString().equals("0")) {
                     char ch = resultBuffer.charAt(resultBuffer.length() - 1);
                     if (ch == '.') {
@@ -364,7 +380,7 @@ public class Calculator implements Application {
         },
         CLEAR {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 result = BigDecimal.ZERO;
                 seenDecimalPoint = false;
                 justSeenOperator = false;
@@ -381,23 +397,22 @@ public class Calculator implements Application {
         },
         QUIT {
             @Override
-            public void perform(Component source) {
+            public void perform(final Component source) {
                 DesktopApplicationContext.exit();
             }
         }
     }
 
-    private class CalculatorAction extends Action
-    {
+    private class CalculatorAction extends Action {
         private ACTION action;
 
-        public CalculatorAction(ACTION action) {
+        public CalculatorAction(final ACTION action) {
             this.action = action;
             Action.getNamedActions().put(action.toString(), this);
         }
 
         @Override
-        public void perform(Component source) {
+        public void perform(final Component source) {
             action.perform(source);
         }
     }
@@ -416,7 +431,7 @@ public class Calculator implements Application {
         instance = this;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(Calculator.class, args);
     }
 

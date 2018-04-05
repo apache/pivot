@@ -294,7 +294,7 @@ public class BeanAdapter implements Map<String, Object> {
             }
         } else {
             try {
-                setterMethod.invoke(bean, new Object[] { valueUpdated });
+                setterMethod.invoke(bean, new Object[] {valueUpdated});
             } catch (IllegalAccessException exception) {
                 throw new RuntimeException(String.format(ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT,
                     key, bean.getClass().getName()), exception);
@@ -757,10 +757,9 @@ public class BeanAdapter implements Map<String, Object> {
                     String valueString = value.toString().toUpperCase(Locale.ENGLISH);
                     Method valueOfMethod = type.getMethod(ENUM_VALUE_OF_METHOD_NAME, String.class);
                     coercedValue = valueOfMethod.invoke(null, valueString);
-                }
-                // Nothing to be gained by handling the getMethod() & invoke() exceptions separately
-                catch (IllegalAccessException | InvocationTargetException |
+                } catch (IllegalAccessException | InvocationTargetException |
                        SecurityException | NoSuchMethodException e) {
+                    // Nothing to be gained by handling the getMethod() & invoke() exceptions separately
                     throw new IllegalArgumentException(String.format(
                         ENUM_COERCION_EXCEPTION_MESSAGE, value.getClass().getName(), value, type,
                         Arrays.toString(type.getEnumConstants())), e);

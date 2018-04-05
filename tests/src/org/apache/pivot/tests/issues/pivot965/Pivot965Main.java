@@ -25,8 +25,7 @@ import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.Window;
 
 
-public class Pivot965Main implements Application
-{
+public class Pivot965Main implements Application {
     private Window window = null;
 
     @Override

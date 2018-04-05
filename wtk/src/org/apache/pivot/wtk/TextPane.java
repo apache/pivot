@@ -790,8 +790,7 @@ public class TextPane extends Container {
             for (Node node : element) {
                 if (node instanceof Element) {
                     addToText(text, (Element) node, includeSpan);
-                }
-                else {
+                } else {
                     Span nodeSpan = node.getDocumentSpan();
                     Span nodeIntersection = nodeSpan.intersect(includeSpan);
                     if (nodeIntersection != null) {

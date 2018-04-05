@@ -35,7 +35,8 @@ import java.util.Queue;
  * in the underlying stream. Nested macros are supported, and are expanded at the
  * point of definition, if defined, or at the point of expansion if defined later.
  */
-public class MacroReader extends Reader {
+public final class MacroReader extends Reader {
+    /** The input reader we are mapping. */
     private Reader in;
 
     /** The map of our defined variables and their values. */
@@ -49,7 +50,11 @@ public class MacroReader extends Reader {
     /** The previous character read. */
     private int lastCh = -1;
 
-    public MacroReader(Reader reader) {
+    /**
+     * Construct a new macro reader on top of the given reader.
+     * @param reader The input reader we are going to wrap.
+     */
+    public MacroReader(final Reader reader) {
         this.in = reader;
     }
 
@@ -58,21 +63,32 @@ public class MacroReader extends Reader {
         in.close();
     }
 
-    private void queue(int ch) {
+    /**
+     * Add the given character to the lookahead queue for reprocessing.
+     * @param ch The character to queue.
+     */
+    private void queue(final int ch) {
         if (ch != -1) {
             lookaheadQueue.add(ch);
         }
     }
 
-    private void queue(String str) {
+    /**
+     * Add all the characters of the given string to the lookahead queue
+     * for reprocessing.
+     * @param str The string to be queued up again.
+     */
+    private void queue(final String str) {
         for (int i = 0; i < str.length(); i++) {
-            lookaheadQueue.add(str.codePointAt(i));
+            lookaheadQueue.add((int) str.charAt(i));
         }
     }
 
     /**
      * Parse out the next word in the stream (according to Unicode
      * Identifier semantics) as the macro name, skipping leading whitespace.
+     * @return The next parsed "word" string.
+     * @throws IOException for errors reading the stream.
      */
     private String getNextWord() throws IOException {
         StringBuilder buf = new StringBuilder();
@@ -81,11 +97,11 @@ public class MacroReader extends Reader {
             ch = getNextChar(true);
         } while (ch != -1 && Character.isWhitespace(ch));
         if (ch != -1) {
-            buf.append((char)ch);
-            while ((ch = getNextChar(true)) != -1 &&
-                  ((buf.length() == 0 && Character.isUnicodeIdentifierStart(ch)) ||
-                   (buf.length() > 0 && Character.isUnicodeIdentifierPart(ch)))) {
-                buf.append((char)ch);
+            buf.append((char) ch);
+            while ((ch = getNextChar(true)) != -1
+                   && ((buf.length() == 0 && Character.isUnicodeIdentifierStart(ch))
+                    || (buf.length() > 0 && Character.isUnicodeIdentifierPart(ch)))) {
+                buf.append((char) ch);
             }
             // Re-queue the character that terminated the word
             queue(ch);
@@ -110,13 +126,14 @@ public class MacroReader extends Reader {
      *                         invoking this method recursively
      *                         to ignore unknown macro commands
      *                         or undefined macros
+     * @return  The next character in the stream.
+     * @throws IOException if there are errors reading the stream.
      */
-    private int getNextChar(boolean handleMacros) throws IOException {
+    private int getNextChar(final boolean handleMacros) throws IOException {
         int ret = -1;
         if (!lookaheadQueue.isEmpty()) {
             ret = lookaheadQueue.poll().intValue();
-        }
-        else {
+        } else {
             ret = in.read();
         }
         // Check for macro define or undefine (starting with "#"
@@ -129,8 +146,7 @@ public class MacroReader extends Reader {
                 skipToEol();
                 variableMap.remove(name);
                 return getNextChar(true);
-            }
-            else if (!keyword.equalsIgnoreCase("define")) {
+            } else if (!keyword.equalsIgnoreCase("define")) {
                 // Basically ignore any commands we don't understand
                 // by simply queueing the text back to be read again
                 // but with the flag set to ignore this command (so
@@ -150,24 +166,22 @@ public class MacroReader extends Reader {
             queue(ch);
             do {
                 while ((ch = getNextChar(true)) != -1 && ch != '\\' && ch != '\n') {
-                    buf.append((char)ch);
+                    buf.append((char) ch);
                 }
                 // Check for line continuation character
                 if (ch == '\\') {
                     int next = getNextChar(true);
                     if (next == '\n') {
-                        buf.append((char)next);
-                    }
-                    else {
-                        buf.append((char)ch);
-                        buf.append((char)next);
+                        buf.append((char) next);
+                    } else {
+                        buf.append((char) ch);
+                        buf.append((char) next);
                     }
                 }
             } while (ch != -1 && ch != '\n');
             variableMap.put(name, buf.toString());
             return getNextChar(true);
-        }
-        else if (ret == '$' && handleMacros) {
+        } else if (ret == '$' && handleMacros) {
             // Check for macro expansion
             // Note: this allows for nested expansion
             int next = getNextChar(true);
@@ -176,7 +190,7 @@ public class MacroReader extends Reader {
                 StringBuilder buf = new StringBuilder();
                 int ch;
                 while ((ch = getNextChar(true)) != -1 && ch != '}') {
-                    buf.append((char)ch);
+                    buf.append((char) ch);
                 }
                 String expansion = variableMap.get(buf.toString());
                 if (expansion == null) {
@@ -185,13 +199,11 @@ public class MacroReader extends Reader {
                     queue(buf.toString());
                     queue(ch);
                     ret = getNextChar(false);
-                }
-                else {
+                } else {
                     queue(expansion);
                     ret = getNextChar(true);
                 }
-            }
-            else {
+            } else {
                 queue(next);
             }
         }
@@ -199,7 +211,7 @@ public class MacroReader extends Reader {
     }
 
     @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
+    public int read(final char[] cbuf, final int off, final int len) throws IOException {
         int read = -1;
         for (int i = 0; i < len; i++) {
             int ch = getNextChar(true);
@@ -207,7 +219,7 @@ public class MacroReader extends Reader {
                 break;
             }
             read = i;
-            cbuf[off + i] = (char)ch;
+            cbuf[off + i] = (char) ch;
         }
         return (read == -1) ? read : read + 1;
     }
