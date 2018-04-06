@@ -37,8 +37,8 @@ public class Transitions extends Window implements Bindable {
 
     private CollapseTransition collapseTransition = null;
 
-    public static int TRANSITION_DURATION = 250;
-    public static int TRANSITION_RATE = 30;
+    public static final int TRANSITION_DURATION = 250;
+    public static final int TRANSITION_RATE = 30;
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {

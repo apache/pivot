@@ -24,7 +24,7 @@ import org.apache.pivot.wtk.Label;
  * Formats an int as a volume value (including separator characters).
  */
 public class VolumeMapping implements Label.TextBindMapping {
-    private static DecimalFormat FORMAT = new DecimalFormat();
+    private static final DecimalFormat FORMAT = new DecimalFormat();
 
     @Override
     public String toString(Object value) {

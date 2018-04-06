@@ -70,12 +70,12 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     private boolean showBorder = false;
     private float borderThickness = 1.0f;
 
-    private static final RenderingHints renderingHints = new RenderingHints(null);
+    private static final RenderingHints RENDERING_HINTS = new RenderingHints(null);
 
     static {
-        renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        renderingHints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-        renderingHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        RENDERING_HINTS.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        RENDERING_HINTS.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+        RENDERING_HINTS.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
     };
 
     public TerraGaugeSkin() {
@@ -176,7 +176,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             graphics.fillRect(0, 0, size.width, size.height);
         }
 
-        graphics.setRenderingHints(renderingHints);
+        graphics.setRenderingHints(RENDERING_HINTS);
         graphics.setStroke(new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
 
         // Note: presume that critical > warning if both are set

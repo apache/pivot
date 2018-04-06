@@ -346,7 +346,7 @@ public class TerraSliderSkin extends SliderSkin {
         }
     }
 
-    private static final BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
+    private static final BasicStroke DASH_STROKE = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
         BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
 
     @Override
@@ -390,7 +390,7 @@ public class TerraSliderSkin extends SliderSkin {
         }
 
         if (thumb.isFocused()) {
-            graphics.setStroke(dashStroke);
+            graphics.setStroke(DASH_STROKE);
             graphics.setColor(buttonBorderColor);
 
             graphics.drawRect(0, 0, width - 1, height - 1);

@@ -123,7 +123,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
 
     private Paint backgroundPaint = null;
 
-    private static FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
+    private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
 
     @Override
     public void install(Component component) {

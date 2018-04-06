@@ -29,22 +29,22 @@ import org.apache.pivot.util.Time;
 
 
 public class CalendarDateTest {
-    private static final String d1 = "1941-12-07";
-    private static final String d2 = "1929-10-29";
-    private static final String d3 = "2008-09-29";
+    private static final String D1 = "1941-12-07";
+    private static final String D2 = "1929-10-29";
+    private static final String D3 = "2008-09-29";
 
     @Test
     public void test1() {
-        CalendarDate.Range r1 = new CalendarDate.Range(d1);
-        CalendarDate.Range r1a = new CalendarDate.Range(d1, d1);
-        CalendarDate.Range r2 = new CalendarDate.Range(d2, d3);
+        CalendarDate.Range r1 = new CalendarDate.Range(D1);
+        CalendarDate.Range r1a = new CalendarDate.Range(D1, D1);
+        CalendarDate.Range r2 = new CalendarDate.Range(D2, D3);
         CalendarDate.Range r3 = CalendarDate.Range.decode("{ \"start\" : \"1929-10-29\", \"end\" : \"2008-09-29\"}");
         CalendarDate.Range r3a = CalendarDate.Range.decode("[ \"1929-10-29\", \"2008-09-29\" ]");
         CalendarDate.Range r3b = CalendarDate.Range.decode("1929-10-29, 2008-09-29");
 
-        CalendarDate cd1 = CalendarDate.decode(d1);
-        CalendarDate cd2 = CalendarDate.decode(d2);
-        CalendarDate cd3 = CalendarDate.decode(d3);
+        CalendarDate cd1 = CalendarDate.decode(D1);
+        CalendarDate cd2 = CalendarDate.decode(D2);
+        CalendarDate cd3 = CalendarDate.decode(D3);
 
         assertTrue(r2.contains(r1));
         assertEquals(r1, r1a);
@@ -59,7 +59,7 @@ public class CalendarDateTest {
         assertEquals(cd1.year, 1941);
         assertEquals(cd1.month, 11);
         assertEquals(cd1.day, 6);
-        assertEquals(cd1.toString(), d1);
+        assertEquals(cd1.toString(), D1);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class CalendarDateTest {
         // PIVOT-1010: test interaction with LocalDate, etc. (new Java 8 classes)
         LocalDate ld1 = LocalDate.of(1941, 12, 7);
         CalendarDate cd1 = new CalendarDate(ld1);
-        CalendarDate cd1a = CalendarDate.decode(d1);
+        CalendarDate cd1a = CalendarDate.decode(D1);
         LocalDate ld1a = cd1a.toLocalDate();
 
         assertEquals(cd1, cd1a);

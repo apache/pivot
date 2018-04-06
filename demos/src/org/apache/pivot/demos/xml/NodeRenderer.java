@@ -30,7 +30,7 @@ import org.apache.pivot.xml.TextNode;
  * Custom tree view node renderer for presenting XML nodes.
  */
 public class NodeRenderer extends Label implements TreeView.NodeRenderer {
-    public static int MAXIMUM_TEXT_LENGTH = 20;
+    public static final int MAXIMUM_TEXT_LENGTH = 20;
 
     @Override
     public void setSize(int width, int height) {

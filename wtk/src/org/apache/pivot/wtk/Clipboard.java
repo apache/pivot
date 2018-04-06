@@ -30,10 +30,10 @@ public final class Clipboard {
     private static LocalManifest content = null;
     private static ClipboardContentListener clipboardContentListener = null;
 
-    private static final ClipboardOwner clipboardOwner = new ClipboardOwner() {
+    private static final ClipboardOwner CLIPBOARD_OWNER = new ClipboardOwner() {
         @Override
-        public void lostOwnership(java.awt.datatransfer.Clipboard clipboard,
-            Transferable contents) {
+        public void lostOwnership(final java.awt.datatransfer.Clipboard clipboard,
+            final Transferable contents) {
             LocalManifest previousContent = Clipboard.content;
             Clipboard.content = null;
 
@@ -42,6 +42,10 @@ public final class Clipboard {
             }
         }
     };
+
+    /** This is a utility class which should never be instantiated. */
+    private Clipboard() {
+    }
 
     /**
      * Retrieves the contents of the clipboard.
@@ -53,7 +57,8 @@ public final class Clipboard {
 
         if (currentContent == null) {
             try {
-                java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                java.awt.datatransfer.Clipboard awtClipboard =
+                        Toolkit.getDefaultToolkit().getSystemClipboard();
                 currentContent = new RemoteManifest(awtClipboard.getContents(null));
             } catch (SecurityException exception) {
                 // No-op
@@ -66,34 +71,34 @@ public final class Clipboard {
     /**
      * Places content on the clipboard.
      *
-     * @param content The new content manifest to place on the clipboard.
+     * @param newContent The new content manifest to place on the clipboard.
      */
-    public static void setContent(LocalManifest content) {
-        setContent(content, null);
+    public static void setContent(final LocalManifest newContent) {
+        setContent(newContent, null);
     }
 
     /**
      * Places content on the clipboard.
      *
-     * @param content The new content manifest for the clipboard.
-     * @param clipboardContentListener A listener for changes in the content
+     * @param newContent The new content manifest for the clipboard.
+     * @param contentListener A listener for changes in the content
      * (which can be {@code null}).
      * @throws IllegalArgumentException if the content is {@code null}.
      */
-    public static void setContent(LocalManifest content,
-        ClipboardContentListener clipboardContentListener) {
-        Utils.checkNull(content, "content");
+    public static void setContent(final LocalManifest newContent,
+        final ClipboardContentListener contentListener) {
+        Utils.checkNull(newContent, "content");
 
         try {
             java.awt.datatransfer.Clipboard awtClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
-            LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(content);
-            awtClipboard.setContents(localManifestAdapter, clipboardOwner);
+            LocalManifestAdapter localManifestAdapter = new LocalManifestAdapter(newContent);
+            awtClipboard.setContents(localManifestAdapter, CLIPBOARD_OWNER);
         } catch (SecurityException exception) {
             // No-op
         }
 
-        Clipboard.content = content;
-        Clipboard.clipboardContentListener = clipboardContentListener;
+        Clipboard.content = newContent;
+        Clipboard.clipboardContentListener = contentListener;
     }
 }

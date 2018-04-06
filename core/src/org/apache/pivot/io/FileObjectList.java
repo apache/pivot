@@ -42,7 +42,7 @@ public class FileObjectList extends ListAdapter<FileObject> {
         }
     }
 
-    private static final FilePathComparator filePathComparator = new FilePathComparator();
+    private static final FilePathComparator FILE_PATH_COMPARATOR = new FilePathComparator();
 
     public FileObjectList() {
         this(new java.util.ArrayList<FileObject>());
@@ -51,7 +51,7 @@ public class FileObjectList extends ListAdapter<FileObject> {
     public FileObjectList(java.util.List<FileObject> files) {
         super(files);
 
-        super.setComparator(filePathComparator);
+        super.setComparator(FILE_PATH_COMPARATOR);
     }
 
     @Override

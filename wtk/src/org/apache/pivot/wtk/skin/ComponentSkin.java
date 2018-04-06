@@ -277,7 +277,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
         boolean consumed = false;
 
         EnumSet<Keyboard.Modifier> otherModifiers = EnumSet.noneOf(Keyboard.Modifier.class);
-        otherModifiers.addAll(Keyboard.Modifier.allModifiers);
+        otherModifiers.addAll(Keyboard.Modifier.ALL_MODIFIERS);
         otherModifiers.remove(Keyboard.Modifier.SHIFT);
 
         if (keyCode == Keyboard.KeyCode.TAB &&

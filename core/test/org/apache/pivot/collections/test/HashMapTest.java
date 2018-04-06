@@ -155,7 +155,7 @@ public class HashMapTest {
         }
     }
 
-    private static int LOAD_COUNT = 50000;
+    private static final int LOAD_COUNT = 50000;
 
     @Test
     public void pivotHashMapSpeedTest() {

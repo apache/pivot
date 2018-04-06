@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Frame;
 public class HyperlinkButtonTest2 implements Application {
     private Frame frame = null;
 
-    private static final String bxmlFile =
+    private static final String BXML_FILE =
         "<Frame title=\"Hyperlink Button Test 2\"" +
         " xmlns:bxml=\"http://pivot.apache.org/bxml\"" +
         " xmlns:content=\"org.apache.pivot.wtk.content\"" +
@@ -44,7 +44,7 @@ public class HyperlinkButtonTest2 implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer serializer = new BXMLSerializer();
-        frame = (Frame)serializer.readObject(new ByteArrayInputStream(bxmlFile.getBytes()));
+        frame = (Frame)serializer.readObject(new ByteArrayInputStream(BXML_FILE.getBytes()));
 
         frame.open(display);
     }

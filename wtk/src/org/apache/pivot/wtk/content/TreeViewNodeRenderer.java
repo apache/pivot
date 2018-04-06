@@ -41,7 +41,7 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
 
     public static final int DEFAULT_ICON_WIDTH = 16;
     public static final int DEFAULT_ICON_HEIGHT = 16;
-    public static boolean DEFAULT_SHOW_ICON = true;
+    public static final boolean DEFAULT_SHOW_ICON = true;
 
     public TreeViewNodeRenderer() {
         super();

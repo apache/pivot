@@ -28,12 +28,12 @@ import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
 import org.junit.Test;
 
-public class ByteArraySerializerTest {
-    public static final String testString = "// \n" + "// Hello from "
+public final class ByteArraySerializerTest {
+    public static final String TEST_STRING = "// \n" + "// Hello from "
         + ByteArraySerializerTest.class.getName() + "\n" + "// \n";
-    public static final byte[] testBytes = testString.getBytes();
+    public static final byte[] TEST_BYTES = TEST_STRING.getBytes();
 
-    public void log(String msg) {
+    public void log(final String msg) {
         System.out.println(msg);
     }
 
@@ -43,7 +43,7 @@ public class ByteArraySerializerTest {
 
         Serializer<byte[]> serializer = new ByteArraySerializer();
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(testBytes);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(TEST_BYTES);
         byte[] result = serializer.readObject(inputStream);
         assertNotNull(result);
 
@@ -62,7 +62,7 @@ public class ByteArraySerializerTest {
         Serializer<byte[]> serializer = new ByteArraySerializer();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        serializer.writeObject(testBytes, outputStream);
+        serializer.writeObject(TEST_BYTES, outputStream);
 
         outputStream.flush();
         outputStream.close();

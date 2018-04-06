@@ -40,7 +40,7 @@ public class ListViewItemRenderer extends BoxPane implements ListView.ItemRender
 
     public static final int DEFAULT_ICON_WIDTH = 16;
     public static final int DEFAULT_ICON_HEIGHT = 16;
-    public static boolean DEFAULT_SHOW_ICON = false;
+    public static final boolean DEFAULT_SHOW_ICON = false;
 
     public ListViewItemRenderer() {
         getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);

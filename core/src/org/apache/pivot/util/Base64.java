@@ -21,48 +21,48 @@ package org.apache.pivot.util;
  * href="http://tools.ietf.org/html/rfc2045">RFC 2045</a>.
  */
 public final class Base64 {
-    private static final char[] lookup = new char[64];
-    private static final byte[] reverseLookup = new byte[256];
+    private static final char[] LOOKUP = new char[64];
+    private static final byte[] REVERSE_LOOKUP = new byte[256];
 
     static {
         // Populate the lookup array
 
         for (int i = 0; i < 26; i++) {
-            lookup[i] = (char) ('A' + i);
+            LOOKUP[i] = (char) ('A' + i);
         }
 
         for (int i = 26, j = 0; i < 52; i++, j++) {
-            lookup[i] = (char) ('a' + j);
+            LOOKUP[i] = (char) ('a' + j);
         }
 
         for (int i = 52, j = 0; i < 62; i++, j++) {
-            lookup[i] = (char) ('0' + j);
+            LOOKUP[i] = (char) ('0' + j);
         }
 
-        lookup[62] = '+';
-        lookup[63] = '/';
+        LOOKUP[62] = '+';
+        LOOKUP[63] = '/';
 
         // Populate the reverse lookup array
 
         for (int i = 0; i < 256; i++) {
-            reverseLookup[i] = -1;
+            REVERSE_LOOKUP[i] = -1;
         }
 
         for (int i = 'Z'; i >= 'A'; i--) {
-            reverseLookup[i] = (byte) (i - 'A');
+            REVERSE_LOOKUP[i] = (byte) (i - 'A');
         }
 
         for (int i = 'z'; i >= 'a'; i--) {
-            reverseLookup[i] = (byte) (i - 'a' + 26);
+            REVERSE_LOOKUP[i] = (byte) (i - 'a' + 26);
         }
 
         for (int i = '9'; i >= '0'; i--) {
-            reverseLookup[i] = (byte) (i - '0' + 52);
+            REVERSE_LOOKUP[i] = (byte) (i - '0' + 52);
         }
 
-        reverseLookup['+'] = 62;
-        reverseLookup['/'] = 63;
-        reverseLookup['='] = 0;
+        REVERSE_LOOKUP['+'] = 62;
+        REVERSE_LOOKUP['/'] = 63;
+        REVERSE_LOOKUP['='] = 0;
     }
 
     /**
@@ -77,7 +77,7 @@ public final class Base64 {
      * @param bytes The unencoded raw data.
      * @return The base64 encoded string.
      */
-    public static String encode(byte[] bytes) {
+    public static String encode(final byte[] bytes) {
         StringBuilder buf = new StringBuilder(4 * (bytes.length / 3 + 1));
 
         for (int i = 0, n = bytes.length; i < n;) {
@@ -85,10 +85,10 @@ public final class Base64 {
             byte byte1 = (i++ < n) ? bytes[i - 1] : 0;
             byte byte2 = (i++ < n) ? bytes[i - 1] : 0;
 
-            buf.append(lookup[byte0 >> 2]);
-            buf.append(lookup[((byte0 << 4) | byte1 >> 4) & 63]);
-            buf.append(lookup[((byte1 << 2) | byte2 >> 6) & 63]);
-            buf.append(lookup[byte2 & 63]);
+            buf.append(LOOKUP[byte0 >> 2]);
+            buf.append(LOOKUP[((byte0 << 4) | byte1 >> 4) & 63]);
+            buf.append(LOOKUP[((byte1 << 2) | byte2 >> 6) & 63]);
+            buf.append(LOOKUP[byte2 & 63]);
 
             if (i > n) {
                 for (int m = buf.length(), j = m - (i - n); j < m; j++) {
@@ -106,7 +106,7 @@ public final class Base64 {
      * @param encoded The base64 encoded string.
      * @return The decoded data bytes.
      */
-    public static byte[] decode(String encoded) {
+    public static byte[] decode(final String encoded) {
         int padding = 0;
 
         for (int i = encoded.length() - 1; encoded.charAt(i) == '='; i--) {
@@ -117,10 +117,10 @@ public final class Base64 {
         byte[] bytes = new byte[length];
 
         for (int i = 0, index = 0, n = encoded.length(); i < n; i += 4) {
-            int word = reverseLookup[encoded.charAt(i)] << 18;
-            word += reverseLookup[encoded.charAt(i + 1)] << 12;
-            word += reverseLookup[encoded.charAt(i + 2)] << 6;
-            word += reverseLookup[encoded.charAt(i + 3)];
+            int word = REVERSE_LOOKUP[encoded.charAt(i)] << 18;
+            word += REVERSE_LOOKUP[encoded.charAt(i + 1)] << 12;
+            word += REVERSE_LOOKUP[encoded.charAt(i + 2)] << 6;
+            word += REVERSE_LOOKUP[encoded.charAt(i + 3)];
 
             for (int j = 0; j < 3 && index + j < length; j++) {
                 bytes[index + j] = (byte) (word >> (8 * (2 - j)));
