@@ -63,6 +63,8 @@ public class BindTest {
     private static final String A_B_C = "{a:1, b:2, c:'3'}";
     private static final String FOO_A_B_C = "{foo: {a:1, b:2, c:'3'}}";
 
+    private static final double NANOS_PER_SEC = 1_000_000_000.0d;
+
     /**
      * Tests returning an untyped list.
      *
@@ -271,8 +273,10 @@ public class BindTest {
 
         long withMacrosTime = (end1 - start1);
         long withoutMacrosTime = (end2 - start2);
+        double withMacrosSecs = (double) withMacrosTime / NANOS_PER_SEC;
+        double withoutMacrosSecs = (double) withoutMacrosTime / NANOS_PER_SEC;
         // Just report the times, there is no right answer here
-        System.out.format("Time with macro overhead = %1$,d nsecs; time without macros = %2$,d nsecs%n",
-            withMacrosTime, withoutMacrosTime);
+        System.out.format("Time with macro overhead = %1$.6f secs; time without macros = %2$.6f secs%n",
+            withMacrosSecs, withoutMacrosSecs);
     }
 }
