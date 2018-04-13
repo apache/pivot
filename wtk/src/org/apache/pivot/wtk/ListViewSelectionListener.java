@@ -99,7 +99,10 @@ public interface ListViewSelectionListener {
     }
 
     /**
-     * Called when a list view's selection state has changed.
+     * Called when a list view's selection state has changed. Called in any select mode, and
+     * will be called BEFORE the {@link #selectedItemChanged} callback if the ListView is in
+     * single-select mode.  But, will be called AFTER either {@link #selectedRangeAdded} or
+     * {@link #selectedRangeRemoved} if appropriate.
      *
      * @param listView The source of the event.
      * @param previousSelectedRanges If the selection changed directly, contains
@@ -111,7 +114,7 @@ public interface ListViewSelectionListener {
     }
 
     /**
-     * Called when a list view's selected item has changed.
+     * Called when a list view's selected item has changed. Only called in single-select mode.
      *
      * @param listView The source of the event.
      * @param previousSelectedItem The item that was previously selected.
