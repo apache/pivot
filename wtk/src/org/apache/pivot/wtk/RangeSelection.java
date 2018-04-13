@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.wtk;
 
-import java.util.Comparator;
-
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.immutable.ImmutableList;
@@ -28,30 +26,6 @@ import org.apache.pivot.collections.immutable.ImmutableList;
 public class RangeSelection {
     // The coalesced selected ranges
     private ArrayList<Span> selectedRanges = new ArrayList<>();
-
-    // Comparator that determines the index of the first intersecting range.
-    private static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
-        @Override
-        public int compare(Span range1, Span range2) {
-            return (range1.end - range2.start);
-        }
-    };
-
-    // Comparator that determines the index of the last intersecting range.
-    private static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
-        @Override
-        public int compare(Span range1, Span range2) {
-            return (range1.start - range2.end);
-        }
-    };
-
-    // Comparator that determines if two ranges intersect.
-    private static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
-        @Override
-        public int compare(Span range1, Span range2) {
-            return (range1.start > range2.end) ? 1 : (range2.start > range1.end) ? -1 : 0;
-        }
-    };
 
     /**
      * Adds a range to the selection, merging and removing intersecting ranges
@@ -64,7 +38,7 @@ public class RangeSelection {
     public Sequence<Span> addRange(int start, int end) {
         ArrayList<Span> addedRanges = new ArrayList<>();
 
-        Span range = normalize(start, end);
+        Span range = Span.normalize(start, end);
         assert (range.start >= 0);
 
         int n = selectedRanges.getLength();
@@ -76,7 +50,7 @@ public class RangeSelection {
             addedRanges.add(range);
         } else {
             // Locate the lower bound of the intersection
-            int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
+            int i = ArrayList.binarySearch(selectedRanges, range, Span.START_COMPARATOR);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -96,7 +70,7 @@ public class RangeSelection {
                 addedRanges.add(range);
             } else {
                 // Locate the upper bound of the intersection
-                int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
+                int j = ArrayList.binarySearch(selectedRanges, range, Span.END_COMPARATOR);
                 if (j < 0) {
                     j = -(j + 1);
                 } else {
@@ -120,8 +94,8 @@ public class RangeSelection {
                     Span lowerRange = selectedRanges.get(i);
                     Span upperRange = selectedRanges.get(j - 1);
 
-                    range = new Span(Math.min(range.start, lowerRange.start), Math.max(range.end,
-                        upperRange.end));
+                    range = new Span(Math.min(range.start, lowerRange.start),
+                                     Math.max(range.end, upperRange.end));
 
                     // Add the gaps to the added list
                     if (range.start < lowerRange.start) {
@@ -162,14 +136,14 @@ public class RangeSelection {
     public Sequence<Span> removeRange(int start, int end) {
         ArrayList<Span> removedRanges = new ArrayList<>();
 
-        Span range = normalize(start, end);
+        Span range = Span.normalize(start, end);
         assert (range.start >= 0);
 
         int n = selectedRanges.getLength();
 
         if (n > 0) {
             // Locate the lower bound of the intersection
-            int i = ArrayList.binarySearch(selectedRanges, range, START_COMPARATOR);
+            int i = ArrayList.binarySearch(selectedRanges, range, Span.START_COMPARATOR);
             if (i < 0) {
                 i = -(i + 1);
             }
@@ -193,7 +167,7 @@ public class RangeSelection {
                     }
 
                     // Locate the upper bound of the intersection
-                    int j = ArrayList.binarySearch(selectedRanges, range, END_COMPARATOR);
+                    int j = ArrayList.binarySearch(selectedRanges, range, Span.END_COMPARATOR);
                     if (j < 0) {
                         j = -(j + 1);
                     } else {
@@ -275,7 +249,7 @@ public class RangeSelection {
         assert (range != null);
 
         int index = -1;
-        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
+        int i = ArrayList.binarySearch(selectedRanges, range, Span.INTERSECTION_COMPARATOR);
 
         if (i >= 0) {
             index = (range.equals(selectedRanges.get(i))) ? i : -1;
@@ -292,7 +266,7 @@ public class RangeSelection {
      */
     public boolean containsIndex(int index) {
         Span range = new Span(index);
-        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
+        int i = ArrayList.binarySearch(selectedRanges, range, Span.INTERSECTION_COMPARATOR);
 
         return (i >= 0);
     }
@@ -310,7 +284,7 @@ public class RangeSelection {
         // Get the insertion point for the range corresponding to the given
         // index
         Span range = new Span(index);
-        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
+        int i = ArrayList.binarySearch(selectedRanges, range, Span.INTERSECTION_COMPARATOR);
 
         if (i < 0) {
             // The inserted index does not intersect with a selected range
@@ -322,7 +296,7 @@ public class RangeSelection {
             // If the inserted index falls within the current range, increment
             // the endpoint only
             if (selectedRange.start < index) {
-                selectedRanges.update(i, new Span(selectedRange.start, selectedRange.end + 1));
+                selectedRanges.update(i, selectedRange.lengthen(1));
 
                 // Start incrementing range bounds beginning at the next range
                 i++;
@@ -333,7 +307,7 @@ public class RangeSelection {
         int n = selectedRanges.getLength();
         while (i < n) {
             Span selectedRange = selectedRanges.get(i);
-            selectedRanges.update(i, new Span(selectedRange.start + 1, selectedRange.end + 1));
+            selectedRanges.update(i, selectedRange.offset(1));
             updated++;
             i++;
         }
@@ -356,7 +330,7 @@ public class RangeSelection {
 
         // Decrement any subsequent selection indexes
         Span range = new Span(index);
-        int i = ArrayList.binarySearch(selectedRanges, range, INTERSECTION_COMPARATOR);
+        int i = ArrayList.binarySearch(selectedRanges, range, Span.INTERSECTION_COMPARATOR);
         assert (i < 0) : "i should be negative, since index should no longer be selected";
 
         i = -(i + 1);
@@ -365,8 +339,7 @@ public class RangeSelection {
         int n = selectedRanges.getLength();
         while (i < n) {
             Span selectedRange = selectedRanges.get(i);
-            selectedRanges.update(i, new Span(selectedRange.start - count, selectedRange.end
-                - count));
+            selectedRanges.update(i, selectedRange.offset(-count));
             updated++;
             i++;
         }
@@ -374,14 +347,4 @@ public class RangeSelection {
         return updated;
     }
 
-    /**
-     * Ensures that the start value is less than or equal to the end value.
-     *
-     * @param start The new proposed start value.
-     * @param end The new proposed end.
-     * @return A span containing the normalized range.
-     */
-    public static Span normalize(int start, int end) {
-        return new Span(Math.min(start, end), Math.max(start, end));
-    }
 }

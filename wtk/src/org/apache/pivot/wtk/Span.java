@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk;
 
+import java.util.Comparator;
+
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
@@ -272,11 +274,22 @@ public final class Span {
     }
 
     /**
+     * Create a span where the start value is less than or equal to the end value.
+     *
+     * @param start The new proposed start value.
+     * @param end The new proposed end.
+     * @return A span containing the normalized range.
+     */
+    public static Span normalize(int start, int end) {
+        return new Span(Math.min(start, end), Math.max(start, end));
+    }
+
+    /**
      * @return A normalized equivalent of the span in which <tt>start</tt> is
      * guaranteed to be less than <tt>end</tt>.
      */
     public Span normalize() {
-        return new Span(normalStart(), normalEnd());
+        return normalize(start, end);
     }
 
     /**
@@ -291,6 +304,28 @@ public final class Span {
      */
     public Span offset(int offset) {
         return new Span(this.start + offset, this.end + offset);
+    }
+
+    /**
+     * Returns a new {@link Span} with the end value offset by the given value.
+     *
+     * @param offset The positive or negative amount by which to "lengthen" this
+     * span (only the end).
+     * @return A new {@link Span} with updated value.
+     */
+    public Span lengthen(int offset) {
+        return new Span(this.start, this.end + offset);
+    }
+
+    /**
+     * Returns a new {@link Span} with the start value offset by the given value.
+     *
+     * @param offset The positive or negative amount by which to "shift" this
+     * span (only the start).
+     * @return A new {@link Span} with updated value.
+     */
+    public Span move(int offset) {
+        return new Span(this.start + offset, this.end);
     }
 
     /**
@@ -384,4 +419,30 @@ public final class Span {
 
         return span;
     }
+
+    /** Comparator that determines the index of the first intersecting range. */
+    public static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
+        @Override
+        public int compare(Span range1, Span range2) {
+            return (range1.end - range2.start);
+        }
+    };
+
+    /** Comparator that determines the index of the last intersecting range. */
+    public static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
+        @Override
+        public int compare(Span range1, Span range2) {
+            return (range1.start - range2.end);
+        }
+    };
+
+    /** Comparator that determines if two ranges intersect. */
+    public static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
+        @Override
+        public int compare(Span range1, Span range2) {
+            return (range1.start > range2.end) ? 1 : (range2.start > range1.end) ? -1 : 0;
+        }
+    };
+
+
 }
