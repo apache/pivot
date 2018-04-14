@@ -72,18 +72,18 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
             Image icon = null;
             String text = null;
 
-            if (node instanceof TreeNode) {
-                TreeNode treeNode = (TreeNode) node;
+            if (node instanceof BaseContent) {
+                BaseContent baseNode = (BaseContent) node;
 
-                if (expanded && treeNode instanceof TreeBranch) {
-                    TreeBranch treeBranch = (TreeBranch) treeNode;
+                if (expanded && baseNode instanceof TreeBranch) {
+                    TreeBranch treeBranch = (TreeBranch) baseNode;
                     icon = treeBranch.getExpandedIcon();
 
                     if (icon == null) {
                         icon = treeBranch.getIcon();
                     }
                 } else {
-                    icon = treeNode.getIcon();
+                    icon = baseNode.getIcon();
                 }
             } else if (node instanceof Image) {
                 icon = (Image) node;
@@ -129,9 +129,9 @@ public class TreeViewNodeRenderer extends BoxPane implements TreeView.NodeRender
     public String toString(Object node) {
         String string = null;
 
-        if (node instanceof TreeNode) {
-            TreeNode treeNode = (TreeNode) node;
-            string = treeNode.getText();
+        if (node instanceof BaseContent) {
+            BaseContent baseNode = (BaseContent) node;
+            string = baseNode.getText();
         } else if (!(node instanceof Image)) {
             if (node != null) {
                 string = node.toString();
