@@ -938,13 +938,14 @@ org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectio
         if (button == Mouse.Button.LEFT) {
             int index = getInsertionPoint(x, y);
             if (index != -1) {
+                int rowStart = getRowOffset(document, index);
                 if (count == 2) {
-                    CharSpan charSpan = CharUtils.selectWord(getRowCharacters(document, index), index);
+                    CharSpan charSpan = CharUtils.selectWord(getRowCharacters(document, index), index - rowStart);
                     if (charSpan != null) {
-                        textPane.setSelection(charSpan);
+                        textPane.setSelection(charSpan.offset(rowStart));
                     }
                 } else if (count == 3) {
-                    textPane.setSelection(getRowOffset(document, index), getRowLength(document, index));
+                    textPane.setSelection(rowStart, getRowLength(document, index));
                 }
             }
         }
