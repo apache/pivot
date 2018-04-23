@@ -130,21 +130,32 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 if (startupPropertiesParameter != null) {
                     String[] arguments = startupPropertiesParameter.split("&");
 
-                    for (int i = 0, n = arguments.length; i < n; i++) {
-                        String argument = arguments[i];
-                        String[] property = argument.split("=");
+                    for (String argument : arguments) {
+                        String[] property = argument.split("=", -1);
 
-                        if (property.length == 2) {
-                            String key = property[0].trim();
-                            String value;
-                            try {
-                                value = URLDecoder.decode(property[1].trim(), "UTF-8");
-                            } catch (UnsupportedEncodingException exception) {
-                                throw new RuntimeException(exception);
-                            }
-                            HostApplet.this.startupProperties.put(key, value);
-                        } else {
+                        String key = property[0].trim();
+                        if (key.isEmpty()) {
                             System.err.println(argument + " is not a valid startup property.");
+                        } else {
+                            if (property.length == 2) {
+                                String propertyValue = property[1].trim();
+                                if (propertyValue.isEmpty()) {
+                                    System.err.println(argument + " is not a valid startup property.");
+                                } else {
+                                    String value;
+                                    try {
+                                        value = URLDecoder.decode(propertyValue, "UTF-8");
+                                    } catch (UnsupportedEncodingException exception) {
+                                        throw new RuntimeException(exception);
+                                    }
+                                    HostApplet.this.startupProperties.put(key, value);
+                                }
+                            } else if (property.length == 1) {
+                                // Options of the form "--option" have a value of TRUE
+                                HostApplet.this.startupProperties.put(key, Boolean.TRUE.toString());
+                            } else {
+                                System.err.println(argument + " is not a valid startup property.");
+                            }
                         }
                     }
                 }

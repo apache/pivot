@@ -389,7 +389,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
     public static final String USE_APPLICATION_INSTANCE_ARGUMENT = "useApplicationInstance";
 
     private static final String INVALID_PROPERTY_FORMAT_MESSAGE = "\"%s\" is not a valid startup "
-        + "property (expected format is \"--name=value\").";
+        + "property (expected format is \"--name[=value]\").";
     private static final String INVALID_PROPERTY_VALUE_MESSAGE = "\"%s\" is not a valid value for "
         + "startup property \"%s\".";
 
@@ -513,62 +513,68 @@ public final class DesktopApplicationContext extends ApplicationContext {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
 
-        for (int i = 1, n = args.length; i < n; i++) {
+        for (int i = 1; i < args.length; i++) {
             String arg = args[i];
 
             if (arg.startsWith("--")) {
                 arg = arg.substring(2);
-                String[] property = arg.split("=");
+                String[] property = arg.split("=", -1);
 
+                String key = property[0];
                 if (property.length == 2) {
-                    String key = property[0];
                     String value = property[1];
-
-                    try {
-                        switch (key) {
-                            case X_ARGUMENT:
-                                x = Integer.parseInt(value);
-                                break;
-                            case Y_ARGUMENT:
-                                y = Integer.parseInt(value);
-                                break;
-                            case WIDTH_ARGUMENT:
-                                width = Integer.parseInt(value);
-                                break;
-                            case HEIGHT_ARGUMENT:
-                                height = Integer.parseInt(value);
-                                break;
-                            case CENTER_ARGUMENT:
-                                center = StringUtils.toBoolean(value);
-                                break;
-                            case RESIZABLE_ARGUMENT:
-                                resizable = StringUtils.toBoolean(value);
-                                break;
-                            case MAXIMIZED_ARGUMENT:
-                                maximized = StringUtils.toBoolean(value);
-                                break;
-                            case UNDECORATED_ARGUMENT:
-                                undecorated = StringUtils.toBoolean(value);
-                                break;
-                            case FULL_SCREEN_ARGUMENT:
-                                fullScreen = StringUtils.toBoolean(value);
-                                break;
-                            case PRESERVE_SPLASH_SCREEN_ARGUMENT:
-                                preserveSplashScreen = StringUtils.toBoolean(value);
-                                break;
-                            case ORIGIN_ARGUMENT:
-                                origin = new URL(value);
-                                break;
-                            case USE_APPLICATION_INSTANCE_ARGUMENT:
-                                useApplicationInstance = StringUtils.toBoolean(value);
-                                break;
-                            default:
-                                properties.put(key, value);
-                                break;
+                    if (value.isEmpty()) {
+                        System.err.println(String.format(INVALID_PROPERTY_FORMAT_MESSAGE, arg));
+                    } else {
+                        try {
+                            switch (key) {
+                                case X_ARGUMENT:
+                                    x = Integer.parseInt(value);
+                                    break;
+                                case Y_ARGUMENT:
+                                    y = Integer.parseInt(value);
+                                    break;
+                                case WIDTH_ARGUMENT:
+                                    width = Integer.parseInt(value);
+                                    break;
+                                case HEIGHT_ARGUMENT:
+                                    height = Integer.parseInt(value);
+                                    break;
+                                case CENTER_ARGUMENT:
+                                    center = StringUtils.toBoolean(value);
+                                    break;
+                                case RESIZABLE_ARGUMENT:
+                                    resizable = StringUtils.toBoolean(value);
+                                    break;
+                                case MAXIMIZED_ARGUMENT:
+                                    maximized = StringUtils.toBoolean(value);
+                                    break;
+                                case UNDECORATED_ARGUMENT:
+                                    undecorated = StringUtils.toBoolean(value);
+                                    break;
+                                case FULL_SCREEN_ARGUMENT:
+                                    fullScreen = StringUtils.toBoolean(value);
+                                    break;
+                                case PRESERVE_SPLASH_SCREEN_ARGUMENT:
+                                    preserveSplashScreen = StringUtils.toBoolean(value);
+                                    break;
+                                case ORIGIN_ARGUMENT:
+                                    origin = new URL(value);
+                                    break;
+                                case USE_APPLICATION_INSTANCE_ARGUMENT:
+                                    useApplicationInstance = StringUtils.toBoolean(value);
+                                    break;
+                                default:
+                                    properties.put(key, value);
+                                    break;
+                            }
+                        } catch (Exception exception) {
+                            System.err.println(String.format(INVALID_PROPERTY_VALUE_MESSAGE, value, key));
                         }
-                    } catch (Exception exception) {
-                        System.err.println(String.format(INVALID_PROPERTY_VALUE_MESSAGE, value, key));
                     }
+                } else if (property.length == 1) {
+                    // Options of the form "--option" have a value of TRUE
+                    properties.put(key, Boolean.TRUE.toString());
                 } else {
                     System.err.println(String.format(INVALID_PROPERTY_FORMAT_MESSAGE, arg));
                 }
