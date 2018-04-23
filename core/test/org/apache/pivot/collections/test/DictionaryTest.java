@@ -60,8 +60,12 @@ public class DictionaryTest {
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 300);
+
         assertEquals(map.containsAny("a", "b", "one"), true);
         Integer first = map.getFirst("c", "d", "two");
         assertEquals(first.intValue(), 2);
+
+        assertEquals(map.containsAny("a", "b", "c", "d"), false);
+        assertEquals(map.getFirst("e", "f"), null);
     }
 }
