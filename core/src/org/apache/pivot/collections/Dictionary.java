@@ -104,6 +104,43 @@ public interface Dictionary<K, V> {
     boolean containsKey(K key);
 
     /**
+     * Determines if any of the given keys exists in the dictionary.
+     *
+     * @param keys The list of keys to search for in the dictionary.
+     * @return {@code true} if {@link #containsKey} returns true for any
+     * of the given keys, or {@code false} if none of the keys exist.
+     */
+    @SuppressWarnings("unchecked")
+    default boolean containsAny(K... keys) {
+        for (K key : keys) {
+            if (containsKey(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieves the value of the first of the given keys that exists in the
+     * dictionary (that is, the first key for which {@link #containsKey} returns
+     * true).
+     *
+     * @param keys The list of keys to search for in the dictionary.
+     * @return The first value found, or {@code null} if either the value is
+     * null for the first key found, or none of the keys exists in the dictionary.
+     * Use {@link #containsAny} to determine the difference.
+     */
+    @SuppressWarnings("unchecked")
+    default V getFirst(K... keys) {
+        for (K key : keys) {
+            if (containsKey(key)) {
+                return get(key);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Retrieve a String value from this dictionary; returning null if the key
      * does not exist.
      *
