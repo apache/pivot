@@ -54,4 +54,14 @@ public class DictionaryTest {
         assertEquals(map.getColor("black"), Color.BLACK);
     }
 
+    @Test
+    public void anyTest() {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 300);
+        assertEquals(map.containsAny("a", "b", "one"), true);
+        Integer first = map.getFirst("c", "d", "two");
+        assertEquals(first.intValue(), 2);
+    }
 }
