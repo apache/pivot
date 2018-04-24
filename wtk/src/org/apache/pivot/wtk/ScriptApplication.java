@@ -31,6 +31,8 @@ import org.apache.pivot.util.Resources;
  * a {@link Window} (or subclass of it) then the window will be displayed
  * directly.  Otherwise a default {@code Window} will be created and the
  * component made its content.
+ * <p> Note: A {@link Sheet} or {@link Palette} will get owned by the default
+ * window.
  */
 public class ScriptApplication implements Application {
     private Window window = null;
