@@ -62,8 +62,7 @@ public final class CharSpan {
     }
 
     /**
-     * Construct a new char span from another one (a "copy
-     * constructor").
+     * Construct a new char span from another one (a "copy constructor").
      *
      * @param charSpan An existing char span (which must not be {@code null}).
      * @throws IllegalArgumentException if the given char span is {@code null}.
