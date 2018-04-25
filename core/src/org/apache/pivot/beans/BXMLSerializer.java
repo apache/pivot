@@ -30,7 +30,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 
 import javax.script.Bindings;
 import javax.script.Invocable;

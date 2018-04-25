@@ -17,7 +17,6 @@
 package org.apache.pivot.text;
 
 import org.apache.pivot.collections.Dictionary;
-import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;

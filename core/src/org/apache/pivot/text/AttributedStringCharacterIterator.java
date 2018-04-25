@@ -20,7 +20,6 @@ import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.apache.pivot.util.Utils;

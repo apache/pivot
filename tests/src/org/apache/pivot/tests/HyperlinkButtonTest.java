@@ -18,11 +18,9 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
-import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Frame;
-import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.HyperlinkButton;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.text.ComponentNode;

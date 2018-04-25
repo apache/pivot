@@ -20,7 +20,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import org.junit.Test;
 
 import org.apache.pivot.collections.ArrayList;

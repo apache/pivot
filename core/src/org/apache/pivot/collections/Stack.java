@@ -16,8 +16,6 @@
  */
 package org.apache.pivot.collections;
 
-import java.util.Comparator;
-
 import org.apache.pivot.util.ListenerList;
 
 /**
