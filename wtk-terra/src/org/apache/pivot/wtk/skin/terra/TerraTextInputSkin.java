@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.event.InputMethodEvent;
@@ -53,6 +52,7 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
@@ -1109,7 +1109,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
             // TODO: this logic won't work in the presence of composed (but not yet committed) text...
             if (anchor != -1) {
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+                if (Keyboard.isPressed(Modifier.SHIFT)) {
                     // Select the range
                     int selectionStart = textInput.getSelectionStart();
 
@@ -1191,7 +1191,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             // Ignore characters in the control range and the ASCII delete
             // character as well as meta key presses
             if (character > 0x1F && character != 0x7F
-                && !Keyboard.isPressed(Keyboard.Modifier.META)) {
+                && !Keyboard.isPressed(Modifier.META)) {
                 if (deleteSelectionDuringTyping(textInput, 1)) {
                     // NOTE We explicitly call getSelectionStart() a second time
                     // here in case the remove event is vetoed
@@ -1255,7 +1255,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      * @see Platform#getCommandModifier()
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         TextInput textInput = (TextInput) getComponent();
@@ -1264,19 +1264,19 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         int start = textInput.getSelectionStart();
         int length = textInput.getSelectionLength();
 
-        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-        Keyboard.Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
-        boolean isMetaPressed = Keyboard.isPressed(Keyboard.Modifier.META);
-        boolean isShiftPressed = Keyboard.isPressed(Keyboard.Modifier.SHIFT);
+        Modifier commandModifier = Platform.getCommandModifier();
+        Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
+        boolean isMetaPressed = Keyboard.isPressed(Modifier.META);
+        boolean isShiftPressed = Keyboard.isPressed(Modifier.SHIFT);
 
-        if (keyCode == Keyboard.KeyCode.DELETE && isEditable) {
+        if (keyCode == KeyCode.DELETE && isEditable) {
             if (start < textInput.getCharacterCount()) {
                 int count = Math.max(length, 1);
                 textInput.removeText(start, count);
 
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.BACKSPACE && isEditable) {
+        } else if (keyCode == KeyCode.BACKSPACE && isEditable) {
             if (length == 0 && start > 0) {
                 textInput.removeText(start - 1, 1);
                 consumed = true;
@@ -1284,8 +1284,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 textInput.removeText(start, length);
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.HOME
-            || (keyCode == Keyboard.KeyCode.LEFT && isMetaPressed)) {
+        } else if (keyCode == KeyCode.HOME
+            || (keyCode == KeyCode.LEFT && isMetaPressed)) {
             if (isShiftPressed) {
                 // Select from the beginning of the text to the current pivot position
                 if (selectDirection == SelectDirection.LEFT) {
@@ -1303,8 +1303,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             scrollCharacterToVisible(0);
 
             consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.END
-            || (keyCode == Keyboard.KeyCode.RIGHT && isMetaPressed)) {
+        } else if (keyCode == KeyCode.END
+            || (keyCode == KeyCode.RIGHT && isMetaPressed)) {
             int n = textInput.getCharacterCount();
 
             if (isShiftPressed) {
@@ -1323,7 +1323,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             scrollCharacterToVisible(n);
 
             consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.LEFT) {
+        } else if (keyCode == KeyCode.LEFT) {
             // Sometimes while selecting we need to make the opposite end visible
             SelectDirection visiblePosition = SelectDirection.LEFT;
 
@@ -1419,7 +1419,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+        } else if (keyCode == KeyCode.RIGHT) {
             // Sometimes while selecting we need to make the opposite end visible
             SelectDirection visiblePosition = SelectDirection.RIGHT;
 
@@ -1507,10 +1507,10 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 consumed = true;
             }
         } else if (Keyboard.isPressed(commandModifier)) {
-            if (keyCode == Keyboard.KeyCode.A) {
+            if (keyCode == KeyCode.A) {
                 textInput.setSelection(0, textInput.getCharacterCount());
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.X && isEditable) {
+            } else if (keyCode == KeyCode.X && isEditable) {
                 if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
@@ -1518,7 +1518,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.C) {
+            } else if (keyCode == KeyCode.C) {
                 if (textInput.isPassword()) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
@@ -1526,17 +1526,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 }
 
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.V && isEditable) {
+            } else if (keyCode == KeyCode.V && isEditable) {
                 textInput.paste();
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.Z && isEditable) {
+            } else if (keyCode == KeyCode.Z && isEditable) {
                 if (!isShiftPressed) {
                     textInput.undo();
                 }
 
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.INSERT) {
+        } else if (keyCode == KeyCode.INSERT) {
             if (isShiftPressed && isEditable) {
                 textInput.paste();
                 consumed = true;

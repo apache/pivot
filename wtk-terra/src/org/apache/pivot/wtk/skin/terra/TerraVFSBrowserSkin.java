@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.skin.terra;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -64,6 +63,8 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
@@ -943,13 +944,13 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         searchTextInput.getComponentKeyListeners().add(new ComponentKeyListener() {
             @Override
             public boolean keyPressed(Component componentArgument, int keyCode,
-                Keyboard.KeyLocation keyLocation) {
+                KeyLocation keyLocation) {
                 boolean consumed = false;
 
-                if (keyCode == Keyboard.KeyCode.ESCAPE) {
+                if (keyCode == KeyCode.ESCAPE) {
                     searchTextInput.setText("");
                     consumed = true;
-                } else if (keyCode == Keyboard.KeyCode.DOWN) {
+                } else if (keyCode == KeyCode.DOWN) {
                     if (fileTableView.getTableData().getLength() > 0) {
                         fileTableView.setSelectedIndex(0);
                         fileTableView.requestFocus();
@@ -1246,12 +1247,12 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
      * F5} Refresh the file list.
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         VFSBrowser fileBrowser = (VFSBrowser) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.ENTER && keyboardFolderTraversalEnabled) {
+        if (keyCode == KeyCode.ENTER && keyboardFolderTraversalEnabled) {
             Sequence<FileObject> selectedFiles = fileBrowser.getSelectedFiles();
 
             if (selectedFiles.getLength() == 1) {
@@ -1265,7 +1266,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
                     throw new RuntimeException(fse);
                 }
             }
-        } else if (keyCode == Keyboard.KeyCode.DELETE || keyCode == Keyboard.KeyCode.BACKSPACE) {
+        } else if (keyCode == KeyCode.DELETE || keyCode == KeyCode.BACKSPACE) {
             FileObject rootDirectory = fileBrowser.getRootDirectory();
             try {
                 FileObject parentDirectory = rootDirectory.getParent();
@@ -1276,7 +1277,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
             } catch (FileSystemException fse) {
                 throw new RuntimeException(fse);
             }
-        } else if (keyCode == Keyboard.KeyCode.F5) {
+        } else if (keyCode == KeyCode.F5) {
             refreshFileList();
             consumed = true;
         }
@@ -1291,11 +1292,11 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
      * @see Platform#getCommandModifier()
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
-        Keyboard.Modifier commandModifier = Platform.getCommandModifier();
-        if (keyCode == Keyboard.KeyCode.F && Keyboard.isPressed(commandModifier)) {
+        Modifier commandModifier = Platform.getCommandModifier();
+        if (keyCode == KeyCode.F && Keyboard.isPressed(commandModifier)) {
             searchTextInput.requestFocus();
             consumed = true;
         }

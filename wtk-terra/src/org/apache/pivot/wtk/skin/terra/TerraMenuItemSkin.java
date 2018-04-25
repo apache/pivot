@@ -20,10 +20,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Transparency;
 
-import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Cursor;

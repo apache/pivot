@@ -27,8 +27,8 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.Menu.Item;
 import org.apache.pivot.wtk.Menu.Section;
@@ -358,12 +358,12 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
      * it does not have a sub-menu.
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         Menu menu = (Menu) component;
 
-        if (keyCode == Keyboard.KeyCode.UP) {
+        if (keyCode == KeyCode.UP) {
             Menu.SectionSequence sections = menu.getSections();
             int sectionCount = sections.getLength();
 
@@ -409,7 +409,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             }
 
             consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.DOWN) {
+        } else if (keyCode == KeyCode.DOWN) {
             Menu.SectionSequence sections = menu.getSections();
             int sectionCount = sections.getLength();
 
@@ -449,14 +449,14 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
             }
 
             consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.LEFT) {
+        } else if (keyCode == KeyCode.LEFT) {
             // Close the window if this is not a top-level menu
             if (menu.getItem() != null) {
                 Window window = menu.getWindow();
                 window.close();
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+        } else if (keyCode == KeyCode.RIGHT) {
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item has a sub-menu
@@ -464,7 +464,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                 activeItem.press();
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.ENTER) {
+        } else if (keyCode == KeyCode.ENTER) {
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item does not have a sub-menu
@@ -472,7 +472,7 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
                 activeItem.press();
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.TAB) {
+        } else if (keyCode == KeyCode.TAB) {
             consumed = false;
         }
 
@@ -484,12 +484,12 @@ public class TerraMenuSkin extends ContainerSkin implements MenuListener, Menu.S
      * have a sub-menu.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
         Menu menu = (Menu) component;
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             Menu.Item activeItem = menu.getActiveItem();
 
             // Press if the item does not have a sub-menu

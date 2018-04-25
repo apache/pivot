@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
 import org.apache.pivot.collections.Dictionary;
@@ -32,8 +31,8 @@ import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Spinner;
@@ -255,7 +254,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
          * {@link KeyCode#DOWN DOWN} Select the next spinner item.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             boolean consumed = false;
 
             Spinner spinner = (Spinner) TerraSpinnerSkin.this.getComponent();
@@ -266,13 +265,13 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
             int selectedIndex = spinner.getSelectedIndex();
             int newSelectedIndex = selectedIndex;
 
-            if (keyCode == Keyboard.KeyCode.UP) {
+            if (keyCode == KeyCode.UP) {
                 if (selectedIndex < count - 1) {
                     newSelectedIndex++;
                 } else if (circular) {
                     newSelectedIndex = 0;
                 }
-            } else if (keyCode == Keyboard.KeyCode.DOWN) {
+            } else if (keyCode == KeyCode.DOWN) {
                 if (selectedIndex > 0) {
                     newSelectedIndex--;
                 } else if (circular) {

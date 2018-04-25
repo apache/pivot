@@ -19,7 +19,6 @@ package org.apache.pivot.wtk.skin.terra;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;

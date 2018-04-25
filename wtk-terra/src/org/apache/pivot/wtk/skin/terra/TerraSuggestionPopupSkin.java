@@ -21,7 +21,6 @@ import java.awt.Font;
 
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
-import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
 import org.apache.pivot.wtk.Border;
 import org.apache.pivot.wtk.Component;
@@ -34,6 +33,7 @@ import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListViewSelectionListener;
@@ -115,19 +115,19 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
          * false.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             boolean consumed = false;
 
             SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
 
-            if (keyCode == Keyboard.KeyCode.DOWN) {
+            if (keyCode == KeyCode.DOWN) {
                 if (listView.getSelectedIndex() == -1 && listView.getListData().getLength() > 0) {
                     listView.setSelectedIndex(0);
                 }
 
                 suggestionPopup.requestFocus();
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
+            } else if (keyCode == KeyCode.ESCAPE) {
                 suggestionPopup.close(false);
                 consumed = true;
             }
@@ -155,16 +155,16 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
          * backwards from the TextInput.<br>
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
             TextInput textInput = suggestionPopup.getTextInput();
 
             switch (keyCode) {
-                case Keyboard.KeyCode.TAB: {
+                case KeyCode.TAB: {
                     returnFocusToTextInput = false;
                     suggestionPopup.close(true);
 
-                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                    FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
                         : FocusTraversalDirection.FORWARD;
                     textInput.transferFocus(direction);
 
@@ -296,16 +296,16 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
      * 'result' of false.
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
 
         switch (keyCode) {
-            case Keyboard.KeyCode.ENTER: {
+            case KeyCode.ENTER: {
                 suggestionPopup.close(true);
                 break;
             }
 
-            case Keyboard.KeyCode.ESCAPE: {
+            case KeyCode.ESCAPE: {
                 suggestionPopup.close(false);
                 break;
             }

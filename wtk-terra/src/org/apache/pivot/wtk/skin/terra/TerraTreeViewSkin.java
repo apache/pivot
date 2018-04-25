@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.geom.GeneralPath;
 import java.util.Iterator;
@@ -42,6 +41,7 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
@@ -1453,7 +1453,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
         TreeView treeView = (TreeView) getComponent();
 
-        if (showHighlight && treeView.getSelectMode() != TreeView.SelectMode.NONE) {
+        if (showHighlight && treeView.getSelectMode() != SelectMode.NONE) {
             NodeInfo previousHighlightedNode = highlightedNode;
             highlightedNode = getNodeInfoAt(y);
 
@@ -1520,13 +1520,13 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     // If we haven't consumed the event, then proceed to manage
                     // the selection state of the node
                     if (!consumed) {
-                        TreeView.SelectMode selectMode = treeView.getSelectMode();
+                        SelectMode selectMode = treeView.getSelectMode();
 
                         if (button == Mouse.Button.LEFT) {
-                            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+                            Modifier commandModifier = Platform.getCommandModifier();
 
                             if (Keyboard.isPressed(commandModifier)
-                                && selectMode == TreeView.SelectMode.MULTI) {
+                                && selectMode == SelectMode.MULTI) {
                                 // Toggle the item's selection state
                                 if (nodeInfo.isSelected()) {
                                     treeView.removeSelectedPath(path);
@@ -1534,7 +1534,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                                     treeView.addSelectedPath(path);
                                 }
                             } else if (Keyboard.isPressed(commandModifier)
-                                && selectMode == TreeView.SelectMode.SINGLE) {
+                                && selectMode == SelectMode.SINGLE) {
                                 // Toggle the item's selection state
                                 if (nodeInfo.isSelected()) {
                                     treeView.clearSelection();
@@ -1542,7 +1542,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                                     treeView.setSelectedPath(path);
                                 }
                             } else {
-                                if (selectMode != TreeView.SelectMode.NONE) {
+                                if (selectMode != SelectMode.NONE) {
                                     if (nodeInfo.isSelected()) {
                                         selectPath = path;
                                     } else {
@@ -1648,15 +1648,15 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
      * next enabled node when select mode is {@link SelectMode#MULTI}
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         TreeView treeView = (TreeView) getComponent();
-        TreeView.SelectMode selectMode = treeView.getSelectMode();
+        SelectMode selectMode = treeView.getSelectMode();
 
         switch (keyCode) {
-            case Keyboard.KeyCode.UP: {
-                if (selectMode != TreeView.SelectMode.NONE) {
+            case KeyCode.UP: {
+                if (selectMode != SelectMode.NONE) {
                     Path firstSelectedPath = treeView.getFirstSelectedPath();
 
                     int index;
@@ -1674,8 +1674,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     } while (newSelectedNode != null && newSelectedNode.isDisabled());
 
                     if (newSelectedNode != null) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                            && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
+                        if (Keyboard.isPressed(Modifier.SHIFT)
+                            && treeView.getSelectMode() == SelectMode.MULTI) {
                             treeView.addSelectedPath(newSelectedNode.getPath());
                         } else {
                             treeView.setSelectedPath(newSelectedNode.getPath());
@@ -1687,8 +1687,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                 break;
             }
 
-            case Keyboard.KeyCode.DOWN: {
-                if (selectMode != TreeView.SelectMode.NONE) {
+            case KeyCode.DOWN: {
+                if (selectMode != SelectMode.NONE) {
                     Path lastSelectedPath = treeView.getLastSelectedPath();
 
                     int index;
@@ -1707,8 +1707,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     } while (newSelectedNode != null && newSelectedNode.isDisabled());
 
                     if (newSelectedNode != null) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                            && treeView.getSelectMode() == TreeView.SelectMode.MULTI) {
+                        if (Keyboard.isPressed(Modifier.SHIFT)
+                            && treeView.getSelectMode() == SelectMode.MULTI) {
                             treeView.addSelectedPath(newSelectedNode.getPath());
                         } else {
                             treeView.setSelectedPath(newSelectedNode.getPath());
@@ -1720,7 +1720,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                 break;
             }
 
-            case Keyboard.KeyCode.LEFT: {
+            case KeyCode.LEFT: {
                 if (showBranchControls) {
                     Sequence<Path> paths = treeView.getSelectedPaths();
 
@@ -1739,7 +1739,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                 break;
             }
 
-            case Keyboard.KeyCode.RIGHT: {
+            case KeyCode.RIGHT: {
                 if (showBranchControls) {
                     Sequence<Path> paths = treeView.getSelectedPaths();
 
@@ -1775,14 +1775,14 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
      * is {@link SelectMode#SINGLE}
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         TreeView treeView = (TreeView) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             if (treeView.getCheckmarksEnabled()
-                && treeView.getSelectMode() == TreeView.SelectMode.SINGLE) {
+                && treeView.getSelectMode() == SelectMode.SINGLE) {
                 Path selectedPath = treeView.getSelectedPath();
 
                 if (selectedPath != null) {
@@ -1803,7 +1803,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     @Override
     public boolean isFocusable() {
         TreeView treeView = (TreeView) getComponent();
-        return (treeView.getSelectMode() != TreeView.SelectMode.NONE);
+        return (treeView.getSelectMode() != SelectMode.NONE);
     }
 
     @Override
@@ -1908,7 +1908,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     @Override
-    public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
+    public void selectModeChanged(TreeView treeView, SelectMode previousSelectMode) {
         // The selection has implicitly been cleared
         clearFields(NodeInfo.SELECTED_MASK);
         repaintComponent();

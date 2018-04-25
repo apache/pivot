@@ -20,14 +20,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Point;
@@ -228,7 +227,7 @@ public class TerraSliderSkin extends SliderSkin {
          * UP} Increment the slider's value.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
             Slider slider = (Slider) TerraSliderSkin.this.getComponent();
@@ -240,10 +239,10 @@ public class TerraSliderSkin extends SliderSkin {
             int value = slider.getValue();
             int increment = length / 10;
 
-            if (keyCode == Keyboard.KeyCode.LEFT || keyCode == Keyboard.KeyCode.DOWN) {
+            if (keyCode == KeyCode.LEFT || keyCode == KeyCode.DOWN) {
                 slider.setValue(Math.max(start, value - increment));
                 consumed = true;
-            } else if (keyCode == Keyboard.KeyCode.RIGHT || keyCode == Keyboard.KeyCode.UP) {
+            } else if (keyCode == KeyCode.RIGHT || keyCode == KeyCode.UP) {
                 slider.setValue(Math.min(end, value + increment));
                 consumed = true;
             }

@@ -27,8 +27,8 @@ import org.apache.pivot.wtk.DialogListener;
 import org.apache.pivot.wtk.DialogStateListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.util.ColorUtilities;
@@ -129,15 +129,15 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogListener, D
      * {@link KeyCode#ESCAPE ESCAPE} Close the dialog with a 'result' of false.
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         Dialog dialog = (Dialog) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.ENTER) {
+        if (keyCode == KeyCode.ENTER) {
             dialog.close(true);
             consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
+        } else if (keyCode == KeyCode.ESCAPE) {
             dialog.close(false);
             consumed = true;
         } else {

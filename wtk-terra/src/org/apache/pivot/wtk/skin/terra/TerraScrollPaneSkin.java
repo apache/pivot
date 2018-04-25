@@ -16,7 +16,6 @@
  */
 package org.apache.pivot.wtk.skin.terra;
 
-import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ScrollPaneSkin;
 
 /**

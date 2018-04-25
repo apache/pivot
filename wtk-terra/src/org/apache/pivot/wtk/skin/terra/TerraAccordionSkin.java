@@ -40,6 +40,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Platform;
@@ -745,68 +746,68 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
      * @see Platform#getCommandModifier()
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (!consumed) {
             Accordion accordion = (Accordion) getComponent();
             Accordion.PanelSequence panels = accordion.getPanels();
 
-            Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+            Modifier commandModifier = Platform.getCommandModifier();
             if (Keyboard.isPressed(commandModifier)) {
                 int selectedIndex = -1;
 
                 switch (keyCode) {
-                    case Keyboard.KeyCode.KEYPAD_1:
-                    case Keyboard.KeyCode.N1: {
+                    case KeyCode.KEYPAD_1:
+                    case KeyCode.N1: {
                         selectedIndex = 0;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_2:
-                    case Keyboard.KeyCode.N2: {
+                    case KeyCode.KEYPAD_2:
+                    case KeyCode.N2: {
                         selectedIndex = 1;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_3:
-                    case Keyboard.KeyCode.N3: {
+                    case KeyCode.KEYPAD_3:
+                    case KeyCode.N3: {
                         selectedIndex = 2;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_4:
-                    case Keyboard.KeyCode.N4: {
+                    case KeyCode.KEYPAD_4:
+                    case KeyCode.N4: {
                         selectedIndex = 3;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_5:
-                    case Keyboard.KeyCode.N5: {
+                    case KeyCode.KEYPAD_5:
+                    case KeyCode.N5: {
                         selectedIndex = 4;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_6:
-                    case Keyboard.KeyCode.N6: {
+                    case KeyCode.KEYPAD_6:
+                    case KeyCode.N6: {
                         selectedIndex = 5;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_7:
-                    case Keyboard.KeyCode.N7: {
+                    case KeyCode.KEYPAD_7:
+                    case KeyCode.N7: {
                         selectedIndex = 6;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_8:
-                    case Keyboard.KeyCode.N8: {
+                    case KeyCode.KEYPAD_8:
+                    case KeyCode.N8: {
                         selectedIndex = 7;
                         break;
                     }
 
-                    case Keyboard.KeyCode.KEYPAD_9:
-                    case Keyboard.KeyCode.N9: {
+                    case KeyCode.KEYPAD_9:
+                    case KeyCode.N9: {
                         selectedIndex = 8;
                         break;
                     }
@@ -821,12 +822,12 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
                     accordion.setSelectedIndex(selectedIndex);
                     consumed = true;
                 }
-            } else if (Keyboard.isPressed(Keyboard.Modifier.ALT)) {
+            } else if (Keyboard.isPressed(Modifier.ALT)) {
                 int n = panels.getLength();
                 int selectedIndex = accordion.getSelectedIndex();
 
                 switch (keyCode) {
-                    case Keyboard.KeyCode.UP: {
+                    case KeyCode.UP: {
                         do {
                             selectedIndex--;
                         } while (selectedIndex >= 0 && !panels.get(selectedIndex).isEnabled());
@@ -834,7 +835,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
                         break;
                     }
 
-                    case Keyboard.KeyCode.DOWN: {
+                    case KeyCode.DOWN: {
                         do {
                             selectedIndex++;
                         } while (selectedIndex < n && !panels.get(selectedIndex).isEnabled());

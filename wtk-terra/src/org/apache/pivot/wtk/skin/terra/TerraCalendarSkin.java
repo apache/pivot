@@ -44,8 +44,8 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.Insets;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
@@ -234,15 +234,15 @@ public class TerraCalendarSkin extends CalendarSkin {
          * around the date grid.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             boolean consumed = false;
 
             DateButton dateButton = (DateButton) getComponent();
 
-            if (keyCode == Keyboard.KeyCode.ENTER) {
+            if (keyCode == KeyCode.ENTER) {
                 dateButton.press();
-            } else if (keyCode == Keyboard.KeyCode.UP || keyCode == Keyboard.KeyCode.DOWN
-                || keyCode == Keyboard.KeyCode.LEFT || keyCode == Keyboard.KeyCode.RIGHT) {
+            } else if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN
+                || keyCode == KeyCode.LEFT || keyCode == KeyCode.RIGHT) {
                 CalendarDate date = (CalendarDate) dateButton.getButtonData();
 
                 Calendar calendar = (Calendar) TerraCalendarSkin.this.getComponent();
@@ -252,7 +252,7 @@ public class TerraCalendarSkin extends CalendarSkin {
 
                 Component nextButton;
                 switch (keyCode) {
-                    case Keyboard.KeyCode.UP: {
+                    case KeyCode.UP: {
                         do {
                             rowIndex--;
                             if (rowIndex < 0) {
@@ -267,7 +267,7 @@ public class TerraCalendarSkin extends CalendarSkin {
                         break;
                     }
 
-                    case Keyboard.KeyCode.DOWN: {
+                    case KeyCode.DOWN: {
                         do {
                             rowIndex++;
                             if (rowIndex > 5) {
@@ -282,7 +282,7 @@ public class TerraCalendarSkin extends CalendarSkin {
                         break;
                     }
 
-                    case Keyboard.KeyCode.LEFT: {
+                    case KeyCode.LEFT: {
                         TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
 
                         do {
@@ -298,7 +298,7 @@ public class TerraCalendarSkin extends CalendarSkin {
                         break;
                     }
 
-                    case Keyboard.KeyCode.RIGHT: {
+                    case KeyCode.RIGHT: {
                         TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
 
                         do {
@@ -332,12 +332,12 @@ public class TerraCalendarSkin extends CalendarSkin {
          */
         @Override
         public boolean keyReleased(Component component, int keyCode,
-            Keyboard.KeyLocation keyLocation) {
+            KeyLocation keyLocation) {
             boolean consumed = false;
 
             DateButton dateButton = (DateButton) getComponent();
 
-            if (keyCode == Keyboard.KeyCode.SPACE) {
+            if (keyCode == KeyCode.SPACE) {
                 dateButton.press();
                 consumed = true;
             } else {

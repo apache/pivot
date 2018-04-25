@@ -26,8 +26,8 @@ import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuItemSelectionListener;
 import org.apache.pivot.wtk.MenuPopup;
@@ -204,10 +204,10 @@ public class TerraMenuPopupSkin extends WindowSkin implements MenuPopupListener,
      * {@link KeyCode#ESCAPE ESCAPE} Close the menu popup.
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
-        if (keyCode == Keyboard.KeyCode.ESCAPE) {
+        if (keyCode == KeyCode.ESCAPE) {
             MenuPopup menuPopup = (MenuPopup) getComponent();
             menuPopup.close();
         }

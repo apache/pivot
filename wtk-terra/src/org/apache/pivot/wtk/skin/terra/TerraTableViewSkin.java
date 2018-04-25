@@ -34,6 +34,7 @@ import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
@@ -407,7 +408,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         // Paint the row content
         for (int rowIndex = rowStart; rowIndex <= rowEnd; rowIndex++) {
             Object rowData = tableData.get(rowIndex);
-            boolean rowHighlighted = (rowIndex == highlightIndex && tableView.getSelectMode() != TableView.SelectMode.NONE);
+            boolean rowHighlighted = (rowIndex == highlightIndex && tableView.getSelectMode() != SelectMode.NONE);
             boolean rowSelected = tableView.isRowSelected(rowIndex);
             boolean rowDisabled = tableView.isRowDisabled(rowIndex);
             int rowY = getRowY(rowIndex);
@@ -717,7 +718,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     @Override
     public boolean isFocusable() {
         TableView tableView = (TableView) getComponent();
-        return (tableView.getSelectMode() != TableView.SelectMode.NONE);
+        return (tableView.getSelectMode() != SelectMode.NONE);
     }
 
     @Override
@@ -1091,7 +1092,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         highlightIndex = getRowAt(y);
 
         if (previousHighlightIndex != highlightIndex
-            && tableView.getSelectMode() != TableView.SelectMode.NONE && showHighlight) {
+            && tableView.getSelectMode() != SelectMode.NONE && showHighlight) {
             if (previousHighlightIndex != -1) {
                 repaintComponent(getRowBounds(previousHighlightIndex));
             }
@@ -1110,7 +1111,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
         TableView tableView = (TableView) getComponent();
 
-        if (highlightIndex != -1 && tableView.getSelectMode() != TableView.SelectMode.NONE
+        if (highlightIndex != -1 && tableView.getSelectMode() != SelectMode.NONE
             && showHighlight) {
             repaintComponent(getRowBounds(highlightIndex));
         }
@@ -1127,13 +1128,13 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         int rowIndex = getRowAt(y);
 
         if (rowIndex >= 0 && !tableView.isRowDisabled(rowIndex)) {
-            TableView.SelectMode selectMode = tableView.getSelectMode();
+            SelectMode selectMode = tableView.getSelectMode();
 
             if (button == Mouse.Button.LEFT) {
-                Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+                Modifier commandModifier = Platform.getCommandModifier();
 
-                if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                    && selectMode == TableView.SelectMode.MULTI) {
+                if (Keyboard.isPressed(Modifier.SHIFT)
+                    && selectMode == SelectMode.MULTI) {
                     Filter<?> disabledRowFilter = tableView.getDisabledRowFilter();
 
                     if (disabledRowFilter == null) {
@@ -1156,7 +1157,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         }
                     }
                 } else if (Keyboard.isPressed(commandModifier)
-                    && selectMode == TableView.SelectMode.MULTI) {
+                    && selectMode == SelectMode.MULTI) {
                     // Toggle the item's selection state
                     if (tableView.isRowSelected(rowIndex)) {
                         tableView.removeSelectedIndex(rowIndex);
@@ -1164,7 +1165,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         tableView.addSelectedIndex(rowIndex);
                     }
                 } else if (Keyboard.isPressed(commandModifier)
-                    && selectMode == TableView.SelectMode.SINGLE) {
+                    && selectMode == SelectMode.SINGLE) {
                     // Toggle the item's selection state
                     if (tableView.isRowSelected(rowIndex)) {
                         tableView.setSelectedIndex(-1);
@@ -1172,7 +1173,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                         tableView.setSelectedIndex(rowIndex);
                     }
                 } else {
-                    if (selectMode != TableView.SelectMode.NONE) {
+                    if (selectMode != SelectMode.NONE) {
                         if (!tableView.isRowSelected(rowIndex)) {
                             tableView.setSelectedIndex(rowIndex);
                         }
@@ -1249,7 +1250,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
 
             highlightIndex = -1;
 
-            if (tableView.getSelectMode() != TableView.SelectMode.NONE && showHighlight) {
+            if (tableView.getSelectMode() != SelectMode.NONE && showHighlight) {
                 repaintComponent(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height, true);
             }
         }
@@ -1271,15 +1272,15 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
      * {@link KeyCode#SPACE SPACE} wil select/unselect the "current" location
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         TableView tableView = (TableView) getComponent();
-        TableView.SelectMode selectMode = tableView.getSelectMode();
+        SelectMode selectMode = tableView.getSelectMode();
 
         switch (keyCode) {
-            case Keyboard.KeyCode.UP: {
-                if (selectMode != TableView.SelectMode.NONE) {
+            case KeyCode.UP: {
+                if (selectMode != SelectMode.NONE) {
                     int index = tableView.getFirstSelectedIndex();
 
                     do {
@@ -1287,8 +1288,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     } while (index >= 0 && tableView.isRowDisabled(index));
 
                     if (index >= 0) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                            && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
+                        if (Keyboard.isPressed(Modifier.SHIFT)
+                            && tableView.getSelectMode() == SelectMode.MULTI) {
                             tableView.addSelectedIndex(index);
                         } else {
                             tableView.setSelectedIndex(index);
@@ -1302,8 +1303,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 break;
             }
 
-            case Keyboard.KeyCode.DOWN: {
-                if (selectMode != TableView.SelectMode.NONE) {
+            case KeyCode.DOWN: {
+                if (selectMode != SelectMode.NONE) {
                     int index = tableView.getLastSelectedIndex();
                     int count = tableView.getTableData().getLength();
 
@@ -1312,8 +1313,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                     } while (index < count && tableView.isRowDisabled(index));
 
                     if (index < count) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                            && tableView.getSelectMode() == TableView.SelectMode.MULTI) {
+                        if (Keyboard.isPressed(Modifier.SHIFT)
+                            && tableView.getSelectMode() == SelectMode.MULTI) {
                             tableView.addSelectedIndex(index);
                         } else {
                             tableView.setSelectedIndex(index);
@@ -1327,8 +1328,8 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 break;
             }
 
-            case Keyboard.KeyCode.SPACE: {
-                if (lastKeyboardSelectIndex != -1 && selectMode != TableView.SelectMode.NONE) {
+            case KeyCode.SPACE: {
+                if (lastKeyboardSelectIndex != -1 && selectMode != SelectMode.NONE) {
                     if (!tableView.isRowDisabled(lastKeyboardSelectIndex)) {
                         switch (selectMode) {
                             case SINGLE:
@@ -1352,10 +1353,10 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 break;
             }
 
-            case Keyboard.KeyCode.A: {
+            case KeyCode.A: {
                 Modifier cmdModifier = Platform.getCommandModifier();
                 if (Keyboard.isPressed(cmdModifier)) {
-                    if (selectMode == TableView.SelectMode.MULTI) {
+                    if (selectMode == SelectMode.MULTI) {
                         tableView.selectAll();
                         lastKeyboardSelectIndex = tableView.getTableData().getLength() - 1; // TODO: what should it be?
                         consumed = true;
@@ -1364,7 +1365,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
                 break;
             }
 
-            case Keyboard.KeyCode.U: {
+            case KeyCode.U: {
                 Modifier cmdModifier = Platform.getCommandModifier();
                 if (Keyboard.isPressed(cmdModifier)) {
                     switch (selectMode) {
@@ -1387,7 +1388,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
         }
 
         // Clear the highlight
-        if (highlightIndex != -1 && tableView.getSelectMode() != TableView.SelectMode.NONE
+        if (highlightIndex != -1 && tableView.getSelectMode() != SelectMode.NONE
             && showHighlight && consumed) {
             repaintComponent(getRowBounds(highlightIndex));
         }
@@ -1439,7 +1440,7 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     @Override
-    public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+    public void selectModeChanged(TableView tableView, SelectMode previousSelectMode) {
         repaintComponent();
     }
 

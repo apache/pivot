@@ -35,8 +35,8 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Mouse.Button;
 import org.apache.pivot.wtk.Orientation;
@@ -490,15 +490,15 @@ public class TerraSheetSkin extends WindowSkin implements SheetStateListener {
      * {@link KeyCode#ESCAPE ESCAPE} Close the sheet with a 'result' of false.
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         Sheet sheet = (Sheet) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.ENTER) {
+        if (keyCode == KeyCode.ENTER) {
             sheet.close(true);
             consumed = true;
-        } else if (keyCode == Keyboard.KeyCode.ESCAPE) {
+        } else if (keyCode == KeyCode.ESCAPE) {
             sheet.close(false);
             consumed = true;
         } else {

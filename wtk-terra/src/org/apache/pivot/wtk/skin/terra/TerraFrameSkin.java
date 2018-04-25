@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
 import org.apache.pivot.collections.Dictionary;
@@ -42,6 +41,9 @@ import org.apache.pivot.wtk.HorizontalAlignment;
 import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
+import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.Mouse;
@@ -795,14 +797,14 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
     }
 
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         Frame frame = (Frame) component;
         MenuBar menuBar = frame.getMenuBar();
 
-        if (menuBar != null && keyCode == Keyboard.KeyCode.SPACE
-            && Keyboard.isPressed(Keyboard.Modifier.ALT)) {
+        if (menuBar != null && keyCode == KeyCode.SPACE
+            && Keyboard.isPressed(Modifier.ALT)) {
             MenuBar.Item activeItem = menuBar.getActiveItem();
             MenuBar.ItemSequence items = menuBar.getItems();
 

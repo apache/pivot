@@ -36,6 +36,7 @@ import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.ListView.SelectMode;
@@ -344,7 +345,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         // Paint the item content
         for (int itemIndex = itemStart; itemIndex <= itemEnd; itemIndex++) {
             Object item = listData.get(itemIndex);
-            boolean highlighted = (itemIndex == highlightIndex && listView.getSelectMode() != ListView.SelectMode.NONE);
+            boolean highlighted = (itemIndex == highlightIndex && listView.getSelectMode() != SelectMode.NONE);
             boolean selected = listView.isItemSelected(itemIndex);
             boolean disabled = listView.isItemDisabled(itemIndex);
             int itemY = getItemY(itemIndex);
@@ -491,7 +492,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     @Override
     public boolean isFocusable() {
         ListView listView = (ListView) getComponent();
-        return (listView.getSelectMode() != ListView.SelectMode.NONE);
+        return (listView.getSelectMode() != SelectMode.NONE);
     }
 
     @Override
@@ -765,7 +766,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         highlightIndex = getItemAt(y);
 
         if (previousHighlightIndex != highlightIndex
-            && listView.getSelectMode() != ListView.SelectMode.NONE && showHighlight) {
+            && listView.getSelectMode() != SelectMode.NONE && showHighlight) {
             if (previousHighlightIndex != -1) {
                 repaintComponent(getItemBounds(previousHighlightIndex));
             }
@@ -784,7 +785,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
         ListView listView = (ListView) getComponent();
 
-        if (highlightIndex != -1 && listView.getSelectMode() != ListView.SelectMode.NONE
+        if (highlightIndex != -1 && listView.getSelectMode() != SelectMode.NONE
             && showHighlight) {
             Bounds itemBounds = getItemBounds(highlightIndex);
             repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height);
@@ -804,13 +805,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         if (itemIndex != -1 && !listView.isItemDisabled(itemIndex)) {
             if (!listView.getCheckmarksEnabled() || listView.isCheckmarkDisabled(itemIndex)
                 || !getCheckboxBounds(itemIndex).contains(x, y)) {
-                ListView.SelectMode selectMode = listView.getSelectMode();
+                SelectMode selectMode = listView.getSelectMode();
 
                 if (button == Mouse.Button.LEFT) {
-                    Keyboard.Modifier commandModifier = Platform.getCommandModifier();
+                    Modifier commandModifier = Platform.getCommandModifier();
 
-                    if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && selectMode == ListView.SelectMode.MULTI) {
+                    if (Keyboard.isPressed(Modifier.SHIFT)
+                        && selectMode == SelectMode.MULTI) {
                         Filter<?> disabledItemFilter = listView.getDisabledItemFilter();
 
                         if (disabledItemFilter == null) {
@@ -826,7 +827,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                             listView.setSelectedRanges(selectedRanges);
                         }
                     } else if (Keyboard.isPressed(commandModifier)
-                        && selectMode == ListView.SelectMode.MULTI) {
+                        && selectMode == SelectMode.MULTI) {
                         // Toggle the item's selection state
                         if (listView.isItemSelected(itemIndex)) {
                             listView.removeSelectedIndex(itemIndex);
@@ -834,7 +835,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                             listView.addSelectedIndex(itemIndex);
                         }
                     } else if (Keyboard.isPressed(commandModifier)
-                        && selectMode == ListView.SelectMode.SINGLE) {
+                        && selectMode == SelectMode.SINGLE) {
                         // Toggle the item's selection state
                         if (listView.isItemSelected(itemIndex)) {
                             listView.setSelectedIndex(-1);
@@ -842,7 +843,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                             listView.setSelectedIndex(itemIndex);
                         }
                     } else {
-                        if (selectMode != ListView.SelectMode.NONE) {
+                        if (selectMode != SelectMode.NONE) {
                             if (listView.isItemSelected(itemIndex)) {
                                 selectIndex = itemIndex;
                             } else {
@@ -943,7 +944,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
             highlightIndex = -1;
 
-            if (listView.getSelectMode() != ListView.SelectMode.NONE && showHighlight) {
+            if (listView.getSelectMode() != SelectMode.NONE && showHighlight) {
                 repaintComponent(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height,
                     true);
             }
@@ -964,15 +965,15 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
      * mode is {@link SelectMode#MULTI}
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         ListView listView = (ListView) getComponent();
-        ListView.SelectMode selectMode = listView.getSelectMode();
+        SelectMode selectMode = listView.getSelectMode();
 
         switch (keyCode) {
-            case Keyboard.KeyCode.UP: {
-                if (selectMode != ListView.SelectMode.NONE) {
+            case KeyCode.UP: {
+                if (selectMode != SelectMode.NONE) {
                     int index = listView.getFirstSelectedIndex();
                     int count = listView.getListData().getLength();
 
@@ -981,14 +982,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                     } while (index >= 0 && listView.isItemDisabled(index));
 
                     if (index >= 0) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                            && listView.getSelectMode() == ListView.SelectMode.MULTI) {
+                        if (Keyboard.isPressed(Modifier.SHIFT)
+                            && listView.getSelectMode() == SelectMode.MULTI) {
                             listView.addSelectedIndex(index);
                         } else {
                             listView.setSelectedIndex(index);
                         }
-                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && listView.getSelectMode() == ListView.SelectMode.MULTI
+                    } else if (!Keyboard.isPressed(Modifier.SHIFT)
+                        && listView.getSelectMode() == SelectMode.MULTI
                         && count == listView.getSelectedItems().getLength()) {
                         index = listView.getLastSelectedIndex();
                         do {
@@ -1004,8 +1005,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 break;
             }
 
-            case Keyboard.KeyCode.DOWN: {
-                if (selectMode != ListView.SelectMode.NONE) {
+            case KeyCode.DOWN: {
+                if (selectMode != SelectMode.NONE) {
                     int index = listView.getLastSelectedIndex();
                     int count = listView.getListData().getLength();
 
@@ -1014,14 +1015,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                     } while (index < count && listView.isItemDisabled(index));
 
                     if (index < count) {
-                        if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                            && listView.getSelectMode() == ListView.SelectMode.MULTI) {
+                        if (Keyboard.isPressed(Modifier.SHIFT)
+                            && listView.getSelectMode() == SelectMode.MULTI) {
                             listView.addSelectedIndex(index);
                         } else {
                             listView.setSelectedIndex(index);
                         }
-                    } else if (!Keyboard.isPressed(Keyboard.Modifier.SHIFT)
-                        && listView.getSelectMode() == ListView.SelectMode.MULTI
+                    } else if (!Keyboard.isPressed(Modifier.SHIFT)
+                        && listView.getSelectMode() == SelectMode.MULTI
                         && count == listView.getSelectedItems().getLength()) {
                         index = 0;
                         do {
@@ -1043,7 +1044,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         }
 
         // Clear the highlight
-        if (highlightIndex != -1 && listView.getSelectMode() != ListView.SelectMode.NONE
+        if (highlightIndex != -1 && listView.getSelectMode() != SelectMode.NONE
             && showHighlight && consumed) {
             repaintComponent(getItemBounds(highlightIndex));
         }
@@ -1058,15 +1059,15 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
      * is {@link SelectMode#SINGLE}
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
         ListView listView = (ListView) getComponent();
 
         switch (keyCode) {
-            case Keyboard.KeyCode.SPACE: {
+            case KeyCode.SPACE: {
                 if (listView.getCheckmarksEnabled()
-                    && listView.getSelectMode() == ListView.SelectMode.SINGLE) {
+                    && listView.getSelectMode() == SelectMode.SINGLE) {
                     int selectedIndex = listView.getSelectedIndex();
 
                     if (!listView.isCheckmarkDisabled(selectedIndex)) {
@@ -1171,7 +1172,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
+    public void selectModeChanged(ListView listView, SelectMode previousSelectMode) {
         repaintComponent();
     }
 
