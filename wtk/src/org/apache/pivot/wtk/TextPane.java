@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URL;
 
 import org.apache.pivot.beans.DefaultProperty;
@@ -42,9 +41,7 @@ import org.apache.pivot.wtk.text.ImageNode;
 import org.apache.pivot.wtk.text.Node;
 import org.apache.pivot.wtk.text.NodeListener;
 import org.apache.pivot.wtk.text.Paragraph;
-import org.apache.pivot.wtk.text.PlainTextSerializer;
 import org.apache.pivot.wtk.text.TextNode;
-import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Component that allows a user to enter and edit multiple lines of (optionally

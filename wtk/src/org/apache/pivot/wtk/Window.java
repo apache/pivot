@@ -28,7 +28,6 @@ import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.util.VoteResult;
 import org.apache.pivot.wtk.media.Image;
 
 /**

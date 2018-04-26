@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
-import org.apache.pivot.util.VoteResult;
 
 /**
  * Window class whose primary purpose is to facilitate interaction between an

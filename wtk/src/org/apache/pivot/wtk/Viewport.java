@@ -19,7 +19,6 @@ package org.apache.pivot.wtk;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ListenerList;
-import org.apache.pivot.util.Utils;
 
 /**
  * Abstract base class for viewport components. Viewports provide a windowed

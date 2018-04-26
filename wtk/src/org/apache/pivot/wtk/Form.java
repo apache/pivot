@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk;
 
 import java.util.Iterator;
-import java.util.Locale;
 
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
