@@ -24,7 +24,6 @@ import java.awt.event.InputMethodEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextHitInfo;
-import java.awt.font.TextLayout;
 import java.awt.geom.Area;
 import java.text.AttributedCharacterIterator;
 
@@ -32,7 +31,6 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.text.AttributedStringCharacterIterator;
 import org.apache.pivot.text.CharSpan;
-import org.apache.pivot.text.CompositeIterator;
 import org.apache.pivot.util.CharUtils;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;

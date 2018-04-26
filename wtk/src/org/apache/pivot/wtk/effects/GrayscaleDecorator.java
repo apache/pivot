@@ -19,13 +19,11 @@ package org.apache.pivot.wtk.effects;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.WritableRaster;
 
-import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 
 /**

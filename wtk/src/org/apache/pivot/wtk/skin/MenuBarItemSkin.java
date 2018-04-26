@@ -23,6 +23,8 @@ import org.apache.pivot.wtk.ContainerMouseListener;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Menu;
 import org.apache.pivot.wtk.MenuBar;
 import org.apache.pivot.wtk.MenuPopup;
@@ -41,24 +43,24 @@ public abstract class MenuBarItemSkin extends ButtonSkin implements MenuBar.Item
     private ComponentKeyListener menuPopupComponentKeyListener = new ComponentKeyListener() {
         /**
          * {@link KeyCode#LEFT LEFT} or {@link KeyCode#TAB TAB} +
-         * {@link Keyboard.Modifier#SHIFT SHIFT} Activate the menu to the left
+         * {@link Modifier#SHIFT SHIFT} Activate the menu to the left
          * of the current menu.<br> {@link KeyCode#RIGHT RIGHT} or
          * {@link KeyCode#TAB TAB} Activate the menu to the right of the current
          * menu.<br>
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             boolean consumed = false;
 
             MenuBar.Item menuBarItem = (MenuBar.Item) getComponent();
             MenuBar menuBar = (MenuBar) menuBarItem.getParent();
 
-            if (keyCode == Keyboard.KeyCode.LEFT
-                || (keyCode == Keyboard.KeyCode.TAB && Keyboard.isPressed(Keyboard.Modifier.SHIFT))) {
+            if (keyCode == KeyCode.LEFT
+                || (keyCode == KeyCode.TAB && Keyboard.isPressed(Modifier.SHIFT))) {
                 menuBar.activatePreviousItem();
                 consumed = true;
 
-            } else if (keyCode == Keyboard.KeyCode.RIGHT || keyCode == Keyboard.KeyCode.TAB) {
+            } else if (keyCode == KeyCode.RIGHT || keyCode == KeyCode.TAB) {
                 menuBar.activateNextItem();
                 consumed = true;
             }

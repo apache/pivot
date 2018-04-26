@@ -43,7 +43,6 @@ import org.apache.pivot.wtk.text.Element;
 import org.apache.pivot.wtk.text.Paragraph;
 import org.apache.pivot.wtk.text.TextNode;
 import org.apache.pivot.wtk.text.TextNodeListener;
-import org.apache.pivot.wtk.text.TextSpan;
 
 /**
  * Text node view.

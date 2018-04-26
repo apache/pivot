@@ -17,8 +17,8 @@
 package org.apache.pivot.wtk.skin;
 
 import org.apache.pivot.wtk.Component;
-import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.RadioButton;
 
@@ -47,12 +47,12 @@ public abstract class RadioButtonSkin extends ButtonSkin {
      * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         RadioButton radioButton = (RadioButton) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             radioButton.press();
         } else {
             consumed = super.keyReleased(component, keyCode, keyLocation);

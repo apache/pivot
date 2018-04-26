@@ -28,6 +28,8 @@ import org.apache.pivot.wtk.DesktopApplicationContext;
 import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.ScrollBar;
@@ -358,7 +360,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
         if (view != null) {
             // The scroll orientation is tied to whether the shift key was
             // pressed while the mouse wheel was scrolled
-            if (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
+            if (Keyboard.isPressed(Modifier.SHIFT)) {
                 // Treat the mouse wheel as a horizontal scroll event
                 int previousScrollLeft = scrollPane.getScrollLeft();
                 int newScrollLeft = previousScrollLeft
@@ -421,7 +423,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
      * @see ScrollBar#getUnitIncrement()
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (!consumed) {
@@ -430,40 +432,40 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             int scrollTop = scrollPane.getScrollTop();
             int scrollLeft = scrollPane.getScrollLeft();
 
-            if (keyCode == Keyboard.KeyCode.UP) {
+            if (keyCode == KeyCode.UP) {
                 int newScrollTop = Math.max(scrollTop - verticalScrollBar.getUnitIncrement(), 0);
 
                 scrollPane.setScrollTop(newScrollTop);
 
                 consumed = (newScrollTop != scrollTop);
-            } else if (keyCode == Keyboard.KeyCode.DOWN) {
+            } else if (keyCode == KeyCode.DOWN) {
                 int newScrollTop = Math.min(scrollTop + verticalScrollBar.getUnitIncrement(),
                     getMaxScrollTop());
 
                 scrollPane.setScrollTop(newScrollTop);
 
                 consumed = (newScrollTop != scrollTop);
-            } else if (keyCode == Keyboard.KeyCode.LEFT) {
+            } else if (keyCode == KeyCode.LEFT) {
                 int newScrollLeft = Math.max(scrollLeft - horizontalScrollBar.getUnitIncrement(), 0);
 
                 scrollPane.setScrollLeft(newScrollLeft);
 
                 consumed = (newScrollLeft != scrollLeft);
-            } else if (keyCode == Keyboard.KeyCode.RIGHT) {
+            } else if (keyCode == KeyCode.RIGHT) {
                 int newScrollLeft = Math.min(scrollLeft + horizontalScrollBar.getUnitIncrement(),
                     getMaxScrollLeft());
 
                 scrollPane.setScrollLeft(newScrollLeft);
 
                 consumed = (newScrollLeft != scrollLeft);
-            } else if (keyCode == Keyboard.KeyCode.PAGE_UP) {
+            } else if (keyCode == KeyCode.PAGE_UP) {
                 int increment = verticalScrollBar.getBlockIncrement();
                 int newScrollTop = Math.max(scrollTop - increment, 0);
 
                 scrollPane.setScrollTop(newScrollTop);
 
                 consumed = (newScrollTop != scrollTop);
-            } else if (keyCode == Keyboard.KeyCode.PAGE_DOWN) {
+            } else if (keyCode == KeyCode.PAGE_DOWN) {
                 int increment = verticalScrollBar.getBlockIncrement();
                 int newScrollTop = Math.min(scrollTop + increment, getMaxScrollTop());
 

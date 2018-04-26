@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.effects;
 
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
@@ -27,7 +26,6 @@ import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.Container;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.HorizontalAlignment;
-import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.VerticalAlignment;
 
 /**

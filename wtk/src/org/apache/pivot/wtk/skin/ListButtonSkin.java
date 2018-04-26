@@ -29,6 +29,8 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
+import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.ListButton;
 import org.apache.pivot.wtk.ListButtonListener;
 import org.apache.pivot.wtk.ListButtonSelectionListener;
@@ -69,15 +71,15 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
          * {@link KeyCode#ENTER ENTER} Choose the selected list item.<br>
          * {@link KeyCode#TAB TAB} Choose the selected list item and transfer
          * focus forwards.<br> {@link KeyCode#TAB TAB} +
-         * {@link Keyboard.Modifier#SHIFT SHIFT} Choose the selected list item
+         * {@link Modifier#SHIFT SHIFT} Choose the selected list item
          * and transfer focus backwards.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             ListButton listButton = (ListButton) getComponent();
 
             switch (keyCode) {
-                case Keyboard.KeyCode.ENTER: {
+                case KeyCode.ENTER: {
                     listViewPopup.close();
 
                     int index = listView.getSelectedIndex();
@@ -90,20 +92,20 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
                     break;
                 }
 
-                case Keyboard.KeyCode.TAB: {
+                case KeyCode.TAB: {
                     listViewPopup.close();
 
                     int index = listView.getSelectedIndex();
                     listButton.setSelectedIndex(index);
 
-                    FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                    FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
                         : FocusTraversalDirection.FORWARD;
                     listButton.transferFocus(direction);
 
                     break;
                 }
 
-                case Keyboard.KeyCode.ESCAPE: {
+                case KeyCode.ESCAPE: {
                     listViewPopup.close();
                     break;
                 }
@@ -300,16 +302,15 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
      * enabled list item.<br> {@link KeyCode#DOWN DOWN} Selects the next enabled
      * list item.
      *
-     * @see #keyReleased(Component, int,
-     * org.apache.pivot.wtk.Keyboard.KeyLocation)
+     * @see #keyReleased(Component, int, Keyboard.KeyLocation)
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         ListButton listButton = (ListButton) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
 
@@ -318,7 +319,7 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
             } else if (!listButton.isRepeatable()) {
                 listViewPopup.open(component.getWindow());
             }
-        } else if (keyCode == Keyboard.KeyCode.UP) {
+        } else if (keyCode == KeyCode.UP) {
             int index = listButton.getSelectedIndex();
 
             do {
@@ -329,8 +330,8 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
                 listButton.setSelectedIndex(index);
                 consumed = true;
             }
-        } else if (keyCode == Keyboard.KeyCode.DOWN) {
-            if (Keyboard.isPressed(Keyboard.Modifier.ALT)) {
+        } else if (keyCode == KeyCode.DOWN) {
+            if (Keyboard.isPressed(Modifier.ALT)) {
                 listViewPopup.open(component.getWindow());
 
                 consumed = true;
@@ -358,12 +359,12 @@ public abstract class ListButtonSkin extends ButtonSkin implements ListButton.Sk
      * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
         ListButton listButton = (ListButton) getComponent();
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             pressed = false;
             repaintComponent();
 

@@ -23,14 +23,11 @@ import java.util.Iterator;
 
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
-import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.FontUtilities;
 import org.apache.pivot.wtk.GraphicsUtilities;
-import org.apache.pivot.wtk.Theme;
 
 /**
  * Abstract base class for elements. <p> TODO Add style properties. <p> TODO Add

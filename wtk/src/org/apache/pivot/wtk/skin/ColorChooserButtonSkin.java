@@ -31,6 +31,7 @@ import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Mouse;
 import org.apache.pivot.wtk.Window;
@@ -78,21 +79,21 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
          * Choose the selected color and transfer focus backwards.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
             ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
             switch (keyCode) {
-                case Keyboard.KeyCode.ESCAPE: {
+                case KeyCode.ESCAPE: {
                     colorChooserPopup.close();
                     break;
                 }
 
-                case Keyboard.KeyCode.TAB:
-                case Keyboard.KeyCode.ENTER: {
+                case KeyCode.TAB:
+                case KeyCode.ENTER: {
                     colorChooserPopup.close();
 
-                    if (keyCode == Keyboard.KeyCode.TAB) {
-                        FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+                    if (keyCode == KeyCode.TAB) {
+                        FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
                             : FocusTraversalDirection.FORWARD;
                         colorChooserButton.transferFocus(direction);
                     }
@@ -293,14 +294,13 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
      * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
      * state.
      *
-     * @see #keyReleased(Component, int,
-     * org.apache.pivot.wtk.Keyboard.KeyLocation)
+     * @see #keyReleased(Component, int, Keyboard.KeyLocation)
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             pressed = true;
             repaintComponent();
 
@@ -322,10 +322,10 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
      * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
         boolean consumed = false;
 
-        if (keyCode == Keyboard.KeyCode.SPACE) {
+        if (keyCode == KeyCode.SPACE) {
             pressed = false;
             repaintComponent();
         } else {

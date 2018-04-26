@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.effects;
 
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;

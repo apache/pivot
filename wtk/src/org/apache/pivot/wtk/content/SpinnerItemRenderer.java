@@ -17,7 +17,6 @@
 package org.apache.pivot.wtk.content;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Label;

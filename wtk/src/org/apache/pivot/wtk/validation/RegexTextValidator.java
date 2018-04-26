@@ -14,7 +14,6 @@
 package org.apache.pivot.wtk.validation;
 
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * A validator for a regular expression.

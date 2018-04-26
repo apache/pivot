@@ -31,7 +31,6 @@ import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Borders;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.CSSColor;
-import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Orientation;

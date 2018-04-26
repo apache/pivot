@@ -30,7 +30,6 @@ import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.ApplicationContext;
-import org.apache.pivot.wtk.Dimensions;
 import org.apache.pivot.wtk.Visual;
 
 import com.kitfox.svg.SVGDiagram;

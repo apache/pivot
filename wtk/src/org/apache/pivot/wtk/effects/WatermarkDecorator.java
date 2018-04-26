@@ -19,14 +19,10 @@ package org.apache.pivot.wtk.effects;
 import java.awt.AlphaComposite;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.net.URL;
 
-import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.Utils;
-import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.BoxPane;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FontUtilities;
@@ -34,7 +30,6 @@ import org.apache.pivot.wtk.ImageView;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Style;
-import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.media.Image;
 

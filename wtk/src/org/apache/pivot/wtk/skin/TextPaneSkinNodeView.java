@@ -17,8 +17,6 @@
 package org.apache.pivot.wtk.skin;
 
 import java.awt.Graphics2D;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.Sequence;

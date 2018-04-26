@@ -20,9 +20,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 import org.apache.pivot.collections.EnumSet;
-import org.apache.pivot.json.JSONSerializer;
-import org.apache.pivot.serialization.SerializationException;
-import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.Bounds;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.ComponentKeyListener;
@@ -42,6 +39,7 @@ import org.apache.pivot.wtk.FocusTraversalDirection;
 import org.apache.pivot.wtk.FontUtilities;
 import org.apache.pivot.wtk.Keyboard;
 import org.apache.pivot.wtk.Keyboard.KeyCode;
+import org.apache.pivot.wtk.Keyboard.KeyLocation;
 import org.apache.pivot.wtk.Keyboard.Modifier;
 import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.MenuHandler;
@@ -273,17 +271,17 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
      */
     @Override
     public boolean keyPressed(Component componentArgument, int keyCode,
-        Keyboard.KeyLocation keyLocation) {
+        KeyLocation keyLocation) {
         boolean consumed = false;
 
-        EnumSet<Keyboard.Modifier> otherModifiers = EnumSet.noneOf(Keyboard.Modifier.class);
-        otherModifiers.addAll(Keyboard.Modifier.ALL_MODIFIERS);
-        otherModifiers.remove(Keyboard.Modifier.SHIFT);
+        EnumSet<Modifier> otherModifiers = EnumSet.noneOf(Modifier.class);
+        otherModifiers.addAll(Modifier.ALL_MODIFIERS);
+        otherModifiers.remove(Modifier.SHIFT);
 
-        if (keyCode == Keyboard.KeyCode.TAB &&
+        if (keyCode == KeyCode.TAB &&
             !Keyboard.areAnyPressed(otherModifiers) &&
             getComponent().isFocused()) {
-            FocusTraversalDirection direction = (Keyboard.isPressed(Keyboard.Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+            FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
                 : FocusTraversalDirection.FORWARD;
 
             // Transfer focus to the next component
@@ -303,7 +301,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
 
     @Override
     public boolean keyReleased(Component componentArgument, int keyCode,
-        Keyboard.KeyLocation keyLocation) {
+        KeyLocation keyLocation) {
         return false;
     }
 
