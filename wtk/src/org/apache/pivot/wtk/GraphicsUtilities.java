@@ -279,7 +279,7 @@ public final class GraphicsUtilities {
     }
 
     /**
-     * Interpret a string as a {@link Paint} value
+     * Interpret a string as a {@link Paint} value.
      *
      * @param value Either (a) One of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
@@ -307,7 +307,7 @@ public final class GraphicsUtilities {
     }
 
     /**
-     * Interpret a dictionary as a {@link Paint} value
+     * Interpret a dictionary as a {@link Paint} value.
      *
      * @param dictionary A dictionary containing a key {@value #PAINT_TYPE_KEY}
      * and further elements according to its value: <ul> <li><b>solid_color</b>
@@ -437,7 +437,8 @@ public final class GraphicsUtilities {
      * @param font              The font to use.
      * @param color             The foreground color for the text.
      */
-    public static void prepareForText(Graphics2D graphics, FontRenderContext fontRenderContext, Font font, Color color) {
+    public static void prepareForText(Graphics2D graphics, FontRenderContext fontRenderContext,
+            Font font, Color color) {
         setFontRenderingHints(graphics, fontRenderContext);
 
         graphics.setFont(font);
@@ -460,7 +461,8 @@ public final class GraphicsUtilities {
     }
 
     /**
-     * Set the context in the given graphics environment for subsequent font drawing and return the font render context.
+     * Set the context in the given graphics environment for subsequent font drawing and return
+     * the font render context.
      *
      * @param graphics  The graphics context.
      * @param font      The font to use.
@@ -487,7 +489,7 @@ public final class GraphicsUtilities {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
         GlyphVector missingGlyphVector = font.createGlyphVector(fontRenderContext,
-            new int[] { missingGlyphCode });
+            new int[] {missingGlyphCode});
         Rectangle2D textBounds = missingGlyphVector.getLogicalBounds();
 
         Rectangle2D maxCharBounds = font.getMaxCharBounds(fontRenderContext);
@@ -512,7 +514,7 @@ public final class GraphicsUtilities {
         TextLayout layout = new TextLayout(text, fontRenderContext);
         Shape caretShape = layout.getCaretShape(caret);
         Rectangle caretRect = caretShape.getBounds();
-        caretRect.translate(leftOffset, topOffset + (int)Math.ceil(layout.getAscent() + layout.getDescent()));
+        caretRect.translate(leftOffset, topOffset + (int) Math.ceil(layout.getAscent() + layout.getDescent()));
         return caretRect;
     }
 
@@ -526,9 +528,11 @@ public final class GraphicsUtilities {
      * @param bottom The bottom interior coordinate (height - 1)
      * @param right The right interior coordinate (width - 1)
      */
-    public static void drawBorders(Graphics2D graphics, Borders borders, int top, int left, int bottom, int right) {
+    public static void drawBorders(Graphics2D graphics, Borders borders, int top, int left,
+            int bottom, int right) {
         // The single line/object cases, or the first of the multiple line cases
         switch (borders) {
+            default:
             case NONE:
                 break;
             case ALL:
@@ -583,6 +587,8 @@ public final class GraphicsUtilities {
                 // The top now
                 graphics.drawLine(left, top, right, top);
                 break;
+            default:
+                break;
         }
 
         // Now the third of the triple line cases
@@ -596,6 +602,8 @@ public final class GraphicsUtilities {
             case NOT_BOTTOM:
                 // The top now
                 graphics.drawLine(left, top, right, top);
+                break;
+            default:
                 break;
         }
     }

@@ -17,6 +17,7 @@
 package org.apache.pivot.util.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -52,6 +53,9 @@ public class BooleanResultTest {
                 break;
             case SET:
                 result.set(value);
+                break;
+            default:
+                assertFalse("Invalid operator " + op, true);
                 break;
         }
         assertEquals(result.get(), expectedResult);

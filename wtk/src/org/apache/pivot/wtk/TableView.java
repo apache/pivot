@@ -509,7 +509,7 @@ public class TableView extends Component {
 
     /**
      * {@link Renderer} interface to customize the appearance of the header of a
-     * TableView
+     * TableView.
      */
     public interface HeaderDataRenderer extends Renderer {
         /**

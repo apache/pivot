@@ -20,17 +20,17 @@ package org.apache.pivot.functional.monad;
  * Generic container, to hold the successful result of a computation.
  */
 public class Success<T> extends Try<T> {
-    final T value;
+    protected final T value;
 
     /**
-     * Default constructor, do not use because it set null as invariant value to hold.
+     * Default constructor, do not use because it will throw an exception.
      */
     public Success() {
         throw new IllegalArgumentException("Success must have a value in the constructor");
     }
 
     /**
-     * Constructor with a value to set in the Option
+     * Constructor with a value to set.
      * @param val the value to set
      */
     public Success(final T val) {

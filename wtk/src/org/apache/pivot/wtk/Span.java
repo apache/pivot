@@ -339,8 +339,8 @@ public final class Span {
     public boolean normalEquals(Span span) {
         Utils.checkNull(span, "span");
 
-        return (normalStart() == span.normalStart()) &&
-               (normalEnd() == span.normalEnd());
+        return (normalStart() == span.normalStart())
+            && (normalEnd() == span.normalEnd());
     }
 
     @Override

@@ -90,14 +90,14 @@ public class Gauge<T extends Number> extends Component {
     @SuppressWarnings("unchecked")
     public void setType(String typeName) {
         try {
-            this.clazz = (Class<? extends Number>)((typeName.indexOf('.') < 0) ?
-                Class.forName("java.lang." + typeName) :
-                Class.forName(typeName));
+            this.clazz = (Class<? extends Number>) ((typeName.indexOf('.') < 0)
+                ? Class.forName("java.lang." + typeName)
+                : Class.forName(typeName));
         } catch (ClassNotFoundException cnfe) {
             if (typeName.indexOf('.') < 0) {
                 // Try "java.math" (for BigDecimal, etc.) types
                 try {
-                    this.clazz = (Class<? extends Number>)Class.forName("java.math." + typeName);
+                    this.clazz = (Class<? extends Number>) Class.forName("java.math." + typeName);
                 } catch (ClassNotFoundException cnfe2) {
                     throw new RuntimeException(cnfe);
                 }
@@ -159,7 +159,7 @@ public class Gauge<T extends Number> extends Component {
      */
     @SuppressWarnings("unchecked")
     public void setValue(String value) {
-        setValue((T)StringUtils.toNumber(value, clazz));
+        setValue((T) StringUtils.toNumber(value, clazz));
     }
 
     public T getMinValue() {
@@ -195,7 +195,7 @@ public class Gauge<T extends Number> extends Component {
      */
     @SuppressWarnings("unchecked")
     public void setMinValue(String minValue) {
-        setMinValue((T)StringUtils.toNumber(minValue, clazz));
+        setMinValue((T) StringUtils.toNumber(minValue, clazz));
     }
 
     public T getMaxValue() {
@@ -231,7 +231,7 @@ public class Gauge<T extends Number> extends Component {
      */
     @SuppressWarnings("unchecked")
     public void setMaxValue(String maxValue) {
-        setMaxValue((T)StringUtils.toNumber(maxValue, clazz));
+        setMaxValue((T) StringUtils.toNumber(maxValue, clazz));
     }
 
     public T getWarningLevel() {
@@ -270,7 +270,7 @@ public class Gauge<T extends Number> extends Component {
      */
     @SuppressWarnings("unchecked")
     public void setWarningLevel(String warningLevel) {
-        setWarningLevel((T)StringUtils.toNumber(warningLevel, clazz));
+        setWarningLevel((T) StringUtils.toNumber(warningLevel, clazz));
     }
 
     public T getCriticalLevel() {
@@ -309,7 +309,7 @@ public class Gauge<T extends Number> extends Component {
      */
     @SuppressWarnings("unchecked")
     public void setCriticalLevel(String criticalLevel) {
-        setCriticalLevel((T)StringUtils.toNumber(criticalLevel, clazz));
+        setCriticalLevel((T) StringUtils.toNumber(criticalLevel, clazz));
     }
 
     public String getText() {
@@ -324,9 +324,9 @@ public class Gauge<T extends Number> extends Component {
         // Null text is allowed
         String previousText = this.text;
 
-        if ((previousText == null && text != null) ||
-            (previousText != null && text == null) ||
-            (previousText != null && !previousText.equals(text))) {
+        if ((previousText == null && text != null)
+         || (previousText != null && text == null)
+         || (previousText != null && !previousText.equals(text))) {
             this.text = text;
             gaugeListeners.textChanged(this, previousText);
         }

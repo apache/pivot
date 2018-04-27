@@ -1321,7 +1321,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                 // descendant of our younger sibling
                 for (int n = visibleNodes.getLength(), nodeDepth = youngerSibling.depth; insertIndex < n
                     && visibleNodes.get(insertIndex).depth > nodeDepth; insertIndex++) {
-                    // empty block
+                    continue;
                 }
             }
 
@@ -1370,7 +1370,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                 // it's a descendant of the last child node
                 for (int n = visibleNodes.getLength(), nodeDepth = last.depth; rangeEnd < n
                     && visibleNodes.get(rangeEnd).depth > nodeDepth; rangeEnd++) {
-                    // empty block
+                    continue;
                 }
 
                 visibleNodes.remove(rangeStart, rangeEnd - rangeStart);
@@ -1638,14 +1638,19 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     /**
-     * {@link KeyCode#UP UP} Selects the previous enabled node when select mode
-     * is not {@link SelectMode#NONE}<br> {@link KeyCode#DOWN DOWN} Selects the
-     * next enabled node when select mode is not {@link SelectMode#NONE}<p>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
+     * Keyboard handling (arrow keys with modifiers).
+     * <ul>
+     * <li>{@link KeyCode#UP UP} Selects the previous enabled node when select mode
+     * is not {@link SelectMode#NONE}</li>
+     * <li>{@link KeyCode#DOWN DOWN} Selects the * next enabled node when select mode
+     * is not {@link SelectMode#NONE}</li>
+     * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
      * selection size by including the previous enabled node when select mode is
-     * {@link SelectMode#MULTI}<br> {@link Modifier#SHIFT SHIFT} +
-     * {@link KeyCode#DOWN DOWN} Increases the selection size by including the
-     * next enabled node when select mode is {@link SelectMode#MULTI}
+     * {@link SelectMode#MULTI}</li>
+     * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the
+     * selection size by including the next enabled node when select mode is
+     * {@link SelectMode#MULTI}</li>
+     * </ul>
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
@@ -1772,7 +1777,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
     /**
      * {@link KeyCode#SPACE SPACE} toggles check mark selection when select mode
-     * is {@link SelectMode#SINGLE}
+     * is {@link SelectMode#SINGLE}.
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {

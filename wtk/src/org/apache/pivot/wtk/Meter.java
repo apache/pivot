@@ -60,8 +60,8 @@ public class Meter extends Component {
 
     public void setText(String text) {
         String previousText = this.text;
-        if ((previousText == null && text != null) ||
-            (previousText != null && !previousText.equals(text))) {
+        if ((previousText == null && text != null)
+         || (previousText != null && !previousText.equals(text))) {
             this.text = text;
             meterListeners.textChanged(this, previousText);
         }

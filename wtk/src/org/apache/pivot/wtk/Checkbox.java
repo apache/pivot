@@ -35,7 +35,7 @@ public class Checkbox extends Button {
         this(null);
     }
 
-    public Checkbox(Object buttonData) {
+    public Checkbox(final Object buttonData) {
         super(buttonData);
         super.setToggleButton(true);
 
@@ -60,24 +60,24 @@ public class Checkbox extends Button {
     }
 
     /**
-     * This operation is not supported for checkboxes
+     * This operation is not supported for checkboxes.
      *
      * @throws UnsupportedOperationException always since this is unsupported.
      */
     @Override
     @UnsupportedOperation
-    public void setToggleButton(boolean toggleButton) {
+    public void setToggleButton(final boolean toggleButton) {
         throw new UnsupportedOperationException("Checkboxes are always toggle buttons.");
     }
 
     /**
-     * This operation is not supported for checkboxes
+     * This operation is not supported for checkboxes.
      *
      * @throws UnsupportedOperationException always since this is unsupported.
      */
     @Override
     @UnsupportedOperation
-    public void setButtonGroup(ButtonGroup buttonGroup) {
+    public void setButtonGroup(final ButtonGroup buttonGroup) {
         throw new UnsupportedOperationException("Checkboxes can't be added to a group.");
     }
 }

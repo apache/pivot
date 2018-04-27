@@ -17,6 +17,7 @@
 package org.apache.pivot.functional.monad.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +46,7 @@ public class OptionTest {
         Option<Object> on = o.fromValue(null);
         assertNotNull(on);
         assertTrue(on instanceof None);
-        assertTrue(on.hasValue() == false);
+        assertFalse(on.hasValue());
         System.out.println("companionNoneTest(), has value is " + on.hasValue());
         Object onValue = on.getValue();  // throw Exception here
         assertTrue(onValue instanceof None);  // never called
@@ -59,7 +60,7 @@ public class OptionTest {
         Option<Object> oo = o.fromValue(new String("Hello"));
         assertNotNull(oo);
         assertTrue(oo instanceof Some);
-        assertTrue(oo.hasValue() == true);
+        assertTrue(oo.hasValue());
         Object ooValue = oo.getValue();
         assertTrue(ooValue instanceof String);
         System.out.println("companionObjectTest(), value stored is " + ooValue);
@@ -73,7 +74,7 @@ public class OptionTest {
         Option<String> os = o.fromValue("Hello");
         assertNotNull(os);
         assertTrue(os instanceof Some);
-        assertTrue(os.hasValue() == true);
+        assertTrue(os.hasValue());
         Object osValue = os.getValue();
         assertTrue(osValue instanceof String);
         System.out.println("companionStringTest(), value stored is " + osValue);
@@ -84,10 +85,10 @@ public class OptionTest {
         OptionCompanion<Number> o = OptionCompanion.getInstance();
         assertNotNull(o);
 
-        Option<Number> on = o.fromValue(new Double(3.141592653589793));
+        Option<Number> on = o.fromValue(new Double(Math.PI));
         assertNotNull(on);
         assertTrue(on instanceof Some);
-        assertTrue(on.hasValue() == true);
+        assertTrue(on.hasValue());
         Object onValue = on.getValue();
         assertTrue(onValue instanceof Number);
         assertTrue(onValue instanceof Double);
@@ -132,20 +133,20 @@ public class OptionTest {
 
             if (randomInt % 2 == 0) {
                 assertTrue(os instanceof Some);
-                assertTrue(os.hasValue() == true);
+                assertTrue(os.hasValue());
                 tsValue = os.getValue();
                 System.out.println("companionRealUsageRandomTest(), value stored is " + tsValue);
                 assertTrue(tsValue != null);
             } else {
                 assertTrue(os instanceof None);
-                assertTrue(os.hasValue() == false);
+                assertFalse(os.hasValue());
                 tsValue = os.getValue();  // will throw a RuntimeException when called in the case
                 assertTrue(tsValue == null);  // never called
             }
 
         } catch (RuntimeException e) {
             System.err.println("companionRealUsageRandomTest(), got RuntimeException " + e);
-            assertTrue(os.hasValue() == false);
+            assertFalse(os.hasValue());
         }
     }
 
@@ -163,7 +164,7 @@ public class OptionTest {
         // verify the value stored
         System.out.println("optionSomeTest(), stored element has a value " + os.hasValue());
         assertTrue(os instanceof Some);
-        assertTrue(os.hasValue() == true);
+        assertTrue(os.hasValue());
         osValue = os.getValue();
         System.out.println("optionSomeTest(), value stored is " + osValue);
         assertTrue(osValue != null);
@@ -189,13 +190,13 @@ public class OptionTest {
         // verify the value stored
         System.out.println("optionNoneTest(), stored element has a value " + os.hasValue());
         assertTrue(os instanceof None);
-        assertTrue(os.hasValue() == false);
+        assertFalse(os.hasValue());
         try {
             tsValue = os.getValue();  // will throw a RuntimeException when called in the case
             assertTrue(tsValue == null);  // never called
         } catch (RuntimeException e) {
             System.err.println("optionNoneTest(), got RuntimeException " + e);
-            assertTrue(os.hasValue() == false);
+            assertFalse(os.hasValue());
         }
         // test with alternative value
         tsValue = os.getValueOrElse("Alternative value");

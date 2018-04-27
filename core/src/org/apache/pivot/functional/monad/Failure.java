@@ -20,7 +20,7 @@ package org.apache.pivot.functional.monad;
  * Generic container, to hold the unsuccessful result of a computation (a RuntimeException).
  */
 public class Failure<T> extends Try<T> {
-    final RuntimeException value;
+    protected final RuntimeException value;
 
     /**
      * Default constructor, do not use because it set null as invariant value to hold.
@@ -30,7 +30,7 @@ public class Failure<T> extends Try<T> {
     }
 
     /**
-     * Constructor with a value to set
+     * Constructor with a value to set.
      * @param val the RuntimeException to set
      */
     public Failure(final RuntimeException val) {

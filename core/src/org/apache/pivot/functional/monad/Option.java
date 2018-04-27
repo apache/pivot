@@ -22,7 +22,7 @@ import java.util.Iterator;
  * Definition of a generic Option container, to hold an invariant value (derived from Monad).
  */
 public abstract class Option<T> extends Monad<T> implements Iterable<T> {
-    final T value;
+    protected final T value;
 
     /**
      * Default constructor, do not use because it set null as invariant value to hold.
@@ -32,7 +32,7 @@ public abstract class Option<T> extends Monad<T> implements Iterable<T> {
     }
 
     /**
-     * Constructor with a value to set in the Option
+     * Constructor with a value to set in the Option.
      * @param val the value to set in the Option
      */
     public Option(final T val) {
@@ -57,7 +57,7 @@ public abstract class Option<T> extends Monad<T> implements Iterable<T> {
      * @return value if set, otherwise alternativeValue
      */
     public T getValueOrElse(final T alternativeValue) {
-        return (hasValue() == true) ? getValue() : alternativeValue;
+        return hasValue() ? getValue() : alternativeValue;
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class Option<T> extends Monad<T> implements Iterable<T> {
     }
 
     /**
-     * Return an Iterator
+     * Return an Iterator over this option.
      * @see java.lang.Iterable#iterator()
      */
     @Override

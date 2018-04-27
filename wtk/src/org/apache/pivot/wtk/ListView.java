@@ -402,11 +402,16 @@ public class ListView extends Component {
         }
     };
 
-    private ListViewListener.Listeners listViewListeners = new ListViewListener.Listeners();
-    private ListViewItemListener.Listeners listViewItemListeners = new ListViewItemListener.Listeners();
-    private ListViewItemStateListener.Listeners listViewItemStateListeners = new ListViewItemStateListener.Listeners();
-    private ListViewSelectionListener.Listeners listViewSelectionListeners = new ListViewSelectionListener.Listeners();
-    private ListViewBindingListener.Listeners listViewBindingListeners = new ListViewBindingListener.Listeners();
+    private ListViewListener.Listeners listViewListeners =
+        new ListViewListener.Listeners();
+    private ListViewItemListener.Listeners listViewItemListeners =
+        new ListViewItemListener.Listeners();
+    private ListViewItemStateListener.Listeners listViewItemStateListeners =
+        new ListViewItemStateListener.Listeners();
+    private ListViewSelectionListener.Listeners listViewSelectionListeners =
+        new ListViewSelectionListener.Listeners();
+    private ListViewBindingListener.Listeners listViewBindingListeners =
+        new ListViewBindingListener.Listeners();
 
     private static final ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();
 
@@ -1130,8 +1135,9 @@ public class ListView extends Component {
      */
     public Button.State getItemCheckmarkState(int index) {
         // Find out where the item is stored currently (if at all)
-        int checked = ArrayList.binarySearch(checkedIndexes, Integer.valueOf(index));
-        int mixed   = allowTriStateCheckmarks ? ArrayList.binarySearch(mixedIndexes, Integer.valueOf(index)) : -1;
+        Integer iIndex = Integer.valueOf(index);
+        int checked = ArrayList.binarySearch(checkedIndexes, iIndex);
+        int mixed   = allowTriStateCheckmarks ? ArrayList.binarySearch(mixedIndexes, iIndex) : -1;
 
         if (checked < 0 && mixed < 0) {
             return Button.State.UNSELECTED;
@@ -1196,6 +1202,8 @@ public class ListView extends Component {
                 case SELECTED:
                     checkedIndexes.insert(Integer.valueOf(index), -(checked + 1));
                     itemCheckedListener = true;
+                    break;
+                default:
                     break;
             }
 

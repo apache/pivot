@@ -30,7 +30,7 @@ public final class TryCompanion<T> {
      * @param <T> The type of this companion object.
      * @return the static instance
      */
-    public static final <T> TryCompanion<T> getInstance() {
+    public static <T> TryCompanion<T> getInstance() {
         return INSTANCE;
     }
 
@@ -48,7 +48,7 @@ public final class TryCompanion<T> {
      * @param val the value to test
      * @return true if it's a Try, false otherwise
      */
-    public final boolean isTry(final T val) {
+    public boolean isTry(final T val) {
         return val instanceof Try;
     }
 
@@ -109,7 +109,7 @@ public final class TryCompanion<T> {
     }
 
     /**
-     * Utility method to return the value contained in the Try, in a Option instance
+     * Utility method to return the value contained in the Try, in a Option instance.
      * @param t the Try
      * @return an Option instance: Some(value) if success, None otherwise
      */

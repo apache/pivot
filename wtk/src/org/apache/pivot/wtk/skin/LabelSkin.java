@@ -473,7 +473,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Sets the font used in rendering the Label's text
+     * Sets the font used in rendering the Label's text.
      *
      * @param font A {@linkplain ComponentSkin#decodeFont(String) font specification}.
      */
@@ -484,7 +484,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     /**
-     * Sets the font used in rendering the Label's text
+     * Sets the font used in rendering the Label's text.
      *
      * @param font A dictionary {@linkplain Theme#deriveFont describing a font}.
      */

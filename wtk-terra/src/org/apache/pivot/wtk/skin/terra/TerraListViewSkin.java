@@ -954,15 +954,19 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     /**
-     * {@link KeyCode#UP UP} Selects the previous enabled list item when select
-     * mode is not {@link SelectMode#NONE}<br> {@link KeyCode#DOWN DOWN} Selects
-     * the next enabled list item when select mode is not
-     * {@link SelectMode#NONE}<p> {@link Modifier#SHIFT SHIFT} +
-     * {@link KeyCode#UP UP} Increases the selection size by including the
-     * previous enabled list item when select mode is {@link SelectMode#MULTI}
-     * <br> {@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases
+     * Keyboard handling (arrow keys with modifiers).
+     * <ul>
+     * <li>{@link KeyCode#UP UP} Selects the previous enabled list item when select
+     * mode is not {@link SelectMode#NONE}</li>
+     * <li>{@link KeyCode#DOWN DOWN} Selects the next enabled list item when select
+     * mode is not {@link SelectMode#NONE}</li>
+     * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the selection
+     * size by including the previous enabled list item when select mode is
+     * {@link SelectMode#MULTI}</li>
+     * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases
      * the selection size by including the next enabled list item when select
-     * mode is {@link SelectMode#MULTI}
+     * mode is {@link SelectMode#MULTI}</li>
+     * </ul>
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
@@ -1056,7 +1060,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     /**
      * {@link KeyCode#SPACE SPACE} Toggles check mark selection when select mode
-     * is {@link SelectMode#SINGLE}
+     * is {@link SelectMode#SINGLE}.
      */
     @Override
     public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {

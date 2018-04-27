@@ -49,7 +49,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
         this.list = list;
     }
 
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public ListAdapter(T... a) {
         this.list = Arrays.asList(a);
     }

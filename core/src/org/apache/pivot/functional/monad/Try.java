@@ -23,7 +23,7 @@ import java.util.Iterator;
  */
 public abstract class Try<T> extends Monad<T> implements Iterable<T> {
 
-    /** Default constructor */
+    /** Default constructor. */
     protected Try() {
         // no-op
     }
@@ -46,7 +46,7 @@ public abstract class Try<T> extends Monad<T> implements Iterable<T> {
      * @return value if it is a successful value, otherwise alternativeValue
      */
     public T getValueOrElse(final T alternativeValue) {
-        return (isSuccess() == true) ? getValue() : alternativeValue;
+        return isSuccess() ? getValue() : alternativeValue;
     }
 
     /**
@@ -63,7 +63,7 @@ public abstract class Try<T> extends Monad<T> implements Iterable<T> {
     }
 
     /**
-     * Return an Iterator
+     * Return an Iterator.
      * @see java.lang.Iterable#iterator()
      */
     @Override

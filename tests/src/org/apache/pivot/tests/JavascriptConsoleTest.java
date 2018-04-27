@@ -140,7 +140,7 @@ public class JavascriptConsoleTest implements Application {
     }
 
     /**
-     * Load (and returns) a Window, given its file name and serializer to use
+     * Load (and returns) a Window, given its file name and serializer to use.
      *
      * @param fileName the file name for the bxml file to load
      * @param bxmlSerializer the serializer to use, or if null a new one will be

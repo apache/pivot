@@ -1259,17 +1259,22 @@ public class TerraTableViewSkin extends ComponentSkin implements TableView.Skin,
     }
 
     /**
-     * {@link KeyCode#UP UP} Selects the previous enabled row when select mode
-     * is not {@link SelectMode#NONE}<br> {@link KeyCode#DOWN DOWN} Selects the
-     * next enabled row when select mode is not {@link SelectMode#NONE}<p>
-     * {@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
+     * Keyboard handling (arrow keys with modifiers and a few others).
+     * <ul>
+     * <li>{@link KeyCode#UP UP} Selects the previous enabled row when select mode
+     * is not {@link SelectMode#NONE}</li>
+     * <li>{@link KeyCode#DOWN DOWN} Selects the next enabled row when select mode
+     * is not {@link SelectMode#NONE}</li>
+     * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
      * selection size by including the previous enabled row when select mode is
-     * {@link SelectMode#MULTI}<br> {@link Modifier#SHIFT SHIFT} +
-     * {@link KeyCode#DOWN DOWN} Increases the selection size by including the
-     * next enabled row when select mode is {@link SelectMode#MULTI}<br>
-     * {@code Cmd/Ctrl-A} in {@link SelectMode#MULTI} select mode to select everything<br>
-     * {@code Cmd/Ctrl-U} will unselect whatever is selected<br>
-     * {@link KeyCode#SPACE SPACE} wil select/unselect the "current" location
+     * {@link SelectMode#MULTI}</li>
+     * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#DOWN DOWN} Increases the
+     * selection size by including the next enabled row when select mode is
+     * {@link SelectMode#MULTI}</li>
+     * <li>{@code Cmd/Ctrl-A} in {@link SelectMode#MULTI} select mode to select everything</li>
+     * <li>{@code Cmd/Ctrl-U} will unselect whatever is selected</li>
+     * <li>{@link KeyCode#SPACE SPACE} wil select/unselect the "current" location</li>
+     * </ul>
      */
     @Override
     public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {

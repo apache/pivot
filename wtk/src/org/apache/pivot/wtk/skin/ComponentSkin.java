@@ -266,8 +266,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
     }
 
     /**
-     * {@link KeyCode#TAB TAB} Transfers focus forwards<br> {@link KeyCode#TAB
-     * TAB} + {@link Modifier#SHIFT SHIFT} Transfers focus backwards
+     * Keyboard handling (Tab key or Shift Tab).
+     * <ul>
+     * <li>{@link KeyCode#TAB TAB} Transfers focus forwards</li>
+     * <li>{@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Transfers focus backwards</li>
+     * </ul>
      */
     @Override
     public boolean keyPressed(Component componentArgument, int keyCode,
@@ -278,10 +281,11 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
         otherModifiers.addAll(Modifier.ALL_MODIFIERS);
         otherModifiers.remove(Modifier.SHIFT);
 
-        if (keyCode == KeyCode.TAB &&
-            !Keyboard.areAnyPressed(otherModifiers) &&
-            getComponent().isFocused()) {
-            FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
+        if (keyCode == KeyCode.TAB
+         && !Keyboard.areAnyPressed(otherModifiers)
+         &&  getComponent().isFocused()) {
+            FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT))
+                ? FocusTraversalDirection.BACKWARD
                 : FocusTraversalDirection.FORWARD;
 
             // Transfer focus to the next component
@@ -325,10 +329,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
             int tooltipWidth = tooltip.getPreferredWidth();
             int tooltipHeight = tooltip.getPreferredHeight();
             if (tooltipX + tooltipWidth > display.getWidth()) {
-                // Try to just fit it inside the display if
-                // there would be room to shift it above the
-                // cursor, otherwise move it to the left of
-                // the cursor
+                // Try to just fit it inside the display if there would be room to shift it
+                // above the cursor, otherwise move it to the left of the cursor.
                 if (tooltipY > tooltipHeight) {
                     tooltipX = display.getWidth() - tooltipWidth;
                 } else {
@@ -337,9 +339,8 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
                 if (tooltipX < 0) {
                     tooltipX = 0;
                 }
-                // Adjust the y location if the tip ends up
-                // being behind the mouse cursor because of
-                // these x adjustments
+                // Adjust the y location if the tip ends up being behind the mouse cursor
+                // because of these x adjustments.
                 if (tooltipX < location.x && tooltipX + tooltipWidth > location.x) {
                     tooltipY -= tooltipHeight;
                     if (tooltipY < 0) {
@@ -396,7 +397,7 @@ public abstract class ComponentSkin implements Skin, ComponentListener, Componen
     }
 
     /**
-     * Interpret a string as a font specification
+     * Interpret a string as a font specification.
      *
      * @param value Either a JSON dictionary {@link Theme#deriveFont describing
      * a font relative to the current theme}, or one of the

@@ -168,14 +168,15 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     public void run() {
                         java.awt.Window hostWindow = getDisplay().getHostWindow();
 
-                        if (DesktopDisplayHost.this.rootOwner == null) {
+                        Window ownerWindow = DesktopDisplayHost.this.rootOwner;
+                        if (ownerWindow == null) {
                             ((TitledWindow) hostWindow).setTitle(DEFAULT_HOST_WINDOW_TITLE);
                             hostWindow.setIconImage(null);
                         } else {
-                            ((TitledWindow) hostWindow).setTitle(DesktopDisplayHost.this.rootOwner.getTitle());
+                            ((TitledWindow) hostWindow).setTitle(ownerWindow.getTitle());
 
                             java.util.ArrayList<BufferedImage> iconImages = new java.util.ArrayList<>();
-                            for (Image icon : DesktopDisplayHost.this.rootOwner.getIcons()) {
+                            for (Image icon : ownerWindow.getIcons()) {
                                 if (icon instanceof Picture) {
                                     iconImages.add(((Picture) icon).getBufferedImage());
                                 }
@@ -457,7 +458,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
     }
 
     /**
-     * Calculate the entire virtual desktop bounding rectangle
+     * Calculate the entire virtual desktop bounding rectangle.
+     * @return The entire bounding rectangle of all the screen devices.
      */
     private static Rectangle getVirtualDesktopBounds() {
         Rectangle virtualBounds = new Rectangle();
@@ -508,7 +510,6 @@ public final class DesktopApplicationContext extends ApplicationContext {
             width = preferences.getInt(WIDTH_ARGUMENT, width);
             height = preferences.getInt(HEIGHT_ARGUMENT, height);
             maximized = preferences.getBoolean(MAXIMIZED_ARGUMENT, maximized);
-
         } catch (SecurityException exception) {
             System.err.println("Unable to retrieve startup preferences: " + exception);
         }
@@ -684,7 +685,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
             }
 
             // Start the application in a callback to allow the host window to open first
-            queueCallback( () -> {
+            queueCallback(() -> {
                 try {
                     application.startup(primaryDisplayHost.getDisplay(), new ImmutableMap<>(properties));
                 } catch (Throwable exception) {
@@ -705,13 +706,13 @@ public final class DesktopApplicationContext extends ApplicationContext {
                 Class<?> eawtApplicationEventClass = Class.forName("com.apple.eawt.ApplicationEvent");
 
                 Method setEnabledAboutMenuMethod = eawtApplicationClass.getMethod(
-                    "setEnabledAboutMenu", new Class<?>[] { Boolean.TYPE });
+                    "setEnabledAboutMenu", new Class<?>[] {Boolean.TYPE});
 
                 Method addApplicationListenerMethod = eawtApplicationClass.getMethod(
-                    "addApplicationListener", new Class<?>[] { eawtApplicationListenerClass });
+                    "addApplicationListener", new Class<?>[] {eawtApplicationListenerClass});
 
                 final Method setHandledMethod = eawtApplicationEventClass.getMethod("setHandled",
-                    new Class<?>[] { Boolean.TYPE });
+                    new Class<?>[] {Boolean.TYPE});
 
                 // Create the proxy handler
                 InvocationHandler handler = new InvocationHandler() {
@@ -729,7 +730,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                         }
 
                         // Invoke setHandled()
-                        setHandledMethod.invoke(args[0], new Object[] { Boolean.valueOf(handled) });
+                        setHandledMethod.invoke(args[0], new Object[] {Boolean.valueOf(handled)});
 
                         return null;
                     }
@@ -742,11 +743,11 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
                 Object eawtApplicationListener = Proxy.newProxyInstance(
                     DesktopApplicationContext.class.getClassLoader(),
-                    new Class<?>[] { eawtApplicationListenerClass }, handler);
+                    new Class<?>[] {eawtApplicationListenerClass}, handler);
 
                 // Invoke the addApplicationListener() method with the proxy listener
                 addApplicationListenerMethod.invoke(eawtApplication,
-                    new Object[] { eawtApplicationListener });
+                    new Object[] {eawtApplicationListener});
             } catch (Throwable throwable) {
                 System.err.println("Unable to attach EAWT hooks: " + throwable);
             }
@@ -862,7 +863,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
      * @param y           The new Y-position for the display.
      * @param modal       Whether or not the new display is to be modal.
      * @param resizable   Whether or not to make the new display resizable by the user.
-     * @param undecorated Whether the new display should be undecorated (that is just a bare window) or normal.
+     * @param undecorated Whether the new display should be undecorated (that is just
+     *                    a bare window) or normal.
      * @param owner       The owner for the new display.
      * @param displayCloseListener The listener for the dialog being closed.
      * @return The newly created display.
@@ -872,7 +874,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         boolean resizable, boolean undecorated, java.awt.Window owner,
         DisplayListener displayCloseListener) {
         if (isFullScreen()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(
+                    "Secondary display cannot be created for full screen application.");
         }
 
         final HostDialog hostDialog = new HostDialog(owner, modal, displayCloseListener);
@@ -883,7 +886,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
         // Open the window in a callback; otherwise, if it is modal, it will
         // block the calling thread
-        ApplicationContext.queueCallback( () -> hostDialog.setVisible(true) );
+        ApplicationContext.queueCallback(() -> hostDialog.setVisible(true));
 
         return hostDialog.getDisplay();
     }

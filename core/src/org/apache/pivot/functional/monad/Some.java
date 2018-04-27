@@ -30,7 +30,7 @@ public final class Some<T> extends Option<T> {
     }
 
     /**
-     * Constructor with a value to set here
+     * Constructor with a value to set here.
      *
      * @param val the value to set
      */

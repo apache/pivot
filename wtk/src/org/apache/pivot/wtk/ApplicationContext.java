@@ -314,7 +314,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             }
 
             @Override
-            public AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes) {
+            public AttributedCharacterIterator cancelLatestCommittedText(
+                    AttributedCharacterIterator.Attribute[] attributes) {
                 TextInputMethodListener listener = getCurrentListener();
                 if (listener != null) {
                     return listener.cancelLatestCommittedText(attributes);
@@ -323,7 +324,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             }
 
             @Override
-            public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+            public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex,
+                    AttributedCharacterIterator.Attribute[] attributes) {
                 TextInputMethodListener listener = getCurrentListener();
                 if (listener != null) {
                     return listener.getCommittedText(beginIndex, endIndex, attributes);
@@ -359,7 +361,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             }
 
             @Override
-            public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+            public AttributedCharacterIterator getSelectedText(
+                    AttributedCharacterIterator.Attribute[] attributes) {
                 TextInputMethodListener listener = getCurrentListener();
                 if (listener != null) {
                     return listener.getSelectedText(attributes);
@@ -423,7 +426,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
 
             try {
                 debugPaint = Boolean.getBoolean("org.apache.pivot.wtk.debugpaint");
-                if (debugPaint == true) {
+                if (debugPaint) {
                     random = new Random();
                 }
             } catch (SecurityException ex) {
@@ -777,7 +780,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         /**
          * Paints the display including any decorators.
          *
-         * @param graphics
+         * @param graphics The graphics to paint into.
          */
         private void paintDisplay(Graphics2D graphics) {
             if (scale != 1) {
@@ -1249,8 +1252,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                 int dragThreshold = Platform.getDragThreshold();
 
                                 if (dragLocation != null
-                                    && (Math.abs(x - dragLocation.x) > dragThreshold ||
-                                        Math.abs(y - dragLocation.y) > dragThreshold)) {
+                                    && (Math.abs(x - dragLocation.x) > dragThreshold
+                                    ||  Math.abs(y - dragLocation.y) > dragThreshold)) {
                                     // The user has dragged the mouse past the
                                     // drag threshold; try
                                     // to find a drag source
@@ -1489,7 +1492,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
 
             // Ignore Control when Alt-Graphics is pressed
             if ((modifiersEx & InputEvent.CTRL_DOWN_MASK) > 0
-                && ((modifiersEx & InputEvent.ALT_DOWN_MASK) == 0 || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
+             && ((modifiersEx & InputEvent.ALT_DOWN_MASK) == 0
+               || awtKeyLocation == KeyEvent.KEY_LOCATION_RIGHT)) {
                 keyboardModifiers |= Keyboard.Modifier.CTRL.getMask();
             }
 
@@ -1557,7 +1561,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler = (Application.UnprocessedKeyHandler) application;
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                                (Application.UnprocessedKeyHandler) application;
                                         unprocessedKeyHandler.keyPressed(keyCode, keyLocation);
                                     }
                                 }
@@ -1587,7 +1592,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler = (Application.UnprocessedKeyHandler) application;
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                                (Application.UnprocessedKeyHandler) application;
                                         unprocessedKeyHandler.keyReleased(keyCode, keyLocation);
                                     }
                                 }
@@ -1828,7 +1834,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             try {
                 return Version.decode(versionString);
             } catch (Throwable ex) {
-                String exMsg = Utils.isNullOrEmpty(ex.getMessage()) ? ex.getClass().getSimpleName() : ex.getMessage();
+                String exMsg = Utils.isNullOrEmpty(ex.getMessage())
+                        ? ex.getClass().getSimpleName()
+                        : ex.getMessage();
                 System.err.println("Error decoding version string \"" + versionString + "\": " + exMsg);
             }
         }
@@ -2283,7 +2291,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             return;
         }
 
-        String message = String.format("%1$s on Thread %2$s:", exception.getClass().getName(), thread.getName());
+        String message = String.format("%1$s on Thread %2$s:",
+                exception.getClass().getName(), thread.getName());
 
         TextArea body = null;
         String bodyText = exception.getMessage();
@@ -2305,7 +2314,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         int n = 0;
         for (Application application : applications) {
             if (application instanceof Application.UncaughtExceptionHandler) {
-                Application.UncaughtExceptionHandler uncaughtExceptionHandler = (Application.UncaughtExceptionHandler) application;
+                Application.UncaughtExceptionHandler uncaughtExceptionHandler =
+                        (Application.UncaughtExceptionHandler) application;
                 uncaughtExceptionHandler.uncaughtException(thread, exception);
                 n++;
             }

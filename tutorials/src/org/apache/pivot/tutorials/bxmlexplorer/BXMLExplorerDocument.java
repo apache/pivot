@@ -63,23 +63,17 @@ import org.apache.pivot.wtk.effects.ShadeDecorator;
 import org.xml.sax.SAXException;
 
 public class BXMLExplorerDocument extends CardPane implements Bindable {
-    @BXML
-    private TreeView treeView;
-    @BXML
-    private CardPane playgroundCardPane;
-    @BXML
-    private TextPane bxmlSourceTextPane;
-    @BXML
-    private ComponentPropertyInspector componentPropertyInspector;
-    @BXML
-    private ComponentStyleInspector componentStyleInspector;
-    @BXML
-    private PushButton reloadButton;
+    @BXML private TreeView treeView;
+    @BXML private CardPane playgroundCardPane;
+    @BXML private TextPane bxmlSourceTextPane;
+    @BXML private ComponentPropertyInspector componentPropertyInspector;
+    @BXML private ComponentStyleInspector componentStyleInspector;
+    @BXML private PushButton reloadButton;
 
     private File file;
     private Component loadedComponent;
     /**
-     * maps the WTK widgets -> bxml:id values
+     * Maps the WTK widgets -&gt; bxml:id values.
      */
     private HashMap<Object, String> widgetToID = null;
     private HashMap<Object, TreeNode> componentToTreeNode = null;

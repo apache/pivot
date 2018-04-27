@@ -17,7 +17,9 @@
 package org.apache.pivot.functional.monad.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
@@ -47,9 +49,9 @@ public class TryTest {
         Try<Object> tn = t.fromValue(null);
         assertNotNull(tn);
         assertTrue(tn instanceof Success);
-        assertTrue(tn.isSuccess() == true);
+        assertTrue(tn.isSuccess());
         Object tnValue = tn.getValue();
-        assertTrue(tnValue == null);
+        assertNull(tnValue);
         System.out.println("companionNullTest(), value stored is " + tnValue);
     }
 
@@ -61,11 +63,11 @@ public class TryTest {
         Try<Object> to = t.fromValue(new String("Hello"));
         assertNotNull(to);
         assertTrue(to instanceof Success);
-        assertTrue(to.isSuccess() == true);
+        assertTrue(to.isSuccess());
         Object toValue = to.getValue();
-        assertTrue(toValue != null);
+        assertNotNull(toValue);
         assertTrue(toValue instanceof String);
-        assertTrue(toValue.equals("Hello"));
+        assertEquals(toValue, "Hello");
         System.out.println("companionObjectTest(), value stored is " + toValue);
     }
 
@@ -77,11 +79,11 @@ public class TryTest {
         Try<String> ts = t.fromValue("Hello");
         assertNotNull(ts);
         assertTrue(ts instanceof Success);
-        assertTrue(ts.isSuccess() == true);
+        assertTrue(ts.isSuccess());
         String tsValue = ts.getValue();
-        assertTrue(tsValue != null);
+        assertNotNull(tsValue);
         // assertTrue(tsValue instanceof String);  // unnecessary
-        assertTrue(tsValue.equals("Hello"));
+        assertEquals(tsValue, "Hello");
         System.out.println("companionStringTest(), value stored is " + tsValue);
     }
 
@@ -94,13 +96,14 @@ public class TryTest {
         Try<String> tf = t.fromValue(re);
         assertNotNull(tf);
         assertTrue(tf instanceof Failure);
-        assertTrue(tf.isSuccess() == false);
+        assertFalse(tf.isSuccess());
         try {
             String tfValue = tf.getValue();  // this will throw the RuntimeException stored inside the Failure
-            assertTrue(tfValue != null);  // never called
+            assertNotNull(tfValue);          // never called
         } catch (RuntimeException e) {
             System.err.println("companionFailureTest(), value stored is " + e);
-            assertTrue(e != null);  // unnecessary
+            assertNotNull(e);  // unnecessary
+
         }
     }
 
@@ -137,12 +140,12 @@ public class TryTest {
         System.out.println("companionRealUsageRandomTest(), value stored is a success " + ts.isSuccess());
         try {
             String tsValue = ts.getValue();  // this will throw the RuntimeException stored inside the Failure
-            assertTrue(tsValue != null);  // called only when a real value is stored (and not a RuntimeException)
+            assertNotNull(tsValue);          // called only when a real value is stored (and not a RuntimeException)
             System.out.println("companionRealUsageRandomTest(), value stored is " + tsValue);
-            assertTrue(ts.isSuccess() == true);
+            assertTrue(ts.isSuccess());
         } catch (RuntimeException e) {
             System.err.println("companionRealUsageRandomTest(), exception stored is " + e);
-            assertTrue(ts.isSuccess() == false);
+            assertFalse(ts.isSuccess());
         }
     }
 
@@ -157,7 +160,7 @@ public class TryTest {
         } catch (RuntimeException e) {
             // ts = new Success<>(e);  // compile error, ok
             ts = new Failure<>(e);
-            assertTrue(e != null);  // unnecessary
+            assertNotNull(e);  // unnecessary
         }
 
         // verify the value stored
@@ -165,12 +168,12 @@ public class TryTest {
         String tsValue;
         try {
             tsValue = ts.getValue();  // this will throw the RuntimeException stored inside the Failure
-            assertTrue(tsValue != null);  // called only when a real value is stored (and not a RuntimeException)
+            assertNotNull(tsValue);   // called only when a real value is stored (and not a RuntimeException)
             System.out.println("trySuccessTest(), value stored is " + tsValue);
-            assertTrue(ts.isSuccess() == true);
+            assertTrue(ts.isSuccess());
         } catch (RuntimeException e) {
             System.err.println("trySuccessTest(), exception stored is " + e);
-            assertTrue(ts.isSuccess() == false);
+            assertFalse(ts.isSuccess());
         }
         // test with alternative value
         tsValue = ts.getValueOrElse("Alternative value");
@@ -190,7 +193,7 @@ public class TryTest {
         } catch (RuntimeException e) {
             // ts = new Success<>(e);  // compile error, ok
             tf = new Failure<>(e);
-            assertTrue(e != null);  // unnecessary
+            assertNotNull(e);  // unnecessary
         }
 
         // verify the value stored
@@ -198,12 +201,12 @@ public class TryTest {
         String tsValue;
         try {
             tsValue = tf.getValue();  // this will throw the RuntimeException stored inside the Failure
-            assertTrue(tsValue != null);  // called only when a real value is stored (and not a RuntimeException)
+            assertNotNull(tsValue);   // called only when a real value is stored (and not a RuntimeException)
             System.out.println("tryFailureTest(), value stored is " + tsValue);
-            assertTrue(tf.isSuccess() == true);
+            assertTrue(tf.isSuccess());
         } catch (RuntimeException e) {
             System.err.println("tryFailureTest(), exception stored is " + e);
-            assertTrue(tf.isSuccess() == false);
+            assertFalse(tf.isSuccess());
         }
         // test with alternative value
         tsValue = tf.getValueOrElse("Alternative value");
@@ -264,7 +267,7 @@ public class TryTest {
             // never executed in this case
             String value = it.next();
             System.out.println("tryFailureIteratorTest(), value " + i + " from iterator is " + value);
-            assertEquals(null, value);
+            assertNull(value);
             i++;
         }
         assertEquals(i, 0);
@@ -275,7 +278,7 @@ public class TryTest {
         for (String value : tf) {
             // never executed in this case
             System.out.println("tryFailureIteratorTest(), value " + i + " from iterator is " + value);
-            assertEquals(null, value);
+            assertNull(value);
             i++;
         }
         assertEquals(i, 0);
@@ -295,15 +298,15 @@ public class TryTest {
 
         assertNotNull(ts);
         assertTrue(ts instanceof Success);
-        assertTrue(ts.isSuccess() == true);
+        assertTrue(ts.isSuccess());
 
         assertNotNull(os);
         assertTrue(os instanceof Some);
-        assertTrue(os.hasValue() == true);
+        assertTrue(os.hasValue());
 
         String osValue = os.getValue();
-        assertTrue(osValue != null);
-        assertTrue(osValue.equals("Hello"));
+        assertNotNull(osValue);
+        assertEquals(osValue, "Hello");
         System.out.println("companionSuccessToOptionTest(), value stored is " + osValue);
     }
 
@@ -322,15 +325,15 @@ public class TryTest {
 
         assertNotNull(tf);
         assertTrue(tf instanceof Failure);
-        assertTrue(tf.isSuccess() == false);
+        assertFalse(tf.isSuccess());
 
         assertNotNull(on);
         assertTrue(on instanceof None);
-        assertTrue(on.hasValue() == false);
+        assertFalse(on.hasValue());
 
         try {
             String onValue = on.getValue();  // this will throw a RuntimeException for the non-value of None
-            assertTrue(onValue != null);  // never called
+            assertNotNull(onValue);          // never called
         } catch (RuntimeException e) {
             System.err.println("companionFailureToOptionTest(), got RuntimeException " + e);
         }

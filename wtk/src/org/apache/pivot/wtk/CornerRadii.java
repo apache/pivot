@@ -93,7 +93,7 @@ public final class CornerRadii implements Serializable {
 
     /**
      * Construct a {@link CornerRadii} object from a dictionary specifying
-     * values for each of the four corners
+     * values for each of the four corners.
      *
      * @param cornerRadii A dictionary with keys {@value #TOP_LEFT_KEY},
      * {@value #TOP_RIGHT_KEY}, {@value #BOTTOM_LEFT_KEY},
@@ -114,10 +114,10 @@ public final class CornerRadii implements Serializable {
     public CornerRadii(Sequence<?> cornerRadii) {
         Utils.checkNull(cornerRadii, "cornerRadii");
 
-        topLeft = ((Number)cornerRadii.get(0)).intValue();
-        topRight = ((Number)cornerRadii.get(1)).intValue();
-        bottomLeft = ((Number)cornerRadii.get(2)).intValue();
-        bottomRight = ((Number)cornerRadii.get(3)).intValue();
+        topLeft = ((Number) cornerRadii.get(0)).intValue();
+        topRight = ((Number) cornerRadii.get(1)).intValue();
+        bottomLeft = ((Number) cornerRadii.get(2)).intValue();
+        bottomRight = ((Number) cornerRadii.get(3)).intValue();
 
         check(this);
     }
@@ -195,10 +195,8 @@ public final class CornerRadii implements Serializable {
             if (parts.length == 4) {
                 try {
                     cornerRadii = new CornerRadii(
-                        Integer.parseInt(parts[0]),
-                        Integer.parseInt(parts[1]),
-                        Integer.parseInt(parts[2]),
-                        Integer.parseInt(parts[3]));
+                        Integer.parseInt(parts[0]), Integer.parseInt(parts[1]),
+                        Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
                 } catch (NumberFormatException ex) {
                     throw new IllegalArgumentException(ex);
                 }

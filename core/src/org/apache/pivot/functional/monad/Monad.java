@@ -21,7 +21,7 @@ package org.apache.pivot.functional.monad;
  */
 public abstract class Monad<T> implements MonadicOperations<T> {
 
-    /** Default constructor */
+    /** Default constructor. */
     protected Monad() {
         // no-op
     }

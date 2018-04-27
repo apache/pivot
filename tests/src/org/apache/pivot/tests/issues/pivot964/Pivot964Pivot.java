@@ -47,7 +47,7 @@ import com.kitfox.svg.SVGException;
 import com.kitfox.svg.animation.AnimationElement;
 
 /**
- * Test application with Pivot components
+ * Test application with Pivot components.
  */
 public class Pivot964Pivot implements Application {
 

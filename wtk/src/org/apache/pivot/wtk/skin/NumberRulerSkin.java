@@ -95,9 +95,9 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         Orientation orientation = ruler.getOrientation();
 
         // Give a little extra height if showing numbers
-        return (orientation == Orientation.HORIZONTAL) ?
-            ((showMajorNumbers || showMinorNumbers) ?
-                ((int)Math.ceil(charHeight) + MAJOR_SIZE + 5) : MAJOR_SIZE * 2) : 0;
+        return (orientation == Orientation.HORIZONTAL)
+            ? ((showMajorNumbers || showMinorNumbers)
+                ? ((int) Math.ceil(charHeight) + MAJOR_SIZE + 5) : MAJOR_SIZE * 2) : 0;
     }
 
     @Override
@@ -120,7 +120,8 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         return 0;
     }
 
-    private void showNumber(Graphics2D graphics, FontRenderContext fontRenderContext, int number, int x, int y) {
+    private void showNumber(Graphics2D graphics, FontRenderContext fontRenderContext,
+            int number, int x, int y) {
         String num = Integer.toString(number);
 
         StringCharacterIterator line;
@@ -135,8 +136,8 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         textBounds = glyphVector.getLogicalBounds();
         width = (float) textBounds.getWidth();
         height = (float) textBounds.getHeight();
-        fx = (float)x - (width / 2.0f);
-        fy = (float)(y - 2);
+        fx = (float) x - (width / 2.0f);
+        fy = (float) (y - 2);
         graphics.drawGlyphVector(glyphVector, fx, fy);
     }
 
@@ -172,7 +173,8 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
 
                 Rectangle lineRect = new Rectangle(0, height - 1, width - 1, 0);
                 Rectangle clippedLineRect = lineRect.intersection(clipRect);
-                graphics.drawLine(clippedLineRect.x, clippedLineRect.y, clippedLineRect.x + clippedLineRect.width, clippedLineRect.y);
+                graphics.drawLine(clippedLineRect.x, clippedLineRect.y,
+                                  clippedLineRect.x + clippedLineRect.width, clippedLineRect.y);
 
                 for (int i = 0, n = width / markerSpacing + 1; i < n; i++) {
                     int x = i * markerSpacing + markerInsets.left;
@@ -193,14 +195,14 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
                         graphics.drawLine(x, start, x, end4);
                     }
                 }
-
                 break;
             }
 
             case VERTICAL: {
                 Rectangle lineRect = new Rectangle(width - 1, 0, 0, height - 1);
                 Rectangle clippedLineRect = lineRect.intersection(clipRect);
-                graphics.drawLine(clippedLineRect.x, clippedLineRect.y, clippedLineRect.x, clippedLineRect.y + clippedLineRect.height);
+                graphics.drawLine(clippedLineRect.x, clippedLineRect.y,
+                                  clippedLineRect.x, clippedLineRect.y + clippedLineRect.height);
 
                 // Optimize drawing by only starting just above the current clip bounds
                 // down to the bottom (plus one) of the end of the clip bounds.
@@ -216,20 +218,18 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
                     int lineY = (num - 1) * lineHeight + markerInsets.top;
                     Graphics2D lineGraphics = (Graphics2D) graphics.create(0, lineY, width, lineHeight);
 
-                    float y = (float)(lineHeight - rowPadding.bottom) - descent;
+                    float y = (float) (lineHeight - rowPadding.bottom) - descent;
                     GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
                     Rectangle2D textBounds = glyphVector.getLogicalBounds();
                     float lineWidth = (float) textBounds.getWidth();
-                    float x = (float)width - (lineWidth + (float)padding);
+                    float x = (float) width - (lineWidth + (float) padding);
                     lineGraphics.drawGlyphVector(glyphVector, x, y);
                 }
-
                 break;
             }
 
-            default: {
+            default:
                 break;
-            }
         }
     }
 
@@ -354,7 +354,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     public final void setShowMajorNumbers(boolean showMajorNumbers) {
         this.showMajorNumbers = showMajorNumbers;
 
-        NumberRuler ruler = (NumberRuler)getComponent();
+        NumberRuler ruler = (NumberRuler) getComponent();
         if (ruler.getOrientation() == Orientation.HORIZONTAL) {
             invalidateComponent();
         }
@@ -377,7 +377,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     public final void setShowMinorNumbers(boolean showMinorNumbers) {
         this.showMinorNumbers = showMinorNumbers;
 
-        NumberRuler ruler = (NumberRuler)getComponent();
+        NumberRuler ruler = (NumberRuler) getComponent();
         if (ruler.getOrientation() == Orientation.HORIZONTAL) {
             invalidateComponent();
         }
@@ -402,14 +402,14 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         LineMetrics lm = this.font.getLineMetrics("0", fontRenderContext);
         this.charHeight = lm.getAscent();
         this.descent = lm.getDescent();
-        this.lineHeight = (int)Math.ceil(lm.getHeight()) +
-            (rowPadding != null ? rowPadding.getHeight() : 0);
+        this.lineHeight = (int) Math.ceil(lm.getHeight())
+            + (rowPadding != null ? rowPadding.getHeight() : 0);
 
         invalidateComponent();
     }
 
     /**
-     * Sets the font used in rendering the Ruler's text
+     * Sets the font used in rendering the Ruler's text.
      *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
@@ -418,7 +418,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     }
 
     /**
-     * Sets the font used in rendering the Ruler's text
+     * Sets the font used in rendering the Ruler's text.
      *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */

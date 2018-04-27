@@ -175,7 +175,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
                 graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
             } else {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(buttonBorderColor);
@@ -242,6 +242,10 @@ public class TerraCheckboxSkin extends CheckboxSkin {
             graphics.setColor(buttonSelectionColorLocal);
             GraphicsUtilities.drawLine(graphics, 4, (CHECKBOX_SIZE - 3) / 2 + 1,
                 CHECKBOX_SIZE - 8, Orientation.HORIZONTAL, 2);
+            break;
+
+          default:
+            // Nothing to do here for the unselected state
             break;
         }
 

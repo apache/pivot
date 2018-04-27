@@ -996,7 +996,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
                 int tooltipXOffset = 16;
                 int padding = 15;
 
-                toolTipTextArea.setMaximumWidth(display.getWidth() - ( x + tooltipXOffset + padding) );
+                toolTipTextArea.setMaximumWidth(display.getWidth() - (x + tooltipXOffset + padding));
                 tooltip.setLocation(x + tooltipXOffset, y);
                 tooltip.open(comp.getWindow());
             }

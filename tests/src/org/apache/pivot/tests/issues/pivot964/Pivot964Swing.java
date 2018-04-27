@@ -34,7 +34,7 @@ import com.kitfox.svg.animation.AnimationElement;
 import com.kitfox.svg.app.beans.SVGIcon;
 
 /**
- * Test using a Swing JFrame
+ * Test using a Swing JFrame.
  * In this case all is good.
  */
 public class Pivot964Swing extends javax.swing.JFrame {
@@ -42,7 +42,7 @@ public class Pivot964Swing extends javax.swing.JFrame {
 
     TestPanel panel = new TestPanel();
 
-    /** Creates new form SVGIconDemo */
+    /** Creates new form SVGIconDemo. */
     public Pivot964Swing() {
         initComponents();
         panelDisplay.add(panel, BorderLayout.CENTER);

@@ -129,6 +129,6 @@ public class TextInputs extends Window implements Bindable {
     @Override
     public void open(Display display, Window owner) {
         super.open(display, owner);
-        ApplicationContext.queueCallback( () -> stateTextInput.requestFocus() );
+        ApplicationContext.queueCallback(() -> stateTextInput.requestFocus());
     }
 }

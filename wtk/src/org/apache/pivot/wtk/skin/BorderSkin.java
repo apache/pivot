@@ -505,7 +505,7 @@ public class BorderSkin extends ContainerSkin implements BorderListener {
     }
 
     /**
-     * Sets the radii of the Border's corners
+     * Sets the radii of the Border's corners.
      *
      * @param cornerRadii A single integer value, or a JSON dictionary
      * {@linkplain CornerRadii#CornerRadii(Dictionary) specifying the four corners}.

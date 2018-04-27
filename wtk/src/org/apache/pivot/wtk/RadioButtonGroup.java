@@ -215,7 +215,7 @@ public class RadioButtonGroup extends ButtonGroup {
     };
 
     /**
-     * Filter used to determine selectable buttons within the group
+     * Filter used to determine selectable buttons within the group.
      */
     private final Filter<Integer> defaultFilter = new Filter<Integer>() {
         @Override

@@ -93,7 +93,7 @@ public class CardPaneTest implements Application {
 
         frame.open(display);
 
-        ApplicationContext.queueCallback( () -> sheet.open(frame) );
+        ApplicationContext.queueCallback(() -> sheet.open(frame));
     }
 
     @Override

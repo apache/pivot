@@ -168,12 +168,10 @@ public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
     @Override
     public Vote previewWindowOpen(Window window) {
         Vote vote = super.previewWindowOpen(window);
-        switch (vote) {
-            case APPROVE:
-                // If this is the second or subsequent open, then the
-                // image view has been cleared, so set it up again
-                messageTypeChanged((Prompt)window, null);
-                break;
+        if (vote == Vote.APPROVE) {
+            // If this is the second or subsequent open, then the
+            // image view has been cleared, so set it up again
+            messageTypeChanged((Prompt)window, null);
         }
         return vote;
     }

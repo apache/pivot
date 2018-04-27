@@ -47,7 +47,7 @@ public class Pivot686 implements Application {
         initializeFields(bxmlSerializer);
         window.open(display);
 
-        if (forceFocus == true) {
+        if (forceFocus) {
             System.out.println("force focus on textInput now");
             textInput.requestFocus(); // force focus on TextInput, Ok when run
                                       // as a Java Application, and even as

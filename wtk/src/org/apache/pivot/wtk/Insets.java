@@ -128,10 +128,10 @@ public final class Insets implements Serializable {
     public Insets(Sequence<?> insets) {
         Utils.checkNull(insets, "padding/margin");
 
-        this.top = ((Number)insets.get(0)).intValue();
-        this.left = ((Number)insets.get(1)).intValue();
-        this.bottom = ((Number)insets.get(2)).intValue();
-        this.right = ((Number)insets.get(3)).intValue();
+        this.top = ((Number) insets.get(0)).intValue();
+        this.left = ((Number) insets.get(1)).intValue();
+        this.bottom = ((Number) insets.get(2)).intValue();
+        this.right = ((Number) insets.get(3)).intValue();
     }
 
     /**
@@ -169,8 +169,8 @@ public final class Insets implements Serializable {
 
         if (object instanceof Insets) {
             Insets insets = (Insets) object;
-            equals = (top == insets.top && left == insets.left &&
-                      bottom == insets.bottom && right == insets.right);
+            equals = (top == insets.top && left == insets.left
+                   && bottom == insets.bottom && right == insets.right);
         }
 
         return equals;
@@ -193,7 +193,7 @@ public final class Insets implements Serializable {
     }
 
     /**
-     * Decode a possible Insets value, which can be in one of the
+     * Decode a possible Insets value. The value can be in one of the
      * following forms:
      * <ul>
      * <li><pre>{ "top": nnn, "left": nnn, "bottom": nnn, "right": nnn }</pre>
