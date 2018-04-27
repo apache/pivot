@@ -94,7 +94,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * Abstract renderer for displaying file system contents.
      */
-    public static abstract class FileRenderer extends BoxPane {
+    public abstract static class FileRenderer extends BoxPane {
         protected ImageView imageView = new ImageView();
         protected Label label = new Label();
 
@@ -362,7 +362,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
     /**
      * Abstract base class for drive renderers.
      */
-    public static abstract class DriveRenderer extends BoxPane {
+    public abstract static class DriveRenderer extends BoxPane {
         protected ImageView imageView = new ImageView();
         protected Label label = new Label();
 
@@ -479,7 +479,7 @@ public class TerraFileBrowserSkin extends FileBrowserSkin {
         }
     }
 
-    public static abstract class FileComparator implements Comparator<File>, Serializable {
+    public abstract static class FileComparator implements Comparator<File>, Serializable {
         private static final long serialVersionUID = 1L;
 
         @Override

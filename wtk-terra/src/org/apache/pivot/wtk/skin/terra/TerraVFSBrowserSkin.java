@@ -99,7 +99,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     /**
      * Abstract renderer for displaying file system contents.
      */
-    public static abstract class FileRenderer extends BoxPane {
+    public abstract static class FileRenderer extends BoxPane {
         protected ImageView imageView = new ImageView();
         protected Label label = new Label();
         protected VFSBrowser fileBrowser = null;
@@ -415,7 +415,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
     /**
      * Abstract base class for drive renderers.
      */
-    public static abstract class DriveRenderer extends BoxPane {
+    public abstract static class DriveRenderer extends BoxPane {
         protected ImageView imageView = new ImageView();
         protected Label label = new Label();
 
@@ -532,7 +532,7 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         }
     }
 
-    public static abstract class FileComparator implements Comparator<FileObject>, Serializable {
+    public abstract static class FileComparator implements Comparator<FileObject>, Serializable {
         private static final long serialVersionUID = 1L;
 
         @Override
