@@ -1642,7 +1642,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
      * <ul>
      * <li>{@link KeyCode#UP UP} Selects the previous enabled node when select mode
      * is not {@link SelectMode#NONE}</li>
-     * <li>{@link KeyCode#DOWN DOWN} Selects the * next enabled node when select mode
+     * <li>{@link KeyCode#DOWN DOWN} Selects the next enabled node when select mode
      * is not {@link SelectMode#NONE}</li>
      * <li>{@link Modifier#SHIFT SHIFT} + {@link KeyCode#UP UP} Increases the
      * selection size by including the previous enabled node when select mode is
