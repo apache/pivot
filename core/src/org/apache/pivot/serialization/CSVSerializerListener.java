@@ -72,7 +72,7 @@ public interface CSVSerializerListener {
      * @param csvSerializer The active serializer.
      * @param list The list just begun.
      */
-    default public void beginList(CSVSerializer csvSerializer, List<?> list) {
+    default void beginList(CSVSerializer csvSerializer, List<?> list) {
     }
 
     /**
@@ -80,7 +80,7 @@ public interface CSVSerializerListener {
      *
      * @param csvSerializer The current serializer.
      */
-    default public void endList(CSVSerializer csvSerializer) {
+    default void endList(CSVSerializer csvSerializer) {
     }
 
     /**
@@ -89,6 +89,6 @@ public interface CSVSerializerListener {
      * @param csvSerializer The current serializer.
      * @param item The item just read.
      */
-    default public void readItem(CSVSerializer csvSerializer, Object item) {
+    default void readItem(CSVSerializer csvSerializer, Object item) {
     }
 }

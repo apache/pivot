@@ -78,7 +78,7 @@ public interface CalendarButtonBindingListener {
      * @param calendarButton          The calendar button that changed.
      * @param previousSelectedDateKey The previous value of the selected date binding key.
      */
-    default public void selectedDateKeyChanged(CalendarButton calendarButton, String previousSelectedDateKey) {
+    default void selectedDateKeyChanged(CalendarButton calendarButton, String previousSelectedDateKey) {
     }
 
     /**
@@ -87,7 +87,7 @@ public interface CalendarButtonBindingListener {
      * @param calendarButton               The calendar button that changed.
      * @param previousSelectedDateBindType The previous bind type for the selected date.
      */
-    default public void selectedDateBindTypeChanged(CalendarButton calendarButton,
+    default void selectedDateBindTypeChanged(CalendarButton calendarButton,
         BindType previousSelectedDateBindType) {
     }
 
@@ -97,7 +97,7 @@ public interface CalendarButtonBindingListener {
      * @param calendarButton                  The calendar button that changed.
      * @param previousSelectedDateBindMapping The previous bind mapping for the selected date.
      */
-    default public void selectedDateBindMappingChanged(CalendarButton calendarButton,
+    default void selectedDateBindMappingChanged(CalendarButton calendarButton,
         Calendar.SelectedDateBindMapping previousSelectedDateBindMapping) {
     }
 

@@ -61,7 +61,7 @@ public interface SliderListener {
      * @param previousStart The previous start of the slider's range.
      * @param previousEnd The previous end value.
      */
-    default public void rangeChanged(Slider slider, int previousStart, int previousEnd) {
+    default void rangeChanged(Slider slider, int previousStart, int previousEnd) {
     }
 
     /**
@@ -69,6 +69,6 @@ public interface SliderListener {
      *
      * @param slider The source of the event.
      */
-    default public void orientationChanged(Slider slider) {
+    default void orientationChanged(Slider slider) {
     }
 }

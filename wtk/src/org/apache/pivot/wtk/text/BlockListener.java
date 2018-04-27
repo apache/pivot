@@ -52,7 +52,7 @@ public interface BlockListener {
      * @param block                       The text block in question.
      * @param previousHorizontalAlignment The previous alignment value.
      */
-    default public void horizontalAlignmentChanged(Block block,
+    default void horizontalAlignmentChanged(Block block,
         HorizontalAlignment previousHorizontalAlignment) {
     }
 }

@@ -49,7 +49,7 @@ public interface MenuHandler {
      * @param component The component that is hosting the menu bar.
      * @param menuBar The menu bar to configure.
      */
-    default public void configureMenuBar(Component component, MenuBar menuBar) {
+    default void configureMenuBar(Component component, MenuBar menuBar) {
     }
 
     /**
@@ -59,7 +59,7 @@ public interface MenuHandler {
      * @param component The component that is hosting the menu bar.
      * @param menuBar The menu bar to clean up.
      */
-    default public void cleanupMenuBar(Component component, MenuBar menuBar) {
+    default void cleanupMenuBar(Component component, MenuBar menuBar) {
     }
 
     /**
@@ -73,7 +73,7 @@ public interface MenuHandler {
      * @return <tt>true</tt> to stop propagation of context menu configuration;
      * <tt>false</tt> to allow it to continue (default).
      */
-    default public boolean configureContextMenu(Component component, Menu menu, int x, int y) {
+    default boolean configureContextMenu(Component component, Menu menu, int x, int y) {
         return false;
     }
 }

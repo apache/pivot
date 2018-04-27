@@ -127,7 +127,7 @@ public interface TreeViewListener {
      * @param treeView         The source of this event.
      * @param previousTreeData The previous data for this tree.
      */
-    default public void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
+    default void treeDataChanged(TreeView treeView, List<?> previousTreeData) {
     }
 
     /**
@@ -136,7 +136,7 @@ public interface TreeViewListener {
      * @param treeView             The source of this event.
      * @param previousNodeRenderer The previous renderer for tree nodes.
      */
-    default public void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
+    default void nodeRendererChanged(TreeView treeView, TreeView.NodeRenderer previousNodeRenderer) {
     }
 
     /**
@@ -145,7 +145,7 @@ public interface TreeViewListener {
      * @param treeView           The source of this event.
      * @param previousNodeEditor The previous editor for tree nodes.
      */
-    default public void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
+    default void nodeEditorChanged(TreeView treeView, TreeView.NodeEditor previousNodeEditor) {
     }
 
     /**
@@ -154,7 +154,7 @@ public interface TreeViewListener {
      * @param treeView           The source of this event.
      * @param previousSelectMode What the tree view's select mode was before the change.
      */
-    default public void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
+    default void selectModeChanged(TreeView treeView, TreeView.SelectMode previousSelectMode) {
     }
 
     /**
@@ -162,7 +162,7 @@ public interface TreeViewListener {
      *
      * @param treeView The source of this event.
      */
-    default public void checkmarksEnabledChanged(TreeView treeView) {
+    default void checkmarksEnabledChanged(TreeView treeView) {
     }
 
     /**
@@ -170,7 +170,7 @@ public interface TreeViewListener {
      *
      * @param treeView The tree view that has changed.
      */
-    default public void showMixedCheckmarkStateChanged(TreeView treeView) {
+    default void showMixedCheckmarkStateChanged(TreeView treeView) {
     }
 
     /**
@@ -179,7 +179,7 @@ public interface TreeViewListener {
      * @param treeView                   The tree view that has changed.
      * @param previousDisabledNodeFilter The previous filter that determines the disabled nodes.
      */
-    default public void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
+    default void disabledNodeFilterChanged(TreeView treeView, Filter<?> previousDisabledNodeFilter) {
     }
 
     /**
@@ -188,7 +188,7 @@ public interface TreeViewListener {
      * @param treeView                        The source of this event.
      * @param previousDisabledCheckmarkFilter The previous filter that determined the disabled checkmarks.
      */
-    default public void disabledCheckmarkFilterChanged(TreeView treeView,
+    default void disabledCheckmarkFilterChanged(TreeView treeView,
         Filter<?> previousDisabledCheckmarkFilter) {
     }
 }

@@ -91,7 +91,7 @@ public interface SpinnerItemListener {
      * @param spinner The source of the event.
      * @param index Where the item was inserted.
      */
-    default public void itemInserted(Spinner spinner, int index) {
+    default void itemInserted(Spinner spinner, int index) {
     }
 
     /**
@@ -101,7 +101,7 @@ public interface SpinnerItemListener {
      * @param index The start of the items that were removed.
      * @param count The number of items removed from there.
      */
-    default public void itemsRemoved(Spinner spinner, int index, int count) {
+    default void itemsRemoved(Spinner spinner, int index, int count) {
     }
 
     /**
@@ -110,7 +110,7 @@ public interface SpinnerItemListener {
      * @param spinner The source of this event.
      * @param index The location of the item that was updated.
      */
-    default public void itemUpdated(Spinner spinner, int index) {
+    default void itemUpdated(Spinner spinner, int index) {
     }
 
     /**
@@ -118,7 +118,7 @@ public interface SpinnerItemListener {
      *
      * @param spinner The source of this event.
      */
-    default public void itemsCleared(Spinner spinner) {
+    default void itemsCleared(Spinner spinner) {
     }
 
     /**
@@ -126,6 +126,6 @@ public interface SpinnerItemListener {
      *
      * @param spinner The source of this event.
      */
-    default public void itemsSorted(Spinner spinner) {
+    default void itemsSorted(Spinner spinner) {
     }
 }

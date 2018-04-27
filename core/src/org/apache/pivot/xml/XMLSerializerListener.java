@@ -71,7 +71,7 @@ public interface XMLSerializerListener {
      * @param xmlSerializer The active serializer.
      * @param element The element we are beginning to read.
      */
-    default public void beginElement(XMLSerializer xmlSerializer, Element element) {
+    default void beginElement(XMLSerializer xmlSerializer, Element element) {
     }
 
     /**
@@ -79,7 +79,7 @@ public interface XMLSerializerListener {
      *
      * @param xmlSerializer The active serializer.
      */
-    default public void endElement(XMLSerializer xmlSerializer) {
+    default void endElement(XMLSerializer xmlSerializer) {
     }
 
     /**
@@ -88,6 +88,6 @@ public interface XMLSerializerListener {
      * @param xmlSerializer The current serializer.
      * @param textNode The text node that was just read.
      */
-    default public void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
+    default void readTextNode(XMLSerializer xmlSerializer, TextNode textNode) {
     }
 }

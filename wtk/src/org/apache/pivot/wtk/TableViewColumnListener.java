@@ -142,7 +142,7 @@ public interface TableViewColumnListener {
      * @param tableView The table view that has changed.
      * @param index Where the new column has been inserted.
      */
-    default public void columnInserted(TableView tableView, int index) {
+    default void columnInserted(TableView tableView, int index) {
     }
 
     /**
@@ -152,7 +152,7 @@ public interface TableViewColumnListener {
      * @param index The starting location of the removed columns.
      * @param columns The actual sequence of columns that were removed.
      */
-    default public void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns) {
+    default void columnsRemoved(TableView tableView, int index, Sequence<TableView.Column> columns) {
     }
 
     /**
@@ -161,7 +161,7 @@ public interface TableViewColumnListener {
      * @param column The column that changed names.
      * @param previousName What the previous name was.
      */
-    default public void columnNameChanged(TableView.Column column, String previousName) {
+    default void columnNameChanged(TableView.Column column, String previousName) {
     }
 
     /**
@@ -170,7 +170,7 @@ public interface TableViewColumnListener {
      * @param column The column that changed.
      * @param previousHeaderData What the header data used to be.
      */
-    default public void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
+    default void columnHeaderDataChanged(TableView.Column column, Object previousHeaderData) {
     }
 
     /**
@@ -179,7 +179,7 @@ public interface TableViewColumnListener {
      * @param column The column whose header data renderer has changed.
      * @param previousHeaderDataRenderer The previous renderer for header data.
      */
-    default public void columnHeaderDataRendererChanged(TableView.Column column,
+    default void columnHeaderDataRendererChanged(TableView.Column column,
         TableView.HeaderDataRenderer previousHeaderDataRenderer) {
     }
 
@@ -190,7 +190,7 @@ public interface TableViewColumnListener {
      * @param previousWidth The previous numeric value of the column width.
      * @param previousRelative Whether the previous width was relative or not.
      */
-    default public void columnWidthChanged(TableView.Column column, int previousWidth,
+    default void columnWidthChanged(TableView.Column column, int previousWidth,
         boolean previousRelative) {
     }
 
@@ -201,7 +201,7 @@ public interface TableViewColumnListener {
      * @param previousMinimumWidth The previous minimum column width.
      * @param previousMaximumWidth The previous maximum column width.
      */
-    default public void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
+    default void columnWidthLimitsChanged(TableView.Column column, int previousMinimumWidth,
         int previousMaximumWidth) {
     }
 
@@ -211,7 +211,7 @@ public interface TableViewColumnListener {
      * @param column The source of this event.
      * @param previousFilter The previous filter value for this column.
      */
-    default public void columnFilterChanged(TableView.Column column, Object previousFilter) {
+    default void columnFilterChanged(TableView.Column column, Object previousFilter) {
     }
 
     /**
@@ -220,7 +220,7 @@ public interface TableViewColumnListener {
      * @param column The source of this event.
      * @param previousCellRenderer The previous cell renderer for this column.
      */
-    default public void columnCellRendererChanged(TableView.Column column,
+    default void columnCellRendererChanged(TableView.Column column,
         TableView.CellRenderer previousCellRenderer) {
     }
 }

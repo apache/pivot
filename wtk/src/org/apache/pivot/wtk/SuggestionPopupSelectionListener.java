@@ -63,7 +63,7 @@ public interface SuggestionPopupSelectionListener {
      * @param suggestionPopup The source of this event.
      * @param previousSelectedIndex What the selected index used to be.
      */
-    default public void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
+    default void selectedIndexChanged(SuggestionPopup suggestionPopup, int previousSelectedIndex) {
     }
 
     /**

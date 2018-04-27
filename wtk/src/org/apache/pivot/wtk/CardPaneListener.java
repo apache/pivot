@@ -78,7 +78,7 @@ public interface CardPaneListener {
      * @param selectedIndex The index that will be selected.
      * @return The consensus vote as to whether to allow this change.
      */
-    default public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+    default Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
         return Vote.APPROVE;
     }
 
@@ -88,7 +88,7 @@ public interface CardPaneListener {
      * @param cardPane The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    default public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+    default void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
     }
 
     /**
@@ -99,6 +99,6 @@ public interface CardPaneListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    default public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+    default void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
     }
 }

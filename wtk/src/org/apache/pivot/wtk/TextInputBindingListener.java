@@ -74,7 +74,7 @@ public interface TextInputBindingListener {
      * @param textInput The source of this event.
      * @param previousTextKey The previous text key for the component.
      */
-    default public void textKeyChanged(TextInput textInput, String previousTextKey) {
+    default void textKeyChanged(TextInput textInput, String previousTextKey) {
     }
 
     /**
@@ -83,7 +83,7 @@ public interface TextInputBindingListener {
      * @param textInput The source of this event.
      * @param previousTextBindType The previous bind type for this component.
      */
-    default public void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
+    default void textBindTypeChanged(TextInput textInput, BindType previousTextBindType) {
     }
 
     /**
@@ -92,7 +92,7 @@ public interface TextInputBindingListener {
      * @param textInput The source of this event.
      * @param previousTextBindMapping The previous bind mapping for this component.
      */
-    default public void textBindMappingChanged(TextInput textInput,
+    default void textBindMappingChanged(TextInput textInput,
         TextInput.TextBindMapping previousTextBindMapping) {
     }
 }

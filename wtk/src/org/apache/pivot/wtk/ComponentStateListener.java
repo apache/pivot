@@ -64,7 +64,7 @@ public interface ComponentStateListener {
      *
      * @param component The component whose enabled state is changing.
      */
-    default public void enabledChanged(Component component) {
+    default void enabledChanged(Component component) {
     }
 
     /**
@@ -80,6 +80,6 @@ public interface ComponentStateListener {
      * component that is losing focus. If the component is losing focus this is
      * the component that is gaining the focus instead.
      */
-    default public void focusedChanged(Component component, Component obverseComponent) {
+    default void focusedChanged(Component component, Component obverseComponent) {
     }
 }

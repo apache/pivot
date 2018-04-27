@@ -60,7 +60,7 @@ public interface FakeWindowListener {
      * @param window
      * @param previousTitle
      */
-    default public void titleChanged(FakeWindow window, String previousTitle) {
+    default void titleChanged(FakeWindow window, String previousTitle) {
     }
 
     /**
@@ -69,7 +69,7 @@ public interface FakeWindowListener {
      * @param window
      * @param addedIcon
      */
-    default public void iconAdded(FakeWindow window, Image addedIcon) {
+    default void iconAdded(FakeWindow window, Image addedIcon) {
     }
 
     /**
@@ -78,7 +78,7 @@ public interface FakeWindowListener {
      * @param window
      * @param addedIcon
      */
-    default public void iconInserted(FakeWindow window, Image addedIcon, int index) {
+    default void iconInserted(FakeWindow window, Image addedIcon, int index) {
     }
 
     /**
@@ -88,7 +88,7 @@ public interface FakeWindowListener {
      * @param index
      * @param removed
      */
-    default public void iconsRemoved(FakeWindow window, int index, Sequence<Image> removed) {
+    default void iconsRemoved(FakeWindow window, int index, Sequence<Image> removed) {
     }
 
     /**
@@ -97,7 +97,7 @@ public interface FakeWindowListener {
      * @param window
      * @param previousContent
      */
-    default public void contentChanged(FakeWindow window, Component previousContent) {
+    default void contentChanged(FakeWindow window, Component previousContent) {
     }
 
 }

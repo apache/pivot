@@ -110,7 +110,7 @@ public interface WindowStateListener {
      *
      * @param window The newly opened window.
      */
-    default public void windowOpened(Window window) {
+    default void windowOpened(Window window) {
     }
 
     /**
@@ -119,7 +119,7 @@ public interface WindowStateListener {
      * @param window The window that wants to close.
      * @return The vote from each listener as to whether to allow the close.
      */
-    default public Vote previewWindowClose(Window window) {
+    default Vote previewWindowClose(Window window) {
         return Vote.APPROVE;
     }
 
@@ -129,7 +129,7 @@ public interface WindowStateListener {
      * @param window The window that wants to open.
      * @return The vote from the listener as to whether to allow the open.
      */
-    default public Vote previewWindowOpen(Window window) {
+    default Vote previewWindowOpen(Window window) {
         return Vote.APPROVE;
     }
 
@@ -140,7 +140,7 @@ public interface WindowStateListener {
      * @param reason The accumulated vote from all the listeners that
      *               vetoed this event.
      */
-    default public void windowCloseVetoed(Window window, Vote reason) {
+    default void windowCloseVetoed(Window window, Vote reason) {
     }
 
     /**
@@ -150,7 +150,7 @@ public interface WindowStateListener {
      * @param reason The accumulated vote from all the listeners that
      *               vetoed this event.
      */
-    default public void windowOpenVetoed(Window window, Vote reason) {
+    default void windowOpenVetoed(Window window, Vote reason) {
     }
 
     /**
@@ -160,6 +160,6 @@ public interface WindowStateListener {
      * @param display The display in which the window was shown.
      * @param owner   The owner of this window (which could be {@code null}).
      */
-    default public void windowClosed(Window window, Display display, Window owner) {
+    default void windowClosed(Window window, Display display, Window owner) {
     }
 }

@@ -100,7 +100,7 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousPolicy The previous horizontal scroll bar policy.
      */
-    default public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
+    default void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollBarPolicy previousPolicy) {
     }
 
@@ -110,7 +110,7 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousPolicy The previous vertical scroll bar policy.
      */
-    default public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
+    default void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
         ScrollBarPolicy previousPolicy) {
     }
 
@@ -120,7 +120,7 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousRowHeader The previous row header for this scroll pane.
      */
-    default public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
+    default void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
     }
 
     /**
@@ -129,7 +129,7 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousColumnHeader The previous column header for this scroll pane.
      */
-    default public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
+    default void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
     }
 
     /**
@@ -138,6 +138,6 @@ public interface ScrollPaneListener {
      * @param scrollPane The source of the event.
      * @param previousCorner The previous corner component.
      */
-    default public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
+    default void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
     }
 }

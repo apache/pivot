@@ -107,7 +107,7 @@ public interface ListButtonBindingListener {
      * @param listButton          The list button that has changed.
      * @param previousListDataKey The previous binding key for the list data.
      */
-    default public void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
+    default void listDataKeyChanged(ListButton listButton, String previousListDataKey) {
     }
 
     /**
@@ -116,7 +116,7 @@ public interface ListButtonBindingListener {
      * @param listButton               The list button that has changed.
      * @param previousListDataBindType The previous bind type for the list data.
      */
-    default public void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
+    default void listDataBindTypeChanged(ListButton listButton, BindType previousListDataBindType) {
     }
 
     /**
@@ -125,7 +125,7 @@ public interface ListButtonBindingListener {
      * @param listButton                  The list button that has changed.
      * @param previousListDataBindMapping The previous bind mapping for the list data.
      */
-    default public void listDataBindMappingChanged(ListButton listButton,
+    default void listDataBindMappingChanged(ListButton listButton,
         ListView.ListDataBindMapping previousListDataBindMapping) {
     }
 
@@ -135,7 +135,7 @@ public interface ListButtonBindingListener {
      * @param listButton              The list button that has changed.
      * @param previousSelectedItemKey The previous binding key for the button's selected item.
      */
-    default public void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
+    default void selectedItemKeyChanged(ListButton listButton, String previousSelectedItemKey) {
     }
 
     /**
@@ -144,7 +144,7 @@ public interface ListButtonBindingListener {
      * @param listButton                   The list button that has changed.
      * @param previousSelectedItemBindType The previous bind type for the selected item.
      */
-    default public void selectedItemBindTypeChanged(ListButton listButton,
+    default void selectedItemBindTypeChanged(ListButton listButton,
         BindType previousSelectedItemBindType) {
     }
 
@@ -154,7 +154,7 @@ public interface ListButtonBindingListener {
      * @param listButton                      The list button that has changed.
      * @param previousSelectedItemBindMapping The previous bind mapping for the button's selected item.
      */
-    default public void selectedItemBindMappingChanged(ListButton listButton,
+    default void selectedItemBindMappingChanged(ListButton listButton,
         ListView.ItemBindMapping previousSelectedItemBindMapping) {
     }
 }

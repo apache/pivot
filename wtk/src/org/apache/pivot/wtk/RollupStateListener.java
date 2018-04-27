@@ -78,7 +78,7 @@ public interface RollupStateListener {
      * @param rollup The rollup that might change.
      * @return The result of this listener voting on the expansion.
      */
-    default public Vote previewExpandedChange(Rollup rollup) {
+    default Vote previewExpandedChange(Rollup rollup) {
         return Vote.APPROVE;
     }
 
@@ -88,7 +88,7 @@ public interface RollupStateListener {
      * @param rollup The rollup that didn't change.
      * @param reason The reason the expansion was vetoed.
      */
-    default public void expandedChangeVetoed(Rollup rollup, Vote reason) {
+    default void expandedChangeVetoed(Rollup rollup, Vote reason) {
     }
 
     /**
@@ -96,6 +96,6 @@ public interface RollupStateListener {
      *
      * @param rollup The rollup that did change.
      */
-    default public void expandedChanged(Rollup rollup) {
+    default void expandedChanged(Rollup rollup) {
     }
 }

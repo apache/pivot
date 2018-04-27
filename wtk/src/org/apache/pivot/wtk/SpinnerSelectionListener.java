@@ -63,7 +63,7 @@ public interface SpinnerSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    default public void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
+    default void selectedIndexChanged(Spinner spinner, int previousSelectedIndex) {
     }
 
     /**
@@ -73,6 +73,6 @@ public interface SpinnerSelectionListener {
      * @param previousSelectedItem The item that was previously selected, or
      * <tt>null</tt> if the previous selection cannot be determined.
      */
-    default public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+    default void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
     }
 }

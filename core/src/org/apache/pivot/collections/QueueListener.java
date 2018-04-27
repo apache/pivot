@@ -82,7 +82,7 @@ public interface QueueListener<T> {
      * @param queue The queue that has been modified.
      * @param item The item that was just added to the queue.
      */
-    default public void itemEnqueued(Queue<T> queue, T item) {
+    default void itemEnqueued(Queue<T> queue, T item) {
     }
 
     /**
@@ -91,7 +91,7 @@ public interface QueueListener<T> {
      * @param queue The queue in question.
      * @param item The item that was just removed from the head of the queue.
      */
-    default public void itemDequeued(Queue<T> queue, T item) {
+    default void itemDequeued(Queue<T> queue, T item) {
     }
 
     /**
@@ -99,7 +99,7 @@ public interface QueueListener<T> {
      *
      * @param queue The newly cleared queue object.
      */
-    default public void queueCleared(Queue<T> queue) {
+    default void queueCleared(Queue<T> queue) {
     }
 
     /**
@@ -108,6 +108,6 @@ public interface QueueListener<T> {
      * @param queue The queue that changed.
      * @param previousComparator Previous value of the queue's comparator (if any).
      */
-    default public void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
+    default void comparatorChanged(Queue<T> queue, Comparator<T> previousComparator) {
     }
 }

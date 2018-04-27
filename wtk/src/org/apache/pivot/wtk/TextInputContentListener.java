@@ -124,7 +124,7 @@ public interface TextInputContentListener {
      * @param index The index at which the text will be inserted.
      * @return The accumulated vote as to whether to allow this insertion.
      */
-    default public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
+    default Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
         return Vote.APPROVE;
     }
 
@@ -134,7 +134,7 @@ public interface TextInputContentListener {
      * @param textInput The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    default public void insertTextVetoed(TextInput textInput, Vote reason) {
+    default void insertTextVetoed(TextInput textInput, Vote reason) {
     }
 
     /**
@@ -144,7 +144,7 @@ public interface TextInputContentListener {
      * @param index The index at which the text was inserted.
      * @param count The number of characters that were inserted.
      */
-    default public void textInserted(TextInput textInput, int index, int count) {
+    default void textInserted(TextInput textInput, int index, int count) {
     }
 
     /**
@@ -155,7 +155,7 @@ public interface TextInputContentListener {
      * @param count The count of characters to be removed starting from that index.
      * @return The accumulated vote as to whether to allow this removal.
      */
-    default public Vote previewRemoveText(TextInput textInput, int index, int count) {
+    default Vote previewRemoveText(TextInput textInput, int index, int count) {
         return Vote.APPROVE;
     }
 
@@ -165,7 +165,7 @@ public interface TextInputContentListener {
      * @param textInput The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    default public void removeTextVetoed(TextInput textInput, Vote reason) {
+    default void removeTextVetoed(TextInput textInput, Vote reason) {
     }
 
     /**
@@ -175,7 +175,7 @@ public interface TextInputContentListener {
      * @param index The index from which the text was removed.
      * @param count The number of characters that were removed.
      */
-    default public void textRemoved(TextInput textInput, int index, int count) {
+    default void textRemoved(TextInput textInput, int index, int count) {
     }
 
     /**
@@ -183,6 +183,6 @@ public interface TextInputContentListener {
      *
      * @param textInput The source of the event.
      */
-    default public void textChanged(TextInput textInput) {
+    default void textChanged(TextInput textInput) {
     }
 }

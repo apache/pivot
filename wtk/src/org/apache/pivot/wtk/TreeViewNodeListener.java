@@ -93,7 +93,7 @@ public interface TreeViewNodeListener {
      * @param path     The path to the branch where the node was inserted.
      * @param index    The index of the newly inserted node within the branch.
      */
-    default public void nodeInserted(TreeView treeView, Path path, int index) {
+    default void nodeInserted(TreeView treeView, Path path, int index) {
     }
 
     /**
@@ -105,7 +105,7 @@ public interface TreeViewNodeListener {
      * @param count    The number of nodes that were removed, or <tt>-1</tt> if all
      * nodes were removed.
      */
-    default public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
+    default void nodesRemoved(TreeView treeView, Path path, int index, int count) {
     }
 
     /**
@@ -115,7 +115,7 @@ public interface TreeViewNodeListener {
      * @param path     Path to the branch that is the parent of the updated node.
      * @param index    Index of the updated node within the branch.
      */
-    default public void nodeUpdated(TreeView treeView, Path path, int index) {
+    default void nodeUpdated(TreeView treeView, Path path, int index) {
     }
 
     /**
@@ -124,7 +124,7 @@ public interface TreeViewNodeListener {
      * @param treeView The source of this event.
      * @param path     Path to the branch where the nodes were cleared.
      */
-    default public void nodesCleared(TreeView treeView, Path path) {
+    default void nodesCleared(TreeView treeView, Path path) {
     }
 
     /**
@@ -133,6 +133,6 @@ public interface TreeViewNodeListener {
      * @param treeView The source of this event.
      * @param path     Path to the branch where the nodes were sorted.
      */
-    default public void nodesSorted(TreeView treeView, Path path) {
+    default void nodesSorted(TreeView treeView, Path path) {
     }
 }

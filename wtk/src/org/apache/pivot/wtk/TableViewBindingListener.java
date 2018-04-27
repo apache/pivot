@@ -141,7 +141,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousTableDataKey The previous key for the table data.
      */
-    default public void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
+    default void tableDataKeyChanged(TableView tableView, String previousTableDataKey) {
     }
 
     /**
@@ -150,7 +150,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousTableDataBindType The previous bind type for the table data.
      */
-    default public void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
+    default void tableDataBindTypeChanged(TableView tableView, BindType previousTableDataBindType) {
     }
 
     /**
@@ -159,7 +159,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousTableDataBindMapping The previous bind mapping for the table data.
      */
-    default public void tableDataBindMappingChanged(TableView tableView,
+    default void tableDataBindMappingChanged(TableView tableView,
         TableView.TableDataBindMapping previousTableDataBindMapping) {
     }
 
@@ -169,7 +169,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousSelectedRowKey The previous key for the selected row.
      */
-    default public void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
+    default void selectedRowKeyChanged(TableView tableView, String previousSelectedRowKey) {
     }
 
     /**
@@ -178,7 +178,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousSelectedRowBindType The previous bind type for the selected row.
      */
-    default public void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
+    default void selectedRowBindTypeChanged(TableView tableView, BindType previousSelectedRowBindType) {
     }
 
     /**
@@ -187,7 +187,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of the event.
      * @param previousSelectedRowBindMapping The previous bind mapping for the selected row.
      */
-    default public void selectedRowBindMappingChanged(TableView tableView,
+    default void selectedRowBindMappingChanged(TableView tableView,
         TableView.SelectedRowBindMapping previousSelectedRowBindMapping) {
     }
 
@@ -197,7 +197,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousSelectedRowsKey The previous key for obtaining the selected rows value.
      */
-    default public void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
+    default void selectedRowsKeyChanged(TableView tableView, String previousSelectedRowsKey) {
     }
 
     /**
@@ -206,7 +206,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousSelectedRowsBindType The previous bind type for the selected rows.
      */
-    default public void selectedRowsBindTypeChanged(TableView tableView,
+    default void selectedRowsBindTypeChanged(TableView tableView,
         BindType previousSelectedRowsBindType) {
     }
 
@@ -216,7 +216,7 @@ public interface TableViewBindingListener {
      * @param tableView The source of this event.
      * @param previousSelectedRowsBindMapping The previous value of the bind mapping for the selected rows.
      */
-    default public void selectedRowsBindMappingChanged(TableView tableView,
+    default void selectedRowsBindMappingChanged(TableView tableView,
         TableView.SelectedRowBindMapping previousSelectedRowsBindMapping) {
     }
 }

@@ -72,7 +72,7 @@ public interface RollupListener {
      * @param rollup The rollup whose heading changed.
      * @param previousHeading What the heading used to be.
      */
-    default public void headingChanged(Rollup rollup, Component previousHeading) {
+    default void headingChanged(Rollup rollup, Component previousHeading) {
     }
 
     /**
@@ -81,7 +81,7 @@ public interface RollupListener {
      * @param rollup The rollup that has new content.
      * @param previousContent What the content used to be.
      */
-    default public void contentChanged(Rollup rollup, Component previousContent) {
+    default void contentChanged(Rollup rollup, Component previousContent) {
     }
 
     /**
@@ -89,6 +89,6 @@ public interface RollupListener {
      *
      * @param rollup The rollup that changed.
      */
-    default public void collapsibleChanged(Rollup rollup) {
+    default void collapsibleChanged(Rollup rollup) {
     }
 }

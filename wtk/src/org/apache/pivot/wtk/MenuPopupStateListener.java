@@ -78,7 +78,7 @@ public interface MenuPopupStateListener {
      * @param immediate Whether the close is meant to be immediate.
      * @return The verdict as to whether to close from this listener.
      */
-    default public Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
+    default Vote previewMenuPopupClose(MenuPopup menuPopup, boolean immediate) {
         return Vote.APPROVE;
     }
 
@@ -88,7 +88,7 @@ public interface MenuPopupStateListener {
      * @param menuPopup The source of the event.
      * @param reason The accumulated vote that caused the veto.
      */
-    default public void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
+    default void menuPopupCloseVetoed(MenuPopup menuPopup, Vote reason) {
     }
 
     /**
@@ -96,6 +96,6 @@ public interface MenuPopupStateListener {
      *
      * @param menuPopup The menu popup that closed.
      */
-    default public void menuPopupClosed(MenuPopup menuPopup) {
+    default void menuPopupClosed(MenuPopup menuPopup) {
     }
 }

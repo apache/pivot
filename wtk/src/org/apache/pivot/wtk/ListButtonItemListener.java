@@ -91,7 +91,7 @@ public interface ListButtonItemListener {
      * @param listButton The list button that has changed.
      * @param index      The index where the new data was inserted.
      */
-    default public void itemInserted(ListButton listButton, int index) {
+    default void itemInserted(ListButton listButton, int index) {
     }
 
     /**
@@ -101,7 +101,7 @@ public interface ListButtonItemListener {
      * @param index      The starting index of the removed data items.
      * @param count      The number of items removed.
      */
-    default public void itemsRemoved(ListButton listButton, int index, int count) {
+    default void itemsRemoved(ListButton listButton, int index, int count) {
     }
 
     /**
@@ -110,7 +110,7 @@ public interface ListButtonItemListener {
      * @param listButton The list button whose data has changed.
      * @param index      The index into the data list of the updated item.
      */
-    default public void itemUpdated(ListButton listButton, int index) {
+    default void itemUpdated(ListButton listButton, int index) {
     }
 
     /**
@@ -118,7 +118,7 @@ public interface ListButtonItemListener {
      *
      * @param listButton The list button whose data was cleared.
      */
-    default public void itemsCleared(ListButton listButton) {
+    default void itemsCleared(ListButton listButton) {
     }
 
     /**
@@ -126,6 +126,6 @@ public interface ListButtonItemListener {
      *
      * @param listButton The list button whose data has been sorted.
      */
-    default public void itemsSorted(ListButton listButton) {
+    default void itemsSorted(ListButton listButton) {
     }
 }

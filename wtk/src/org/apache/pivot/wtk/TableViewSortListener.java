@@ -83,7 +83,7 @@ public interface TableViewSortListener {
      * @param tableView The source of this event.
      * @param columnName The new column name added to the sort criteria.
      */
-    default public void sortAdded(TableView tableView, String columnName) {
+    default void sortAdded(TableView tableView, String columnName) {
     }
 
     /**
@@ -93,7 +93,7 @@ public interface TableViewSortListener {
      * @param columnName The column that was updated.
      * @param previousSortDirection The previous value of the sort direction for this column.
      */
-    default public void sortUpdated(TableView tableView, String columnName,
+    default void sortUpdated(TableView tableView, String columnName,
         SortDirection previousSortDirection) {
     }
 
@@ -104,7 +104,7 @@ public interface TableViewSortListener {
      * @param columnName The column name that was removed from the sort criteria.
      * @param sortDirection What the sort direction was for this column.
      */
-    default public void sortRemoved(TableView tableView, String columnName, SortDirection sortDirection) {
+    default void sortRemoved(TableView tableView, String columnName, SortDirection sortDirection) {
     }
 
     /**
@@ -112,6 +112,6 @@ public interface TableViewSortListener {
      *
      * @param tableView The source of this event.
      */
-    default public void sortChanged(TableView tableView) {
+    default void sortChanged(TableView tableView) {
     }
 }

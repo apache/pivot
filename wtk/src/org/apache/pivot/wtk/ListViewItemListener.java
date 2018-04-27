@@ -91,7 +91,7 @@ public interface ListViewItemListener {
      * @param listView The source of the event.
      * @param index The index of the item that was inserted.
      */
-    default public void itemInserted(ListView listView, int index) {
+    default void itemInserted(ListView listView, int index) {
     }
 
     /**
@@ -102,7 +102,7 @@ public interface ListViewItemListener {
      * @param count The number of items that were removed, or <tt>-1</tt> if all
      * items were removed.
      */
-    default public void itemsRemoved(ListView listView, int index, int count) {
+    default void itemsRemoved(ListView listView, int index, int count) {
     }
 
     /**
@@ -111,7 +111,7 @@ public interface ListViewItemListener {
      * @param listView The source of the event.
      * @param index The first index affected by the event.
      */
-    default public void itemUpdated(ListView listView, int index) {
+    default void itemUpdated(ListView listView, int index) {
     }
 
     /**
@@ -119,7 +119,7 @@ public interface ListViewItemListener {
      *
      * @param listView The source of the event.
      */
-    default public void itemsCleared(ListView listView) {
+    default void itemsCleared(ListView listView) {
     }
 
     /**
@@ -127,6 +127,6 @@ public interface ListViewItemListener {
      *
      * @param listView The source of the event.
      */
-    default public void itemsSorted(ListView listView) {
+    default void itemsSorted(ListView listView) {
     }
 }

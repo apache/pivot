@@ -89,7 +89,7 @@ public interface TreeViewBranchListener {
      * @param treeView The source of the event.
      * @param path The path of the node that was shown.
      */
-    default public void branchExpanded(TreeView treeView, Path path) {
+    default void branchExpanded(TreeView treeView, Path path) {
     }
 
     /**
@@ -98,7 +98,7 @@ public interface TreeViewBranchListener {
      * @param treeView The source of the event.
      * @param path The path of the node that was collapsed.
      */
-    default public void branchCollapsed(TreeView treeView, Path path) {
+    default void branchCollapsed(TreeView treeView, Path path) {
     }
 
     /**
@@ -109,7 +109,7 @@ public interface TreeViewBranchListener {
      * @param path The path of the node about to be collapsed or expanded.
      * @return The accumulated vote as to whether to allow this expansion or collapse.
      */
-    default public Vote previewBranchExpandedChange(TreeView treeView, Path path) {
+    default Vote previewBranchExpandedChange(TreeView treeView, Path path) {
         return Vote.APPROVE;
     }
 
@@ -123,7 +123,7 @@ public interface TreeViewBranchListener {
      * @param path The path of the node whose state will remain the same.
      * @param reason The tallied vote result that caused the veto.
      */
-    default public void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
+    default void branchExpandedChangeVetoed(TreeView treeView, Path path, Vote reason) {
     }
 
 }

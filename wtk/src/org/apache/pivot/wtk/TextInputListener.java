@@ -121,7 +121,7 @@ public interface TextInputListener {
      * @param textInput        The source of this event.
      * @param previousTextSize The previous text size for the control
      */
-    default public void textSizeChanged(TextInput textInput, int previousTextSize) {
+    default void textSizeChanged(TextInput textInput, int previousTextSize) {
     }
 
     /**
@@ -130,7 +130,7 @@ public interface TextInputListener {
      * @param textInput             The source of this event.
      * @param previousMaximumLength The previous maximum text length.
      */
-    default public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
+    default void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
     }
 
     /**
@@ -138,7 +138,7 @@ public interface TextInputListener {
      *
      * @param textInput The source of this event.
      */
-    default public void passwordChanged(TextInput textInput) {
+    default void passwordChanged(TextInput textInput) {
     }
 
     /**
@@ -147,7 +147,7 @@ public interface TextInputListener {
      * @param textInput      The source of this event.
      * @param previousPrompt The previous prompt string.
      */
-    default public void promptChanged(TextInput textInput, String previousPrompt) {
+    default void promptChanged(TextInput textInput, String previousPrompt) {
     }
 
     /**
@@ -156,7 +156,7 @@ public interface TextInputListener {
      * @param textInput         The source of this event.
      * @param previousValidator The previous validator for the text.
      */
-    default public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+    default void textValidatorChanged(TextInput textInput, Validator previousValidator) {
     }
 
     /**
@@ -164,7 +164,7 @@ public interface TextInputListener {
      *
      * @param textInput The text input that has changed.
      */
-    default public void strictValidationChanged(TextInput textInput) {
+    default void strictValidationChanged(TextInput textInput) {
     }
 
     /**
@@ -172,7 +172,7 @@ public interface TextInputListener {
      *
      * @param textInput The text input that has been changed.
      */
-    default public void textValidChanged(TextInput textInput) {
+    default void textValidChanged(TextInput textInput) {
     }
 
     /**
@@ -180,7 +180,7 @@ public interface TextInputListener {
      *
      * @param textInput The text input whose state has changed.
      */
-    default public void editableChanged(TextInput textInput) {
+    default void editableChanged(TextInput textInput) {
     }
 
 }

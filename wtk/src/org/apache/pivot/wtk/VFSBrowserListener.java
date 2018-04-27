@@ -130,7 +130,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser     The browser that has changed.
      * @param previousManager The previous file manager for this browser.
      */
-    default public void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {
+    default void managerChanged(VFSBrowser fileBrowser, FileSystemManager previousManager) {
     }
 
     /**
@@ -139,7 +139,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser           The browser that has changed.
      * @param previousRootDirectory The previous root directory that we were browsing.
      */
-    default public void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
+    default void rootDirectoryChanged(VFSBrowser fileBrowser, FileObject previousRootDirectory) {
     }
 
     /**
@@ -148,7 +148,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser           The browser that has changed.
      * @param previousHomeDirectory The previous home directory.
      */
-    default public void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
+    default void homeDirectoryChanged(VFSBrowser fileBrowser, FileObject previousHomeDirectory) {
     }
 
     /**
@@ -157,7 +157,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser The source of this event.
      * @param file        The file newly added to the selection.
      */
-    default public void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
+    default void selectedFileAdded(VFSBrowser fileBrowser, FileObject file) {
     }
 
     /**
@@ -166,7 +166,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser The source of this event.
      * @param file        The file just removed from the selection.
      */
-    default public void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
+    default void selectedFileRemoved(VFSBrowser fileBrowser, FileObject file) {
     }
 
     /**
@@ -175,7 +175,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser           The source of this event.
      * @param previousSelectedFiles The sequence of files that were previously selected.
      */
-    default public void selectedFilesChanged(VFSBrowser fileBrowser,
+    default void selectedFilesChanged(VFSBrowser fileBrowser,
         Sequence<FileObject> previousSelectedFiles) {
     }
 
@@ -184,7 +184,7 @@ public interface VFSBrowserListener {
      *
      * @param fileBrowser The browser that has changed selection modes.
      */
-    default public void multiSelectChanged(VFSBrowser fileBrowser) {
+    default void multiSelectChanged(VFSBrowser fileBrowser) {
     }
 
     /**
@@ -193,7 +193,7 @@ public interface VFSBrowserListener {
      * @param fileBrowser                The source of this event.
      * @param previousDisabledFileFilter The previous filter for disabled files (if any).
      */
-    default public void disabledFileFilterChanged(VFSBrowser fileBrowser,
+    default void disabledFileFilterChanged(VFSBrowser fileBrowser,
         Filter<FileObject> previousDisabledFileFilter) {
     }
 }

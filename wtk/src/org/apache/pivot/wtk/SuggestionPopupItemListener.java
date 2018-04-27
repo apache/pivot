@@ -91,7 +91,7 @@ public interface SuggestionPopupItemListener {
      * @param suggestionPopup The source of this event.
      * @param index The location where the item was inserted.
      */
-    default public void itemInserted(SuggestionPopup suggestionPopup, int index) {
+    default void itemInserted(SuggestionPopup suggestionPopup, int index) {
     }
 
     /**
@@ -101,7 +101,7 @@ public interface SuggestionPopupItemListener {
      * @param index The starting index where items were removed.
      * @param count The number of items that were removed.
      */
-    default public void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
+    default void itemsRemoved(SuggestionPopup suggestionPopup, int index, int count) {
     }
 
     /**
@@ -110,7 +110,7 @@ public interface SuggestionPopupItemListener {
      * @param suggestionPopup The source of this event.
      * @param index Which item was updated.
      */
-    default public void itemUpdated(SuggestionPopup suggestionPopup, int index) {
+    default void itemUpdated(SuggestionPopup suggestionPopup, int index) {
     }
 
     /**
@@ -118,7 +118,7 @@ public interface SuggestionPopupItemListener {
      *
      * @param suggestionPopup The source of this event.
      */
-    default public void itemsCleared(SuggestionPopup suggestionPopup) {
+    default void itemsCleared(SuggestionPopup suggestionPopup) {
     }
 
     /**
@@ -126,6 +126,6 @@ public interface SuggestionPopupItemListener {
      *
      * @param suggestionPopup The source of this event.
      */
-    default public void itemsSorted(SuggestionPopup suggestionPopup) {
+    default void itemsSorted(SuggestionPopup suggestionPopup) {
     }
 }

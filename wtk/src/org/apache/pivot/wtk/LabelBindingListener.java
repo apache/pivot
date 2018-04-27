@@ -73,7 +73,7 @@ public interface LabelBindingListener {
      * @param label           The label whose binding has changed.
      * @param previousTextKey The previous binding key for the label text.
      */
-    default public void textKeyChanged(Label label, String previousTextKey) {
+    default void textKeyChanged(Label label, String previousTextKey) {
     }
 
     /**
@@ -82,7 +82,7 @@ public interface LabelBindingListener {
      * @param label                The label whose binding has changed.
      * @param previousTextBindType The previous bind type for the label text.
      */
-    default public void textBindTypeChanged(Label label, BindType previousTextBindType) {
+    default void textBindTypeChanged(Label label, BindType previousTextBindType) {
     }
 
     /**
@@ -91,6 +91,6 @@ public interface LabelBindingListener {
      * @param label                   The label whose binding has changed.
      * @param previousTextBindMapping The previous bind mapping for the label text.
      */
-    default public void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
+    default void textBindMappingChanged(Label label, Label.TextBindMapping previousTextBindMapping) {
     }
 }

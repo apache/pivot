@@ -60,7 +60,7 @@ public interface TextAreaListener {
      * @param textArea The source of this event.
      * @param previousMaximumLength What the maximum length used to be.
      */
-    default public void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
+    default void maximumLengthChanged(TextArea textArea, int previousMaximumLength) {
     }
 
     /**
@@ -68,6 +68,6 @@ public interface TextAreaListener {
      *
      * @param textArea The source of this event.
      */
-    default public void editableChanged(TextArea textArea) {
+    default void editableChanged(TextArea textArea) {
     }
 }

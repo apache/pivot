@@ -207,7 +207,7 @@ public interface ListViewBindingListener {
      * @param listView            The list view whose binding has changed.
      * @param previousListDataKey The previous binding key for the list data.
      */
-    default public void listDataKeyChanged(ListView listView, String previousListDataKey) {
+    default void listDataKeyChanged(ListView listView, String previousListDataKey) {
     }
 
     /**
@@ -216,7 +216,7 @@ public interface ListViewBindingListener {
      * @param listView                 The list view whose binding has changed.
      * @param previousListDataBindType The previous bind type for the list data.
      */
-    default public void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
+    default void listDataBindTypeChanged(ListView listView, BindType previousListDataBindType) {
     }
 
     /**
@@ -225,7 +225,7 @@ public interface ListViewBindingListener {
      * @param listView                    The list view whose binding has changed.
      * @param previousListDataBindMapping The previous bind mapping for the list data.
      */
-    default public void listDataBindMappingChanged(ListView listView,
+    default void listDataBindMappingChanged(ListView listView,
         ListView.ListDataBindMapping previousListDataBindMapping) {
     }
 
@@ -235,7 +235,7 @@ public interface ListViewBindingListener {
      * @param listView                The list view whose binding has changed.
      * @param previousSelectedItemKey The previous binding key for the selected item.
      */
-    default public void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
+    default void selectedItemKeyChanged(ListView listView, String previousSelectedItemKey) {
     }
 
     /**
@@ -244,7 +244,7 @@ public interface ListViewBindingListener {
      * @param listView                     The list view whose binding has changed.
      * @param previousSelectedItemBindType The previous bind type for the selected item.
      */
-    default public void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
+    default void selectedItemBindTypeChanged(ListView listView, BindType previousSelectedItemBindType) {
     }
 
     /**
@@ -253,7 +253,7 @@ public interface ListViewBindingListener {
      * @param listView                        The list view whose binding has changed.
      * @param previousSelectedItemBindMapping The previous bind mapping for the selected item.
      */
-    default public void selectedItemBindMappingChanged(ListView listView,
+    default void selectedItemBindMappingChanged(ListView listView,
         ListView.ItemBindMapping previousSelectedItemBindMapping) {
     }
 
@@ -263,7 +263,7 @@ public interface ListViewBindingListener {
      * @param listView                 The list view whose binding has changed.
      * @param previousSelectedItemsKey The previous binding key for the selected items.
      */
-    default public void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
+    default void selectedItemsKeyChanged(ListView listView, String previousSelectedItemsKey) {
     }
 
     /**
@@ -272,7 +272,7 @@ public interface ListViewBindingListener {
      * @param listView                      The list view whose binding has changed.
      * @param previousSelectedItemsBindType The previous bind type for the selected items.
      */
-    default public void selectedItemsBindTypeChanged(ListView listView,
+    default void selectedItemsBindTypeChanged(ListView listView,
         BindType previousSelectedItemsBindType) {
     }
 
@@ -282,7 +282,7 @@ public interface ListViewBindingListener {
      * @param listView                         The list view whose binding has changed.
      * @param previousSelectedItemsBindMapping The previous bind mapping for the selected items.
      */
-    default public void selectedItemsBindMappingChanged(ListView listView,
+    default void selectedItemsBindMappingChanged(ListView listView,
         ListView.ItemBindMapping previousSelectedItemsBindMapping) {
     }
 
@@ -292,7 +292,7 @@ public interface ListViewBindingListener {
      * @param listView                The list view whose binding has changed.
      * @param previousCheckedItemsKey The previous binding key for the checked items.
      */
-    default public void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
+    default void checkedItemsKeyChanged(ListView listView, String previousCheckedItemsKey) {
     }
 
     /**
@@ -301,7 +301,7 @@ public interface ListViewBindingListener {
      * @param listView                     The list view whose binding has changed.
      * @param previousCheckedItemsBindType The previous bind type for the checked items.
      */
-    default public void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
+    default void checkedItemsBindTypeChanged(ListView listView, BindType previousCheckedItemsBindType) {
     }
 
     /**
@@ -310,7 +310,7 @@ public interface ListViewBindingListener {
      * @param listView                        The list view whose binding has changed.
      * @param previousCheckedItemsBindMapping The previous bind mapping function for the checked items.
      */
-    default public void checkedItemsBindMappingChanged(ListView listView,
+    default void checkedItemsBindMappingChanged(ListView listView,
         ListView.ItemBindMapping previousCheckedItemsBindMapping) {
     }
 
@@ -320,7 +320,7 @@ public interface ListViewBindingListener {
      * @param listView              The list view whose binding has changed.
      * @param previousItemsStateKey The previous bind key for the items' state.
      */
-    default public void itemsStateKeyChanged(ListView listView, String previousItemsStateKey) {
+    default void itemsStateKeyChanged(ListView listView, String previousItemsStateKey) {
     }
 
     /**
@@ -329,7 +329,7 @@ public interface ListViewBindingListener {
      * @param listView                   The list view whose binding has changed.
      * @param previousItemsStateBindType The previous bind type for the items' state.
      */
-    default public void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType) {
+    default void itemsStateBindTypeChanged(ListView listView, BindType previousItemsStateBindType) {
     }
 
     /**
@@ -338,7 +338,7 @@ public interface ListViewBindingListener {
      * @param listView                      The list view whose binding has changed.
      * @param previousItemsStateBindMapping The previous bind mapping function for the items' state.
      */
-    default public void itemsStateBindMappingChanged(ListView listView,
+    default void itemsStateBindMappingChanged(ListView listView,
         ListView.ItemStateBindMapping previousItemsStateBindMapping) {
     }
 }

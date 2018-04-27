@@ -114,7 +114,7 @@ public interface ElementListener {
      * @param element The element that has changed.
      * @param index   Where in the element's node sequence the new one was inserted.
      */
-    default public void nodeInserted(Element element, int index) {
+    default void nodeInserted(Element element, int index) {
     }
 
     /**
@@ -124,7 +124,7 @@ public interface ElementListener {
      * @param index   The starting index of where nodes were removed.
      * @param nodes   The actual sequence of removed nodes.
      */
-    default public void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
+    default void nodesRemoved(Element element, int index, Sequence<Node> nodes) {
     }
 
     /**
@@ -133,7 +133,7 @@ public interface ElementListener {
      * @param element      The element that changed.
      * @param previousFont What the font used to be.
      */
-    default public void fontChanged(Element element, java.awt.Font previousFont) {
+    default void fontChanged(Element element, java.awt.Font previousFont) {
     }
 
     /**
@@ -142,7 +142,7 @@ public interface ElementListener {
      * @param element                 The element that changed.
      * @param previousBackgroundColor What the background color was before the change.
      */
-    default public void backgroundColorChanged(Element element, Color previousBackgroundColor) {
+    default void backgroundColorChanged(Element element, Color previousBackgroundColor) {
     }
 
     /**
@@ -151,7 +151,7 @@ public interface ElementListener {
      * @param element                 The element whose color changed.
      * @param previousForegroundColor The old foreground color.
      */
-    default public void foregroundColorChanged(Element element, Color previousForegroundColor) {
+    default void foregroundColorChanged(Element element, Color previousForegroundColor) {
     }
 
     /**
@@ -159,7 +159,7 @@ public interface ElementListener {
      *
      * @param element The element that changed.
      */
-    default public void underlineChanged(Element element) {
+    default void underlineChanged(Element element) {
     }
 
     /**
@@ -167,6 +167,6 @@ public interface ElementListener {
      *
      * @param element The element that changed.
      */
-    default public void strikethroughChanged(Element element) {
+    default void strikethroughChanged(Element element) {
     }
 }

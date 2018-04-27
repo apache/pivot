@@ -155,7 +155,7 @@ public interface TablePaneListener {
      * @param tablePane The source of this event.
      * @param index The index of the inserted row.
      */
-    default public void rowInserted(TablePane tablePane, int index) {
+    default void rowInserted(TablePane tablePane, int index) {
     }
 
     /**
@@ -165,7 +165,7 @@ public interface TablePaneListener {
      * @param index The starting index of the rows that were removed.
      * @param rows The actual sequence of rows that were removed.
      */
-    default public void rowsRemoved(TablePane tablePane, int index, Sequence<TablePane.Row> rows) {
+    default void rowsRemoved(TablePane tablePane, int index, Sequence<TablePane.Row> rows) {
     }
 
     /**
@@ -175,7 +175,7 @@ public interface TablePaneListener {
      * @param previousHeight The previous numeric height value.
      * @param previousRelative Whether the previous row height was relative or not.
      */
-    default public void rowHeightChanged(TablePane.Row row, int previousHeight, boolean previousRelative) {
+    default void rowHeightChanged(TablePane.Row row, int previousHeight, boolean previousRelative) {
     }
 
     /**
@@ -183,7 +183,7 @@ public interface TablePaneListener {
      *
      * @param row The source of this event.
      */
-    default public void rowHighlightedChanged(TablePane.Row row) {
+    default void rowHighlightedChanged(TablePane.Row row) {
     }
 
     /**
@@ -192,7 +192,7 @@ public interface TablePaneListener {
      * @param tablePane The table pane that changed.
      * @param index The location where the column was inserted.
      */
-    default public void columnInserted(TablePane tablePane, int index) {
+    default void columnInserted(TablePane tablePane, int index) {
     }
 
     /**
@@ -202,7 +202,7 @@ public interface TablePaneListener {
      * @param index The starting index of the removed columns.
      * @param columns The actual sequence of the columns that were removed.
      */
-    default public void columnsRemoved(TablePane tablePane, int index, Sequence<TablePane.Column> columns) {
+    default void columnsRemoved(TablePane tablePane, int index, Sequence<TablePane.Column> columns) {
     }
 
     /**
@@ -212,7 +212,7 @@ public interface TablePaneListener {
      * @param previousWidth The previous numeric value of the width.
      * @param previousRelative Whether the previous width was relative or not.
      */
-    default public void columnWidthChanged(TablePane.Column column, int previousWidth,
+    default void columnWidthChanged(TablePane.Column column, int previousWidth,
         boolean previousRelative) {
     }
 
@@ -221,7 +221,7 @@ public interface TablePaneListener {
      *
      * @param column The column that changed.
      */
-    default public void columnHighlightedChanged(TablePane.Column column) {
+    default void columnHighlightedChanged(TablePane.Column column) {
     }
 
     /**
@@ -230,7 +230,7 @@ public interface TablePaneListener {
      * @param row The table pane row that has changed.
      * @param column The index of the new column.
      */
-    default public void cellInserted(TablePane.Row row, int column) {
+    default void cellInserted(TablePane.Row row, int column) {
     }
 
     /**
@@ -240,7 +240,7 @@ public interface TablePaneListener {
      * @param column The starting index of the column(s) that were removed.
      * @param removed The actual sequence of removed columns.
      */
-    default public void cellsRemoved(TablePane.Row row, int column, Sequence<Component> removed) {
+    default void cellsRemoved(TablePane.Row row, int column, Sequence<Component> removed) {
     }
 
     /**
@@ -250,6 +250,6 @@ public interface TablePaneListener {
      * @param column Index of the column that was updated.
      * @param previousComponent The previous cell contents.
      */
-    default public void cellUpdated(TablePane.Row row, int column, Component previousComponent) {
+    default void cellUpdated(TablePane.Row row, int column, Component previousComponent) {
     }
 }

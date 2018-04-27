@@ -61,7 +61,7 @@ public interface TextPaneListener {
      * @param textPane         The text pane that changed.
      * @param previousDocument What the document used to be.
      */
-    default public void documentChanged(TextPane textPane, Document previousDocument) {
+    default void documentChanged(TextPane textPane, Document previousDocument) {
     }
 
     /**
@@ -69,6 +69,6 @@ public interface TextPaneListener {
      *
      * @param textPane The source of this event.
      */
-    default public void editableChanged(TextPane textPane) {
+    default void editableChanged(TextPane textPane) {
     }
 }

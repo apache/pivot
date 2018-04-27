@@ -66,7 +66,7 @@ public interface AccordionAttributeListener {
      * @param component           The child component in question.
      * @param previousHeaderData  The previous header data for this component.
      */
-    default public void headerDataChanged(Accordion accordion, Component component,
+    default void headerDataChanged(Accordion accordion, Component component,
         Object previousHeaderData) {
     }
 
@@ -77,7 +77,7 @@ public interface AccordionAttributeListener {
      * @param component           The child component in question.
      * @param previousTooltipText The previous tooltip text for the component.
      */
-    default public void tooltipTextChanged(Accordion accordion, Component component,
+    default void tooltipTextChanged(Accordion accordion, Component component,
         String previousTooltipText) {
     }
 }

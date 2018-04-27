@@ -57,7 +57,7 @@ public interface EventLoggerListener {
      * @param eventLogger
      * @param previousSource
      */
-    default public void sourceChanged(EventLogger eventLogger, Component previousSource) {
+    default void sourceChanged(EventLogger eventLogger, Component previousSource) {
     }
 
     /**
@@ -67,7 +67,7 @@ public interface EventLoggerListener {
      * @param eventLogger
      * @param event
      */
-    default public void eventIncluded(EventLogger eventLogger, Method event) {
+    default void eventIncluded(EventLogger eventLogger, Method event) {
     }
 
     /**
@@ -77,7 +77,7 @@ public interface EventLoggerListener {
      * @param eventLogger
      * @param event
      */
-    default public void eventExcluded(EventLogger eventLogger, Method event) {
+    default void eventExcluded(EventLogger eventLogger, Method event) {
     }
 
     /**
@@ -88,6 +88,6 @@ public interface EventLoggerListener {
      * @param event
      * @param arguments
      */
-    default public void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
+    default void eventFired(EventLogger eventLogger, Method event, Object[] arguments) {
     }
 }

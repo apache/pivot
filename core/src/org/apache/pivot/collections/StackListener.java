@@ -82,7 +82,7 @@ public interface StackListener<T> {
      * @param stack The stack that has changed.
      * @param item The newly pushed item.
      */
-    default public void itemPushed(Stack<T> stack, T item) {
+    default void itemPushed(Stack<T> stack, T item) {
     }
 
     /**
@@ -91,7 +91,7 @@ public interface StackListener<T> {
      * @param stack The stack that has changed.
      * @param item The item newly popped from the stack.
      */
-    default public void itemPopped(Stack<T> stack, T item) {
+    default void itemPopped(Stack<T> stack, T item) {
     }
 
     /**
@@ -99,7 +99,7 @@ public interface StackListener<T> {
      *
      * @param stack The newly cleared stack.
      */
-    default public void stackCleared(Stack<T> stack) {
+    default void stackCleared(Stack<T> stack) {
     }
 
     /**
@@ -108,6 +108,6 @@ public interface StackListener<T> {
      * @param stack The stack in question.
      * @param previousComparator The previous comparator for this stack (if any).
      */
-    default public void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
+    default void comparatorChanged(Stack<T> stack, Comparator<T> previousComparator) {
     }
 }

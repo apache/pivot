@@ -97,7 +97,7 @@ public interface ListButtonListener {
      * @param listButton       The list button that has changed.
      * @param previousListData The previous list data.
      */
-    default public void listDataChanged(ListButton listButton, List<?> previousListData) {
+    default void listDataChanged(ListButton listButton, List<?> previousListData) {
     }
 
     /**
@@ -106,7 +106,7 @@ public interface ListButtonListener {
      * @param listButton           The list button that was changed.
      * @param previousItemRenderer The previous renderer for the button's items.
      */
-    default public void itemRendererChanged(ListButton listButton,
+    default void itemRendererChanged(ListButton listButton,
         ListView.ItemRenderer previousItemRenderer) {
     }
 
@@ -115,7 +115,7 @@ public interface ListButtonListener {
      *
      * @param listButton The list button that has changed.
      */
-    default public void repeatableChanged(ListButton listButton) {
+    default void repeatableChanged(ListButton listButton) {
     }
 
     /**
@@ -124,7 +124,7 @@ public interface ListButtonListener {
      * @param listButton                 The list button that has changed.
      * @param previousDisabledItemFilter The previous disabled item filter for the list button.
      */
-    default public void disabledItemFilterChanged(ListButton listButton,
+    default void disabledItemFilterChanged(ListButton listButton,
         Filter<?> previousDisabledItemFilter) {
     }
 
@@ -134,6 +134,6 @@ public interface ListButtonListener {
      * @param listButton       The list button that has changed.
      * @param previousListSize The previous value of the visible list size.
      */
-    default public void listSizeChanged(ListButton listButton, int previousListSize) {
+    default void listSizeChanged(ListButton listButton, int previousListSize) {
     }
 }

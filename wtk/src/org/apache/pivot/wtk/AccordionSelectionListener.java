@@ -78,7 +78,7 @@ public interface AccordionSelectionListener {
      * @param selectedIndex The index that will be selected.
      * @return The consensus vote as to whether to allow the selected index change.
      */
-    default public Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
+    default Vote previewSelectedIndexChange(Accordion accordion, int selectedIndex) {
         return Vote.APPROVE;
     }
 
@@ -88,7 +88,7 @@ public interface AccordionSelectionListener {
      * @param accordion The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    default public void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
+    default void selectedIndexChangeVetoed(Accordion accordion, Vote reason) {
     }
 
     /**
@@ -99,6 +99,6 @@ public interface AccordionSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    default public void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
+    default void selectedIndexChanged(Accordion accordion, int previousSelectedIndex) {
     }
 }

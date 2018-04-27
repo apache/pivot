@@ -101,7 +101,7 @@ public interface AlertListener {
      * @param alert               The alert that has changed.
      * @param previousMessageType The previous message type for the alert.
      */
-    default public void messageTypeChanged(Alert alert, MessageType previousMessageType) {
+    default void messageTypeChanged(Alert alert, MessageType previousMessageType) {
     }
 
     /**
@@ -110,7 +110,7 @@ public interface AlertListener {
      * @param alert           The alert that has changed.
      * @param previousMessage The previous message for this alert.
      */
-    default public void messageChanged(Alert alert, String previousMessage) {
+    default void messageChanged(Alert alert, String previousMessage) {
     }
 
     /**
@@ -119,7 +119,7 @@ public interface AlertListener {
      * @param alert        The alert that has changed.
      * @param previousBody The previous body for this alert.
      */
-    default public void bodyChanged(Alert alert, Component previousBody) {
+    default void bodyChanged(Alert alert, Component previousBody) {
     }
 
     /**
@@ -128,7 +128,7 @@ public interface AlertListener {
      * @param alert The alert that has changed.
      * @param index The index where the new option was inserted.
      */
-    default public void optionInserted(Alert alert, int index) {
+    default void optionInserted(Alert alert, int index) {
     }
 
     /**
@@ -138,7 +138,7 @@ public interface AlertListener {
      * @param index    The starting index where the options were removed.
      * @param removed  The actual sequence of the options that were removed.
      */
-    default public void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
+    default void optionsRemoved(Alert alert, int index, Sequence<?> removed) {
     }
 
     /**
@@ -147,6 +147,6 @@ public interface AlertListener {
      * @param alert                  The alert that has changed.
      * @param previousSelectedOption The index of the previously selected option.
      */
-    default public void selectedOptionChanged(Alert alert, int previousSelectedOption) {
+    default void selectedOptionChanged(Alert alert, int previousSelectedOption) {
     }
 }

@@ -83,7 +83,7 @@ public interface TableViewSelectionListener {
      * @param rangeStart The start index of the range that was added, inclusive.
      * @param rangeEnd The end index of the range that was added, inclusive.
      */
-    default public void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
+    default void selectedRangeAdded(TableView tableView, int rangeStart, int rangeEnd) {
     }
 
     /**
@@ -94,7 +94,7 @@ public interface TableViewSelectionListener {
      * inclusive.
      * @param rangeEnd The end index of the range that was removed, inclusive.
      */
-    default public void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
+    default void selectedRangeRemoved(TableView tableView, int rangeStart, int rangeEnd) {
     }
 
     /**
@@ -106,7 +106,7 @@ public interface TableViewSelectionListener {
      * indirectly as a result of a model change, contains the current selection.
      * Otherwise, contains <tt>null</tt>.
      */
-    default public void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
+    default void selectedRangesChanged(TableView tableView, Sequence<Span> previousSelectedRanges) {
     }
 
     /**
@@ -115,6 +115,6 @@ public interface TableViewSelectionListener {
      * @param tableView The source of the event.
      * @param previousSelectedRow The row that was previously selected.
      */
-    default public void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
+    default void selectedRowChanged(TableView tableView, Object previousSelectedRow) {
     }
 }

@@ -71,7 +71,7 @@ public interface ActionClassListener {
      *
      * @param id The identifier for the newly added action.
      */
-    default public void actionAdded(String id) {
+    default void actionAdded(String id) {
     }
 
     /**
@@ -80,7 +80,7 @@ public interface ActionClassListener {
      * @param id             The identifier for the updated action.
      * @param previousAction The previous {@link Action} associated with this identifier.
      */
-    default public void actionUpdated(String id, Action previousAction) {
+    default void actionUpdated(String id, Action previousAction) {
     }
 
     /**
@@ -89,6 +89,6 @@ public interface ActionClassListener {
      * @param id     Identifier for the action that was removed.
      * @param action The removed action.
      */
-    default public void actionRemoved(String id, Action action) {
+    default void actionRemoved(String id, Action action) {
     }
 }

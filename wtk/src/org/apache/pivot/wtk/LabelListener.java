@@ -60,7 +60,7 @@ public interface LabelListener {
      * @param label        The label that has changed.
      * @param previousText The previous text associated with the label.
      */
-    default public void textChanged(Label label, String previousText) {
+    default void textChanged(Label label, String previousText) {
     }
 
     /**
@@ -69,6 +69,6 @@ public interface LabelListener {
      * @param label                 The label that has changed.
      * @param previousMaximumLength The previous maximum text length for the label.
      */
-    default public void maximumLengthChanged(Label label, int previousMaximumLength) {
+    default void maximumLengthChanged(Label label, int previousMaximumLength) {
     }
 }

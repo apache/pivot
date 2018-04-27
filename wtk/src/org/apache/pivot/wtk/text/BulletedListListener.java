@@ -50,6 +50,6 @@ public interface BulletedListListener {
      * @param bulletedList  The list whose style has changed.
      * @param previousStyle The previous list style.
      */
-    default public void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
+    default void styleChanged(BulletedList bulletedList, BulletedList.Style previousStyle) {
     }
 }

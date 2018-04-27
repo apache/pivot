@@ -78,7 +78,7 @@ public interface TabPaneSelectionListener {
      * @param selectedIndex The index that will be selected.
      * @return The vote result as to whether to accept this selected index change.
      */
-    default public Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
+    default Vote previewSelectedIndexChange(TabPane tabPane, int selectedIndex) {
         return Vote.APPROVE;
     }
 
@@ -88,7 +88,7 @@ public interface TabPaneSelectionListener {
      * @param tabPane The source of the event.
      * @param reason The reason the event was vetoed.
      */
-    default public void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
+    default void selectedIndexChangeVetoed(TabPane tabPane, Vote reason) {
     }
 
     /**
@@ -99,6 +99,6 @@ public interface TabPaneSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    default public void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
+    default void selectedIndexChanged(TabPane tabPane, int previousSelectedIndex) {
     }
 }

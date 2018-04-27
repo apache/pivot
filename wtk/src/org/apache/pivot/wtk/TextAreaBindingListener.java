@@ -73,7 +73,7 @@ public interface TextAreaBindingListener {
      * @param textArea The component that has changed.
      * @param previousTextKey What the text key used to be for this component.
      */
-    default public void textKeyChanged(TextArea textArea, String previousTextKey) {
+    default void textKeyChanged(TextArea textArea, String previousTextKey) {
     }
 
     /**
@@ -82,7 +82,7 @@ public interface TextAreaBindingListener {
      * @param textArea The source of this event.
      * @param previousTextBindType The previous bind type for this component.
      */
-    default public void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
+    default void textBindTypeChanged(TextArea textArea, BindType previousTextBindType) {
     }
 
     /**
@@ -91,7 +91,7 @@ public interface TextAreaBindingListener {
      * @param textArea The source of this event.
      * @param previousTextBindMapping The previous bind mapping for this component.
      */
-    default public void textBindMappingChanged(TextArea textArea,
+    default void textBindMappingChanged(TextArea textArea,
         TextArea.TextBindMapping previousTextBindMapping) {
     }
 }

@@ -71,7 +71,7 @@ public interface MenuListener {
      * @param menu The source of the event.
      * @param index Where the menu section was inserted.
      */
-    default public void sectionInserted(Menu menu, int index) {
+    default void sectionInserted(Menu menu, int index) {
     }
 
     /**
@@ -81,7 +81,7 @@ public interface MenuListener {
      * @param index The starting index of the removal.
      * @param removed The actual menu sections that were removed from the menu.
      */
-    default public void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
+    default void sectionsRemoved(Menu menu, int index, Sequence<Menu.Section> removed) {
     }
 
     /**
@@ -90,6 +90,6 @@ public interface MenuListener {
      * @param menu The menu that changed.
      * @param previousActiveItem What the previously active menu item was.
      */
-    default public void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
+    default void activeItemChanged(Menu menu, Menu.Item previousActiveItem) {
     }
 }

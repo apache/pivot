@@ -105,7 +105,7 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean mouseMove(Container container, int x, int y) {
+    default boolean mouseMove(Container container, int x, int y) {
         return false;
     }
 
@@ -119,7 +119,7 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+    default boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
         return false;
     }
 
@@ -133,7 +133,7 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+    default boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
         return false;
     }
 
@@ -149,7 +149,7 @@ public interface ContainerMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean mouseWheel(Container container, Mouse.ScrollType scrollType, int scrollAmount,
+    default boolean mouseWheel(Container container, Mouse.ScrollType scrollType, int scrollAmount,
         int wheelRotation, int x, int y) {
         return false;
     }

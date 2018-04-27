@@ -107,7 +107,7 @@ public interface ExpanderListener {
      * @param expander      The expander that has changed.
      * @param previousTitle The previous title for the expander.
      */
-    default public void titleChanged(Expander expander, String previousTitle) {
+    default void titleChanged(Expander expander, String previousTitle) {
     }
 
     /**
@@ -115,7 +115,7 @@ public interface ExpanderListener {
      *
      * @param expander The expander that has changed.
      */
-    default public void collapsibleChanged(Expander expander) {
+    default void collapsibleChanged(Expander expander) {
     }
 
     /**
@@ -124,7 +124,7 @@ public interface ExpanderListener {
      * @param expander The expander that is about to expand or collapse.
      * @return The consensus vote as to whether to allow the change.
      */
-    default public Vote previewExpandedChange(Expander expander) {
+    default Vote previewExpandedChange(Expander expander) {
         return Vote.APPROVE;
     }
 
@@ -134,7 +134,7 @@ public interface ExpanderListener {
      * @param expander The expander that is not going to change.
      * @param reason   The consensus vote that disallowed the change.
      */
-    default public void expandedChangeVetoed(Expander expander, Vote reason) {
+    default void expandedChangeVetoed(Expander expander, Vote reason) {
     }
 
     /**
@@ -142,7 +142,7 @@ public interface ExpanderListener {
      *
      * @param expander The expander that has now expanded or collapsed.
      */
-    default public void expandedChanged(Expander expander) {
+    default void expandedChanged(Expander expander) {
     }
 
     /**
@@ -151,6 +151,6 @@ public interface ExpanderListener {
      * @param expander        The expander that has changed content.
      * @param previousContent The previous content of the expander.
      */
-    default public void contentChanged(Expander expander, Component previousContent) {
+    default void contentChanged(Expander expander, Component previousContent) {
     }
 }

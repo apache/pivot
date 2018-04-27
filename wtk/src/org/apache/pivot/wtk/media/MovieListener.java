@@ -111,7 +111,7 @@ public interface MovieListener {
      * @param previousWidth  The previous width of this movie.
      * @param previousHeight The previous value of the height before resizing.
      */
-    default public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+    default void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
     }
 
     /**
@@ -120,7 +120,7 @@ public interface MovieListener {
      * @param movie            The movie that has changed.
      * @param previousBaseline The previous baseline value of the movie.
      */
-    default public void baselineChanged(Movie movie, int previousBaseline) {
+    default void baselineChanged(Movie movie, int previousBaseline) {
     }
 
     /**
@@ -129,7 +129,7 @@ public interface MovieListener {
      * @param movie         The movie that has changed.
      * @param previousFrame The previous frame index of the movie.
      */
-    default public void currentFrameChanged(Movie movie, int previousFrame) {
+    default void currentFrameChanged(Movie movie, int previousFrame) {
     }
 
     /**
@@ -137,7 +137,7 @@ public interface MovieListener {
      *
      * @param movie The source of this event.
      */
-    default public void loopingChanged(Movie movie) {
+    default void loopingChanged(Movie movie) {
     }
 
     /**
@@ -147,7 +147,7 @@ public interface MovieListener {
      *
      * @param movie The movie that has just started to play.
      */
-    default public void movieStarted(Movie movie) {
+    default void movieStarted(Movie movie) {
     }
 
     /**
@@ -157,7 +157,7 @@ public interface MovieListener {
      *
      * @param movie The movie that has just stopped playing.
      */
-    default public void movieStopped(Movie movie) {
+    default void movieStopped(Movie movie) {
     }
 
     /**
@@ -169,6 +169,6 @@ public interface MovieListener {
      * @param width  The width of the image to repaint.
      * @param height The height to repaint.
      */
-    default public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+    default void regionUpdated(Movie movie, int x, int y, int width, int height) {
     }
 }

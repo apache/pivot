@@ -92,7 +92,7 @@ public interface MapListener<K, V> {
      * @param map The source of the map event.
      * @param key The key that was added to the map.
      */
-    default public void valueAdded(Map<K, V> map, K key) {
+    default void valueAdded(Map<K, V> map, K key) {
     }
 
     /**
@@ -103,7 +103,7 @@ public interface MapListener<K, V> {
      * @param previousValue The value that was previously associated with the
      * key.
      */
-    default public void valueUpdated(Map<K, V> map, K key, V previousValue) {
+    default void valueUpdated(Map<K, V> map, K key, V previousValue) {
     }
 
     /**
@@ -113,7 +113,7 @@ public interface MapListener<K, V> {
      * @param key The key that was removed.
      * @param value The value that was removed.
      */
-    default public void valueRemoved(Map<K, V> map, K key, V value) {
+    default void valueRemoved(Map<K, V> map, K key, V value) {
     }
 
     /**
@@ -121,7 +121,7 @@ public interface MapListener<K, V> {
      *
      * @param map The source of the map event.
      */
-    default public void mapCleared(Map<K, V> map) {
+    default void mapCleared(Map<K, V> map) {
     }
 
     /**
@@ -130,6 +130,6 @@ public interface MapListener<K, V> {
      * @param map The source of the event.
      * @param previousComparator The previous comparator value.
      */
-    default public void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
+    default void comparatorChanged(Map<K, V> map, Comparator<K> previousComparator) {
     }
 }

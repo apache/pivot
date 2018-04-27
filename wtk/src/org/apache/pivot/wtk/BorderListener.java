@@ -60,7 +60,7 @@ public interface BorderListener {
      * @param border        The border component that has changed.
      * @param previousTitle The previous title for the border.
      */
-    default public void titleChanged(Border border, String previousTitle) {
+    default void titleChanged(Border border, String previousTitle) {
     }
 
     /**
@@ -69,6 +69,6 @@ public interface BorderListener {
      * @param border          The border that has changed.
      * @param previousContent The previous content of the border.
      */
-    default public void contentChanged(Border border, Component previousContent) {
+    default void contentChanged(Border border, Component previousContent) {
     }
 }

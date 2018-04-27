@@ -64,7 +64,7 @@ public interface TabPaneAttributeListener {
      * @param component The component whose tab pane data has changed.
      * @param previousTabData What the tab data attribute used to be.
      */
-    default public void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
+    default void tabDataChanged(TabPane tabPane, Component component, Object previousTabData) {
     }
 
     /**
@@ -74,6 +74,6 @@ public interface TabPaneAttributeListener {
      * @param component The actual tab component whose tooltip was changed.
      * @param previousTooltipText What the text used to be.
      */
-    default public void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
+    default void tooltipTextChanged(TabPane tabPane, Component component, String previousTooltipText) {
     }
 }

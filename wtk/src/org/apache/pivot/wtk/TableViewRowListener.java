@@ -91,7 +91,7 @@ public interface TableViewRowListener {
      * @param tableView The source of the event.
      * @param index The index of the row that was inserted.
      */
-    default public void rowInserted(TableView tableView, int index) {
+    default void rowInserted(TableView tableView, int index) {
     }
 
     /**
@@ -102,7 +102,7 @@ public interface TableViewRowListener {
      * @param count The number of rows that were removed, or <tt>-1</tt> if all
      * rows were removed.
      */
-    default public void rowsRemoved(TableView tableView, int index, int count) {
+    default void rowsRemoved(TableView tableView, int index, int count) {
     }
 
     /**
@@ -111,7 +111,7 @@ public interface TableViewRowListener {
      * @param tableView The source of the event.
      * @param index The first index affected by the event.
      */
-    default public void rowUpdated(TableView tableView, int index) {
+    default void rowUpdated(TableView tableView, int index) {
     }
 
     /**
@@ -119,7 +119,7 @@ public interface TableViewRowListener {
      *
      * @param tableView The source of the event.
      */
-    default public void rowsCleared(TableView tableView) {
+    default void rowsCleared(TableView tableView) {
     }
 
     /**
@@ -127,6 +127,6 @@ public interface TableViewRowListener {
      *
      * @param tableView The source of the event.
      */
-    default public void rowsSorted(TableView tableView) {
+    default void rowsSorted(TableView tableView) {
     }
 }

@@ -63,7 +63,7 @@ public interface ListButtonSelectionListener {
      * the index that was previously selected. Otherwise, contains the current
      * selection.
      */
-    default public void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
+    default void selectedIndexChanged(ListButton listButton, int previousSelectedIndex) {
     }
 
     /**
@@ -73,6 +73,6 @@ public interface ListButtonSelectionListener {
      * @param previousSelectedItem The item that was previously selected, or
      * <tt>null</tt> if the previous selection cannot be determined.
      */
-    default public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
+    default void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
     }
 }

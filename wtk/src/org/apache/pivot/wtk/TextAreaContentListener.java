@@ -75,7 +75,7 @@ public interface TextAreaContentListener {
      * @param textArea The source of the event.
      * @param index The index at which the paragraph was inserted.
      */
-    default public void paragraphInserted(TextArea textArea, int index) {
+    default void paragraphInserted(TextArea textArea, int index) {
     }
 
     /**
@@ -86,7 +86,7 @@ public interface TextAreaContentListener {
      * @param index The starting index from which the paragraphs were removed.
      * @param removed The paragraphs that were removed.
      */
-    default public void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed) {
+    default void paragraphsRemoved(TextArea textArea, int index, Sequence<TextArea.Paragraph> removed) {
     }
 
     /**
@@ -94,6 +94,6 @@ public interface TextAreaContentListener {
      *
      * @param textArea The source of the event.
      */
-    default public void textChanged(TextArea textArea) {
+    default void textChanged(TextArea textArea) {
     }
 }

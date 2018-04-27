@@ -109,7 +109,7 @@ public interface FileBrowserListener {
      * @param fileBrowser           The file browser that has changed.
      * @param previousRootDirectory The previous root directory of the browser.
      */
-    default public void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
+    default void rootDirectoryChanged(FileBrowser fileBrowser, File previousRootDirectory) {
     }
 
     /**
@@ -118,7 +118,7 @@ public interface FileBrowserListener {
      * @param fileBrowser The file browser that has changed.
      * @param file        The newly selected file.
      */
-    default public void selectedFileAdded(FileBrowser fileBrowser, File file) {
+    default void selectedFileAdded(FileBrowser fileBrowser, File file) {
     }
 
     /**
@@ -127,7 +127,7 @@ public interface FileBrowserListener {
      * @param fileBrowser The file browser that has changed.
      * @param file        The file that was just unselected.
      */
-    default public void selectedFileRemoved(FileBrowser fileBrowser, File file) {
+    default void selectedFileRemoved(FileBrowser fileBrowser, File file) {
     }
 
     /**
@@ -136,7 +136,7 @@ public interface FileBrowserListener {
      * @param fileBrowser           The file browser that has changed.
      * @param previousSelectedFiles The complete sequence of files that used to be selected.
      */
-    default public void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
+    default void selectedFilesChanged(FileBrowser fileBrowser, Sequence<File> previousSelectedFiles) {
     }
 
     /**
@@ -144,7 +144,7 @@ public interface FileBrowserListener {
      *
      * @param fileBrowser The file browser that has changed.
      */
-    default public void multiSelectChanged(FileBrowser fileBrowser) {
+    default void multiSelectChanged(FileBrowser fileBrowser) {
     }
 
     /**
@@ -153,7 +153,7 @@ public interface FileBrowserListener {
      * @param fileBrowser                The file browser that has changed.
      * @param previousDisabledFileFilter The previous disabled file filter.
      */
-    default public void disabledFileFilterChanged(FileBrowser fileBrowser,
+    default void disabledFileFilterChanged(FileBrowser fileBrowser,
         Filter<File> previousDisabledFileFilter) {
     }
 }

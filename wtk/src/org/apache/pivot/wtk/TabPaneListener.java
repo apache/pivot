@@ -129,7 +129,7 @@ public interface TabPaneListener {
      * @param tabPane The source of this event.
      * @param index Where the newly inserted tab was placed.
      */
-    default public void tabInserted(TabPane tabPane, int index) {
+    default void tabInserted(TabPane tabPane, int index) {
     }
 
     /**
@@ -140,7 +140,7 @@ public interface TabPaneListener {
      * @param count The count of tabs to remove.
      * @return Whether or not to accept this tab removal (or defer it).
      */
-    default public Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
+    default Vote previewRemoveTabs(TabPane tabPane, int index, int count) {
         return Vote.APPROVE;
     }
 
@@ -150,7 +150,7 @@ public interface TabPaneListener {
      * @param tabPane The source of this event.
      * @param reason The vote result that vetoed the tab removal.
      */
-    default public void removeTabsVetoed(TabPane tabPane, Vote reason) {
+    default void removeTabsVetoed(TabPane tabPane, Vote reason) {
     }
 
     /**
@@ -160,7 +160,7 @@ public interface TabPaneListener {
      * @param index The starting location of the tabs that were removed.
      * @param tabs The actual sequence of tab components that were removed.
      */
-    default public void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
+    default void tabsRemoved(TabPane tabPane, int index, Sequence<Component> tabs) {
     }
 
     /**
@@ -169,7 +169,7 @@ public interface TabPaneListener {
      * @param tabPane The component that changed.
      * @param previousCorner What the corner component used to be.
      */
-    default public void cornerChanged(TabPane tabPane, Component previousCorner) {
+    default void cornerChanged(TabPane tabPane, Component previousCorner) {
     }
 
     /**
@@ -178,7 +178,7 @@ public interface TabPaneListener {
      * @param tabPane The source of this event.
      * @param previousTabDataRenderer The previous renderer for the tab data.
      */
-    default public void tabDataRendererChanged(TabPane tabPane,
+    default void tabDataRendererChanged(TabPane tabPane,
         Button.DataRenderer previousTabDataRenderer) {
     }
 
@@ -187,7 +187,7 @@ public interface TabPaneListener {
      *
      * @param tabPane The component that changed.
      */
-    default public void closeableChanged(TabPane tabPane) {
+    default void closeableChanged(TabPane tabPane) {
     }
 
     /**
@@ -195,6 +195,6 @@ public interface TabPaneListener {
      *
      * @param tabPane The source of this event.
      */
-    default public void collapsibleChanged(TabPane tabPane) {
+    default void collapsibleChanged(TabPane tabPane) {
     }
 }

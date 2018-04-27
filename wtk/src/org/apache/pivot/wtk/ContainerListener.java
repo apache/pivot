@@ -85,7 +85,7 @@ public interface ContainerListener {
      * @param container The container that has changed.
      * @param index     The index where the new component has been inserted.
      */
-    default public void componentInserted(Container container, int index) {
+    default void componentInserted(Container container, int index) {
     }
 
     /**
@@ -96,7 +96,7 @@ public interface ContainerListener {
      * @param index     The starting index of the components that were removed.
      * @param removed   The complete sequence of removed components.
      */
-    default public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+    default void componentsRemoved(Container container, int index, Sequence<Component> removed) {
     }
 
     /**
@@ -107,7 +107,7 @@ public interface ContainerListener {
      * @param from      The starting index of the component (in Z-order).
      * @param to        The place in the Z-order where this component ended up.
      */
-    default public void componentMoved(Container container, int from, int to) {
+    default void componentMoved(Container container, int from, int to) {
     }
 
     /**
@@ -116,7 +116,7 @@ public interface ContainerListener {
      * @param container                    The container that has changed.
      * @param previousFocusTraversalPolicy The previous value of the focus traversal policy for this container.
      */
-    default public void focusTraversalPolicyChanged(Container container,
+    default void focusTraversalPolicyChanged(Container container,
         FocusTraversalPolicy previousFocusTraversalPolicy) {
     }
 }

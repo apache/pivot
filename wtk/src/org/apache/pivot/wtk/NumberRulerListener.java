@@ -60,7 +60,7 @@ public interface NumberRulerListener {
      *
      * @param ruler The component that has changed.
      */
-    default public void orientationChanged(NumberRuler ruler) {
+    default void orientationChanged(NumberRuler ruler) {
     }
 
     /**
@@ -70,6 +70,6 @@ public interface NumberRulerListener {
      * @param ruler The component that has changed.
      * @param previousSize The previous value of the size.
      */
-    default public void textSizeChanged(NumberRuler ruler, int previousSize) {
+    default void textSizeChanged(NumberRuler ruler, int previousSize) {
     }
 }

@@ -68,7 +68,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge that has changed.
      * @param previousOrigin The previous origin value.
      */
-    default public void originChanged(Gauge<T> gauge, Origin previousOrigin) {
+    default void originChanged(Gauge<T> gauge, Origin previousOrigin) {
     }
 
     /**
@@ -77,7 +77,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge that is changing.
      * @param previousValue The old value.
      */
-    default public void valueChanged(Gauge<T> gauge, T previousValue) {
+    default void valueChanged(Gauge<T> gauge, T previousValue) {
     }
 
     /**
@@ -86,7 +86,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge whose text changed.
      * @param previousText The previous text.
      */
-    default public void textChanged(Gauge<T> gauge, String previousText) {
+    default void textChanged(Gauge<T> gauge, String previousText) {
     }
 
     /**
@@ -95,7 +95,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge that is changing.
      * @param previousMinValue The previous minimum.
      */
-    default public void minValueChanged(Gauge<T> gauge, T previousMinValue) {
+    default void minValueChanged(Gauge<T> gauge, T previousMinValue) {
     }
 
     /**
@@ -104,7 +104,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge that is changing.
      * @param previousMaxValue The previous maximum.
      */
-    default public void maxValueChanged(Gauge<T> gauge, T previousMaxValue) {
+    default void maxValueChanged(Gauge<T> gauge, T previousMaxValue) {
     }
 
     /**
@@ -113,7 +113,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge we're talking about.
      * @param previousWarningLevel The previous value for the warning level.
      */
-    default public void warningLevelChanged(Gauge<T> gauge, T previousWarningLevel) {
+    default void warningLevelChanged(Gauge<T> gauge, T previousWarningLevel) {
     }
 
     /**
@@ -122,7 +122,7 @@ public interface GaugeListener<T extends Number> {
      * @param gauge The gauge we're talking about.
      * @param previousCriticalLevel The previous value for the critical level.
      */
-    default public void criticalLevelChanged(Gauge<T> gauge, T previousCriticalLevel) {
+    default void criticalLevelChanged(Gauge<T> gauge, T previousCriticalLevel) {
     }
 }
 

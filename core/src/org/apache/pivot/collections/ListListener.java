@@ -60,7 +60,7 @@ public interface ListListener<T> {
      * @param list The source of the list event.
      * @param index The index at which the item was added.
      */
-    default public void itemInserted(List<T> list, int index) {
+    default void itemInserted(List<T> list, int index) {
     }
 
     /**
@@ -70,7 +70,7 @@ public interface ListListener<T> {
      * @param index The starting index from which items have been removed.
      * @param items The items that were removed from the list.
      */
-    default public void itemsRemoved(List<T> list, int index, Sequence<T> items) {
+    default void itemsRemoved(List<T> list, int index, Sequence<T> items) {
     }
 
     /**
@@ -80,7 +80,7 @@ public interface ListListener<T> {
      * @param index The index of the item that was updated.
      * @param previousItem The item that was previously stored at <tt>index</tt>.
      */
-    default public void itemUpdated(List<T> list, int index, T previousItem) {
+    default void itemUpdated(List<T> list, int index, T previousItem) {
     }
 
     /**
@@ -88,7 +88,7 @@ public interface ListListener<T> {
      *
      * @param list The source of the list event.
      */
-    default public void listCleared(List<T> list) {
+    default void listCleared(List<T> list) {
     }
 
     /**
@@ -97,6 +97,6 @@ public interface ListListener<T> {
      * @param list The source of the event.
      * @param previousComparator The previous comparator value.
      */
-    default public void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
+    default void comparatorChanged(List<T> list, Comparator<T> previousComparator) {
     }
 }

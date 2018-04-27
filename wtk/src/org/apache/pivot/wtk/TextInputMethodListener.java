@@ -87,40 +87,40 @@ public interface TextInputMethodListener extends InputMethodRequests, InputMetho
         }
     }
 
-    default public AttributedCharacterIterator cancelLatestCommittedText(
+    default AttributedCharacterIterator cancelLatestCommittedText(
         AttributedCharacterIterator.Attribute[] attributes) {
         return null;
     }
 
-    default public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex,
+    default AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex,
         AttributedCharacterIterator.Attribute[] attributes) {
         return null;
     }
 
-    default public int getCommittedTextLength() {
+    default int getCommittedTextLength() {
         return 0;
     }
 
-    default public int getInsertPositionOffset() {
+    default int getInsertPositionOffset() {
         return 0;
     }
 
-    default public TextHitInfo getLocationOffset(int x, int y) {
+    default TextHitInfo getLocationOffset(int x, int y) {
         return null;
     }
 
-    default public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+    default AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
         return null;
     }
 
-    default public Rectangle getTextLocation(TextHitInfo offset) {
+    default Rectangle getTextLocation(TextHitInfo offset) {
         return new Rectangle();
     }
 
-    default public void inputMethodTextChanged(InputMethodEvent event) {
+    default void inputMethodTextChanged(InputMethodEvent event) {
     }
 
-    default public void caretPositionChanged(InputMethodEvent event) {
+    default void caretPositionChanged(InputMethodEvent event) {
     }
 
 }

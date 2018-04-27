@@ -94,7 +94,7 @@ public interface TableViewListener {
      * @param tableView The source of this event.
      * @param previousTableData The previous data list for this table view.
      */
-    default public void tableDataChanged(TableView tableView, List<?> previousTableData) {
+    default void tableDataChanged(TableView tableView, List<?> previousTableData) {
     }
 
     /**
@@ -103,7 +103,7 @@ public interface TableViewListener {
      * @param tableView The source of this event.
      * @param previousColumnSource The previous column source for this table.
      */
-    default public void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
+    default void columnSourceChanged(TableView tableView, TableView previousColumnSource) {
     }
 
     /**
@@ -112,7 +112,7 @@ public interface TableViewListener {
      * @param tableView The source of this event.
      * @param previousRowEditor The row editor that was previously used.
      */
-    default public void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
+    default void rowEditorChanged(TableView tableView, TableView.RowEditor previousRowEditor) {
     }
 
     /**
@@ -121,7 +121,7 @@ public interface TableViewListener {
      * @param tableView The source of the event.
      * @param previousSelectMode What the select mode used to be.
      */
-    default public void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
+    default void selectModeChanged(TableView tableView, TableView.SelectMode previousSelectMode) {
     }
 
     /**
@@ -130,6 +130,6 @@ public interface TableViewListener {
      * @param tableView The table view in question.
      * @param previousDisabledRowFilter What the previous filter for disabled rows was.
      */
-    default public void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
+    default void disabledRowFilterChanged(TableView tableView, Filter<?> previousDisabledRowFilter) {
     }
 }

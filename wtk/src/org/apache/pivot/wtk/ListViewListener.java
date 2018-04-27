@@ -139,7 +139,7 @@ public interface ListViewListener {
      * @param listView         The source of the event.
      * @param previousListData The previous list data that was displayed.
      */
-    default public void listDataChanged(ListView listView, List<?> previousListData) {
+    default void listDataChanged(ListView listView, List<?> previousListData) {
     }
 
     /**
@@ -148,7 +148,7 @@ public interface ListViewListener {
      * @param listView             The source of the event.
      * @param previousItemRenderer The previous renderer used for each item.
      */
-    default public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
+    default void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
     }
 
     /**
@@ -157,7 +157,7 @@ public interface ListViewListener {
      * @param listView           The source of the event.
      * @param previousItemEditor The previous editor used for updating items.
      */
-    default public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+    default void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
     }
 
     /**
@@ -166,7 +166,7 @@ public interface ListViewListener {
      * @param listView           The source of the event.
      * @param previousSelectMode The previous selection mode.
      */
-    default public void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
+    default void selectModeChanged(ListView listView, ListView.SelectMode previousSelectMode) {
     }
 
     /**
@@ -174,7 +174,7 @@ public interface ListViewListener {
      *
      * @param listView The list view that has been changed.
      */
-    default public void checkmarksEnabledChanged(ListView listView) {
+    default void checkmarksEnabledChanged(ListView listView) {
     }
 
     /**
@@ -182,7 +182,7 @@ public interface ListViewListener {
      *
      * @param listView The list view that has been changed.
      */
-    default public void checkmarksTriStateChanged(ListView listView) {
+    default void checkmarksTriStateChanged(ListView listView) {
     }
 
     /**
@@ -191,7 +191,7 @@ public interface ListViewListener {
      *
      * @param listView The list view that has been changed.
      */
-    default public void checkmarksMixedAsCheckedChanged(ListView listView) {
+    default void checkmarksMixedAsCheckedChanged(ListView listView) {
     }
 
     /**
@@ -200,7 +200,7 @@ public interface ListViewListener {
      * @param listView                   The source of the event.
      * @param previousDisabledItemFilter The previous filter function used to disable specific items.
      */
-    default public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+    default void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
     }
 
     /**
@@ -210,7 +210,7 @@ public interface ListViewListener {
      * @param previousDisabledCheckmarkFilter The previous filter function used to disable checkmarks
      *                                        for certain items.
      */
-    default public void disabledCheckmarkFilterChanged(ListView listView,
+    default void disabledCheckmarkFilterChanged(ListView listView,
         Filter<?> previousDisabledCheckmarkFilter) {
     }
 }

@@ -100,7 +100,7 @@ public interface ButtonListener {
      * @param button             The button that changed.
      * @param previousButtonData The previous value of the button data.
      */
-    default public void buttonDataChanged(Button button, Object previousButtonData) {
+    default void buttonDataChanged(Button button, Object previousButtonData) {
     }
 
     /**
@@ -109,7 +109,7 @@ public interface ButtonListener {
      * @param button               The button that changed.
      * @param previousDataRenderer The previous data renderer for the button.
      */
-    default public void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
+    default void dataRendererChanged(Button button, Button.DataRenderer previousDataRenderer) {
     }
 
     /**
@@ -118,7 +118,7 @@ public interface ButtonListener {
      * @param button         The button that changed.
      * @param previousAction The previous action that was assigned to the button.
      */
-    default public void actionChanged(Button button, Action previousAction) {
+    default void actionChanged(Button button, Action previousAction) {
     }
 
     /**
@@ -126,7 +126,7 @@ public interface ButtonListener {
      *
      * @param button The button that changed.
      */
-    default public void toggleButtonChanged(Button button) {
+    default void toggleButtonChanged(Button button) {
     }
 
     /**
@@ -134,7 +134,7 @@ public interface ButtonListener {
      *
      * @param button The button that changed.
      */
-    default public void triStateChanged(Button button) {
+    default void triStateChanged(Button button) {
     }
 
     /**
@@ -143,6 +143,6 @@ public interface ButtonListener {
      * @param button              The button whose group changed.
      * @param previousButtonGroup The button group the button used to belong to (can be {@code null}).
      */
-    default public void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
+    default void buttonGroupChanged(Button button, ButtonGroup previousButtonGroup) {
     }
 }

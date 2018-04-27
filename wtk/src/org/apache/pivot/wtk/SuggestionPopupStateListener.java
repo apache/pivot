@@ -78,7 +78,7 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
      * @param result What the result would be.
      * @return What this listener thinks about closing the popup with this result.
      */
-    default public Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
+    default Vote previewSuggestionPopupClose(SuggestionPopup suggestionPopup, boolean result) {
         return Vote.APPROVE;
     }
 
@@ -88,6 +88,6 @@ public interface SuggestionPopupStateListener extends SuggestionPopupCloseListen
      * @param suggestionPopup The source of this event.
      * @param reason The accumulated vote that forced the veto.
      */
-    default public void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
+    default void suggestionPopupCloseVetoed(SuggestionPopup suggestionPopup, Vote reason) {
     }
 }

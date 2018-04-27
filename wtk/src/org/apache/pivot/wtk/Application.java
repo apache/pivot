@@ -94,13 +94,13 @@ public interface Application {
             }
         }
 
-        default public void keyTyped(char character) {
+        default void keyTyped(char character) {
         }
 
-        default public void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
+        default void keyPressed(int keyCode, Keyboard.KeyLocation keyLocation) {
         }
 
-        default public void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
+        default void keyReleased(int keyCode, Keyboard.KeyLocation keyLocation) {
         }
     }
 
@@ -118,7 +118,7 @@ public interface Application {
      * @param properties Initialization properties passed to the application.
      * @throws Exception if there is any problem during startup.
      */
-    default public void startup(Display display, Map<String, String> properties) throws Exception {
+    default void startup(Display display, Map<String, String> properties) throws Exception {
     }
 
     /**
@@ -129,7 +129,7 @@ public interface Application {
      * @return <tt>true</tt> to cancel shutdown, <tt>false</tt> to proceed with shutdown (default).
      * @throws Exception if there is a problem during shutdown.
      */
-    default public boolean shutdown(boolean optional) throws Exception {
+    default boolean shutdown(boolean optional) throws Exception {
         return false;
     }
 
@@ -138,7 +138,7 @@ public interface Application {
      *
      * @throws Exception if there is a problem doing the suspend.
      */
-    default public void suspend() throws Exception {
+    default void suspend() throws Exception {
     }
 
     /**
@@ -146,6 +146,6 @@ public interface Application {
      *
      * @throws Exception if there is a problem doing the resume.
      */
-    default public void resume() throws Exception {
+    default void resume() throws Exception {
     }
 }

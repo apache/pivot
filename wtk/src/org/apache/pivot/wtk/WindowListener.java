@@ -113,7 +113,7 @@ public interface WindowListener {
      * @param window        The window whose title has changed.
      * @param previousTitle What the title was previously (can be {@code null}).
      */
-    default public void titleChanged(Window window, String previousTitle) {
+    default void titleChanged(Window window, String previousTitle) {
     }
 
     /**
@@ -122,7 +122,7 @@ public interface WindowListener {
      * @param window    The window that has changed.
      * @param addedIcon The icon that was added.
      */
-    default public void iconAdded(Window window, Image addedIcon) {
+    default void iconAdded(Window window, Image addedIcon) {
     }
 
     /**
@@ -133,7 +133,7 @@ public interface WindowListener {
      * @param index     The index where this icon was inserted in the
      *                  window's icon sequence..
      */
-    default public void iconInserted(Window window, Image addedIcon, int index) {
+    default void iconInserted(Window window, Image addedIcon, int index) {
     }
 
     /**
@@ -144,7 +144,7 @@ public interface WindowListener {
      *                the window's icon sequence.
      * @param removed The sequence of icons that were actually removed.
      */
-    default public void iconsRemoved(Window window, int index, Sequence<Image> removed) {
+    default void iconsRemoved(Window window, int index, Sequence<Image> removed) {
     }
 
     /**
@@ -153,7 +153,7 @@ public interface WindowListener {
      * @param window          The window whose content has changed.
      * @param previousContent What the window's content was previously.
      */
-    default public void contentChanged(Window window, Component previousContent) {
+    default void contentChanged(Window window, Component previousContent) {
     }
 
     /**
@@ -162,7 +162,7 @@ public interface WindowListener {
      * @param window        The window that has changed its active state.
      * @param obverseWindow The "other" window that is affected.
      */
-    default public void activeChanged(Window window, Window obverseWindow) {
+    default void activeChanged(Window window, Window obverseWindow) {
     }
 
     /**
@@ -170,6 +170,6 @@ public interface WindowListener {
      *
      * @param window The window whose state has changed.
      */
-    default public void maximizedChanged(Window window) {
+    default void maximizedChanged(Window window) {
     }
 }

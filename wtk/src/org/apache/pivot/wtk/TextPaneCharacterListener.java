@@ -68,7 +68,7 @@ public interface TextPaneCharacterListener {
      * @param index    The starting point of the text insertion.
      * @param count    The count of characters inserted there.
      */
-    default public void charactersInserted(TextPane textPane, int index, int count) {
+    default void charactersInserted(TextPane textPane, int index, int count) {
     }
 
     /**
@@ -78,6 +78,6 @@ public interface TextPaneCharacterListener {
      * @param index    The starting point where text was removed.
      * @param count    Number of characters removed starting from there.
      */
-    default public void charactersRemoved(TextPane textPane, int index, int count) {
+    default void charactersRemoved(TextPane textPane, int index, int count) {
     }
 }

@@ -91,7 +91,7 @@ public interface FormListener {
      * @param form  The form that has changed.
      * @param index The index where the new section has been inserted.
      */
-    default public void sectionInserted(Form form, int index) {
+    default void sectionInserted(Form form, int index) {
     }
 
     /**
@@ -101,7 +101,7 @@ public interface FormListener {
      * @param index   The starting index where sections were removed.
      * @param removed The complete sequence of the removed sections.
      */
-    default public void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
+    default void sectionsRemoved(Form form, int index, Sequence<Form.Section> removed) {
     }
 
     /**
@@ -109,7 +109,7 @@ public interface FormListener {
      *
      * @param section The form section whose heading changed.
      */
-    default public void sectionHeadingChanged(Form.Section section) {
+    default void sectionHeadingChanged(Form.Section section) {
     }
 
     /**
@@ -118,7 +118,7 @@ public interface FormListener {
      * @param section The enclosing form section that has changed.
      * @param index   The index where a new field has been inserted.
      */
-    default public void fieldInserted(Form.Section section, int index) {
+    default void fieldInserted(Form.Section section, int index) {
     }
 
     /**
@@ -128,6 +128,6 @@ public interface FormListener {
      * @param index   The starting index where fields were removed.
      * @param fields  The complete sequence of fields that were removed.
      */
-    default public void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
+    default void fieldsRemoved(Form.Section section, int index, Sequence<Component> fields) {
     }
 }

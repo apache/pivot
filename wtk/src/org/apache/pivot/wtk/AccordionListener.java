@@ -73,7 +73,7 @@ public interface AccordionListener {
      * @param accordion The accordion that has changed.
      * @param index     The index of the newly inserted panel.
      */
-    default public void panelInserted(Accordion accordion, int index) {
+    default void panelInserted(Accordion accordion, int index) {
     }
 
     /**
@@ -83,7 +83,7 @@ public interface AccordionListener {
      * @param index     The starting index of the panel(s) that were removed.
      * @param removed   The sequence of removed panels.
      */
-    default public void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
+    default void panelsRemoved(Accordion accordion, int index, Sequence<Component> removed) {
     }
 
     /**
@@ -92,7 +92,7 @@ public interface AccordionListener {
      * @param accordion                  The accordion that was changed.
      * @param previousHeaderDataRenderer The previous version of the header data renderer.
      */
-    default public void headerDataRendererChanged(Accordion accordion,
+    default void headerDataRendererChanged(Accordion accordion,
         Button.DataRenderer previousHeaderDataRenderer) {
     }
 }

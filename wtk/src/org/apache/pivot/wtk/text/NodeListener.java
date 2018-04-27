@@ -114,7 +114,7 @@ public interface NodeListener {
      * @param node           The node that moved.
      * @param previousParent What the node's parent used to be.
      */
-    default public void parentChanged(Node node, Element previousParent) {
+    default void parentChanged(Node node, Element previousParent) {
     }
 
     /**
@@ -123,7 +123,7 @@ public interface NodeListener {
      * @param node           The node that has been updated.
      * @param previousOffset The previous offset of this node.
      */
-    default public void offsetChanged(Node node, int previousOffset) {
+    default void offsetChanged(Node node, int previousOffset) {
     }
 
     /**
@@ -132,7 +132,7 @@ public interface NodeListener {
      * @param node   The parent node that changed.
      * @param offset The offset where the child node was inserted.
      */
-    default public void nodeInserted(Node node, int offset) {
+    default void nodeInserted(Node node, int offset) {
     }
 
     /**
@@ -142,7 +142,7 @@ public interface NodeListener {
      * @param removed The sequence of child nodes that were removed.
      * @param offset  The starting offset of the removed nodes.
      */
-    default public void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
+    default void nodesRemoved(Node node, Sequence<Node> removed, int offset) {
     }
 
     /**
@@ -152,7 +152,7 @@ public interface NodeListener {
      * @param offset The starting offset of the insertion.
      * @param span   Count of characters inserted.
      */
-    default public void rangeInserted(Node node, int offset, int span) {
+    default void rangeInserted(Node node, int offset, int span) {
     }
 
     /**
@@ -165,6 +165,6 @@ public interface NodeListener {
      *                       if the removal was directly from a text node,
      *                       otherwise this will be null.
      */
-    default public void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars) {
+    default void rangeRemoved(Node node, int offset, int characterCount, CharSequence removedChars) {
     }
 }

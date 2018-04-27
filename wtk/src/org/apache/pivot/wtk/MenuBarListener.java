@@ -71,7 +71,7 @@ public interface MenuBarListener {
      * @param menuBar The menu bar that changed.
      * @param index The index where a new item was inserted.
      */
-    default public void itemInserted(MenuBar menuBar, int index) {
+    default void itemInserted(MenuBar menuBar, int index) {
     }
 
     /**
@@ -81,7 +81,7 @@ public interface MenuBarListener {
      * @param index The starting index where items were removed.
      * @param removed The sequence of removed items.
      */
-    default public void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
+    default void itemsRemoved(MenuBar menuBar, int index, Sequence<MenuBar.Item> removed) {
     }
 
     /**
@@ -90,6 +90,6 @@ public interface MenuBarListener {
      * @param menuBar The source of the event.
      * @param previousActiveItem Which item was active previously.
      */
-    default public void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
+    default void activeItemChanged(MenuBar menuBar, MenuBar.Item previousActiveItem) {
     }
 }

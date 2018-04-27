@@ -62,7 +62,7 @@ public interface TableViewHeaderListener {
      * @param tableViewHeader The source of this event.
      * @param previousTableView The table view that used to be associated with this header.
      */
-    default public void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
+    default void tableViewChanged(TableViewHeader tableViewHeader, TableView previousTableView) {
     }
 
     /**
@@ -71,6 +71,6 @@ public interface TableViewHeaderListener {
      * @param tableViewHeader The source of this event.
      * @param previousSortMode The previous sort mode for this header.
      */
-    default public void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
+    default void sortModeChanged(TableViewHeader tableViewHeader, SortMode previousSortMode) {
     }
 }

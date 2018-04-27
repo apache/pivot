@@ -61,7 +61,7 @@ public interface ListViewItemStateListener {
      * @param listView The list view whose state has changed.
      * @param index    The index of the item whose checked state has changed.
      */
-    default public void itemCheckedChanged(ListView listView, int index) {
+    default void itemCheckedChanged(ListView listView, int index) {
     }
 
     /**
@@ -71,7 +71,7 @@ public interface ListViewItemStateListener {
      * @param listView The list view whose state has changed.
      * @param index    The index of the item whose tri-state has changed.
      */
-    default public void itemCheckedStateChanged(ListView listView, int index) {
+    default void itemCheckedStateChanged(ListView listView, int index) {
     }
 
 }

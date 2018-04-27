@@ -190,7 +190,7 @@ public interface ComponentListener {
      * @param component The component whose parent changed.
      * @param previousParent Previous parent of this component.
      */
-    default public void parentChanged(Component component, Container previousParent) {
+    default void parentChanged(Component component, Container previousParent) {
     }
 
     /**
@@ -200,7 +200,7 @@ public interface ComponentListener {
      * @param previousWidth Previous width of this component.
      * @param previousHeight Previous height of this component.
      */
-    default public void sizeChanged(Component component, int previousWidth, int previousHeight) {
+    default void sizeChanged(Component component, int previousWidth, int previousHeight) {
     }
 
     /**
@@ -210,7 +210,7 @@ public interface ComponentListener {
      * @param previousPreferredWidth Previous value of the preferred width for this component.
      * @param previousPreferredHeight Previous preferred height for this component.
      */
-    default public void preferredSizeChanged(Component component, int previousPreferredWidth,
+    default void preferredSizeChanged(Component component, int previousPreferredWidth,
         int previousPreferredHeight) {
     }
 
@@ -221,7 +221,7 @@ public interface ComponentListener {
      * @param previousMinimumWidth Previously specified preferred minimum width.
      * @param previousMaximumWidth Previous value of the preferred maximum width.
      */
-    default public void widthLimitsChanged(Component component, int previousMinimumWidth,
+    default void widthLimitsChanged(Component component, int previousMinimumWidth,
         int previousMaximumWidth) {
     }
 
@@ -232,7 +232,7 @@ public interface ComponentListener {
      * @param previousMinimumHeight Previously given minimum height value.
      * @param previousMaximumHeight Previous maximum height value.
      */
-    default public void heightLimitsChanged(Component component, int previousMinimumHeight,
+    default void heightLimitsChanged(Component component, int previousMinimumHeight,
         int previousMaximumHeight) {
     }
 
@@ -243,7 +243,7 @@ public interface ComponentListener {
      * @param previousX The previous X position of the component.
      * @param previousY The previous Y position.
      */
-    default public void locationChanged(Component component, int previousX, int previousY) {
+    default void locationChanged(Component component, int previousX, int previousY) {
     }
 
     /**
@@ -251,7 +251,7 @@ public interface ComponentListener {
      *
      * @param component Component that has changed visibility.
      */
-    default public void visibleChanged(Component component) {
+    default void visibleChanged(Component component) {
     }
 
     /**
@@ -260,7 +260,7 @@ public interface ComponentListener {
      * @param component Component whose cursor has changed.
      * @param previousCursor Previous cursor for this component.
      */
-    default public void cursorChanged(Component component, Cursor previousCursor) {
+    default void cursorChanged(Component component, Cursor previousCursor) {
     }
 
     /**
@@ -269,7 +269,7 @@ public interface ComponentListener {
      * @param component Component that changed.
      * @param previousTooltipText Previous value of this component's tooltip text.
      */
-    default public void tooltipTextChanged(Component component, String previousTooltipText) {
+    default void tooltipTextChanged(Component component, String previousTooltipText) {
     }
 
     /**
@@ -278,7 +278,7 @@ public interface ComponentListener {
      * @param component The component we're dealing with.
      * @param previousTooltipDelay The previous tooltip delay for this component.
      */
-    default public void tooltipDelayChanged(Component component, int previousTooltipDelay) {
+    default void tooltipDelayChanged(Component component, int previousTooltipDelay) {
     }
 
     /**
@@ -287,7 +287,7 @@ public interface ComponentListener {
      * @param component The component in question.
      * @param previousDragSource The previous value of the {@link DragSource} for this component.
      */
-    default public void dragSourceChanged(Component component, DragSource previousDragSource) {
+    default void dragSourceChanged(Component component, DragSource previousDragSource) {
     }
 
     /**
@@ -296,7 +296,7 @@ public interface ComponentListener {
      * @param component The component that is changing.
      * @param previousDropTarget The previous value of the {@link DropTarget} for this component.
      */
-    default public void dropTargetChanged(Component component, DropTarget previousDropTarget) {
+    default void dropTargetChanged(Component component, DropTarget previousDropTarget) {
     }
 
     /**
@@ -305,7 +305,7 @@ public interface ComponentListener {
      * @param component The component that has changed.
      * @param previousMenuHandler The previous menu handler object for this component.
      */
-    default public void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
+    default void menuHandlerChanged(Component component, MenuHandler previousMenuHandler) {
     }
 
     /**
@@ -314,6 +314,6 @@ public interface ComponentListener {
      * @param component Component whose name changed.
      * @param previousName Previous name for this component.
      */
-    default public void nameChanged(Component component, String previousName) {
+    default void nameChanged(Component component, String previousName) {
     }
 }

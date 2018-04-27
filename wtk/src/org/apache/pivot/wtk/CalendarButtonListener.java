@@ -87,7 +87,7 @@ public interface CalendarButtonListener {
      * @param calendarButton The calendar button that changed.
      * @param previousYear   The previously selected year.
      */
-    default public void yearChanged(CalendarButton calendarButton, int previousYear) {
+    default void yearChanged(CalendarButton calendarButton, int previousYear) {
     }
 
     /**
@@ -96,7 +96,7 @@ public interface CalendarButtonListener {
      * @param calendarButton The calendar button that changed.
      * @param previousMonth  The previously selected month.
      */
-    default public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+    default void monthChanged(CalendarButton calendarButton, int previousMonth) {
     }
 
     /**
@@ -105,7 +105,7 @@ public interface CalendarButtonListener {
      * @param calendarButton The calendar button that changed.
      * @param previousLocale The previously selected locale for the calendar.
      */
-    default public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+    default void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
     }
 
     /**
@@ -114,7 +114,7 @@ public interface CalendarButtonListener {
      * @param calendarButton             The calendar button that changed.
      * @param previousDisabledDateFilter The previous disabled date filter.
      */
-    default public void disabledDateFilterChanged(CalendarButton calendarButton,
+    default void disabledDateFilterChanged(CalendarButton calendarButton,
         Filter<CalendarDate> previousDisabledDateFilter) {
     }
 }

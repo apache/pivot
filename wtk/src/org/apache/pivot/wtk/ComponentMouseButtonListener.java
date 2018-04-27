@@ -88,7 +88,7 @@ public interface ComponentMouseButtonListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate (default).
      */
-    default public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    default boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
         return false;
     }
 
@@ -102,7 +102,7 @@ public interface ComponentMouseButtonListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate (default).
      */
-    default public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    default boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
         return false;
     }
 
@@ -117,7 +117,7 @@ public interface ComponentMouseButtonListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate (default).
      */
-    default public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    default boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
         return false;
     }
 }

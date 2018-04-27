@@ -72,7 +72,7 @@ public interface ButtonGroupListener {
      * @param buttonGroup The button group that has changed.
      * @param button      The button that was added to the group.
      */
-    default public void buttonAdded(ButtonGroup buttonGroup, Button button) {
+    default void buttonAdded(ButtonGroup buttonGroup, Button button) {
     }
 
     /**
@@ -81,7 +81,7 @@ public interface ButtonGroupListener {
      * @param buttonGroup The button group that has changed.
      * @param button      The button that was removed from the group.
      */
-    default public void buttonRemoved(ButtonGroup buttonGroup, Button button) {
+    default void buttonRemoved(ButtonGroup buttonGroup, Button button) {
     }
 
     /**
@@ -90,6 +90,6 @@ public interface ButtonGroupListener {
      * @param buttonGroup       The button group that changed.
      * @param previousSelection The previously selected button in the group.
      */
-    default public void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
+    default void selectionChanged(ButtonGroup buttonGroup, Button previousSelection) {
     }
 }

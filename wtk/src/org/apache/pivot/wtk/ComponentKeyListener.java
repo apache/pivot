@@ -87,7 +87,7 @@ public interface ComponentKeyListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean keyTyped(Component component, char character) {
+    default boolean keyTyped(Component component, char character) {
         return false;
     }
 
@@ -100,7 +100,7 @@ public interface ComponentKeyListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    default boolean keyPressed(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         return false;
     }
 
@@ -113,7 +113,7 @@ public interface ComponentKeyListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate.
      */
-    default public boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
+    default boolean keyReleased(Component component, int keyCode, Keyboard.KeyLocation keyLocation) {
         return false;
     }
 }

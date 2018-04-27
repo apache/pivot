@@ -81,7 +81,7 @@ public interface QueryListener<V> {
      *
      * @param query The query that has just connected.
      */
-    default public void connected(Query<V> query) {
+    default void connected(Query<V> query) {
     }
 
     /**
@@ -90,7 +90,7 @@ public interface QueryListener<V> {
      *
      * @param query The query whose request has been sent.
      */
-    default public void requestSent(Query<V> query) {
+    default void requestSent(Query<V> query) {
     }
 
     /**
@@ -98,7 +98,7 @@ public interface QueryListener<V> {
      *
      * @param query The query whose response has just been received.
      */
-    default public void responseReceived(Query<V> query) {
+    default void responseReceived(Query<V> query) {
     }
 
     /**
@@ -106,6 +106,6 @@ public interface QueryListener<V> {
      *
      * @param query The query that has failed.
      */
-    default public void failed(Query<V> query) {
+    default void failed(Query<V> query) {
     }
 }

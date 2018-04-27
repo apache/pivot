@@ -74,7 +74,7 @@ public interface ComponentDecoratorListener {
      * @param component The component that has changed.
      * @param index     The starting index of the decorator that has been inserted.
      */
-    default public void decoratorInserted(Component component, int index) {
+    default void decoratorInserted(Component component, int index) {
     }
 
     /**
@@ -85,7 +85,7 @@ public interface ComponentDecoratorListener {
      * @param index             The index of the decorator that has been updated.
      * @param previousDecorator The previous decorator at that index.
      */
-    default public void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
+    default void decoratorUpdated(Component component, int index, Decorator previousDecorator) {
     }
 
     /**
@@ -96,6 +96,6 @@ public interface ComponentDecoratorListener {
      * @param index      The starting index where decorators were removed.
      * @param decorators The complete sequence of decorators that were removed.
      */
-    default public void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
+    default void decoratorsRemoved(Component component, int index, Sequence<Decorator> decorators) {
     }
 }

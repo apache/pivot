@@ -86,7 +86,7 @@ public interface CalendarListener {
      * @param calendar     The calendar that changed.
      * @param previousYear The previously selected year.
      */
-    default public void yearChanged(Calendar calendar, int previousYear) {
+    default void yearChanged(Calendar calendar, int previousYear) {
     }
 
     /**
@@ -95,7 +95,7 @@ public interface CalendarListener {
      * @param calendar      The calendar that changed.
      * @param previousMonth The previously selected month value.
      */
-    default public void monthChanged(Calendar calendar, int previousMonth) {
+    default void monthChanged(Calendar calendar, int previousMonth) {
     }
 
     /**
@@ -104,7 +104,7 @@ public interface CalendarListener {
      * @param calendar       The calendar that changed.
      * @param previousLocale The previously selected locale for the calendar.
      */
-    default public void localeChanged(Calendar calendar, Locale previousLocale) {
+    default void localeChanged(Calendar calendar, Locale previousLocale) {
     }
 
     /**
@@ -113,7 +113,7 @@ public interface CalendarListener {
      * @param calendar                   The calendar that changed.
      * @param previousDisabledDateFilter The previous disabled date filter.
      */
-    default public void disabledDateFilterChanged(Calendar calendar,
+    default void disabledDateFilterChanged(Calendar calendar,
         Filter<CalendarDate> previousDisabledDateFilter) {
     }
 }

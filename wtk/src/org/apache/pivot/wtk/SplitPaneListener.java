@@ -111,7 +111,7 @@ public interface SplitPaneListener {
      * @param previousTopLeft The previous component. The new component can be
      * found inside the splitPane.
      */
-    default public void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
+    default void topLeftChanged(SplitPane splitPane, Component previousTopLeft) {
     }
 
     /**
@@ -121,7 +121,7 @@ public interface SplitPaneListener {
      * @param previousBottomRight The previous component. The new component can
      * be found inside the splitPane.
      */
-    default public void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
+    default void bottomRightChanged(SplitPane splitPane, Component previousBottomRight) {
     }
 
     /**
@@ -129,7 +129,7 @@ public interface SplitPaneListener {
      *
      * @param splitPane The source of the event.
      */
-    default public void orientationChanged(SplitPane splitPane) {
+    default void orientationChanged(SplitPane splitPane) {
     }
 
     /**
@@ -137,7 +137,7 @@ public interface SplitPaneListener {
      *
      * @param splitPane The source of the event.
      */
-    default public void primaryRegionChanged(SplitPane splitPane) {
+    default void primaryRegionChanged(SplitPane splitPane) {
     }
 
     /**
@@ -146,7 +146,7 @@ public interface SplitPaneListener {
      * @param splitPane The source of the event.
      * @param previousSplitRatio The previous setting of the splitRatio.
      */
-    default public void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
+    default void splitRatioChanged(SplitPane splitPane, float previousSplitRatio) {
     }
 
     /**
@@ -154,7 +154,7 @@ public interface SplitPaneListener {
      *
      * @param splitPane The source of the event.
      */
-    default public void lockedChanged(SplitPane splitPane) {
+    default void lockedChanged(SplitPane splitPane) {
     }
 
     /**
@@ -163,6 +163,6 @@ public interface SplitPaneListener {
      * @param splitPane The source of the event.
      * @param previousResizeMode The previous setting of the resizeMode.
      */
-    default public void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode) {
+    default void resizeModeChanged(SplitPane splitPane, SplitPane.ResizeMode previousResizeMode) {
     }
 }

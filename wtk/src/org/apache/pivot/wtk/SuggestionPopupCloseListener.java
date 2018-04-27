@@ -25,6 +25,6 @@ public interface SuggestionPopupCloseListener {
      *
      * @param suggestionPopup The suggestion popup that has closed.
      */
-    default public void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
+    default void suggestionPopupClosed(SuggestionPopup suggestionPopup) {
     }
 }

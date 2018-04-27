@@ -101,7 +101,7 @@ public interface PromptListener {
      * @param prompt The prompt object that has been changed.
      * @param previousMessageType The message type before the change.
      */
-    default public void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
+    default void messageTypeChanged(Prompt prompt, MessageType previousMessageType) {
     }
 
     /**
@@ -110,7 +110,7 @@ public interface PromptListener {
      * @param prompt The prompt whose message has changed.
      * @param previousMessage What the message used to be.
      */
-    default public void messageChanged(Prompt prompt, String previousMessage) {
+    default void messageChanged(Prompt prompt, String previousMessage) {
     }
 
     /**
@@ -119,7 +119,7 @@ public interface PromptListener {
      * @param prompt The prompt that has changed.
      * @param previousBody What the body of this prompt used to be.
      */
-    default public void bodyChanged(Prompt prompt, Component previousBody) {
+    default void bodyChanged(Prompt prompt, Component previousBody) {
     }
 
     /**
@@ -128,7 +128,7 @@ public interface PromptListener {
      * @param prompt The prompt whose options have changed.
      * @param index The location where the new option was inserted.
      */
-    default public void optionInserted(Prompt prompt, int index) {
+    default void optionInserted(Prompt prompt, int index) {
     }
 
     /**
@@ -138,7 +138,7 @@ public interface PromptListener {
      * @param index The starting location of the removed options.
      * @param removed The actual sequence of options removed.
      */
-    default public void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
+    default void optionsRemoved(Prompt prompt, int index, Sequence<?> removed) {
     }
 
     /**
@@ -147,6 +147,6 @@ public interface PromptListener {
      * @param prompt The prompt that changed.
      * @param previousSelectedOption The option that used to be the selected one.
      */
-    default public void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
+    default void selectedOptionChanged(Prompt prompt, int previousSelectedOption) {
     }
 }

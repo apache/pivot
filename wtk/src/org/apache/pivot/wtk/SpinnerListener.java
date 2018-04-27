@@ -72,7 +72,7 @@ public interface SpinnerListener {
      * @param spinner The source of this event.
      * @param previousSpinnerData What the spinner data used to be.
      */
-    default public void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
+    default void spinnerDataChanged(Spinner spinner, List<?> previousSpinnerData) {
     }
 
     /**
@@ -81,7 +81,7 @@ public interface SpinnerListener {
      * @param spinner The source of this event.
      * @param previousItemRenderer What the item renderer used to be.
      */
-    default public void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
+    default void itemRendererChanged(Spinner spinner, Spinner.ItemRenderer previousItemRenderer) {
     }
 
     /**
@@ -89,6 +89,6 @@ public interface SpinnerListener {
      *
      * @param spinner The source of this event.
      */
-    default public void circularChanged(Spinner spinner) {
+    default void circularChanged(Spinner spinner) {
     }
 }

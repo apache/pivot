@@ -80,7 +80,7 @@ public interface ComponentMouseListener {
      * @return <tt>true</tt> to consume the event; <tt>false</tt> to allow it to
      * propagate (default return).
      */
-    default public boolean mouseMove(Component component, int x, int y) {
+    default boolean mouseMove(Component component, int x, int y) {
         return false;
     }
 
@@ -90,7 +90,7 @@ public interface ComponentMouseListener {
      *
      * @param component Component that is now under the mouse pointer.
      */
-    default public void mouseOver(Component component) {
+    default void mouseOver(Component component) {
     }
 
     /**
@@ -99,6 +99,6 @@ public interface ComponentMouseListener {
      *
      * @param component Component that has now lost the mouse pointer.
      */
-    default public void mouseOut(Component component) {
+    default void mouseOut(Component component) {
     }
 }

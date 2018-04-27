@@ -62,7 +62,7 @@ public interface ImageViewListener {
      * @param imageView     The image view whose image has changed.
      * @param previousImage The previous image associated with this image view.
      */
-    default public void imageChanged(ImageView imageView, Image previousImage) {
+    default void imageChanged(ImageView imageView, Image previousImage) {
     }
 
     /**
@@ -70,6 +70,6 @@ public interface ImageViewListener {
      *
      * @param imageView The image view whose asynchronous flag has changed.
      */
-    default public void asynchronousChanged(ImageView imageView) {
+    default void asynchronousChanged(ImageView imageView) {
     }
 }

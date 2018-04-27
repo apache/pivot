@@ -112,7 +112,7 @@ public interface ElementListener {
      * @param element The element that has changed.
      * @param previousDefaultNamespaceURI The previous value of the default namespace URI.
      */
-    default public void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
+    default void defaultNamespaceURIChanged(Element element, String previousDefaultNamespaceURI) {
     }
 
     /**
@@ -121,7 +121,7 @@ public interface ElementListener {
      * @param element The element that has been changed.
      * @param prefix The new namespace prefix that has been set.
      */
-    default public void namespaceAdded(Element element, String prefix) {
+    default void namespaceAdded(Element element, String prefix) {
     }
 
     /**
@@ -131,7 +131,7 @@ public interface ElementListener {
      * @param prefix The namespace prefix for this element.
      * @param previousURI The previous value of the namespace URI.
      */
-    default public void namespaceUpdated(Element element, String prefix, String previousURI) {
+    default void namespaceUpdated(Element element, String prefix, String previousURI) {
     }
 
     /**
@@ -141,7 +141,7 @@ public interface ElementListener {
      * @param prefix The namespace prefix that has been removed.
      * @param uri The {@code URI} that was removed.
      */
-    default public void namespaceRemoved(Element element, String prefix, String uri) {
+    default void namespaceRemoved(Element element, String prefix, String uri) {
     }
 
     /**
@@ -150,7 +150,7 @@ public interface ElementListener {
      * @param element The element that has changed.
      * @param index The index where the new attribute was added.
      */
-    default public void attributeInserted(Element element, int index) {
+    default void attributeInserted(Element element, int index) {
     }
 
     /**
@@ -160,7 +160,7 @@ public interface ElementListener {
      * @param index Starting index of the attributes that were removed.
      * @param attributes The sequence of removed attributes.
      */
-    default public void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes) {
+    default void attributesRemoved(Element element, int index, Sequence<Element.Attribute> attributes) {
     }
 
     /**
@@ -169,6 +169,6 @@ public interface ElementListener {
      * @param attribute The attribute whose value has changed.
      * @param previousValue The previous value for this attribute.
      */
-    default public void attributeValueChanged(Element.Attribute attribute, String previousValue) {
+    default void attributeValueChanged(Element.Attribute attribute, String previousValue) {
     }
 }

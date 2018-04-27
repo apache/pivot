@@ -93,7 +93,7 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet The browser sheet that has changed.
      * @param previousMode     The previous mode that was in effect.
      */
-    default public void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode) {
+    default void modeChanged(FileBrowserSheet fileBrowserSheet, FileBrowserSheet.Mode previousMode) {
     }
 
     /**
@@ -102,7 +102,7 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet      The browser sheet that has changed.
      * @param previousRootDirectory The previous root directory that was being browsed.
      */
-    default public void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory) {
+    default void rootDirectoryChanged(FileBrowserSheet fileBrowserSheet, File previousRootDirectory) {
     }
 
     /**
@@ -111,7 +111,7 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet      The browser sheet that has changed.
      * @param previousSelectedFiles The complete sequence of files that used to be selected.
      */
-    default public void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
+    default void selectedFilesChanged(FileBrowserSheet fileBrowserSheet,
         Sequence<File> previousSelectedFiles) {
     }
 
@@ -121,7 +121,7 @@ public interface FileBrowserSheetListener {
      * @param fileBrowserSheet           The browser sheet that has changed.
      * @param previousDisabledFileFilter The previous disabled file filter.
      */
-    default public void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
+    default void disabledFileFilterChanged(FileBrowserSheet fileBrowserSheet,
         Filter<File> previousDisabledFileFilter) {
     }
 }

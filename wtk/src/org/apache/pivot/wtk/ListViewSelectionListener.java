@@ -83,7 +83,7 @@ public interface ListViewSelectionListener {
      * @param rangeStart The start index of the range that was added, inclusive.
      * @param rangeEnd The end index of the range that was added, inclusive.
      */
-    default public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+    default void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
     }
 
     /**
@@ -95,7 +95,7 @@ public interface ListViewSelectionListener {
      * @param rangeEnd The starting index of the range that was removed,
      * inclusive.
      */
-    default public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+    default void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
     }
 
     /**
@@ -110,7 +110,7 @@ public interface ListViewSelectionListener {
      * indirectly as a result of a model change, contains the current selection.
      * Otherwise, contains <tt>null</tt>.
      */
-    default public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+    default void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
     }
 
     /**
@@ -119,6 +119,6 @@ public interface ListViewSelectionListener {
      * @param listView The source of the event.
      * @param previousSelectedItem The item that was previously selected.
      */
-    default public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+    default void selectedItemChanged(ListView listView, Object previousSelectedItem) {
     }
 }

@@ -82,7 +82,7 @@ public interface ScrollBarListener {
      * @param scrollBar The scroll bar that changed orientation.
      * @param previousOrientation The previous orientation.
      */
-    default public void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
+    default void orientationChanged(ScrollBar scrollBar, Orientation previousOrientation) {
     }
 
     /**
@@ -93,7 +93,7 @@ public interface ScrollBarListener {
      * @param previousEnd The previous end value.
      * @param previousExtent The previous scroll bar extent value.
      */
-    default public void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
+    default void scopeChanged(ScrollBar scrollBar, int previousStart, int previousEnd,
         int previousExtent) {
     }
 
@@ -103,7 +103,7 @@ public interface ScrollBarListener {
      * @param scrollBar The scroll bar that changed.
      * @param previousUnitIncrement The previous unit increment value.
      */
-    default public void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
+    default void unitIncrementChanged(ScrollBar scrollBar, int previousUnitIncrement) {
     }
 
     /**
@@ -112,6 +112,6 @@ public interface ScrollBarListener {
      * @param scrollBar The scroll bar that changed.
      * @param previousBlockIncrement The previous block increment value.
      */
-    default public void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
+    default void blockIncrementChanged(ScrollBar scrollBar, int previousBlockIncrement) {
     }
 }

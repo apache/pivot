@@ -82,7 +82,7 @@ public interface SetListener<E> {
      * @param set The source of the set event.
      * @param element The element that was added to the set.
      */
-    default public void elementAdded(Set<E> set, E element) {
+    default void elementAdded(Set<E> set, E element) {
     }
 
     /**
@@ -91,7 +91,7 @@ public interface SetListener<E> {
      * @param set The source of the set event.
      * @param element The element that was removed from the set.
      */
-    default public void elementRemoved(Set<E> set, E element) {
+    default void elementRemoved(Set<E> set, E element) {
     }
 
     /**
@@ -99,7 +99,7 @@ public interface SetListener<E> {
      *
      * @param set The source of the set event.
      */
-    default public void setCleared(Set<E> set) {
+    default void setCleared(Set<E> set) {
     }
 
     /**
@@ -108,6 +108,6 @@ public interface SetListener<E> {
      * @param set The source of the event.
      * @param previousComparator The previous comparator value.
      */
-    default public void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
+    default void comparatorChanged(Set<E> set, Comparator<E> previousComparator) {
     }
 }

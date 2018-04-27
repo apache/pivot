@@ -50,6 +50,6 @@ public interface NumberedListListener {
      * @param numberedList  The list whose style has changed.
      * @param previousStyle The previous style for this list.
      */
-    default public void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle) {
+    default void styleChanged(NumberedList numberedList, NumberedList.Style previousStyle) {
     }
 }

@@ -102,7 +102,7 @@ public interface GridPaneListener {
      * @param gridPane            The grid pane that has changed.
      * @param previousColumnCount The previous column count for the grid.
      */
-    default public void columnCountChanged(GridPane gridPane, int previousColumnCount) {
+    default void columnCountChanged(GridPane gridPane, int previousColumnCount) {
     }
 
     /**
@@ -111,7 +111,7 @@ public interface GridPaneListener {
      * @param gridPane The grid pane that has changed.
      * @param index    The index of the row that was just inserted.
      */
-    default public void rowInserted(GridPane gridPane, int index) {
+    default void rowInserted(GridPane gridPane, int index) {
     }
 
     /**
@@ -121,7 +121,7 @@ public interface GridPaneListener {
      * @param index    The starting index of the row(s) that were removed.
      * @param rows     The complete sequence of removed rows.
      */
-    default public void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
+    default void rowsRemoved(GridPane gridPane, int index, Sequence<GridPane.Row> rows) {
     }
 
     /**
@@ -130,7 +130,7 @@ public interface GridPaneListener {
      * @param row    The parent row of the cell that was inserted.
      * @param column The column index of the inserted cell.
      */
-    default public void cellInserted(GridPane.Row row, int column) {
+    default void cellInserted(GridPane.Row row, int column) {
     }
 
     /**
@@ -140,7 +140,7 @@ public interface GridPaneListener {
      * @param column  The starting column index of the removed cells.
      * @param removed The complete sequence of removed cells.
      */
-    default public void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
+    default void cellsRemoved(GridPane.Row row, int column, Sequence<Component> removed) {
     }
 
     /**
@@ -150,6 +150,6 @@ public interface GridPaneListener {
      * @param column            The column index of the updated cell.
      * @param previousComponent The previous contents of this cell.
      */
-    default public void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
+    default void cellUpdated(GridPane.Row row, int column, Component previousComponent) {
     }
 }

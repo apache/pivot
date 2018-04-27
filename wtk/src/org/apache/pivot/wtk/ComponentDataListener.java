@@ -71,7 +71,7 @@ public interface ComponentDataListener {
      * @param component The component that has changed.
      * @param key       The key for the key/value pair that was added to this component's data dictionary.
      */
-    default public void valueAdded(Component component, String key) {
+    default void valueAdded(Component component, String key) {
     }
 
     /**
@@ -82,7 +82,7 @@ public interface ComponentDataListener {
      * @param key           The key for the value that has been updated.
      * @param previousValue The previous value for this key.
      */
-    default public void valueUpdated(Component component, String key, Object previousValue) {
+    default void valueUpdated(Component component, String key, Object previousValue) {
     }
 
     /**
@@ -93,6 +93,6 @@ public interface ComponentDataListener {
      * @param key       The key for the key/value pair that has been removed.
      * @param value     The corresponding value that was removed.
      */
-    default public void valueRemoved(Component component, String key, Object value) {
+    default void valueRemoved(Component component, String key, Object value) {
     }
 }

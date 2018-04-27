@@ -107,7 +107,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose data is changing.
      * @param previousSpinnerDataKey The previous key for the spinner's data.
      */
-    default public void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
+    default void spinnerDataKeyChanged(Spinner spinner, String previousSpinnerDataKey) {
     }
 
     /**
@@ -116,7 +116,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose data is changing.
      * @param previousSpinnerDataBindType What the data bind type used to be.
      */
-    default public void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
+    default void spinnerDataBindTypeChanged(Spinner spinner, BindType previousSpinnerDataBindType) {
     }
 
     /**
@@ -125,7 +125,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose data is changing.
      * @param previousSpinnerDataBindMapping What the data bind mapping used to be.
      */
-    default public void spinnerDataBindMappingChanged(Spinner spinner,
+    default void spinnerDataBindMappingChanged(Spinner spinner,
         Spinner.SpinnerDataBindMapping previousSpinnerDataBindMapping) {
     }
 
@@ -135,7 +135,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner that is the source of this event.
      * @param previousSelectedItemKey What the selected item key used to be.
      */
-    default public void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
+    default void selectedItemKeyChanged(Spinner spinner, String previousSelectedItemKey) {
     }
 
     /**
@@ -144,7 +144,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose selected binding has changed.
      * @param previousSelectedItemBindType The previous selected item bind type.
      */
-    default public void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
+    default void selectedItemBindTypeChanged(Spinner spinner, BindType previousSelectedItemBindType) {
     }
 
     /**
@@ -153,7 +153,7 @@ public interface SpinnerBindingListener {
      * @param spinner The spinner whose bind mapping has changed.
      * @param previousSelectedItemBindMapping What the selected item bind mapping used to be.
      */
-    default public void selectedItemBindMappingChanged(Spinner spinner,
+    default void selectedItemBindMappingChanged(Spinner spinner,
         Spinner.ItemBindMapping previousSelectedItemBindMapping) {
     }
 }

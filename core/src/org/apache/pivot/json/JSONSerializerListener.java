@@ -133,7 +133,7 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The serializer in question.
      * @param value The dictionary just started.
      */
-    default public void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
+    default void beginDictionary(JSONSerializer jsonSerializer, Dictionary<String, ?> value) {
     }
 
     /**
@@ -141,7 +141,7 @@ public interface JSONSerializerListener {
      *
      * @param jsonSerializer The serializer in operation.
      */
-    default public void endDictionary(JSONSerializer jsonSerializer) {
+    default void endDictionary(JSONSerializer jsonSerializer) {
     }
 
     /**
@@ -150,7 +150,7 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The active serializer.
      * @param key The key just read.
      */
-    default public void readKey(JSONSerializer jsonSerializer, String key) {
+    default void readKey(JSONSerializer jsonSerializer, String key) {
     }
 
     /**
@@ -159,7 +159,7 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The serializer.
      * @param value The sequence just started.
      */
-    default public void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
+    default void beginSequence(JSONSerializer jsonSerializer, Sequence<?> value) {
     }
 
     /**
@@ -167,7 +167,7 @@ public interface JSONSerializerListener {
      *
      * @param jsonSerializer The current serializer.
      */
-    default public void endSequence(JSONSerializer jsonSerializer) {
+    default void endSequence(JSONSerializer jsonSerializer) {
     }
 
     /**
@@ -176,7 +176,7 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The active serializer.
      * @param value The string value just read.
      */
-    default public void readString(JSONSerializer jsonSerializer, String value) {
+    default void readString(JSONSerializer jsonSerializer, String value) {
     }
 
     /**
@@ -185,7 +185,7 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The active serializer.
      * @param value The numeric value just read.
      */
-    default public void readNumber(JSONSerializer jsonSerializer, Number value) {
+    default void readNumber(JSONSerializer jsonSerializer, Number value) {
     }
 
     /**
@@ -194,7 +194,7 @@ public interface JSONSerializerListener {
      * @param jsonSerializer The serializer.
      * @param value The boolean value just read.
      */
-    default public void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
+    default void readBoolean(JSONSerializer jsonSerializer, Boolean value) {
     }
 
     /**
@@ -202,6 +202,6 @@ public interface JSONSerializerListener {
      *
      * @param jsonSerializer The currently active serializer.
      */
-    default public void readNull(JSONSerializer jsonSerializer) {
+    default void readNull(JSONSerializer jsonSerializer) {
     }
 }

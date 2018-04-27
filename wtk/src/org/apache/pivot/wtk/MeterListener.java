@@ -71,7 +71,7 @@ public interface MeterListener {
      * @param meter The meter that is changing.
      * @param previousPercentage What the meter's percentage value used to be.
      */
-    default public void percentageChanged(Meter meter, double previousPercentage) {
+    default void percentageChanged(Meter meter, double previousPercentage) {
     }
 
     /**
@@ -80,7 +80,7 @@ public interface MeterListener {
      * @param meter The meter that has changed.
      * @param previousText The previous meter text.
      */
-    default public void textChanged(Meter meter, String previousText) {
+    default void textChanged(Meter meter, String previousText) {
     }
 
     /**
@@ -88,6 +88,6 @@ public interface MeterListener {
      *
      * @param meter The source of the event.
      */
-    default public void orientationChanged(Meter meter) {
+    default void orientationChanged(Meter meter) {
     }
 }

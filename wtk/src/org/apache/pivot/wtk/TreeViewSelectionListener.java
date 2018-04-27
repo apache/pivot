@@ -83,7 +83,7 @@ public interface TreeViewSelectionListener {
      * @param treeView The source of this event.
      * @param path     The path that has been added to the selection.
      */
-    default public void selectedPathAdded(TreeView treeView, Path path) {
+    default void selectedPathAdded(TreeView treeView, Path path) {
     }
 
     /**
@@ -92,7 +92,7 @@ public interface TreeViewSelectionListener {
      * @param treeView The source of this event.
      * @param path     The path that was removed from the selection.
      */
-    default public void selectedPathRemoved(TreeView treeView, Path path) {
+    default void selectedPathRemoved(TreeView treeView, Path path) {
     }
 
     /**
@@ -101,7 +101,7 @@ public interface TreeViewSelectionListener {
      * @param treeView              The source of this event.
      * @param previousSelectedPaths The list of paths that were previously selected.
      */
-    default public void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
+    default void selectedPathsChanged(TreeView treeView, Sequence<Path> previousSelectedPaths) {
     }
 
     /**
@@ -110,6 +110,6 @@ public interface TreeViewSelectionListener {
      * @param treeView             The source of this event.
      * @param previousSelectedNode The node that used to be selected.
      */
-    default public void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
+    default void selectedNodeChanged(TreeView treeView, Object previousSelectedNode) {
     }
 }
