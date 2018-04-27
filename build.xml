@@ -995,7 +995,8 @@ limitations under the License.
     <target name="check-style">
         <cs:checkstyle config="pivot_checks.xml" failOnViolation="false">
             <fileset dir=".">
-                <include name="**/*.java"/>
+                <include name="**/src/org/**/*.java"/>
+                <include name="**/test/org/**/*.java"/>
             </fileset>
             <cs:formatter type="plain" toFile="style_errors.log"/>
         </cs:checkstyle>
