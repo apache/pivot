@@ -196,10 +196,10 @@ public final class Insets implements Serializable {
      * Decode a possible Insets value. The value can be in one of the
      * following forms:
      * <ul>
-     * <li><pre>{ "top": nnn, "left": nnn, "bottom": nnn, "right": nnn }</pre>
-     * <li><pre>[ top, left, bottom, right ]</pre>
-     * <li><pre>top[,;] left[,;] bottom[,;] right</pre>
-     * <li>nnnn
+     * <li><pre>{ "top": nnn, "left": nnn, "bottom": nnn, "right": nnn }</pre></li>
+     * <li><pre>[ top, left, bottom, right ]</pre></li>
+     * <li><pre>top[,;] left[,;] bottom[,;] right</pre></li>
+     * <li><em>nnnn</em></li>
      * </ul>
      *
      * @param value The string value of the Insets to decode.
@@ -207,6 +207,7 @@ public final class Insets implements Serializable {
      * @throws IllegalArgumentException if the input is not in one of these
      * formats.
      * @see #Insets(Dictionary)
+     * @see #Insets(Sequence)
      * @see #Insets(int, int, int, int)
      * @see #Insets(int)
      */

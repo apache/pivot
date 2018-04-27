@@ -144,6 +144,9 @@ public final class Dimensions implements Serializable {
      * @return The parsed dimensions value if possible.
      * @throws IllegalArgumentException if the input value is null, empty, or cannot be parsed in
      * one of these forms.
+     * @see #Dimensions(Dictionary)
+     * @see #Dimensions(Sequence)
+     * @see #Dimensions(int, int)
      */
     public static Dimensions decode(String value) {
         Utils.checkNullOrEmpty(value, "dimensions");

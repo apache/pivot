@@ -384,6 +384,10 @@ public final class Span {
      * if the string starts with <code>"{"</code> but it cannot be parsed as
      * a JSON map, or if it starts with <code>"["</code> but cannot be parsed
      * as a JSON list.
+     * @see #Span(Dictionary)
+     * @see #Span(Sequence)
+     * @see #Span(int, int)
+     * @see #Span(int)
      */
     public static Span decode(String value) {
         Utils.checkNullOrEmpty(value, "value");

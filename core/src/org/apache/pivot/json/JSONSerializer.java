@@ -810,10 +810,15 @@ public class JSONSerializer implements Serializer<Object> {
      * Writes data to a JSON stream.
      *
      * @param object The object to serialize. Must be one of the following
-     * types: <ul> <li>pivot.collections.Map</li>
-     * <li>pivot.collections.List</li> <li>java.lang.String</li>
-     * <li>java.lang.Number</li> <li>java.lang.Boolean</li>
-     * <li><tt>null</tt></li> </ul>
+     * types:
+     * <ul>
+     * <li>pivot.collections.Map</li>
+     * <li>pivot.collections.List</li>
+     * <li>java.lang.String</li>
+     * <li>java.lang.Number</li>
+     * <li>java.lang.Boolean</li>
+     * <li><tt>null</tt></li>
+     * </ul>
      * @param writer The writer to which data will be written.
      * @throws IOException for any errors during the writing process.
      * @throws SerializationException for any formatting errors in the data.

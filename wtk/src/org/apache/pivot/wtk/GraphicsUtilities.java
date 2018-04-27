@@ -197,6 +197,7 @@ public final class GraphicsUtilities {
      * contains illegal hexadecimal digits.
      * @throws IllegalArgumentException if the value is not in one of the
      * formats listed above.
+     * @see CSSColor
      */
     public static Color decodeColor(final String value, String argument) throws NumberFormatException {
         Utils.checkNullOrEmpty(value, argument == null ? "color" : argument);
@@ -257,6 +258,7 @@ public final class GraphicsUtilities {
      * @throws IllegalArgumentException if the value is not in one of the
      * formats listed above.
      * @see #decodeColor(String, String)
+     * @see CSSColor
      */
     public static Color decodeColor(final String value) throws NumberFormatException {
         return decodeColor(value, null);
@@ -310,13 +312,15 @@ public final class GraphicsUtilities {
      * Interpret a dictionary as a {@link Paint} value.
      *
      * @param dictionary A dictionary containing a key {@value #PAINT_TYPE_KEY}
-     * and further elements according to its value: <ul> <li><b>solid_color</b>
-     * - key {@value #COLOR_KEY} with value being any of the
+     * and further elements according to its value:
+     * <ul>
+     * <li><b>solid_color</b> - key {@value #COLOR_KEY} with value being any of the
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
-     * Pivot}</li> <li><b>gradient</b> - keys {@value #START_X_KEY},
-     * {@value #START_Y_KEY}, {@value #END_X_KEY}, {@value #END_Y_KEY} (values
-     * are coordinates), {@value #START_COLOR_KEY}, {@value #END_COLOR_KEY}
-     * (values are {@linkplain GraphicsUtilities#decodeColor colors})</li>
+     * Pivot}</li>
+     * <li><b>gradient</b> - keys {@value #START_X_KEY}, {@value #START_Y_KEY},
+     * {@value #END_X_KEY}, {@value #END_Y_KEY} (values are coordinates),
+     * {@value #START_COLOR_KEY}, {@value #END_COLOR_KEY} (values are
+     * {@linkplain GraphicsUtilities#decodeColor colors})</li>
      * <li><b>linear_gradient</b> - keys {@value #START_X_KEY},
      * {@value #START_Y_KEY}, {@value #END_X_KEY}, {@value #END_Y_KEY}
      * (coordinates), {@value #STOPS_KEY} (a list of dictionaries with keys
@@ -324,7 +328,8 @@ public final class GraphicsUtilities {
      * <li><b>radial_gradient</b> - keys {@value #CENTER_X_KEY},
      * {@value #CENTER_Y_KEY} (coordinates), {@value #RADIUS_KEY} (a number),
      * {@value #STOPS_KEY} (a list of dictionaries with keys
-     * {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li> </ul>
+     * {@value #OFFSET_KEY} and {@value #COLOR_KEY})</li>
+     * </ul>
      * @return The fully decoded paint value.
      * @throws IllegalArgumentException if there is no paint type key found.
      */

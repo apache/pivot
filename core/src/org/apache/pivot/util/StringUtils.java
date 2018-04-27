@@ -130,12 +130,12 @@ public final class StringUtils {
      * Extension of {@link Boolean#parseBoolean} that is both more exact
      * and supports more features.  Specifically it will recognize:
      * <ul>
-     * <li><tt>true</tt> or <tt>false</tt> in mixed case.
-     * <li><tt>yes</tt> or <tt>no</tt> in mixed case.
-     * <li><tt>on</tt> or <tt>off</tt> in mixed case.
-     * <li><tt>T</tt> or <tt>F</tt> in mixed case.
-     * <li><tt>Y</tt> or <tt>N</tt> in mixed case.
-     * <li><tt>1</tt> or <tt>0</tt>.
+     * <li><tt>true</tt> or <tt>false</tt> in mixed case.</li>
+     * <li><tt>yes</tt> or <tt>no</tt> in mixed case.</li>
+     * <li><tt>on</tt> or <tt>off</tt> in mixed case.</li>
+     * <li><tt>T</tt> or <tt>F</tt> in mixed case.</li>
+     * <li><tt>Y</tt> or <tt>N</tt> in mixed case.</li>
+     * <li><tt>1</tt> or <tt>0</tt>.</li>
      * </ul>
      *
      * @param input The string value to convert to a boolean.
