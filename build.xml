@@ -18,6 +18,7 @@ limitations under the License.
 
 <project name="pivot" default="environment-info"
     xmlns:artifact="antlib:org.apache.maven.artifact.ant"
+    xmlns:cs="antlib:com.puppycrawl.tools.checkstyle.ant"
 >
     <!-- Classpath-related properties -->
     <property environment="env"/>
@@ -989,4 +990,22 @@ limitations under the License.
             <fileset refid="trimfiles"/>
         </replaceregexp>
     </target>
+
+    <!-- Run our custom checkstyle on all the source -->
+    <target name="check-style">
+        <cs:checkstyle config="pivot_checks.xml" failOnViolation="false">
+            <fileset dir=".">
+                <include name="**/*.java"/>
+            </fileset>
+            <cs:formatter type="plain" toFile="style_errors.log"/>
+        </cs:checkstyle>
+        <javac srcdir="." includeantruntime="false">
+            <include name="StyleErrors.java"/>
+        </javac>
+        <java dir="." classname="StyleErrors" fork="true" output="style_summary.log" logError="true">
+            <arg value="style_errors.log"/>
+        </java>
+        <echo message="Style check results in &quot;style_errors.log&quot; and &quot;style_summary.log&quot;"/>
+    </target>
+
 </project>
