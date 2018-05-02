@@ -47,8 +47,8 @@ public final class Colors implements Application {
             colorFill.getStyles().put(Style.backgroundColor, fillColor);
             colorFill.setMinimumWidth(50);
             colorFill.setPreferredHeight(50);
-            colorFill.setTooltipText(String.format("R:%1$3d,G:%2$3d,B:%3$3d",
-                    fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
+            colorFill.setTooltipText(String.format("%1$s=R:%2$3d,G:%3$3d,B:%4$3d",
+                    color.toString(), fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
             Label nameLabel = new Label(color.toString());
             nameLabel.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.CENTER);
             container.add(colorFill);
