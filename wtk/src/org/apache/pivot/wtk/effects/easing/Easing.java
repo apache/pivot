@@ -20,9 +20,42 @@ package org.apache.pivot.wtk.effects.easing;
  * Base interface for easing operations.
  */
 public interface Easing {
+    /**
+     * Easing in - accelerating from zero velocity.
+     *
+     * @param time     The current time since the beginning, or how long into the
+     *                 easing we are.
+     * @param begin    The beginning position.
+     * @param change   The total change in position.
+     * @param duration The total duration of the easing.
+     * @return The updated position at the current point in time, according to the
+     *         easing equation.
+     */
     public float easeIn(float time, float begin, float change, float duration);
 
+    /**
+     * Easing out - decelerating to zero velocity.
+     *
+     * @param time     The current time since the beginning, or how long into the
+     *                 easing we are.
+     * @param begin    The beginning position.
+     * @param change   The total change in position.
+     * @param duration The total duration of the easing.
+     * @return The updated position at the current point in time, according to the
+     *         easing equation.
+     */
     public float easeOut(float time, float begin, float change, float duration);
 
+    /**
+     * Easing in and out - acceleration until halfway, then deceleration.
+     *
+     * @param time     The current time since the beginning, or how long into the
+     *                 easing we are.
+     * @param begin    The beginning position.
+     * @param change   The total change in position.
+     * @param duration The total duration of the easing.
+     * @return The updated position at the current point in time, according to the
+     *         easing equation.
+     */
     public float easeInOut(float time, float begin, float change, float duration);
 }
