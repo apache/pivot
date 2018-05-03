@@ -21,8 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,13 +85,17 @@ public final class StyleErrors {
 
     /** Pattern used to parse each input line. */
     private static final Pattern LINE_PATTERN =
-        Pattern.compile("^\\[[A-Z]+\\]\\s+(.+)\\:(\\d+)\\:(\\d+\\:)?\\s+(.+)\\s+(\\[[a-zA-Z]+\\])$");
+        Pattern.compile("^\\[[A-Z]+\\]\\s+(([a-zA-Z]\\:)?([^:]+))(\\:[0-9]+\\:)([0-9]+\\:)?\\s+(.+)\\s+(\\[[a-zA-Z]+\\])$");
+    /** The group in the {@link #LINE_PATTERN} that contains the file name. */
+    private static final int FILE_NAME_GROUP = 1;
     /** The group in the {@link #LINE_PATTERN} that contains the checkstyle error name. */
-    private static final int CLASS_NAME_GROUP = 5;
+    private static final int CLASS_NAME_GROUP = 7;
     /** A format string used to output all the information in a uniform manner. */
     private static final String FORMAT = "%1$-32s%2$5d%n";
     /** Format string used to print the underlines. */
     private static final String UNDER_FORMAT = "%1$-32s%2$5s%n";
+    /** The set of unique file names found in the list. */
+    private static Set<String> fileNameSet = new HashSet<>();
     /** For each type of checkstyle error, the name and running count for each. */
     private static Map<String, Integer> counts = new TreeMap<>();
     /** At the end of each file, the list used to sort by count and name. */
@@ -111,6 +117,8 @@ public final class StyleErrors {
                     lineNo++;
                     Matcher m = LINE_PATTERN.matcher(line);
                     if (m.matches()) {
+                        String fileName = m.group(FILE_NAME_GROUP);
+                        fileNameSet.add(fileName);
                         String errorClass = m.group(CLASS_NAME_GROUP);
                         Integer count = counts.get(errorClass);
                         if (count == null) {
@@ -143,6 +151,7 @@ public final class StyleErrors {
             }
             System.out.format(UNDER_FORMAT, "----------------------------", "-----");
             System.out.format(FORMAT, "Grand Total", total);
+            System.out.format(FORMAT, "Total Files With Errors", fileNameSet.size());
             System.out.println();
         }
     }
