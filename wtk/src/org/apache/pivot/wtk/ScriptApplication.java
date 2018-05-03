@@ -126,6 +126,12 @@ public class ScriptApplication implements Application {
     }
 
     /**
+     * No-arg constructor for use with {@link DesktopApplicationContext}.
+     */
+    public ScriptApplication() {
+    }
+
+    /**
      * Constructor for subclasses to preset the "SRC" argument for completely
      * automatic application startup (mainly used for tests, demos, etc.).
      *
