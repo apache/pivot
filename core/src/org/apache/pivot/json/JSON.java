@@ -35,7 +35,10 @@ import org.apache.pivot.util.Utils;
  * consideration is given to an object that implements the {@link Dictionary}
  * interface.
  */
-public class JSON {
+public final class JSON {
+    private JSON() {
+    }
+
     /**
      * Returns the value at a given path.
      *
@@ -71,8 +74,8 @@ public class JSON {
 
             String key = keys.get(i);
 
-            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map ?
-                new MapAdapter<>((java.util.Map<String, T>) value)
+            Map<String, T> adapter = (Map<String, T>) (value instanceof java.util.Map
+                ? new MapAdapter<>((java.util.Map<String, T>) value)
                 : (value instanceof Map ? ((Map<String, T>) value)
                     : new BeanAdapter(value)));
             if (adapter.containsKey(key)) {
@@ -145,8 +148,8 @@ public class JSON {
             throw new IllegalArgumentException("Invalid path.");
         }
 
-        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ?
-            new MapAdapter<>((java.util.Map<String, T>) parent)
+        Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map
+            ? new MapAdapter<>((java.util.Map<String, T>) parent)
             : (parent instanceof Map ? ((Map<String, T>) parent)
                 : new BeanAdapter(parent)));
 
@@ -227,8 +230,8 @@ public class JSON {
         if (parent == null) {
             containsKey = false;
         } else {
-            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map ?
-                new MapAdapter<>((java.util.Map<String, T>) parent)
+            Map<String, T> adapter = (Map<String, T>) (parent instanceof java.util.Map
+                ? new MapAdapter<>((java.util.Map<String, T>) parent)
                 : (parent instanceof Map ? ((Map<String, T>) parent)
                     : new BeanAdapter(parent)));
             containsKey = adapter.containsKey(key);

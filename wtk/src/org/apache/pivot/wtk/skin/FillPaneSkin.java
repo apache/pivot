@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.Insets;
 import org.apache.pivot.wtk.Orientation;
 
 /**
- * Fill pane skin.
+ * Theme-independent skin for the {@link FillPane} component.
  */
 public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
     private Insets padding = Insets.NONE;
@@ -55,8 +55,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                 heightUpdated = Math.max(heightUpdated - padding.getHeight(), 0);
             }
 
-            // Preferred width is the sum of the preferred widths of all
-            // components
+            // Preferred width is the sum of the preferred widths of all components
             int j = 0;
             for (int i = 0, n = fillPane.getLength(); i < n; i++) {
                 Component component = fillPane.get(i);
@@ -96,8 +95,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
 
         Orientation orientation = fillPane.getOrientation();
         if (orientation == Orientation.HORIZONTAL) {
-            // Preferred height is the maximum preferred height of all
-            // components
+            // Preferred height is the maximum preferred height of all components
             for (int i = 0, n = fillPane.getLength(); i < n; i++) {
                 Component component = fillPane.get(i);
 
@@ -112,8 +110,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                 widthUpdated = Math.max(widthUpdated - padding.getWidth(), 0);
             }
 
-            // Preferred height is the sum of the preferred heights of all
-            // components
+            // Preferred height is the sum of the preferred heights of all components
             int j = 0;
             for (int i = 0, n = fillPane.getLength(); i < n; i++) {
                 Component component = fillPane.get(i);
@@ -142,12 +139,11 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
 
         int preferredWidth = 0;
         int preferredHeight = 0;
+        int j = 0;
 
         switch (fillPane.getOrientation()) {
-            case HORIZONTAL: {
-                // Preferred width is the sum of the preferred widths of all
-                // components
-                int j = 0;
+            case HORIZONTAL:
+                // Preferred width is the sum of the preferred widths of all components
                 for (int i = 0, n = fillPane.getLength(); i < n; i++) {
                     Component component = fillPane.get(i);
 
@@ -163,14 +159,10 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                 if (j > 1) {
                     preferredWidth += spacing * (j - 1);
                 }
-
                 break;
-            }
 
-            case VERTICAL: {
-                // Preferred height is the sum of the preferred heights of all
-                // components
-                int j = 0;
+            case VERTICAL:
+                // Preferred height is the sum of the preferred heights of all components
                 for (int i = 0, n = fillPane.getLength(); i < n; i++) {
                     Component component = fillPane.get(i);
 
@@ -186,13 +178,10 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                 if (j > 1) {
                     preferredHeight += spacing * (j - 1);
                 }
-
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         // Include padding
@@ -210,7 +199,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         int contentHeight = 0;
 
         switch (fillPane.getOrientation()) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 int clientHeight = Math.max(height - padding.getHeight(), 0);
 
                 for (Component component : fillPane) {
@@ -220,11 +209,9 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                             component.getBaseline(componentWidth, clientHeight));
                     }
                 }
-
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 int clientWidth = Math.max(width - padding.getWidth(), 0);
 
                 for (Component component : fillPane) {
@@ -243,13 +230,10 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
                         contentHeight += size.height + spacing;
                     }
                 }
-
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         if (baseline != -1) {
@@ -355,7 +339,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
      * @return The amount of space between the edge of the FillPane and its
      * components.
      */
-    public Insets getPadding() {
+    public final Insets getPadding() {
         return padding;
     }
 
@@ -365,7 +349,7 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
      *
      * @param padding The new values for padding.
      */
-    public void setPadding(Insets padding) {
+    public final void setPadding(Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
@@ -423,11 +407,11 @@ public class FillPaneSkin extends ContainerSkin implements FillPaneListener {
         setPadding(Insets.decode(padding));
     }
 
-    public int getSpacing() {
+    public final int getSpacing() {
         return spacing;
     }
 
-    public void setSpacing(int spacing) {
+    public final void setSpacing(int spacing) {
         Utils.checkNonNegative(spacing, "spacing");
 
         this.spacing = spacing;
