@@ -144,7 +144,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         // without the "doingCaretCalculations" flag to get back something non-null
         if (selectionStartBounds == null) {
             selectionStartBounds = getCharacterBounds(selectionStart);
-org.apache.pivot.util.Console.logMethod("****", "null selection bounds: selectionStart=%1$d, updated bounds=%2$s", selectionStart, selectionStartBounds);
+org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bounds: selectionStart=%1$d, updated bounds=%2$s", selectionStart, selectionStartBounds);
         }
 
         return GraphicsUtilities.getCaretRectangle(textCaret, composedText,
