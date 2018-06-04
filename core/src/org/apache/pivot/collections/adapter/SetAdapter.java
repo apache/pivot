@@ -31,6 +31,8 @@ import org.apache.pivot.util.Utils;
 /**
  * Implementation of the {@link Set} interface that is backed by an instance of
  * {@link java.util.Set}.
+ *
+ * @param <E> Type of element in the set.
  */
 public class SetAdapter<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = -816891924416727900L;
@@ -38,7 +40,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     private java.util.Set<E> set = null;
     private transient SetListener.Listeners<E> setListeners = new SetListener.Listeners<>();
 
-    public SetAdapter(java.util.Set<E> set) {
+    public SetAdapter(final java.util.Set<E> set) {
         Utils.checkNull(set, "set");
 
         this.set = set;
@@ -49,7 +51,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     }
 
     @Override
-    public boolean add(E element) {
+    public boolean add(final E element) {
         boolean added = false;
 
         if (!contains(element)) {
@@ -63,7 +65,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     }
 
     @Override
-    public boolean remove(E element) {
+    public boolean remove(final E element) {
         boolean removed = false;
 
         if (contains(element)) {
@@ -85,7 +87,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     }
 
     @Override
-    public boolean contains(E element) {
+    public boolean contains(final E element) {
         return set.contains(element);
     }
 
@@ -109,7 +111,7 @@ public class SetAdapter<E> implements Set<E>, Serializable {
     }
 
     @Override
-    public void setComparator(Comparator<E> comparator) {
+    public void setComparator(final Comparator<E> comparator) {
         Comparator<E> previousComparator = getComparator();
 
         // If the adapted set supports it, construct a new sorted set
@@ -118,12 +120,12 @@ public class SetAdapter<E> implements Set<E>, Serializable {
                 Constructor<?> constructor = this.set.getClass().getConstructor(Comparator.class);
                 if (constructor != null) {
                     @SuppressWarnings("unchecked")
-                    java.util.SortedSet<E> setLocal = (java.util.SortedSet<E>) constructor.newInstance(comparator);
+                    java.util.Set<E> setLocal = (java.util.Set<E>) constructor.newInstance(comparator);
                     setLocal.addAll(this.set);
                     this.set = setLocal;
                 }
-            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException |
-                 InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException
+                   | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }

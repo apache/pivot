@@ -71,9 +71,8 @@ public enum Vote {
                 tally = (this == DENY) ? this : vote;
                 break;
 
-            default: {
+            default:
                 throw new IllegalArgumentException("Unknown Vote value to tally.");
-            }
         }
 
         return tally;

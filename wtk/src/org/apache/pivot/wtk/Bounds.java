@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import java.awt.Rectangle;
 import java.io.Serializable;
 
 import org.apache.pivot.collections.Dictionary;
@@ -50,7 +51,7 @@ public final class Bounds implements Serializable {
      * @param width  The width of the bounded area.
      * @param height The height of the area.
      */
-    public Bounds(int x, int y, int width, int height) {
+    public Bounds(final int x, final int y, final int width, final int height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -63,7 +64,7 @@ public final class Bounds implements Serializable {
      * @param size   The size of the bounded area (must not be {@code null}).
      * @throws IllegalArgumentException if either argument is {@code null}.
      */
-    public Bounds(Point origin, Dimensions size) {
+    public Bounds(final Point origin, final Dimensions size) {
         Utils.checkNull(origin, "origin");
         Utils.checkNull(size, "size");
 
@@ -78,7 +79,7 @@ public final class Bounds implements Serializable {
      * @param size The size of the bounded area (must not be {@code null}).
      * @throws IllegalArgumentException if the size is {@code null}.
      */
-    public Bounds(Dimensions size) {
+    public Bounds(final Dimensions size) {
         Utils.checkNull(size, "size");
 
         x = 0;
@@ -92,7 +93,7 @@ public final class Bounds implements Serializable {
      * @param bounds The existing bounds to copy (cannot be {@code null}).
      * @throws IllegalArgumentException if the argument is {@code null}.
      */
-    public Bounds(Bounds bounds) {
+    public Bounds(final Bounds bounds) {
         Utils.checkNull(bounds, "bounds");
 
         x = bounds.x;
@@ -111,7 +112,7 @@ public final class Bounds implements Serializable {
      * {@link #WIDTH_KEY} and {@link #HEIGHT_KEY}.
      * @throws IllegalArgumentException if the bounds argument is {@code null}.
      */
-    public Bounds(Dictionary<String, ?> bounds) {
+    public Bounds(final Dictionary<String, ?> bounds) {
         Utils.checkNull(bounds, "bounds");
 
         x = bounds.getInt(X_KEY);
@@ -120,22 +121,30 @@ public final class Bounds implements Serializable {
         height = bounds.getInt(HEIGHT_KEY);
     }
 
-    public Bounds(Sequence<?> bounds) {
+    /**
+     * Construct a new bounds object given a sequence of the
+     * four needed values.
+     *
+     * @param bounds The sequence containing the bounds values,
+     * in the order of <tt>[ x, y, width, height ]</tt>
+     * @throws IllegalArgumentException if the bounds argument is {@code null}.
+     */
+    public Bounds(final Sequence<?> bounds) {
         Utils.checkNull(bounds, "bounds");
 
-        x = ((Number)bounds.get(0)).intValue();
-        y = ((Number)bounds.get(1)).intValue();
-        width = ((Number)bounds.get(2)).intValue();
-        height = ((Number)bounds.get(3)).intValue();
+        x = ((Number) bounds.get(0)).intValue();
+        y = ((Number) bounds.get(1)).intValue();
+        width = ((Number) bounds.get(2)).intValue();
+        height = ((Number) bounds.get(3)).intValue();
     }
 
     /**
-     * Convert a {@link java.awt.Rectangle} to one of our bounds objects.
+     * Convert a {@link Rectangle} to one of our bounds objects.
      * @param rectangle The existing rectangle to convert (cannot
      * be {@code null}).
      * @throws IllegalArgumentException if the rectangle is {@code null}.
      */
-    public Bounds(java.awt.Rectangle rectangle) {
+    public Bounds(final Rectangle rectangle) {
         Utils.checkNull(rectangle, "rectangle");
 
         x = rectangle.x;
@@ -173,7 +182,7 @@ public final class Bounds implements Serializable {
      * @return A new bounds that is the union of this one with the bounds specified by
      * the given arguments.
      */
-    public Bounds union(int xValue, int yValue, int widthValue, int heightValue) {
+    public Bounds union(final int xValue, final int yValue, final int widthValue, final int heightValue) {
         int x1 = Math.min(this.x, xValue);
         int y1 = Math.min(this.y, yValue);
         int x2 = Math.max(this.x + this.width, xValue + widthValue);
@@ -189,7 +198,7 @@ public final class Bounds implements Serializable {
      * @see #union(int, int, int, int)
      * @throws IllegalArgumentException if the given bounds is {@code null}.
      */
-    public Bounds union(Bounds bounds) {
+    public Bounds union(final Bounds bounds) {
         Utils.checkNull(bounds, "bounds");
 
         return union(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -207,7 +216,7 @@ public final class Bounds implements Serializable {
      * @param heightValue The height of the other area.
      * @return The new bounds that is the intersection of this one and the given area.
      */
-    public Bounds intersect(int xValue, int yValue, int widthValue, int heightValue) {
+    public Bounds intersect(final int xValue, final int yValue, final int widthValue, final int heightValue) {
         int x1 = Math.max(this.x, xValue);
         int y1 = Math.max(this.y, yValue);
         int x2 = Math.min(this.x + this.width, xValue + widthValue);
@@ -222,7 +231,7 @@ public final class Bounds implements Serializable {
      * @throws IllegalArgumentException if the given bounds is {@code null}.
      * @see #intersect(int, int, int, int)
      */
-    public Bounds intersect(Bounds bounds) {
+    public Bounds intersect(final Bounds bounds) {
         Utils.checkNull(bounds, "bounds");
 
         return intersect(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -235,7 +244,7 @@ public final class Bounds implements Serializable {
      * @throws IllegalArgumentException if the rectangle is {@code null}.
      * @see #intersect(int, int, int, int)
      */
-    public Bounds intersect(java.awt.Rectangle rect) {
+    public Bounds intersect(final Rectangle rect) {
         Utils.checkNull(rect, "rect");
 
         return intersect(rect.x, rect.y, rect.width, rect.height);
@@ -250,7 +259,7 @@ public final class Bounds implements Serializable {
      * @param dy The amount of translation in the Y-direction.
      * @return A new bounds offset by these amounts.
      */
-    public Bounds translate(int dx, int dy) {
+    public Bounds translate(final int dx, final int dy) {
         return new Bounds(x + dx, y + dy, width, height);
     }
 
@@ -262,7 +271,7 @@ public final class Bounds implements Serializable {
      * @param dh The amount of expansion(contraction) in the height.
      * @return A new bounds expanded by this amount.
      */
-    public Bounds expand(int dw, int dh) {
+    public Bounds expand(final int dw, final int dh) {
         return new Bounds(x, y, width + dw, height + dh);
     }
 
@@ -273,7 +282,7 @@ public final class Bounds implements Serializable {
      * @throws IllegalArgumentException if the offset value is {@code null}.
      * @see #translate(int, int)
      */
-    public Bounds translate(Point offset) {
+    public Bounds translate(final Point offset) {
         Utils.checkNull(offset, "offset");
 
         return translate(offset.x, offset.y);
@@ -285,7 +294,7 @@ public final class Bounds implements Serializable {
      * @throws IllegalArgumentException if the point argument is {@code null}.
      * @see #contains(int, int)
      */
-    public boolean contains(Point point) {
+    public boolean contains(final Point point) {
         Utils.checkNull(point, "point");
 
         return contains(point.x, point.y);
@@ -297,11 +306,11 @@ public final class Bounds implements Serializable {
      * @param yValue The Y-position of the other point to test.
      * @return Whether this bounds contains the given point.
      */
-    public boolean contains(int xValue, int yValue) {
-        return (xValue >= this.x &&
-                yValue >= this.y &&
-                xValue < this.x + width &&
-                yValue < this.y + height);
+    public boolean contains(final int xValue, final int yValue) {
+        return (xValue >= this.x
+             && yValue >= this.y
+             && xValue < this.x + width
+             && yValue < this.y + height);
     }
 
     /**
@@ -311,7 +320,7 @@ public final class Bounds implements Serializable {
      * @throws IllegalArgumentException if the given bounds is {@code null}.
      * @see #contains(int, int, int, int)
      */
-    public boolean contains(Bounds bounds) {
+    public boolean contains(final Bounds bounds) {
         Utils.checkNull(bounds, "bounds");
 
         return contains(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -325,12 +334,12 @@ public final class Bounds implements Serializable {
      * @param widthValue  The width of the other area.
      * @param heightValue The height of the area to test.
      */
-    public boolean contains(int xValue, int yValue, int widthValue, int heightValue) {
-        return (!isEmpty() &&
-                xValue >= this.x &&
-                yValue >= this.y &&
-                xValue + widthValue <= this.x + this.width &&
-                yValue + heightValue <= this.y + this.height);
+    public boolean contains(final int xValue, final int yValue, final int widthValue, final int heightValue) {
+        return (!isEmpty()
+             && xValue >= this.x
+             && yValue >= this.y
+             && xValue + widthValue <= this.x + this.width
+             && yValue + heightValue <= this.y + this.height);
     }
 
     /**
@@ -339,7 +348,7 @@ public final class Bounds implements Serializable {
      * @throws IllegalArgumentException if the given bounds is {@code null}.
      * @see #intersects(int, int, int, int)
      */
-    public boolean intersects(Bounds bounds) {
+    public boolean intersects(final Bounds bounds) {
         Utils.checkNull(bounds, "bounds");
 
         return intersects(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -352,12 +361,12 @@ public final class Bounds implements Serializable {
      * @param widthValue  The width of the other bounded area.
      * @param heightValue The height of the other area.
      */
-    public boolean intersects(int xValue, int yValue, int widthValue, int heightValue) {
-        return (!isEmpty() &&
-                xValue + widthValue > this.x &&
-                yValue + heightValue > this.y &&
-                xValue < this.x + this.width &&
-                yValue < this.y + this.height);
+    public boolean intersects(final int xValue, final int yValue, final int widthValue, final int heightValue) {
+        return (!isEmpty()
+             && xValue + widthValue > this.x
+             && yValue + heightValue > this.y
+             && xValue < this.x + this.width
+             && yValue < this.y + this.height);
     }
 
     /**
@@ -370,13 +379,13 @@ public final class Bounds implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         boolean equals = false;
 
         if (object instanceof Bounds) {
             Bounds bounds = (Bounds) object;
-            equals = (x == bounds.x && y == bounds.y &&
-                      width == bounds.width && height == bounds.height);
+            equals = (x == bounds.x && y == bounds.y
+                   && width == bounds.width && height == bounds.height);
         }
 
         return equals;
@@ -396,8 +405,8 @@ public final class Bounds implements Serializable {
     /**
      * @return This bounded area as a {@link java.awt.Rectangle}.
      */
-    public java.awt.Rectangle toRectangle() {
-        return new java.awt.Rectangle(x, y, width, height);
+    public Rectangle toRectangle() {
+        return new Rectangle(x, y, width, height);
     }
 
     /**
@@ -427,7 +436,7 @@ public final class Bounds implements Serializable {
      * @see #Bounds(Dictionary)
      * @see #Bounds(int, int, int, int)
      */
-    public static Bounds decode(String boundsValue) {
+    public static Bounds decode(final String boundsValue) {
         Utils.checkNullOrEmpty(boundsValue, "boundsValue");
 
         Bounds bounds;

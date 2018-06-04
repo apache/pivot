@@ -71,20 +71,21 @@ public class JSONSerializer implements Serializer<Object> {
     public static final String JSON_EXTENSION = "json";
     public static final String MIME_TYPE = "application/json";
     public static final int BUFFER_SIZE = 2048;
+    public static final int BYTE_ORDER_MARK = 0xFEFF;
 
     public JSONSerializer() {
         this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_TYPE);
     }
 
-    public JSONSerializer(Charset charset) {
+    public JSONSerializer(final Charset charset) {
         this(charset, DEFAULT_TYPE);
     }
 
-    public JSONSerializer(Type type) {
+    public JSONSerializer(final Type type) {
         this(Charset.forName(DEFAULT_CHARSET_NAME), type);
     }
 
-    public JSONSerializer(Charset charset, Type type) {
+    public JSONSerializer(final Charset charset, final Type type) {
         Utils.checkNull(charset, "charset");
         Utils.checkNull(type, "type");
 
@@ -127,7 +128,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @param alwaysDelimitMapKeys <tt>true</tt> to bound map keys in double
      * quotes; <tt>false</tt> to only quote-delimit keys as necessary.
      */
-    public void setAlwaysDelimitMapKeys(boolean alwaysDelimitMapKeys) {
+    public void setAlwaysDelimitMapKeys(final boolean alwaysDelimitMapKeys) {
         this.alwaysDelimitMapKeys = alwaysDelimitMapKeys;
     }
 
@@ -145,7 +146,7 @@ public class JSONSerializer implements Serializer<Object> {
      *
      * @param verbose <tt>true</tt> to set verbose mode, <tt>false</tt> to disable.
      */
-    public void setVerbose(boolean verbose) {
+    public void setVerbose(final boolean verbose) {
         this.verbose = verbose;
     }
 
@@ -166,7 +167,7 @@ public class JSONSerializer implements Serializer<Object> {
      * The flag must be set to true in order to activate this feature, because there is a
      * definitely measured 25x slowdown when using it, even if no macros are defined.
      */
-    public void setAllowMacros(boolean macros) {
+    public void setAllowMacros(final boolean macros) {
         this.macros = macros;
     }
 
@@ -178,7 +179,7 @@ public class JSONSerializer implements Serializer<Object> {
      */
     @SuppressWarnings("resource")
     @Override
-    public Object readObject(InputStream inputStream) throws IOException, SerializationException {
+    public Object readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
@@ -208,7 +209,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @throws IOException for any I/O related errors while reading.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public Object readObject(Reader reader) throws IOException, SerializationException {
+    public Object readObject(final Reader reader) throws IOException, SerializationException {
         Utils.checkNull(reader, "reader");
 
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
@@ -220,7 +221,7 @@ public class JSONSerializer implements Serializer<Object> {
         c = realReader.read();
 
         // Ignore BOM (if present)
-        if (c == 0xFEFF) {
+        if (c == BYTE_ORDER_MARK) {
             c = realReader.read();
         }
 
@@ -238,8 +239,8 @@ public class JSONSerializer implements Serializer<Object> {
         return object;
     }
 
-    private Object readValue(Reader reader, Type typeArgument, String key) throws IOException,
-        SerializationException {
+    private Object readValue(final Reader reader, final Type typeArgument, final String key)
+        throws IOException, SerializationException {
         Object object = null;
 
         skipWhitespaceAndComments(reader);
@@ -261,14 +262,13 @@ public class JSONSerializer implements Serializer<Object> {
         } else if (c == '{') {
             object = readMapValue(reader, typeArgument);
         } else {
-            throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+            throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
         }
 
         return object;
     }
 
-    private void skipWhitespaceAndComments(Reader reader) throws IOException,
-        SerializationException {
+    private void skipWhitespaceAndComments(final Reader reader) throws IOException, SerializationException {
         while (c != -1 && (Character.isWhitespace(c) || c == '/')) {
             boolean comment = (c == '/');
 
@@ -302,13 +302,13 @@ public class JSONSerializer implements Serializer<Object> {
                         c = reader.read();
                     }
                 } else {
-                    throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+                    throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
                 }
             }
         }
     }
 
-    private Object readNullValue(Reader reader) throws IOException, SerializationException {
+    private Object readNullValue(final Reader reader) throws IOException, SerializationException {
         String nullString = "null";
 
         int n = nullString.length();
@@ -316,7 +316,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         while (c != -1 && i < n) {
             if (nullString.charAt(i) != c) {
-                throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+                throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
             }
 
             c = reader.read();
@@ -335,7 +335,7 @@ public class JSONSerializer implements Serializer<Object> {
         return null;
     }
 
-    private String readString(Reader reader) throws IOException, SerializationException {
+    private String readString(final Reader reader) throws IOException, SerializationException {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Use the same delimiter to close the string
@@ -394,7 +394,7 @@ public class JSONSerializer implements Serializer<Object> {
         return stringBuilder.toString();
     }
 
-    private Object readStringValue(Reader reader, Type typeArgument, String key)
+    private Object readStringValue(final Reader reader, final Type typeArgument, final String key)
         throws IOException, SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert string to " + typeArgument + ".");
@@ -410,8 +410,8 @@ public class JSONSerializer implements Serializer<Object> {
         return BeanAdapter.coerce(string, (Class<?>) typeArgument, key);
     }
 
-    private Object readNumberValue(Reader reader, Type typeArgument, String key) throws IOException,
-        SerializationException {
+    private Object readNumberValue(final Reader reader, final Type typeArgument, final String key)
+        throws IOException, SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert number to " + typeArgument + ".");
         }
@@ -453,8 +453,8 @@ public class JSONSerializer implements Serializer<Object> {
         return BeanAdapter.coerce(number, (Class<?>) typeArgument, key);
     }
 
-    private Object readBooleanValue(Reader reader, Type typeArgument, String key) throws IOException,
-        SerializationException {
+    private Object readBooleanValue(final Reader reader, final Type typeArgument, final String key)
+        throws IOException, SerializationException {
         if (!(typeArgument instanceof Class<?>)) {
             throw new SerializationException("Cannot convert boolean to " + typeArgument + ".");
         }
@@ -465,7 +465,7 @@ public class JSONSerializer implements Serializer<Object> {
 
         while (c != -1 && i < n) {
             if (text.charAt(i) != c) {
-                throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+                throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
             }
 
             c = reader.read();
@@ -488,8 +488,8 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     @SuppressWarnings("unchecked")
-    private Object readListValue(Reader reader, Type typeArgument, String key) throws IOException,
-        SerializationException {
+    private Object readListValue(final Reader reader, final Type typeArgument, final String key)
+        throws IOException, SerializationException {
         Sequence<Object> sequence = null;
         Type itemType = null;
 
@@ -556,9 +556,7 @@ public class JSONSerializer implements Serializer<Object> {
 
             try {
                 sequence = (Sequence<Object>) sequenceType.newInstance();
-            } catch (InstantiationException exception) {
-                throw new RuntimeException(exception);
-            } catch (IllegalAccessException exception) {
+            } catch (InstantiationException | IllegalAccessException exception) {
                 throw new RuntimeException(exception);
             }
         }
@@ -583,7 +581,7 @@ public class JSONSerializer implements Serializer<Object> {
                 throw new SerializationException("Unexpected end of input stream.");
             } else {
                 if (c != ']') {
-                    throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+                    throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
                 }
             }
         }
@@ -600,8 +598,8 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     @SuppressWarnings("unchecked")
-    private Object readMapValue(Reader reader, Type typeArgument) throws IOException,
-        SerializationException {
+    private Object readMapValue(final Reader reader, final Type typeArgument)
+        throws IOException, SerializationException {
         Dictionary<String, Object> dictionary = null;
         Type valueType = null;
 
@@ -659,9 +657,7 @@ public class JSONSerializer implements Serializer<Object> {
 
                 try {
                     dictionary = new BeanAdapter(beanType.newInstance());
-                } catch (InstantiationException exception) {
-                    throw new RuntimeException(exception);
-                } catch (IllegalAccessException exception) {
+                } catch (InstantiationException | IllegalAccessException exception) {
                     throw new RuntimeException(exception);
                 }
             } else {
@@ -675,9 +671,7 @@ public class JSONSerializer implements Serializer<Object> {
 
                 try {
                     dictionary = (Dictionary<String, Object>) dictionaryType.newInstance();
-                } catch (InstantiationException exception) {
-                    throw new RuntimeException(exception);
-                } catch (IllegalAccessException exception) {
+                } catch (InstantiationException | IllegalAccessException exception) {
                     throw new RuntimeException(exception);
                 }
             }
@@ -735,7 +729,7 @@ public class JSONSerializer implements Serializer<Object> {
             skipWhitespaceAndComments(reader);
 
             if (c != ':') {
-                throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+                throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
             }
 
             // Move to the first character after ':'
@@ -765,7 +759,7 @@ public class JSONSerializer implements Serializer<Object> {
                 throw new SerializationException("Unexpected end of input stream.");
             } else {
                 if (c != '}') {
-                    throw new SerializationException("Unexpected character in input stream: '" + (char)c + "'");
+                    throw new SerializationException("Unexpected character in input stream: '" + (char) c + "'");
                 }
             }
         }
@@ -793,8 +787,8 @@ public class JSONSerializer implements Serializer<Object> {
      */
     @SuppressWarnings("resource")
     @Override
-    public void writeObject(Object object, OutputStream outputStream) throws IOException,
-        SerializationException {
+    public void writeObject(final Object object, final OutputStream outputStream)
+        throws IOException, SerializationException {
         Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
@@ -824,8 +818,8 @@ public class JSONSerializer implements Serializer<Object> {
      * @throws SerializationException for any formatting errors in the data.
      */
     @SuppressWarnings("unchecked")
-    public void writeObject(Object object, Writer writer) throws IOException,
-        SerializationException {
+    public void writeObject(final Object object, final Writer writer)
+        throws IOException, SerializationException {
         Utils.checkNull(writer, "writer");
 
         if (object == null) {
@@ -838,49 +832,37 @@ public class JSONSerializer implements Serializer<Object> {
                 char ci = string.charAt(i);
 
                 switch (ci) {
-                    case '\t': {
+                    case '\t':
                         stringBuilder.append("\\t");
                         break;
-                    }
-
-                    case '\n': {
+                    case '\n':
                         stringBuilder.append("\\n");
                         break;
-                    }
-
-                    case '\r': {
+                    case '\r':
                         stringBuilder.append("\\r");
                         break;
-                    }
-
-                    case '\f': {
+                    case '\f':
                         stringBuilder.append("\\f");
                         break;
-                    }
-
-                    case '\b': {
+                    case '\b':
                         stringBuilder.append("\\b");
                         break;
-                    }
-
                     case '\\':
                     case '\"':
-                    case '\'': {
+                    case '\'':
                         stringBuilder.append("\\" + ci);
                         break;
-                    }
-
-                    default: {
+                    default:
                         // For Unicode character sets if it is a control character, then use \\uXXXX notation
                         // and for other character sets if the value is an ASCII control character.
-                        if ((charset.name().startsWith("UTF") && !Character.isISOControl(ci)) ||
-                            (ci > 0x1F && ci != 0x7F && ci <= 0xFF)) {
+                        if ((charset.name().startsWith("UTF") && !Character.isISOControl(ci))
+                         || (ci > 0x1F && ci != 0x7F && ci <= 0xFF)) {
                             stringBuilder.append(ci);
                         } else {
                             stringBuilder.append("\\u");
                             stringBuilder.append(String.format("%04x", (short) ci));
                         }
-                    }
+                        break;
                 }
 
             }
@@ -924,7 +906,7 @@ public class JSONSerializer implements Serializer<Object> {
             if (object instanceof Map<?, ?>) {
                 map = (Map<String, Object>) object;
             } else if (object instanceof java.util.Map<?, ?>) {
-                map = new MapAdapter<>((java.util.Map<String, Object>)object);
+                map = new MapAdapter<>((java.util.Map<String, Object>) object);
             } else {
                 map = new BeanAdapter(object, true);
             }
@@ -981,7 +963,7 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     @Override
-    public String getMIMEType(Object object) {
+    public String getMIMEType(final Object object) {
         return MIME_TYPE + "; charset=" + charset.name();
     }
 
@@ -992,7 +974,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed object.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Object parse(String json) throws SerializationException {
+    public static Object parse(final String json) throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
 
         Object object;
@@ -1012,7 +994,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed string.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static String parseString(String json) throws SerializationException {
+    public static String parseString(final String json) throws SerializationException {
         return (String) parse(json);
     }
 
@@ -1023,7 +1005,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed number.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Number parseNumber(String json) throws SerializationException {
+    public static Number parseNumber(final String json) throws SerializationException {
         return (Number) parse(json);
     }
 
@@ -1034,7 +1016,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed short.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Short parseShort(String json) throws SerializationException {
+    public static Short parseShort(final String json) throws SerializationException {
         return (Short) parse(json);
     }
 
@@ -1045,7 +1027,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed integer.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Integer parseInteger(String json) throws SerializationException {
+    public static Integer parseInteger(final String json) throws SerializationException {
         return (Integer) parse(json);
     }
 
@@ -1056,7 +1038,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed number.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Long parseLong(String json) throws SerializationException {
+    public static Long parseLong(final String json) throws SerializationException {
         return (Long) parse(json);
     }
 
@@ -1067,7 +1049,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed float.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Float parseFloat(String json) throws SerializationException {
+    public static Float parseFloat(final String json) throws SerializationException {
         return (Float) parse(json);
     }
 
@@ -1078,7 +1060,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed double.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Double parseDouble(String json) throws SerializationException {
+    public static Double parseDouble(final String json) throws SerializationException {
         return (Double) parse(json);
     }
 
@@ -1089,7 +1071,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed boolean.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static Boolean parseBoolean(String json) throws SerializationException {
+    public static Boolean parseBoolean(final String json) throws SerializationException {
         return (Boolean) parse(json);
     }
 
@@ -1100,7 +1082,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The parsed list.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static List<?> parseList(String json) throws SerializationException {
+    public static List<?> parseList(final String json) throws SerializationException {
         return (List<?>) parse(json);
     }
 
@@ -1112,7 +1094,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @throws SerializationException for any formatting errors in the data.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> parseMap(String json) throws SerializationException {
+    public static Map<String, ?> parseMap(final String json) throws SerializationException {
         return (Map<String, ?>) parse(json);
     }
 
@@ -1125,7 +1107,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @throws SerializationException for any formatting errors in the data.
      * @see #toString(Object, boolean)
      */
-    public static String toString(Object value) throws SerializationException {
+    public static String toString(final Object value) throws SerializationException {
         return toString(value, false);
     }
 
@@ -1138,7 +1120,7 @@ public class JSONSerializer implements Serializer<Object> {
      * @return The resulting JSON string.
      * @throws SerializationException for any formatting errors in the data.
      */
-    public static String toString(Object value, boolean alwaysDelimitMapKeys)
+    public static String toString(final Object value, final boolean alwaysDelimitMapKeys)
         throws SerializationException {
         JSONSerializer jsonSerializer = new JSONSerializer();
         jsonSerializer.setAlwaysDelimitMapKeys(alwaysDelimitMapKeys);

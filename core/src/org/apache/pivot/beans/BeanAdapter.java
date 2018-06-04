@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ListenerList;
@@ -139,6 +140,7 @@ public class BeanAdapter implements Map<String, Object> {
         }
 
         @Override
+        @UnsupportedOperation
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -155,15 +157,17 @@ public class BeanAdapter implements Map<String, Object> {
 
     private static final String ENUM_VALUE_OF_METHOD_NAME = "valueOf";
 
-    private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT = "Unable to access property \"%s\" for type %s.";
-    private static final String ENUM_COERCION_EXCEPTION_MESSAGE = "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s";
+    private static final String ILLEGAL_ACCESS_EXCEPTION_MESSAGE_FORMAT =
+            "Unable to access property \"%s\" for type %s.";
+    private static final String ENUM_COERCION_EXCEPTION_MESSAGE =
+            "Unable to coerce %s (\"%s\") to %s.\nValid enum constants - %s";
 
     /**
      * Creates a new bean dictionary.
      *
      * @param bean The bean object to wrap.
      */
-    public BeanAdapter(Object bean) {
+    public BeanAdapter(final Object bean) {
         this(bean, false);
     }
 
@@ -176,7 +180,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @param ignoreReadOnlyProperties <tt>true</tt> if {@code final} or non-settable
      * fields should be excluded from the dictionary, <tt>false</tt> to include all fields.
      */
-    public BeanAdapter(Object bean, boolean ignoreReadOnlyProperties) {
+    public BeanAdapter(final Object bean, final boolean ignoreReadOnlyProperties) {
         Utils.checkNull(bean, "bean object");
 
         this.bean = bean;
@@ -200,7 +204,7 @@ public class BeanAdapter implements Map<String, Object> {
      * method exists.
      */
     @Override
-    public Object get(String key) {
+    public Object get(final String key) {
         Utils.checkNullOrEmpty(key, "key");
 
         Object value = null;
@@ -323,7 +327,7 @@ public class BeanAdapter implements Map<String, Object> {
      * exist or are read-only.
      */
     @Override
-    public void putAll(Map<String, Object> valueMap) {
+    public void putAll(final Map<String, Object> valueMap) {
         for (String key : valueMap) {
             put(key, valueMap.get(key));
         }
@@ -344,7 +348,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return <code>true</code> if any exceptions were caught,
      * <code>false</code> if not.
      */
-    public boolean putAll(Map<String, ?> valueMap, boolean ignoreErrors) {
+    public boolean putAll(final Map<String, ?> valueMap, final boolean ignoreErrors) {
         boolean anyErrors = false;
         for (String key : valueMap) {
             try {
@@ -363,7 +367,8 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
-    public Object remove(String key) {
+    @UnsupportedOperation
+    public Object remove(final String key) {
         throw new UnsupportedOperationException();
     }
 
@@ -371,6 +376,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
+    @UnsupportedOperation
     public synchronized void clear() {
         throw new UnsupportedOperationException();
     }
@@ -383,7 +389,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return <tt>true</tt> if the property exists; <tt>false</tt>, otherwise.
      */
     @Override
-    public boolean containsKey(String key) {
+    public boolean containsKey(final String key) {
         Utils.checkNullOrEmpty(key, "key");
 
         boolean containsKey = (getGetterMethod(key) != null);
@@ -399,6 +405,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
+    @UnsupportedOperation
     public boolean isEmpty() {
         throw new UnsupportedOperationException();
     }
@@ -407,6 +414,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
+    @UnsupportedOperation
     public int getCount() {
         throw new UnsupportedOperationException();
     }
@@ -420,7 +428,8 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
-    public void setComparator(Comparator<String> comparator) {
+    @UnsupportedOperation
+    public void setComparator(final Comparator<String> comparator) {
         throw new UnsupportedOperationException();
     }
 
@@ -431,7 +440,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return <tt>true</tt> if the property is read-only; <tt>false</tt>,
      * otherwise.
      */
-    public boolean isReadOnly(String key) {
+    public boolean isReadOnly(final String key) {
         return isReadOnly(bean.getClass(), key);
     }
 
@@ -442,7 +451,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return The real class type of this property.
      * @see #getType(Class, String)
      */
-    public Class<?> getType(String key) {
+    public Class<?> getType(final String key) {
         return getType(bean.getClass(), key);
     }
 
@@ -453,7 +462,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return The generic type of this property.
      * @see #getGenericType(Class, String)
      */
-    public Type getGenericType(String key) {
+    public Type getGenericType(final String key) {
         return getGenericType(bean.getClass(), key);
     }
 
@@ -478,7 +487,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @param key The property name.
      * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
-    private Method getGetterMethod(String key) {
+    private Method getGetterMethod(final String key) {
         return getGetterMethod(bean.getClass(), key);
     }
 
@@ -486,9 +495,10 @@ public class BeanAdapter implements Map<String, Object> {
      * Returns the setter method for a property.
      *
      * @param key The property name.
+     * @param valueType The value type of the property in question.
      * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
-    private Method getSetterMethod(String key, Class<?> valueType) {
+    private Method getSetterMethod(final String key, final Class<?> valueType) {
         return getSetterMethod(bean.getClass(), key, valueType);
     }
 
@@ -496,14 +506,12 @@ public class BeanAdapter implements Map<String, Object> {
      * Returns the public, non-static field for a property. Note that fields
      * will only be consulted for bean properties after bean methods.
      *
-     * @param fieldName The property name
+     * @param key The property name
      * @return The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static
      */
-    private Field getField(String fieldName) {
-        Utils.checkNull(fieldName, "fieldName");
-
-        return getField(bean.getClass(), fieldName);
+    private Field getField(final String key) {
+        return getField(bean.getClass(), key);
     }
 
     /**
@@ -516,7 +524,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return <tt>true</tt> if the property is read-only; <tt>false</tt>,
      * otherwise.
      */
-    public static boolean isReadOnly(Class<?> beanClass, String key) {
+    public static boolean isReadOnly(final Class<?> beanClass, final String key) {
         Utils.checkNull(beanClass, "beanClass");
         Utils.checkNullOrEmpty(key, "key");
 
@@ -544,7 +552,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return The type of the property, or <tt>null</tt> if no such bean
      * property exists.
      */
-    public static Class<?> getType(Class<?> beanClass, String key) {
+    public static Class<?> getType(final Class<?> beanClass, final String key) {
         Utils.checkNull(beanClass, "beanClass");
         Utils.checkNullOrEmpty(key, "key");
 
@@ -575,7 +583,7 @@ public class BeanAdapter implements Map<String, Object> {
      * {@link java.lang.reflect.ParameterizedType} will be returned. Otherwise,
      * an instance of {@link java.lang.Class} will be returned.
      */
-    public static Type getGenericType(Class<?> beanClass, String key) {
+    public static Type getGenericType(final Class<?> beanClass, final String key) {
         Utils.checkNull(beanClass, "beanClass");
         Utils.checkNullOrEmpty(key, "key");
 
@@ -605,7 +613,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @return The field, or <tt>null</tt> if the field does not exist, or is
      * non-public or static.
      */
-    public static Field getField(Class<?> beanClass, String key) {
+    public static Field getField(final Class<?> beanClass, final String key) {
         Utils.checkNull(beanClass, "beanClass");
         Utils.checkNullOrEmpty(key, "key");
 
@@ -667,7 +675,8 @@ public class BeanAdapter implements Map<String, Object> {
      * @param valueType The type of the property.
      * @return The getter method, or <tt>null</tt> if the method does not exist.
      */
-    public static Method getSetterMethod(final Class<?> beanClass, final String key, final Class<?> valueType) {
+    public static Method getSetterMethod(final Class<?> beanClass, final String key,
+            final Class<?> valueType) {
         Utils.checkNull(beanClass, "beanClass");
         Utils.checkNullOrEmpty(key, "key");
 
@@ -738,7 +747,7 @@ public class BeanAdapter implements Map<String, Object> {
      * @throws IllegalArgumentException for all the possible other exceptions.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T coerce(Object value, Class<? extends T> type, String key) {
+    public static <T> T coerce(final Object value, final Class<? extends T> type, final String key) {
         Utils.checkNull(type, "type");
 
         Object coercedValue;
@@ -757,8 +766,8 @@ public class BeanAdapter implements Map<String, Object> {
                     String valueString = value.toString().toUpperCase(Locale.ENGLISH);
                     Method valueOfMethod = type.getMethod(ENUM_VALUE_OF_METHOD_NAME, String.class);
                     coercedValue = valueOfMethod.invoke(null, valueString);
-                } catch (IllegalAccessException | InvocationTargetException |
-                       SecurityException | NoSuchMethodException e) {
+                } catch (IllegalAccessException | InvocationTargetException
+                        | SecurityException | NoSuchMethodException e) {
                     // Nothing to be gained by handling the getMethod() & invoke() exceptions separately
                     throw new IllegalArgumentException(String.format(
                         ENUM_COERCION_EXCEPTION_MESSAGE, value.getClass().getName(), value, type,

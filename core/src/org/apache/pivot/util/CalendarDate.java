@@ -49,32 +49,32 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         public final CalendarDate start;
         public final CalendarDate end;
 
-        public Range(CalendarDate calendarDate) {
+        public Range(final CalendarDate calendarDate) {
             this(calendarDate, calendarDate);
         }
 
-        public Range(CalendarDate start, CalendarDate end) {
+        public Range(final CalendarDate start, final CalendarDate end) {
             this.start = start;
             this.end = end;
         }
 
-        public Range(String date) {
+        public Range(final String date) {
             this.start = this.end = CalendarDate.decode(date);
         }
 
-        public Range(String start, String end) {
+        public Range(final String start, final String end) {
             this.start = CalendarDate.decode(start);
             this.end = CalendarDate.decode(end);
         }
 
-        public Range(Range range) {
+        public Range(final Range range) {
             Utils.checkNull(range, "range");
 
             this.start = range.start;
             this.end = range.end;
         }
 
-        public Range(Dictionary<String, ?> range) {
+        public Range(final Dictionary<String, ?> range) {
             Utils.checkNull(range, "range");
 
             Object startRange = range.get(START_KEY);
@@ -101,7 +101,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             }
         }
 
-        public Range(Sequence<?> range) {
+        public Range(final Sequence<?> range) {
             Utils.checkNull(range, "range");
 
             Object startRange = range.get(0);
@@ -124,22 +124,24 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             return Math.abs(this.start.subtract(this.end)) + 1;
         }
 
-        public boolean contains(Range range) {
+        public boolean contains(final Range range) {
             Utils.checkNull(range, "range");
 
             Range normalizedRange = range.normalize();
 
             boolean contains;
             if (this.start.compareTo(this.end) < 0) {
-                contains = (this.start.compareTo(normalizedRange.start) <= 0 && this.end.compareTo(normalizedRange.end) >= 0);
+                contains = (this.start.compareTo(normalizedRange.start) <= 0
+                         && this.end.compareTo(normalizedRange.end) >= 0);
             } else {
-                contains = (this.end.compareTo(normalizedRange.start) <= 0 && this.start.compareTo(normalizedRange.end) >= 0);
+                contains = (this.end.compareTo(normalizedRange.start) <= 0
+                         && this.start.compareTo(normalizedRange.end) >= 0);
             }
 
             return contains;
         }
 
-        public boolean contains(CalendarDate calendarDate) {
+        public boolean contains(final CalendarDate calendarDate) {
             Utils.checkNull(calendarDate, "calendarDate");
 
             boolean contains;
@@ -152,16 +154,18 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             return contains;
         }
 
-        public boolean intersects(Range range) {
+        public boolean intersects(final Range range) {
             Utils.checkNull(range, "range");
 
             Range normalizedRange = range.normalize();
 
             boolean intersects;
             if (this.start.compareTo(this.end) < 0) {
-                intersects = (this.start.compareTo(normalizedRange.end) <= 0 && this.end.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.start.compareTo(normalizedRange.end) <= 0
+                           && this.end.compareTo(normalizedRange.start) >= 0);
             } else {
-                intersects = (this.end.compareTo(normalizedRange.end) <= 0 && this.start.compareTo(normalizedRange.start) >= 0);
+                intersects = (this.end.compareTo(normalizedRange.end) <= 0
+                           && this.start.compareTo(normalizedRange.start) >= 0);
             }
 
             return intersects;
@@ -174,11 +178,10 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (o != null && o instanceof Range) {
-                Range r = (Range)o;
-                return r.start.equals(this.start) &&
-                    r.end.equals(this.end);
+                Range r = (Range) o;
+                return r.start.equals(this.start) && r.end.equals(this.end);
             }
             return false;
         }
@@ -189,8 +192,8 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
             return start.hashCode() * end.hashCode();
         }
 
-        public static Range decode(String value) {
-            Utils.checkNull(value, "value");
+        public static Range decode(final String value) {
+            Utils.checkNullOrEmpty(value, "value");
 
             Range range;
             if (value.startsWith("{")) {
@@ -235,7 +238,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      */
     public final int day;
 
-    private static final int[] MONTH_LENGTHS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    private static final int[] MONTH_LENGTHS = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     private static final Pattern PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2})$");
 
@@ -261,7 +264,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      *
      * @param calendar The calendar containing the year, month, and day fields.
      */
-    public CalendarDate(GregorianCalendar calendar) {
+    public CalendarDate(final GregorianCalendar calendar) {
         this(calendar.get(Calendar.YEAR),
              calendar.get(Calendar.MONTH),
              calendar.get(Calendar.DAY_OF_MONTH) - 1);
@@ -274,7 +277,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      *
      * @param localDate The date value containing year, month and day fields.
      */
-    public CalendarDate(LocalDate localDate) {
+    public CalendarDate(final LocalDate localDate) {
         this(localDate.getYear(),
              localDate.getMonthValue() - 1,
              localDate.getDayOfMonth() - 1);
@@ -290,7 +293,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @see #MIN_CALENDAR_YEAR
      * @see #MAX_CALENDAR_YEAR
      */
-    public CalendarDate(int year, int month, int day) {
+    public CalendarDate(final int year, final int month, final int day) {
         if (year < MIN_CALENDAR_YEAR || year > MAX_CALENDAR_YEAR) {
             throw new IllegalArgumentException("Invalid year: " + year);
         }
@@ -301,8 +304,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
 
         int daysInMonth = MONTH_LENGTHS[month];
 
-        boolean isLeapYear = ((year & 3) == 0 && (year % 100 != 0 || year % 400 == 0));
-        if (isLeapYear && month == 1) {
+        if (isLeapYear(year) && month == 1) {
             daysInMonth++;
         }
 
@@ -327,7 +329,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * this calendar date.
      * @return The resulting calendar date.
      */
-    public CalendarDate add(int days) {
+    public CalendarDate add(final int days) {
         GregorianCalendar calendar = toCalendar();
         calendar.add(Calendar.DAY_OF_YEAR, days);
         return new CalendarDate(calendar);
@@ -345,7 +347,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * this calendar date.
      * @return The resulting calendar date.
      */
-    public CalendarDate addMonths(int months) {
+    public CalendarDate addMonths(final int months) {
         GregorianCalendar calendar = toCalendar();
         calendar.add(Calendar.MONTH, months);
         return new CalendarDate(calendar);
@@ -363,7 +365,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * this calendar date.
      * @return The resulting calendar date.
      */
-    public CalendarDate addYears(int years) {
+    public CalendarDate addYears(final int years) {
         GregorianCalendar calendar = toCalendar();
         calendar.add(Calendar.YEAR, years);
         return new CalendarDate(calendar);
@@ -384,7 +386,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @return The number of days in between this calendar date and
      * <tt>calendarDate</tt>.
      */
-    public int subtract(CalendarDate calendarDate) {
+    public int subtract(final CalendarDate calendarDate) {
         GregorianCalendar c1 = toCalendar();
         GregorianCalendar c2 = calendarDate.toCalendar();
 
@@ -415,7 +417,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @param time The time of day.
      * @return This calendar date as a <tt>GregorianCalendar</tt>.
      */
-    public GregorianCalendar toCalendar(Time time) {
+    public GregorianCalendar toCalendar(final Time time) {
         GregorianCalendar calendar = new GregorianCalendar(this.year, this.month, this.day + 1,
             time.hour, time.minute, time.second);
         calendar.set(Calendar.MILLISECOND, time.millisecond);
@@ -437,7 +439,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      *
      * @param time The wall clock time to combine with this calendar date.
      */
-    public LocalDateTime toLocalDateTime(Time time) {
+    public LocalDateTime toLocalDateTime(final Time time) {
         LocalTime localTime = LocalTime.of(time.hour, time.minute, time.second, time.millisecond * 1_000_000);
         LocalDate localDate = toLocalDate();
         return localDate.atTime(localTime);
@@ -452,7 +454,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * respectively.
      */
     @Override
-    public int compareTo(CalendarDate calendarDate) {
+    public int compareTo(final CalendarDate calendarDate) {
         int result = this.year - calendarDate.year;
 
         if (result == 0) {
@@ -474,7 +476,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * @param o Reference to the object against which to compare.
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         return (o instanceof CalendarDate && ((CalendarDate) o).year == this.year
             && ((CalendarDate) o).month == this.month && ((CalendarDate) o).day == this.day);
     }
@@ -517,6 +519,15 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
     }
 
     /**
+     * @return Is the given year a leap year according to the standard definition?
+     *
+     * @param year The year to check.
+     */
+    public static boolean isLeapYear(final int year) {
+        return ((year & 3) == 0 && (year % 100 != 0 || year % 400 == 0));
+    }
+
+    /**
      * Creates a new date representing the specified date string. The date
      * string must be in the <tt>ISO 8601</tt> "calendar date" format, which is
      * <tt>[YYYY]-[MM]-[DD]</tt>.
@@ -525,7 +536,7 @@ public final class CalendarDate implements Comparable<CalendarDate>, Serializabl
      * 2008-07-23).
      * @return The {@code CalendarDate} corresponding to the input string.
      */
-    public static CalendarDate decode(String value) {
+    public static CalendarDate decode(final String value) {
         Utils.checkNullOrEmpty(value, "calendarDate");
 
         Matcher matcher = PATTERN.matcher(value);

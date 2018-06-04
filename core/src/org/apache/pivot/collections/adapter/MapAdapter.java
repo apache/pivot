@@ -32,6 +32,9 @@ import org.apache.pivot.util.Utils;
 /**
  * Implementation of the {@link Map} interface that is backed by an instance of
  * {@link java.util.Map}.
+ *
+ * @param <K> Type of the key objects.
+ * @param <V> Type of the value objects.
  */
 public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = 4005649560306864969L;
@@ -39,7 +42,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     private java.util.Map<K, V> map = null;
     private transient MapListener.Listeners<K, V> mapListeners = new MapListener.Listeners<>();
 
-    public MapAdapter(java.util.Map<K, V> map) {
+    public MapAdapter(final java.util.Map<K, V> map) {
         Utils.checkNull(map, "map");
 
         this.map = map;
@@ -50,12 +53,12 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     }
 
     @Override
-    public V get(K key) {
+    public V get(final K key) {
         return map.get(key);
     }
 
     @Override
-    public V put(K key, V value) {
+    public V put(final K key, final V value) {
         boolean update = containsKey(key);
         V previousValue = map.put(key, value);
 
@@ -69,7 +72,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     }
 
     @Override
-    public V remove(K key) {
+    public V remove(final K key) {
         V value = null;
 
         if (containsKey(key)) {
@@ -89,7 +92,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     }
 
     @Override
-    public boolean containsKey(K key) {
+    public boolean containsKey(final K key) {
         return map.containsKey(key);
     }
 
@@ -113,7 +116,7 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
     }
 
     @Override
-    public void setComparator(Comparator<K> comparator) {
+    public void setComparator(final Comparator<K> comparator) {
         Comparator<K> previousComparator = getComparator();
 
         // If the adapted map supports it, construct a new sorted map
@@ -126,8 +129,8 @@ public class MapAdapter<K, V> implements Map<K, V>, Serializable {
                     mapLocal.putAll(this.map);
                     this.map = mapLocal;
                 }
-            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException |
-                 InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+            } catch (SecurityException | NoSuchMethodException | IllegalArgumentException
+                   | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }
