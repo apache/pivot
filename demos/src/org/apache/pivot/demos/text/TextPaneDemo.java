@@ -94,10 +94,12 @@ public class TextPaneDemo implements Application {
     public void startup(Display display, Map<String, String> properties) throws Exception {
         System.out.println("startup(...)");
         System.out.println("\n"
-            + "In this test application as a sample for setting the display scale on startup, use startup argument \"--scale=n\" property; \n"
-            + "for instance, using \"--scale=2.0\" will set double scale on the whole application.\n"
+            + "In this test application as a sample for setting the display scale on startup,\n"
+            + "use startup argument \"--scale=n\" property; \n"
+            + "For instance, using \"--scale=2.0\" will set double scale on the whole application.\n"
             + "\n"
-            + "Anyway, using Ctrl-Shift-MouseWheel will scale the display up and down as well, for the user of your application.\n");
+            + "Anyway, using Ctrl-Shift-MouseWheel will scale the display up and down as well,\n"
+            + "for the user of your application.\n");
 
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         window = (Window) bxmlSerializer.readObject(TextPaneDemo.class, "text_pane_demo.bxml");
@@ -401,13 +403,13 @@ public class TextPaneDemo implements Application {
         }, 200L);
     }
 
-    /** debugging tools */
+    /** Debugging tools. */
     @SuppressWarnings("unused")
     private void dumpDocument() {
         dumpDocumentNode(textPane.getDocument(), System.out, 0);
     }
 
-    /** debugging tools */
+    /** Debugging tools. */
     private void dumpDocumentNode(Node node, PrintStream printStream, final int indent) {
         for (int i = 0; i < indent; i++) {
             printStream.append("  ");
