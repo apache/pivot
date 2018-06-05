@@ -32,11 +32,11 @@ public final class TextNode extends Node {
         this("");
     }
 
-    public TextNode(TextNode textNode) {
+    public TextNode(final TextNode textNode) {
         this(textNode.getText());
     }
 
-    public TextNode(String text) {
+    public TextNode(final String text) {
         Utils.checkNull(text, "text");
 
         characters = new StringBuilder(text);
@@ -46,30 +46,30 @@ public final class TextNode extends Node {
         return characters.toString();
     }
 
-    public String getText(int beginIndex, int endIndex) {
+    public String getText(final int beginIndex, final int endIndex) {
         return characters.substring(beginIndex, endIndex);
     }
 
-    public String getText(Span span) {
+    public String getText(final Span span) {
         Utils.checkNull(span, "span");
 
         return characters.substring(span.normalStart(), span.normalEnd() + 1);
     }
 
-    public String getText(CharSpan charSpan) {
+    public String getText(final CharSpan charSpan) {
         Utils.checkNull(charSpan, "charSpan");
 
         return characters.substring(charSpan.start, charSpan.start + charSpan.length);
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         Utils.checkNull(text, "text");
 
         removeText(0, getCharacterCount());
         insertText(text, 0);
     }
 
-    public void appendText(CharSequence text) {
+    public void appendText(final CharSequence text) {
         insertText(text, characters.length());
     }
 
@@ -77,7 +77,7 @@ public final class TextNode extends Node {
      * @param text  The new text to insert into this node.
      * @param index Starting index into this node for the insertion.
      */
-    public void insertText(CharSequence text, int index) {
+    public void insertText(final CharSequence text, final int index) {
         Utils.checkNull(text, "text");
         Utils.checkIndexBounds(index, 0, characters.length());
 
@@ -93,7 +93,7 @@ public final class TextNode extends Node {
      * @param index Index into this node.
      * @param count Count of characters to remove.
      */
-    public void removeText(int index, int count) {
+    public void removeText(final int index, final int count) {
         Utils.checkIndexBounds(index, count, 0, characters.length());
 
         if (count > 0) {
@@ -106,16 +106,16 @@ public final class TextNode extends Node {
         }
     }
 
-    public String getSubstring(Span range) {
+    public String getSubstring(final Span range) {
         Utils.checkNull(range, "range");
         return characters.substring(range.start, range.end + 1);
     }
 
-    public String getSubstring(int start, int end) {
+    public String getSubstring(final int start, final int end) {
         return characters.substring(start, end);
     }
 
-    public String getSubstring(CharSpan charSpan) {
+    public String getSubstring(final CharSpan charSpan) {
         Utils.checkNull(charSpan, "charSpan");
         return characters.substring(charSpan.start, charSpan.start + charSpan.length);
     }
@@ -124,22 +124,22 @@ public final class TextNode extends Node {
         return characters;
     }
 
-    public CharSequence getCharacters(int start, int end) {
+    public CharSequence getCharacters(final int start, final int end) {
         return characters.subSequence(start, end);
     }
 
-    public CharSequence getCharacters(Span range) {
+    public CharSequence getCharacters(final Span range) {
         Utils.checkNull(range, "range");
         return characters.subSequence(range.start, range.end + 1);
     }
 
-    public CharSequence getCharacters(CharSpan charSpan) {
+    public CharSequence getCharacters(final CharSpan charSpan) {
         Utils.checkNull(charSpan, "charSpan");
         return characters.subSequence(charSpan.start, charSpan.start + charSpan.length);
     }
 
     @Override
-    public char getCharacterAt(int index) {
+    public char getCharacterAt(final int index) {
         return characters.charAt(index);
     }
 
@@ -152,10 +152,10 @@ public final class TextNode extends Node {
      * @param offset Offset into this text node.
      */
     @Override
-    public void insertRange(Node range, int offset) {
+    public void insertRange(final Node range, final int offset) {
         if (!(range instanceof TextNode)) {
-            throw new IllegalArgumentException("Range node (" +
-                range.getClass().getSimpleName() + ") is not a text node.");
+            throw new IllegalArgumentException("Range node ("
+                + range.getClass().getSimpleName() + ") is not a text node.");
         }
 
         TextNode textNode = (TextNode) range;
@@ -163,7 +163,7 @@ public final class TextNode extends Node {
     }
 
     @Override
-    public Node removeRange(int offset, int characterCount) {
+    public Node removeRange(final int offset, final int characterCount) {
         Utils.checkNonNegative(characterCount, "characterCount");
 
         String removed = characters.substring(offset, offset + characterCount);
@@ -174,7 +174,7 @@ public final class TextNode extends Node {
     }
 
     @Override
-    public Node getRange(int offset, int characterCount) {
+    public Node getRange(final int offset, final int characterCount) {
         Utils.checkNonNegative(characterCount, "characterCount");
         Utils.checkIndexBounds(offset, characterCount, 0, characters.length());
 
@@ -188,7 +188,7 @@ public final class TextNode extends Node {
     }
 
     @Override
-    public Node duplicate(boolean recursive) {
+    public Node duplicate(final boolean recursive) {
         return new TextNode(this);
     }
 

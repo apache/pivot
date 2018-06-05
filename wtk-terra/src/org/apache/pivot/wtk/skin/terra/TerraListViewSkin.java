@@ -101,7 +101,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         ListView listView = (ListView) component;
@@ -112,7 +112,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         int preferredWidth = 0;
 
         ListView listView = (ListView) getComponent();
@@ -135,7 +135,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         int preferredHeight = 0;
 
         ListView listView = (ListView) getComponent();
@@ -171,7 +171,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         ListView listView = (ListView) getComponent();
 
         int baseline = -1;
@@ -288,7 +288,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         ListView listView = (ListView) getComponent();
         @SuppressWarnings("unchecked")
         List<Object> listData = (List<Object>) listView.getListData();
@@ -412,7 +412,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     // List view skin methods
     @Override
-    public int getItemAt(int y) {
+    public int getItemAt(final int y) {
         Utils.checkNonNegative(y, "y");
 
         ListView listView = (ListView) getComponent();
@@ -441,7 +441,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public Bounds getItemBounds(int index) {
+    public Bounds getItemBounds(final int index) {
         return new Bounds(0, getItemY(index), getWidth(), getItemHeight(index));
     }
 
@@ -457,7 +457,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         return itemIndent;
     }
 
-    private int getItemY(int index) {
+    private int getItemY(final int index) {
         int itemY;
 
         if (variableItemHeight) {
@@ -473,7 +473,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         return itemY;
     }
 
-    private int getItemHeight(int index) {
+    private int getItemHeight(final int index) {
         int itemHeight;
 
         if (variableItemHeight) {
@@ -490,274 +490,274 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public boolean isFocusable() {
+    public final boolean isFocusable() {
         ListView listView = (ListView) getComponent();
         return (listView.getSelectMode() != SelectMode.NONE);
     }
 
     @Override
-    public boolean isOpaque() {
+    public final boolean isOpaque() {
         return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
-    public Font getFont() {
+    public final Font getFont() {
         return font;
     }
 
-    public void setFont(Font font) {
+    public final void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         this.font = font;
         invalidateComponent();
     }
 
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         setFont(decodeFont(font));
     }
 
-    public final void setFont(Dictionary<String, ?> font) {
+    public final void setFont(final Dictionary<String, ?> font) {
         setFont(Theme.deriveFont(font));
     }
 
-    public Color getColor() {
+    public final Color getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public final void setColor(final Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
-    public final void setColor(String color) {
+    public final void setColor(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
-    public final void setColor(int color) {
+    public final void setColor(final int color) {
         Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
-    public Color getDisabledColor() {
+    public final Color getDisabledColor() {
         return disabledColor;
     }
 
-    public void setDisabledColor(Color disabledColor) {
+    public final void setDisabledColor(final Color disabledColor) {
         Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
-    public final void setDisabledColor(String disabledColor) {
+    public final void setDisabledColor(final String disabledColor) {
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
-    public final void setDisabledColor(int disabledColor) {
+    public final void setDisabledColor(final int disabledColor) {
         Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
-    public Color getBackgroundColor() {
+    public final Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(final Color backgroundColor) {
         // We allow a null background color here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
+    public final void setBackgroundColor(final int backgroundColor) {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
-    public Color getSelectionColor() {
+    public final Color getSelectionColor() {
         return selectionColor;
     }
 
-    public void setSelectionColor(Color selectionColor) {
+    public final void setSelectionColor(final Color selectionColor) {
         Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
-    public final void setSelectionColor(String selectionColor) {
+    public final void setSelectionColor(final String selectionColor) {
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
-    public final void setSelectionColor(int selectionColor) {
+    public final void setSelectionColor(final int selectionColor) {
         Theme theme = currentTheme();
         setSelectionColor(theme.getColor(selectionColor));
     }
 
-    public Color getSelectionBackgroundColor() {
+    public final Color getSelectionBackgroundColor() {
         return selectionBackgroundColor;
     }
 
-    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+    public final void setSelectionBackgroundColor(final Color selectionBackgroundColor) {
         Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
-    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
+    public final void setSelectionBackgroundColor(final String selectionBackgroundColor) {
         setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor,
             "selectionBackgroundColor"));
     }
 
-    public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
+    public final void setSelectionBackgroundColor(final int selectionBackgroundColor) {
         Theme theme = currentTheme();
         setSelectionBackgroundColor(theme.getColor(selectionBackgroundColor));
     }
 
-    public Color getInactiveSelectionColor() {
+    public final Color getInactiveSelectionColor() {
         return inactiveSelectionColor;
     }
 
-    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+    public final void setInactiveSelectionColor(final Color inactiveSelectionColor) {
         Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
-    public final void setInactiveSelectionColor(String inactiveSelectionColor) {
+    public final void setInactiveSelectionColor(final String inactiveSelectionColor) {
         setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor,
             "inactiveSelectionColor"));
     }
 
-    public final void setInactiveSelectionColor(int inactiveSelectionColor) {
+    public final void setInactiveSelectionColor(final int inactiveSelectionColor) {
         Theme theme = currentTheme();
         setInactiveSelectionColor(theme.getColor(inactiveSelectionColor));
     }
 
-    public Color getInactiveSelectionBackgroundColor() {
+    public final Color getInactiveSelectionBackgroundColor() {
         return inactiveSelectionBackgroundColor;
     }
 
-    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+    public final void setInactiveSelectionBackgroundColor(final Color inactiveSelectionBackgroundColor) {
         Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
-    public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+    public final void setInactiveSelectionBackgroundColor(final String inactiveSelectionBackgroundColor) {
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor,
             "inactiveSelectionBackgroundColor"));
     }
 
-    public final void setInactiveSelectionBackgroundColor(int inactiveSelectionBackgroundColor) {
+    public final void setInactiveSelectionBackgroundColor(final int inactiveSelectionBackgroundColor) {
         Theme theme = currentTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(inactiveSelectionBackgroundColor));
     }
 
-    public Color getHighlightBackgroundColor() {
+    public final Color getHighlightBackgroundColor() {
         return highlightBackgroundColor;
     }
 
-    public void setHighlightBackgroundColor(Color highlightBackgroundColor) {
+    public final void setHighlightBackgroundColor(final Color highlightBackgroundColor) {
         Utils.checkNull(highlightBackgroundColor, "highlightBackgroundColor");
 
         this.highlightBackgroundColor = highlightBackgroundColor;
         repaintComponent();
     }
 
-    public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
+    public final void setHighlightBackgroundColor(final String highlightBackgroundColor) {
         setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor,
             "highlightBackgroundColor"));
     }
 
-    public final void setHighlightBackgroundColor(int highlightBackgroundColor) {
+    public final void setHighlightBackgroundColor(final int highlightBackgroundColor) {
         Theme theme = currentTheme();
         setHighlightBackgroundColor(theme.getColor(highlightBackgroundColor));
     }
 
-    public Color getAlternateItemBackgroundColor() {
+    public final Color getAlternateItemBackgroundColor() {
         return alternateItemBackgroundColor;
     }
 
-    public void setAlternateItemBackgroundColor(Color alternateItemBackgroundColor) {
+    public final void setAlternateItemBackgroundColor(final Color alternateItemBackgroundColor) {
         Utils.checkNull(alternateItemBackgroundColor, "alternateItemBackgroundColor");
 
         this.alternateItemBackgroundColor = alternateItemBackgroundColor;
         repaintComponent();
     }
 
-    public final void setAlternateItemBackgroundColor(String alternateItemBackgroundColor) {
+    public final void setAlternateItemBackgroundColor(final String alternateItemBackgroundColor) {
         setAlternateItemBackgroundColor(GraphicsUtilities.decodeColor(alternateItemBackgroundColor,
             "alternateItemBackgroundColor"));
     }
 
-    public final void setAlternateItemColor(int alternateItemBackgroundColor) {
+    public final void setAlternateItemColor(final int alternateItemBackgroundColor) {
         Theme theme = currentTheme();
         setAlternateItemBackgroundColor(theme.getColor(alternateItemBackgroundColor));
     }
 
-    public boolean getShowHighlight() {
+    public final boolean getShowHighlight() {
         return showHighlight;
     }
 
-    public void setShowHighlight(boolean showHighlight) {
+    public final void setShowHighlight(final boolean showHighlight) {
         this.showHighlight = showHighlight;
         repaintComponent();
     }
 
-    public boolean getWrapSelectNext() {
+    public final boolean getWrapSelectNext() {
         return wrapSelectNext;
     }
 
-    public void setWrapSelectNext(boolean wrapSelectNext) {
+    public final void setWrapSelectNext(final boolean wrapSelectNext) {
         this.wrapSelectNext = wrapSelectNext;
     }
 
-    public Insets getCheckboxPadding() {
+    public final Insets getCheckboxPadding() {
         return checkboxPadding;
     }
 
-    public void setCheckboxPadding(Insets checkboxPadding) {
+    public final void setCheckboxPadding(final Insets checkboxPadding) {
         Utils.checkNull(checkboxPadding, "checkboxPadding");
 
         this.checkboxPadding = checkboxPadding;
         invalidateComponent();
     }
 
-    public final void setCheckboxPadding(Dictionary<String, ?> checkboxPadding) {
+    public final void setCheckboxPadding(final Dictionary<String, ?> checkboxPadding) {
         setCheckboxPadding(new Insets(checkboxPadding));
     }
 
-    public final void setCheckboxPadding(int checkboxPadding) {
+    public final void setCheckboxPadding(final int checkboxPadding) {
         setCheckboxPadding(new Insets(checkboxPadding));
     }
 
-    public final void setCheckboxPadding(Number padding) {
+    public final void setCheckboxPadding(final Number padding) {
         setCheckboxPadding(new Insets(padding));
     }
 
-    public final void setCheckboxPadding(String checkboxPadding) {
+    public final void setCheckboxPadding(final String checkboxPadding) {
         setCheckboxPadding(Insets.decode(checkboxPadding));
     }
 
-    public boolean isVariableItemHeight() {
+    public final boolean isVariableItemHeight() {
         return variableItemHeight;
     }
 
-    public void setVariableItemHeight(boolean variableItemHeight) {
+    public final void setVariableItemHeight(final boolean variableItemHeight) {
         this.variableItemHeight = variableItemHeight;
         invalidateComponent();
     }
 
     @Override
-    public boolean mouseMove(Component component, int x, int y) {
+    public boolean mouseMove(final Component component, final int x, final int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
         ListView listView = (ListView) getComponent();
@@ -780,7 +780,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void mouseOut(Component component) {
+    public void mouseOut(final Component component) {
         super.mouseOut(component);
 
         ListView listView = (ListView) getComponent();
@@ -796,7 +796,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
         ListView listView = (ListView) getComponent();
@@ -861,7 +861,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
         ListView listView = (ListView) getComponent();
@@ -875,7 +875,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(final Component component, final Mouse.Button button, final int x, final int y,
+        final int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         ListView listView = (ListView) getComponent();
@@ -900,6 +901,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                             break;
                         case SELECTED:
                             nextState = Button.State.UNSELECTED;
+                            break;
+                        default:
                             break;
                     }
                     listView.setItemCheckmarkState(itemIndex, nextState);
@@ -926,7 +929,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
         return consumed;
     }
 
-    private Bounds getCheckboxBounds(int itemIndex) {
+    private Bounds getCheckboxBounds(final int itemIndex) {
         Bounds itemBounds = getItemBounds(itemIndex);
 
         int checkboxHeight = CHECKBOX.getHeight();
@@ -935,8 +938,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y) {
+    public boolean mouseWheel(final Component component, final Mouse.ScrollType scrollType, final int scrollAmount,
+        final int wheelRotation, final int x, final int y) {
         ListView listView = (ListView) getComponent();
 
         if (highlightIndex != -1) {
@@ -969,14 +972,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
      * </ul>
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         ListView listView = (ListView) getComponent();
         SelectMode selectMode = listView.getSelectMode();
 
         switch (keyCode) {
-            case KeyCode.UP: {
+            case KeyCode.UP:
                 if (selectMode != SelectMode.NONE) {
                     int index = listView.getFirstSelectedIndex();
                     int count = listView.getListData().getLength();
@@ -1007,9 +1010,8 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 }
 
                 break;
-            }
 
-            case KeyCode.DOWN: {
+            case KeyCode.DOWN:
                 if (selectMode != SelectMode.NONE) {
                     int index = listView.getLastSelectedIndex();
                     int count = listView.getListData().getLength();
@@ -1040,11 +1042,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 }
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         // Clear the highlight
@@ -1063,13 +1063,13 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
      * is {@link SelectMode#SINGLE}.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyReleased(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = super.keyReleased(component, keyCode, keyLocation);
 
         ListView listView = (ListView) getComponent();
 
         switch (keyCode) {
-            case KeyCode.SPACE: {
+            case KeyCode.SPACE:
                 if (listView.getCheckmarksEnabled()
                     && listView.getSelectMode() == SelectMode.SINGLE) {
                     int selectedIndex = listView.getSelectedIndex();
@@ -1082,11 +1082,9 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
                 }
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         return consumed;
@@ -1097,7 +1095,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
      * rendered text matches the typed key (case insensitive).
      */
     @Override
-    public boolean keyTyped(Component component, char character) {
+    public boolean keyTyped(final Component component, final char character) {
         boolean consumed = super.keyTyped(component, character);
 
         ListView listView = (ListView) getComponent();
@@ -1145,14 +1143,14 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     // Component state events
     @Override
-    public void enabledChanged(Component component) {
+    public void enabledChanged(final Component component) {
         super.enabledChanged(component);
 
         repaintComponent();
     }
 
     @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
+    public void focusedChanged(final Component component, final Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
         repaintComponent();
@@ -1160,60 +1158,60 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     // List view events
     @Override
-    public void listDataChanged(ListView listView, List<?> previousListData) {
+    public void listDataChanged(final ListView listView, final List<?> previousListData) {
         highlightIndex = -1;
         invalidateComponent();
     }
 
     @Override
-    public void itemRendererChanged(ListView listView, ListView.ItemRenderer previousItemRenderer) {
+    public void itemRendererChanged(final ListView listView, final ListView.ItemRenderer previousItemRenderer) {
         invalidateComponent();
     }
 
     @Override
-    public void itemEditorChanged(ListView listView, ListView.ItemEditor previousItemEditor) {
+    public void itemEditorChanged(final ListView listView, final ListView.ItemEditor previousItemEditor) {
         // No-op
     }
 
     @Override
-    public void selectModeChanged(ListView listView, SelectMode previousSelectMode) {
+    public void selectModeChanged(final ListView listView, final SelectMode previousSelectMode) {
         repaintComponent();
     }
 
     @Override
-    public void checkmarksEnabledChanged(ListView listView) {
+    public void checkmarksEnabledChanged(final ListView listView) {
         invalidateComponent();
     }
 
     @Override
-    public void checkmarksTriStateChanged(ListView listView) {
+    public void checkmarksTriStateChanged(final ListView listView) {
         repaintComponent();
     }
 
     @Override
-    public void checkmarksMixedAsCheckedChanged(ListView listView) {
+    public void checkmarksMixedAsCheckedChanged(final ListView listView) {
         repaintComponent();
     }
 
     @Override
-    public void disabledItemFilterChanged(ListView listView, Filter<?> previousDisabledItemFilter) {
+    public void disabledItemFilterChanged(final ListView listView, final Filter<?> previousDisabledItemFilter) {
         repaintComponent();
     }
 
     @Override
-    public void disabledCheckmarkFilterChanged(ListView listView,
-        Filter<?> previousDisabledCheckmarkFilter) {
+    public void disabledCheckmarkFilterChanged(final ListView listView,
+        final Filter<?> previousDisabledCheckmarkFilter) {
         repaintComponent();
     }
 
     // List view item events
     @Override
-    public void itemInserted(ListView listView, int index) {
+    public void itemInserted(final ListView listView, final int index) {
         invalidateComponent();
     }
 
     @Override
-    public void itemsRemoved(ListView listView, int index, int count) {
+    public void itemsRemoved(final ListView listView, final int index, final int count) {
         if (highlightIndex >= index) {
             highlightIndex = -1;
         }
@@ -1221,18 +1219,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void itemUpdated(ListView listView, int index) {
+    public void itemUpdated(final ListView listView, final int index) {
         invalidateComponent();
     }
 
     @Override
-    public void itemsCleared(ListView listView) {
+    public void itemsCleared(final ListView listView) {
         highlightIndex = -1;
         invalidateComponent();
     }
 
     @Override
-    public void itemsSorted(ListView listView) {
+    public void itemsSorted(final ListView listView) {
         if (variableItemHeight) {
             invalidateComponent();
         } else {
@@ -1242,18 +1240,18 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
 
     // List view item state events
     @Override
-    public void itemCheckedChanged(ListView listView, int index) {
+    public void itemCheckedChanged(final ListView listView, final int index) {
         repaintComponent(getItemBounds(index));
     }
 
     @Override
-    public void itemCheckedStateChanged(ListView listView, int index) {
+    public void itemCheckedStateChanged(final ListView listView, final int index) {
         repaintComponent(getItemBounds(index));
     }
 
     // List view selection detail events
     @Override
-    public void selectedRangeAdded(ListView listView, int rangeStart, int rangeEnd) {
+    public void selectedRangeAdded(final ListView listView, final int rangeStart, final int rangeEnd) {
         if (listView.isValid()) {
             Bounds selectionBounds = getItemBounds(rangeStart);
             selectionBounds = selectionBounds.union(getItemBounds(rangeEnd));
@@ -1270,7 +1268,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void selectedRangeRemoved(ListView listView, int rangeStart, int rangeEnd) {
+    public void selectedRangeRemoved(final ListView listView, final int rangeStart, final int rangeEnd) {
         // Repaint the area containing the removed selection
         if (listView.isValid()) {
             Bounds selectionBounds = getItemBounds(rangeStart);
@@ -1280,7 +1278,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void selectedRangesChanged(ListView listView, Sequence<Span> previousSelectedRanges) {
+    public void selectedRangesChanged(final ListView listView, final Sequence<Span> previousSelectedRanges) {
         if (previousSelectedRanges != null
             && previousSelectedRanges != listView.getSelectedRanges()) {
             if (listView.isValid()) {
@@ -1321,7 +1319,7 @@ public class TerraListViewSkin extends ComponentSkin implements ListView.Skin, L
     }
 
     @Override
-    public void selectedItemChanged(ListView listView, Object previousSelectedItem) {
+    public void selectedItemChanged(final ListView listView, final Object previousSelectedItem) {
         // No-op
     }
 

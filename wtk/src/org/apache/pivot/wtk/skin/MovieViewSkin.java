@@ -45,12 +45,12 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
 
     private MovieListener movieListener = new MovieListener() {
         @Override
-        public void sizeChanged(Movie movie, int previousWidth, int previousHeight) {
+        public void sizeChanged(final Movie movie, final int previousWidth, final int previousHeight) {
             invalidateComponent();
         }
 
         @Override
-        public void regionUpdated(Movie movie, int x, int y, int width, int height) {
+        public void regionUpdated(final Movie movie, final int x, final int y, final int width, final int height) {
             repaintComponent(
                 movieX + (int) Math.floor(x * scale),
                 movieY + (int) Math.floor(y * scale),
@@ -60,7 +60,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     };
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         MovieView movieView = (MovieView) component;
@@ -73,7 +73,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
@@ -81,7 +81,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
@@ -93,9 +93,9 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
-        return (movie == null) ? Dimensions.ZERO :
-            new Dimensions(Math.round(movie.getWidth() * scale),
-                           Math.round(movie.getHeight() * scale));
+        return (movie == null) ? Dimensions.ZERO
+            : new Dimensions(Math.round(movie.getWidth() * scale),
+                             Math.round(movie.getHeight() * scale));
     }
 
     @Override
@@ -137,7 +137,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         MovieView movieView = (MovieView) getComponent();
         Movie movie = movieView.getMovie();
 
@@ -163,34 +163,34 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
      * @return <tt>false</tt>; movie views are not focusable.
      */
     @Override
-    public boolean isFocusable() {
+    public final boolean isFocusable() {
         return false;
     }
 
     @Override
-    public boolean isOpaque() {
+    public final boolean isOpaque() {
         return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
-    public Color getBackgroundColor() {
+    public final Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(final Color backgroundColor) {
         // Note: null background allowed here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public float getScale() {
+    public final float getScale() {
         return scale;
     }
 
-    public void setScale(float scale) {
+    public final void setScale(final float scale) {
         if (scale <= 0) {
             throw new IllegalArgumentException("scale must be positive.");
         }
@@ -199,11 +199,11 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         invalidateComponent();
     }
 
-    public HorizontalAlignment getHorizontalAlignment() {
+    public final HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+    public final void setHorizontalAlignment(final HorizontalAlignment horizontalAlignment) {
         Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         if (this.horizontalAlignment != horizontalAlignment) {
@@ -214,11 +214,11 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
         }
     }
 
-    public VerticalAlignment getVerticalAlignment() {
+    public final VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
 
-    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+    public final void setVerticalAlignment(final VerticalAlignment verticalAlignment) {
         Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         if (this.verticalAlignment != verticalAlignment) {
@@ -232,7 +232,7 @@ public class MovieViewSkin extends ComponentSkin implements MovieViewListener {
     // MovieViewListener methods
 
     @Override
-    public void movieChanged(MovieView movieView, Movie previousMovie) {
+    public void movieChanged(final MovieView movieView, final Movie previousMovie) {
         if (previousMovie != null) {
             previousMovie.getMovieListeners().remove(movieListener);
         }

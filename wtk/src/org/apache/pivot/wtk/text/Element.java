@@ -47,7 +47,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     public Element() {
     }
 
-    public Element(Element element, boolean recursive) {
+    public Element(final Element element, final boolean recursive) {
         this.font = element.getFont();
         this.foregroundColor = element.getForegroundColor();
         this.backgroundColor = element.getBackgroundColor();
@@ -61,10 +61,10 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public void insertRange(Node range, int offset) {
+    public void insertRange(final Node range, final int offset) {
         if (!(range instanceof Element)) {
-            throw new IllegalArgumentException("Range node (" +
-                range.getClass().getSimpleName() + ") is not an Element.");
+            throw new IllegalArgumentException("Range node ("
+                + range.getClass().getSimpleName() + ") is not an Element.");
         }
 
         Utils.checkIndexBounds(offset, 0, characterCount);
@@ -109,7 +109,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         }
     }
 
-    private Paragraph getParagraphParent(Node node) {
+    private Paragraph getParagraphParent(final Node node) {
         Element parent = node.getParent();
         while ((parent != null) && !(parent instanceof Paragraph)) {
             parent = parent.getParent();
@@ -118,7 +118,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Node removeRange(int offset, int charCount) {
+    public Node removeRange(final int offset, final int charCount) {
         Utils.checkIndexBounds(offset, charCount, 0, characterCount);
 
         // Create a copy of this element
@@ -144,8 +144,8 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                     // empty line, so check that condition and don't remove the
                     // entire node.
                     Paragraph paragraph;
-                    if (node instanceof TextNode && (paragraph = getParagraphParent(node)) != null &&
-                        paragraph.getLength() == 1) {
+                    if (node instanceof TextNode && (paragraph = getParagraphParent(node)) != null
+                     && paragraph.getLength() == 1) {
                         segment = node.removeRange(0, charCount);
                     } else {
                         // Remove the entire node
@@ -205,7 +205,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Element getRange(int offset, int charCount) {
+    public Element getRange(final int offset, final int charCount) {
         Utils.checkIndexBounds(offset, charCount, 0, characterCount);
 
         // Create a copy of this element
@@ -273,7 +273,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     public abstract Element duplicate(boolean recursive);
 
     @Override
-    public char getCharacterAt(int offset) {
+    public char getCharacterAt(final int offset) {
         Node node = nodes.get(getNodeAt(offset));
         return node.getCharacterAt(offset - node.getOffset());
     }
@@ -283,7 +283,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         return characterCount;
     }
 
-    private void addCharacters(Appendable buf, Element element) {
+    private void addCharacters(final Appendable buf, final Element element) {
         try {
             for (Node child : element.nodes) {
                 if (child instanceof Element) {
@@ -311,7 +311,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public int add(Node node) {
+    public int add(final Node node) {
         int index = nodes.getLength();
         insert(node, index);
 
@@ -319,7 +319,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public void insert(Node node, int index) {
+    public void insert(final Node node, final int index) {
         Utils.checkNull(node, "node");
         Utils.checkIndexBounds(index, 0, nodes.getLength());
 
@@ -362,12 +362,12 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Node update(int index, Node node) {
+    public Node update(final int index, final Node node) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int remove(Node node) {
+    public int remove(final Node node) {
         int index = indexOf(node);
         if (index != -1) {
             remove(index, 1);
@@ -377,17 +377,17 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Sequence<Node> remove(int index, int count) {
+    public Sequence<Node> remove(final int index, final int count) {
         Utils.checkIndexBounds(index, count, 0, nodes.getLength());
 
         // Remove the nodes
         Sequence<Node> removed = nodes.remove(index, count);
-        count = removed.getLength();
+        int len = removed.getLength();
         StringBuilder removedChars = new StringBuilder();
 
-        if (count > 0) {
+        if (len > 0) {
             int removedCharacterCount = 0;
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < len; i++) {
                 Node node = removed.get(i);
                 node.setParent(null);
                 removedCharacterCount += node.getCharacterCount();
@@ -429,14 +429,14 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    public Node get(int index) {
+    public Node get(final int index) {
         Utils.checkZeroBasedIndex(index, nodes.getLength());
 
         return nodes.get(index);
     }
 
     @Override
-    public int indexOf(Node node) {
+    public int indexOf(final Node node) {
         Utils.checkNull(node, "node");
 
         return nodes.indexOf(node);
@@ -453,7 +453,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @param offset The text offset to search for.
      * @return The index of the child node at the given offset.
      */
-    public int getNodeAt(int offset) {
+    public int getNodeAt(final int offset) {
         Utils.checkZeroBasedIndex(offset, characterCount);
 
         int i = nodes.getLength() - 1;
@@ -472,7 +472,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @param offset The text offset to search for.
      * @return The path to the descendant node at the given offset.
      */
-    public Sequence<Integer> getPathAt(int offset) {
+    public Sequence<Integer> getPathAt(final int offset) {
         Sequence<Integer> path;
 
         int index = getNodeAt(offset);
@@ -496,7 +496,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @param offset The text offset to search for.
      * @return The descendant node at the given offset.
      */
-    public Node getDescendantAt(int offset) {
+    public Node getDescendantAt(final int offset) {
         Node descendant = nodes.get(getNodeAt(offset));
 
         if (descendant instanceof Element) {
@@ -508,7 +508,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    protected void rangeInserted(int offset, int charCount) {
+    protected void rangeInserted(final int offset, final int charCount) {
         this.characterCount += charCount;
 
         // Update the offsets of consecutive nodes
@@ -523,7 +523,8 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
-    protected void rangeRemoved(Node originalNode, int offset, int charCount, CharSequence removedChars) {
+    protected void rangeRemoved(final Node originalNode, final int offset, final int charCount,
+        final CharSequence removedChars) {
         // Update the offsets of consecutive nodes, if any
         if (offset < this.characterCount) {
             int index = getNodeAt(offset);
@@ -544,11 +545,11 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         return new ImmutableIterator<>(nodes.iterator());
     }
 
-    public java.awt.Font getFont() {
+    public final Font getFont() {
         return font;
     }
 
-    public void setFont(Font font) {
+    public final void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         Font previousFont = this.font;
@@ -558,7 +559,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         }
     }
 
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         setFont(FontUtilities.decodeFont(font));
     }
 
@@ -566,17 +567,17 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @return The current foreground color, or <tt>null</tt> if no color is
      * foreground.
      */
-    public Color getForegroundColor() {
+    public final Color getForegroundColor() {
         return foregroundColor;
     }
 
     /**
-     * Sets the currently foreground color.
+     * Sets the current foreground color.
      *
      * @param foregroundColor The foreground color, or <tt>null</tt> to specify
      * no selection.
      */
-    public void setForegroundColor(Color foregroundColor) {
+    public final void setForegroundColor(final Color foregroundColor) {
         Color previousForegroundColor = this.foregroundColor;
 
         if (foregroundColor != previousForegroundColor) {
@@ -590,7 +591,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      *
      * @param foregroundColor The foreground color.
      */
-    public void setForegroundColor(String foregroundColor) {
+    public final void setForegroundColor(final String foregroundColor) {
         setForegroundColor(GraphicsUtilities.decodeColor(foregroundColor, "foregroundColor"));
     }
 
@@ -598,7 +599,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @return The current background color, or <tt>null</tt> if no color is
      * background.
      */
-    public Color getBackgroundColor() {
+    public final Color getBackgroundColor() {
         return backgroundColor;
     }
 
@@ -608,7 +609,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      * @param backgroundColor The background color, or <tt>null</tt> to specify
      * no selection.
      */
-    public void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(final Color backgroundColor) {
         Color previousBackgroundColor = this.backgroundColor;
 
         if (backgroundColor != previousBackgroundColor) {
@@ -622,15 +623,15 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
      *
      * @param backgroundColor The background color.
      */
-    public void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public boolean isUnderline() {
+    public final boolean isUnderline() {
         return underline;
     }
 
-    public void setUnderline(boolean underline) {
+    public final void setUnderline(final boolean underline) {
         boolean previousUnderline = this.underline;
         if (previousUnderline != underline) {
             this.underline = underline;
@@ -638,11 +639,11 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         }
     }
 
-    public boolean isStrikethrough() {
+    public final boolean isStrikethrough() {
         return strikethrough;
     }
 
-    public void setStrikethrough(boolean strikethrough) {
+    public final void setStrikethrough(final boolean strikethrough) {
         boolean previousStrikethrough = this.strikethrough;
         if (previousStrikethrough != strikethrough) {
             this.strikethrough = strikethrough;

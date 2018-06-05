@@ -36,7 +36,7 @@ import org.apache.pivot.util.Vote;
 public class BeanMonitor {
     private class BeanInvocationHandler implements InvocationHandler {
         @Override
-        public Object invoke(Object proxy, Method event, Object[] arguments) throws Throwable {
+        public Object invoke(final Object proxy, final Method event, final Object[] arguments) throws Throwable {
             String propertyName;
             if ((propertyName = getPropertyChangeName(event.getName())) != null) {
                 if (notifyingProperties.contains(propertyName)) {
@@ -59,7 +59,7 @@ public class BeanMonitor {
     private class PropertyChangeListenerList extends ListenerList<PropertyChangeListener> implements
         PropertyChangeListener {
         @Override
-        public void add(PropertyChangeListener listener) {
+        public void add(final PropertyChangeListener listener) {
             if (isEmpty()) {
                 registerBeanListeners();
             }
@@ -68,7 +68,7 @@ public class BeanMonitor {
         }
 
         @Override
-        public void remove(PropertyChangeListener listener) {
+        public void remove(final PropertyChangeListener listener) {
             super.remove(listener);
 
             if (isEmpty()) {
@@ -77,10 +77,8 @@ public class BeanMonitor {
         }
 
         @Override
-        public void propertyChanged(Object beanArgument, String propertyName) {
-            for (PropertyChangeListener listener : this) {
-                listener.propertyChanged(beanArgument, propertyName);
-            }
+        public void propertyChanged(final Object beanArgument, final String propertyName) {
+            forEach(listener -> listener.propertyChanged(beanArgument, propertyName));
         }
     }
 
@@ -95,14 +93,14 @@ public class BeanMonitor {
     public static final String LISTENERS_SUFFIX = "Listeners";
     public static final String PROPERTY_CHANGE_SUFFIX = "Changed";
 
-    private static String getPropertyChangeName(String name) {
+    private static String getPropertyChangeName(final String name) {
         if (name.endsWith(PROPERTY_CHANGE_SUFFIX)) {
             return name.substring(0, name.length() - PROPERTY_CHANGE_SUFFIX.length());
         }
         return null;
     }
 
-    public BeanMonitor(Object bean) {
+    public BeanMonitor(final Object bean) {
         Utils.checkNull(bean, "bean object");
 
         this.bean = bean;
@@ -119,7 +117,7 @@ public class BeanMonitor {
                     Type type = typeArguments[0];
                     Class<?> listenerInterface;
                     if (type instanceof ParameterizedType) {
-                        ParameterizedType paramType = (ParameterizedType)type;
+                        ParameterizedType paramType = (ParameterizedType) type;
                         listenerInterface = (Class<?>) paramType.getRawType();
                     } else {
                         listenerInterface = (Class<?>) type;
@@ -158,11 +156,11 @@ public class BeanMonitor {
      * @return <tt>true</tt> if the property fires change events; <tt>false</tt>
      * otherwise.
      */
-    public boolean isNotifying(String key) {
+    public boolean isNotifying(final String key) {
         return notifyingProperties.contains(key);
     }
 
-    private void invoke(String methodName, boolean addProxy) {
+    private void invoke(final String methodName, final boolean addProxy) {
         for (Method method : bean.getClass().getMethods()) {
             if (ListenerList.class.isAssignableFrom(method.getReturnType())
                 && (method.getModifiers() & Modifier.STATIC) == 0) {
@@ -173,7 +171,7 @@ public class BeanMonitor {
                     Type type = typeArguments[0];
                     Class<?> listenerInterface;
                     if (type instanceof ParameterizedType) {
-                        ParameterizedType paramType = (ParameterizedType)type;
+                        ParameterizedType paramType = (ParameterizedType) type;
                         listenerInterface = (Class<?>) paramType.getRawType();
                     } else {
                         listenerInterface = (Class<?>) type;
@@ -193,7 +191,7 @@ public class BeanMonitor {
                         if (addProxy) {
                             listener = Proxy.newProxyInstance(
                                 Thread.currentThread().getContextClassLoader(),
-                                new Class<?>[] { listenerInterface }, invocationHandler);
+                                new Class<?>[] {listenerInterface}, invocationHandler);
                             beanListenerProxies.put(listenerInterface, listener);
                         } else {
                             throw new IllegalStateException("Listener proxy is null.");
@@ -203,13 +201,13 @@ public class BeanMonitor {
                     Class<?> listenerListClass = listenerList.getClass();
                     Method classMethod;
                     try {
-                        classMethod = listenerListClass.getMethod(methodName, new Class<?>[] { Object.class });
+                        classMethod = listenerListClass.getMethod(methodName, new Class<?>[] {Object.class});
                     } catch (NoSuchMethodException exception) {
                         throw new RuntimeException(exception);
                     }
 
                     try {
-                        classMethod.invoke(listenerList, new Object[] { listener });
+                        classMethod.invoke(listenerList, new Object[] {listener});
                     } catch (IllegalAccessException | InvocationTargetException exception) {
                         throw new RuntimeException(exception);
                     }

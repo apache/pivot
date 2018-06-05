@@ -53,11 +53,11 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     private TextLayout textLayout = null;
     private TextPaneSkinTextNodeView next = null;
 
-    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode) {
+    public TextPaneSkinTextNodeView(final TextPaneSkin textPaneSkin, final TextNode textNode) {
         this(textPaneSkin, textNode, 0);
     }
 
-    public TextPaneSkinTextNodeView(TextPaneSkin textPaneSkin, TextNode textNode, int start) {
+    public TextPaneSkinTextNodeView(final TextPaneSkin textPaneSkin, final TextNode textNode, final int start) {
         super(textPaneSkin, textNode);
         this.start = start;
     }
@@ -97,16 +97,18 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
      * @return The dimensions of the text in pixel amounts, or 0,0 if
      * there is no text currently.
      */
-    private static Dimensions getTextSize(TextLayout textLayout) {
+    private static Dimensions getTextSize(final TextLayout textLayout) {
         if (textLayout != null) {
-            int lineHeight = (int)Math.ceil(textLayout.getAscent() + textLayout.getDescent() + textLayout.getLeading());
-            return new Dimensions((int)Math.ceil(textLayout.getAdvance()), lineHeight);
+            int lineHeight = (int) Math.ceil(textLayout.getAscent() + textLayout.getDescent()
+                + textLayout.getLeading());
+            return new Dimensions((int) Math.ceil(textLayout.getAdvance()), lineHeight);
         }
         // TODO: should this be 0 height?  Maybe use average character height
         return Dimensions.ZERO;
     }
 
-    private AttributedStringCharacterIterator getCharIterator(TextNode textNode, int start, int end, Font font) {
+    private AttributedStringCharacterIterator getCharIterator(final TextNode textNode, final int start,
+        final int end, final Font font) {
         CharSequence characters;
         int num = end - start;
         if (num == textNode.getCharacterCount()) {
@@ -118,7 +120,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    protected void childLayout(int breakWidth) {
+    protected void childLayout(final int breakWidth) {
         TextNode textNode = (TextNode) getNode();
 
         textLayout = null;
@@ -157,7 +159,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             } else {
                 ourSpan = new Span(documentOffset + start, documentOffset + charCount - 1);
             }
-            // The "composed span" just encompasses the start position, because this is "phantom" text, so it exists between any two other "real" text positions.
+            // The "composed span" just encompasses the start position, because this is "phantom" text,
+            // so it exists between any two other "real" text positions.
             Span composedSpan = new Span(selectionStart + composedTextBegin);
             composedIntersects = composedSpan.intersects(ourSpan);
         }
@@ -178,7 +181,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                     if (charCount - start == 0) {
                         text = composedText;
                     } else {
-                        AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
+                        AttributedStringCharacterIterator fullText =
+                            getCharIterator(textNode, start, charCount, effectiveFont);
                         // Note: only apply the underline and strikethrough to our text, not the composed text
                         fullText.addUnderlineAttribute(underlined);
                         fullText.addStrikethroughAttribute(struckthrough);
@@ -186,23 +190,27 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                     }
                 } else if (composedPos == charCount) {
                     // Composed text is at the end
-                    AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
+                    AttributedStringCharacterIterator fullText =
+                        getCharIterator(textNode, start, charCount, effectiveFont);
                     // Note: only apply the underline and strikethrough to our text, not the composed text
                     fullText.addUnderlineAttribute(underlined);
                     fullText.addStrikethroughAttribute(struckthrough);
                     text = new CompositeIterator(fullText, composedText);
                 } else {
                     // Composed text is somewhere in the middle
-                    AttributedStringCharacterIterator leadingText = getCharIterator(textNode, start, composedPos, effectiveFont);
+                    AttributedStringCharacterIterator leadingText =
+                        getCharIterator(textNode, start, composedPos, effectiveFont);
                     leadingText.addUnderlineAttribute(underlined);
                     leadingText.addStrikethroughAttribute(struckthrough);
-                    AttributedStringCharacterIterator trailingText = getCharIterator(textNode, composedPos, charCount, effectiveFont);
+                    AttributedStringCharacterIterator trailingText =
+                        getCharIterator(textNode, composedPos, charCount, effectiveFont);
                     trailingText.addUnderlineAttribute(underlined);
                     trailingText.addStrikethroughAttribute(struckthrough);
                     text = new CompositeIterator(leadingText, composedText, trailingText);
                 }
             } else {
-                AttributedStringCharacterIterator fullText = getCharIterator(textNode, start, charCount, effectiveFont);
+                AttributedStringCharacterIterator fullText =
+                    getCharIterator(textNode, start, charCount, effectiveFont);
                 fullText.addUnderlineAttribute(underlined);
                 fullText.addStrikethroughAttribute(struckthrough);
                 text = fullText;
@@ -210,7 +218,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
 
             if (getTextPaneSkin().getWrapText()) {
                 LineBreakMeasurer measurer = new LineBreakMeasurer(text, fontRenderContext);
-                float wrappingWidth = (float)breakWidth;
+                float wrappingWidth = (float) breakWidth;
                 textLayout = measurer.nextLayout(wrappingWidth);
                 length = textLayout.getCharacterCount();
                 Dimensions size = getTextSize(textLayout);
@@ -229,15 +237,14 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
                 Dimensions size = getTextSize(textLayout);
                 float advance = textLayout.getAdvance();
                 setSize(size);
-                // set to null in case this node used to be broken across multiple,
-                // but is no longer
+                // set to null in case this node used to be broken across multiple, but is no longer
                 next = null;
             }
         }
     }
 
     @Override
-    public Dimensions getPreferredSize(int breakWidth) {
+    public Dimensions getPreferredSize(final int breakWidth) {
         TextNode textNode = (TextNode) getNode();
 
         Font effectiveFont = getEffectiveFont();
@@ -245,7 +252,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         // TODO: figure out if the composedText impinges on this node or not
         // and construct an iterator based on that
         // For now, just get the committed text
-        if (textNode.getCharacterCount() == 0 /* && composedText == null || composedText doesn't impinge on this node */) {
+        if (textNode.getCharacterCount() == 0 /* && composedText == null || doesn't impinge on this node */) {
             Dimensions charSize = GraphicsUtilities.getAverageCharacterSize(effectiveFont);
             return new Dimensions(0, charSize.height);
         } else {
@@ -261,7 +268,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             TextLayout currentTextLayout;
             if (getTextPaneSkin().getWrapText()) {
                 LineBreakMeasurer measurer = new LineBreakMeasurer(text, fontRenderContext);
-                float wrappingWidth = (float)breakWidth;
+                float wrappingWidth = (float) breakWidth;
                 currentTextLayout = measurer.nextLayout(wrappingWidth);
             } else {
                 // Not wrapping the text, then the width is of the whole thing
@@ -281,12 +288,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    protected void setSkinLocation(int skinX, int skinY) {
+    protected void setSkinLocation(final int skinX, final int skinY) {
         // empty block
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         if (textLayout != null) {
             TextPane textPane = (TextPane) getTextPaneSkin().getComponent();
 
@@ -364,12 +371,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public int getOffset() {
+    public final int getOffset() {
         return super.getOffset() + start;
     }
 
     @Override
-    public int getCharacterCount() {
+    public final int getCharacterCount() {
         return length;
     }
 
@@ -379,7 +386,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
      *
      * @return The next node view in the document.
      */
-    public TextPaneSkinNodeView getNext() {
+    public final TextPaneSkinNodeView getNext() {
         return next;
     }
 
@@ -435,7 +442,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public int getInsertionPoint(int x, int y) {
+    public int getInsertionPoint(final int x, final int y) {
         int offset = 0;
 
         if (textLayout != null) {
@@ -444,8 +451,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             float ascent = lm.getAscent();
 
             // Translate to glyph coordinates
-            float fx = (float)x;
-            float fy = (float)y - ascent;
+            float fx = (float) x;
+            float fy = (float) y - ascent;
 
             TextHitInfo hitInfo = textLayout.hitTestChar(fx, fy);
             offset = hitInfo.getInsertionIndex();
@@ -455,7 +462,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
+    public int getNextInsertionPoint(final int x, final int from, final TextPane.ScrollDirection direction) {
         int offset = -1;
 
         if (from == -1) {
@@ -464,7 +471,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
             // "hitTestChar" will map out-of-bounds points to the beginning or end of the text
             // but we need to know if the given x is inside or not, so test that first.
             if (textBounds.contains(x, 0)) {
-                TextHitInfo hitInfo = textLayout.hitTestChar((float)x, 0f);
+                TextHitInfo hitInfo = textLayout.hitTestChar((float) x, 0f);
                 offset = hitInfo.getInsertionIndex();
             }
         }
@@ -473,7 +480,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public int getRowAt(int offset) {
+    public int getRowAt(final int offset) {
         return -1;
     }
 
@@ -483,7 +490,7 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public Bounds getCharacterBounds(int offset) {
+    public Bounds getCharacterBounds(final int offset) {
         Bounds characterBounds = null;
         if (textLayout != null) {
             // If the offest == length, then use the right hand edge of the previous
@@ -506,12 +513,12 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
     }
 
     @Override
-    public void charactersInserted(TextNode textNode, int index, int count) {
+    public void charactersInserted(final TextNode textNode, final int index, final int count) {
         invalidateUpTree();
     }
 
     @Override
-    public void charactersRemoved(TextNode textNode, int index, int count) {
+    public void charactersRemoved(final TextNode textNode, final int index, final int count) {
         invalidateUpTree();
     }
 
@@ -526,8 +533,8 @@ class TextPaneSkinTextNodeView extends TextPaneSkinNodeView implements TextNodeL
         } else {
             textSubString = text.substring(start, start + length);
         }
-        return ClassUtils.simpleToString(this) +
-            " start=" + start + ",length=" + length + " [" + textSubString + "]";
+        return ClassUtils.simpleToString(this)
+            + " start=" + start + ",length=" + length + " [" + textSubString + "]";
     }
 
 }

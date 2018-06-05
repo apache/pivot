@@ -53,17 +53,17 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     private ImageListener imageListener = new ImageListener() {
         @Override
-        public void sizeChanged(Image image, int previousWidth, int previousHeight) {
+        public void sizeChanged(final Image image, final int previousWidth, final int previousHeight) {
             invalidateComponent();
         }
 
         @Override
-        public void baselineChanged(Image image, int previousBaseline) {
+        public void baselineChanged(final Image image, final int previousBaseline) {
             invalidateComponent();
         }
 
         @Override
-        public void regionUpdated(Image image, int x, int y, int width, int height) {
+        public void regionUpdated(final Image image, final int x, final int y, final int width, final int height) {
             // TODO A rounding error is causing an off-by-one error; we're
             // accounting for it here by adding 1 to width and height
             Bounds bounds = new Bounds(
@@ -76,7 +76,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     };
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         ImageView imageView = (ImageView) component;
@@ -89,7 +89,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         ImageView imageView = (ImageView) getComponent();
         Image image = imageView.getImage();
 
@@ -97,7 +97,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         ImageView imageView = (ImageView) getComponent();
         Image image = imageView.getImage();
 
@@ -109,12 +109,12 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
         ImageView imageView = (ImageView) getComponent();
         Image image = imageView.getImage();
 
-        return (image == null) ? Dimensions.ZERO :
-            new Dimensions(image.getWidth(), image.getHeight());
+        return (image == null)
+            ? Dimensions.ZERO : new Dimensions(image.getWidth(), image.getHeight());
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         ImageView imageView = (ImageView) getComponent();
         Image image = imageView.getImage();
 
@@ -217,7 +217,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         ImageView imageView = (ImageView) getComponent();
         Image image = imageView.getImage();
 
@@ -234,8 +234,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
             imageGraphics.translate(imageX, imageY);
             imageGraphics.scale(scaleX, scaleY);
 
-            // Apply an alpha composite if the opacity value is less than
-            // the current alpha
+            // Apply an alpha composite if the opacity value is less than the current alpha
             float alpha = 1.0f;
 
             Composite composite = imageGraphics.getComposite();
@@ -258,19 +257,19 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * @return <tt>false</tt>; image views are not focusable.
      */
     @Override
-    public boolean isFocusable() {
+    public final boolean isFocusable() {
         return false;
     }
 
     @Override
-    public boolean isOpaque() {
+    public final boolean isOpaque() {
         return (backgroundColor != null && backgroundColor.getTransparency() == Transparency.OPAQUE);
     }
 
     /**
      * @return The color that is painted behind the image.
      */
-    public Color getBackgroundColor() {
+    public final Color getBackgroundColor() {
         return backgroundColor;
     }
 
@@ -279,7 +278,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param backgroundColor The new color for behind the image.
      */
-    public void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(final Color backgroundColor) {
         // A null background is acceptable
         this.backgroundColor = backgroundColor;
         repaintComponent();
@@ -292,14 +291,14 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
      */
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
     /**
      * @return The opacity of the image, in [0,1].
      */
-    public float getOpacity() {
+    public final float getOpacity() {
         return opacity;
     }
 
@@ -308,7 +307,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param opacity A number between 0 (transparent) and 1 (opaque), inclusive.
      */
-    public void setOpacity(float opacity) {
+    public final void setOpacity(final float opacity) {
         if (opacity < 0 || opacity > 1) {
             throw new IllegalArgumentException("Opacity out of range [0,1].");
         }
@@ -322,7 +321,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param opacity A number between 0 (transparent) and 1 (opaque), inclusive.
      */
-    public final void setOpacity(Number opacity) {
+    public final void setOpacity(final Number opacity) {
         Utils.checkNull(opacity, "opacity");
 
         setOpacity(opacity.floatValue());
@@ -331,7 +330,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * @return The horizontal alignment of the image.
      */
-    public HorizontalAlignment getHorizontalAlignment() {
+    public final HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
@@ -341,7 +340,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param horizontalAlignment The new alignment value.
      */
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+    public final void setHorizontalAlignment(final HorizontalAlignment horizontalAlignment) {
         Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
@@ -352,7 +351,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     /**
      * @return The vertical alignment of the image.
      */
-    public VerticalAlignment getVerticalAlignment() {
+    public final VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
 
@@ -362,7 +361,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param verticalAlignment The new alignment value.
      */
-    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+    public final void setVerticalAlignment(final VerticalAlignment verticalAlignment) {
         Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
@@ -374,7 +373,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * @return A boolean indicating whether the image will be scaled to fit the
      * space in which it is placed.
      */
-    public boolean getFill() {
+    public final boolean getFill() {
         return fill;
     }
 
@@ -386,7 +385,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param fill The new fill flag value.
      */
-    public void setFill(boolean fill) {
+    public final void setFill(final boolean fill) {
         this.fill = fill;
         layout();
         repaintComponent();
@@ -396,7 +395,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      * @return A boolean indicating whether, when the image is scaled, its
      * aspect ratio is preserved.
      */
-    public boolean getPreserveAspectRatio() {
+    public final boolean getPreserveAspectRatio() {
         return preserveAspectRatio;
     }
 
@@ -406,7 +405,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
      *
      * @param preserveAspectRatio The new flag value.
      */
-    public void setPreserveAspectRatio(boolean preserveAspectRatio) {
+    public final void setPreserveAspectRatio(final boolean preserveAspectRatio) {
         this.preserveAspectRatio = preserveAspectRatio;
         layout();
         repaintComponent();
@@ -414,7 +413,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
 
     // Image view events
     @Override
-    public void imageChanged(ImageView imageView, Image previousImage) {
+    public void imageChanged(final ImageView imageView, final Image previousImage) {
         if (previousImage != null) {
             previousImage.getImageListeners().remove(imageListener);
         }
@@ -428,7 +427,7 @@ public class ImageViewSkin extends ComponentSkin implements ImageViewListener {
     }
 
     @Override
-    public void asynchronousChanged(ImageView imageView) {
+    public void asynchronousChanged(final ImageView imageView) {
         // No-op
     }
 }

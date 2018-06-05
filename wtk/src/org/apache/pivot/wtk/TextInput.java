@@ -82,7 +82,7 @@ public class TextInput extends Component {
         private final int index;
         private final int count;
 
-        public InsertTextEdit(CharSequence text, int index) {
+        public InsertTextEdit(final CharSequence text, final int index) {
             this.index = index;
             count = text.length();
         }
@@ -97,7 +97,7 @@ public class TextInput extends Component {
         private final int index;
         private final String text;
 
-        public RemoveTextEdit(int index, int count) {
+        public RemoveTextEdit(final int index, final int count) {
             this.index = index;
             text = getText(index, index + count);
         }
@@ -132,7 +132,8 @@ public class TextInput extends Component {
 
     private TextInputListener.Listeners textInputListeners = new TextInputListener.Listeners();
     private TextInputContentListener.Listeners textInputContentListeners = new TextInputContentListener.Listeners();
-    private TextInputSelectionListener.Listeners textInputSelectionListeners = new TextInputSelectionListener.Listeners();
+    private TextInputSelectionListener.Listeners textInputSelectionListeners =
+        new TextInputSelectionListener.Listeners();
     private TextInputBindingListener.Listeners textInputBindingListeners = new TextInputBindingListener.Listeners();
 
     public static final int DEFAULT_TEXT_SIZE = 16;
@@ -144,7 +145,7 @@ public class TextInput extends Component {
     }
 
     @Override
-    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+    protected void setSkin(final org.apache.pivot.wtk.Skin skin) {
         checkSkin(skin, TextInput.Skin.class);
 
         super.setSkin(skin);
@@ -166,11 +167,11 @@ public class TextInput extends Component {
      * @param endIndex The ending index of the text (exclusive).
      * @return A string containing a copy of the text area's text content.
      */
-    public String getText(int beginIndex, int endIndex) {
+    public String getText(final int beginIndex, final int endIndex) {
         return characters.substring(beginIndex, endIndex);
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         Utils.checkNull(text, "text");
 
         if (text.length() > maximumLength) {
@@ -204,11 +205,11 @@ public class TextInput extends Component {
         }
     }
 
-    public void insertText(CharSequence text, int index) {
+    public void insertText(final CharSequence text, final int index) {
         insertText(text, index, true);
     }
 
-    private void insertText(CharSequence text, int index, boolean addToEditHistory) {
+    private void insertText(final CharSequence text, final int index, final boolean addToEditHistory) {
         Utils.checkNull(text, "text");
 
         if (characters.length() + text.length() > maximumLength) {
@@ -256,11 +257,11 @@ public class TextInput extends Component {
         }
     }
 
-    public void removeText(int index, int count) {
+    public void removeText(final int index, final int count) {
         removeText(index, count, true);
     }
 
-    private void removeText(int index, int count, boolean addToEditHistory) {
+    private void removeText(final int index, final int count, final boolean addToEditHistory) {
         if (count > 0) {
             Vote vote = textInputContentListeners.previewRemoveText(this, index, count);
 
@@ -324,7 +325,7 @@ public class TextInput extends Component {
      * @param composedText The current composed text (which can be {@code null}
      * for many different reasons).
      */
-    public void setComposedText(AttributedStringCharacterIterator composedText) {
+    public void setComposedText(final AttributedStringCharacterIterator composedText) {
         this.composedText = composedText;
     }
 
@@ -341,7 +342,7 @@ public class TextInput extends Component {
      * @param start The start of the sequence (inclusive).
      * @param end The end of the sequence (exclusive).
      */
-    public CharSequence getCharacters(int start, int end) {
+    public CharSequence getCharacters(final int start, final int end) {
         return characters.subSequence(start, end);
     }
 
@@ -350,7 +351,7 @@ public class TextInput extends Component {
      *
      * @param index Location of the character to retrieve.
      */
-    public char getCharacterAt(int index) {
+    public char getCharacterAt(final int index) {
         return characters.charAt(index);
     }
 
@@ -419,14 +420,14 @@ public class TextInput extends Component {
     /**
      * @return The starting index of the selection.
      */
-    public int getSelectionStart() {
+    public final int getSelectionStart() {
         return selectionStart;
     }
 
     /**
      * @return The length of the selection; may be <tt>0</tt>.
      */
-    public int getSelectionLength() {
+    public final int getSelectionLength() {
         return selectionLength;
     }
 
@@ -437,9 +438,8 @@ public class TextInput extends Component {
      * points are inclusive. Returns <tt>null</tt> if the selection length is
      * <tt>0</tt>.
      */
-    public Span getSelection() {
-        return (selectionLength == 0) ? null :
-            new Span(selectionStart, selectionStart + selectionLength - 1);
+    public final Span getSelection() {
+        return (selectionLength == 0) ? null : new Span(selectionStart, selectionStart + selectionLength - 1);
     }
 
     /**
@@ -447,7 +447,7 @@ public class TextInput extends Component {
      *
      * @return A char span with the start and length values.
      */
-    public CharSpan getCharSelection() {
+    public final CharSpan getCharSelection() {
         return new CharSpan(selectionStart, selectionLength);
     }
 
@@ -458,7 +458,7 @@ public class TextInput extends Component {
      * @param selectionStart The starting index of the selection.
      * @param selectionLength The length of the selection.
      */
-    public void setSelection(int selectionStart, int selectionLength) {
+    public final void setSelection(final int selectionStart, final int selectionLength) {
         Utils.checkNonNegative(selectionLength, "selectionLength");
 
         int composedTextLength = composedText != null ? (composedText.getEndIndex() - composedText.getBeginIndex()) : 0;
@@ -485,7 +485,7 @@ public class TextInput extends Component {
      * @see #setSelection(int, int)
      * @throws IllegalArgumentException if the selection span is {@code null}.
      */
-    public final void setSelection(Span selection) {
+    public final void setSelection(final Span selection) {
         Utils.checkNull(selection, "selection");
 
         setSelection(Math.min(selection.start, selection.end), (int) selection.getLength());
@@ -498,7 +498,7 @@ public class TextInput extends Component {
      * @see #setSelection(int, int)
      * @throws IllegalArgumentException if the character span is {@code null}.
      */
-    public final void setSelection(CharSpan selection) {
+    public final void setSelection(final CharSpan selection) {
         Utils.checkNull(selection, "selection");
 
         setSelection(selection.start, selection.length);
@@ -507,14 +507,14 @@ public class TextInput extends Component {
     /**
      * Selects all text.
      */
-    public void selectAll() {
+    public final void selectAll() {
         setSelection(0, characters.length());
     }
 
     /**
      * Clears the selection.
      */
-    public void clearSelection() {
+    public final void clearSelection() {
         setSelection(0, 0);
     }
 
@@ -523,7 +523,7 @@ public class TextInput extends Component {
      *
      * @return A new string containing a copy of the text in the selected range.
      */
-    public String getSelectedText() {
+    public final String getSelectedText() {
         return getText(selectionStart, selectionStart + selectionLength);
     }
 
@@ -532,7 +532,7 @@ public class TextInput extends Component {
      *
      * @return The number of characters to display in the text input.
      */
-    public int getTextSize() {
+    public final int getTextSize() {
         return textSize;
     }
 
@@ -542,7 +542,7 @@ public class TextInput extends Component {
      * @param textSize The number of characters to display in the text input.
      * @throws IllegalArgumentException if the size value is negative.
      */
-    public void setTextSize(int textSize) {
+    public final void setTextSize(final int textSize) {
         Utils.checkNonNegative(textSize, "textSize");
 
         int previousTextSize = this.textSize;
@@ -558,7 +558,7 @@ public class TextInput extends Component {
      *
      * @return The maximum length of the text input's text content.
      */
-    public int getMaximumLength() {
+    public final int getMaximumLength() {
         return maximumLength;
     }
 
@@ -568,7 +568,7 @@ public class TextInput extends Component {
      * @param maximumLength The maximum length of the text input's text content.
      * @throws IllegalArgumentException if the length value is negative.
      */
-    public void setMaximumLength(int maximumLength) {
+    public final void setMaximumLength(final int maximumLength) {
         Utils.checkNonNegative(maximumLength, "maximumLength");
 
         int previousMaximumLength = this.maximumLength;
@@ -576,8 +576,7 @@ public class TextInput extends Component {
         if (previousMaximumLength != maximumLength) {
             this.maximumLength = maximumLength;
 
-            // Truncate the text, if necessary (do not allow listeners to vote
-            // on this change)
+            // Truncate the text, if necessary (do not allow listeners to vote on this change)
             int length = characters.length();
 
             if (length > maximumLength) {
@@ -597,7 +596,7 @@ public class TextInput extends Component {
      * @return <tt>true</tt> if this is a password text input; <tt>false</tt>,
      * otherwise.
      */
-    public boolean isPassword() {
+    public final boolean isPassword() {
         return password;
     }
 
@@ -608,7 +607,7 @@ public class TextInput extends Component {
      * @param password <tt>true</tt> if this is a password text input;
      * <tt>false</tt>, otherwise.
      */
-    public void setPassword(boolean password) {
+    public final void setPassword(final boolean password) {
         if (this.password != password) {
             this.password = password;
             textInputListeners.passwordChanged(this);
@@ -618,7 +617,7 @@ public class TextInput extends Component {
     /**
      * @return The text input's prompt.
      */
-    public String getPrompt() {
+    public final String getPrompt() {
         return prompt;
     }
 
@@ -627,7 +626,7 @@ public class TextInput extends Component {
      *
      * @param prompt The prompt text, or <tt>null</tt> for no prompt.
      */
-    public void setPrompt(String prompt) {
+    public final void setPrompt(final String prompt) {
         String previousPrompt = this.prompt;
 
         if (previousPrompt != prompt) {
@@ -641,7 +640,7 @@ public class TextInput extends Component {
      *
      * @return The text key, or <tt>null</tt> if no text key is set.
      */
-    public String getTextKey() {
+    public final String getTextKey() {
         return textKey;
     }
 
@@ -650,7 +649,7 @@ public class TextInput extends Component {
      *
      * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
-    public void setTextKey(String textKey) {
+    public final void setTextKey(final String textKey) {
         String previousTextKey = this.textKey;
 
         if (previousTextKey != textKey) {
@@ -659,11 +658,11 @@ public class TextInput extends Component {
         }
     }
 
-    public BindType getTextBindType() {
+    public final BindType getTextBindType() {
         return textBindType;
     }
 
-    public void setTextBindType(BindType textBindType) {
+    public final void setTextBindType(final BindType textBindType) {
         Utils.checkNull(textBindType, "textBindType");
 
         BindType previousTextBindType = this.textBindType;
@@ -674,11 +673,11 @@ public class TextInput extends Component {
         }
     }
 
-    public TextBindMapping getTextBindMapping() {
+    public final TextBindMapping getTextBindMapping() {
         return textBindMapping;
     }
 
-    public void setTextBindMapping(TextBindMapping textBindMapping) {
+    public final void setTextBindMapping(final TextBindMapping textBindMapping) {
         TextBindMapping previousTextBindMapping = this.textBindMapping;
 
         if (previousTextBindMapping != textBindMapping) {
@@ -688,7 +687,7 @@ public class TextInput extends Component {
     }
 
     @Override
-    public void load(Object context) {
+    public void load(final Object context) {
         if (textKey != null && JSON.containsKey(context, textKey) && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
 
@@ -703,7 +702,7 @@ public class TextInput extends Component {
     }
 
     @Override
-    public void store(Object context) {
+    public void store(final Object context) {
         if (textKey != null && textBindType != BindType.LOAD) {
             String text = getText();
             JSON.put(context, textKey,
@@ -718,12 +717,12 @@ public class TextInput extends Component {
         }
     }
 
-    public int getInsertionPoint(int x) {
+    public final int getInsertionPoint(final int x) {
         TextInput.Skin textInputSkin = (TextInput.Skin) getSkin();
         return textInputSkin.getInsertionPoint(x);
     }
 
-    public Bounds getCharacterBounds(int index) {
+    public final Bounds getCharacterBounds(final int index) {
         TextInput.Skin textInputSkin = (TextInput.Skin) getSkin();
         return textInputSkin.getCharacterBounds(index);
     }
@@ -731,7 +730,7 @@ public class TextInput extends Component {
     /**
      * @return The validator associated with this text input.
      */
-    public Validator getValidator() {
+    public final Validator getValidator() {
         return validator;
     }
 
@@ -741,7 +740,7 @@ public class TextInput extends Component {
      * @param validator The validator to use, or <tt>null</tt> to use no
      * validator.
      */
-    public void setValidator(Validator validator) {
+    public final void setValidator(final Validator validator) {
         Validator previousValidator = this.validator;
 
         if (validator != previousValidator) {
@@ -765,7 +764,7 @@ public class TextInput extends Component {
     /**
      * @return The text input's strict validation flag.
      */
-    public boolean isStrictValidation() {
+    public final boolean isStrictValidation() {
         return strictValidation;
     }
 
@@ -775,7 +774,7 @@ public class TextInput extends Component {
      *
      * @param strictValidation The new flag setting.
      */
-    public void setStrictValidation(boolean strictValidation) {
+    public final void setStrictValidation(final boolean strictValidation) {
         if (this.strictValidation != strictValidation) {
             this.strictValidation = strictValidation;
             textInputListeners.strictValidationChanged(this);
@@ -789,14 +788,14 @@ public class TextInput extends Component {
      * @return <tt>true</tt> if the text is valid or no validator is installed;
      * <tt>false</tt>, otherwise.
      */
-    public boolean isTextValid() {
+    public final boolean isTextValid() {
         return textValid;
     }
 
     /**
      * @return The text area's editable flag.
      */
-    public boolean isEditable() {
+    public final boolean isEditable() {
         return editable;
     }
 
@@ -805,7 +804,7 @@ public class TextInput extends Component {
      *
      * @param editable The new flag setting.
      */
-    public void setEditable(boolean editable) {
+    public final void setEditable(final boolean editable) {
         if (this.editable != editable) {
             if (!editable) {
                 if (isFocused()) {

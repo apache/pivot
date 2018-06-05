@@ -687,8 +687,8 @@ public abstract class Button extends Component {
         if (buttonDataKey != null && JSON.containsKey(context, buttonDataKey)
             && buttonDataBindType != BindType.STORE) {
             Object value = JSON.get(context, buttonDataKey);
-            setButtonData((buttonDataBindMapping == null) ? value
-                : buttonDataBindMapping.toButtonData(value));
+            setButtonData((buttonDataBindMapping == null)
+                ? value : buttonDataBindMapping.toButtonData(value));
         }
     }
 
@@ -698,21 +698,21 @@ public abstract class Button extends Component {
             if (triState) {
                 // Bind using state key
                 if (stateKey != null && stateBindType != BindType.LOAD) {
-                    JSON.put(context, stateKey, (stateBindMapping == null) ? state
-                        : stateBindMapping.valueOf(state));
+                    JSON.put(context, stateKey, (stateBindMapping == null)
+                        ? state : stateBindMapping.valueOf(state));
                 }
             } else {
                 // Bind using selected key
                 if (selectedKey != null && selectedBindType != BindType.LOAD) {
-                    JSON.put(context, selectedKey, (selectedBindMapping == null) ?
-                        Boolean.valueOf(isSelected()) : selectedBindMapping.valueOf(isSelected()));
+                    JSON.put(context, selectedKey, (selectedBindMapping == null)
+                      ? Boolean.valueOf(isSelected()) : selectedBindMapping.valueOf(isSelected()));
                 }
             }
         }
 
         if (buttonDataKey != null && buttonDataBindType != BindType.LOAD) {
-            JSON.put(context, buttonDataKey, (buttonDataBindMapping == null) ? buttonData
-                : buttonDataBindMapping.valueOf(buttonData));
+            JSON.put(context, buttonDataKey, (buttonDataBindMapping == null)
+                ? buttonData : buttonDataBindMapping.valueOf(buttonData));
         }
     }
 

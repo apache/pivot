@@ -45,6 +45,8 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
  * Skin class for the {@link Gauge} component, which draws a circular gauge with possible text
  * in the center.
  * <p> The gauge colors, as well as colors for the warning and/or critical colors can be set.
+ *
+ * @param <T> The numeric type for the gauge value.
  */
 public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements GaugeListener<T> {
     private static final float STROKE_WIDTH = 6.0f;
@@ -90,7 +92,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         @SuppressWarnings("unchecked")
@@ -102,7 +104,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * This is a "display-only" component, so as such will not accept focus.
      */
     @Override
-    public boolean isFocusable() {
+    public final boolean isFocusable() {
         return false;
     }
 
@@ -112,21 +114,29 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         return 128;  // Note: same as TerraActivityIndicatorSkin
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         return 128;  // Note: same as TerraActivityIndicatorSkin
     }
 
     /**
      * Do the transformation of the arcs to the normal cartesian coordinates, and for the specified origin,
      * then draw the arc in the given color.  Assumes the rendering hints and the stroke have already been set.
-     * <p> Start and extent are in the 0-360 range
+     * <p> Start and extent are in the 0-360 range.
+     *
+     * @param graphics Where to draw the arc.
+     * @param rect The enclosing rectangle for the arc.
+     * @param origin Which of the compass points to use for the start of the arc.
+     * @param arcStart The starting angle from the origin for the arc.
+     * @param arcExtent The angular extent of the arc (from the start).
+     * @param color The color to use for this arc.
      */
-    private void drawArc(Graphics2D graphics, Rectangle2D rect, Origin origin, float arcStart, float arcExtent, Color color) {
+    private void drawArc(final Graphics2D graphics, final Rectangle2D rect, final Origin origin,
+        final float arcStart, final float arcExtent, final Color color) {
         float newStart = origin.getOriginAngle() - arcStart - arcExtent;
         Arc2D arc = new Arc2D.Float(rect, newStart, arcExtent, Arc2D.OPEN);
         graphics.setPaint(color);
@@ -134,7 +144,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         @SuppressWarnings("unchecked")
         Gauge<T> gauge = (Gauge<T>)getComponent();
         // NOTE: sanity check:  warning level > min && < max, warning < critical if both set
@@ -155,10 +165,10 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         // And only account for the border thickness (the outer part) if > 1.0
         boolean showingBorder = showBorder && borderColor != null;
         float borderAdjust = (showingBorder ? (borderThickness > 1.0f ? borderThickness : 0.0f) : 0.0f);
-        float diameter = (float)(Math.min(size.width - padding.getWidth(), size.height - padding.getHeight()))
+        float diameter = (float) (Math.min(size.width - padding.getWidth(), size.height - padding.getHeight()))
             - thickness - (borderAdjust * 2.0f);
-        float x = ((float)size.width - diameter) / 2.0f;
-        float y = ((float)size.height - diameter) / 2.0f;
+        float x = ((float) size.width - diameter) / 2.0f;
+        float y = ((float) size.height - diameter) / 2.0f;
 
         Rectangle2D rect = new Rectangle2D.Float(x, y, diameter, diameter);
 
@@ -189,7 +199,10 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
                         if (onlyMaxColor) {
                             maxColor = criticalColor;
                         } else {
-                            // Three segments here: min->warning (normal color), warning->critical (warning color), critical->active (critical color)
+                            // Three segments here:
+                            // min->warning (normal color),
+                            // warning->critical (warning color),
+                            // critical->active (critical color)
                             float criticalAngle = criticalValue * toAngle;
                             drawArc(graphics, rect, origin, 0.0f, warningAngle, color);
                             drawArc(graphics, rect, origin, warningAngle, criticalAngle - warningAngle, warningColor);
@@ -254,8 +267,10 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             float border = borderThickness > 1.0f ? borderThickness : 0.0f;
             float halfStroke = (thickness + border) / 2.0f;
             float thicknessAdjust = thickness + border;
-            Rectangle2D rectOuter = new Rectangle2D.Float(x - halfStroke, y - halfStroke, diameter + thicknessAdjust, diameter + thicknessAdjust);
-            Rectangle2D rectInner = new Rectangle2D.Float(x + halfStroke, y + halfStroke, diameter - thicknessAdjust, diameter - thicknessAdjust);
+            Rectangle2D rectOuter = new Rectangle2D.Float(x - halfStroke, y - halfStroke,
+                 diameter + thicknessAdjust, diameter + thicknessAdjust);
+            Rectangle2D rectInner = new Rectangle2D.Float(x + halfStroke, y + halfStroke,
+                diameter - thicknessAdjust, diameter - thicknessAdjust);
             drawArc(graphics, rectInner, origin, 360.0f, 360.0f, borderColor);
             drawArc(graphics, rectOuter, origin, 360.0f, 360.0f, borderColor);
         }
@@ -264,7 +279,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         if (showTickMarks && tickFrequency != null && tickColor != null) {
             // frequency is how many gauge values between marks
             float frequency = tickFrequency.floatValue();
-            int numMarks = (int)Math.floor(fullRange / frequency);
+            int numMarks = (int) Math.floor(fullRange / frequency);
             graphics.setColor(tickColor == null ? backgroundColor : tickColor);
             // Note: VALUE_STROKE_PURE tends to make the arcs fine but the lines non-uniform,
             // while VALUE_STROKE_NORMALIZE works well for the lines but makes the arcs "wobble" around a bit
@@ -278,16 +293,22 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             // Draw the "0" mark at the origin
             switch (origin) {
                 case NORTH:
-                    graphics.drawLine((int)xCenter, (int)(yCenter - innerRadius), (int)xCenter, (int)(yCenter - outerRadius));
+                    graphics.drawLine((int) xCenter, (int) (yCenter - innerRadius),
+                                      (int) xCenter, (int) (yCenter - outerRadius));
                     break;
                 case EAST:
-                    graphics.drawLine((int)(xCenter + innerRadius), (int)yCenter, (int)(xCenter + outerRadius), (int)yCenter);
+                    graphics.drawLine((int) (xCenter + innerRadius), (int) yCenter,
+                                      (int) (xCenter + outerRadius), (int) yCenter);
                     break;
                 case SOUTH:
-                    graphics.drawLine((int)xCenter, (int)(yCenter + innerRadius), (int)xCenter, (int)(yCenter + outerRadius));
+                    graphics.drawLine((int) xCenter, (int) (yCenter + innerRadius),
+                                      (int) xCenter, (int) (yCenter + outerRadius));
                     break;
                 case WEST:
-                    graphics.drawLine((int)(xCenter - innerRadius), (int)yCenter, (int)(xCenter - outerRadius), (int)yCenter);
+                    graphics.drawLine((int) (xCenter - innerRadius), (int) yCenter,
+                                      (int) (xCenter - outerRadius), (int) yCenter);
+                    break;
+                default:
                     break;
             }
             // Draw clockwise from the origin, subtracting the frequency each time
@@ -295,12 +316,12 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
             double frequencyAngleRadians = frequency / fullRange * Math.PI * 2.0;
             double angleRadians = startAngleRadians - frequencyAngleRadians;
             for (int i = 0; i < numMarks; i++) {
-                float cosAngle = (float)Math.cos(angleRadians);
-                float sinAngle = (float)Math.sin(angleRadians);
-                int xInner = (int)(xCenter + (innerRadius * cosAngle) + 0.5f);
-                int yInner = (int)(yCenter + (innerRadius * sinAngle) + 0.5f);
-                int xOuter = (int)(xCenter + (outerRadius * cosAngle) + 0.5f);
-                int yOuter = (int)(yCenter + (outerRadius * sinAngle) + 0.5f);
+                float cosAngle = (float) Math.cos(angleRadians);
+                float sinAngle = (float) Math.sin(angleRadians);
+                int xInner = (int) (xCenter + (innerRadius * cosAngle) + 0.5f);
+                int yInner = (int) (yCenter + (innerRadius * sinAngle) + 0.5f);
+                int xOuter = (int) (xCenter + (outerRadius * cosAngle) + 0.5f);
+                int yOuter = (int) (yCenter + (outerRadius * sinAngle) + 0.5f);
                 graphics.drawLine(xInner, yInner, xOuter, yOuter);
                 angleRadians -= frequencyAngleRadians;
             }
@@ -321,102 +342,102 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         }
     }
 
-    public Font getFont() {
+    public final Font getFont() {
         return font;
     }
 
-    public void setFont(Font font) {
+    public final void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         this.font = font;
         repaintComponent();
     }
 
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         setFont(decodeFont(font));
     }
 
-    public final void setFont(Dictionary<String, ?> font) {
+    public final void setFont(final Dictionary<String, ?> font) {
         setFont(Theme.deriveFont(font));
     }
 
-    public Color getBackgroundColor() {
+    public final Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public final void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(final Color backgroundColor) {
         // We allow a null background color here
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
 
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
+    public final void setBackgroundColor(final int backgroundColor) {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
-    public Color getColor() {
+    public final Color getColor() {
         return color;
     }
 
-    public final void setColor(Color color) {
+    public final void setColor(final Color color) {
         Utils.checkNull(color, "color");
         this.color = color;
         repaintComponent();
     }
 
-    public final void setColor(String color) {
+    public final void setColor(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
-    public final void setColor(int color) {
+    public final void setColor(final int color) {
         Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
-    public Color getGaugeColor() {
+    public final Color getGaugeColor() {
         return gaugeColor;
     }
 
-    public final void setGaugeColor(Color gaugeColor) {
+    public final void setGaugeColor(final Color gaugeColor) {
         Utils.checkNull(gaugeColor, "gaugeColor");
         this.gaugeColor = gaugeColor;
         repaintComponent();
     }
 
-    public final void setGaugeColor(String gaugeColor) {
+    public final void setGaugeColor(final String gaugeColor) {
         setGaugeColor(GraphicsUtilities.decodeColor(gaugeColor, "gaugeColor"));
     }
 
-    public final void setGaugeColor(int gaugeColor) {
+    public final void setGaugeColor(final int gaugeColor) {
         Theme theme = currentTheme();
         setGaugeColor(theme.getColor(gaugeColor));
     }
 
-    public Color getTextColor() {
+    public final Color getTextColor() {
         return textColor;
     }
 
-    public final void setTextColor(Color textColor) {
+    public final void setTextColor(final Color textColor) {
         Utils.checkNull(textColor, "textColor");
         this.textColor = textColor;
         repaintComponent();
     }
 
-    public final void setTextColor(String textColor) {
+    public final void setTextColor(final String textColor) {
         setTextColor(GraphicsUtilities.decodeColor(textColor, "textColor"));
     }
 
-    public final void setTextColor(int textColor) {
+    public final void setTextColor(final int textColor) {
         Theme theme = currentTheme();
         setTextColor(theme.getColor(textColor));
     }
 
-    public Color getTickColor() {
+    public final Color getTickColor() {
         return tickColor;
     }
 
@@ -425,22 +446,22 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * <p> Note: to disable tick drawing, use a style of "showTickMarks:false".
      * @param tickColor Any color value, or {@code null} to use the background color.
      */
-    public final void setTickColor(Color tickColor) {
+    public final void setTickColor(final Color tickColor) {
         // Tick color can be null to use the background color.
         this.tickColor = tickColor;
         repaintComponent();
     }
 
-    public final void setTickColor(String tickColor) {
+    public final void setTickColor(final String tickColor) {
         setTickColor(GraphicsUtilities.decodeColor(tickColor, "tickColor"));
     }
 
-    public final void setTickColor(int tickColor) {
+    public final void setTickColor(final int tickColor) {
         Theme theme = currentTheme();
         setTickColor(theme.getColor(tickColor));
     }
 
-    public Color getBorderColor() {
+    public final Color getBorderColor() {
         return borderColor;
     }
 
@@ -450,22 +471,22 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * or set this color to null.
      * @param borderColor Any color value, or {@code null} to disable border drawing.
      */
-    public final void setBorderColor(Color borderColor) {
+    public final void setBorderColor(final Color borderColor) {
         // Border color can be null to not draw the border.
         this.borderColor = borderColor;
         repaintComponent();
     }
 
-    public final void setBorderColor(String borderColor) {
+    public final void setBorderColor(final String borderColor) {
         setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
-    public final void setBorderColor(int borderColor) {
+    public final void setBorderColor(final int borderColor) {
         Theme theme = currentTheme();
         setBorderColor(theme.getColor(borderColor));
     }
 
-    public Color getWarningColor() {
+    public final Color getWarningColor() {
         return this.warningColor;
     }
 
@@ -478,22 +499,21 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * @param warningColor A color for the warning levels, or {@code null} to disable
      * the warning level checks.
      */
-    public final void setWarningColor(Color warningColor) {
-        // Note: null is okay here to effectively disable using the warning color logic
+    public final void setWarningColor(final Color warningColor) {
         this.warningColor = warningColor;
         repaintComponent();
     }
 
-    public final void setWarningColor(String warningColor) {
+    public final void setWarningColor(final String warningColor) {
         setWarningColor(GraphicsUtilities.decodeColor(warningColor, "warningColor"));
     }
 
-    public final void setWarningColor(int warningColor) {
+    public final void setWarningColor(final int warningColor) {
         Theme theme = currentTheme();
         setWarningColor(theme.getColor(warningColor));
     }
 
-    public Color getCriticalColor() {
+    public final Color getCriticalColor() {
         return this.criticalColor;
     }
 
@@ -506,25 +526,24 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * @param criticalColor A color for the critical levels, or {@code null} to disable
      * the critical level checks.
      */
-    public final void setCriticalColor(Color criticalColor) {
-        // Note: null is okay here to disable using the critical color logic
+    public final void setCriticalColor(final Color criticalColor) {
         this.criticalColor = criticalColor;
     }
 
-    public final void setCriticalColor(String criticalColor) {
+    public final void setCriticalColor(final String criticalColor) {
         setCriticalColor(GraphicsUtilities.decodeColor(criticalColor, "criticalColor"));
     }
 
-    public final void setCriticalColor(int criticalColor) {
+    public final void setCriticalColor(final int criticalColor) {
         Theme theme = currentTheme();
         setCriticalColor(theme.getColor(criticalColor));
     }
 
-    public Insets getPadding() {
+    public final Insets getPadding() {
         return padding;
     }
 
-    public void setPadding(Insets padding) {
+    public final void setPadding(final Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
@@ -537,7 +556,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      *
      * @param padding A dictionary containing the keys {top ,left, bottom, and/or right}.
      */
-    public final void setPadding(Dictionary<String, ?> padding) {
+    public final void setPadding(final Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -547,7 +566,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      *
      * @param padding A sequence containing the values [top left, bottom, right].
      */
-    public final void setPadding(Sequence<?> padding) {
+    public final void setPadding(final Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -557,7 +576,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      *
      * @param padding A single value to use for the padding on all sides.
      */
-    public final void setPadding(int padding) {
+    public final void setPadding(final int padding) {
         setPadding(new Insets(padding));
     }
 
@@ -567,7 +586,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      *
      * @param padding A single value to use for the padding on all sides.
      */
-    public void setPadding(Number padding) {
+    public final void setPadding(final Number padding) {
         setPadding(new Insets(padding));
     }
 
@@ -578,11 +597,11 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * @param padding A string containing an integer or a JSON map or list with
      * keys/values top, left, bottom, and/or right.
      */
-    public final void setPadding(String padding) {
+    public final void setPadding(final String padding) {
         setPadding(Insets.decode(padding));
     }
 
-    public float getThickness() {
+    public final float getThickness() {
         return thickness;
     }
 
@@ -591,52 +610,52 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * @param thickness The new value (default is {@link #STROKE_WIDTH}).
      * @throws IllegalArgumentException if the value is 0.0 or less.
      */
-    public final void setThickness(float thickness) {
+    public final void setThickness(final float thickness) {
         Utils.checkPositive(thickness, "thickness");
 
         this.thickness = thickness;
         repaintComponent();
     }
 
-    public final void setThickness(Number thickness) {
+    public final void setThickness(final Number thickness) {
         Utils.checkNull(thickness, "thickness");
         setThickness(thickness.floatValue());
     }
 
-    public final void setThickness(String thickness) {
+    public final void setThickness(final String thickness) {
         Utils.checkNullOrEmpty(thickness, "thickness");
         setThickness(StringUtils.toNumber(thickness, Float.class));
     }
 
-    public boolean getShowTickMarks() {
+    public final boolean getShowTickMarks() {
         return showTickMarks;
     }
 
-    public final void setShowTickMarks(boolean showTickMarks) {
+    public final void setShowTickMarks(final boolean showTickMarks) {
         this.showTickMarks = showTickMarks;
         repaintComponent();
     }
 
-    public T getTickFrequency() {
+    public final T getTickFrequency() {
         return tickFrequency;
     }
 
-    public final void setTickFrequency(T frequency) {
+    public final void setTickFrequency(final T frequency) {
         Utils.checkNull(frequency, "frequency");
         this.tickFrequency = frequency;
         repaintComponent();
     }
 
-    public boolean getShowBorder() {
+    public final boolean getShowBorder() {
         return showBorder;
     }
 
-    public final void setShowBorder(boolean showBorder) {
+    public final void setShowBorder(final boolean showBorder) {
         this.showBorder = showBorder;
         repaintComponent();
     }
 
-    public float getBorderThickness() {
+    public final float getBorderThickness() {
         return borderThickness;
     }
 
@@ -645,24 +664,24 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * @param borderThickness The new value (default is 1.0f).
      * @throws IllegalArgumentException if the value is 0.0 or less.
      */
-    public final void setBorderThickness(float borderThickness) {
+    public final void setBorderThickness(final float borderThickness) {
         Utils.checkPositive(borderThickness, "borderThickness");
 
         this.borderThickness = borderThickness;
         invalidateComponent();
     }
 
-    public final void setBorderThickness(Number borderThickness) {
+    public final void setBorderThickness(final Number borderThickness) {
         Utils.checkNull(borderThickness, "borderThickness");
         setBorderThickness(borderThickness.floatValue());
     }
 
-    public final void setBorderThickness(String borderThickness) {
+    public final void setBorderThickness(final String borderThickness) {
         Utils.checkNullOrEmpty(borderThickness, "borderThickness");
         setBorderThickness(StringUtils.toNumber(borderThickness, Float.class));
     }
 
-    public boolean getOnlyMaxColor() {
+    public final boolean getOnlyMaxColor() {
         return onlyMaxColor;
     }
 
@@ -673,43 +692,43 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
      * and the warning or critical levels (again if set), <tt>false</tt> to
      * show multiple segments.
      */
-    public final void setOnlyMaxColor(boolean onlyMaxColor) {
+    public final void setOnlyMaxColor(final boolean onlyMaxColor) {
         this.onlyMaxColor = onlyMaxColor;
         repaintComponent();
     }
 
     @Override
-    public void originChanged(Gauge<T> gauge, Origin previousOrigin) {
+    public void originChanged(final Gauge<T> gauge, final Origin previousOrigin) {
         invalidateComponent();
     }
 
     @Override
-    public void valueChanged(Gauge<T> gauge, T previousValue) {
+    public void valueChanged(final Gauge<T> gauge, final T previousValue) {
         repaintComponent();
     }
 
     @Override
-    public void textChanged(Gauge<T> gauge, String previousText) {
+    public void textChanged(final Gauge<T> gauge, final String previousText) {
         repaintComponent();
     }
 
     @Override
-    public void minValueChanged(Gauge<T> gauge, T previousMinValue) {
+    public void minValueChanged(final Gauge<T> gauge, final T previousMinValue) {
         repaintComponent();
     }
 
     @Override
-    public void maxValueChanged(Gauge<T> gauge, T previousMaxValue) {
+    public void maxValueChanged(final Gauge<T> gauge, final T previousMaxValue) {
         repaintComponent();
     }
 
     @Override
-    public void warningLevelChanged(Gauge<T> gauge, T previousWarningLevel) {
+    public void warningLevelChanged(final Gauge<T> gauge, final T previousWarningLevel) {
         repaintComponent();
     }
 
     @Override
-    public void criticalLevelChanged(Gauge<T> gauge, T previousCriticalLevel) {
+    public void criticalLevelChanged(final Gauge<T> gauge, final T previousCriticalLevel) {
         repaintComponent();
     }
 }

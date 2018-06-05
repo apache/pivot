@@ -29,28 +29,28 @@ public class HyperlinkButtonTest2 implements Application {
     private Frame frame = null;
 
     private static final String BXML_FILE =
-        "<Frame title=\"Hyperlink Button Test 2\"" +
-        " xmlns:bxml=\"http://pivot.apache.org/bxml\"" +
-        " xmlns:content=\"org.apache.pivot.wtk.content\"" +
-        " xmlns=\"org.apache.pivot.wtk\">" +
-        "  <BoxPane orientation=\"vertical\">" +
-        "    <HyperlinkButton url=\"http://commons.apache.org\"/>" +
-        "    <HyperlinkButton url=\"http://apache.org\">" +
-        "      <content:ButtonData text=\"ASF website\" icon=\"/org/apache/pivot/tests/house.png\"/>" +
-        "    </HyperlinkButton>" +
-        "  </BoxPane>" +
-        "</Frame>";
+        "<Frame title=\"Hyperlink Button Test 2\""
+      + " xmlns:bxml=\"http://pivot.apache.org/bxml\""
+      + " xmlns:content=\"org.apache.pivot.wtk.content\""
+      + " xmlns=\"org.apache.pivot.wtk\">"
+      + "  <BoxPane orientation=\"vertical\">"
+      + "    <HyperlinkButton url=\"http://commons.apache.org\"/>"
+      + "    <HyperlinkButton url=\"http://apache.org\">"
+      + "      <content:ButtonData text=\"ASF website\" icon=\"/org/apache/pivot/tests/house.png\"/>"
+      + "    </HyperlinkButton>"
+      + "  </BoxPane>"
+      + "</Frame>";
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer serializer = new BXMLSerializer();
-        frame = (Frame)serializer.readObject(new ByteArrayInputStream(BXML_FILE.getBytes()));
+        frame = (Frame) serializer.readObject(new ByteArrayInputStream(BXML_FILE.getBytes()));
 
         frame.open(display);
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (frame != null) {
             frame.close();
         }
@@ -58,7 +58,7 @@ public class HyperlinkButtonTest2 implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(HyperlinkButtonTest2.class, args);
     }
 }

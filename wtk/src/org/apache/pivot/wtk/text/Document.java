@@ -24,25 +24,25 @@ public class Document extends Block {
         super();
     }
 
-    public Document(Document document, boolean recursive) {
+    public Document(final Document document, final boolean recursive) {
         super(document, recursive);
     }
 
     @Override
-    protected void setParent(Element parent) {
+    protected void setParent(final Element parent) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Document duplicate(boolean recursive) {
+    public Document duplicate(final boolean recursive) {
         return new Document(this, recursive);
     }
 
     @Override
-    public void insert(Node node, int index) {
+    public void insert(final Node node, final int index) {
         if (!(node instanceof Block)) {
-            throw new IllegalArgumentException("Child node (" +
-                node.getClass().getSimpleName() + ") must be an instance of "
+            throw new IllegalArgumentException("Child node ("
+                + node.getClass().getSimpleName() + ") must be an instance of "
                 + Block.class.getName());
         }
 
