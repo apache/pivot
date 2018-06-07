@@ -82,6 +82,7 @@ import org.apache.pivot.wtk.TextArea;
 import org.apache.pivot.wtk.TextInput;
 import org.apache.pivot.wtk.TextPane;
 import org.apache.pivot.wtk.Theme;
+import org.apache.pivot.wtk.ThemeNotFoundException;
 import org.apache.pivot.wtk.Tooltip;
 import org.apache.pivot.wtk.TreeView;
 import org.apache.pivot.wtk.VFSBrowser;
@@ -91,7 +92,8 @@ import org.apache.pivot.wtk.skin.ComponentSkin;
 import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
- * Terra theme.
+ * The default (and only) Pivot theme ("Terra"), which is highly customizable
+ * as far as color and style using configuration files and runtime attributes.
  */
 public final class TerraTheme extends Theme {
     private Font font = null;
@@ -136,85 +138,80 @@ public final class TerraTheme extends Theme {
     private Map<String, Map<String, ?>> themeDefaultStyles = null;
 
 
+    /**
+     * Construct the "Terra" theme and set the default skin classes for each component.
+     */
     @SuppressWarnings("unchecked")
     public TerraTheme() {
         // Note: these classes are in addition to the classes listed in Theme's constructor.
-        componentSkinMap.put(Accordion.class, TerraAccordionSkin.class);
-        componentSkinMap.put(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
-        componentSkinMap.put(Alert.class, TerraAlertSkin.class);
-        componentSkinMap.put(Border.class, TerraBorderSkin.class);
-        componentSkinMap.put(Calendar.class, TerraCalendarSkin.class);
-        componentSkinMap.put(CalendarButton.class, TerraCalendarButtonSkin.class);
-        componentSkinMap.put(Checkbox.class, TerraCheckboxSkin.class);
-        componentSkinMap.put(ColorChooser.class, TerraColorChooserSkin.class);
-        componentSkinMap.put(ColorChooserButton.class, TerraColorChooserButtonSkin.class);
-        componentSkinMap.put(Dialog.class, TerraDialogSkin.class);
-        componentSkinMap.put(Expander.class, TerraExpanderSkin.class);
-        componentSkinMap.put(FileBrowser.class, TerraFileBrowserSkin.class);
-        componentSkinMap.put(FileBrowserSheet.class, TerraFileBrowserSheetSkin.class);
-        componentSkinMap.put(Form.class, TerraFormSkin.class);
-        componentSkinMap.put(Frame.class, TerraFrameSkin.class);
-        componentSkinMap.put(Gauge.class, TerraGaugeSkin.class);
-        componentSkinMap.put(GridPane.class, TerraGridPaneSkin.class);
-        componentSkinMap.put(HyperlinkButton.class, TerraLinkButtonSkin.class);
-        componentSkinMap.put(Label.class, TerraLabelSkin.class);
-        componentSkinMap.put(LinkButton.class, TerraLinkButtonSkin.class);
-        componentSkinMap.put(ListButton.class, TerraListButtonSkin.class);
-        componentSkinMap.put(ListView.class, TerraListViewSkin.class);
-        componentSkinMap.put(Menu.class, TerraMenuSkin.class);
-        componentSkinMap.put(Menu.Item.class, TerraMenuItemSkin.class);
-        componentSkinMap.put(MenuBar.class, TerraMenuBarSkin.class);
-        componentSkinMap.put(MenuBar.Item.class, TerraMenuBarItemSkin.class);
-        componentSkinMap.put(MenuButton.class, TerraMenuButtonSkin.class);
-        componentSkinMap.put(MenuPopup.class, TerraMenuPopupSkin.class);
-        componentSkinMap.put(Meter.class, TerraMeterSkin.class);
-        componentSkinMap.put(Palette.class, TerraPaletteSkin.class);
-        componentSkinMap.put(Panorama.class, TerraPanoramaSkin.class);
-        componentSkinMap.put(Prompt.class, TerraPromptSkin.class);
-        componentSkinMap.put(PushButton.class, TerraPushButtonSkin.class);
-        componentSkinMap.put(RadioButton.class, TerraRadioButtonSkin.class);
-        componentSkinMap.put(Rollup.class, TerraRollupSkin.class);
-        componentSkinMap.put(ScrollBar.class, TerraScrollBarSkin.class);
-        componentSkinMap.put(ScrollPane.class, TerraScrollPaneSkin.class);
-        componentSkinMap.put(ScrollPane.Corner.class, TerraScrollPaneCornerSkin.class);
-        componentSkinMap.put(Separator.class, TerraSeparatorSkin.class);
-        componentSkinMap.put(Sheet.class, TerraSheetSkin.class);
-        componentSkinMap.put(Slider.class, TerraSliderSkin.class);
-        componentSkinMap.put(Spinner.class, TerraSpinnerSkin.class);
-        componentSkinMap.put(SplitPane.class, TerraSplitPaneSkin.class);
-        componentSkinMap.put(SuggestionPopup.class, TerraSuggestionPopupSkin.class);
-        componentSkinMap.put(TablePane.class, TerraTablePaneSkin.class);
-        componentSkinMap.put(TableViewHeader.class, TerraTableViewHeaderSkin.class);
-        componentSkinMap.put(TableView.class, TerraTableViewSkin.class);
-        componentSkinMap.put(TabPane.class, TerraTabPaneSkin.class);
-        componentSkinMap.put(TextArea.class, TerraTextAreaSkin.class);
-        componentSkinMap.put(TextPane.class, TerraTextPaneSkin.class);
-        componentSkinMap.put(TextInput.class, TerraTextInputSkin.class);
-        componentSkinMap.put(Tooltip.class, TerraTooltipSkin.class);
-        componentSkinMap.put(TreeView.class, TerraTreeViewSkin.class);
-        componentSkinMap.put(VFSBrowser.class, TerraVFSBrowserSkin.class);
-        componentSkinMap.put(VFSBrowserSheet.class, TerraVFSBrowserSheetSkin.class);
+        set(Accordion.class, TerraAccordionSkin.class);
+        set(ActivityIndicator.class, TerraActivityIndicatorSkin.class);
+        set(Alert.class, TerraAlertSkin.class);
+        set(Border.class, TerraBorderSkin.class);
+        set(Calendar.class, TerraCalendarSkin.class);
+        set(CalendarButton.class, TerraCalendarButtonSkin.class);
+        set(Checkbox.class, TerraCheckboxSkin.class);
+        set(ColorChooser.class, TerraColorChooserSkin.class);
+        set(ColorChooserButton.class, TerraColorChooserButtonSkin.class);
+        set(Dialog.class, TerraDialogSkin.class);
+        set(Expander.class, TerraExpanderSkin.class);
+        set(FileBrowser.class, TerraFileBrowserSkin.class);
+        set(FileBrowserSheet.class, TerraFileBrowserSheetSkin.class);
+        set(Form.class, TerraFormSkin.class);
+        set(Frame.class, TerraFrameSkin.class);
+        set(Gauge.class, TerraGaugeSkin.class);
+        set(GridPane.class, TerraGridPaneSkin.class);
+        set(HyperlinkButton.class, TerraLinkButtonSkin.class);
+        set(Label.class, TerraLabelSkin.class);
+        set(LinkButton.class, TerraLinkButtonSkin.class);
+        set(ListButton.class, TerraListButtonSkin.class);
+        set(ListView.class, TerraListViewSkin.class);
+        set(Menu.class, TerraMenuSkin.class);
+        set(Menu.Item.class, TerraMenuItemSkin.class);
+        set(MenuBar.class, TerraMenuBarSkin.class);
+        set(MenuBar.Item.class, TerraMenuBarItemSkin.class);
+        set(MenuButton.class, TerraMenuButtonSkin.class);
+        set(MenuPopup.class, TerraMenuPopupSkin.class);
+        set(Meter.class, TerraMeterSkin.class);
+        set(Palette.class, TerraPaletteSkin.class);
+        set(Panorama.class, TerraPanoramaSkin.class);
+        set(Prompt.class, TerraPromptSkin.class);
+        set(PushButton.class, TerraPushButtonSkin.class);
+        set(RadioButton.class, TerraRadioButtonSkin.class);
+        set(Rollup.class, TerraRollupSkin.class);
+        set(ScrollBar.class, TerraScrollBarSkin.class);
+        set(ScrollPane.class, TerraScrollPaneSkin.class);
+        set(ScrollPane.Corner.class, TerraScrollPaneCornerSkin.class);
+        set(Separator.class, TerraSeparatorSkin.class);
+        set(Sheet.class, TerraSheetSkin.class);
+        set(Slider.class, TerraSliderSkin.class);
+        set(Spinner.class, TerraSpinnerSkin.class);
+        set(SplitPane.class, TerraSplitPaneSkin.class);
+        set(SuggestionPopup.class, TerraSuggestionPopupSkin.class);
+        set(TablePane.class, TerraTablePaneSkin.class);
+        set(TableViewHeader.class, TerraTableViewHeaderSkin.class);
+        set(TableView.class, TerraTableViewSkin.class);
+        set(TabPane.class, TerraTabPaneSkin.class);
+        set(TextArea.class, TerraTextAreaSkin.class);
+        set(TextPane.class, TerraTextPaneSkin.class);
+        set(TextInput.class, TerraTextInputSkin.class);
+        set(Tooltip.class, TerraTooltipSkin.class);
+        set(TreeView.class, TerraTreeViewSkin.class);
+        set(VFSBrowser.class, TerraVFSBrowserSkin.class);
+        set(VFSBrowserSheet.class, TerraVFSBrowserSheetSkin.class);
 
-        componentSkinMap.put(TerraCalendarSkin.DateButton.class,
-            TerraCalendarSkin.DateButtonSkin.class);
-        componentSkinMap.put(TerraExpanderSkin.ShadeButton.class,
-            TerraExpanderSkin.ShadeButtonSkin.class);
-        componentSkinMap.put(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
-        componentSkinMap.put(TerraRollupSkin.RollupButton.class,
-            TerraRollupSkin.RollupButtonSkin.class);
-        componentSkinMap.put(TerraScrollBarSkin.ScrollButton.class,
-            TerraScrollBarSkin.ScrollButtonSkin.class);
-        componentSkinMap.put(TerraScrollBarSkin.Handle.class, TerraScrollBarSkin.HandleSkin.class);
-        componentSkinMap.put(TerraSliderSkin.Thumb.class, TerraSliderSkin.ThumbSkin.class);
-        componentSkinMap.put(TerraSpinnerSkin.SpinButton.class,
-            TerraSpinnerSkin.SpinButtonSkin.class);
-        componentSkinMap.put(TerraSpinnerSkin.SpinnerContent.class,
-            TerraSpinnerSkin.SpinnerContentSkin.class);
-        componentSkinMap.put(TerraSplitPaneSkin.Splitter.class,
-            TerraSplitPaneSkin.SplitterSkin.class);
-        componentSkinMap.put(TerraSplitPaneSkin.SplitterShadow.class,
-            TerraSplitPaneSkin.SplitterShadowSkin.class);
-        componentSkinMap.put(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
+        set(TerraCalendarSkin.DateButton.class, TerraCalendarSkin.DateButtonSkin.class);
+        set(TerraExpanderSkin.ShadeButton.class, TerraExpanderSkin.ShadeButtonSkin.class);
+        set(TerraFrameSkin.FrameButton.class, TerraFrameSkin.FrameButtonSkin.class);
+        set(TerraRollupSkin.RollupButton.class, TerraRollupSkin.RollupButtonSkin.class);
+        set(TerraScrollBarSkin.ScrollButton.class, TerraScrollBarSkin.ScrollButtonSkin.class);
+        set(TerraScrollBarSkin.Handle.class, TerraScrollBarSkin.HandleSkin.class);
+        set(TerraSliderSkin.Thumb.class, TerraSliderSkin.ThumbSkin.class);
+        set(TerraSpinnerSkin.SpinButton.class, TerraSpinnerSkin.SpinButtonSkin.class);
+        set(TerraSpinnerSkin.SpinnerContent.class, TerraSpinnerSkin.SpinnerContentSkin.class);
+        set(TerraSplitPaneSkin.Splitter.class, TerraSplitPaneSkin.SplitterSkin.class);
+        set(TerraSplitPaneSkin.SplitterShadow.class, TerraSplitPaneSkin.SplitterShadowSkin.class);
+        set(TerraTabPaneSkin.TabButton.class, TerraTabPaneSkin.TabButtonSkin.class);
 
         String packageName = getClass().getPackage().getName();
 
@@ -236,14 +233,12 @@ public final class TerraTheme extends Theme {
             if (location.startsWith("/")) {
                 locationURL = classLoader.getResource(location.substring(1));
             } else {
-                locationURL = classLoader.getResource(packageName.replace('.', '/') + "/"
-                    + location);
+                locationURL = classLoader.getResource(packageName.replace('.', '/') + "/" + location);
             }
         }
 
         if (locationURL == null) {
-            throw new RuntimeException("Unable to locate color scheme resource \"" + location
-                + "\".");
+            throw new ThemeNotFoundException("Unable to locate color scheme resource \"" + location + "\".");
         }
 
         load(locationURL);
@@ -275,7 +270,16 @@ public final class TerraTheme extends Theme {
         }
     }
 
-    private Color getColorProperty(Map<String, ?> properties, String colorPropertyName) {
+    /**
+     * Get the given color property from the color properties map, doing the color decode from
+     * the string property value.
+     *
+     * @param properties The color properties map.
+     * @param colorPropertyName Name of the color property to get.
+     * @return The decoded color value or <tt>null</tt> if the property by that name cannot be found.
+     * @see GraphicsUtilities#decodeColor
+     */
+    private Color getColorProperty(final Map<String, ?> properties, final String colorPropertyName) {
         String colorString = (String) properties.get(colorPropertyName);
         if (colorString != null) {
             return GraphicsUtilities.decodeColor(colorString, colorPropertyName);
@@ -283,7 +287,12 @@ public final class TerraTheme extends Theme {
         return null;
     }
 
-    private void load(URL location) {
+    /**
+     * Load the theme from the configuration file at the given URL location.
+     *
+     * @param location Where to load the theme configuration from.
+     */
+    private void load(final URL location) {
         Utils.checkNull(location, "location");
 
         try (InputStream inputStream = location.openStream()) {
@@ -324,16 +333,8 @@ public final class TerraTheme extends Theme {
                 colors.add(brighten(baseColor));
             }
 
-
-            @SuppressWarnings("unchecked")
-            Map<String, String> messageIconNames = (Map<String, String>) properties.get(MESSAGE_ICONS_PROPERTY);
-            messageIcons = new HashMap<>();
-            loadMessageIcons(messageIconNames, messageIcons);
-
-            @SuppressWarnings("unchecked")
-            Map<String, String> smallMessageIconNames = (Map<String, String>) properties.get(SMALL_MESSAGE_ICONS_PROPERTY);
-            smallMessageIcons = new HashMap<>();
-            loadMessageIcons(smallMessageIconNames, smallMessageIcons);
+            messageIcons = loadMessageIcons(properties, MESSAGE_ICONS_PROPERTY);
+            smallMessageIcons = loadMessageIcons(properties, SMALL_MESSAGE_ICONS_PROPERTY);
 
             if ((defaultBackgroundColor = getColorProperty(properties, DEFAULT_BACKGROUND_COLOR_PROPERTY)) == null) {
                 defaultBackgroundColor = super.getDefaultBackgroundColor();
@@ -341,15 +342,23 @@ public final class TerraTheme extends Theme {
             if ((defaultForegroundColor = getColorProperty(properties, DEFAULT_FOREGROUND_COLOR_PROPERTY)) == null) {
                 defaultForegroundColor = super.getDefaultForegroundColor();
             }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        } catch (SerializationException exception) {
+        } catch (IOException | SerializationException exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    private void loadMessageIcons(Map<String, String> messageIconNames,
-        Map<MessageType, Image> messageIconsMap) {
+    /**
+     * Load the default set of message icons for the given type.
+     *
+     * @param properties The theme properties map.
+     * @param propertyName The name of the property containing the icons.
+     * @return The map of icons for each {@link MessageType}.
+     */
+    private Map<MessageType, Image> loadMessageIcons(final Map<String, ?> properties, final String propertyName) {
+        @SuppressWarnings("unchecked")
+        Map<String, String> messageIconNames = (Map<String, String>) properties.get(propertyName);
+        Map<MessageType, Image> messageIconsMap = new HashMap<>();
+
         for (String messageIconType : messageIconNames) {
             String messageIconName = messageIconNames.get(messageIconType);
 
@@ -362,6 +371,7 @@ public final class TerraTheme extends Theme {
 
             messageIconsMap.put(MessageType.fromString(messageIconType), messageIcon);
         }
+        return messageIconsMap;
     }
 
     /**
@@ -378,19 +388,30 @@ public final class TerraTheme extends Theme {
      * @param font the font
      */
     @Override
-    public void setFont(Font font) {
+    public void setFont(final Font font) {
         Utils.checkNull(font, "Font");
 
         this.font = font;
     }
 
-    private void checkColorIndex(int index, int numberOfColors) {
+    /**
+     * Check the given color index against the total number of colors.
+     * @param index Index into the theme color chart.
+     * @param numberOfColors the total size of the color chart.
+     * @throws IllegalArgumentException if the index is out of range.
+     */
+    private void checkColorIndex(final int index, final int numberOfColors) {
         if (index < 0 || index >= numberOfColors) {
             throw new IllegalArgumentException("Color index out of range of [0 .. " + (numberOfColors - 1) + "].");
         }
     }
 
-    private void checkColorIndex(int index) {
+    /**
+     * Check the given color index against the {@link #getNumberOfColors} value.
+     * @param index Index into the theme color chart.
+     * @throws IllegalArgumentException if the index is out of range.
+     */
+    private void checkColorIndex(final int index) {
         checkColorIndex(index, getNumberOfColors());
     }
 
@@ -401,7 +422,7 @@ public final class TerraTheme extends Theme {
      * @param index the index of the color, starting from 0
      */
     @Override
-    public Color getColor(int index) {
+    public Color getColor(final int index) {
         checkColorIndex(index);
 
         return colors.get(index);
@@ -415,7 +436,7 @@ public final class TerraTheme extends Theme {
      * @param color the color to set
      */
     @Override
-    public void setColor(int index, Color color) {
+    public void setColor(final int index, final Color color) {
         checkColorIndex(index);
         Utils.checkNull(color, "Color");
 
@@ -428,7 +449,7 @@ public final class TerraTheme extends Theme {
      * @param index the index of the color, starting from 0
      */
     @Override
-    public Color getBaseColor(int index) {
+    public Color getBaseColor(final int index) {
         checkColorIndex(index, numberOfPaletteColors);
 
         return colors.get(index * 3 + 1);
@@ -441,7 +462,7 @@ public final class TerraTheme extends Theme {
      * @param baseColor the color to set
      */
     @Override
-    public void setBaseColor(int index, Color baseColor) {
+    public void setBaseColor(final int index, final Color baseColor) {
         checkColorIndex(index, numberOfPaletteColors);
         Utils.checkNull(baseColor, "Base color");
 
@@ -512,7 +533,7 @@ public final class TerraTheme extends Theme {
      * @param messageType The desired message type.
      * @return The icon image for this message type.
      */
-    public Image getMessageIcon(MessageType messageType) {
+    public Image getMessageIcon(final MessageType messageType) {
         return messageIcons.get(messageType);
     }
 
@@ -523,7 +544,7 @@ public final class TerraTheme extends Theme {
      * @param messageType The message type to change.
      * @param messageIcon The new icon image for this type.
      */
-    public void setMessageIcon(MessageType messageType, Image messageIcon) {
+    public void setMessageIcon(final MessageType messageType, final Image messageIcon) {
         Utils.checkNull(messageType, "Message type");
         Utils.checkNull(messageIcon, "Message icon");
 
@@ -537,7 +558,7 @@ public final class TerraTheme extends Theme {
      * @param messageType The message type to query.
      * @return The small image.
      */
-    public Image getSmallMessageIcon(MessageType messageType) {
+    public Image getSmallMessageIcon(final MessageType messageType) {
         return smallMessageIcons.get(messageType);
     }
 
@@ -548,7 +569,7 @@ public final class TerraTheme extends Theme {
      * @param messageType      The message type to change.
      * @param smallMessageIcon The new small icon for this type.
      */
-    public void setSmallMessageIcon(MessageType messageType, Image smallMessageIcon) {
+    public void setSmallMessageIcon(final MessageType messageType, final Image smallMessageIcon) {
         Utils.checkNull(messageType, "Message type");
         Utils.checkNull(smallMessageIcon, "Small message icon");
 
@@ -582,7 +603,7 @@ public final class TerraTheme extends Theme {
      * set.
      * @param color The color to brighten.
      */
-    public static Color brighten(Color color) {
+    public static Color brighten(final Color color) {
         if (!themeIsDark) {
             return ColorUtilities.adjustBrightness(color, colorMultiplier);
         }
@@ -595,7 +616,7 @@ public final class TerraTheme extends Theme {
      * <tt>colorMultiplier</tt> factor and <tt>themeDark</tt> flag already set.
      * @param color The color to darken.
      */
-    public static Color darken(Color color) {
+    public static Color darken(final Color color) {
         if (!themeIsDark) {
             return ColorUtilities.adjustBrightness(color, (colorMultiplier * -1.0f));
         }
@@ -608,17 +629,16 @@ public final class TerraTheme extends Theme {
      *
      * @param <T>  The skin class whose type we are dealing with.
      * @param skin The skin object of that type whose styles are to be set.
+     * @throws ThemeNotFoundException if the default styles cannot be located for the skin.
      */
-    public <T extends ComponentSkin> void setDefaultStyles(T skin) {
+    public <T extends ComponentSkin> void setDefaultStyles(final T skin) {
         String className = skin.getClass().getSimpleName();
         @SuppressWarnings("unchecked")
-        Map<String, Object> styleMap = (Map<String, Object>)themeDefaultStyles.get(className);
-        if (styleMap == null) {
-            throw new IllegalArgumentException("Cannot find default styles for class " + className);
+        Map<String, Object> defaultStyleMap = (Map<String, Object>) themeDefaultStyles.get(className);
+        if (defaultStyleMap == null) {
+            throw new ThemeNotFoundException("Cannot find default styles for class " + className);
         }
-        Component component = skin.getComponent();
-        Component.StyleDictionary styles = component.getStyles();
-        styles.putAll(styleMap);
+        skin.getComponent().getStyles().putAll(defaultStyleMap);
     }
 
 }

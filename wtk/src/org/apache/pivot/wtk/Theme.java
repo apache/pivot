@@ -58,8 +58,18 @@ import org.apache.pivot.wtk.skin.WindowSkin;
  * listeners.
  */
 public abstract class Theme {
-    protected HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap = new HashMap<>();
+    /**
+     * The map between the components and their associated skins.
+     * <p>Note: there are some skins that are partially or completely implemented
+     * in the "wtk" classes, and thus have entries made in here.  Most, however,
+     * have skins implemented in a specific theme, and therefore are initialized
+     * by the specific theme subclass.
+     */
+    private HashMap<Class<? extends Component>, Class<? extends Skin>> componentSkinMap = new HashMap<>();
 
+    /**
+     * The single installed theme for the application.
+     */
     private static Theme theme = null;
 
     public static final String NAME_KEY = "name";
@@ -80,34 +90,71 @@ public abstract class Theme {
         }
     }
 
+    /**
+     * Construct the generic theme by assigning default skin classes
+     * to some components.
+     */
     public Theme() {
-        componentSkinMap.put(Border.class, BorderSkin.class);
-        componentSkinMap.put(BoxPane.class, BoxPaneSkin.class);
-        componentSkinMap.put(CardPane.class, CardPaneSkin.class);
-        componentSkinMap.put(ColorChooserButtonSkin.ColorChooserPopup.class,
-            ColorChooserButtonSkin.ColorChooserPopupSkin.class);
-        componentSkinMap.put(FillPane.class, FillPaneSkin.class);
-        componentSkinMap.put(FlowPane.class, FlowPaneSkin.class);
-        componentSkinMap.put(GridPane.class, GridPaneSkin.class);
-        componentSkinMap.put(GridPane.Filler.class, GridPaneFillerSkin.class);
-        componentSkinMap.put(ImageView.class, ImageViewSkin.class);
-        componentSkinMap.put(Label.class, LabelSkin.class);
-        componentSkinMap.put(MovieView.class, MovieViewSkin.class);
-        componentSkinMap.put(NumberRuler.class, NumberRulerSkin.class);
-        componentSkinMap.put(Panel.class, PanelSkin.class);
-        componentSkinMap.put(Ruler.class, RulerSkin.class);
-        componentSkinMap.put(ScrollPane.class, ScrollPaneSkin.class);
-        componentSkinMap.put(Separator.class, SeparatorSkin.class);
-        componentSkinMap.put(StackPane.class, StackPaneSkin.class);
-        componentSkinMap.put(TablePane.class, TablePaneSkin.class);
-        componentSkinMap.put(TablePane.Filler.class, TablePaneFillerSkin.class);
-        componentSkinMap.put(TextArea.class, TextAreaSkin.class);
-        componentSkinMap.put(TextPane.class, TextPaneSkin.class);
-        componentSkinMap.put(Window.class, WindowSkin.class);
+        set(Border.class, BorderSkin.class);
+        set(BoxPane.class, BoxPaneSkin.class);
+        set(CardPane.class, CardPaneSkin.class);
+        set(ColorChooserButtonSkin.ColorChooserPopup.class, ColorChooserButtonSkin.ColorChooserPopupSkin.class);
+        set(FillPane.class, FillPaneSkin.class);
+        set(FlowPane.class, FlowPaneSkin.class);
+        set(GridPane.class, GridPaneSkin.class);
+        set(GridPane.Filler.class, GridPaneFillerSkin.class);
+        set(ImageView.class, ImageViewSkin.class);
+        set(Label.class, LabelSkin.class);
+        set(MovieView.class, MovieViewSkin.class);
+        set(NumberRuler.class, NumberRulerSkin.class);
+        set(Panel.class, PanelSkin.class);
+        set(Ruler.class, RulerSkin.class);
+        set(ScrollPane.class, ScrollPaneSkin.class);
+        set(Separator.class, SeparatorSkin.class);
+        set(StackPane.class, StackPaneSkin.class);
+        set(TablePane.class, TablePaneSkin.class);
+        set(TablePane.Filler.class, TablePaneFillerSkin.class);
+        set(TextArea.class, TextAreaSkin.class);
+        set(TextPane.class, TextPaneSkin.class);
+        set(Window.class, WindowSkin.class);
     }
 
-    public final Class<? extends Skin> getSkinClass(Class<? extends Component> componentClass) {
+    /**
+     * Returns the skin class responsible for skinning the specified component
+     * class.
+     *
+     * @param componentClass The component class.
+     * @return The skin class, or <tt>null</tt> if no skin mapping exists for
+     * the component class.
+     * @throws IllegalArgumentException if the given component class is <tt>null</tt>.
+     */
+    public final Class<? extends Skin> getSkinClass(final Class<? extends Component> componentClass) {
         return componentSkinMap.get(componentClass);
+    }
+
+    /**
+     * Sets the skin class responsible for skinning the specified component class.
+     *
+     * @param componentClass The component class.
+     * @param skinClass The skin class.
+     */
+    public void set(final Class<? extends Component> componentClass, final Class<? extends Skin> skinClass) {
+        Utils.checkNull(componentClass, "Component class");
+        Utils.checkNull(skinClass, "Skin class");
+
+        // Make sure if an override is made of a class that already has a skin that the new one
+        // is a subclass of the initial one.
+        Class<? extends Skin> existingSkinClass = componentSkinMap.get(componentClass);
+        if (existingSkinClass != null) {
+            if (existingSkinClass.isAssignableFrom(skinClass)) {
+                componentSkinMap.put(componentClass, skinClass);
+            } else {
+                throw new RuntimeException("Incompatible skin class " + skinClass.getName()
+                    + " being assigned to " + componentClass.getName() + " class.");
+            }
+        } else {
+            componentSkinMap.put(componentClass, skinClass);
+        }
     }
 
     /**
@@ -204,33 +251,6 @@ public abstract class Theme {
     public abstract <T extends ComponentSkin> void setDefaultStyles(T skin);
 
     /**
-     * Returns the skin class responsible for skinning the specified component
-     * class.
-     *
-     * @param componentClass The component class.
-     * @return The skin class, or <tt>null</tt> if no skin mapping exists for
-     * the component class.
-     */
-    public Class<? extends Skin> get(Class<? extends Component> componentClass) {
-        Utils.checkNull(componentClass, "Component class");
-
-        return componentSkinMap.get(componentClass);
-    }
-
-    /**
-     * Sets the skin class responsible for skinning the specified component class.
-     *
-     * @param componentClass The component class.
-     * @param skinClass The skin class.
-     */
-    public void set(Class<? extends Component> componentClass, Class<? extends Skin> skinClass) {
-        Utils.checkNull(componentClass, "Component class");
-        Utils.checkNull(skinClass, "Skin class");
-
-        componentSkinMap.put(componentClass, skinClass);
-    }
-
-    /**
      * Returns a safe (and general) default background color.
      *
      * @return White if the theme is not dark (default), or Black.
@@ -256,7 +276,7 @@ public abstract class Theme {
      */
     public static Theme getTheme() {
         if (theme == null) {
-            throw new IllegalStateException("No installed theme.");
+            throw new ThemeNotFoundException("No installed theme.");
         }
 
         return theme;
@@ -277,7 +297,7 @@ public abstract class Theme {
      * @return The new font derived from the current font.
      * @throws IllegalArgumentException if the supplied dictionary is <tt>null</tt>.
      */
-    public static Font deriveFont(Dictionary<String, ?> dictionary) {
+    public static Font deriveFont(final Dictionary<String, ?> dictionary) {
         Utils.checkNull(dictionary, "dictionary");
 
         Font font = theme.getFont();
