@@ -26,20 +26,20 @@ public interface CSVSerializerListener {
     /**
      * CSV Serializer listeners.
      */
-    public static class Listeners extends ListenerList<CSVSerializerListener>
+    public static final class Listeners extends ListenerList<CSVSerializerListener>
         implements CSVSerializerListener {
         @Override
-        public void beginList(CSVSerializer csvSerializer, List<?> list) {
+        public void beginList(final CSVSerializer csvSerializer, final List<?> list) {
             forEach(listener -> listener.beginList(csvSerializer, list));
         }
 
         @Override
-        public void endList(CSVSerializer csvSerializer) {
+        public void endList(final CSVSerializer csvSerializer) {
             forEach(listener -> listener.endList(csvSerializer));
         }
 
         @Override
-        public void readItem(CSVSerializer csvSerializer, Object item) {
+        public void readItem(final CSVSerializer csvSerializer, final Object item) {
             forEach(listener -> listener.readItem(csvSerializer, item));
         }
     }
@@ -51,17 +51,17 @@ public interface CSVSerializerListener {
     @Deprecated
     public static class Adapter implements CSVSerializerListener {
         @Override
-        public void beginList(CSVSerializer csvSerializer, List<?> list) {
+        public void beginList(final CSVSerializer csvSerializer, final List<?> list) {
             // empty block
         }
 
         @Override
-        public void endList(CSVSerializer csvSerializer) {
+        public void endList(final CSVSerializer csvSerializer) {
             // empty block
         }
 
         @Override
-        public void readItem(CSVSerializer csvSerializer, Object item) {
+        public void readItem(final CSVSerializer csvSerializer, final Object item) {
             // empty block
         }
     }

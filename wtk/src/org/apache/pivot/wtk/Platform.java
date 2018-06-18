@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Keyboard.Modifier;
 /**
  * Provides platform-specific information.
  */
-public class Platform {
+public final class Platform {
     private static FontRenderContext fontRenderContext;
 
     private static final int DEFAULT_MULTI_CLICK_INTERVAL = 400;
@@ -62,23 +62,34 @@ public class Platform {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         toolkit.addPropertyChangeListener("awt.font.desktophints", new PropertyChangeListener() {
             @Override
-            public void propertyChange(PropertyChangeEvent event) {
+            public void propertyChange(final PropertyChangeEvent event) {
                 initializeFontRenderContext();
                 ApplicationContext.invalidateDisplays();
             }
         });
     }
 
+    /** Private constructor because this is a utility class. */
+    private Platform() {
+    }
+
+    /**
+     * @return The platform's font rendering context.
+     */
     public static FontRenderContext getFontRenderContext() {
         return fontRenderContext;
     }
 
+    /**
+     * Do the one-time initialization of the font rendering context from the hints.
+     */
     private static void initializeFontRenderContext() {
         Object aaHint = null;
         Object fmHint = null;
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        java.util.Map<?, ?> fontDesktopHints = (java.util.Map<?, ?>) toolkit.getDesktopProperty("awt.font.desktophints");
+        java.util.Map<?, ?> fontDesktopHints =
+            (java.util.Map<?, ?>) toolkit.getDesktopProperty("awt.font.desktophints");
         if (fontDesktopHints != null) {
             aaHint = fontDesktopHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
             fmHint = fontDesktopHints.get(RenderingHints.KEY_FRACTIONALMETRICS);

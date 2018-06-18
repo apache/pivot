@@ -50,12 +50,13 @@ public class CSVSerializer implements Serializer<List<?>> {
     private Charset charset;
     private Type itemType;
 
-    private ArrayList<String> keys = new ArrayList<>();
+    private List<String> keys = new ArrayList<>();
 
     private boolean writeKeys = false;
     private boolean verbose = false;
 
     private int c = -1;
+    private static final int BOM = 0xFEFF;
 
     private CSVSerializerListener.Listeners csvSerializerListeners = null;
 
@@ -70,15 +71,15 @@ public class CSVSerializer implements Serializer<List<?>> {
         this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_ITEM_TYPE);
     }
 
-    public CSVSerializer(Charset charset) {
+    public CSVSerializer(final Charset charset) {
         this(charset, DEFAULT_ITEM_TYPE);
     }
 
-    public CSVSerializer(Type itemType) {
+    public CSVSerializer(final Type itemType) {
         this(Charset.forName(DEFAULT_CHARSET_NAME), itemType);
     }
 
-    public CSVSerializer(Charset charset, Type itemType) {
+    public CSVSerializer(final Charset charset, final Type itemType) {
         Utils.checkNull(charset, "charset");
         Utils.checkNull(itemType, "itemType");
 
@@ -117,7 +118,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param keys The keys to be read/written.
      * @throws IllegalArgumentException for {@code null} input.
      */
-    public void setKeys(Sequence<String> keys) {
+    public void setKeys(final Sequence<String> keys) {
         Utils.checkNull(keys, "keys");
 
         this.keys = new ArrayList<>(keys);
@@ -129,7 +130,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @param keys The list of keys to be read/written.
      * @throws IllegalArgumentException for {@code null} input.
      */
-    public void setKeys(String... keys) {
+    public void setKeys(final String... keys) {
         Utils.checkNull(keys, "keys");
 
         setKeys(new ArrayAdapter<>(keys));
@@ -151,7 +152,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * contain the keys. Otherwise, the first line will contain the first line
      * of data.
      */
-    public void setWriteKeys(boolean writeKeys) {
+    public void setWriteKeys(final boolean writeKeys) {
         this.writeKeys = writeKeys;
     }
 
@@ -170,7 +171,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      *
      * @param verbose Whether or not to echo the input.
      */
-    public void setVerbose(boolean verbose) {
+    public void setVerbose(final boolean verbose) {
         this.verbose = verbose;
     }
 
@@ -186,7 +187,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      */
     @SuppressWarnings("resource")
     @Override
-    public List<?> readObject(InputStream inputStream) throws IOException, SerializationException {
+    public List<?> readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
@@ -210,10 +211,11 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @throws SerializationException for any formatting errors with the data.
      * @throws IllegalArgumentException for {@code null} input reader.
      */
-    public List<?> readObject(Reader reader) throws IOException, SerializationException {
+    public List<?> readObject(final Reader reader) throws IOException, SerializationException {
         Utils.checkNull(reader, "reader");
 
         LineNumberReader lineNumberReader = new LineNumberReader(reader);
+        lineNumberReader.setLineNumber(1);
 
         if (keys.getLength() == 0) {
             // Read keys from first line
@@ -222,17 +224,16 @@ public class CSVSerializer implements Serializer<List<?>> {
                 throw new SerializationException("Could not read keys from input.");
             }
 
-            String[] keysLocal = line.split(",");
-            this.keys = new ArrayList<>(keysLocal.length);
+            String[] keysOnLine = line.split(",");
+            this.keys = new ArrayList<>(keysOnLine.length);
 
-            for (int i = 0; i < keysLocal.length; i++) {
-                String key = keysLocal[i];
+            for (String key : keysOnLine) {
                 this.keys.add(key.trim());
             }
         }
 
         // Create the list and notify the listeners
-        ArrayList<Object> items = new ArrayList<>();
+        List<Object> items = new ArrayList<>();
 
         if (csvSerializerListeners != null) {
             csvSerializerListeners.beginList(this, items);
@@ -241,8 +242,8 @@ public class CSVSerializer implements Serializer<List<?>> {
         // Move to the first character
         c = lineNumberReader.read();
 
-        // Ignore BOM (if present)
-        if (c == 0xFEFF) {
+        // Ignore Byte Order Mark (if present)
+        if (c == BOM) {
             c = lineNumberReader.read();
         }
 
@@ -263,7 +264,7 @@ public class CSVSerializer implements Serializer<List<?>> {
             }
         } catch (SerializationException exception) {
             System.err.println("An error occurred while processing input at line number "
-                + (lineNumberReader.getLineNumber() + 1));
+                + lineNumberReader.getLineNumber());
 
             throw exception;
         }
@@ -277,7 +278,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    private Object readItem(Reader reader) throws IOException, SerializationException {
+    private Object readItem(final Reader reader) throws IOException, SerializationException {
         Object item = null;
 
         if (c != -1) {
@@ -339,7 +340,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         return item;
     }
 
-    private String readValue(Reader reader) throws IOException, SerializationException {
+    private String readValue(final Reader reader) throws IOException, SerializationException {
         String value = null;
 
         // Read the next value from this line, returning null if there are
@@ -409,7 +410,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      */
     @SuppressWarnings("resource")
     @Override
-    public void writeObject(List<?> items, OutputStream outputStream) throws IOException,
+    public void writeObject(final List<?> items, final OutputStream outputStream) throws IOException,
         SerializationException {
         Utils.checkNull(items, "items");
         Utils.checkNull(outputStream, "outputStream");
@@ -434,7 +435,7 @@ public class CSVSerializer implements Serializer<List<?>> {
      * @throws IllegalArgumentException for {@code null} input arguments.
      */
     @SuppressWarnings("unchecked")
-    public void writeObject(List<?> items, Writer writer) throws IOException {
+    public void writeObject(final List<?> items, final Writer writer) throws IOException {
         Utils.checkNull(items, "items");
         Utils.checkNull(writer, "writer");
 
@@ -449,6 +450,8 @@ public class CSVSerializer implements Serializer<List<?>> {
 
                 writer.append(key);
             }
+
+            writer.append("\r\n");
         }
 
         for (Object item : items) {
@@ -495,7 +498,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     @Override
-    public String getMIMEType(List<?> objects) {
+    public String getMIMEType(final List<?> objects) {
         return MIME_TYPE + "; charset=" + charset.name();
     }
 

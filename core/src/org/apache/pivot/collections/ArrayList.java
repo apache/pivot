@@ -30,16 +30,24 @@ import org.apache.pivot.util.Utils;
  * Implementation of the {@link List} interface that is backed by an array. <p>
  * NOTE This class is not thread-safe. For concurrent access, use a
  * {@link org.apache.pivot.collections.concurrent.SynchronizedList}.
+ *
+ * @param <T> Type of the list elements.
  */
 public class ArrayList<T> implements List<T>, Serializable {
     private static final long serialVersionUID = 2123086211369612675L;
 
+    /**
+     * Iterator through the items of the ArrayList.
+     */
     private class ArrayListItemIterator implements ItemIterator<T> {
         private int index = 0;
         private int modificationCountLocal;
         private boolean forward = true;
 
-        public ArrayListItemIterator() {
+        /**
+         * Initialize the iterator.
+         */
+        ArrayListItemIterator() {
             modificationCountLocal = ArrayList.this.modificationCount;
         }
 
@@ -92,7 +100,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         @Override
-        public void insert(T item) {
+        public void insert(final T item) {
             indexBoundsCheck();
 
             ArrayList.this.insert(item, index);
@@ -100,7 +108,7 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
 
         @Override
-        public void update(T item) {
+        public void update(final T item) {
             indexBoundsCheck();
 
             ArrayList.this.update(forward ? index - 1 : index, item);
@@ -119,6 +127,10 @@ public class ArrayList<T> implements List<T>, Serializable {
             modificationCountLocal++;
         }
 
+        /**
+         * Check the current index against the ArrayList length.
+         * @throws IndexOutOfBoundsException if the index is out of range.
+         */
         private void indexBoundsCheck() {
             Utils.checkIndexBounds(index, 0, ArrayList.this.length);
         }
@@ -134,27 +146,55 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     public static final int DEFAULT_CAPACITY = 10;
 
+    /**
+     * Construct a new unsorted ArrayList with the default capacity.
+     */
     public ArrayList() {
         items = new Object[DEFAULT_CAPACITY];
     }
 
-    public ArrayList(Comparator<T> comparator) {
+    /**
+     * Construct a new ArrayList sorted by the given comparator, with the
+     * default capacity.
+     *
+     * @param comparator A comparator to sort the entries in the list.
+     */
+    public ArrayList(final Comparator<T> comparator) {
         this();
         this.comparator = comparator;
     }
 
-    public ArrayList(int capacity) {
+    /**
+     * Construct a new unsorted ArrayList with the given initial capacity.
+     *
+     * @param capacity The initial capacity for this list.
+     * @throws IllegalArgumentException if the given capacity is negative.
+     */
+    public ArrayList(final int capacity) {
         Utils.checkNonNegative(capacity, "capacity");
 
         items = new Object[capacity];
     }
 
-    @SuppressWarnings({ "unchecked" })
-    public ArrayList(T... items) {
+    /**
+     * Construct a new ArrayList with the given list of items.
+     *
+     * @param items The initial list of values for the list.
+     */
+    @SuppressWarnings("unchecked")
+    public ArrayList(final T... items) {
         this(items, 0, items.length);
     }
 
-    public ArrayList(T[] items, int index, int count) {
+    /**
+     * Construct a new ArrayList with a subset of the given list of items.
+     *
+     * @param items The full array of items to choose from.
+     * @param index The starting location of the items to choose.
+     * @param count The count of items to pick from the full array, starting at the index.
+     * @throws IndexOutOfBoundsException if the given index is negative or greater than the count.
+     */
+    public ArrayList(final T[] items, final int index, final int count) {
         Utils.checkNull(items, "items");
         Utils.checkIndexBounds(index, count, 0, items.length);
 
@@ -164,11 +204,24 @@ public class ArrayList<T> implements List<T>, Serializable {
         length = count;
     }
 
-    public ArrayList(Sequence<T> items) {
+    /**
+     * Construct a new ArrayList with the given sequence of items.
+     *
+     * @param items The initial list of values for the list.
+     */
+    public ArrayList(final Sequence<T> items) {
         this(items, 0, items.getLength());
     }
 
-    public ArrayList(Sequence<T> items, int index, int count) {
+    /**
+     * Construct a new ArrayList with a subset of the given sequence of items.
+     *
+     * @param items The full sequence of items to choose from.
+     * @param index The starting location of the items to choose.
+     * @param count The count of items to pick from the full sequence, starting at the index.
+     * @throws IndexOutOfBoundsException if the given index is negative or greater than the count.
+     */
+    public ArrayList(final Sequence<T> items, final int index, final int count) {
         Utils.checkNull(items, "items");
         Utils.checkIndexBounds(index, count, 0, items.getLength());
 
@@ -181,11 +234,24 @@ public class ArrayList<T> implements List<T>, Serializable {
         length = count;
     }
 
-    public ArrayList(ArrayList<T> arrayList) {
+    /**
+     * Copy the given ArrayList into a new one.
+     *
+     * @param arrayList The existing list to copy into this one.
+     */
+    public ArrayList(final ArrayList<T> arrayList) {
         this(arrayList, 0, arrayList.length);
     }
 
-    public ArrayList(ArrayList<T> arrayList, int index, int count) {
+    /**
+     * Construct a new ArrayList with a subset of the given ArrayList.
+     *
+     * @param arrayList The full list of items to choose from.
+     * @param index The starting location of the items to choose.
+     * @param count The count of items to pick from the full list, starting at the index.
+     * @throws IndexOutOfBoundsException if the given index is negative or greater than the count.
+     */
+    public ArrayList(final ArrayList<T> arrayList, final int index, final int count) {
         Utils.checkNull(arrayList, "arrayList");
         Utils.checkIndexBounds(index, count, 0, arrayList.length);
 
@@ -197,7 +263,12 @@ public class ArrayList<T> implements List<T>, Serializable {
         comparator = arrayList.comparator;
     }
 
-    public ArrayList(java.util.Collection<T> c) {
+    /**
+     * Copy the given collection into a new ArrayList.
+     *
+     * @param c The existing collection to copy into this list.
+     */
+    public ArrayList(final java.util.Collection<T> c) {
         Utils.checkNull(c, "c");
 
         items = c.toArray();
@@ -205,7 +276,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @Override
-    public int add(T item) {
+    public int add(final T item) {
         int index = -1;
 
         if (comparator == null) {
@@ -225,11 +296,23 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @Override
-    public void insert(T item, int index) {
+    public void insert(final T item, final int index) {
         insert(item, index, true);
     }
 
-    private void insert(T item, int index, boolean validate) {
+    /**
+     * Private method to insert an item into the list, with an option to validate
+     * its position with any comparator.
+     *
+     * @param item The item to insert.
+     * @param index The position at which to insert the item.
+     * @param validate Whether or not to ensure the item is being inserted into
+     * the correct sorted position if the list has a comparator.
+     * @throws IllegalArgumentException if the "validate" parameter is true, and
+     * there is a comparator set, and the given insertion point is incorrect for
+     * the value of the item.
+     */
+    private void insert(final T item, final int index, final boolean validate) {
         Utils.checkIndexBounds(index, 0, length);
 
         if (comparator != null && validate) {
@@ -259,7 +342,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T update(int index, T item) {
+    public T update(final int index, final T item) {
         Utils.checkIndexBounds(index, 0, length - 1);
 
         T previousItem = (T) items[index];
@@ -273,7 +356,8 @@ public class ArrayList<T> implements List<T>, Serializable {
 
                 if ((predecessorItem != null && comparator.compare(item, predecessorItem) < 0)
                     || (successorItem != null && comparator.compare(item, successorItem) > 0)) {
-                    throw new IllegalArgumentException("Updated item at index " + index + " is not in correct sorted order.");
+                    throw new IllegalArgumentException(
+                        "Updated item at index " + index + " is not in correct sorted order.");
                 }
             }
 
@@ -290,7 +374,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @Override
-    public int remove(T item) {
+    public int remove(final T item) {
         int index = indexOf(item);
 
         if (index >= 0) {
@@ -302,7 +386,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Sequence<T> remove(int index, int count) {
+    public Sequence<T> remove(final int index, final int count) {
         Utils.checkIndexBounds(index, count, 0, length);
 
         ArrayList<T> removed = new ArrayList<>((T[]) items, index, count);
@@ -343,14 +427,14 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T get(int index) {
+    public T get(final int index) {
         Utils.checkIndexBounds(index, 0, length - 1);
 
         return (T) items[index];
     }
 
     @Override
-    public int indexOf(T item) {
+    public int indexOf(final T item) {
         int i;
 
         if (comparator == null) {
@@ -380,12 +464,21 @@ public class ArrayList<T> implements List<T>, Serializable {
         return length;
     }
 
-    public void addAll(Collection<T> collection) {
+    /**
+     * Add all the elements of the given collection to this list.
+     *
+     * @param collection The collection whose elements should be added.
+     */
+    public void addAll(final Collection<T> collection) {
         for (T item : collection) {
             add(item);
         }
     }
 
+    /**
+     * Trim the internal storage for this list to exactly fit the current
+     * number of items in it.
+     */
     public void trimToSize() {
         Object[] itemsLocal = new Object[length];
         System.arraycopy(this.items, 0, itemsLocal, 0, length);
@@ -394,7 +487,19 @@ public class ArrayList<T> implements List<T>, Serializable {
         length = itemsLocal.length;
     }
 
-    public void ensureCapacity(int capacity) {
+    /**
+     * Ensure there is sufficient capacity in the internal storage for the given
+     * number of items.  This can be used before a large number of inserts to
+     * avoid many incremental storage updates during the inserts.
+     * <p> If there is already sufficient storage for the given capacity nothing
+     * happens, regardless of how many items are currently in the list.  This means
+     * that to ensure capacity for the current length plus "n" new items, this
+     * method should be called with the {@link getLength} plus the number of items
+     * to insert.
+     *
+     * @param capacity The new capacity to allow for.
+     */
+    public void ensureCapacity(final int capacity) {
         if (capacity > items.length) {
             int capacityMax = Math.max(this.items.length * 3 / 2, capacity);
             Object[] itemsLocal = new Object[capacityMax];
@@ -404,15 +509,27 @@ public class ArrayList<T> implements List<T>, Serializable {
         }
     }
 
+    /**
+     * @return The current capacity of the list, that is, how many items can be
+     * stored before allocating more memory.
+     */
     public int getCapacity() {
         return items.length;
     }
 
+    /**
+     * @return The current contents of the list as an array of objects.
+     */
     public Object[] toArray() {
         return Arrays.copyOf(items, length);
     }
 
-    public T[] toArray(Class<? extends T[]> type) {
+    /**
+     * @return The current contents of the list as an array of the given type.
+     * @param type The type of the array elements to be returned (which should
+     * match the declared type of this ArrayList).
+     */
+    public T[] toArray(final Class<? extends T[]> type) {
         return Arrays.copyOf(items, length, type);
     }
 
@@ -422,7 +539,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     @Override
-    public void setComparator(Comparator<T> comparator) {
+    public void setComparator(final Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
         if (comparator != null) {
@@ -452,7 +569,7 @@ public class ArrayList<T> implements List<T>, Serializable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         boolean equals = false;
 
         if (this == o) {
@@ -490,7 +607,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(getClass().getName());
+        sb.append(getClass().getSimpleName());
         sb.append(" [");
 
         int i = 0;
@@ -508,12 +625,30 @@ public class ArrayList<T> implements List<T>, Serializable {
         return sb.toString();
     }
 
-    public static <T> void sort(ArrayList<T> arrayList, Comparator<T> comparator) {
+    /**
+     * Sort the current contents of the given list using the given comparator.
+     *
+     * @param <T> Type of the list elements.
+     * @param arrayList The list to sort.
+     * @param comparator The comparator to use to establish the sort order.
+     */
+    public static <T> void sort(final ArrayList<T> arrayList, final Comparator<T> comparator) {
         sort(arrayList, 0, arrayList.getLength(), comparator);
     }
 
+    /**
+     * Sort a portion of the given list.
+     *
+     * @param <T> Type of the list elements.
+     * @param arrayList The list to sort.
+     * @param from The beginning index in the list of the items to sort (inclusive).
+     * @param to The ending index of the items to sort (exclusive), that is, the elements
+     * from "from" to "to - 1" are sorted on return.
+     * @param comparator The comparator to use to establish the sorted order.
+     */
     @SuppressWarnings("unchecked")
-    public static <T> void sort(ArrayList<T> arrayList, int from, int to, Comparator<T> comparator) {
+    public static <T> void sort(final ArrayList<T> arrayList, final int from, final int to,
+        final Comparator<T> comparator) {
         Utils.checkNull(arrayList, "arrayList");
         Utils.checkNull(comparator, "comparator");
 
@@ -522,34 +657,49 @@ public class ArrayList<T> implements List<T>, Serializable {
         arrayList.modificationCount++;
     }
 
-    public static <T extends Comparable<? super T>> void sort(ArrayList<T> arrayList) {
-        sort(arrayList, new Comparator<T>() {
-            @Override
-            public int compare(T t1, T t2) {
-                return t1.compareTo(t2);
-            }
-        });
+    /**
+     * Sort the given array list according to the "natural" sort order of the comparable elements.
+     * <p> The elements must implement the {@link Comparable} interface, as the default sort calls
+     * the {@link Comparable#compareTo} method to order the elements.
+     *
+     * @param <T> The comparable type of the elements in the list.
+     * @param arrayList The list to sort.
+     */
+    public static <T extends Comparable<? super T>> void sort(final ArrayList<T> arrayList) {
+        sort(arrayList, (o1, o2) -> o1.compareTo(o2));
     }
 
+    /**
+     * Search for a given element in the list using the "binary search" algorithm, which requires a comparator
+     * to establish the sort order of the elements.
+     *
+     * @param <T> Type of the list elements.
+     * @param arrayList The list to search.
+     * @param item The item to search for in the list.
+     * @param comparator Comparator to use for testing.
+     * @return The index of the item in the list if found, or -1 if the item cannot be found in the list.
+     */
     @SuppressWarnings("unchecked")
-    public static <T> int binarySearch(ArrayList<T> arrayList, T item, Comparator<T> comparator) {
+    public static <T> int binarySearch(final ArrayList<T> arrayList, final T item, final Comparator<T> comparator) {
         Utils.checkNull(arrayList, "arrayList");
         Utils.checkNull(comparator, "comparator");
         Utils.checkNull(item, "item");
 
-        int index = Arrays.binarySearch((T[]) arrayList.items, 0, arrayList.length, item,
-            comparator);
+        int index = Arrays.binarySearch((T[]) arrayList.items, 0, arrayList.length, item, comparator);
 
         return index;
     }
 
-    public static <T extends Comparable<? super T>> int binarySearch(ArrayList<T> arrayList, T item) {
-        return binarySearch(arrayList, item, new Comparator<T>() {
-            @Override
-            public int compare(T t1, T t2) {
-                return t1.compareTo(t2);
-            }
-        });
+    /**
+     * Search for an item in the given list using the elements' "natural" ordering.
+     *
+     * @param <T> The comparable type of the elements in the list.
+     * @param arrayList The list to search.
+     * @param item The item to search for.
+     * @return The index of the item in the list if found, or -1 if the item is not found.
+     */
+    public static <T extends Comparable<? super T>> int binarySearch(final ArrayList<T> arrayList, final T item) {
+        return binarySearch(arrayList, item, (o1, o2) -> o1.compareTo(o2));
     }
 
 }

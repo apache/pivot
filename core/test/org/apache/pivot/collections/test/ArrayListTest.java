@@ -117,4 +117,17 @@ public class ArrayListTest {
         assertEquals(list.get(1), "b");
         assertEquals(list.get(2), "c");
     }
+
+    @Test
+    public void comparatorTest() {
+        // Note: this is a reverse-order comparator
+        ArrayList<Integer> list = new ArrayList<>((i1, i2) -> i2.compareTo(i1));
+
+        list.add(12);
+        list.add(5);
+        list.add(-3);
+        list.add(45);
+
+        assertEquals(list.toString(), "ArrayList [45, 12, 5, -3]");
+    }
 }

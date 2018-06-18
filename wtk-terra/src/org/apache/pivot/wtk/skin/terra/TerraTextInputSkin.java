@@ -74,56 +74,8 @@ import org.apache.pivot.wtk.validation.Validator;
 public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin, TextInputListener,
     TextInputContentListener, TextInputSelectionListener {
 
-    private class BlinkCaretCallback implements Runnable {
-        @Override
-        public void run() {
-            caretOn = !caretOn;
-
-            if (caret != null) {
-                TextInput textInput = (TextInput) getComponent();
-                textInput.repaint(caret.x, caret.y, caret.width, caret.height);
-            }
-        }
-    }
-
-    private class ScrollSelectionCallback implements Runnable {
-        @Override
-        public void run() {
-            TextInput textInput = (TextInput) getComponent();
-            int selectionStart = textInput.getSelectionStart();
-            int selectionLength = textInput.getSelectionLength();
-            int selectionEnd = selectionStart + selectionLength - 1;
-
-            switch (scrollDirection) {
-                case FORWARD: {
-                    if (selectionEnd < textInput.getCharacterCount() - 1) {
-                        selectionEnd++;
-                        textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
-                        scrollCharacterToVisible(selectionEnd);
-                    }
-
-                    break;
-                }
-
-                case BACKWARD: {
-                    if (selectionStart > 0) {
-                        selectionStart--;
-                        textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
-                        scrollCharacterToVisible(selectionStart);
-                    }
-
-                    break;
-                }
-
-                default: {
-                    throw new RuntimeException();
-                }
-            }
-        }
-    }
-
-    private Rectangle getCaretRectangle(TextHitInfo textCaret) {
-        TextInput textInput = (TextInput)getComponent();
+    private Rectangle getCaretRectangle(final TextHitInfo textCaret) {
+        TextInput textInput = (TextInput) getComponent();
         AttributedStringCharacterIterator composedText = textInput.getComposedText();
         Bounds selectionStartBounds = getCharacterBounds(textInput.getSelectionStart());
         return GraphicsUtilities.getCaretRectangle(textCaret, composedText, selectionStartBounds.x, padding.top + 1);
@@ -136,42 +88,43 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     private class TextInputMethodHandler implements TextInputMethodListener {
 
         @Override
-        public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
-            TextInput textInput = (TextInput)getComponent();
+        public AttributedCharacterIterator getCommittedText(final int beginIndex, final int endIndex,
+            final AttributedCharacterIterator.Attribute[] attributes) {
+            TextInput textInput = (TextInput) getComponent();
             return new AttributedStringCharacterIterator(textInput.getText(), beginIndex, endIndex, attributes);
         }
 
         @Override
         public int getCommittedTextLength() {
-            TextInput textInput = (TextInput)getComponent();
+            TextInput textInput = (TextInput) getComponent();
             return textInput.getCharacterCount();
         }
 
         @Override
         public int getInsertPositionOffset() {
-            TextInput textInput = (TextInput)getComponent();
+            TextInput textInput = (TextInput) getComponent();
             return textInput.getSelectionStart();
         }
 
         @Override
-        public TextHitInfo getLocationOffset(int x, int y) {
+        public TextHitInfo getLocationOffset(final int x, final int y) {
             return null;
         }
 
         @Override
-        public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
-            TextInput textInput = (TextInput)getComponent();
+        public AttributedCharacterIterator getSelectedText(final AttributedCharacterIterator.Attribute[] attributes) {
+            TextInput textInput = (TextInput) getComponent();
             return new AttributedStringCharacterIterator(textInput.getSelectedText(), attributes);
         }
 
-        private Rectangle offsetToScreen(Rectangle clientRectangle) {
-            TextInput textInput = (TextInput)getComponent();
+        private Rectangle offsetToScreen(final Rectangle clientRectangle) {
+            TextInput textInput = (TextInput) getComponent();
             return textInput.offsetToScreen(clientRectangle);
         }
 
         @Override
-        public Rectangle getTextLocation(TextHitInfo offset) {
-            TextInput textInput = (TextInput)getComponent();
+        public Rectangle getTextLocation(final TextHitInfo offset) {
+            TextInput textInput = (TextInput) getComponent();
             AttributedStringCharacterIterator composedText = textInput.getComposedText();
 
             if (composedText == null) {
@@ -183,7 +136,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             }
         }
 
-        private String getCommittedText(AttributedCharacterIterator fullTextIter, int count) {
+        private String getCommittedText(final AttributedCharacterIterator fullTextIter, final int count) {
             StringBuilder buf = new StringBuilder(count);
             buf.setLength(count);
             if (fullTextIter != null) {
@@ -196,7 +149,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
             return buf.toString();
         }
 
-        private AttributedStringCharacterIterator getComposedText(AttributedCharacterIterator fullTextIter, int start) {
+        private AttributedStringCharacterIterator getComposedText(final AttributedCharacterIterator fullTextIter,
+            final int start) {
             if (fullTextIter != null) {
                 if (start < fullTextIter.getEndIndex()) {
                     return new AttributedStringCharacterIterator(fullTextIter, start, fullTextIter.getEndIndex());
@@ -206,8 +160,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         @Override
-        public void inputMethodTextChanged(InputMethodEvent event) {
-            TextInput textInput = (TextInput)getComponent();
+        public void inputMethodTextChanged(final InputMethodEvent event) {
+            TextInput textInput = (TextInput) getComponent();
             AttributedCharacterIterator iter = event.getText();
             AttributedStringCharacterIterator composedIter = null;
 
@@ -236,8 +190,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
 
         @Override
-        public void caretPositionChanged(InputMethodEvent event) {
-            TextInput textInput = (TextInput)getComponent();
+        public void caretPositionChanged(final InputMethodEvent event) {
+            TextInput textInput = (TextInput) getComponent();
             // TODO:  so far I have not seen this called, so ???
         }
 
@@ -260,10 +214,44 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private FocusTraversalDirection scrollDirection = null;
 
-    private BlinkCaretCallback blinkCaretCallback = new BlinkCaretCallback();
-    private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
+    private Runnable blinkCaretCallback = () -> {
+        caretOn = !caretOn;
 
-    private ScrollSelectionCallback scrollSelectionCallback = new ScrollSelectionCallback();
+        if (caret != null) {
+            TextInput textInput = (TextInput) getComponent();
+            textInput.repaint(caret.x, caret.y, caret.width, caret.height);
+        }
+    };
+
+    private Runnable scrollSelectionCallback = () -> {
+        TextInput textInput = (TextInput) getComponent();
+        int selectionStart = textInput.getSelectionStart();
+        int selectionLength = textInput.getSelectionLength();
+        int selectionEnd = selectionStart + selectionLength - 1;
+
+        switch (scrollDirection) {
+            case FORWARD:
+                if (selectionEnd < textInput.getCharacterCount() - 1) {
+                    selectionEnd++;
+                    textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
+                    scrollCharacterToVisible(selectionEnd);
+                }
+                break;
+
+            case BACKWARD:
+                if (selectionStart > 0) {
+                    selectionStart--;
+                    textInput.setSelection(selectionStart, selectionEnd - selectionStart + 1);
+                    scrollCharacterToVisible(selectionStart);
+                }
+                break;
+
+            default:
+                throw new RuntimeException();
+        }
+    };
+
+    private ApplicationContext.ScheduledCallback scheduledBlinkCaretCallback = null;
     private ApplicationContext.ScheduledCallback scheduledScrollSelectionCallback = null;
 
     private Font font;
@@ -324,7 +312,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         TextInput textInput = (TextInput) component;
@@ -338,7 +326,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         TextInput textInput = (TextInput) getComponent();
         int textSize = textInput.getTextSize();
 
@@ -346,7 +334,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         return averageCharacterSize.height + padding.getHeight() + 2;
     }
 
@@ -356,7 +344,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
@@ -367,7 +355,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return baseline;
     }
 
-    private AttributedCharacterIterator getCharIterator(TextInput textInput, int start, int end) {
+    private AttributedCharacterIterator getCharIterator(final TextInput textInput, final int start, final int end) {
         CharSequence characters;
         int num = end - start;
         if (textInput.isPassword()) {
@@ -389,9 +377,9 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      * @param textLayout The existing text (if any).
      * @return The "advance" value or 0 if there is no text.
      */
-    private int getTextWidth(TextLayout textLayout) {
+    private int getTextWidth(final TextLayout textLayout) {
         if (textLayout != null) {
-            return (int)Math.ceil(textLayout.getAdvance());
+            return (int) Math.ceil(textLayout.getAdvance());
         }
         return 0;
     }
@@ -458,10 +446,11 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         showCaret(textInput.isFocused() && textInput.getSelectionLength() == 0);
     }
 
-    private int getAlignmentDeltaX(TextLayout textLayout) {
+    private int getAlignmentDeltaX(final TextLayout textLayout) {
         int alignmentDeltaX = 0;
         switch (horizontalAlignment) {
             case LEFT:
+            default:
                 break;
             case CENTER: {
                 TextInput textInput = (TextInput) getComponent();
@@ -478,16 +467,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                 alignmentDeltaX = (availWidth - txtWidth);
                 break;
             }
-            default: {
-                break;
-            }
         }
 
         return alignmentDeltaX;
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         TextInput textInput = (TextInput) getComponent();
 
         int width = getWidth();
@@ -635,7 +621,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      * @return The offset into the text determined by the X-position.
      */
     @Override
-    public int getInsertionPoint(int x) {
+    public int getInsertionPoint(final int x) {
         int offset = -1;
 
         if (textLayout == null) {
@@ -661,7 +647,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      * will be displayed, or {@code null} if there is no text.
      */
     @Override
-    public Bounds getCharacterBounds(int index) {
+    public Bounds getCharacterBounds(final int index) {
         Bounds characterBounds = null;
 
         if (textLayout != null) {
@@ -685,13 +671,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return characterBounds;
     }
 
-    private void setScrollLeft(int scrollLeft) {
+    private void setScrollLeft(final int scrollLeft) {
         this.scrollLeft = scrollLeft;
         updateSelection();
         repaintComponent();
     }
 
-    private void scrollCharacterToVisible(int offset) {
+    private void scrollCharacterToVisible(final int offset) {
         int width = getWidth();
         Bounds characterBounds = getCharacterBounds(offset);
 
@@ -706,7 +692,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
     }
 
-    public Font getFont() {
+    public final Font getFont() {
         return font;
     }
 
@@ -719,7 +705,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
      * @param font The new font to use.
      * @throws IllegalArgumentException if the <tt>font</tt> argument is <tt>null</tt>.
      */
-    public void setFont(Font font) {
+    public final void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         this.font = font;
@@ -729,79 +715,79 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         invalidateComponent();
     }
 
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         setFont(decodeFont(font));
     }
 
-    public final void setFont(Dictionary<String, ?> font) {
+    public final void setFont(final Dictionary<String, ?> font) {
         setFont(Theme.deriveFont(font));
     }
 
-    public Color getColor() {
+    public final Color getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public final void setColor(final Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
         repaintComponent();
     }
 
-    public final void setColor(String color) {
+    public final void setColor(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
-    public final void setColor(int color) {
+    public final void setColor(final int color) {
         Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
 
-    public Color getPromptColor() {
+    public final Color getPromptColor() {
         return promptColor;
     }
 
-    public void setPromptColor(Color promptColor) {
+    public final void setPromptColor(final Color promptColor) {
         Utils.checkNull(promptColor, "promptColor");
 
         this.promptColor = promptColor;
         repaintComponent();
     }
 
-    public final void setPromptColor(String promptColor) {
+    public final void setPromptColor(final String promptColor) {
         setPromptColor(GraphicsUtilities.decodeColor(promptColor, "promptColor"));
     }
 
-    public final void setPromptColor(int promptColor) {
+    public final void setPromptColor(final int promptColor) {
         Theme theme = currentTheme();
         setPromptColor(theme.getColor(promptColor));
     }
 
-    public Color getDisabledColor() {
+    public final Color getDisabledColor() {
         return disabledColor;
     }
 
-    public void setDisabledColor(Color disabledColor) {
+    public final void setDisabledColor(final Color disabledColor) {
         Utils.checkNull(disabledColor, "disabledColor");
 
         this.disabledColor = disabledColor;
         repaintComponent();
     }
 
-    public final void setDisabledColor(String disabledColor) {
+    public final void setDisabledColor(final String disabledColor) {
         setDisabledColor(GraphicsUtilities.decodeColor(disabledColor, "disabledColor"));
     }
 
-    public final void setDisabledColor(int disabledColor) {
+    public final void setDisabledColor(final int disabledColor) {
         Theme theme = currentTheme();
         setDisabledColor(theme.getColor(disabledColor));
     }
 
-    public Color getBackgroundColor() {
+    public final Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(Color backgroundColor) {
+    public final void setBackgroundColor(final Color backgroundColor) {
         Utils.checkNull(backgroundColor, "backgroundColor");
 
         this.backgroundColor = backgroundColor;
@@ -810,40 +796,40 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         repaintComponent();
     }
 
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public final void setBackgroundColor(int color) {
+    public final void setBackgroundColor(final int color) {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(color));
     }
 
-    public Color getInvalidColor() {
+    public final Color getInvalidColor() {
         return invalidColor;
     }
 
-    public void setInvalidColor(Color color) {
+    public final void setInvalidColor(final Color color) {
         Utils.checkNull(color, "invalidColor");
 
         this.invalidColor = color;
         repaintComponent();
     }
 
-    public final void setInvalidColor(String color) {
+    public final void setInvalidColor(final String color) {
         setInvalidColor(GraphicsUtilities.decodeColor(color, "invalidColor"));
     }
 
-    public final void setInvalidColor(int color) {
+    public final void setInvalidColor(final int color) {
         Theme theme = currentTheme();
         setInvalidColor(theme.getColor(color));
     }
 
-    public Color getInvalidBackgroundColor() {
+    public final Color getInvalidBackgroundColor() {
         return invalidBackgroundColor;
     }
 
-    public void setInvalidBackgroundColor(Color color) {
+    public final void setInvalidBackgroundColor(final Color color) {
         Utils.checkNull(color, "invalidBackgroundColor");
 
         this.invalidBackgroundColor = color;
@@ -852,20 +838,20 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         repaintComponent();
     }
 
-    public final void setInvalidBackgroundColor(String color) {
+    public final void setInvalidBackgroundColor(final String color) {
         setInvalidBackgroundColor(GraphicsUtilities.decodeColor(color, "invalidBackgroundColor"));
     }
 
-    public final void setInvalidBackgroundColor(int color) {
+    public final void setInvalidBackgroundColor(final int color) {
         Theme theme = currentTheme();
         setInvalidBackgroundColor(theme.getColor(color));
     }
 
-    public Color getDisabledBackgroundColor() {
+    public final Color getDisabledBackgroundColor() {
         return disabledBackgroundColor;
     }
 
-    public void setDisabledBackgroundColor(Color disabledBackgroundColor) {
+    public final void setDisabledBackgroundColor(final Color disabledBackgroundColor) {
         Utils.checkNull(disabledBackgroundColor, "disabledBackgroundColor");
 
         this.disabledBackgroundColor = disabledBackgroundColor;
@@ -874,173 +860,174 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         repaintComponent();
     }
 
-    public final void setDisabledBackgroundColor(String disabledBackgroundColor) {
+    public final void setDisabledBackgroundColor(final String disabledBackgroundColor) {
         setDisabledBackgroundColor(
             GraphicsUtilities.decodeColor(disabledBackgroundColor, "disabledBackgroundColor"));
     }
 
-    public final void setDisabledBackgroundColor(int color) {
+    public final void setDisabledBackgroundColor(final int color) {
         Theme theme = currentTheme();
         setDisabledBackgroundColor(theme.getColor(color));
     }
 
-    public Color getBorderColor() {
+    public final Color getBorderColor() {
         return borderColor;
     }
 
-    public void setBorderColor(Color borderColor) {
+    public final void setBorderColor(final Color borderColor) {
         Utils.checkNull(borderColor, "borderColor");
 
         this.borderColor = borderColor;
         repaintComponent();
     }
 
-    public final void setBorderColor(String borderColor) {
+    public final void setBorderColor(final String borderColor) {
         setBorderColor(GraphicsUtilities.decodeColor(borderColor, "borderColor"));
     }
 
-    public final void setBorderColor(int color) {
+    public final void setBorderColor(final int color) {
         Theme theme = currentTheme();
         setBorderColor(theme.getColor(color));
     }
 
-    public Color getDisabledBorderColor() {
+    public final Color getDisabledBorderColor() {
         return disabledBorderColor;
     }
 
-    public void setDisabledBorderColor(Color disabledBorderColor) {
+    public final void setDisabledBorderColor(final Color disabledBorderColor) {
         Utils.checkNull(disabledBorderColor, "disabledBorderColor");
 
         this.disabledBorderColor = disabledBorderColor;
         repaintComponent();
     }
 
-    public final void setDisabledBorderColor(String disabledBorderColor) {
+    public final void setDisabledBorderColor(final String disabledBorderColor) {
         setDisabledBorderColor(GraphicsUtilities.decodeColor(disabledBorderColor, "disabledBorderColor"));
     }
 
-    public final void setDisabledBorderColor(int color) {
+    public final void setDisabledBorderColor(final int color) {
         Theme theme = currentTheme();
         setDisabledBorderColor(theme.getColor(color));
     }
 
-    public Color getSelectionColor() {
+    public final Color getSelectionColor() {
         return selectionColor;
     }
 
-    public void setSelectionColor(Color selectionColor) {
+    public final void setSelectionColor(final Color selectionColor) {
         Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
-    public final void setSelectionColor(String selectionColor) {
+    public final void setSelectionColor(final String selectionColor) {
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
-    public final void setSelectionColor(int color) {
+    public final void setSelectionColor(final int color) {
         Theme theme = currentTheme();
         setSelectionColor(theme.getColor(color));
     }
 
-    public Color getSelectionBackgroundColor() {
+    public final Color getSelectionBackgroundColor() {
         return selectionBackgroundColor;
     }
 
-    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+    public final void setSelectionBackgroundColor(final Color selectionBackgroundColor) {
         Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
-    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
+    public final void setSelectionBackgroundColor(final String selectionBackgroundColor) {
+        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor,
+            "selectionBackgroundColor"));
     }
 
-    public final void setSelectionBackgroundColor(int color) {
+    public final void setSelectionBackgroundColor(final int color) {
         Theme theme = currentTheme();
         setSelectionBackgroundColor(theme.getColor(color));
     }
 
-    public Color getInactiveSelectionColor() {
+    public final Color getInactiveSelectionColor() {
         return inactiveSelectionColor;
     }
 
-    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+    public final void setInactiveSelectionColor(final Color inactiveSelectionColor) {
         Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
-    public final void setInactiveSelectionColor(String inactiveSelectionColor) {
+    public final void setInactiveSelectionColor(final String inactiveSelectionColor) {
         setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor, "inactiveSelectionColor"));
     }
 
-    public final void setInactiveSelectionColor(int color) {
+    public final void setInactiveSelectionColor(final int color) {
         Theme theme = currentTheme();
         setInactiveSelectionColor(theme.getColor(color));
     }
 
-    public Color getInactiveSelectionBackgroundColor() {
+    public final Color getInactiveSelectionBackgroundColor() {
         return inactiveSelectionBackgroundColor;
     }
 
-    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+    public final void setInactiveSelectionBackgroundColor(final Color inactiveSelectionBackgroundColor) {
         Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
-    public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+    public final void setInactiveSelectionBackgroundColor(final String inactiveSelectionBackgroundColor) {
         setInactiveSelectionBackgroundColor(
             GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor"));
     }
 
-    public final void setInactiveSelectionBackgroundColor(int color) {
+    public final void setInactiveSelectionBackgroundColor(final int color) {
         Theme theme = currentTheme();
         setInactiveSelectionBackgroundColor(theme.getColor(color));
     }
 
-    public Insets getPadding() {
+    public final Insets getPadding() {
         return padding;
     }
 
-    public void setPadding(Insets padding) {
+    public final void setPadding(final Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
         invalidateComponent();
     }
 
-    public final void setPadding(Dictionary<String, ?> padding) {
+    public final void setPadding(final Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(Sequence<?> padding) {
+    public final void setPadding(final Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(int padding) {
+    public final void setPadding(final int padding) {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(Number padding) {
+    public final void setPadding(final Number padding) {
         setPadding(new Insets(padding));
     }
 
-    public final void setPadding(String padding) {
+    public final void setPadding(final String padding) {
         setPadding(Insets.decode(padding));
     }
 
-    public HorizontalAlignment getHorizontalAlignment() {
+    public final HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
     }
 
-    public final void setHorizontalAlignment(HorizontalAlignment alignment) {
+    public final void setHorizontalAlignment(final HorizontalAlignment alignment) {
         Utils.checkNull(alignment, "horizontalAlignment");
 
         this.horizontalAlignment = alignment;
@@ -1048,7 +1035,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public boolean mouseMove(Component component, int x, int y) {
+    public boolean mouseMove(final Component component, final int x, final int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
@@ -1099,7 +1086,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
@@ -1134,7 +1121,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
         if (Mouse.getCapturer() == component) {
@@ -1153,7 +1140,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(final Component component, final Mouse.Button button, final int x, final int y,
+        final int count) {
         if (button == Mouse.Button.LEFT && count > 1) {
             TextInput textInput = (TextInput) getComponent();
             if (count == 2) {
@@ -1170,7 +1158,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return super.mouseClick(component, button, x, y, count);
     }
 
-    private boolean deleteSelectionDuringTyping(TextInput textInput, int count) {
+    private boolean deleteSelectionDuringTyping(final TextInput textInput, final int count) {
         int selectionLength = textInput.getSelectionLength();
 
         if (textInput.getCharacterCount() - selectionLength + count > textInput.getMaximumLength()) {
@@ -1183,7 +1171,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public boolean keyTyped(Component component, char character) {
+    public boolean keyTyped(final Component component, final char character) {
         boolean consumed = super.keyTyped(component, character);
         TextInput textInput = (TextInput) getComponent();
 
@@ -1204,127 +1192,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         return consumed;
     }
 
-    /**
-     * {@link KeyCode#DELETE DELETE}
-     * Delete the character after the caret or the entire selection if there is one.<br>
-     * {@link KeyCode#BACKSPACE BACKSPACE}
-     * Delete the character before the caret or the entire selection if there is one.
-     * <p> {@link KeyCode#HOME HOME}
-     * Move the caret to the beginning of the text. <br>
-     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META}
-     * Move the caret to the beginning of the text.
-     * <p> {@link KeyCode#HOME HOME} + {@link Modifier#SHIFT SHIFT}
-     * Select from the caret to the beginning of the text.<br>
-     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} + {@link Modifier#SHIFT SHIFT}
-     * Select from the caret to the beginning of the text.
-     * <p> {@link KeyCode#END END}
-     * Move the caret to the end of the text.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META}
-     * Move the caret to the end of the text.
-     * <p> {@link KeyCode#END END} + {@link Modifier#SHIFT SHIFT}
-     * Select from the caret to the end of the text.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} + {@link Modifier#SHIFT SHIFT}
-     * Select from the caret to the end of the text.
-     * <p> {@link KeyCode#LEFT LEFT}
-     * Clear the selection and move the caret back by one character.<br>
-     * {@link KeyCode#LEFT LEFT} + {@link Modifier#SHIFT SHIFT}
-     * Add the previous character to the selection.<br>
-     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL}
-     * Clear the selection and move the caret to the beginning of the text.<br>
-     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL} + {@link Modifier#SHIFT SHIFT}
-     * Add all preceding text to the selection.
-     * <p> {@link KeyCode#RIGHT RIGHT}
-     * Clear the selection and move the caret forward by one character.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#SHIFT SHIFT}
-     * Add the next character to the selection.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL}
-     * Clear the selection and move the caret to the end of the text.<br>
-     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} + {@link Modifier#SHIFT SHIFT}
-     * Add all subsequent text to the selection.
-     * <p> CommandModifier + {@link KeyCode#A A}
-     * Select all.<br>
-     * CommandModifier + {@link KeyCode#X X}
-     * Cut selection to clipboard (if not a password TextInput).<br>
-     * CommandModifier + {@link KeyCode#C C}
-     * Copy selection to clipboard (if not a password TextInput).<br>
-     * CommandModifier + {@link KeyCode#V V}
-     * Paste from clipboard.<br>
-     * CommandModifier + {@link KeyCode#Z Z}
-     * Undo.
-     *
-     * @see Platform#getCommandModifier()
-     */
-    @Override
-    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+    private boolean handleLeftRightKeys(final TextInput textInput, final int keyCode, final boolean isShiftPressed,
+        final int selStart, final int selLength) {
         boolean consumed = false;
-
-        TextInput textInput = (TextInput) getComponent();
-        boolean isEditable = textInput.isEditable();
-
-        int start = textInput.getSelectionStart();
-        int length = textInput.getSelectionLength();
-
-        Modifier commandModifier = Platform.getCommandModifier();
+        int start = selStart, length = selLength;
         Modifier wordNavigationModifier = Platform.getWordNavigationModifier();
-        boolean isMetaPressed = Keyboard.isPressed(Modifier.META);
-        boolean isShiftPressed = Keyboard.isPressed(Modifier.SHIFT);
 
-        if (keyCode == KeyCode.DELETE && isEditable) {
-            if (start < textInput.getCharacterCount()) {
-                int count = Math.max(length, 1);
-                textInput.removeText(start, count);
-
-                consumed = true;
-            }
-        } else if (keyCode == KeyCode.BACKSPACE && isEditable) {
-            if (length == 0 && start > 0) {
-                textInput.removeText(start - 1, 1);
-                consumed = true;
-            } else {
-                textInput.removeText(start, length);
-                consumed = true;
-            }
-        } else if (keyCode == KeyCode.HOME
-            || (keyCode == KeyCode.LEFT && isMetaPressed)) {
-            if (isShiftPressed) {
-                // Select from the beginning of the text to the current pivot position
-                if (selectDirection == SelectDirection.LEFT) {
-                    textInput.setSelection(0, start + length);
-                } else {
-                    textInput.setSelection(0, start);
-                }
-                selectDirection = SelectDirection.LEFT;
-            } else {
-                // Move the caret to the beginning of the text
-                textInput.setSelection(0, 0);
-                selectDirection = null;
-            }
-
-            scrollCharacterToVisible(0);
-
-            consumed = true;
-        } else if (keyCode == KeyCode.END
-            || (keyCode == KeyCode.RIGHT && isMetaPressed)) {
-            int n = textInput.getCharacterCount();
-
-            if (isShiftPressed) {
-                // Select from current pivot position to the end of the text
-                if (selectDirection == SelectDirection.LEFT) {
-                    start += length;
-                }
-                textInput.setSelection(start, n - start);
-                selectDirection = SelectDirection.RIGHT;
-            } else {
-                // Move the caret to the end of the text
-                textInput.setSelection(n, 0);
-                selectDirection = null;
-            }
-
-            scrollCharacterToVisible(n);
-
-            consumed = true;
-        } else if (keyCode == KeyCode.LEFT) {
-            // Sometimes while selecting we need to make the opposite end visible
+        // Sometimes while selecting we need to make the opposite end visible
+        if (keyCode == KeyCode.LEFT) {
             SelectDirection visiblePosition = SelectDirection.LEFT;
 
             if (Keyboard.isPressed(wordNavigationModifier)) {
@@ -1386,6 +1261,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                                 }
                             }
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     // Add one to the selection
@@ -1415,12 +1292,13 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     case RIGHT:
                         scrollCharacterToVisible(start + length);
                         break;
+                    default:
+                        break;
                 }
 
                 consumed = true;
             }
         } else if (keyCode == KeyCode.RIGHT) {
-            // Sometimes while selecting we need to make the opposite end visible
             SelectDirection visiblePosition = SelectDirection.RIGHT;
 
             if (Keyboard.isPressed(wordNavigationModifier)) {
@@ -1474,6 +1352,8 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                                 }
                             }
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     // Add the next character to the selection
@@ -1502,11 +1382,137 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
                     case RIGHT:
                         scrollCharacterToVisible(start + length);
                         break;
+                    default:
+                        break;
                 }
 
                 consumed = true;
             }
-        } else if (Keyboard.isPressed(commandModifier)) {
+        }
+
+        return consumed;
+    }
+
+    /**
+     * {@link KeyCode#DELETE DELETE}
+     * Delete the character after the caret or the entire selection if there is one.<br>
+     * {@link KeyCode#BACKSPACE BACKSPACE}
+     * Delete the character before the caret or the entire selection if there is one.
+     * <p> {@link KeyCode#HOME HOME}
+     * Move the caret to the beginning of the text. <br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META}
+     * Move the caret to the beginning of the text.
+     * <p> {@link KeyCode#HOME HOME} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the beginning of the text.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#META META} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the beginning of the text.
+     * <p> {@link KeyCode#END END}
+     * Move the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META}
+     * Move the caret to the end of the text.
+     * <p> {@link KeyCode#END END} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#META META} + {@link Modifier#SHIFT SHIFT}
+     * Select from the caret to the end of the text.
+     * <p> {@link KeyCode#LEFT LEFT}
+     * Clear the selection and move the caret back by one character.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#SHIFT SHIFT}
+     * Add the previous character to the selection.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL}
+     * Clear the selection and move the caret to the beginning of the text.<br>
+     * {@link KeyCode#LEFT LEFT} + {@link Modifier#CTRL CTRL} + {@link Modifier#SHIFT SHIFT}
+     * Add all preceding text to the selection.
+     * <p> {@link KeyCode#RIGHT RIGHT}
+     * Clear the selection and move the caret forward by one character.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#SHIFT SHIFT}
+     * Add the next character to the selection.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL}
+     * Clear the selection and move the caret to the end of the text.<br>
+     * {@link KeyCode#RIGHT RIGHT} + {@link Modifier#CTRL CTRL} + {@link Modifier#SHIFT SHIFT}
+     * Add all subsequent text to the selection.
+     * <p> CommandModifier + {@link KeyCode#A A}
+     * Select all.<br>
+     * CommandModifier + {@link KeyCode#X X}
+     * Cut selection to clipboard (if not a password TextInput).<br>
+     * CommandModifier + {@link KeyCode#C C}
+     * Copy selection to clipboard (if not a password TextInput).<br>
+     * CommandModifier + {@link KeyCode#V V}
+     * Paste from clipboard.<br>
+     * CommandModifier + {@link KeyCode#Z Z}
+     * Undo.
+     *
+     * @see Platform#getCommandModifier()
+     */
+    @Override
+    public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
+        boolean consumed = false;
+
+        TextInput textInput = (TextInput) getComponent();
+        boolean isEditable = textInput.isEditable();
+
+        int start = textInput.getSelectionStart();
+        int length = textInput.getSelectionLength();
+
+        boolean isMetaPressed = Keyboard.isPressed(Modifier.META);
+        boolean isShiftPressed = Keyboard.isPressed(Modifier.SHIFT);
+
+        if (keyCode == KeyCode.DELETE && isEditable) {
+            if (start < textInput.getCharacterCount()) {
+                int count = Math.max(length, 1);
+                textInput.removeText(start, count);
+
+                consumed = true;
+            }
+        } else if (keyCode == KeyCode.BACKSPACE && isEditable) {
+            if (length == 0 && start > 0) {
+                textInput.removeText(start - 1, 1);
+                consumed = true;
+            } else {
+                textInput.removeText(start, length);
+                consumed = true;
+            }
+        } else if (keyCode == KeyCode.HOME || (keyCode == KeyCode.LEFT && isMetaPressed)) {
+            if (isShiftPressed) {
+                // Select from the beginning of the text to the current pivot position
+                if (selectDirection == SelectDirection.LEFT) {
+                    textInput.setSelection(0, start + length);
+                } else {
+                    textInput.setSelection(0, start);
+                }
+                selectDirection = SelectDirection.LEFT;
+            } else {
+                // Move the caret to the beginning of the text
+                textInput.setSelection(0, 0);
+                selectDirection = null;
+            }
+
+            scrollCharacterToVisible(0);
+
+            consumed = true;
+        } else if (keyCode == KeyCode.END || (keyCode == KeyCode.RIGHT && isMetaPressed)) {
+            int n = textInput.getCharacterCount();
+
+            if (isShiftPressed) {
+                // Select from current pivot position to the end of the text
+                if (selectDirection == SelectDirection.LEFT) {
+                    start += length;
+                }
+                textInput.setSelection(start, n - start);
+                selectDirection = SelectDirection.RIGHT;
+            } else {
+                // Move the caret to the end of the text
+                textInput.setSelection(n, 0);
+                selectDirection = null;
+            }
+
+            scrollCharacterToVisible(n);
+
+            consumed = true;
+        } else if (keyCode == KeyCode.LEFT) {
+            consumed = handleLeftRightKeys(textInput, keyCode, isShiftPressed, start, length);
+        } else if (keyCode == KeyCode.RIGHT) {
+            consumed = handleLeftRightKeys(textInput, keyCode, isShiftPressed, start, length);
+        } else if (Keyboard.isPressed(Platform.getCommandModifier())) {
             if (keyCode == KeyCode.A) {
                 textInput.setSelection(0, textInput.getCharacterCount());
                 consumed = true;
@@ -1550,14 +1556,14 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     // Component state events
     @Override
-    public void enabledChanged(Component component) {
+    public void enabledChanged(final Component component) {
         super.enabledChanged(component);
 
         repaintComponent();
     }
 
     @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
+    public void focusedChanged(final Component component, final Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
         TextInput textInput = (TextInput) component;
@@ -1596,44 +1602,44 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     // Text input events
     @Override
-    public void textSizeChanged(TextInput textInput, int previousTextSize) {
+    public void textSizeChanged(final TextInput textInput, final int previousTextSize) {
         invalidateComponent();
     }
 
     @Override
-    public void maximumLengthChanged(TextInput textInput, int previousMaximumLength) {
+    public void maximumLengthChanged(final TextInput textInput, final int previousMaximumLength) {
         // No-op
     }
 
     @Override
-    public void passwordChanged(TextInput textInput) {
+    public void passwordChanged(final TextInput textInput) {
         layout();
         repaintComponent();
     }
 
     @Override
-    public void promptChanged(TextInput textInput, String previousPrompt) {
+    public void promptChanged(final TextInput textInput, final String previousPrompt) {
         repaintComponent();
     }
 
     @Override
-    public void textValidatorChanged(TextInput textInput, Validator previousValidator) {
+    public void textValidatorChanged(final TextInput textInput, final Validator previousValidator) {
         repaintComponent();
     }
 
     @Override
-    public void strictValidationChanged(TextInput textInput) {
+    public void strictValidationChanged(final TextInput textInput) {
         // No-op
     }
 
     @Override
-    public void textValidChanged(TextInput textInput) {
+    public void textValidChanged(final TextInput textInput) {
         repaintComponent();
     }
 
     // Text input character events
     @Override
-    public Vote previewInsertText(TextInput textInput, CharSequence text, int index) {
+    public Vote previewInsertText(final TextInput textInput, final CharSequence text, final int index) {
         Vote vote = Vote.APPROVE;
 
         if (textInput.isStrictValidation()) {
@@ -1655,17 +1661,17 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public void insertTextVetoed(TextInput textInput, Vote reason) {
+    public void insertTextVetoed(final TextInput textInput, final Vote reason) {
         // No-op
     }
 
     @Override
-    public void textInserted(TextInput textInput, int index, int count) {
+    public void textInserted(final TextInput textInput, final int index, final int count) {
         // No-op
     }
 
     @Override
-    public Vote previewRemoveText(TextInput textInput, int index, int count) {
+    public Vote previewRemoveText(final TextInput textInput, final int index, final int count) {
         Vote vote = Vote.APPROVE;
 
         if (textInput.isStrictValidation()) {
@@ -1686,7 +1692,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public void setSize(int width, int height) {
+    public void setSize(final int width, final int height) {
         boolean invalidate = (horizontalAlignment != HorizontalAlignment.LEFT)
             && (width != this.getWidth());
         super.setSize(width, height);
@@ -1697,30 +1703,30 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
     }
 
     @Override
-    public void removeTextVetoed(TextInput textInput, Vote reason) {
+    public void removeTextVetoed(final TextInput textInput, final Vote reason) {
         // No-op
     }
 
     @Override
-    public void textRemoved(TextInput textInput, int index, int count) {
+    public void textRemoved(final TextInput textInput, final int index, final int count) {
         // No-op
     }
 
     @Override
-    public void textChanged(TextInput textInput) {
+    public void textChanged(final TextInput textInput) {
         layout();
         repaintComponent();
     }
 
     @Override
-    public void editableChanged(TextInput textInput) {
+    public void editableChanged(final TextInput textInput) {
         repaintComponent();
     }
 
     // Text input selection events
     @Override
-    public void selectionChanged(TextInput textInput, int previousSelectionStart,
-        int previousSelectionLength) {
+    public void selectionChanged(final TextInput textInput, final int previousSelectionStart,
+        final int previousSelectionLength) {
         // If the text input is valid, repaint the selection state; otherwise,
         // the selection will be updated in layout()
         if (textInput.isValid()) {
@@ -1791,7 +1797,7 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
         }
     }
 
-    public void showCaret(boolean show) {
+    public void showCaret(final boolean show) {
         if (scheduledBlinkCaretCallback != null) {
             scheduledBlinkCaretCallback.cancel();
         }

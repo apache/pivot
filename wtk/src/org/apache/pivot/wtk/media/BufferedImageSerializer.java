@@ -45,7 +45,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
         private String name;
         private String mimeType;
 
-        private Format(String name, String mimeType) {
+        Format(final String name, final String mimeType) {
             this.name = name;
             this.mimeType = mimeType;
         }
@@ -61,11 +61,19 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
 
     private Format outputFormat;
 
+    /**
+     * Construct an image serializer for the default {@link Format#PNG PNG} format.
+     */
     public BufferedImageSerializer() {
         this(Format.PNG);
     }
 
-    public BufferedImageSerializer(Format outputFormat) {
+    /**
+     * Construct an image serializer for the given format.
+     *
+     * @param outputFormat The output format for this serializer.
+     */
+    public BufferedImageSerializer(final Format outputFormat) {
         setOutputFormat(outputFormat);
     }
 
@@ -81,7 +89,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      *
      * @param outputFormat The new format to use for output.
      */
-    public void setOutputFormat(Format outputFormat) {
+    public void setOutputFormat(final Format outputFormat) {
         Utils.checkNull(outputFormat, "outputFormat");
 
         this.outputFormat = outputFormat;
@@ -94,7 +102,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * @return A <tt>BufferedImage</tt> object
      */
     @Override
-    public BufferedImage readObject(InputStream inputStream) throws IOException,
+    public BufferedImage readObject(final InputStream inputStream) throws IOException,
         SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
@@ -109,7 +117,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * @param outputStream The stream to write the image out to.
      */
     @Override
-    public void writeObject(BufferedImage bufferedImage, OutputStream outputStream)
+    public void writeObject(final BufferedImage bufferedImage, final OutputStream outputStream)
         throws IOException, SerializationException {
         Utils.checkNull(bufferedImage, "bufferedImage");
         Utils.checkNull(outputStream, "outputStream");
@@ -118,7 +126,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     }
 
     @Override
-    public String getMIMEType(BufferedImage bufferedImage) {
+    public String getMIMEType(final BufferedImage bufferedImage) {
         return outputFormat.getMIMEType();
     }
 }

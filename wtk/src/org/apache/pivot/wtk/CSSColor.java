@@ -180,7 +180,9 @@ public enum CSSColor {
     Yellow              (Color.YELLOW),
     YellowGreen         (new Color(154, 205,  50));
 
+    /** The color value associated with this CSS color name. */
     private Color color;
+    /** A standardized (lower-case) name for this color for matching. */
     private String colorName;
 
     CSSColor(final Color color) {
@@ -238,7 +240,9 @@ public enum CSSColor {
     }
 
 
+    /** A map to translate from a color name to the enum value. */
     private static Map<String, CSSColor> colorNameMap;
+    /** A map to translate from a color value to the enum value. */
     private static Map<Color, CSSColor> colorValueMap;
 
     static {

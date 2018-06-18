@@ -22,20 +22,28 @@ package org.apache.pivot.wtk;
  */
 public enum Origin {
     /** Origin is at the top. */
-    NORTH   (90.0f),
+    NORTH(90.0f),
     /** Origin is on the right side of the gauge. */
-    EAST    (360.0f),
+    EAST(360.0f),
     /** Origin is at the bottom. */
-    SOUTH   (270.0f),
+    SOUTH(270.0f),
     /** Origin is to the left side of the gauge. */
-    WEST    (180.0f);
+    WEST(180.0f);
 
+    /** The angle (degrees) represented by this origin value. */
     private float originAngle;
 
-    private Origin(float angle) {
-         this.originAngle = angle;
+    /**
+     * Construct an origin, specifying the angle.
+     * @param angle The origin angle (in degrees).
+     */
+    Origin(final float angle) {
+        this.originAngle = angle;
     }
 
+    /**
+     * @return The angle (in degrees) represented by this origin.
+     */
     public float getOriginAngle() {
         return this.originAngle;
     }

@@ -26,6 +26,8 @@ import org.apache.pivot.util.ListenerList;
 /**
  * Implementation of the {@link Set} interface that is backed by an array of
  * enum values.
+ *
+ * @param <E> The enum type contained in this set.
  */
 public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     private static final long serialVersionUID = 3544488357505145448L;
@@ -77,7 +79,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
 
     private transient SetListener.Listeners<E> setListeners = new SetListener.Listeners<>();
 
-    public EnumSet(Class<E> enumClass) {
+    public EnumSet(final Class<E> enumClass) {
         this.enumClass = enumClass;
 
         elements = enumClass.getEnumConstants();
@@ -89,7 +91,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     @Override
-    public boolean add(E element) {
+    public boolean add(final E element) {
         boolean added = false;
 
         int ordinal = element.ordinal();
@@ -105,7 +107,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     @Override
-    public boolean remove(E element) {
+    public boolean remove(final E element) {
         boolean removed = false;
 
         int ordinal = element.ordinal();
@@ -130,7 +132,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     @Override
-    public boolean contains(E element) {
+    public boolean contains(final E element) {
         return members[element.ordinal()];
     }
 
@@ -150,7 +152,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     @Override
-    public void setComparator(Comparator<E> comparator) {
+    public void setComparator(final Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
 
@@ -172,7 +174,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * in this set.
      * @return The new empty set.
      */
-    public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementClass) {
+    public static <E extends Enum<E>> EnumSet<E> noneOf(final Class<E> elementClass) {
         return new EnumSet<E>(elementClass);
     }
 
@@ -184,7 +186,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * in this set.
      * @return The new complete set.
      */
-    public static <E extends Enum<E>> EnumSet<E> allOf(Class<E> elementClass) {
+    public static <E extends Enum<E>> EnumSet<E> allOf(final Class<E> elementClass) {
         EnumSet<E> set = new EnumSet<E>(elementClass);
         for (E e : elementClass.getEnumConstants()) {
             set.add(e);
@@ -199,7 +201,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * @param e The only element to assign to the new set.
      * @return The new set containing the single element.
      */
-    public static <E extends Enum<E>> EnumSet<E> of(E e) {
+    public static <E extends Enum<E>> EnumSet<E> of(final E e) {
         EnumSet<E> set = new EnumSet<>(e.getDeclaringClass());
         set.add(e);
         return set;
@@ -213,7 +215,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * @param e2 The second element to add.
      * @return The new set containing only these two elements.
      */
-    public static <E extends Enum<E>> EnumSet<E> of (E e1, E e2) {
+    public static <E extends Enum<E>> EnumSet<E> of(final E e1, final E e2) {
         EnumSet<E> set = new EnumSet<>(e1.getDeclaringClass());
         set.add(e1);
         set.add(e2);
@@ -229,7 +231,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * @param e3 The third element to add.
      * @return The new set containing only these three elements.
      */
-    public static <E extends Enum<E>> EnumSet<E> of (E e1, E e2, E e3) {
+    public static <E extends Enum<E>> EnumSet<E> of(final E e1, final E e2, final E e3) {
         EnumSet<E> set = new EnumSet<>(e1.getDeclaringClass());
         set.add(e1);
         set.add(e2);
@@ -247,7 +249,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * @param e4 The fourth element to add.
      * @return The new set containing only these four elements.
      */
-    public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3, E e4) {
+    public static <E extends Enum<E>> EnumSet<E> of(final E e1, final E e2, final E e3, final E e4) {
         EnumSet<E> set = new EnumSet<>(e1.getDeclaringClass());
         set.add(e1);
         set.add(e2);
@@ -263,7 +265,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
      * @param c The other collection to add to this set.
      * @return Whether or not the enum set changed as a result.
      */
-    public boolean addAll(Collection<E> c) {
+    public boolean addAll(final Collection<E> c) {
         boolean changed = false;
         for (E elem : c) {
             if (add(elem)) {

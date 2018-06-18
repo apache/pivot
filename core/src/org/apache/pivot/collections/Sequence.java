@@ -19,18 +19,21 @@ package org.apache.pivot.collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.Utils;
 
 /**
  * Interface representing an ordered sequence of items.
+ *
+ * @param <T> The type of elements stored in this sequence.
  */
 public interface Sequence<T> {
     /**
      * Collection of static utility methods providing path access to nested
      * sequence data.
      *
-     * @param <T> note that in Tree the type parameter currently it's not used
+     * @param <T> note that in Tree the type parameter currently is not used
      */
     public static class Tree<T> {
         /**
@@ -44,54 +47,55 @@ public interface Sequence<T> {
                 elements = new ArrayList<>();
             }
 
-            public Path(Integer... elements) {
+            public Path(final Integer... elements) {
                 this.elements = new ArrayList<>(elements);
             }
 
-            public Path(Path path) {
+            public Path(final Path path) {
                 elements = new ArrayList<>(path.elements);
             }
 
-            public Path(Path path, int depth) {
+            public Path(final Path path, final int depth) {
                 elements = new ArrayList<>(path.elements, 0, depth);
             }
 
-            private Path(ArrayList<Integer> elements) {
+            private Path(final ArrayList<Integer> elements) {
                 this.elements = elements;
             }
 
             @Override
-            public int add(Integer element) {
+            public int add(final Integer element) {
                 return elements.add(element);
             }
 
             @Override
-            public void insert(Integer element, int index) {
+            public void insert(final Integer element, final int index) {
                 elements.insert(element, index);
             }
 
             @Override
-            public Integer update(int index, Integer element) {
+            public Integer update(final int index, final Integer element) {
                 return elements.update(index, element);
             }
 
             @Override
-            public int remove(Integer element) {
+            @UnsupportedOperation
+            public int remove(final Integer element) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Sequence<Integer> remove(int index, int count) {
+            public Sequence<Integer> remove(final int index, final int count) {
                 return elements.remove(index, count);
             }
 
             @Override
-            public Integer get(int index) {
+            public Integer get(final int index) {
                 return elements.get(index);
             }
 
             @Override
-            public int indexOf(Integer element) {
+            public int indexOf(final Integer element) {
                 return elements.indexOf(element);
             }
 
@@ -130,7 +134,7 @@ public interface Sequence<T> {
                 return elements.toArray(Integer[].class);
             }
 
-            public static Path forDepth(int depth) {
+            public static Path forDepth(final int depth) {
                 return new Path(new ArrayList<Integer>(depth));
             }
         }
@@ -139,37 +143,43 @@ public interface Sequence<T> {
          * Class representing an immutable path.
          */
         public static class ImmutablePath extends Path {
-            public ImmutablePath(Integer... elements) {
+            public ImmutablePath(final Integer... elements) {
                 super(elements);
             }
 
-            public ImmutablePath(Path path) {
+            public ImmutablePath(final Path path) {
                 super(path);
             }
 
             @Override
-            public int add(Integer element) {
+            @UnsupportedOperation
+            public int add(final Integer element) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public void insert(Integer element, int index) {
+            @UnsupportedOperation
+            public void insert(final Integer element, final int index) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Integer update(int index, Integer element) {
+            @UnsupportedOperation
+            public Integer update(final int index, final Integer element) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Sequence<Integer> remove(int index, int count) {
+            @UnsupportedOperation
+            public Sequence<Integer> remove(final int index, final int count) {
                 throw new UnsupportedOperationException();
             }
         }
 
         /**
          * Nested sequence item iterator interface.
+         *
+         * @param <T> Type of object contained in the sequence and the iterator.
          */
         public interface ItemIterator<T> extends Iterator<T> {
             /**
@@ -188,7 +198,7 @@ public interface Sequence<T> {
             private Path previousPath = null;
             private Path nextPath = new Path();
 
-            public DepthFirstItemIterator(Sequence<T> sequence) {
+            public DepthFirstItemIterator(final Sequence<T> sequence) {
                 stack.push(sequence);
                 nextPath.add(0);
                 normalize();
@@ -252,6 +262,7 @@ public interface Sequence<T> {
             }
 
             @Override
+            @UnsupportedOperation
             public void remove() {
                 throw new UnsupportedOperationException();
             }
@@ -278,7 +289,7 @@ public interface Sequence<T> {
          * parent sequence.
          */
         @SuppressWarnings("unchecked")
-        public static <T> int add(Sequence<T> sequence, T item, Path path) {
+        public static <T> int add(final Sequence<T> sequence, final T item, final Path path) {
             return ((Sequence<T>) get(sequence, path)).add(item);
         }
 
@@ -294,7 +305,7 @@ public interface Sequence<T> {
          * parent sequence.
          */
         @SuppressWarnings("unchecked")
-        public static <T> void insert(Sequence<T> sequence, T item, Path path, int index) {
+        public static <T> void insert(final Sequence<T> sequence, final T item, final Path path, final int index) {
             ((Sequence<T>) get(sequence, path)).insert(item, index);
         }
 
@@ -330,7 +341,7 @@ public interface Sequence<T> {
          * @param item The item to remove.
          * @return The path of the item that was removed.
          */
-        public static <T> Path remove(Sequence<T> sequence, T item) {
+        public static <T> Path remove(final Sequence<T> sequence, final T item) {
             Path path = pathOf(sequence, item);
             if (path == null) {
                 throw new IllegalArgumentException("item is not a descendant of sequence.");
@@ -351,7 +362,7 @@ public interface Sequence<T> {
          * @return The sequence of items that were removed.
          */
         @SuppressWarnings("unchecked")
-        public static <T> Sequence<T> remove(final Sequence<T> sequence, final Path path, int count) {
+        public static <T> Sequence<T> remove(final Sequence<T> sequence, final Path path, final int count) {
             Utils.checkNull(sequence, "sequence");
             Utils.checkNull(path, "path");
 
@@ -437,7 +448,7 @@ public interface Sequence<T> {
          * @param sequence The sequence for which we are requesting an iterator.
          * @return The new iterator over the sequence (depth-first order).
          */
-        public static <T> ItemIterator<T> depthFirstIterator(Sequence<T> sequence) {
+        public static <T> ItemIterator<T> depthFirstIterator(final Sequence<T> sequence) {
             return new DepthFirstItemIterator<>(sequence);
         }
 
@@ -450,7 +461,7 @@ public interface Sequence<T> {
          * @return <tt>true</tt> if the second argument is a descendant of the first
          * path argument, <tt>false</tt> otherwise.
          */
-        public static boolean isDescendant(Path ancestorPath, Path descendantPath) {
+        public static boolean isDescendant(final Path ancestorPath, final Path descendantPath) {
             int ancestorLength = ancestorPath.getLength();
             int descendantLength = descendantPath.getLength();
 
@@ -550,7 +561,7 @@ public interface Sequence<T> {
      * @param c The other collection to add to this sequence.
      */
     default void addAll(Collection<T> c) {
-        c.forEach (item -> add(item));
+        c.forEach(item -> add(item));
     }
 
     /**
