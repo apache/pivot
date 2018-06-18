@@ -52,6 +52,7 @@ limitations under the License.
     <!-- Dynamic properties -->
     <property file="build.properties"/>
     <property name="release" value="apache-${ant.project.name}-${version}"/>
+    <buildnumber/>
     <!-- Compiler properties and Test properties have been moved in build.properties -->
 
     <!-- Jar file names -->
@@ -225,7 +226,7 @@ limitations under the License.
                     <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                     <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
-                    <attribute name="Implementation-Version" value="${version}"/>
+                    <attribute name="Implementation-Version" value="${version}_${build.number}"/>
                     <attribute name="Permissions" value="${permissions}"/>
                     <attribute name="Codebase" value="*"/>
                     <attribute name="Caller-Allowable-Codebase" value="*"/>
@@ -270,7 +271,7 @@ limitations under the License.
                     <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                     <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
-                    <attribute name="Implementation-Version" value="${version}"/>
+                    <attribute name="Implementation-Version" value="${version}_${build.number}"/>
                     <attribute name="Permissions" value="${permissions}"/>
                     <attribute name="Codebase" value="*"/>
                     <attribute name="Caller-Allowable-Codebase" value="*"/>
