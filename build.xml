@@ -92,6 +92,19 @@ limitations under the License.
         <isset property="running.on.jenkins"/>
     </condition>
 
+    <!-- Definitions of the various translated resource files -->
+    <patternset id="resource-files">
+        <include name="**/src/**/Localization*.json"/>
+        <include name="**/src/**/StockTrackerWindow*.json"/>
+        <include name="**/src/**/Alert*.json"/>
+        <include name="**/src/**/Prompt*.json"/>
+        <include name="**/src/**/TerraCalendarSkin*.json"/>
+        <include name="**/src/**/TerraFileBrowserSheetSkin*.json"/>
+        <include name="**/src/**/TerraFileBrowserSkin*.json"/>
+        <include name="**/src/**/TerraVFSBrowserSheetSkin*.json"/>
+        <include name="**/src/**/TerraVFSBrowserSkin*.json"/>
+    </patternset>
+
     <!-- Ant version check -->
     <fail>
         <condition>
@@ -457,6 +470,15 @@ limitations under the License.
         <package-javadoc project="wtk" jarFile="${jar.wtk.javadoc}" title="WTK" package="${src.package.base}.wtk.*"/>
         <package-javadoc project="wtk-terra" jarFile="${jar.wtk-terra.javadoc}" title="WTK Terra Theme Provider" package="${src.package.base}.wtk.skin.terra.*"/>
         <delete dir="${folder.doc}"/>
+    </target>
+
+    <!-- Package the internationalizable resources separately for translators -->
+    <target name="package-i18n-resources" description="Packages the internationalizable resources" depends="compile">
+        <zip destfile="${release}-i18n.zip" update="false">
+            <zipfileset dir="." prefix="">
+                <patternset refid="resource-files"/>
+            </zipfileset>
+        </zip>
     </target>
 
     <!-- Run unit tests -->
