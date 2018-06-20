@@ -31,6 +31,7 @@ import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.collections.Sequence.Tree.Path;
+import org.apache.pivot.util.ClassUtils;
 import org.apache.pivot.util.Filter;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.util.Vote;
@@ -361,6 +362,11 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
 
         public void clearField(byte mask) {
             fields &= ~mask;
+        }
+
+        @Override
+        public String toString() {
+            return ClassUtils.simpleToString(this);
         }
     }
 
@@ -1256,8 +1262,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
         if (insertIndex >= 0) {
             Sequence<NodeInfo> nodes = new ArrayList<>();
 
-            // The parent branch's children are the baseline nodes to make
-            // visible
+            // The parent branch's children are the baseline nodes to make visible
             parentBranchInfo.loadChildren();
             for (int i = 0, n = parentBranchInfo.children.getLength(); i < n; i++) {
                 nodes.add(parentBranchInfo.children.get(i));
@@ -1344,16 +1349,21 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
      */
     private void removeVisibleNodes(BranchInfo parentBranchInfo, int index, int count) {
         parentBranchInfo.loadChildren();
+        int childrenLength = parentBranchInfo.children.getLength();
 
         int countUpdated = count;
 
         if (countUpdated == -1) {
             assert (index == 0) : "Non-zero index with 'remove all' count";
-            countUpdated = parentBranchInfo.children.getLength();
+            countUpdated = childrenLength;
         }
 
-        assert (index + countUpdated <= parentBranchInfo.children.getLength()) : "Value too big";
-
+        // If the index is greater-equal the child length, then there could
+        // not possibly be any visible nodes, so just quit
+        if (index >= childrenLength) {
+            return;
+        }
+        assert (index + countUpdated <= childrenLength) : "Value too big";
         if (countUpdated > 0) {
             NodeInfo first = parentBranchInfo.children.get(index);
             NodeInfo last = parentBranchInfo.children.get(index + countUpdated - 1);
@@ -2060,12 +2070,18 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     public void nodesRemoved(TreeView treeView, Path path, int index, int count) {
         BranchInfo branchInfo = (BranchInfo) getNodeInfoAt(path);
 
-        // Remove the node from the visible nodes list
+        // Remove the nodes from the visible nodes list
         removeVisibleNodes(branchInfo, index, count);
 
         // Update our internal branch info
         if (branchInfo.children != null) {
-            branchInfo.children.remove(index, count);
+            // Problem: if "loadChildren" was called on this branch the first time
+            // by "removeVisibleNodes" above, then the "children" will actually be
+            // correct here (i.e., already removed), so this is unnecessary.
+            int len = branchInfo.children.getLength();
+            if (index < len && index + count <= len) {
+                branchInfo.children.remove(index, count);
+            }
         }
 
         // If the empty branch controls are not shown, then this event might
