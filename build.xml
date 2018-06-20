@@ -240,6 +240,9 @@ limitations under the License.
                 </metainf>
                 <manifest>
                     <attribute name="Sealed" value="true"/>
+                    <attribute name="Specification-Title" value="Apache Pivot @{title}"/>
+                    <attribute name="Specification-Version" value="${version}"/>
+                    <attribute name="Specification-Vendor" value="The Apache Software Foundation"/>
                     <attribute name="Implementation-Vendor-Id" value="org.apache"/>
                     <attribute name="Implementation-Vendor" value="The Apache Software Foundation"/>
                     <attribute name="Implementation-Title" value="Apache Pivot @{title}"/>
