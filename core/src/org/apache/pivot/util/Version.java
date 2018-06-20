@@ -29,24 +29,23 @@ public class Version implements Comparable<Version>, Serializable {
     private short majorRevision = 0;
     private short minorRevision = 0;
     private short maintenanceRevision = 0;
-    private short updateRevision = 0;
+    private long updateRevision = 0;
     private String build = null;
 
-    public Version(int majorRevision, int minorRevision, int maintenanceRevision, int updateRevision) {
+    public Version(int majorRevision, int minorRevision, int maintenanceRevision, long updateRevision) {
         this(majorRevision, minorRevision, maintenanceRevision, updateRevision, null);
     }
 
     public Version(int majorRevision, int minorRevision, int maintenanceRevision,
-        int updateRevision, String build) {
+        long updateRevision, String build) {
         Utils.checkInRangeOfShort(majorRevision, "majorRevision");
         Utils.checkInRangeOfShort(minorRevision, "minorRevision");
         Utils.checkInRangeOfShort(maintenanceRevision, "maintenanceRevision");
-        Utils.checkInRangeOfShort(updateRevision, "updateRevision");
 
         this.majorRevision = (short)majorRevision;
         this.minorRevision = (short)minorRevision;
         this.maintenanceRevision = (short)maintenanceRevision;
-        this.updateRevision = (short)updateRevision;
+        this.updateRevision = updateRevision;
         this.build = build;
     }
 
@@ -62,15 +61,15 @@ public class Version implements Comparable<Version>, Serializable {
         return maintenanceRevision;
     }
 
-    public short getUpdateRevision() {
+    public long getUpdateRevision() {
         return updateRevision;
     }
 
     public long getNumber() {
-        long number = (long)((majorRevision) & 0xffff) << (16 * 3)
+        long number = ((long)((majorRevision) & 0xffff) << (16 * 3)
             | (long)((minorRevision) & 0xffff) << (16 * 2)
-            | (long)((maintenanceRevision) & 0xffff) << (16 * 1)
-            | (long)((updateRevision) & 0xffff) << (16 * 0);
+            | (long)((maintenanceRevision) & 0xffff) << (16 * 1))
+            + updateRevision;
 
         return number;
     }
@@ -110,7 +109,7 @@ public class Version implements Comparable<Version>, Serializable {
         short majorRevision = 0;
         short minorRevision = 0;
         short maintenanceRevision = 0;
-        short updateRevision = 0;
+        long updateRevision = 0;
         String build = null;
 
         String revision;
@@ -140,7 +139,7 @@ public class Version implements Comparable<Version>, Serializable {
                         maintenanceRevision = Short.parseShort(maintenanceRevisionNumbers[0]);
 
                         if (maintenanceRevisionNumbers.length > 1) {
-                            updateRevision = Short.parseShort(maintenanceRevisionNumbers[1]);
+                            updateRevision = Long.parseLong(maintenanceRevisionNumbers[1]);
                         }
                     }
                 }
