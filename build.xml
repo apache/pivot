@@ -52,8 +52,12 @@ limitations under the License.
     <!-- Dynamic properties -->
     <property file="build.properties"/>
     <property name="release" value="apache-${ant.project.name}-${version}"/>
-    <buildnumber/>
-    <!-- Compiler properties and Test properties have been moved in build.properties -->
+    <propertyfile file="build.number" comment="## Auto generated build number. DO NOT MODIFY!">
+        <entry key="build.number" type="date" operation="=" value="now" pattern="YYYYDDDHHmm"/>
+    </propertyfile>
+    <property file="build.number"/>
+
+    <!-- Compiler properties and Test properties have been moved into build.properties -->
 
     <!-- Jar file names -->
     <property name="jar.charts" value="${ant.project.name}-charts-${version}.jar" />
