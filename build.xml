@@ -136,7 +136,8 @@ limitations under the License.
                     <not>
                         <or>
                             <equals arg1="${ant.java.version}" arg2="1.8"/>
-                            <equals arg1="${ant.java.version}" arg2="1.9"/>
+                            <equals arg1="${ant.java.version}" arg2="9"/>
+                            <equals arg1="${ant.java.version}" arg2="10"/>
                         </or>
                     </not>
                 </condition>
