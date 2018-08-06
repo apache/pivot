@@ -18,6 +18,8 @@ package org.apache.pivot.util.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import java.util.regex.*;
 
 import org.junit.Test;
 
@@ -114,12 +116,16 @@ public class VersionTest {
             parsedToString, PIVOT_996_OUTPUT);
         assertEquals("PIVOT-996 toString", parsedToString, PIVOT_996_OUTPUT);
 
+        Pattern versionPattern = Pattern.compile("(\\d+\\.\\d+\\.\\d+).*");
         String sysJavaVersion = System.getProperty("java.runtime.version");
         Version javaVersion = Version.decode(sysJavaVersion);
         String formattedJavaVersion = javaVersion.toString();
         System.out.format("Java Runtime version (parsed and formatted): %1$s, raw: %2$s%n",
             formattedJavaVersion, sysJavaVersion);
-        assertEquals("Java Runtime version", sysJavaVersion, formattedJavaVersion);
+        Matcher sysMatcher = versionPattern.matcher(sysJavaVersion);
+        boolean matches = sysMatcher.matches() 
+            && sysMatcher.group(1).equals(javaVersion.simpleToString());
+        assertTrue("Java Runtime version match", matches);
 
         String newJava9Version = "9-ea+19";
         Version newJava9 = Version.decode(newJava9Version);

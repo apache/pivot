@@ -103,6 +103,16 @@ public class Version implements Comparable<Version>, Serializable {
         return string;
     }
 
+    /**
+     * @return A three-component string with "major.minor.maintenance".
+     */
+    public String simpleToString() {
+        return String.format("%1$d.%2$d.%3$d",
+            this.majorRevision,
+            this.minorRevision,
+            this.maintenanceRevision);
+    }
+
     public static Version decode(String string) {
         Version version = null;
 
