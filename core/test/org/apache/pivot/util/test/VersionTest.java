@@ -19,7 +19,8 @@ package org.apache.pivot.util.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -123,7 +124,7 @@ public class VersionTest {
         System.out.format("Java Runtime version (parsed and formatted): %1$s, raw: %2$s%n",
             formattedJavaVersion, sysJavaVersion);
         Matcher sysMatcher = versionPattern.matcher(sysJavaVersion);
-        boolean matches = sysMatcher.matches() 
+        boolean matches = sysMatcher.matches()
             && sysMatcher.group(1).equals(javaVersion.simpleToString());
         assertTrue("Java Runtime version match", matches);
 

@@ -19,14 +19,28 @@ limitations under the License.
 <project name="pivot" default="environment-info"
     xmlns:artifact="antlib:org.apache.maven.artifact.ant"
     xmlns:cs="antlib:com.puppycrawl.tools.checkstyle.ant"
+    xmlns:if="ant:if"
+    xmlns:unless="ant:unless"
 >
+    <!-- Java-version-related properties -->
+    <condition property="java_modules" value="true" else="false">
+        <not>
+            <!-- Since we only support Java 8 or above here, anything not 8 must be 9 or above -->
+            <equals arg1="${ant.java.version}" arg2="1.8"/>
+        </not>
+    </condition>
+
     <!-- Classpath-related properties -->
     <property environment="env"/>
     <path id="classpath.env">
         <pathelement location="${env.CLASSPATH}"/>
     </path>
     <path id="classpath.javalib">
-        <fileset dir="${java.home}/lib" includes="**/*.jar" excludes="**/jfxrt.jar"/>
+        <fileset dir="${java.home}/lib">
+            <include name="**/*.jar"/>
+            <exclude name="**/jfxrt.jar"/>
+            <exclude name="missioncontrol/**/*.jar" if:true="${java_modules}"/>
+        </fileset>
     </path>
     <property name="classpath_env" refid="classpath.env"/>
     <property name="classpath_javalib" refid="classpath.javalib"/>
@@ -373,6 +387,10 @@ limitations under the License.
 
                 <link href="http://download.oracle.com/javase/8/docs/api"/>
                 <link href="http://download.oracle.com/javaee/7/api/"/>
+
+                <arg value="-html4" if:true="${java_modules}"/>
+                <arg value="--add-modules" if:true="${java_modules}"/>
+                <arg value="java.activation" if:true="${java_modules}"/>
             </javadoc>
 
             <package-maven-source-or-javadoc-jar
@@ -547,6 +565,10 @@ limitations under the License.
 
             <link href="https://docs.oracle.com/javase/8/docs/api/"/>
             <link href="http://download.oracle.com/javaee/7/api/"/>
+
+            <arg value="-html4" if:true="${java_modules}"/>
+            <arg value="--add-modules" if:true="${java_modules}"/>
+            <arg value="java.activation" if:true="${java_modules}"/>
         </javadoc>
     </target>
 
