@@ -66,10 +66,23 @@ limitations under the License.
     <!-- Dynamic properties -->
     <property file="build.properties"/>
     <property name="release" value="apache-${ant.project.name}-${version}"/>
+    <exec executable="svn" dir="." output="svnlog">
+        <arg value="info"/>
+    </exec>
+    <loadproperties srcFile="svnlog">
+        <filterchain>
+            <linecontains>
+                <contains value="Last Changed Rev:"/>
+            </linecontains>
+            <replacestring from="Last Changed Rev:" to="lastchangedrev="/>
+        </filterchain>
+    </loadproperties>
+    <echo message="Last Changed Revision: ${lastchangedrev}"/>
     <propertyfile file="build.number" comment="## Auto generated build number. DO NOT MODIFY!">
-        <entry key="build.number" type="date" operation="=" value="now" pattern="YYYYDDDHHmm"/>
+        <entry key="build.number" type="string" operation="=" value="${lastchangedrev}"/>
     </propertyfile>
     <property file="build.number"/>
+    <echo message="Build Number: ${build.number}"/>
 
     <!-- Compiler properties and Test properties have been moved into build.properties -->
 
