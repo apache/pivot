@@ -126,7 +126,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
     }
 
     private TextPane getTextPane() {
-        return (TextPane)getComponent();
+        return (TextPane) getComponent();
     }
 
     private Rectangle getCaretRectangle(TextHitInfo textCaret) {

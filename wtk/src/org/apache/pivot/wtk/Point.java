@@ -39,30 +39,30 @@ public final class Point implements Serializable {
     public static final String X_KEY = "x";
     public static final String Y_KEY = "y";
 
-    public Point(int x, int y) {
+    public Point(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Point(Point point) {
+    public Point(final Point point) {
         Utils.checkNull(point, "point");
 
         this.x = point.x;
         this.y = point.y;
     }
 
-    public Point(Dictionary<String, ?> point) {
+    public Point(final Dictionary<String, ?> point) {
         Utils.checkNull(point, "point");
 
         this.x = point.getInt(X_KEY);
         this.y = point.getInt(Y_KEY);
     }
 
-    public Point(Sequence<?> point) {
+    public Point(final Sequence<?> point) {
         Utils.checkNull(point, "point");
 
-        this.x = ((Number)point.get(0)).intValue();
-        this.y = ((Number)point.get(1)).intValue();
+        this.x = ((Number) point.get(0)).intValue();
+        this.y = ((Number) point.get(1)).intValue();
     }
 
     /**
@@ -78,12 +78,12 @@ public final class Point implements Serializable {
      * @return A new object represented the translated
      * location.
      */
-    public Point translate(int dx, int dy) {
+    public Point translate(final int dx, final int dy) {
         return new Point(x + dx, y + dy);
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         boolean equals = false;
 
         if (object instanceof Point) {
@@ -119,7 +119,7 @@ public final class Point implements Serializable {
      * @see #Point(Dictionary)
      * @see #Point(int, int)
      */
-    public static Point decode(String value) {
+    public static Point decode(final String value) {
         Utils.checkNull(value);
 
         Point point;

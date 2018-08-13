@@ -46,7 +46,7 @@ public final class Limits implements Serializable {
         this(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    public Limits(int minimum, int maximum) {
+    public Limits(final int minimum, final int maximum) {
         if (minimum > maximum) {
             throw new IllegalArgumentException("minimum is greater than maximum.");
         }
@@ -61,11 +61,11 @@ public final class Limits implements Serializable {
      *
      * @param value The single value range for this limits.
      */
-    public Limits(int value) {
+    public Limits(final int value) {
         this(value, value);
     }
 
-    public Limits(Limits limits) {
+    public Limits(final Limits limits) {
         Utils.checkNull(limits, "limits");
 
         minimum = limits.minimum;
@@ -81,7 +81,7 @@ public final class Limits implements Serializable {
      * @param limits The map/dictionary containing the desired limits values.
      * @throws IllegalArgumentException if the min is greater than the max.
      */
-    public Limits(Dictionary<String, ?> limits) {
+    public Limits(final Dictionary<String, ?> limits) {
         Utils.checkNull(limits, "limits");
 
         minimum = limits.getInt(MINIMUM_KEY, Integer.MIN_VALUE);
@@ -92,11 +92,11 @@ public final class Limits implements Serializable {
         }
     }
 
-    public Limits(Sequence<?> limits) {
+    public Limits(final Sequence<?> limits) {
         Utils.checkNull(limits, "limits");
 
-        minimum = ((Number)limits.get(0)).intValue();
-        maximum = ((Number)limits.get(1)).intValue();
+        minimum = ((Number) limits.get(0)).intValue();
+        maximum = ((Number) limits.get(1)).intValue();
 
         if (minimum > maximum) {
             throw new IllegalArgumentException("minimum is greater than maximum.");
@@ -110,7 +110,7 @@ public final class Limits implements Serializable {
      * the range in this case cannot be represented by an integer.
      */
     public long range() {
-        return ((long)maximum - (long)minimum + 1L);
+        return ((long) maximum - (long) minimum + 1L);
     }
 
     /**
@@ -120,7 +120,7 @@ public final class Limits implements Serializable {
      * @param value The value to limit.
      * @return The bounded value.
      */
-    public int constrain(int value) {
+    public int constrain(final int value) {
         if (value < minimum) {
             return minimum;
         } else if (value > maximum) {
@@ -137,12 +137,12 @@ public final class Limits implements Serializable {
      * @param value The value to test.
      * @return Whether the value is contained within the limits.
      */
-    public boolean contains(int value) {
+    public boolean contains(final int value) {
         return (value >= minimum) && (value <= maximum);
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         boolean equals = false;
 
         if (object instanceof Limits) {
@@ -202,7 +202,7 @@ public final class Limits implements Serializable {
      * @see #Limits(Dictionary)
      * @see #Limits(int, int)
      */
-    public static Limits decode(String value) {
+    public static Limits decode(final String value) {
         Utils.checkNull(value, "value");
 
         Limits limits;

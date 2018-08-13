@@ -114,7 +114,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         while ((parent != null) && !(parent instanceof Paragraph)) {
             parent = parent.getParent();
         }
-        return (Paragraph)parent;
+        return (Paragraph) parent;
     }
 
     @Override
@@ -287,7 +287,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
         try {
             for (Node child : element.nodes) {
                 if (child instanceof Element) {
-                    addCharacters(buf, (Element)child);
+                    addCharacters(buf, (Element) child);
                 } else {
                     buf.append(child.getCharacters());
                 }
@@ -392,9 +392,9 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
                 node.setParent(null);
                 removedCharacterCount += node.getCharacterCount();
                 if (node instanceof Element) {
-                    removedChars.append(((Element)node).getText());
+                    removedChars.append(((Element) node).getText());
                 } else if (node instanceof TextNode) {
-                    removedChars.append(((TextNode)node).getText());
+                    removedChars.append(((TextNode) node).getText());
                 }
             }
 

@@ -69,9 +69,9 @@ public class ScrollBar extends Container {
         public Scope(Sequence<?> scope) {
             Utils.checkNull(scope, "scope");
 
-            start = ((Number)scope.get(0)).intValue();
-            end = ((Number)scope.get(1)).intValue();
-            extent = ((Number)scope.get(2)).intValue();
+            start = ((Number) scope.get(0)).intValue();
+            end = ((Number) scope.get(1)).intValue();
+            extent = ((Number) scope.get(2)).intValue();
         }
 
         @Override

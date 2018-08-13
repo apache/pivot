@@ -44,7 +44,7 @@ public class ScriptApplication implements Application {
     private String sourceDefault = null;
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         // Get the location of the source file
         String src = properties.get(SRC_KEY);
         if (src == null) {
@@ -97,12 +97,12 @@ public class ScriptApplication implements Application {
             window = new Window();
             window.setMaximized(true);
             window.open(display);
-            Window auxWindow = (Window)component;
+            Window auxWindow = (Window) component;
             auxWindow.open(window);
             auxWindow.requestFocus();
         } else {
             if (component instanceof Window) {
-                window = (Window)component;
+                window = (Window) component;
             } else {
                 window = new Window();
                 window.setContent(component);
@@ -138,7 +138,7 @@ public class ScriptApplication implements Application {
      * @param srcArgument The name of a source file that will be used if
      * the <tt>--src=...</tt> argument is missing from the command line.
      */
-    public ScriptApplication(String srcArgument) {
+    public ScriptApplication(final String srcArgument) {
         if (srcArgument.startsWith("@")) {
             this.sourceDefault = srcArgument;
         } else {

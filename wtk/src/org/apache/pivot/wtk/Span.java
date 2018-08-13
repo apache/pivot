@@ -41,7 +41,7 @@ public final class Span {
      *
      * @param index The start and end of this span (inclusive).
      */
-    public Span(int index) {
+    public Span(final int index) {
         start = index;
         end = index;
     }
@@ -51,7 +51,7 @@ public final class Span {
      * @param start The start of this span - inclusive.
      * @param end The end of the span - inclusive.
      */
-    public Span(int start, int end) {
+    public Span(final int start, final int end) {
         this.start = start;
         this.end = end;
     }
@@ -63,7 +63,7 @@ public final class Span {
      * @param span An existing span (which must not be {@code null}).
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public Span(Span span) {
+    public Span(final Span span) {
         Utils.checkNull(span, "span");
 
         start = span.start;
@@ -78,7 +78,7 @@ public final class Span {
      * @throws IllegalArgumentException if the given span is {@code null}
      * or if the dictionary does not contain the start and end keys.
      */
-    public Span(Dictionary<String, ?> span) {
+    public Span(final Dictionary<String, ?> span) {
         Utils.checkNull(span, "span");
 
         if (!span.containsKey(START_KEY)) {
@@ -101,11 +101,11 @@ public final class Span {
      * @param span A sequence containing the start and end values.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public Span(Sequence<?> span) {
+    public Span(final Sequence<?> span) {
         Utils.checkNull(span, "span");
 
-        start = ((Number)span.get(0)).intValue();
-        end = ((Number)span.get(1)).intValue();
+        start = ((Number) span.get(0)).intValue();
+        end = ((Number) span.get(1)).intValue();
     }
 
     /**
@@ -125,7 +125,7 @@ public final class Span {
      * otherwise.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public boolean contains(Span span) {
+    public boolean contains(final Span span) {
         Utils.checkNull(span, "span");
 
         int otherNormalStart = span.normalStart();
@@ -151,7 +151,7 @@ public final class Span {
      * otherwise.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public boolean adjacentTo(Span span) {
+    public boolean adjacentTo(final Span span) {
         Utils.checkNull(span, "span");
 
         int otherNormalStart = span.normalStart();
@@ -177,7 +177,7 @@ public final class Span {
      * otherwise.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public boolean before(Span span) {
+    public boolean before(final Span span) {
         Utils.checkNull(span, "span");
 
         return normalEnd() < span.normalStart();
@@ -193,7 +193,7 @@ public final class Span {
      * otherwise.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public boolean after(Span span) {
+    public boolean after(final Span span) {
         Utils.checkNull(span, "span");
 
         return normalStart() > span.normalEnd();
@@ -207,7 +207,7 @@ public final class Span {
      * <tt>false</tt>, otherwise.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public boolean intersects(Span span) {
+    public boolean intersects(final Span span) {
         Utils.checkNull(span, "span");
 
         int otherNormalStart = span.normalStart();
@@ -231,16 +231,14 @@ public final class Span {
      * <tt>span</tt>, or <tt>null</tt> if the spans do not intersect.
      * @throws IllegalArgumentException if the given span is {@code null}.
      */
-    public Span intersect(Span span) {
+    public Span intersect(final Span span) {
         Utils.checkNull(span, "span");
 
-        Span intersection = null;
-
         if (intersects(span)) {
-            intersection = new Span(Math.max(start, span.start), Math.min(end, span.end));
+            return new Span(Math.max(start, span.start), Math.min(end, span.end));
         }
 
-        return intersection;
+        return null;
     }
 
     /**
@@ -250,7 +248,7 @@ public final class Span {
      * @return A new Span instance representing the union of this span and
      * <tt>span</tt>.
      */
-    public Span union(Span span) {
+    public Span union(final Span span) {
         Utils.checkNull(span, "span");
 
         return new Span(Math.min(start, span.start), Math.max(end, span.end));
@@ -279,7 +277,7 @@ public final class Span {
      * @param end The new proposed end.
      * @return A span containing the normalized range.
      */
-    public static Span normalize(int start, int end) {
+    public static Span normalize(final int start, final int end) {
         return new Span(Math.min(start, end), Math.max(start, end));
     }
 
@@ -301,7 +299,7 @@ public final class Span {
      * span (both start and end).
      * @return A new {@link Span} with updated values.
      */
-    public Span offset(int offset) {
+    public Span offset(final int offset) {
         return new Span(this.start + offset, this.end + offset);
     }
 
@@ -312,7 +310,7 @@ public final class Span {
      * span (only the end).
      * @return A new {@link Span} with updated value.
      */
-    public Span lengthen(int offset) {
+    public Span lengthen(final int offset) {
         return new Span(this.start, this.end + offset);
     }
 
@@ -323,12 +321,12 @@ public final class Span {
      * span (only the start).
      * @return A new {@link Span} with updated value.
      */
-    public Span move(int offset) {
+    public Span move(final int offset) {
         return new Span(this.start + offset, this.end);
     }
 
     /**
-     * Decides whether the normalized version of this span is equal the
+     * Decides whether the normalized version of this span is equal to the
      * normalized version of the other span.  Saves the overhead of making
      * a new object (with {@link #normalize}).
      *
@@ -336,7 +334,7 @@ public final class Span {
      * @return Whether or not the normalized values of both spans are the same.
      * @throws IllegalArgumentException if the other span is {@code null}.
      */
-    public boolean normalEquals(Span span) {
+    public boolean normalEquals(final Span span) {
         Utils.checkNull(span, "span");
 
         return (normalStart() == span.normalStart())
@@ -344,7 +342,7 @@ public final class Span {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         boolean equal = false;
 
         if (o instanceof Span) {
@@ -389,7 +387,7 @@ public final class Span {
      * @see #Span(int, int)
      * @see #Span(int)
      */
-    public static Span decode(String value) {
+    public static Span decode(final String value) {
         Utils.checkNullOrEmpty(value, "value");
 
         Span span;
@@ -426,7 +424,7 @@ public final class Span {
     /** Comparator that determines the index of the first intersecting range. */
     public static final Comparator<Span> START_COMPARATOR = new Comparator<Span>() {
         @Override
-        public int compare(Span range1, Span range2) {
+        public int compare(final Span range1, final Span range2) {
             return (range1.end - range2.start);
         }
     };
@@ -434,7 +432,7 @@ public final class Span {
     /** Comparator that determines the index of the last intersecting range. */
     public static final Comparator<Span> END_COMPARATOR = new Comparator<Span>() {
         @Override
-        public int compare(Span range1, Span range2) {
+        public int compare(final Span range1, final Span range2) {
             return (range1.start - range2.end);
         }
     };
@@ -442,7 +440,7 @@ public final class Span {
     /** Comparator that determines if two ranges intersect. */
     public static final Comparator<Span> INTERSECTION_COMPARATOR = new Comparator<Span>() {
         @Override
-        public int compare(Span range1, Span range2) {
+        public int compare(final Span range1, final Span range2) {
             return (range1.start > range2.end) ? 1 : (range2.start > range1.end) ? -1 : 0;
         }
     };

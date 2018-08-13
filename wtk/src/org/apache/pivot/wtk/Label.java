@@ -62,7 +62,7 @@ public class Label extends Component {
         this("");
     }
 
-    public Label(String text) {
+    public Label(final String text) {
         setText(text);
 
         installSkin(Label.class);
@@ -82,7 +82,7 @@ public class Label extends Component {
      * @throws IllegalArgumentException if the text is {@code null} or if
      * the text length exceeds the allowed maximum.
      */
-    public void setText(String text) {
+    public void setText(final String text) {
         Utils.checkNull(text, "text");
 
         if (text.length() > maximumLength) {
@@ -104,7 +104,7 @@ public class Label extends Component {
      * @param text The text to set (if {@code null} will set an empty string {@code ""}).
      * @see #setText
      */
-    public void setTextOrEmpty(String text) {
+    public void setTextOrEmpty(final String text) {
         this.setText(text != null ? text : "");
     }
 
@@ -130,7 +130,7 @@ public class Label extends Component {
      * @param maximumLength The maximum length of the label text.
      * @throws IllegalArgumentException if the length given is negative.
      */
-    public void setMaximumLength(int maximumLength) {
+    public void setMaximumLength(final int maximumLength) {
         Utils.checkNonNegative(maximumLength, "maximumLength");
 
         int previousMaximumLength = this.maximumLength;
@@ -152,7 +152,7 @@ public class Label extends Component {
      *
      * @param textKey The text key, or <tt>null</tt> to clear the binding.
      */
-    public void setTextKey(String textKey) {
+    public void setTextKey(final String textKey) {
         String previousTextKey = this.textKey;
 
         if (previousTextKey != textKey) {
@@ -165,7 +165,7 @@ public class Label extends Component {
         return textBindType;
     }
 
-    public void setTextBindType(BindType textBindType) {
+    public void setTextBindType(final BindType textBindType) {
         Utils.checkNull(textBindType, "textBindType");
 
         BindType previousTextBindType = this.textBindType;
@@ -180,7 +180,7 @@ public class Label extends Component {
         return textBindMapping;
     }
 
-    public void setTextBindMapping(TextBindMapping textBindMapping) {
+    public void setTextBindMapping(final TextBindMapping textBindMapping) {
         TextBindMapping previousTextBindMapping = this.textBindMapping;
 
         if (previousTextBindMapping != textBindMapping) {
@@ -190,7 +190,7 @@ public class Label extends Component {
     }
 
     @Override
-    public void load(Object context) {
+    public void load(final Object context) {
         if (textKey != null && JSON.containsKey(context, textKey) && textBindType != BindType.STORE) {
             Object value = JSON.get(context, textKey);
 
@@ -200,12 +200,12 @@ public class Label extends Component {
                 value = textBindMapping.toString(value);
             }
 
-            setTextOrEmpty((String)value);
+            setTextOrEmpty((String) value);
         }
     }
 
     @Override
-    public void store(Object context) {
+    public void store(final Object context) {
         if (textKey != null && textBindType != BindType.LOAD) {
             String textLocal = getText();
             JSON.put(context, textKey,

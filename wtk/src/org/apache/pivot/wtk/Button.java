@@ -290,7 +290,7 @@ public abstract class Button extends Component {
                 if (queuedActionDelay <= 0) {
                     ApplicationContext.queueCallback(actionCallback);
                 } else {
-                    ApplicationContext.scheduleCallback(actionCallback, (long)queuedActionDelay);
+                    ApplicationContext.scheduleCallback(actionCallback, (long) queuedActionDelay);
                 }
             } else {
                 action.perform(this);

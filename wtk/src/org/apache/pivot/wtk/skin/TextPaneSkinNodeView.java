@@ -54,7 +54,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
 
     private boolean valid = false;
 
-    public TextPaneSkinNodeView(TextPaneSkin textPaneSkin, Node node) {
+    public TextPaneSkinNodeView(final TextPaneSkin textPaneSkin, final Node node) {
         this.textPaneSkin = textPaneSkin;
         this.node = node;
     }
@@ -67,7 +67,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return parent;
     }
 
-    protected void setParent(TextPaneSkinElementView parent) {
+    protected void setParent(final TextPaneSkinElementView parent) {
         this.parent = parent;
     }
 
@@ -99,7 +99,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return new Dimensions(width, height);
     }
 
-    public void setSize(int width, int height) {
+    public void setSize(final int width, final int height) {
         assert (width >= 0);
         assert (height >= 0);
 
@@ -113,7 +113,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         repaint();
     }
 
-    public void setSize(Dimensions size) {
+    public void setSize(final Dimensions size) {
         Utils.checkNull(size, "size");
         setSize(size.width, size.height);
     }
@@ -130,7 +130,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         return new Point(x, y);
     }
 
-    protected void setLocation(int x, int y) {
+    protected void setLocation(final int x, final int y) {
         // Redraw the region formerly occupied by this view
         repaint();
 
@@ -158,12 +158,12 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         repaint(0, 0, width, height);
     }
 
-    public void repaint(int xArgument, int yArgument, int widthArgument, int heightArgument) {
-        assert (widthArgument >= 0);
-        assert (heightArgument >= 0);
+    public void repaint(final int xArg, final int yArg, final int widthArg, final int heightArg) {
+        assert (widthArg >= 0);
+        assert (heightArg >= 0);
 
         if (parent != null) {
-            parent.repaint(xArgument + this.x, yArgument + this.y, widthArgument, heightArgument);
+            parent.repaint(xArg + this.x, yArg + this.y, widthArg, heightArg);
         }
     }
 
@@ -183,7 +183,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
         valid = false;
     }
 
-    public final void layout(int breakWidth) {
+    public final void layout(final int breakWidth) {
         // reduce the number of layout calculations we need to do by only
         // redoing them if necessary
         if (!valid || previousBreakWidth != breakWidth) {
@@ -221,33 +221,33 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     public abstract Bounds getCharacterBounds(int offset);
 
     @Override
-    public void parentChanged(Node nodeArgument, Element previousParent) {
+    public void parentChanged(final Node nodeArgument, final Element previousParent) {
         // No-op
     }
 
     @Override
-    public void offsetChanged(Node nodeArgument, int previousOffset) {
+    public void offsetChanged(final Node nodeArgument, final int previousOffset) {
         // No-op
     }
 
     @Override
-    public void rangeInserted(Node nodeArgument, int offset, int span) {
+    public void rangeInserted(final Node nodeArgument, final int offset, final int span) {
         // No-op
     }
 
     @Override
-    public void rangeRemoved(Node nodeArgument, int offset, int characterCount,
-        CharSequence removedChars) {
+    public void rangeRemoved(final Node nodeArgument, final int offset, final int characterCount,
+        final CharSequence removedChars) {
         // No-op
     }
 
     @Override
-    public void nodesRemoved(Node nodeArgument, Sequence<Node> removed, int offset) {
+    public void nodesRemoved(final Node nodeArgument, final Sequence<Node> removed, final int offset) {
         // No-op
     }
 
     @Override
-    public void nodeInserted(Node nodeArgument, int offset) {
+    public void nodeInserted(final Node nodeArgument, final int offset) {
         // No-op
     }
 
@@ -264,23 +264,23 @@ abstract class TextPaneSkinNodeView implements NodeListener {
     private static HashMap<Class<? extends Node>, NodeCreator> nodeViewCreatorMap = new HashMap<>();
     static {
         nodeViewCreatorMap.put(Document.class, (textPaneSkin, node) ->
-            new TextPaneSkinDocumentView(textPaneSkin, (Document)node));
+            new TextPaneSkinDocumentView(textPaneSkin, (Document) node));
         nodeViewCreatorMap.put(Paragraph.class, (textPaneSkin, node) ->
-            new TextPaneSkinParagraphView(textPaneSkin, (Paragraph)node));
+            new TextPaneSkinParagraphView(textPaneSkin, (Paragraph) node));
         nodeViewCreatorMap.put(TextNode.class, (textPaneSkin, node) ->
-            new TextPaneSkinTextNodeView(textPaneSkin, (TextNode)node));
+            new TextPaneSkinTextNodeView(textPaneSkin, (TextNode) node));
         nodeViewCreatorMap.put(ImageNode.class, (textPaneSkin, node) ->
-            new TextPaneSkinImageNodeView(textPaneSkin, (ImageNode)node));
+            new TextPaneSkinImageNodeView(textPaneSkin, (ImageNode) node));
         nodeViewCreatorMap.put(ComponentNode.class, (textPaneSkin, node) ->
-            new TextPaneSkinComponentNodeView(textPaneSkin, (ComponentNode)node));
+            new TextPaneSkinComponentNodeView(textPaneSkin, (ComponentNode) node));
         nodeViewCreatorMap.put(TextSpan.class, (textPaneSkin, node) ->
-            new TextPaneSkinSpanView(textPaneSkin, (TextSpan)node));
+            new TextPaneSkinSpanView(textPaneSkin, (TextSpan) node));
         nodeViewCreatorMap.put(NumberedList.class, (textPaneSkin, node) ->
-            new TextPaneSkinNumberedListView(textPaneSkin, (NumberedList)node));
+            new TextPaneSkinNumberedListView(textPaneSkin, (NumberedList) node));
         nodeViewCreatorMap.put(BulletedList.class, (textPaneSkin, node) ->
-            new TextPaneSkinBulletedListView(textPaneSkin, (BulletedList)node));
+            new TextPaneSkinBulletedListView(textPaneSkin, (BulletedList) node));
         nodeViewCreatorMap.put(List.Item.class, (textPaneSkin, node) ->
-            new TextPaneSkinListItemView(textPaneSkin, (List.Item)node));
+            new TextPaneSkinListItemView(textPaneSkin, (List.Item) node));
     }
 
     /**
@@ -290,7 +290,7 @@ abstract class TextPaneSkinNodeView implements NodeListener {
      * @param node The data node we are creating the view for.
      * @return The corresponding view node.
      */
-    public static TextPaneSkinNodeView createNodeView(TextPaneSkin textPaneSkin, Node node) {
+    public static TextPaneSkinNodeView createNodeView(final TextPaneSkin textPaneSkin, final Node node) {
         TextPaneSkinNodeView nodeView = null;
 
         NodeCreator creator = nodeViewCreatorMap.get(node.getClass());

@@ -44,34 +44,34 @@ public final class Dimensions implements Serializable {
      *
      * @param side The width and height of this dimensions.
      */
-    public Dimensions(int side) {
+    public Dimensions(final int side) {
         this.width = this.height = side;
     }
 
-    public Dimensions(int width, int height) {
+    public Dimensions(final int width, final int height) {
         this.width = width;
         this.height = height;
     }
 
-    public Dimensions(Dimensions dimensions) {
+    public Dimensions(final Dimensions dimensions) {
         Utils.checkNull(dimensions, "dimensions");
 
         this.width = dimensions.width;
         this.height = dimensions.height;
     }
 
-    public Dimensions(Dictionary<String, ?> dimensions) {
+    public Dimensions(final Dictionary<String, ?> dimensions) {
         Utils.checkNull(dimensions, "dimensions");
 
         width = dimensions.getInt(WIDTH_KEY, 0);
         height = dimensions.getInt(HEIGHT_KEY, 0);
     }
 
-    public Dimensions(Sequence<?> dimensions) {
+    public Dimensions(final Sequence<?> dimensions) {
         Utils.checkNull(dimensions, "dimensions");
 
-        width = ((Number)dimensions.get(0)).intValue();
-        height = ((Number)dimensions.get(1)).intValue();
+        width = ((Number) dimensions.get(0)).intValue();
+        height = ((Number) dimensions.get(1)).intValue();
     }
 
     /**
@@ -81,7 +81,7 @@ public final class Dimensions implements Serializable {
      * @param factor The amount to add to/subtract from both the width and height.
      * @return The new dimensions with the changed values.
      */
-    public Dimensions expand(int factor) {
+    public Dimensions expand(final int factor) {
         return new Dimensions(width + factor, height + factor);
     }
 
@@ -93,7 +93,7 @@ public final class Dimensions implements Serializable {
      * @param heightDelta The amount to add to/subtract from the height.
      * @return The new dimensions with the changed values.
      */
-    public Dimensions expand(int widthDelta, int heightDelta) {
+    public Dimensions expand(final int widthDelta, final int heightDelta) {
         return new Dimensions(width + widthDelta, height + heightDelta);
     }
 
@@ -104,12 +104,12 @@ public final class Dimensions implements Serializable {
      * @param insets The padding amounts (width and height) to expand by.
      * @return The new dimensions with the changed values.
      */
-    public Dimensions expand(Insets insets) {
+    public Dimensions expand(final Insets insets) {
         return new Dimensions(width + insets.getWidth(), height + insets.getHeight());
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         boolean equals = false;
 
         if (object instanceof Dimensions) {
@@ -148,7 +148,7 @@ public final class Dimensions implements Serializable {
      * @see #Dimensions(Sequence)
      * @see #Dimensions(int, int)
      */
-    public static Dimensions decode(String value) {
+    public static Dimensions decode(final String value) {
         Utils.checkNullOrEmpty(value, "dimensions");
 
         Dimensions dimensions;

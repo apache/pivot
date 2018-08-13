@@ -31,12 +31,12 @@ public class Paragraph extends Block {
         add(new TextNode());
     }
 
-    public Paragraph(String text) {
+    public Paragraph(final String text) {
         super();
         add(text);
     }
 
-    public Paragraph(Paragraph paragraph, boolean recursive) {
+    public Paragraph(final Paragraph paragraph, final boolean recursive) {
         super(paragraph, recursive);
         if (!recursive) {
             add(new TextNode());
@@ -50,7 +50,7 @@ public class Paragraph extends Block {
      * @return A new {@link Node} containing the removed characters.
      */
     @Override
-    public Node removeRange(int offset, int characterCount) {
+    public Node removeRange(final int offset, final int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
             return super.removeRange(offset, characterCount - 1);
         }
@@ -66,7 +66,7 @@ public class Paragraph extends Block {
      * @return New {@link Paragraph} with these characters.
      */
     @Override
-    public Paragraph getRange(int offset, int characterCount) {
+    public Paragraph getRange(final int offset, final int characterCount) {
         if (offset + characterCount == getCharacterCount()) {
             return (Paragraph) super.getRange(offset, characterCount - 1);
         }
@@ -80,7 +80,7 @@ public class Paragraph extends Block {
      * @return The character at that position.
      */
     @Override
-    public char getCharacterAt(int offset) {
+    public char getCharacterAt(final int offset) {
         char c;
         if (offset == getCharacterCount() - 1) {
             c = '\n';
@@ -113,13 +113,13 @@ public class Paragraph extends Block {
      * @return The index of the (new or existing) text node where
      * the text was added.
      */
-    public int add(String text) {
+    public int add(final String text) {
         int length = getLength();
         if (length > 0) {
             // Add to the last node if it is a text node already
             Node node = get(length - 1);
             if (node instanceof TextNode) {
-                ((TextNode)node).appendText(text);
+                ((TextNode) node).appendText(text);
                 return length - 1;
             }
         }
@@ -128,7 +128,7 @@ public class Paragraph extends Block {
     }
 
     @Override
-    public void insert(Node node, int index) {
+    public void insert(final Node node, final int index) {
         if (node instanceof Block) {
             throw new IllegalArgumentException("Child node must not be an instance of "
                 + Block.class.getName());
@@ -145,7 +145,7 @@ public class Paragraph extends Block {
      * for the trailing newline character.
      */
     @Override
-    public Sequence<Integer> getPathAt(int offset) {
+    public Sequence<Integer> getPathAt(final int offset) {
         Sequence<Integer> path;
 
         if (offset < super.getCharacterCount()) {
@@ -166,7 +166,7 @@ public class Paragraph extends Block {
      * @return The descendant node at that offset.
      */
     @Override
-    public Node getDescendantAt(int offset) {
+    public Node getDescendantAt(final int offset) {
         Node descendant;
 
         if (offset < super.getCharacterCount()) {
@@ -179,7 +179,7 @@ public class Paragraph extends Block {
     }
 
     @Override
-    public Paragraph duplicate(boolean recursive) {
+    public Paragraph duplicate(final boolean recursive) {
         return new Paragraph(this, recursive);
     }
 }

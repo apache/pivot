@@ -39,9 +39,9 @@ public class ListViewIndexBindMapping implements ListView.ItemBindMapping {
      * if the value is out of range of the list size.
      */
     @Override
-    public int indexOf(List<?> listData, Object value) {
+    public int indexOf(final List<?> listData, final Object value) {
         if (value instanceof Number) {
-            int iValue = ((Number)value).intValue();
+            int iValue = ((Number) value).intValue();
             if (iValue >= -1 && iValue < listData.getLength()) {
                 return iValue;
             }
@@ -59,7 +59,7 @@ public class ListViewIndexBindMapping implements ListView.ItemBindMapping {
      * @return The <tt>Integer</tt> value of the index.
      */
     @Override
-    public Object get(List<?> listData, int index) {
+    public Object get(final List<?> listData, final int index) {
         return Integer.valueOf(index);
     }
 

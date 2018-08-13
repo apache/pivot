@@ -34,11 +34,21 @@ class TextPaneSkinNumberedListView extends TextPaneSkinListView implements Numbe
         }
     }
 
-    private static final RomanValue[] ROMAN_VALUE_TABLE = { new RomanValue(1000, "M"),
-        new RomanValue(900, "CM"), new RomanValue(500, "D"), new RomanValue(400, "CD"),
-        new RomanValue(100, "C"), new RomanValue(90, "XC"), new RomanValue(50, "L"),
-        new RomanValue(40, "XL"), new RomanValue(10, "X"), new RomanValue(9, "IX"),
-        new RomanValue(5, "V"), new RomanValue(4, "IV"), new RomanValue(1, "I") };
+    private static final RomanValue[] ROMAN_VALUE_TABLE = {
+        new RomanValue(1000, "M"),
+        new RomanValue(900, "CM"),
+        new RomanValue(500, "D"),
+        new RomanValue(400, "CD"),
+        new RomanValue(100, "C"),
+        new RomanValue(90, "XC"),
+        new RomanValue(50, "L"),
+        new RomanValue(40, "XL"),
+        new RomanValue(10, "X"),
+        new RomanValue(9, "IX"),
+        new RomanValue(5, "V"),
+        new RomanValue(4, "IV"),
+        new RomanValue(1, "I")
+    };
 
     private static String int2roman(int n) {
         int num = n;

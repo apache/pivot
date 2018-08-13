@@ -39,9 +39,9 @@ public class SpinnerIndexBindMapping implements Spinner.ItemBindMapping {
      * if the value is out of range of the data list size.
      */
     @Override
-    public int indexOf(List<?> spinnerData, Object value) {
+    public int indexOf(final List<?> spinnerData, final Object value) {
         if (value instanceof Integer) {
-        int iValue = ((Integer)value).intValue();
+        int iValue = ((Integer) value).intValue();
         if (iValue >= -1 && iValue < spinnerData.getLength()) {
             return iValue;
         }
@@ -59,7 +59,7 @@ public class SpinnerIndexBindMapping implements Spinner.ItemBindMapping {
      * @return The <tt>Integer</tt> value of the index.
      */
     @Override
-    public Object get(List<?> spinnerData, int index) {
+    public Object get(final List<?> spinnerData, final int index) {
         return Integer.valueOf(index);
     }
 

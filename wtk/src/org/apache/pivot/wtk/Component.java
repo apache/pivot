@@ -125,7 +125,7 @@ public abstract class Component implements ConstrainedVisual {
          * @return The previous value in the target dictionary (but note
          * the caveats from the {@link #put(String,Object)} method.
          */
-        public Object copy(Style key, Dictionary<String,Object> source) {
+        public Object copy(Style key, Dictionary<String, Object> source) {
             return copy(key.toString(), source);
         }
 
@@ -410,11 +410,14 @@ public abstract class Component implements ConstrainedVisual {
     // Event listener lists
     private ComponentListener.Listeners componentListeners = new ComponentListener.Listeners();
     private ComponentStateListener.Listeners componentStateListeners = new ComponentStateListener.Listeners();
-    private ComponentDecoratorListener.Listeners componentDecoratorListeners = new ComponentDecoratorListener.Listeners();
+    private ComponentDecoratorListener.Listeners componentDecoratorListeners =
+        new ComponentDecoratorListener.Listeners();
     private ComponentStyleListener.Listeners componentStyleListeners = new ComponentStyleListener.Listeners();
     private ComponentMouseListener.Listeners componentMouseListeners = new ComponentMouseListener.Listeners();
-    private ComponentMouseButtonListener.Listeners componentMouseButtonListeners = new ComponentMouseButtonListener.Listeners();
-    private ComponentMouseWheelListener.Listeners componentMouseWheelListeners = new ComponentMouseWheelListener.Listeners();
+    private ComponentMouseButtonListener.Listeners componentMouseButtonListeners =
+        new ComponentMouseButtonListener.Listeners();
+    private ComponentMouseWheelListener.Listeners componentMouseWheelListeners =
+        new ComponentMouseWheelListener.Listeners();
     private ComponentKeyListener.Listeners componentKeyListeners = new ComponentKeyListener.Listeners();
     private ComponentTooltipListener.Listeners componentTooltipListeners = new ComponentTooltipListener.Listeners();
     private ComponentDataListener.Listeners componentDataListeners = new ComponentDataListener.Listeners();
@@ -2564,7 +2567,7 @@ public abstract class Component implements ConstrainedVisual {
      * component.
      */
     public TextInputMethodListener getTextInputMethodListener() {
-        return ((ComponentSkin)getSkin()).getTextInputMethodListener();
+        return ((ComponentSkin) getSkin()).getTextInputMethodListener();
     }
 
     @Override

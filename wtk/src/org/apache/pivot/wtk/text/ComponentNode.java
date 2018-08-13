@@ -85,25 +85,25 @@ public class ComponentNode extends Block {
 
     public CharSequence getCharacters(Component comp) {
         if (comp instanceof TextInput) {
-            return ((TextInput)comp).getCharacters();
+            return ((TextInput) comp).getCharacters();
         } else if (comp instanceof TextArea) {
-            return ((TextArea)comp).getCharacters();
+            return ((TextArea) comp).getCharacters();
         } else if (comp instanceof TextPane) {
-            return ((TextPane)comp).getText();   // TODO: use getCharacters when it is available
+            return ((TextPane) comp).getText();   // TODO: use getCharacters when it is available
         } else if (comp instanceof Label) {
-            return ((Label)comp).getText();
+            return ((Label) comp).getText();
         } else if (comp instanceof Button) {
-            Object buttonData = ((Button)comp).getButtonData();
+            Object buttonData = ((Button) comp).getButtonData();
             if (buttonData instanceof BaseContent) {
-                return ((BaseContent)buttonData).getText();
+                return ((BaseContent) buttonData).getText();
             } else if (buttonData instanceof CharSequence) {
-                return (CharSequence)buttonData;
+                return (CharSequence) buttonData;
             } else {
                 return buttonData.toString();
             }
         } else if (comp instanceof Container) {
             StringBuilder buf = new StringBuilder();
-            for (Component child : (Container)comp) {
+            for (Component child : (Container) comp) {
                 buf.append(getCharacters(child));
             }
             return buf;
