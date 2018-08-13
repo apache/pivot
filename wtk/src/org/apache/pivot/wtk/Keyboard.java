@@ -30,6 +30,12 @@ import org.apache.pivot.util.Utils;
  */
 public final class Keyboard {
     /**
+     * Private constructor for utility class.
+     */
+    private Keyboard() {
+    }
+
+    /**
      * Enumeration representing keyboard modifiers.
      */
     public enum Modifier {
@@ -63,7 +69,7 @@ public final class Keyboard {
 
         public static final String COMMAND_ABBREVIATION = "CMD";
 
-        public KeyStroke(int keyCode, int modifiers) {
+        public KeyStroke(final int keyCode, final int modifiers) {
             this.keyCode = keyCode;
             this.keyModifiers = modifiers;
         }
@@ -77,7 +83,7 @@ public final class Keyboard {
         }
 
         @Override
-        public boolean equals(Object object) {
+        public boolean equals(final Object object) {
             boolean equals = false;
 
             if (object instanceof KeyStroke) {
@@ -127,7 +133,7 @@ public final class Keyboard {
             return KeyEvent.getKeyText(keyCode);
         }
 
-        public static KeyStroke decode(String value) {
+        public static KeyStroke decode(final String value) {
             Utils.checkNull(value, "value");
 
             int keyCode = KeyCode.UNDEFINED;
@@ -278,7 +284,7 @@ public final class Keyboard {
         return modifiers;
     }
 
-    protected static void setModifiers(int modifiers) {
+    protected static void setModifiers(final int modifiers) {
         Keyboard.modifiers = modifiers;
     }
 
@@ -289,7 +295,7 @@ public final class Keyboard {
      * @return <tt>true</tt> if the modifier is pressed; <tt>false</tt>,
      * otherwise.
      */
-    public static boolean isPressed(Modifier modifier) {
+    public static boolean isPressed(final Modifier modifier) {
         return (modifiers & modifier.getMask()) > 0;
     }
 
@@ -300,7 +306,7 @@ public final class Keyboard {
      * @return <tt>true</tt> if any of them are pressed, <tt>false</tt>
      * if none are pressed.
      */
-    public static boolean areAnyPressed(Set<Modifier> modifiers) {
+    public static boolean areAnyPressed(final Set<Modifier> modifiers) {
         boolean result = false;
         for (Modifier modifier : modifiers) {
             if (isPressed(modifier)) {

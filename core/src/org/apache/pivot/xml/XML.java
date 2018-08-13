@@ -23,7 +23,13 @@ import org.apache.pivot.util.Utils;
 /**
  * Contains utility methods for working with XML structures.
  */
-public class XML {
+public final class XML {
+    /**
+     * Private constructor for utility class.
+     */
+    private XML() {
+    }
+
     /**
      * Returns the element matching a given path.
      *
@@ -35,7 +41,7 @@ public class XML {
      * element at index 0).
      * @return The matching element, or {@code null} if no such element exists.
      */
-    public static Element getElement(Element root, String path) {
+    public static Element getElement(final Element root, final String path) {
         Utils.checkNull(root, "root");
         Utils.checkNullOrEmpty(path, "path");
 
@@ -104,7 +110,7 @@ public class XML {
      * @see #getElement(Element, String)
      * @see Element#getElements(String)
      */
-    public static List<Element> getElements(Element root, String path, String name) {
+    public static List<Element> getElements(final Element root, final String path, final String name) {
         Element element = getElement(root, path);
         return (element == null) ? null : element.getElements(name);
     }
@@ -119,7 +125,7 @@ public class XML {
      * @see #getElement(Element, String)
      * @see Element#getText()
      */
-    public static String getText(Element root, String path) {
+    public static String getText(final Element root, final String path) {
         Element element = getElement(root, path);
         return (element == null) ? null : element.getText();
     }

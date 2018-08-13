@@ -25,7 +25,13 @@ import org.apache.pivot.util.Utils;
 /**
  * Utility class for dealing with fonts.
  */
-public class FontUtilities {
+public final class FontUtilities {
+
+    /**
+     * Private constructor for utility class.
+     */
+    private FontUtilities() {
+    }
 
     /**
      * Interpret a string as a font specification.
@@ -37,7 +43,7 @@ public class FontUtilities {
      * @throws IllegalArgumentException if the given string is <tt>null</tt>
      * or empty or the font specification cannot be decoded.
      */
-    public static Font decodeFont(String value) {
+    public static Font decodeFont(final String value) {
         Utils.checkNullOrEmpty(value, "font");
 
         Font font;

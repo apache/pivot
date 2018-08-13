@@ -21,7 +21,14 @@ import org.apache.pivot.collections.HashMap;
 /**
  * Provides support for basic intra-application message passing.
  */
-public class MessageBus {
+public final class MessageBus {
+    /**
+     * Private constructor for utility class.
+     */
+    private MessageBus() {
+    }
+
+    /** The master list of topics and their listeners. */
     private static HashMap<Class<?>, ListenerList<MessageBusListener<?>>> messageTopics = new HashMap<>();
 
     /**
@@ -31,7 +38,7 @@ public class MessageBus {
      * @param topic The topic class to subscribe to.
      * @param messageListener The listener we want to attach.
      */
-    public static <T> void subscribe(Class<? super T> topic, MessageBusListener<T> messageListener) {
+    public static <T> void subscribe(final Class<? super T> topic, final MessageBusListener<T> messageListener) {
         ListenerList<MessageBusListener<?>> topicListeners = messageTopics.get(topic);
 
         if (topicListeners == null) {
@@ -52,7 +59,7 @@ public class MessageBus {
      * @param messageListener The listener to unsubscribe.
      * @throws IllegalArgumentException if there are no listeners subscribed.
      */
-    public static <T> void unsubscribe(Class<? super T> topic, MessageBusListener<T> messageListener) {
+    public static <T> void unsubscribe(final Class<? super T> topic, final MessageBusListener<T> messageListener) {
         ListenerList<MessageBusListener<?>> topicListeners = messageTopics.get(topic);
 
         if (topicListeners == null) {
@@ -72,7 +79,7 @@ public class MessageBus {
      * @param message The message to send to all subscribed listeners.
      */
     @SuppressWarnings("unchecked")
-    public static <T> void sendMessage(T message) {
+    public static <T> void sendMessage(final T message) {
         Class<?> topic = message.getClass();
         ListenerList<MessageBusListener<?>> topicListeners = messageTopics.get(topic);
 

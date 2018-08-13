@@ -24,7 +24,13 @@ import java.io.InputStreamReader;
 /**
  * Utility class for locating and instantiating service providers.
  */
-public class Service {
+public final class Service {
+    /**
+     * Private constructor for utility class.
+     */
+    private Service() {
+    }
+
     /**
      * Attempts to load a service provider.
      *
@@ -39,7 +45,7 @@ public class Service {
      * cannot be found or loaded.
      */
     @SuppressWarnings("resource")
-    public static Object getProvider(String providerName) {
+    public static Object getProvider(final String providerName) {
         String providerClassName = null;
 
         // First look for a system property
