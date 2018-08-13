@@ -120,10 +120,10 @@ public class DataBindingTest implements Application {
 
         window.getContent().load(context);
 
-        final Label textLabel = (Label)(bxmlSerializer.getNamespace().get("bindingDataText"));
+        final Label textLabel = (Label) (bxmlSerializer.getNamespace().get("bindingDataText"));
         textLabel.setText(JSONSerializer.toString(context));
 
-        Button storeButton = (Button)(bxmlSerializer.getNamespace().get("storeButton"));
+        Button storeButton = (Button) (bxmlSerializer.getNamespace().get("storeButton"));
         storeButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
             public void buttonPressed(Button button) {

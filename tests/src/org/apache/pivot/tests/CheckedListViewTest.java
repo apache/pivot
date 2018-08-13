@@ -55,7 +55,7 @@ public class CheckedListViewTest implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer serializer = new BXMLSerializer();
-        mainWindow = (Window)serializer.readObject(CheckedListViewTest.class, "checked_list_view_test.bxml");
+        mainWindow = (Window) serializer.readObject(CheckedListViewTest.class, "checked_list_view_test.bxml");
         serializer.bind(this);
 
         allowMixedStateCheckbox.getButtonPressListeners().add(new ButtonPressListener() {

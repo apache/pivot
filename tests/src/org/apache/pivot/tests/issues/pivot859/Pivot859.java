@@ -186,7 +186,7 @@ public class Pivot859 implements Application {
                 result = "";
             }
             contentArea.setText(result);
-            double elapsedSecs = ((double)(end - start)) / 1000000000.0d;
+            double elapsedSecs = ((double) (end - start)) / 1000000000.0d;
             updateStatus("retrieved " + result.length() + " chars in " + elapsedSecs + " sec.");
         } catch (Exception e) {
             e.printStackTrace();

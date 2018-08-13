@@ -43,7 +43,7 @@ public class Forms extends Window implements Bindable {
 
     @Override
     public void initialize(Map<String, Object> namespace, URL location, Resources resources) {
-        titleListButton = (ListButton)namespace.get("titleListButton");
+        titleListButton = (ListButton) namespace.get("titleListButton");
         nameBoxPane = (BoxPane) namespace.get("nameBoxPane");
         lastNameTextInput = (TextInput) namespace.get("lastNameTextInput");
         firstNameTextInput = (TextInput) namespace.get("firstNameTextInput");

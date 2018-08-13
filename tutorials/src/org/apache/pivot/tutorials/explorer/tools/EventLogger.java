@@ -291,7 +291,7 @@ public class EventLogger extends Container {
                     Type type = typeArguments[0];
                     Class<?> listenerInterface;
                     if (type instanceof ParameterizedType) {
-                        ParameterizedType paramType = (ParameterizedType)type;
+                        ParameterizedType paramType = (ParameterizedType) type;
                         listenerInterface = (Class<?>) paramType.getRawType();
                     } else {
                         listenerInterface = (Class<?>) type;
@@ -323,7 +323,7 @@ public class EventLogger extends Container {
                     if (listener == null) {
                         listener = Proxy.newProxyInstance(
                             Thread.currentThread().getContextClassLoader(),
-                            new Class<?>[] { listenerInterface }, loggerInvocationHandler);
+                            new Class<?>[] {listenerInterface}, loggerInvocationHandler);
                         eventListenerProxies.put(listenerInterface, listener);
                     }
 
@@ -366,7 +366,7 @@ public class EventLogger extends Container {
                     Type type = typeArguments[0];
                     Class<?> listenerInterface;
                     if (type instanceof ParameterizedType) {
-                        ParameterizedType paramType = (ParameterizedType)type;
+                        ParameterizedType paramType = (ParameterizedType) type;
                         listenerInterface = (Class<?>) paramType.getRawType();
                     } else {
                         listenerInterface = (Class<?>) type;

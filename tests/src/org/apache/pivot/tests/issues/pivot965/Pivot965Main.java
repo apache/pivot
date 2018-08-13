@@ -31,9 +31,10 @@ public class Pivot965Main implements Application {
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window) bxmlSerializer.readObject(Window.class,"/org/apache/pivot/tests/issues/pivot965/Window965.bxml");
+        window = (Window) bxmlSerializer.readObject(Window.class,
+            "/org/apache/pivot/tests/issues/pivot965/Window965.bxml");
         window.open(display);
-        TextInput textInput = (TextInput)bxmlSerializer.getNamespace().get("textInput");
+        TextInput textInput = (TextInput) bxmlSerializer.getNamespace().get("textInput");
         textInput.requestFocus();
     }
 

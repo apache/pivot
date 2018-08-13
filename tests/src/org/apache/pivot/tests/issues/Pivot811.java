@@ -144,12 +144,10 @@ public class Pivot811 implements Application {
 
     public static void main(String[] args) {
         // turn on debug drawing, to better see painting problems
-        System.setProperty("org.apache.pivot.wtk.debugfocus", "true"); // debug
-                                                                       // focus
-        // System.setProperty("org.apache.pivot.wtk.debugpaint", "true"); //
-        // debug paint
+        System.setProperty("org.apache.pivot.wtk.debugfocus", "true"); // debug focus
+        // System.setProperty("org.apache.pivot.wtk.debugpaint", "true"); // debug paint
 
-        DesktopApplicationContext.main(new String[] { Pivot811.class.getName() });
+        DesktopApplicationContext.main(new String[] {Pivot811.class.getName()});
     }
 
 }

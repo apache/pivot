@@ -44,7 +44,7 @@ public class Pivot948 implements Application, ButtonPressListener, ListView.Item
     @Override
     public void startup(Display display, Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
-        window = (Window)bxmlSerializer.readObject(this.getClass(), "pivot_948.bxml");
+        window = (Window) bxmlSerializer.readObject(this.getClass(), "pivot_948.bxml");
         bxmlSerializer.bind(this);
 
         loadButton.getButtonPressListeners().add(this);
@@ -97,7 +97,7 @@ public class Pivot948 implements Application, ButtonPressListener, ListView.Item
     @Override
     public int indexOf(List<?> listData, Object value) {
         if (value != null) {
-            Integer iVal = (Integer)value;
+            Integer iVal = (Integer) value;
             return iVal.intValue();
         }
         // Null item implies nothing selected, so return -1 as the index

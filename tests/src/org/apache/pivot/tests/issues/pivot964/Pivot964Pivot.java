@@ -148,8 +148,8 @@ public class Pivot964Pivot implements Application {
             @Override
             public void buttonPressed(Button arg0) {
                 try {
-                    String xOffset = (String)sp1.getSelectedItem();
-                    String yOffset = (String)sp2.getSelectedItem();
+                    String xOffset = (String) sp1.getSelectedItem();
+                    String yOffset = (String) sp2.getSelectedItem();
                     String viewBox = String.format("%1$s %2$s 2368 1652", xOffset, yOffset);
                     root.setAttribute("viewBox", AnimationElement.AT_XML, viewBox);
                     root.updateTime(0f);

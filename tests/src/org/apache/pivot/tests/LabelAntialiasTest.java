@@ -124,7 +124,7 @@ public class LabelAntialiasTest implements Application {
         rotationAngleSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             @Override
             public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
-                currentRotationAngle = (Integer)spinner.getSelectedItem();
+                currentRotationAngle = (Integer) spinner.getSelectedItem();
                 if (labelRow.getLength() > 0) {
                     labelRow.remove(0, labelRow.getLength());
                 }

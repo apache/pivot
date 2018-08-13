@@ -82,7 +82,7 @@ public class Pivot765 implements Application {
     }
 
     public static void main(String[] args) {
-        DesktopApplicationContext.main(new String[] { Pivot765.class.getName() });
+        DesktopApplicationContext.main(new String[] {Pivot765.class.getName()});
     }
 
 }
