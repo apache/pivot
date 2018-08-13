@@ -38,7 +38,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
 
     public TerraActivityIndicatorSkin() {
         setColor(2);
-        setBackgroundColor((Color)null);
+        setBackgroundColor((Color) null);
     }
 
     @Override

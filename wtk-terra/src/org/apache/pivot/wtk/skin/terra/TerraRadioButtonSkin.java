@@ -173,7 +173,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
                 graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
             } else {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(buttonBorderColor);
@@ -199,8 +199,8 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
             if (!themeIsFlat()) {
                 buttonPaint = new RadialGradientPaint((float) buttonBackgroundCircle.getCenterX(),
                     (float) buttonBackgroundCircle.getCenterY(),
-                    (float) buttonBackgroundCircle.getWidth() * 2 / 3, new float[] { 0f, 1f },
-                    new Color[] { TerraTheme.darken(buttonColor), buttonColor });
+                    (float) buttonBackgroundCircle.getWidth() * 2 / 3, new float[] {0f, 1f},
+                    new Color[] {TerraTheme.darken(buttonColor), buttonColor});
             } else {
                 buttonPaint = currentTheme().getColor(10);
             }

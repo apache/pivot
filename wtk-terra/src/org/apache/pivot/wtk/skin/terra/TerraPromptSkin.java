@@ -171,7 +171,7 @@ public class TerraPromptSkin extends TerraSheetSkin implements PromptListener {
         if (vote == Vote.APPROVE) {
             // If this is the second or subsequent open, then the
             // image view has been cleared, so set it up again
-            messageTypeChanged((Prompt)window, null);
+            messageTypeChanged((Prompt) window, null);
         }
         return vote;
     }

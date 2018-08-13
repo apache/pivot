@@ -96,7 +96,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
         super.install(component);
 
         @SuppressWarnings("unchecked")
-        Gauge<T> gauge = (Gauge<T>)component;
+        Gauge<T> gauge = (Gauge<T>) component;
         gauge.getGaugeListeners().add(this);
     }
 
@@ -146,7 +146,7 @@ public class TerraGaugeSkin<T extends Number> extends ComponentSkin implements G
     @Override
     public void paint(final Graphics2D graphics) {
         @SuppressWarnings("unchecked")
-        Gauge<T> gauge = (Gauge<T>)getComponent();
+        Gauge<T> gauge = (Gauge<T>) getComponent();
         // NOTE: sanity check:  warning level > min && < max, warning < critical if both set
         // also critical > main && < max, critical > warning if both set
 

@@ -861,10 +861,10 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         bxmlSerializer.bind(this, TerraVFSBrowserSkin.class);
 
         // Notify all the renderers of which component they are dealing with
-        ((FileRenderer)pathListButton.getDataRenderer()).setFileBrowser(fileBrowser);
-        ((FileRenderer)pathListButton.getItemRenderer()).setFileBrowser(fileBrowser);
+        ((FileRenderer) pathListButton.getDataRenderer()).setFileBrowser(fileBrowser);
+        ((FileRenderer) pathListButton.getItemRenderer()).setFileBrowser(fileBrowser);
         for (TableView.Column col : fileTableView.getColumns()) {
-            ((FileRenderer)col.getCellRenderer()).setFileBrowser(fileBrowser);
+            ((FileRenderer) col.getCellRenderer()).setFileBrowser(fileBrowser);
         }
 
         homeDirectory = fileBrowser.getHomeDirectory();

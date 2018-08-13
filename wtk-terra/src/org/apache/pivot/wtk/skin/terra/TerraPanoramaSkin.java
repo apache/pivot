@@ -74,8 +74,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = { 0, 3, 6 };
-            int[] yPoints = { 5, 1, 5 };
+            int[] xPoints = {0, 3, 6};
+            int[] yPoints = {5, 1, 5};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -89,8 +89,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = { 0, 3, 6 };
-            int[] yPoints = { 1, 5, 1 };
+            int[] xPoints = {0, 3, 6};
+            int[] yPoints = {1, 5, 1};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -104,8 +104,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = { 1, 5, 1 };
-            int[] yPoints = { 0, 3, 6 };
+            int[] xPoints = {1, 5, 1};
+            int[] yPoints = {0, 3, 6};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -119,8 +119,8 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = { 5, 1, 5 };
-            int[] yPoints = { 0, 3, 6 };
+            int[] xPoints = {5, 1, 5};
+            int[] yPoints = {0, 3, 6};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -136,7 +136,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
 
         @Override
         public void setToggleButton(boolean toggleButton) {
-            throw new UnsupportedOperationException("Link buttons cannot be toggle buttons.");
+            throw new UnsupportedOperationException("Scroll buttons cannot be toggle buttons.");
         }
     }
 
@@ -176,7 +176,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         }
 
         /**
-         * @return <tt>false</tt>; link buttons are not focusable.
+         * @return <tt>false</tt>; scroll buttons are not focusable.
          */
         @Override
         public boolean isFocusable() {

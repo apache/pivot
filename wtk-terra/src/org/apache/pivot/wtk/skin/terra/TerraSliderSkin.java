@@ -346,7 +346,7 @@ public class TerraSliderSkin extends SliderSkin {
     }
 
     private static final BasicStroke DASH_STROKE = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-        BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
+        BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
     @Override
     public void paint(Graphics2D graphics) {

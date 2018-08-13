@@ -225,7 +225,7 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
             // Paint the focus state
             if (spinnerContentLocal.isFocused()) {
                 BasicStroke dashStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND,
-                    BasicStroke.JOIN_ROUND, 1.0f, new float[] { 0.0f, 2.0f }, 0.0f);
+                    BasicStroke.JOIN_ROUND, 1.0f, new float[] {0.0f, 2.0f}, 0.0f);
 
                 graphics.setStroke(dashStroke);
                 graphics.setColor(borderColor);
@@ -485,8 +485,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = { 0, 2, 4 };
-            int[] yPoints = { 3, 1, 3 };
+            int[] xPoints = {0, 2, 4};
+            int[] yPoints = {3, 1, 3};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -497,8 +497,8 @@ public class TerraSpinnerSkin extends ContainerSkin implements Spinner.Skin, Spi
         public void paint(Graphics2D graphics) {
             super.paint(graphics);
 
-            int[] xPoints = { 0, 2, 4 };
-            int[] yPoints = { 1, 3, 1 };
+            int[] xPoints = {0, 2, 4};
+            int[] yPoints = {1, 3, 1};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }

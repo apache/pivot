@@ -53,7 +53,7 @@ public class TerraMenuBarSkin extends ContainerSkin implements MenuBarListener {
     }
 
     private MenuBar.ItemSequence getMenuItems() {
-        MenuBar menuBar = (MenuBar)getComponent();
+        MenuBar menuBar = (MenuBar) getComponent();
         return menuBar.getItems();
     }
 

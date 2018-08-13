@@ -161,8 +161,8 @@ public class TerraMenuItemSkin extends MenuItemSkin {
             graphics.translate(dataRenderer.getWidth() + (EXPANDER_SIZE - EXPANDER_ICON_SIZE) / 2,
                 (height - EXPANDER_ICON_SIZE) / 2);
 
-            int[] xPoints = { 0, EXPANDER_ICON_SIZE, 0 };
-            int[] yPoints = { 0, EXPANDER_ICON_SIZE / 2, EXPANDER_ICON_SIZE };
+            int[] xPoints = {0, EXPANDER_ICON_SIZE, 0};
+            int[] yPoints = {0, EXPANDER_ICON_SIZE / 2, EXPANDER_ICON_SIZE};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }

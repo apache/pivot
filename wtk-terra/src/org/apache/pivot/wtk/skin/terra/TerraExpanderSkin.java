@@ -160,8 +160,8 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
             }
             GraphicsUtilities.setAntialiasingOn(graphics);
 
-            int[] xPoints = { 3, 6, 9 };
-            int[] yPoints = { 9, 3, 9 };
+            int[] xPoints = {3, 6, 9};
+            int[] yPoints = {9, 3, 9};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }
@@ -180,8 +180,8 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
             }
             GraphicsUtilities.setAntialiasingOn(graphics);
 
-            int[] xPoints = { 3, 6, 9 };
-            int[] yPoints = { 3, 9, 3 };
+            int[] xPoints = {3, 6, 9};
+            int[] yPoints = {3, 9, 3};
             graphics.fillPolygon(xPoints, yPoints, 3);
             graphics.drawPolygon(xPoints, yPoints, 3);
         }

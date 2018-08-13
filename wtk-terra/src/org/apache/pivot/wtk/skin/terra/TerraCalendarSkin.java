@@ -506,7 +506,7 @@ public class TerraCalendarSkin extends CalendarSkin {
                     // result of the user toggling the date button (as opposed
                     // to changing the month or year), clear the selection
                     if (selectedDate == null
-                        || (selectedDate.year == ((Integer)yearSpinner.getSelectedItem()).intValue()
+                        || (selectedDate.year == ((Integer) yearSpinner.getSelectedItem()).intValue()
                         && selectedDate.month == monthSpinner.getSelectedIndex())) {
                         calendar.setSelectedDate((CalendarDate) null);
                     }

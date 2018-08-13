@@ -340,7 +340,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     public int getPreferredWidth(int height) {
         int preferredWidth = splitterThickness;
 
-        SplitPane splitPane = (SplitPane)getComponent();
+        SplitPane splitPane = (SplitPane) getComponent();
 
         Component topLeft = splitPane.getTopLeft();
         if (topLeft != null) {
@@ -359,7 +359,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
     public int getPreferredHeight(int width) {
         int preferredHeight = splitterThickness;
 
-        SplitPane splitPane = (SplitPane)getComponent();
+        SplitPane splitPane = (SplitPane) getComponent();
 
         Component topLeft = splitPane.getTopLeft();
         if (topLeft != null) {
@@ -379,7 +379,7 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
         int preferredWidth = splitterThickness;
         int preferredHeight = splitterThickness;
 
-        SplitPane splitPane = (SplitPane)getComponent();
+        SplitPane splitPane = (SplitPane) getComponent();
 
         Component topLeft = splitPane.getTopLeft();
         if (topLeft != null) {

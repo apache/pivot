@@ -140,14 +140,14 @@ public class TerraRollupSkin extends RollupSkin {
             if (rollup.isCollapsible()) {
                 if (rollup.isExpanded()) {
                     // Paint the collapse image
-                    int[] xPoints = { 0, 3, 6 };
-                    int[] yPoints = { 0, 6, 0 };
+                    int[] xPoints = {0, 3, 6};
+                    int[] yPoints = {0, 6, 0};
                     graphics.fillPolygon(xPoints, yPoints, 3);
                     graphics.drawPolygon(xPoints, yPoints, 3);
                 } else {
                     // Paint the expand image
-                    int[] xPoints = { 0, 6, 0 };
-                    int[] yPoints = { 0, 3, 6 };
+                    int[] xPoints = {0, 6, 0};
+                    int[] yPoints = {0, 3, 6};
                     graphics.fillPolygon(xPoints, yPoints, 3);
                     graphics.drawPolygon(xPoints, yPoints, 3);
                 }
