@@ -21,6 +21,12 @@ package org.apache.pivot.util;
  */
 public class Utils {
     /**
+     * Non-public constructor for a utility class.
+     */
+    private Utils() {
+    }
+
+    /**
      * Decide if two strings are the same content (not just the same reference).
      * <p> Works properly for either string being <tt>null</tt>.
      * @param s1 First string to compare (can be {@code null}).
@@ -28,7 +34,7 @@ public class Utils {
      * @return  <tt>true</tt> if both strings are <tt>null</tt> or if
      * <code>s1.equals(s2)</code>.
      */
-    public static boolean stringsAreEqual(String s1, String s2) {
+    public static boolean stringsAreEqual(final String s1, final String s2) {
         if (s1 == null && s2 == null) {
             return true;
         }
@@ -50,7 +56,7 @@ public class Utils {
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is {@code null}.
      */
-    public static void checkNull(Object value, String description) {
+    public static void checkNull(final Object value, final String description) {
         if (value == null) {
             if (isNullOrEmpty(description)) {
                 throw new IllegalArgumentException();
@@ -67,7 +73,7 @@ public class Utils {
      * @param value The argument value to check for {@code null}.
      * @throws IllegalArgumentException if the value is {@code null}.
      */
-    public static void checkNull(Object value) {
+    public static void checkNull(final Object value) {
         checkNull(value, null);
     }
 
@@ -78,7 +84,7 @@ public class Utils {
      * @return {@code true} if the input is {@code null} or empty, {@code false}
      * otherwise.
      */
-    public static boolean isNullOrEmpty(String value) {
+    public static boolean isNullOrEmpty(final String value) {
         if (value == null) {
             return true;
         }
@@ -94,11 +100,11 @@ public class Utils {
      * {@code false} otherwise (which would include a non-null object other
      * than a string).
      */
-    public static boolean isNullOrEmpty(Object value) {
+    public static boolean isNullOrEmpty(final Object value) {
         if (value == null) {
             return true;
         }
-        return (value instanceof String) && ((String)value).trim().isEmpty();
+        return (value instanceof String) && ((String) value).trim().isEmpty();
     }
 
     /**
@@ -113,8 +119,8 @@ public class Utils {
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is {@code null}.
      */
-    public static void checkNullOrEmpty(Object value, String argument) {
-        if (value == null || (value instanceof String && isNullOrEmpty((String)value))) {
+    public static void checkNullOrEmpty(final Object value, final String argument) {
+        if (value == null || (value instanceof String && isNullOrEmpty((String) value))) {
             if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
             } else {
@@ -135,7 +141,7 @@ public class Utils {
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is negative.
      */
-    public static void checkNonNegative(int value, String argument) {
+    public static void checkNonNegative(final int value, final String argument) {
         if (value < 0) {
             if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
@@ -157,7 +163,7 @@ public class Utils {
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is negative.
      */
-    public static void checkNonNegative(float value, String argument) {
+    public static void checkNonNegative(final float value, final String argument) {
         if (value < 0.0f) {
             if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
@@ -179,7 +185,7 @@ public class Utils {
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is negative.
      */
-    public static void checkPositive(int value, String argument) {
+    public static void checkPositive(final int value, final String argument) {
         if (value <= 0) {
             if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
@@ -201,7 +207,7 @@ public class Utils {
      * {@link IllegalArgumentException} is thrown without any detail message.
      * @throws IllegalArgumentException if the value is negative.
      */
-    public static void checkPositive(float value, String argument) {
+    public static void checkPositive(final float value, final String argument) {
         if (value <= 0.0f) {
             if (isNullOrEmpty(argument)) {
                 throw new IllegalArgumentException();
@@ -220,11 +226,11 @@ public class Utils {
      * (used in the thrown exception).
      * @throws IllegalArgumentException if the value is out of range.
      */
-    public static void checkInRangeOfShort(int value, String argument) {
-        if (value < 0 || value > 0x7FFF) {
+    public static void checkInRangeOfShort(final int value, final String argument) {
+        if (value < 0 || value > (int) Short.MAX_VALUE) {
             String valueMsg = isNullOrEmpty(argument) ? "value" : argument;
             throw new IllegalArgumentException(valueMsg + " must be less than or equal "
-                + 0x7FFF + ".");
+                + Short.MAX_VALUE + ".");
         }
     }
 
@@ -238,7 +244,7 @@ public class Utils {
      * @throws IllegalArgumentException if {@code end} is &lt; {@code start}.
      * @throws IndexOutOfBoundsException if {@code index} is &lt; {@code start} or &gt; {@code end}.
      */
-    public static void checkIndexBounds(int index, int start, int end) {
+    public static void checkIndexBounds(final int index, final int start, final int end) {
         if (end < start) {
             throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
@@ -256,25 +262,27 @@ public class Utils {
      * @param size    The size of the array/list/etc. (so the proper range is {@code 0 .. size - 1}).
      * @throws IndexOutOfBoundsException if the {@code index} is &lt; 0 or &gt;= {@code size}.
      */
-    public static void checkZeroBasedIndex(int index, int size) {
+    public static void checkZeroBasedIndex(final int index, final int size) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index " + index + " out of bounds [0," + (size - 1) + "].");
         }
     }
 
     /**
-     * Check that the given {@code index} plus {@code count} are between the values of {@code start} and {@code end}.
+     * Check that the given {@code index} plus {@code count} are between the values of
+     * {@code start} and {@code end}.
      *
      * @param index  The candidate index into the range.
      * @param count  The number of elements in the indexed selection.
      * @param start  The start of the acceptable range (inclusive).
      * @param end    The end of the acceptable range (inclusive).
      *
-     * @throws IllegalArgumentException if {@code end} is &lt; {@code start}, or if {@code count} or {@code start}
-     * are &lt; zero.
-     * @throws IndexOutOfBoundsException if {@code index} is &lt; {@code start} or {@code index + start} is &gt; {@code end}.
+     * @throws IllegalArgumentException if {@code end} is &lt; {@code start}, or if {@code count}
+     * or {@code start} are &lt; zero.
+     * @throws IndexOutOfBoundsException if {@code index} is &lt; {@code start} or {@code index + start}
+     * is &gt; {@code end}.
      */
-    public static void checkIndexBounds(int index, int count, int start, int end) {
+    public static void checkIndexBounds(final int index, final int count, final int start, final int end) {
         if (end < start) {
             throw new IllegalArgumentException("end (" + end + ") < " + "start (" + start + ")");
         }
@@ -302,9 +310,10 @@ public class Utils {
      * @param end    The end of the acceptable range (inclusive).
      *
      * @throws IllegalArgumentException if {@code endIndex} is &lt; {@code startIndex}.
-     * @throws IndexOutOfBoundsException if {@code startIndex} is &lt; {@code start} or {@code endIndex} is &gt; {@code end}.
+     * @throws IndexOutOfBoundsException if {@code startIndex} is &lt; {@code start} or
+     * {@code endIndex} is &gt; {@code end}.
      */
-    public static void checkTwoIndexBounds(int startIndex, int endIndex, int start, int end) {
+    public static void checkTwoIndexBounds(final int startIndex, final int endIndex, final int start, final int end) {
         if (startIndex > endIndex) {
             throw new IllegalArgumentException("endIndex (" + endIndex + ") < " + "startIndex (" + startIndex + ")");
         }

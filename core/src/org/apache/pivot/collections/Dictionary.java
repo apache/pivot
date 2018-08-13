@@ -24,10 +24,14 @@ import org.apache.pivot.util.Utils;
 
 /**
  * Interface representing a set of key/value pairs.
+ * @param <K> Type for the keys in this dictionary.
+ * @param <V> Type for each of the values in the dictionary.
  */
 public interface Dictionary<K, V> {
     /**
      * Class representing a key/value pair.
+     * @param <K> Type of the key part of the pair.
+     * @param <V> Type of the value in the pair.
      */
     public static final class Pair<K, V> implements Serializable {
         private static final long serialVersionUID = 5010958035775950649L;
@@ -35,7 +39,7 @@ public interface Dictionary<K, V> {
         public final K key;
         public final V value;
 
-        public Pair(K key, V value) {
+        public Pair(final K key, final V value) {
             Utils.checkNull(key, "key");
 
             this.key = key;
@@ -44,12 +48,13 @@ public interface Dictionary<K, V> {
 
         @Override
         @SuppressWarnings("unchecked")
-        public boolean equals(Object object) {
+        public boolean equals(final Object object) {
             boolean equals = false;
 
             if (object instanceof Pair<?, ?>) {
                 Pair<K, V> pair = (Pair<K, V>) object;
-                equals = (key.equals(pair.key) && ((value == null && pair.value == null) || (value != null && value.equals(pair.value))));
+                equals = (key.equals(pair.key) && ((value == null && pair.value == null)
+                    || (value != null && value.equals(pair.value))));
             }
 
             return equals;
@@ -148,7 +153,7 @@ public interface Dictionary<K, V> {
      * @return The string value, or <tt>null</tt> if the key is not present.
      */
     default String getString(K key) {
-        return (String)get(key);
+        return (String) get(key);
     }
 
     /**
@@ -161,7 +166,7 @@ public interface Dictionary<K, V> {
      */
     default String getString(K key, String defaultValue) {
         if (containsKey(key)) {
-            return (String)get(key);
+            return (String) get(key);
         }
         return defaultValue;
     }
@@ -189,7 +194,7 @@ public interface Dictionary<K, V> {
      */
     default int getInt(K key, int defaultValue) {
         if (containsKey(key)) {
-            return ((Number)get(key)).intValue();
+            return ((Number) get(key)).intValue();
         }
         return defaultValue;
     }
@@ -217,7 +222,7 @@ public interface Dictionary<K, V> {
      */
     default boolean getBoolean(K key, boolean defaultValue) {
         if (containsKey(key)) {
-            return ((Boolean)get(key)).booleanValue();
+            return ((Boolean) get(key)).booleanValue();
         }
         return defaultValue;
     }
@@ -231,7 +236,7 @@ public interface Dictionary<K, V> {
      * @return The color value, or <tt>null</tt> if the key is not present.
      */
     default Color getColor(K key) {
-        return (Color)get(key);
+        return (Color) get(key);
     }
 
     /**
@@ -243,7 +248,7 @@ public interface Dictionary<K, V> {
      * @return The font value, or <tt>null</tt> if the key is not present.
      */
     default Font getFont(K key) {
-        return (Font)get(key);
+        return (Font) get(key);
     }
 
     /**

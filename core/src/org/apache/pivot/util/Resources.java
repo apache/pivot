@@ -41,28 +41,28 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
 
-    public Resources(String baseName) throws IOException, SerializationException {
+    public Resources(final String baseName) throws IOException, SerializationException {
         this(null, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(Resources parent, String baseName) throws IOException, SerializationException {
+    public Resources(final Resources parent, final String baseName) throws IOException, SerializationException {
         this(parent, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(String baseName, Locale locale) throws IOException, SerializationException {
+    public Resources(final String baseName, final Locale locale) throws IOException, SerializationException {
         this(null, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(Resources parent, String baseName, Locale locale) throws IOException,
+    public Resources(final Resources parent, final String baseName, final Locale locale) throws IOException,
         SerializationException {
         this(parent, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public Resources(String baseName, Charset charset) throws IOException, SerializationException {
+    public Resources(final String baseName, final Charset charset) throws IOException, SerializationException {
         this(null, baseName, Locale.getDefault(), charset);
     }
 
-    public Resources(Resources parent, String baseName, Charset charset) throws IOException,
+    public Resources(final Resources parent, final String baseName, final Charset charset) throws IOException,
         SerializationException {
         this(parent, baseName, Locale.getDefault(), charset);
     }
@@ -83,7 +83,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
      * @throws MissingResourceException If no resource for the specified base
      * name can be found.
      */
-    public Resources(Resources parent, String baseName, Locale locale, Charset charset)
+    public Resources(final Resources parent, final String baseName, final Locale locale, final Charset charset)
         throws IOException, SerializationException {
         Utils.checkNull(baseName, "Base name");
         Utils.checkNull(locale, "Locale");
@@ -150,35 +150,35 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
      *           pair doesn't exist.  If the resource object is not a {@link String}
      *           then the {@link Object#toString} method will be called to return the value.
      */
-    public String getString(String key) {
+    public String getString(final String key) {
         Object value = get(key);
         if (value == null) {
             return null;
         } else if (value instanceof String) {
-            return (String)value;
+            return (String) value;
         } else {
             return value.toString();
         }
     }
 
     @Override
-    public Object get(String key) {
+    public Object get(final String key) {
         return (this.resourceMap.containsKey(key)) ? this.resourceMap.get(key)
             : (this.parent == null) ? null : this.parent.get(key);
     }
 
     @Override
-    public Object put(String key, Object value) {
+    public Object put(final String key, final Object value) {
         throw new UnsupportedOperationException("Resources are immutable.");
     }
 
     @Override
-    public Object remove(String key) {
+    public Object remove(final String key) {
         throw new UnsupportedOperationException("Resources are immutable.");
     }
 
     @Override
-    public boolean containsKey(String key) {
+    public boolean containsKey(final String key) {
         return this.resourceMap.containsKey(key)
             || (this.parent != null && this.parent.containsKey(key));
     }
@@ -189,7 +189,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     @SuppressWarnings("unchecked")
-    private void applyOverrides(Map<String, Object> sourceMap, Map<String, Object> overridesMap) {
+    private void applyOverrides(final Map<String, Object> sourceMap, final Map<String, Object> overridesMap) {
         for (String key : overridesMap) {
             if (sourceMap.containsKey(key)) {
                 Object source = sourceMap.get(key);
@@ -205,7 +205,7 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> readJSONResource(String name) throws IOException,
+    private Map<String, Object> readJSONResource(final String name) throws IOException,
         SerializationException {
         Map<String, Object> resourceMapFromResource = null;
 

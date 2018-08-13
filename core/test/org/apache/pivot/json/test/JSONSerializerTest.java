@@ -86,48 +86,48 @@ public class JSONSerializerTest {
         jsonSerializer.setAllowMacros(true);
         JSONSerializerListener jsonSerializerListener = new JSONSerializerListener() {
             @Override
-            public void beginDictionary(JSONSerializer jsonSerializerArgument,
-                Dictionary<String, ?> value) {
+            public void beginDictionary(final JSONSerializer jsonSerializerArgument,
+                final Dictionary<String, ?> value) {
                 System.out.println("Begin dictionary: " + value);
             }
 
             @Override
-            public void endDictionary(JSONSerializer jsonSerializerArgument) {
+            public void endDictionary(final JSONSerializer jsonSerializerArgument) {
                 System.out.println("End dictionary");
             }
 
             @Override
-            public void readKey(JSONSerializer jsonSerializerArgument, String key) {
+            public void readKey(final JSONSerializer jsonSerializerArgument, final String key) {
                 System.out.println("Read key: " + key);
             }
 
             @Override
-            public void beginSequence(JSONSerializer jsonSerializerArgument, Sequence<?> value) {
+            public void beginSequence(final JSONSerializer jsonSerializerArgument, final Sequence<?> value) {
                 System.out.println("Begin sequence: " + value);
             }
 
             @Override
-            public void endSequence(JSONSerializer jsonSerializerArgument) {
+            public void endSequence(final JSONSerializer jsonSerializerArgument) {
                 System.out.println("End sequence");
             }
 
             @Override
-            public void readString(JSONSerializer jsonSerializerArgument, String value) {
+            public void readString(final JSONSerializer jsonSerializerArgument, final String value) {
                 System.out.println("Read string: " + value);
             }
 
             @Override
-            public void readNumber(JSONSerializer jsonSerializerArgument, Number value) {
+            public void readNumber(final JSONSerializer jsonSerializerArgument, final Number value) {
                 System.out.println("Read number: " + value);
             }
 
             @Override
-            public void readBoolean(JSONSerializer jsonSerializerArgument, Boolean value) {
+            public void readBoolean(final JSONSerializer jsonSerializerArgument, final Boolean value) {
                 System.out.println("Read boolean: " + value);
             }
 
             @Override
-            public void readNull(JSONSerializer jsonSerializerArgument) {
+            public void readNull(final JSONSerializer jsonSerializerArgument) {
                 System.out.println("Read null");
             }
         };
@@ -135,21 +135,21 @@ public class JSONSerializerTest {
         jsonSerializer.getJSONSerializerListeners().add(jsonSerializerListener);
         Object o1 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
 
-        assertEquals((Integer)JSON.get(o1, "a"), (Integer)100);
+        assertEquals((Integer) JSON.get(o1, "a"), (Integer) 100);
         assertEquals(JSON.get(o1, "b"), "Hello");
         assertEquals(JSON.get(o1, "c"), false);
-        assertEquals((Integer)JSON.get(o1, "e.g"), (Integer)5);
-        assertEquals((Integer)JSON.get(o1, "i.a"), (Integer)200);
+        assertEquals((Integer) JSON.get(o1, "e.g"), (Integer) 5);
+        assertEquals((Integer) JSON.get(o1, "i.a"), (Integer) 200);
         assertEquals(JSON.get(o1, "i.c"), true);
         assertEquals(JSON.get(o1, "m"), "Hello\r\n\tWorld!");
 
         jsonSerializer.getJSONSerializerListeners().remove(jsonSerializerListener);
         Object o2 = jsonSerializer.readObject(getClass().getResourceAsStream("map.json"));
-        assertEquals((Integer)JSON.get(o2, "k[1].a"), (Integer)10);
-        assertEquals((Integer)JSON.get(o2, "k[2].a"), (Integer)100);
-        assertEquals((Integer)JSON.get(o2, "k[2].b"), (Integer)200);
+        assertEquals((Integer) JSON.get(o2, "k[1].a"), (Integer) 10);
+        assertEquals((Integer) JSON.get(o2, "k[2].a"), (Integer) 100);
+        assertEquals((Integer) JSON.get(o2, "k[2].b"), (Integer) 200);
         assertEquals(JSON.get(o2, "k[2].c"), "300");
-        assertEquals((Integer)JSON.get(o2, "j"), (Integer)200);
+        assertEquals((Integer) JSON.get(o2, "j"), (Integer) 200);
         assertEquals(JSON.get(o2, "n"), "This is a \"test\" of the 'quoting' in \\JSON\\");
 
         assertTrue(o1.equals(o2));

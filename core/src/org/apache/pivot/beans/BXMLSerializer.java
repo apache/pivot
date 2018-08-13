@@ -193,7 +193,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             if (bindings.containsKey(methodName)) {
                 result = invokeMethod(methodName, args);
             } else if (bindings.containsKey(NASHORN_GLOBAL)) {
-                Bindings globalBindings = (Bindings)bindings.get(NASHORN_GLOBAL);
+                Bindings globalBindings = (Bindings) bindings.get(NASHORN_GLOBAL);
                 if (globalBindings.containsKey(methodName)) {
                     result = invokeMethod(methodName, args);
                 } else {
@@ -258,7 +258,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             if (bindings.containsKey(functionName)) {
                 result = invokeFunction(functionName, result);
             } else if (bindings.containsKey(NASHORN_GLOBAL)) {
-                Bindings globalBindings = (Bindings)bindings.get(NASHORN_GLOBAL);
+                Bindings globalBindings = (Bindings) bindings.get(NASHORN_GLOBAL);
                 if (globalBindings.containsKey(functionName)) {
                     result = invokeFunction(functionName, result);
                 } else {
@@ -1164,7 +1164,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                                         + "\" is not defined.");
                                                 } else {
                                                     if (nashornGlobal instanceof Bindings) {
-                                                        Bindings bindings = (Bindings)nashornGlobal;
+                                                        Bindings bindings = (Bindings) nashornGlobal;
                                                         if (bindings.containsKey(value)) {
                                                             attribute.value = bindings.get(value);
                                                         } else {

@@ -32,19 +32,20 @@ public class Version implements Comparable<Version>, Serializable {
     private long updateRevision = 0;
     private String build = null;
 
-    public Version(int majorRevision, int minorRevision, int maintenanceRevision, long updateRevision) {
+    public Version(final int majorRevision, final int minorRevision, final int maintenanceRevision,
+        final long updateRevision) {
         this(majorRevision, minorRevision, maintenanceRevision, updateRevision, null);
     }
 
-    public Version(int majorRevision, int minorRevision, int maintenanceRevision,
-        long updateRevision, String build) {
+    public Version(final int majorRevision, final int minorRevision, final int maintenanceRevision,
+        final long updateRevision, final String build) {
         Utils.checkInRangeOfShort(majorRevision, "majorRevision");
         Utils.checkInRangeOfShort(minorRevision, "minorRevision");
         Utils.checkInRangeOfShort(maintenanceRevision, "maintenanceRevision");
 
-        this.majorRevision = (short)majorRevision;
-        this.minorRevision = (short)minorRevision;
-        this.maintenanceRevision = (short)maintenanceRevision;
+        this.majorRevision = (short) majorRevision;
+        this.minorRevision = (short) minorRevision;
+        this.maintenanceRevision = (short) maintenanceRevision;
         this.updateRevision = updateRevision;
         this.build = build;
     }
@@ -66,21 +67,21 @@ public class Version implements Comparable<Version>, Serializable {
     }
 
     public long getNumber() {
-        long number = ((long)((majorRevision) & 0xffff) << (16 * 3)
-            | (long)((minorRevision) & 0xffff) << (16 * 2)
-            | (long)((maintenanceRevision) & 0xffff) << (16 * 1))
+        long number = ((long) ((majorRevision) & 0xffff) << (16 * 3)
+            | (long) ((minorRevision) & 0xffff) << (16 * 2)
+            | (long) ((maintenanceRevision) & 0xffff) << (16 * 1))
             + updateRevision;
 
         return number;
     }
 
     @Override
-    public int compareTo(Version version) {
+    public int compareTo(final Version version) {
         return new Long(getNumber()).compareTo(version.getNumber());
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         return (object instanceof Version && compareTo((Version) object) == 0);
     }
 
@@ -113,7 +114,7 @@ public class Version implements Comparable<Version>, Serializable {
             this.maintenanceRevision);
     }
 
-    public static Version decode(String string) {
+    public static Version decode(final String string) {
         Version version = null;
 
         short majorRevision = 0;

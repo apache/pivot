@@ -42,7 +42,7 @@ public final class CharSpan {
      *
      * @param start The start of this char span.
      */
-    public CharSpan(int start) {
+    public CharSpan(final int start) {
         Utils.checkNonNegative(start, "start");
         this.start = start;
         this.length = 0;
@@ -53,7 +53,7 @@ public final class CharSpan {
      * @param start The start of this char span.
      * @param length The length of this char span.
      */
-    public CharSpan(int start, int length) {
+    public CharSpan(final int start, final int length) {
         Utils.checkNonNegative(start, "start");
         Utils.checkNonNegative(length, "length");
         this.start = start;
@@ -66,7 +66,7 @@ public final class CharSpan {
      * @param charSpan An existing char span (which must not be {@code null}).
      * @throws IllegalArgumentException if the given char span is {@code null}.
      */
-    public CharSpan(CharSpan charSpan) {
+    public CharSpan(final CharSpan charSpan) {
         Utils.checkNull(charSpan, "charSpan");
 
         this.start = charSpan.start;
@@ -81,7 +81,7 @@ public final class CharSpan {
      * @throws IllegalArgumentException if the given char span is {@code null}
      * or if the dictionary does not contain the start and length keys.
      */
-    public CharSpan(Dictionary<String, ?> charSpan) {
+    public CharSpan(final Dictionary<String, ?> charSpan) {
         Utils.checkNull(charSpan, "charSpan");
 
         if (!charSpan.containsKey(START_KEY)) {
@@ -110,11 +110,11 @@ public final class CharSpan {
      * @param charSpan A sequence containing the start and length values.
      * @throws IllegalArgumentException if the given char span is {@code null}.
      */
-    public CharSpan(Sequence<?> charSpan) {
+    public CharSpan(final Sequence<?> charSpan) {
         Utils.checkNull(charSpan, "charSpan");
 
-        int start = ((Number)charSpan.get(0)).intValue();
-        int length = ((Number)charSpan.get(1)).intValue();
+        int start = ((Number) charSpan.get(0)).intValue();
+        int length = ((Number) charSpan.get(1)).intValue();
 
         Utils.checkNonNegative(start, "start");
         Utils.checkNonNegative(length, "length");
@@ -142,7 +142,7 @@ public final class CharSpan {
      * @return A new {@link CharSpan} with the updated value.
      * @throws IllegalArgumentException if the updated start value goes negative.
      */
-    public CharSpan offset(int offset) {
+    public CharSpan offset(final int offset) {
         return new CharSpan(this.start + offset, this.length);
     }
 
@@ -155,12 +155,12 @@ public final class CharSpan {
      * @return A new {@link CharSpan} with the updated value.
      * @throws IllegalArgumentException if the updated length value goes negative.
      */
-    public CharSpan lengthen(int offset) {
+    public CharSpan lengthen(final int offset) {
         return new CharSpan(this.start, this.length + offset);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         boolean equal = false;
 
         if (o instanceof CharSpan) {
@@ -201,7 +201,7 @@ public final class CharSpan {
      * a JSON map, or if it starts with <code>"["</code> but cannot be parsed
      * as a JSON list.
      */
-    public static CharSpan decode(String value) {
+    public static CharSpan decode(final String value) {
         Utils.checkNullOrEmpty(value, "value");
 
         CharSpan charSpan;

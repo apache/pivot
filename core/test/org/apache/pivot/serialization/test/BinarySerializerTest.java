@@ -31,7 +31,7 @@ public class BinarySerializerTest {
     public void testBinarySerializer() {
         Serializer<Object> serializer = new BinarySerializer();
 
-        Object[] outputData = { "Hello World", 123.456, true };
+        Object[] outputData = {"Hello World", 123.456, true};
         Object[] inputData;
 
         try {

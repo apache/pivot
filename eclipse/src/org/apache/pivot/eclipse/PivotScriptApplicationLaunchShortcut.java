@@ -132,7 +132,7 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
                 IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, fileProjectName);
             workingLaunchConfiguration.setAttribute(
                 IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, getProgramArguments(file));
-            workingLaunchConfiguration.setMappedResources(new IResource[] { file });
+            workingLaunchConfiguration.setMappedResources(new IResource[] {file});
 
             launchConfiguration = workingLaunchConfiguration.doSave();
         } catch (CoreException exception) {

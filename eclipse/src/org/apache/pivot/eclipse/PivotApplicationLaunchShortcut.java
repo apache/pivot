@@ -137,7 +137,7 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
                 IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, applicationProjectName);
             workingLaunchConfiguration.setAttribute(
                 IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, applicationTypeName);
-            workingLaunchConfiguration.setMappedResources(new IResource[] { type.getUnderlyingResource() });
+            workingLaunchConfiguration.setMappedResources(new IResource[] {type.getUnderlyingResource()});
 
             launchConfiguration = workingLaunchConfiguration.doSave();
         } catch (CoreException exception) {

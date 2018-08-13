@@ -67,7 +67,8 @@ public class RESTDemoTest {
         GetQuery getQuery = new GetQuery(hostname, port, path, secure);
 
         Object result = getQuery.execute();
-        assertArrayEquals((Object[])JSON.get(contact, "address.street"), (Object[])JSON.get(result, "address.street"));
+        assertArrayEquals((Object[]) JSON.get(contact, "address.street"),
+            (Object[]) JSON.get(result, "address.street"));
         assertEquals(contact, result);
 
         // Update

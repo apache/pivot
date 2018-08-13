@@ -22,6 +22,11 @@ import java.net.URL;
  * Utility class for dealing with images.
  */
 public class ImageUtils {
+    /**
+     * Private constructor for a utility class.
+     */
+    private ImageUtils() {
+    }
 
     /**
      * Find an image in the application's resources given the name.
@@ -34,7 +39,7 @@ public class ImageUtils {
      * @throws IllegalArgumentException if the image resource cannot be found,
      * or if the {@code imageName} is null or empty.
      */
-    public static URL findByName(String imageName, String imageType) {
+    public static URL findByName(final String imageName, final String imageType) {
         Utils.checkNullOrEmpty(imageName, "imageName");
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

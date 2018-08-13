@@ -22,6 +22,11 @@ import org.apache.pivot.text.CharSpan;
  * A set of static methods that perform various character-based operations.
  */
 public class CharUtils {
+    /**
+     * Private constructor for a utility class.
+     */
+    private CharUtils() {
+    }
 
     /**
      * Return a {@link CharSpan} describing a "word" which contains the given
@@ -35,7 +40,7 @@ public class CharUtils {
      * word around the given starting point, or {@code null} if a word selection
      * cannot be made.
      */
-    public static CharSpan selectWord(CharSequence sequence, int start) {
+    public static CharSpan selectWord(final CharSequence sequence, final int start) {
         int length = sequence.length();
         int adjustedStart = start;
         char ch;
@@ -104,7 +109,7 @@ public class CharUtils {
      * @param start The starting point to find the start of the word prior to.
      * @return The index of the prior word start.
      */
-    public static int findPriorWord(CharSequence sequence, int start) {
+    public static int findPriorWord(final CharSequence sequence, final int start) {
         int wordStart = start;
 
         // Skip over any space immediately to the left
@@ -134,7 +139,7 @@ public class CharUtils {
      * @param start The starting point to find the start of the word after.
      * @return The index of the next word start.
      */
-    public static int findNextWord(CharSequence sequence, int start) {
+    public static int findNextWord(final CharSequence sequence, final int start) {
         int wordStart = start;
         int count = sequence.length();
 
