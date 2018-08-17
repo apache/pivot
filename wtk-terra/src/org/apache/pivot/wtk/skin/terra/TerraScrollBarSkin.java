@@ -935,7 +935,8 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
     public final void setScrollButtonHighlightedBackgroundColor(
         String scrollButtonHighlightedBackgroundColor) {
         setScrollButtonHighlightedBackgroundColor(
-            GraphicsUtilities.decodeColor(scrollButtonHighlightedBackgroundColor, "scrollButtonHighlightedBackgroundColor"));
+            GraphicsUtilities.decodeColor(scrollButtonHighlightedBackgroundColor,
+                "scrollButtonHighlightedBackgroundColor"));
     }
 
     public final void setScrollButtonHighlightedBackgroundColor(

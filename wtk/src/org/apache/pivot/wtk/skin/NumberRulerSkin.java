@@ -39,6 +39,10 @@ import org.apache.pivot.wtk.Orientation;
 import org.apache.pivot.wtk.Platform;
 import org.apache.pivot.wtk.Theme;
 
+/**
+ * Skin for the {@link NumberRuler} component, which can be used as a horizontal or
+ * vertical header for viewports.
+ */
 public class NumberRulerSkin extends ComponentSkin implements NumberRulerListener {
     private static final int MAJOR_SIZE = 10;
     private static final int MINOR_SIZE = 8;
@@ -59,7 +63,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     private int lineHeight;
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         Theme theme = Theme.getTheme();
@@ -90,7 +94,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         NumberRuler ruler = (NumberRuler) getComponent();
         Orientation orientation = ruler.getOrientation();
 
@@ -101,7 +105,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         NumberRuler ruler = (NumberRuler) getComponent();
         Orientation orientation = ruler.getOrientation();
 
@@ -120,8 +124,8 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         return 0;
     }
 
-    private void showNumber(Graphics2D graphics, FontRenderContext fontRenderContext,
-            int number, int x, int y) {
+    private void showNumber(final Graphics2D graphics, final FontRenderContext fontRenderContext,
+            final int number, final int x, final int y) {
         String num = Integer.toString(number);
 
         StringCharacterIterator line;
@@ -142,7 +146,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         int width = getWidth();
         int height = getHeight();
         int bottom = height - markerInsets.bottom;
@@ -164,15 +168,17 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         Rectangle fullRect = new Rectangle(width, height);
         Rectangle clippedRect = fullRect.intersection(clipRect);
 
+        Rectangle lineRect, clippedLineRect;
+
         switch (orientation) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 int start = bottom - 1;
                 int end2 = start - (MAJOR_SIZE - 1);
                 int end3 = start - (MINOR_SIZE - 1);
                 int end4 = start - (REGULAR_SIZE - 1);
 
-                Rectangle lineRect = new Rectangle(0, height - 1, width - 1, 0);
-                Rectangle clippedLineRect = lineRect.intersection(clipRect);
+                lineRect = new Rectangle(0, height - 1, width - 1, 0);
+                clippedLineRect = lineRect.intersection(clipRect);
                 graphics.drawLine(clippedLineRect.x, clippedLineRect.y,
                                   clippedLineRect.x + clippedLineRect.width, clippedLineRect.y);
 
@@ -196,11 +202,10 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
                     }
                 }
                 break;
-            }
 
-            case VERTICAL: {
-                Rectangle lineRect = new Rectangle(width - 1, 0, 0, height - 1);
-                Rectangle clippedLineRect = lineRect.intersection(clipRect);
+            case VERTICAL:
+                lineRect = new Rectangle(width - 1, 0, 0, height - 1);
+                clippedLineRect = lineRect.intersection(clipRect);
                 graphics.drawLine(clippedLineRect.x, clippedLineRect.y,
                                   clippedLineRect.x, clippedLineRect.y + clippedLineRect.height);
 
@@ -226,7 +231,6 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
                     lineGraphics.drawGlyphVector(glyphVector, x, y);
                 }
                 break;
-            }
 
             default:
                 break;
@@ -234,51 +238,50 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
     }
 
     @Override
-    public void orientationChanged(NumberRuler ruler) {
+    public void orientationChanged(final NumberRuler ruler) {
         invalidateComponent();
     }
 
     @Override
-    public void textSizeChanged(NumberRuler ruler, int previousSize) {
+    public void textSizeChanged(final NumberRuler ruler, final int previousSize) {
         invalidateComponent();
     }
 
     /**
-     * @return The insets for the markers (only applicable for horizontal
-     * orientation).
+     * @return The insets for the markers (only applicable for horizontal orientation).
      */
     public Insets getMarkerInsets() {
         return markerInsets;
     }
 
-    public final void setMarkerInsets(Insets insets) {
+    public final void setMarkerInsets(final Insets insets) {
         Utils.checkNull(insets, "markerInsets");
 
         this.markerInsets = insets;
         repaintComponent();
     }
 
-    public final void setMarkerInsets(Dictionary<String, ?> insets) {
+    public final void setMarkerInsets(final Dictionary<String, ?> insets) {
         setMarkerInsets(new Insets(insets));
     }
 
-    public final void setMarkerInsets(Sequence<?> insets) {
+    public final void setMarkerInsets(final Sequence<?> insets) {
         setMarkerInsets(new Insets(insets));
     }
 
-    public final void setMarkerInsets(int insets) {
+    public final void setMarkerInsets(final int insets) {
         setMarkerInsets(new Insets(insets));
     }
 
-    public final void setMarkerInsets(Number insets) {
+    public final void setMarkerInsets(final Number insets) {
         setMarkerInsets(new Insets(insets));
     }
 
-    public final void setMarkerInsets(String insets) {
+    public final void setMarkerInsets(final String insets) {
         setMarkerInsets(Insets.decode(insets));
     }
 
-    public final void setRowPadding(Insets padding) {
+    public final void setRowPadding(final Insets padding) {
         Utils.checkNull(padding, "rowPadding");
 
         this.rowPadding = padding;
@@ -291,23 +294,23 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
         }
     }
 
-    public final void setRowPadding(Dictionary<String, ?> padding) {
+    public final void setRowPadding(final Dictionary<String, ?> padding) {
         setRowPadding(new Insets(padding));
     }
 
-    public final void setRowPadding(Sequence<?> padding) {
+    public final void setRowPadding(final Sequence<?> padding) {
         setRowPadding(new Insets(padding));
     }
 
-    public final void setRowPadding(int padding) {
+    public final void setRowPadding(final int padding) {
         setRowPadding(new Insets(padding));
     }
 
-    public final void setRowPadding(Number padding) {
+    public final void setRowPadding(final Number padding) {
         setRowPadding(new Insets(padding));
     }
 
-    public final void setRowPadding(String padding) {
+    public final void setRowPadding(final String padding) {
         setRowPadding(Insets.decode(padding));
     }
 
@@ -324,14 +327,14 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param spacing The number of pixels between markers (must be &gt;= 1).
      */
-    public final void setMarkerSpacing(int spacing) {
+    public final void setMarkerSpacing(final int spacing) {
         Utils.checkPositive(spacing, "markerSpacing");
 
         this.markerSpacing = spacing;
         invalidateComponent();
     }
 
-    public final void setMarkerSpacing(Number spacing) {
+    public final void setMarkerSpacing(final Number spacing) {
         Utils.checkNull(spacing, "markerSpacing");
 
         setMarkerSpacing(spacing.intValue());
@@ -351,7 +354,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param showMajorNumbers Whether numbers should be shown for major divisions.
      */
-    public final void setShowMajorNumbers(boolean showMajorNumbers) {
+    public final void setShowMajorNumbers(final boolean showMajorNumbers) {
         this.showMajorNumbers = showMajorNumbers;
 
         NumberRuler ruler = (NumberRuler) getComponent();
@@ -374,7 +377,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param showMinorNumbers Whether numbers should be shown for minor divisions.
      */
-    public final void setShowMinorNumbers(boolean showMinorNumbers) {
+    public final void setShowMinorNumbers(final boolean showMinorNumbers) {
         this.showMinorNumbers = showMinorNumbers;
 
         NumberRuler ruler = (NumberRuler) getComponent();
@@ -392,7 +395,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param font The new font to use.
      */
-    public void setFont(Font font) {
+    public void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         this.font = font;
@@ -413,7 +416,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         setFont(decodeFont(font));
     }
 
@@ -422,7 +425,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
-    public final void setFont(Dictionary<String, ?> font) {
+    public final void setFont(final Dictionary<String, ?> font) {
         setFont(Theme.deriveFont(font));
     }
 
@@ -440,7 +443,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param color The foreground (that is, the text) color.
      */
-    public void setColor(Color color) {
+    public void setColor(final Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
@@ -453,11 +456,11 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
-    public final void setColor(String color) {
+    public final void setColor(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
-    public final void setColor(int color) {
+    public final void setColor(final int color) {
         Theme theme = currentTheme();
         setColor(theme.getColor(color));
     }
@@ -476,7 +479,7 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      *
      * @param backgroundColor New background color value.
      */
-    public void setBackgroundColor(Color backgroundColor) {
+    public void setBackgroundColor(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
@@ -485,14 +488,13 @@ public class NumberRulerSkin extends ComponentSkin implements NumberRulerListene
      * Sets the background color of the ruler.
      *
      * @param backgroundColor Any of the
-     * {@linkplain GraphicsUtilities#decodeColor color values recognized by
-     * Pivot}.
+     * {@linkplain GraphicsUtilities#decodeColor color values recognized by Pivot}.
      */
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
-    public final void setBackgroundColor(int backgroundColor) {
+    public final void setBackgroundColor(final int backgroundColor) {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }

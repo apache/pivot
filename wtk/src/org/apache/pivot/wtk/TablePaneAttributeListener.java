@@ -25,7 +25,8 @@ public interface TablePaneAttributeListener {
     /**
      * Table pane attribute listeners.
      */
-    public static class Listeners extends ListenerList<TablePaneAttributeListener> implements TablePaneAttributeListener {
+    public static class Listeners extends ListenerList<TablePaneAttributeListener>
+        implements TablePaneAttributeListener {
         @Override
         public void rowSpanChanged(TablePane tablePane, Component component, int previousRowSpan) {
             forEach(listener -> listener.rowSpanChanged(tablePane, component, previousRowSpan));

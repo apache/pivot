@@ -44,19 +44,20 @@ public class TableViewHeader extends Component {
     private SortMode sortMode = SortMode.NONE;
 
     private TableViewHeaderListener.Listeners tableViewHeaderListeners = new TableViewHeaderListener.Listeners();
-    private TableViewHeaderPressListener.Listeners tableViewHeaderPressListeners = new TableViewHeaderPressListener.Listeners();
+    private TableViewHeaderPressListener.Listeners tableViewHeaderPressListeners =
+        new TableViewHeaderPressListener.Listeners();
 
     public TableViewHeader() {
         this(null);
     }
 
-    public TableViewHeader(TableView tableView) {
+    public TableViewHeader(final TableView tableView) {
         installSkin(TableViewHeader.class);
         setTableView(tableView);
     }
 
     @Override
-    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+    protected void setSkin(final org.apache.pivot.wtk.Skin skin) {
         checkSkin(skin, TableViewHeader.Skin.class);
 
         super.setSkin(skin);
@@ -66,7 +67,7 @@ public class TableViewHeader extends Component {
         return tableView;
     }
 
-    public void setTableView(TableView tableView) {
+    public void setTableView(final TableView tableView) {
         TableView previousTableView = this.tableView;
 
         if (previousTableView != tableView) {
@@ -79,7 +80,7 @@ public class TableViewHeader extends Component {
         return sortMode;
     }
 
-    public void setSortMode(SortMode sortMode) {
+    public void setSortMode(final SortMode sortMode) {
         Utils.checkNull(sortMode, "sortMode");
 
         SortMode previousSortMode = this.sortMode;
@@ -89,7 +90,7 @@ public class TableViewHeader extends Component {
         }
     }
 
-    public void pressHeader(int index) {
+    public void pressHeader(final int index) {
         tableViewHeaderPressListeners.headerPressed(this, index);
     }
 
@@ -100,7 +101,7 @@ public class TableViewHeader extends Component {
      * @return The column index, or <tt>-1</tt> if there is no column at the
      * given x-coordinate.
      */
-    public int getHeaderAt(int x) {
+    public int getHeaderAt(final int x) {
         TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin) getSkin();
         return tableViewHeaderSkin.getHeaderAt(x);
     }
@@ -111,7 +112,7 @@ public class TableViewHeader extends Component {
      * @param index The index of the header.
      * @return The bounding area of the header.
      */
-    public Bounds getHeaderBounds(int index) {
+    public Bounds getHeaderBounds(final int index) {
         TableViewHeader.Skin tableViewHeaderSkin = (TableViewHeader.Skin) getSkin();
         return tableViewHeaderSkin.getHeaderBounds(index);
     }

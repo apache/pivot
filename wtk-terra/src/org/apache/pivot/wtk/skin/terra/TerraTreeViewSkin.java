@@ -883,7 +883,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
+        setSelectionBackgroundColor(
+            GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
     }
 
     public final void setSelectionBackgroundColor(int selectionBackgroundColor) {
@@ -903,7 +904,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setInactiveSelectionColor(String inactiveSelectionColor) {
-        setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor, "inactiveSelectionColor"));
+        setInactiveSelectionColor(
+            GraphicsUtilities.decodeColor(inactiveSelectionColor, "inactiveSelectionColor"));
     }
 
     public final void setInactiveSelectionColor(int inactiveSelectionColor) {
@@ -964,7 +966,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
     }
 
     public void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
+        setHighlightBackgroundColor(
+            GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
     }
 
     public final void setHighlightBackgroundColor(int highlightBackgroundColor) {

@@ -54,13 +54,7 @@ public class Pivot862 implements Application {
             public void buttonPressed(Button button) {
                 final FileBrowserSheet fileBrowserSheet = new FileBrowserSheet();
 
-                fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_TO); // to
-                                                                         // be
-                                                                         // able
-                                                                         // to
-                                                                         // select
-                                                                         // a
-                                                                         // folder
+                fileBrowserSheet.setMode(FileBrowserSheet.Mode.SAVE_TO); // to be able to select a folder
                 fileBrowserSheet.open(window, new SheetCloseListener() {
                     @Override
                     public void sheetClosed(Sheet sheet) {
@@ -96,17 +90,12 @@ public class Pivot862 implements Application {
                 System.out.println("Now opening a BrowserSheet starting from the previous selected folder: \""
                     + selectedFolder + "\"");
                 FileBrowserSheet fileBrowserSheet =
-                // new FileBrowserSheet(FileBrowserSheet.Mode.OPEN,
-                // selectedFolder); // use this as a workaround ...
-                new FileBrowserSheet(FileBrowserSheet.Mode.OPEN); // test to see
-                                                                  // the wrong
-                                                                  // behavior
+                // new FileBrowserSheet(FileBrowserSheet.Mode.OPEN, selectedFolder); // use this as a workaround ...
+                new FileBrowserSheet(FileBrowserSheet.Mode.OPEN); // test to see the wrong behavior
                 // new FileBrowserSheet(); // test to see the wrong behavior
-                fileBrowserSheet.setRootFolder(selectedFolder); // ok, but
-                                                                // doesn't solve
-                                                                // this issue
-                                                                // ...
-                System.out.println("\nNote: the behavior here is right only when using the constructor with two parameters ..."
+                fileBrowserSheet.setRootFolder(selectedFolder); // ok, but doesn't solve this issue ...
+                System.out.println(
+                      "\nNote: the behavior here is right only when using the constructor with two parameters ..."
                     + " but in this source it's used one of other constructors.\n");
 
                 try {

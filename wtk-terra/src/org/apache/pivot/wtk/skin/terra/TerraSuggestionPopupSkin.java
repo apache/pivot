@@ -164,8 +164,8 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
                     returnFocusToTextInput = false;
                     suggestionPopup.close(true);
 
-                    FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
-                        : FocusTraversalDirection.FORWARD;
+                    FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT))
+                        ? FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
                     textInput.transferFocus(direction);
 
                     break;

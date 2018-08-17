@@ -298,7 +298,8 @@ public class Window extends Container {
 
     private WindowListener.Listeners windowListeners = new WindowListener.Listeners();
     private WindowStateListener.Listeners windowStateListeners = new WindowStateListener.Listeners();
-    private WindowActionMappingListener.Listeners windowActionMappingListeners = new WindowActionMappingListener.Listeners();
+    private WindowActionMappingListener.Listeners windowActionMappingListeners =
+        new WindowActionMappingListener.Listeners();
 
     private static WindowClassListener.Listeners windowClassListeners = new WindowClassListener.Listeners();
 

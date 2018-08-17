@@ -890,7 +890,8 @@ public class TableView extends Component {
     private TableViewListener.Listeners tableViewListeners = new TableViewListener.Listeners();
     private TableViewColumnListener.Listeners tableViewColumnListeners = new TableViewColumnListener.Listeners();
     private TableViewRowListener.Listeners tableViewRowListeners = new TableViewRowListener.Listeners();
-    private TableViewSelectionListener.Listeners tableViewSelectionListeners = new TableViewSelectionListener.Listeners();
+    private TableViewSelectionListener.Listeners tableViewSelectionListeners =
+        new TableViewSelectionListener.Listeners();
     private TableViewSortListener.Listeners tableViewSortListeners = new TableViewSortListener.Listeners();
     private TableViewBindingListener.Listeners tableViewBindingListeners = new TableViewBindingListener.Listeners();
 

@@ -816,7 +816,8 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
-        setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
+        setSelectionBackgroundColor(
+            GraphicsUtilities.decodeColor(selectionBackgroundColor, "selectionBackgroundColor"));
     }
 
     public Color getHighlightColor() {
@@ -846,7 +847,8 @@ public class TerraCalendarSkin extends CalendarSkin {
     }
 
     public final void setHighlightBackgroundColor(String highlightBackgroundColor) {
-        setHighlightBackgroundColor(GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
+        setHighlightBackgroundColor(
+            GraphicsUtilities.decodeColor(highlightBackgroundColor, "highlightBackgroundColor"));
     }
 
     public Color getDividerColor() {

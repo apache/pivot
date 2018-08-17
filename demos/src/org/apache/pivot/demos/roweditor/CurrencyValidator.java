@@ -25,21 +25,22 @@ import org.apache.pivot.wtk.validation.Validator;
 /**
  * Validates that text represents a valid dollar value.
  */
-public class CurrencyValidator implements Validator {
+public final class CurrencyValidator implements Validator {
     protected static final DecimalFormat FORMAT = new DecimalFormat("0.00");
     static {
         FORMAT.setParseBigDecimal(true);
     }
 
     @Override
-    public boolean isValid(String text) {
+    public boolean isValid(final String text) {
         boolean valid = true;
 
         if (text.length() > 0) {
             ParsePosition parsePosition = new ParsePosition(0);
             BigDecimal numericAmount = (BigDecimal) FORMAT.parse(text, parsePosition);
             valid = (numericAmount != null && numericAmount.scale() <= 2
-                && numericAmount.signum() >= 0 && parsePosition.getErrorIndex() == -1 && parsePosition.getIndex() == text.length());
+                && numericAmount.signum() >= 0 && parsePosition.getErrorIndex() == -1
+                && parsePosition.getIndex() == text.length());
         }
 
         return valid;

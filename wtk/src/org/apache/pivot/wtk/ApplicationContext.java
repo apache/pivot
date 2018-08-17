@@ -1623,7 +1623,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             if (focusedComponentLocal == null) {
                                 for (Application application : applications) {
                                     if (application instanceof Application.UnprocessedKeyHandler) {
-                                        Application.UnprocessedKeyHandler unprocessedKeyHandler = (Application.UnprocessedKeyHandler) application;
+                                        Application.UnprocessedKeyHandler unprocessedKeyHandler =
+                                            (Application.UnprocessedKeyHandler) application;
                                         unprocessedKeyHandler.keyTyped(keyChar);
                                     }
                                 }

@@ -28,6 +28,7 @@ import org.apache.pivot.util.Utils;
 
 /**
  * Unmodifiable implementation of the {@link List} interface.
+ * @param <T> Type of elements in this list.
  */
 public final class ImmutableList<T> implements List<T> {
     private List<T> list = null;
@@ -36,34 +37,34 @@ public final class ImmutableList<T> implements List<T> {
 
     private static final String ERROR_MSG = "Immutable list cannot be modified.";
 
-    public ImmutableList(List<T> list) {
+    public ImmutableList(final List<T> list) {
         Utils.checkNull(list, "list");
 
         this.list = list;
     }
 
     @Override
-    public int add(T item) {
+    public int add(final T item) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
-    public void insert(T item, int index) {
+    public void insert(final T item, final int index) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
-    public T update(int index, T item) {
+    public T update(final int index, final T item) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
-    public int remove(T item) {
+    public int remove(final T item) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
-    public Sequence<T> remove(int index, int count) {
+    public Sequence<T> remove(final int index, final int count) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
@@ -73,12 +74,12 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     @Override
-    public T get(int index) {
+    public T get(final int index) {
         return list.get(index);
     }
 
     @Override
-    public int indexOf(T item) {
+    public int indexOf(final T item) {
         return list.indexOf(item);
     }
 
@@ -98,7 +99,7 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     @Override
-    public void setComparator(Comparator<T> comparator) {
+    public void setComparator(final Comparator<T> comparator) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 

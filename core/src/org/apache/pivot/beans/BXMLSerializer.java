@@ -83,7 +83,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         public final HashMap<String, String> properties = new HashMap<>();
         public final LinkedList<Attribute> attributes = new LinkedList<>();
 
-        public Element(Element parent, Type type, String name, Class<?> propertyClass, Object value) {
+        public Element(final Element parent, final Type type, final String name,
+            final Class<?> propertyClass, final Object value) {
             this.parent = parent;
             this.type = type;
             this.name = name;
@@ -98,7 +99,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         public final Class<?> propertyClass;
         public Object value;
 
-        public Attribute(Element element, String name, Class<?> propertyClass, Object value) {
+        public Attribute(final Element element, final String name, final Class<?> propertyClass, final Object value) {
             this.element = element;
             this.name = name;
             this.propertyClass = propertyClass;
@@ -106,17 +107,19 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
     }
 
-/*    private static void printBindings(String message, java.util.Map<String,Object> bindings) {
+/*    private static void printBindings(final String message, final java.util.Map<String,Object> bindings) {
         System.out.format("===== %1$s =====%n", message);
         System.out.format("--- Bindings %1$s=%2$s ---%n", bindings, bindings.getClass().getName());
         for (String key : bindings.keySet()) {
             Object value = bindings.get(key);
-            System.out.format("key: %1$s, value: %2$s [%3$s]%n", key, value, Integer.toHexString(System.identityHashCode(value)));
+            System.out.format("key: %1$s, value: %2$s [%3$s]%n",
+                key, value, Integer.toHexString(System.identityHashCode(value)));
             if (key.equals(NASHORN_GLOBAL)) {
                 Bindings globalBindings = (Bindings)value;
                 for (String globalKey : globalBindings.keySet()) {
                     Object globalValue = globalBindings.get(globalKey);
-                    System.out.format("    global key: %1$s, value: %2$s [%3$s]%n", globalKey, globalValue, Integer.toHexString(System.identityHashCode(globalValue)));
+                    System.out.format("    global key: %1$s, value: %2$s [%3$s]%n",
+                        globalKey, globalValue, Integer.toHexString(System.identityHashCode(globalValue)));
                 }
             }
         }
@@ -130,14 +133,14 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
         private static final String ARGUMENTS_KEY = "arguments";
 
-        public AttributeInvocationHandler(ScriptEngine scriptEngine, String event, String script) {
+        public AttributeInvocationHandler(final ScriptEngine scriptEngine, final String event, final String script) {
             this.scriptEngine = scriptEngine;
             this.event = event;
             this.script = script;
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
             Object result = null;
 
             String methodName = method.getName();
@@ -169,11 +172,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private static class ElementInvocationHandler implements InvocationHandler {
         private ScriptEngine scriptEngine;
 
-        public ElementInvocationHandler(ScriptEngine scriptEngine) {
+        public ElementInvocationHandler(final ScriptEngine scriptEngine) {
             this.scriptEngine = scriptEngine;
         }
 
-        private Object invokeMethod(String methodName, Object[] args) throws Throwable {
+        private Object invokeMethod(final String methodName, final Object[] args) throws Throwable {
             Invocable invocable;
             try {
                 invocable = (Invocable) scriptEngine;
@@ -185,7 +188,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
             Object result = null;
 
             String methodName = method.getName();
@@ -227,12 +230,12 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         private ScriptEngine scriptEngine;
         private String functionName;
 
-        public ScriptBindMapping(ScriptEngine scriptEngine, String functionName) {
+        public ScriptBindMapping(final ScriptEngine scriptEngine, final String functionName) {
             this.scriptEngine = scriptEngine;
             this.functionName = functionName;
         }
 
-        private Object invokeFunction(String functionName, Object value) {
+        private Object invokeFunction(final String functionName, final Object value) {
             Invocable invocable;
             try {
                 invocable = (Invocable) scriptEngine;
@@ -320,7 +323,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     public static final String LANGUAGE_PROCESSING_INSTRUCTION = "language";
 
     public static final String NASHORN_GLOBAL = "nashorn.global";
-    public static final String NASHORN_COMPAT_SCRIPT = "if (typeof importClass != \"function\") { load(\"nashorn:mozilla_compat.js\"); }";
+    public static final String NASHORN_COMPAT_SCRIPT =
+        "if (typeof importClass != \"function\") { load(\"nashorn:mozilla_compat.js\"); }";
 
     public static final String BXML_PREFIX = "bxml";
     public static final String BXML_EXTENSION = "bxml";
@@ -360,7 +364,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         fileExtensions.put(PropertiesSerializer.PROPERTIES_EXTENSION, PropertiesSerializer.MIME_TYPE);
     }
 
-    private ScriptEngine newEngineByName(String scriptLanguage) throws SerializationException {
+    private ScriptEngine newEngineByName(final String scriptLanguage) throws SerializationException {
         ScriptEngine engine = scriptEngineManager.getEngineByName(scriptLanguage);
 
         if (engine == null) {
@@ -394,8 +398,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @param scriptLanguage Any script language name supported by the current JVM.
      * @return Either an existing engine for that name, or a new one found by the
      * {@link #scriptEngineManager} and then cached (in the {@link #scriptEngines} map).
+     * @throws SerializationException for problems finding the engine.
      */
-    private ScriptEngine getEngineByName(String scriptLanguage) throws SerializationException {
+    private ScriptEngine getEngineByName(final String scriptLanguage) throws SerializationException {
         String languageKey = scriptLanguage.toLowerCase();
         ScriptEngine engine = scriptEngines.get(languageKey);
         if (engine != null) {
@@ -429,8 +434,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @param extension Any script language extension supported by the current JVM.
      * @return Either an existing engine for that extension, or a new one found by the
      * {@link #scriptEngineManager} and then cached (in the {@link #scriptEnginesExts} map).
+     * @throws SerializationException for problems finding the engine.
      */
-    private ScriptEngine getEngineByExtension(String extension) throws SerializationException {
+    private ScriptEngine getEngineByExtension(final String extension) throws SerializationException {
         String extensionKey = extension.toLowerCase();
         ScriptEngine engine = scriptEnginesExts.get(extensionKey);
         if (engine != null) {
@@ -490,7 +496,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @return The deserialized object hierarchy.
      */
     @Override
-    public Object readObject(InputStream inputStream) throws IOException, SerializationException {
+    public Object readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
         root = null;
@@ -505,41 +511,30 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     int event = xmlStreamReader.next();
 
                     switch (event) {
-                        case XMLStreamConstants.PROCESSING_INSTRUCTION: {
+                        case XMLStreamConstants.PROCESSING_INSTRUCTION:
                             processProcessingInstruction();
                             break;
-                        }
 
-                        case XMLStreamConstants.CHARACTERS: {
+                        case XMLStreamConstants.CHARACTERS:
                             processCharacters();
                             break;
-                        }
 
-                        case XMLStreamConstants.START_ELEMENT: {
+                        case XMLStreamConstants.START_ELEMENT:
                             processStartElement();
                             break;
-                        }
 
-                        case XMLStreamConstants.END_ELEMENT: {
+                        case XMLStreamConstants.END_ELEMENT:
                             processEndElement();
                             break;
-                        }
 
-                        default: {
+                        default:
                             break;
-                        }
                     }
                 }
             } catch (XMLStreamException exception) {
                 throw new SerializationException(exception);
             }
-        } catch (IOException exception) {
-            logException(exception);
-            throw exception;
-        } catch (SerializationException exception) {
-            logException(exception);
-            throw exception;
-        } catch (RuntimeException exception) {
+        } catch (IOException | SerializationException | RuntimeException exception) {
             logException(exception);
             throw exception;
         }
@@ -561,42 +556,39 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 bindMapping = new ScriptBindMapping(getEngineByName(language), bindFunction);
             }
 
+            String targetPath;
+            NamespaceBinding namespaceBinding;
+
             switch (elementLocal.type) {
                 case INSTANCE:
-                case INCLUDE: {
+                case INCLUDE:
                     // Bind to <element ID>.<attribute name>
                     if (elementLocal.id == null) {
                         elementLocal.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
                         namespace.put(elementLocal.id, elementLocal.value);
                     }
 
-                    String targetPath = elementLocal.id + "." + attribute.name;
-                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath,
-                        targetPath, bindMapping);
+                    targetPath = elementLocal.id + "." + attribute.name;
+                    namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath, bindMapping);
                     namespaceBinding.bind();
 
                     break;
-                }
 
-                case READ_ONLY_PROPERTY: {
+                case READ_ONLY_PROPERTY:
                     // Bind to <parent element ID>.<element name>.<attribute name>
                     if (elementLocal.parent.id == null) {
                         elementLocal.parent.id = INTERNAL_ID_PREFIX + Integer.toString(nextID++);
                         namespace.put(elementLocal.parent.id, elementLocal.parent.value);
                     }
 
-                    String targetPath = elementLocal.parent.id + "." + elementLocal.name + "."
-                        + attribute.name;
-                    NamespaceBinding namespaceBinding = new NamespaceBinding(namespace, sourcePath,
-                        targetPath, bindMapping);
+                    targetPath = elementLocal.parent.id + "." + elementLocal.name + "." + attribute.name;
+                    namespaceBinding = new NamespaceBinding(namespace, sourcePath, targetPath, bindMapping);
                     namespaceBinding.bind();
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
         }
 
@@ -630,7 +622,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(Class, String, boolean)
      */
-    public final Object readObject(Class<?> baseType, String resourceName)
+    public final Object readObject(final Class<?> baseType, final String resourceName)
         throws IOException, SerializationException {
         return readObject(baseType, resourceName, false);
     }
@@ -655,7 +647,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(URL, Resources)
      */
-    public final Object readObject(Class<?> baseType, String resourceName, boolean localize)
+    public final Object readObject(final Class<?> baseType, final String resourceName, final boolean localize)
         throws IOException, SerializationException {
         Utils.checkNull(baseType, "baseType");
         Utils.checkNull(resourceName, "resourceName");
@@ -681,7 +673,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(URL, Resources)
      */
-    public final Object readObject(URL locationArgument)
+    public final Object readObject(final URL locationArgument)
         throws IOException, SerializationException {
         return readObject(locationArgument, null);
     }
@@ -697,7 +689,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws SerializationException for any other errors encountered deserializing the resource.
      * @see #readObject(InputStream)
      */
-    public final Object readObject(URL locationArgument, Resources resourcesArgument)
+    public final Object readObject(final URL locationArgument, final Resources resourcesArgument)
         throws IOException, SerializationException {
         Utils.checkNull(locationArgument, "location");
 
@@ -735,7 +727,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             String text = xmlStreamReader.getText();
 
             switch (element.type) {
-                case INSTANCE: {
+                case INSTANCE:
                     if (element.value instanceof Sequence<?>) {
                         Sequence<Object> sequence = (Sequence<Object>) element.value;
 
@@ -751,21 +743,17 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                             throw new SerializationException(exception);
                         }
                     }
-
                     break;
-                }
 
                 case WRITABLE_PROPERTY:
                 case LISTENER_LIST_PROPERTY:
-                case SCRIPT: {
+                case SCRIPT:
                     element.value = text;
                     break;
-                }
 
-                default: {
+                default:
                     throw new SerializationException("Unexpected characters in " + element.type
                         + " element.");
-                }
             }
         }
     }
@@ -782,14 +770,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         // Get element properties
         String namespaceURI = xmlStreamReader.getNamespaceURI();
         String prefix = xmlStreamReader.getPrefix();
+        String localName = xmlStreamReader.getLocalName();
 
         // Some stream readers incorrectly report an empty string as the prefix
         // for the default namespace
         if (prefix != null && prefix.length() == 0) {
             prefix = null;
         }
-
-        String localName = xmlStreamReader.getLocalName();
 
         // Determine the type and value of this element
         Element.Type elementType;
@@ -852,8 +839,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             } else {
                 // The element represents a property
                 if (prefix != null) {
-                    throw new SerializationException(
-                        "Property elements cannot have a namespace prefix.");
+                    throw new SerializationException("Property elements cannot have a namespace prefix.");
                 }
 
                 if (element.value instanceof Dictionary<?, ?>) {
@@ -928,8 +914,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             }
 
             if (mimeType == null) {
-                throw new SerializationException("Cannot determine MIME type of include \"" + src
-                    + "\".");
+                throw new SerializationException("Cannot determine MIME type of include \"" + src + "\".");
             }
 
             boolean inline = false;
@@ -941,8 +926,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             Class<? extends Serializer<?>> serializerClass = mimeTypes.get(mimeType);
 
             if (serializerClass == null) {
-                throw new SerializationException("No serializer associated with MIME type "
-                    + mimeType + ".");
+                throw new SerializationException("No serializer associated with MIME type " + mimeType + ".");
             }
 
             Serializer<?> serializer;
@@ -1020,18 +1004,15 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 // The attribute represents an internal value
                 if (localName.equals(ID_ATTRIBUTE)) {
                     if (value.length() == 0 || value.contains(".")) {
-                        throw new IllegalArgumentException("\"" + value
-                            + "\" is not a valid ID value.");
+                        throw new IllegalArgumentException("\"" + value + "\" is not a valid ID value.");
                     }
 
                     if (namespace.containsKey(value)) {
                         throw new SerializationException("ID " + value + " is already in use.");
                     }
 
-                    if (element.type != Element.Type.INSTANCE
-                        && element.type != Element.Type.INCLUDE) {
-                        throw new SerializationException(
-                            "An ID cannot be assigned to this element.");
+                    if (element.type != Element.Type.INSTANCE && element.type != Element.Type.INCLUDE) {
+                        throw new SerializationException("An ID cannot be assigned to this element.");
                     }
 
                     element.id = value;
@@ -1043,27 +1024,23 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 boolean property = false;
 
                 switch (element.type) {
-                    case INCLUDE: {
+                    case INCLUDE:
                         property = (localName.equals(INCLUDE_SRC_ATTRIBUTE)
                             || localName.equals(INCLUDE_RESOURCES_ATTRIBUTE)
                             || localName.equals(INCLUDE_MIME_TYPE_ATTRIBUTE)
                             || localName.equals(INCLUDE_INLINE_ATTRIBUTE));
                         break;
-                    }
 
-                    case SCRIPT: {
+                    case SCRIPT:
                         property = (localName.equals(SCRIPT_SRC_ATTRIBUTE));
                         break;
-                    }
 
-                    case REFERENCE: {
+                    case REFERENCE:
                         property = (localName.equals(REFERENCE_ID_ATTRIBUTE));
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 if (property) {
@@ -1093,8 +1070,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                         name = localName;
                     }
 
-                    if (value.startsWith(NAMESPACE_BINDING_PREFIX)
-                        && value.endsWith(NAMESPACE_BINDING_SUFFIX)) {
+                    if (value.startsWith(NAMESPACE_BINDING_PREFIX) && value.endsWith(NAMESPACE_BINDING_SUFFIX)) {
                         // The attribute represents a namespace binding
                         if (propertyClass != null) {
                             throw new SerializationException(
@@ -1158,7 +1134,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                                             if (JSON.containsKey(namespace, value)) {
                                                 attribute.value = JSON.get(namespace, value);
                                             } else {
-                                                Object nashornGlobal = scriptEngineManager.getBindings().get(NASHORN_GLOBAL);
+                                                Object nashornGlobal =
+                                                    scriptEngineManager.getBindings().get(NASHORN_GLOBAL);
                                                 if (nashornGlobal == null) {
                                                     throw new SerializationException("Value \"" + value
                                                         + "\" is not defined.");
@@ -1196,15 +1173,17 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     private void processEndElement() throws SerializationException {
 
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        Dictionary<String, Object> dictionary;
+        String script;
+        ScriptEngine scriptEngine;
 
         switch (element.type) {
             case INSTANCE:
             case INCLUDE:
-            case REFERENCE: {
+            case REFERENCE:
                 // Apply attributes
                 for (Attribute attribute : element.attributes) {
                     if (attribute.propertyClass == null) {
-                        Dictionary<String, Object> dictionary;
                         if (element.value instanceof Dictionary<?, ?>) {
                             dictionary = (Dictionary<String, Object>) element.value;
                         } else {
@@ -1309,10 +1288,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 break;
-            }
 
-            case READ_ONLY_PROPERTY: {
-                Dictionary<String, Object> dictionary;
+            case READ_ONLY_PROPERTY:
                 if (element.value instanceof Dictionary<?, ?>) {
                     dictionary = (Dictionary<String, Object>) element.value;
                 } else {
@@ -1330,11 +1307,9 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 break;
-            }
 
-            case WRITABLE_PROPERTY: {
+            case WRITABLE_PROPERTY:
                 if (element.propertyClass == null) {
-                    Dictionary<String, Object> dictionary;
                     if (element.parent.value instanceof Dictionary) {
                         dictionary = (Dictionary<String, Object>) element.parent.value;
                     } else {
@@ -1356,14 +1331,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 break;
-            }
 
-            case LISTENER_LIST_PROPERTY: {
+            case LISTENER_LIST_PROPERTY:
                 // Evaluate the script
-                String script = (String) element.value;
+                script = (String) element.value;
 
                 // Get a new engine here in order to make the script function private to this object
-                ScriptEngine scriptEngine = newEngineByName(language);
+                scriptEngine = newEngineByName(language);
 
                 // ORIGINAL COMMENT: Don't pollute the engine namespace with the listener functions
                 // Removed for Java 1.8+ because Nashorn handles globals differently
@@ -1405,9 +1379,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                 }
 
                 break;
-            }
 
-            case SCRIPT: {
+            case SCRIPT:
                 String src = null;
                 if (element.properties.containsKey(SCRIPT_SRC_ATTRIBUTE)) {
                     src = element.properties.get(SCRIPT_SRC_ATTRIBUTE);
@@ -1431,7 +1404,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
 
                     String extension = src.substring(i + 1);
-                    ScriptEngine scriptEngine = getEngineByExtension(extension);
+                    scriptEngine = getEngineByExtension(extension);
 
                     scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
@@ -1466,8 +1439,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
                 if (element.value != null) {
                     // Evaluate the script
-                    String script = (String) element.value;
-                    ScriptEngine scriptEngine = getEngineByName(language);
+                    script = (String) element.value;
+                    scriptEngine = getEngineByName(language);
 
                     scriptEngine.setBindings(scriptEngineManager.getBindings(), ScriptContext.ENGINE_SCOPE);
 
@@ -1479,16 +1452,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     }
                 }
                 break;
-            }
 
-            case DEFINE: {
+            case DEFINE:
                 // No-op
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         // Move up the stack
@@ -1510,7 +1480,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return xmlStreamReader.getLocation();
     }
 
-    private void logException(Throwable exception) {
+    private void logException(final Throwable exception) {
         Location streamReaderlocation = xmlStreamReader.getLocation();
         String message = "An error occurred at line number " + streamReaderlocation.getLineNumber();
 
@@ -1523,7 +1493,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         reportException(new SerializationException(message, exception));
     }
 
-    private void reportException(ScriptException exception, String script) {
+    private void reportException(final ScriptException exception, final String script) {
         reportException(new SerializationException("Failed to execute script:\n" + script, exception));
     }
 
@@ -1533,7 +1503,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * print to <tt>System.err</tt>.
      * @param exception Whatever exception has been thrown during processing.
      */
-    protected void reportException(Throwable exception) {
+    protected void reportException(final Throwable exception) {
         String message = exception.getLocalizedMessage();
         if (Utils.isNullOrEmpty(message)) {
             message = exception.getClass().getSimpleName();
@@ -1543,13 +1513,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @Override
-    public void writeObject(Object object, OutputStream outputStream) throws IOException,
+    public void writeObject(final Object object, final OutputStream outputStream) throws IOException,
         SerializationException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String getMIMEType(Object object) {
+    public String getMIMEType(final Object object) {
         return MIME_TYPE;
     }
 
@@ -1570,7 +1540,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @Override
-    public void setNamespace(Map<String, Object> namespace) {
+    public void setNamespace(final Map<String, Object> namespace) {
         Utils.checkNull(namespace, "namespace");
 
         this.namespace = namespace;
@@ -1582,7 +1552,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @Override
-    public void setLocation(URL location) {
+    public void setLocation(final URL location) {
         this.location = location;
     }
 
@@ -1592,7 +1562,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     }
 
     @Override
-    public void setResources(Resources resources) {
+    public void setResources(final Resources resources) {
         this.resources = resources;
     }
 
@@ -1603,7 +1573,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws BindException If an error occurs during binding.
      * @see #bind(Object, Class)
      */
-    public void bind(Object object) {
+    public void bind(final Object object) {
         Utils.checkNull(object, "bind object");
 
         bind(object, object.getClass());
@@ -1618,7 +1588,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @param type The type of the object.
      * @throws BindException If an error occurs during binding.
      */
-    public void bind(Object object, Class<?> type) throws BindException {
+    public void bind(final Object object, final Class<?> type) throws BindException {
         Utils.checkNull(object, "bind object");
         Utils.checkNull(type, "bind type");
 
@@ -1676,12 +1646,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      *
      * @param type The type of serializer being requested.
      * @return The new serializer to use.
-     * @throws InstantiationException if an object of the given type cannot
-     * be instantiated.
+     * @throws InstantiationException if an object of the given type cannot be instantiated.
      * @throws IllegalAccessException if the class cannot be accessed in the
      * current security environment.
      */
-    protected Serializer<?> newIncludeSerializer(Class<? extends Serializer<?>> type)
+    protected Serializer<?> newIncludeSerializer(final Class<? extends Serializer<?>> type)
         throws InstantiationException, IllegalAccessException {
         return type.newInstance();
     }
@@ -1694,12 +1663,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      *
      * @param type The type of object being requested.
      * @return The newly created object.
-     * @throws InstantiationException if an object of the given type cannot
-     * be instantiated.
+     * @throws InstantiationException if an object of the given type cannot be instantiated.
      * @throws IllegalAccessException if the class cannot be accessed in the
      * current security environment.
      */
-    protected Object newTypedObject(Class<?> type)
+    protected Object newTypedObject(final Class<?> type)
         throws InstantiationException, IllegalAccessException {
         return type.newInstance();
     }
@@ -1752,8 +1720,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return mimeTypes;
     }
 
-    private static Method getStaticGetterMethod(Class<?> propertyClass, String propertyName,
-        Class<?> objectType) {
+    private static Method getStaticGetterMethod(final Class<?> propertyClass, final String propertyName,
+        final Class<?> objectType) {
         Method method = null;
 
         if (objectType != null) {
@@ -1780,8 +1748,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return method;
     }
 
-    private static Method getStaticSetterMethod(Class<?> propertyClass, String propertyName,
-        Class<?> objectType, Class<?> propertyValueType) {
+    private static Method getStaticSetterMethod(final Class<?> propertyClass, final String propertyName,
+        final Class<?> objectType, final Class<?> propertyValueType) {
         Method method = null;
 
         if (objectType != null) {
@@ -1801,8 +1769,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
                     Class<?> primitivePropertyValueType = (Class<?>) primitiveTypeField.get(null);
 
                     try {
-                        method = propertyClass.getMethod(methodName, objectType,
-                            primitivePropertyValueType);
+                        method = propertyClass.getMethod(methodName, objectType, primitivePropertyValueType);
                     } catch (NoSuchMethodException exception) {
                         // No-op
                     }
@@ -1822,7 +1789,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         return method;
     }
 
-    private static void setStaticProperty(Object object, Class<?> propertyClass,
+    private static void setStaticProperty(final Object object, final Class<?> propertyClass,
         final String propertyName, final Object value) throws SerializationException {
         Class<?> objectType = object.getClass();
         String propertyNameUpdated = Character.toUpperCase(propertyName.charAt(0))
@@ -1836,13 +1803,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         }
 
         if (setterMethod == null) {
-            Method getterMethod = getStaticGetterMethod(propertyClass, propertyNameUpdated,
-                objectType);
+            Method getterMethod = getStaticGetterMethod(propertyClass, propertyNameUpdated, objectType);
 
             if (getterMethod != null) {
                 Class<?> propertyType = getterMethod.getReturnType();
-                setterMethod = getStaticSetterMethod(propertyClass, propertyNameUpdated,
-                    objectType, propertyType);
+                setterMethod = getStaticSetterMethod(propertyClass, propertyNameUpdated, objectType, propertyType);
 
                 if (valueToAssign instanceof String) {
                     valueToAssign = BeanAdapter.coerce((String) valueToAssign, propertyType, propertyNameUpdated);
@@ -1870,7 +1835,7 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * or {@code null} to set the default, default value.
      * @see #DEFAULT_LANGUAGE
      */
-    protected void setDefaultLanguage(String defaultLanguage) {
+    protected void setDefaultLanguage(final String defaultLanguage) {
         if (defaultLanguage == null) {
             this.defaultLanguage = DEFAULT_LANGUAGE;
         } else {

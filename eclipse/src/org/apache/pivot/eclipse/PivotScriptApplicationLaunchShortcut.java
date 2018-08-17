@@ -79,14 +79,15 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
 
     private ILaunchConfiguration getExistingLaunchConfiguration(IFile file) {
         ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-        ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+        ILaunchConfigurationType launchConfigurationType =
+            launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
 
         ILaunchConfiguration existingLaunchConfiguration = null;
         try {
             String fileProjectName = file.getProject().getName();
 
-            ILaunchConfiguration[] launchConfigurations = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(
-                launchConfigurationType);
+            ILaunchConfiguration[] launchConfigurations =
+                DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(launchConfigurationType);
 
             for (int i = 0; i < launchConfigurations.length; i++) {
                 ILaunchConfiguration launchConfiguration = launchConfigurations[i];
@@ -121,7 +122,8 @@ public class PivotScriptApplicationLaunchShortcut implements ILaunchShortcut {
             String fileName = file.getName();
 
             ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-            ILaunchConfigurationType configurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+            ILaunchConfigurationType configurationType =
+                launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
             String name = launchManager.generateUniqueLaunchConfigurationNameFrom(fileName);
 
             ILaunchConfigurationWorkingCopy workingLaunchConfiguration = configurationType.newInstance(

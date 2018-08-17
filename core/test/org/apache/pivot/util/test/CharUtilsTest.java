@@ -28,7 +28,9 @@ import org.apache.pivot.util.CharUtils;
  * Test the word selection and navigation methods in {@link CharUtils}.
  */
 public class CharUtilsTest {
-    private static final String TEST_STRING = "A successful man is one who can lay a firm foundation with the bricks others have thrown at him. -David Brinkley\n";
+    private static final String TEST_STRING =
+        "A successful man is one who can lay a firm foundation with the bricks others have thrown at him."
+            + " -David Brinkley\n";
 
     @Test
     public void testSelectWord() {

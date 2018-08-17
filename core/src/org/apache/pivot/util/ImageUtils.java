@@ -21,7 +21,7 @@ import java.net.URL;
 /**
  * Utility class for dealing with images.
  */
-public class ImageUtils {
+public final class ImageUtils {
     /**
      * Private constructor for a utility class.
      */

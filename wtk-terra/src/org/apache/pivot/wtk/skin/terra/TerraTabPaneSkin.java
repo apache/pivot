@@ -1626,11 +1626,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                         public void transitionCompleted(Transition transition) {
                             TabPane tabPaneLocal = (TabPane) getComponent();
 
-                            SelectionChangeTransition selectionChangeTransitionLocal = (SelectionChangeTransition) transition;
+                            SelectionChangeTransition selChangeTransitionLocal = (SelectionChangeTransition) transition;
 
                             int selectedIndexLocal;
-                            if (selectionChangeTransitionLocal.expand) {
-                                selectedIndexLocal = selectionChangeTransitionLocal.index;
+                            if (selChangeTransitionLocal.expand) {
+                                selectedIndexLocal = selChangeTransitionLocal.index;
                             } else {
                                 selectedIndexLocal = -1;
                             }

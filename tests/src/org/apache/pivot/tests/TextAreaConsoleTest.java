@@ -48,7 +48,8 @@ public class TextAreaConsoleTest implements Application {
             throw new RuntimeException(ex);
         }
         console = new Console(new TextAreaOutputStream(consoleArea).toPrintStream());
-        logMessageButton.getButtonPressListeners().add((button) -> console.log(String.format("%1$d. Hello, World!", line++)));
+        logMessageButton.getButtonPressListeners().add(
+            (button) -> console.log(String.format("%1$d. Hello, World!", line++)));
         window.open(display);
     }
 

@@ -1483,10 +1483,10 @@ public class TerraVFSBrowserSkin extends VFSBrowserSkin {
         fileTableView.setTableData(new ArrayList<FileObject>());
 
         String text = searchTextInput.getText().trim();
-        Filter<FileObject> disabledFileFilter = hideDisabledFiles ? ((VFSBrowser) getComponent()).getDisabledFileFilter()
-            : null;
-        Filter<FileObject> includeFileFilter = text.length() != 0 ? new IncludeFileFilter(text)
-            : null;
+        Filter<FileObject> disabledFileFilter = hideDisabledFiles
+            ? ((VFSBrowser) getComponent()).getDisabledFileFilter() : null;
+        Filter<FileObject> includeFileFilter = text.length() != 0
+            ? new IncludeFileFilter(text) : null;
 
         TableView.SortDictionary sort = fileTableView.getSort();
 

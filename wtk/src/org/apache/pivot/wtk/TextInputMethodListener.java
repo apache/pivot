@@ -42,12 +42,14 @@ public interface TextInputMethodListener extends InputMethodRequests, InputMetho
     @Deprecated
     public static class Adapter implements TextInputMethodListener {
         @Override
-        public AttributedCharacterIterator cancelLatestCommittedText(AttributedCharacterIterator.Attribute[] attributes) {
+        public AttributedCharacterIterator cancelLatestCommittedText(
+            AttributedCharacterIterator.Attribute[] attributes) {
             return null;
         }
 
         @Override
-        public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+        public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex,
+            AttributedCharacterIterator.Attribute[] attributes) {
             return null;
         }
 

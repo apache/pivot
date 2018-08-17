@@ -54,8 +54,10 @@ public class ColorChooser extends Container {
     private BindType selectedColorBindType = BindType.BOTH;
     private SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserSelectionListener.Listeners colorChooserSelectionListeners = new ColorChooserSelectionListener.Listeners();
-    private ColorChooserBindingListener.Listeners colorChooserBindingListeners = new ColorChooserBindingListener.Listeners();
+    private ColorChooserSelectionListener.Listeners colorChooserSelectionListeners =
+        new ColorChooserSelectionListener.Listeners();
+    private ColorChooserBindingListener.Listeners colorChooserBindingListeners =
+        new ColorChooserBindingListener.Listeners();
 
     public ColorChooser() {
         installSkin(ColorChooser.class);
@@ -75,7 +77,7 @@ public class ColorChooser extends Container {
      * @param selectedColor The color to select, or <tt>null</tt> to clear the
      * selection.
      */
-    public void setSelectedColor(Color selectedColor) {
+    public void setSelectedColor(final Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
         if (previousSelectedColor != selectedColor
@@ -91,7 +93,7 @@ public class ColorChooser extends Container {
      * @param selectedColor The color to select, or <tt>"null"</tt> to clear the
      * selection.
      */
-    public void setSelectedColor(String selectedColor) {
+    public void setSelectedColor(final String selectedColor) {
         setSelectedColor(GraphicsUtilities.decodeColor(selectedColor, "selectedColor"));
     }
 
@@ -107,7 +109,7 @@ public class ColorChooser extends Container {
      *
      * @param selectedColorKey The binding key for the selected color.
      */
-    public void setSelectedColorKey(String selectedColorKey) {
+    public void setSelectedColorKey(final String selectedColorKey) {
         String previousSelectedColorKey = this.selectedColorKey;
 
         if (selectedColorKey != previousSelectedColorKey) {
@@ -120,7 +122,7 @@ public class ColorChooser extends Container {
         return selectedColorBindType;
     }
 
-    public void setSelectedColorBindType(BindType selectedColorBindType) {
+    public void setSelectedColorBindType(final BindType selectedColorBindType) {
         Utils.checkNull(selectedColorBindType, "selectedColorBindType");
 
         BindType previousSelectedColorBindType = this.selectedColorBindType;
@@ -136,7 +138,7 @@ public class ColorChooser extends Container {
         return selectedColorBindMapping;
     }
 
-    public void setSelectedColorBindMapping(SelectedColorBindMapping selectedColorBindMapping) {
+    public void setSelectedColorBindMapping(final SelectedColorBindMapping selectedColorBindMapping) {
         SelectedColorBindMapping previousSelectedColorBindMapping = this.selectedColorBindMapping;
 
         if (previousSelectedColorBindMapping != selectedColorBindMapping) {
@@ -151,7 +153,7 @@ public class ColorChooser extends Container {
      * chooser's bind key, if one is set.
      */
     @Override
-    public void load(Object context) {
+    public void load(final Object context) {
         if (selectedColorKey != null && JSON.containsKey(context, selectedColorKey)
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
@@ -177,7 +179,7 @@ public class ColorChooser extends Container {
      * color chooser's bind key, if one is set.
      */
     @Override
-    public void store(Object context) {
+    public void store(final Object context) {
         if (selectedColorKey != null && selectedColorBindType != BindType.LOAD) {
             JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ? selectedColor
                 : selectedColorBindMapping.valueOf(selectedColor));

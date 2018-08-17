@@ -21,7 +21,7 @@ import org.apache.pivot.text.CharSpan;
 /**
  * A set of static methods that perform various character-based operations.
  */
-public class CharUtils {
+public final class CharUtils {
     /**
      * Private constructor for a utility class.
      */

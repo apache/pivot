@@ -54,8 +54,10 @@ public class CalendarButton extends Button {
     private Calendar.SelectedDateBindMapping selectedDateBindMapping = null;
 
     private CalendarButtonListener.Listeners calendarButtonListeners = new CalendarButtonListener.Listeners();
-    private CalendarButtonSelectionListener.Listeners calendarButtonSelectionListeners = new CalendarButtonSelectionListener.Listeners();
-    private CalendarButtonBindingListener.Listeners calendarButtonBindingListeners = new CalendarButtonBindingListener.Listeners();
+    private CalendarButtonSelectionListener.Listeners calendarButtonSelectionListeners =
+        new CalendarButtonSelectionListener.Listeners();
+    private CalendarButtonBindingListener.Listeners calendarButtonBindingListeners =
+        new CalendarButtonBindingListener.Listeners();
 
     public static final String LANGUAGE_KEY = "language";
     public static final String COUNTRY_KEY = "country";

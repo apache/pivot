@@ -64,7 +64,8 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
 
     private void launch(Object element, String mode) {
         if (element instanceof IAdaptable) {
-            ICompilationUnit compilationUnit = (ICompilationUnit) ((IAdaptable) element).getAdapter(ICompilationUnit.class);
+            ICompilationUnit compilationUnit = (ICompilationUnit)
+                ((IAdaptable) element).getAdapter(ICompilationUnit.class);
 
             if (compilationUnit != null) {
                 IType type = compilationUnit.findPrimaryType();
@@ -83,15 +84,16 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
 
     private ILaunchConfiguration getExistingLaunchConfiguration(IType type) {
         ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-        ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+        ILaunchConfigurationType launchConfigurationType =
+            launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
 
         ILaunchConfiguration existingLaunchConfiguration = null;
         try {
             String applicationProjectName = type.getJavaProject().getElementName();
             String applicationTypeName = type.getFullyQualifiedName();
 
-            ILaunchConfiguration[] launchConfigurations = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(
-                launchConfigurationType);
+            ILaunchConfiguration[] launchConfigurations =
+                DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(launchConfigurationType);
 
             for (int i = 0; i < launchConfigurations.length; i++) {
                 ILaunchConfiguration launchConfiguration = launchConfigurations[i];
@@ -126,7 +128,8 @@ public class PivotApplicationLaunchShortcut implements ILaunchShortcut {
             String applicationTypeName = type.getFullyQualifiedName();
 
             ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-            ILaunchConfigurationType configurationType = launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+            ILaunchConfigurationType configurationType =
+                launchManager.getLaunchConfigurationType(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
             String name = launchManager.generateUniqueLaunchConfigurationNameFrom(type.getElementName());
 
             ILaunchConfigurationWorkingCopy workingLaunchConfiguration = configurationType.newInstance(

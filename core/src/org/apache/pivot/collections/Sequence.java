@@ -142,7 +142,7 @@ public interface Sequence<T> {
         /**
          * Class representing an immutable path.
          */
-        public static class ImmutablePath extends Path {
+        public static final class ImmutablePath extends Path {
             public ImmutablePath(final Integer... elements) {
                 super(elements);
             }

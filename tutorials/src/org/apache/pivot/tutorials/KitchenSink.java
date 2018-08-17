@@ -740,7 +740,8 @@ public class KitchenSink implements Application, Application.AboutHandler {
                             int y, int count) {
                             if (button == Mouse.Button.LEFT) {
                                 @SuppressWarnings("unchecked")
-                                List<CustomTableRow> customTableData = (List<CustomTableRow>) TablesRollupStateHandler.this.customTableView.getTableData();
+                                List<CustomTableRow> customTableData =
+                                    (List<CustomTableRow>) TablesRollupStateHandler.this.customTableView.getTableData();
 
                                 int columnIndex = TablesRollupStateHandler.this.customTableView.getColumnAt(x);
                                 if (columnIndex == 0) {

@@ -27,7 +27,8 @@ import org.apache.pivot.wtk.Container;
 public abstract class ComponentInspector extends Container {
     private Component source = null;
 
-    private ComponentInspectorListener.Listeners componentInspectorListeners = new ComponentInspectorListener.Listeners();
+    private ComponentInspectorListener.Listeners componentInspectorListeners =
+        new ComponentInspectorListener.Listeners();
 
     public Component getSource() {
         return source;

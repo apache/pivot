@@ -68,7 +68,8 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
         @Override
         public boolean include(FileObject file) {
-            return (file.getName().getType() != FileType.FOLDER || (sourceFilter != null && sourceFilter.include(file)));
+            return (file.getName().getType() != FileType.FOLDER
+                || (sourceFilter != null && sourceFilter.include(file)));
         }
     }
 
@@ -84,7 +85,8 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
     private FileSystem fileSystem = null;
     private boolean updatingSelection = false;
     private int selectedDirectoryCount = 0;
-    private static final Pattern HOST_PATTERN = Pattern.compile("[a-zA-Z]+://([a-zA-Z0-9\\-_\\.]+)(\\\\[a-zA-Z0-9\\-\\.]+)?:\\d+/.*");
+    private static final Pattern HOST_PATTERN =
+        Pattern.compile("[a-zA-Z]+://([a-zA-Z0-9\\-_\\.]+)(\\\\[a-zA-Z0-9\\-\\.]+)?:\\d+/.*");
 
 
     private void setHostLabel(FileObject rootDir) {

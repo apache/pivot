@@ -89,8 +89,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
                     calendarPopup.close();
 
                     if (keyCode == KeyCode.TAB) {
-                        FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
-                            : FocusTraversalDirection.FORWARD;
+                        FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT))
+                            ? FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
                         calendarButton.transferFocus(direction);
                     }
 

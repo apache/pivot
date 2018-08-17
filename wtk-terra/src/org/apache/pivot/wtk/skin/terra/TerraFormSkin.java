@@ -112,7 +112,8 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                 Form form = (Form) getComponent();
                 Form.SectionSequence sections = form.getSections();
 
-                for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount; sectionIndex++) {
+                for (int sectionIndex = 0, sectionCount = sections.getLength(); sectionIndex < sectionCount;
+                    sectionIndex++) {
                     Form.Section section = sections.get(sectionIndex);
 
                     for (int fieldIndex = 0, fieldCount = section.getLength(); fieldIndex < fieldCount; fieldIndex++) {

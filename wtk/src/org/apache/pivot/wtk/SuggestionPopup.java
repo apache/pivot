@@ -126,9 +126,12 @@ public class SuggestionPopup extends Window {
     };
 
     private SuggestionPopupListener.Listeners suggestionPopupListeners = new SuggestionPopupListener.Listeners();
-    private SuggestionPopupItemListener.Listeners suggestionPopupItemListeners = new SuggestionPopupItemListener.Listeners();
-    private SuggestionPopupSelectionListener.Listeners suggestionPopupSelectionListeners = new SuggestionPopupSelectionListener.Listeners();
-    private SuggestionPopupStateListener.Listeners suggestionPopupStateListeners = new SuggestionPopupStateListener.Listeners();
+    private SuggestionPopupItemListener.Listeners suggestionPopupItemListeners =
+        new SuggestionPopupItemListener.Listeners();
+    private SuggestionPopupSelectionListener.Listeners suggestionPopupSelectionListeners =
+        new SuggestionPopupSelectionListener.Listeners();
+    private SuggestionPopupStateListener.Listeners suggestionPopupStateListeners =
+        new SuggestionPopupStateListener.Listeners();
 
     private static final ListView.ItemRenderer DEFAULT_SUGGESTION_RENDERER = new ListViewItemRenderer();
 

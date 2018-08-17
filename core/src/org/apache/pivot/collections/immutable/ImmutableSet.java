@@ -27,25 +27,26 @@ import org.apache.pivot.util.Utils;
 
 /**
  * Unmodifiable implementation of the {@link Set} interface.
+ * @param <E> Type of elements in this set.
  */
-public class ImmutableSet<E> implements Set<E> {
+public final class ImmutableSet<E> implements Set<E> {
     private Set<E> set = null;
 
     private SetListener.Listeners<E> setListeners = new SetListener.Listeners<>();
 
-    public ImmutableSet(Set<E> set) {
+    public ImmutableSet(final Set<E> set) {
         Utils.checkNull(set, "set");
 
         this.set = set;
     }
 
     @Override
-    public boolean add(E element) {
+    public boolean add(final E element) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean remove(E element) {
+    public boolean remove(final E element) {
         throw new UnsupportedOperationException();
     }
 
@@ -55,7 +56,7 @@ public class ImmutableSet<E> implements Set<E> {
     }
 
     @Override
-    public boolean contains(E element) {
+    public boolean contains(final E element) {
         return set.contains(element);
     }
 
@@ -75,7 +76,7 @@ public class ImmutableSet<E> implements Set<E> {
     }
 
     @Override
-    public void setComparator(Comparator<E> comparator) {
+    public void setComparator(final Comparator<E> comparator) {
         throw new UnsupportedOperationException();
     }
 

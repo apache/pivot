@@ -64,7 +64,8 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
 
         @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(final Component component, final Mouse.Button button, final int x, final int y,
+            final int count) {
             component.requestFocus();
             return super.mouseClick(component, button, x, y, count);
         }
@@ -79,22 +80,21 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
          * Choose the selected color and transfer focus backwards.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+        public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
             ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
             switch (keyCode) {
-                case KeyCode.ESCAPE: {
+                case KeyCode.ESCAPE:
                     colorChooserPopup.close();
                     break;
-                }
 
                 case KeyCode.TAB:
-                case KeyCode.ENTER: {
+                case KeyCode.ENTER:
                     colorChooserPopup.close();
 
                     if (keyCode == KeyCode.TAB) {
-                        FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT)) ? FocusTraversalDirection.BACKWARD
-                            : FocusTraversalDirection.FORWARD;
+                        FocusTraversalDirection direction = (Keyboard.isPressed(Modifier.SHIFT))
+                            ? FocusTraversalDirection.BACKWARD : FocusTraversalDirection.FORWARD;
                         colorChooserButton.transferFocus(direction);
                     }
 
@@ -102,11 +102,9 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
                     colorChooserButton.setSelectedColor(color);
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             return false;
@@ -115,7 +113,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
 
     private WindowStateListener colorChooserPopupWindowStateListener = new WindowStateListener() {
         @Override
-        public void windowOpened(Window window) {
+        public void windowOpened(final Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
 
@@ -123,7 +121,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
 
         @Override
-        public Vote previewWindowClose(Window window) {
+        public Vote previewWindowClose(final Window window) {
             if (window.containsFocus()) {
                 getComponent().requestFocus();
             }
@@ -132,14 +130,14 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
 
         @Override
-        public void windowCloseVetoed(Window window, Vote reason) {
+        public void windowCloseVetoed(final Window window, final Vote reason) {
             if (reason == Vote.DENY) {
                 window.requestFocus();
             }
         }
 
         @Override
-        public void windowClosed(Window window, Display display, Window owner) {
+        public void windowClosed(final Window window, final Display display, final Window owner) {
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
@@ -151,7 +149,8 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
 
     private ComponentMouseButtonListener colorChooserMouseButtonListener = new ComponentMouseButtonListener() {
         @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(final Component component, final Mouse.Button button, final int x, final int y,
+            final int count) {
             ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
             if (button == Mouse.Button.LEFT && count == 2) {
@@ -167,7 +166,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(final Container container, final Mouse.Button button, final int x, final int y) {
             ColorChooserButton colorChooserButton = (ColorChooserButton) getComponent();
 
             Display display = (Display) container;
@@ -184,8 +183,8 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
         }
 
         @Override
-        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
+        public boolean mouseWheel(final Container container, final Mouse.ScrollType scrollType,
+            final int scrollAmount, final int wheelRotation, final int x, final int y) {
             return true;
         }
     };
@@ -204,7 +203,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         ColorChooserButton colorChooserButton = (ColorChooserButton) component;
@@ -221,7 +220,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     // ComponentStateListener methods
 
     @Override
-    public void enabledChanged(Component component) {
+    public void enabledChanged(final Component component) {
         super.enabledChanged(component);
 
         if (!component.isEnabled()) {
@@ -234,13 +233,12 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     }
 
     @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
+    public void focusedChanged(final Component component, final Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
         repaintComponent();
 
-        // Close the popup if focus was transferred to a component whose
-        // window is not the popup
+        // Close the popup if focus was transferred to a component whose window is not the popup
         if (!component.isFocused()) {
             pressed = false;
 
@@ -253,7 +251,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     // ComponentMouseListener methods
 
     @Override
-    public void mouseOut(Component component) {
+    public void mouseOut(final Component component) {
         super.mouseOut(component);
 
         pressed = false;
@@ -263,7 +261,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     // ComponentMouseButtonListener methods
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
         pressed = true;
@@ -279,7 +277,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     }
 
     @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
         pressed = false;
@@ -291,13 +289,12 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     // ComponentKeyListener methods
 
     /**
-     * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed
-     * state.
+     * {@link KeyCode#SPACE SPACE} Repaints the component to reflect the pressed state.
      *
      * @see #keyReleased(Component, int, Keyboard.KeyLocation)
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == KeyCode.SPACE) {
@@ -322,7 +319,7 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
      * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyReleased(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == KeyCode.SPACE) {
@@ -338,8 +335,8 @@ public abstract class ColorChooserButtonSkin extends ButtonSkin implements Color
     // ColorChooserButtonSelectionListener methods
 
     @Override
-    public void selectedColorChanged(ColorChooserButton colorChooserButton,
-        Color previousSelectedColor) {
+    public void selectedColorChanged(final ColorChooserButton colorChooserButton,
+        final Color previousSelectedColor) {
         // Set the selected color as the button data
         Color selectedColor = colorChooserButton.getSelectedColor();
 

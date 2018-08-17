@@ -77,7 +77,8 @@ public class FileBrowserWithCharsetTest extends FileBrowserSheet implements Appl
         lb.getListButtonSelectionListeners().add(new ListButtonSelectionListener() {
             @Override
             public void selectedItemChanged(ListButton listButton, Object previousSelectedItem) {
-                System.out.println(listButton.toString() + "; New character set selection: " + listButton.getSelectedItem());
+                System.out.println(listButton.toString() + "; New character set selection: "
+                    + listButton.getSelectedItem());
             }
         });
         box.add(lb);

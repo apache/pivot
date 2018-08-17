@@ -19,7 +19,7 @@ package org.apache.pivot.util;
 /**
  * Utility methods for other parts of the code.
  */
-public class Utils {
+public final class Utils {
     /**
      * Non-public constructor for a utility class.
      */

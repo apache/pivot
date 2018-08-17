@@ -75,7 +75,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         ScrollPane scrollPane = (ScrollPane) component;
@@ -95,7 +95,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         int preferredWidth = 0;
 
         ScrollPane scrollPane = (ScrollPane) getComponent();
@@ -182,7 +182,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         int preferredHeight = 0;
 
         ScrollPane scrollPane = (ScrollPane) getComponent();
@@ -304,7 +304,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         ScrollPane scrollPane = (ScrollPane) getComponent();
 
         Component view = scrollPane.getView();
@@ -350,8 +350,8 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public boolean mouseWheel(Component component, Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y) {
+    public boolean mouseWheel(final Component component, final Mouse.ScrollType scrollType, final int scrollAmount,
+        final int wheelRotation, final int x, final int y) {
         boolean consumed = false;
 
         ScrollPane scrollPane = (ScrollPane) getComponent();
@@ -423,7 +423,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
      * @see ScrollBar#getUnitIncrement()
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = super.keyPressed(component, keyCode, keyLocation);
 
         if (!consumed) {
@@ -624,7 +624,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
      * @param verticalPolicy The assumed vertical scroll policy; musn't be
      * <tt>FILL_TO_CAPACITY</tt>
      */
-    private void layoutHelper(ScrollBarPolicy horizontalPolicy, ScrollBarPolicy verticalPolicy) {
+    private void layoutHelper(final ScrollBarPolicy horizontalPolicy, final ScrollBarPolicy verticalPolicy) {
         ScrollPane scrollPane = (ScrollPane) getComponent();
 
         int width = getWidth();
@@ -824,7 +824,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public void setBackgroundPaint(Paint backgroundPaint) {
+    public void setBackgroundPaint(final Paint backgroundPaint) {
         super.setBackgroundPaint(backgroundPaint);
 
         optimizeScrolling = (backgroundPaint != null && backgroundPaint.getTransparency() == Transparency.OPAQUE);
@@ -834,7 +834,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
         return horizontalScrollBar.getUnitIncrement();
     }
 
-    public void setHorizontalIncrement(int horizontalIncrement) {
+    public void setHorizontalIncrement(final int horizontalIncrement) {
         horizontalScrollBar.setUnitIncrement(horizontalIncrement);
     }
 
@@ -842,7 +842,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
         return verticalScrollBar.getUnitIncrement();
     }
 
-    public void setVerticalIncrement(int verticalIncrement) {
+    public void setVerticalIncrement(final int verticalIncrement) {
         verticalScrollBar.setUnitIncrement(verticalIncrement);
     }
 
@@ -850,7 +850,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
         return horizontalReveal;
     }
 
-    public void setHorizontalReveal(int horizontalReveal) {
+    public void setHorizontalReveal(final int horizontalReveal) {
         this.horizontalReveal = horizontalReveal;
     }
 
@@ -858,7 +858,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
         return verticalReveal;
     }
 
-    public void setVerticalReveal(int verticalReveal) {
+    public void setVerticalReveal(final int verticalReveal) {
         this.verticalReveal = verticalReveal;
     }
 
@@ -876,7 +876,8 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
             ScrollPane scrollPane = (ScrollPane) getComponent();
             ApplicationContext.DisplayHost displayHost = scrollPane.getDisplay().getDisplayHost();
 
-            optimizeScrollingLocal = (displayHost.getScale() == 1 && (DesktopApplicationContext.isActive() && displayHost.isDisplayable()));
+            optimizeScrollingLocal = (displayHost.getScale() == 1
+                && (DesktopApplicationContext.isActive() && displayHost.isDisplayable()));
         }
 
         return optimizeScrollingLocal;
@@ -923,36 +924,36 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     // ScrollPaneListener methods
 
     @Override
-    public void horizontalScrollBarPolicyChanged(ScrollPane scrollPane,
-        ScrollBarPolicy previousHorizontalScrollBarPolicy) {
+    public void horizontalScrollBarPolicyChanged(final ScrollPane scrollPane,
+        final ScrollBarPolicy previousHorizontalScrollBarPolicy) {
         invalidateComponent();
     }
 
     @Override
-    public void verticalScrollBarPolicyChanged(ScrollPane scrollPane,
-        ScrollBarPolicy previousVerticalScrollBarPolicy) {
+    public void verticalScrollBarPolicyChanged(final ScrollPane scrollPane,
+        final ScrollBarPolicy previousVerticalScrollBarPolicy) {
         invalidateComponent();
     }
 
     @Override
-    public void rowHeaderChanged(ScrollPane scrollPane, Component previousRowHeader) {
+    public void rowHeaderChanged(final ScrollPane scrollPane, final Component previousRowHeader) {
         invalidateComponent();
     }
 
     @Override
-    public void columnHeaderChanged(ScrollPane scrollPane, Component previousColumnHeader) {
+    public void columnHeaderChanged(final ScrollPane scrollPane, final Component previousColumnHeader) {
         invalidateComponent();
     }
 
     @Override
-    public void cornerChanged(ScrollPane scrollPane, Component previousCorner) {
+    public void cornerChanged(final ScrollPane scrollPane, final Component previousCorner) {
         invalidateComponent();
     }
 
     // ViewportListener methods
 
     @Override
-    public void scrollTopChanged(Viewport viewport, int previousScrollTop) {
+    public void scrollTopChanged(final Viewport viewport, final int previousScrollTop) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and row header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
@@ -1029,7 +1030,7 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public void scrollLeftChanged(Viewport viewport, int previousScrollLeft) {
+    public void scrollLeftChanged(final Viewport viewport, final int previousScrollLeft) {
         // NOTE we don't invalidate the component here because we need only
         // reposition the view and column header. Invalidating would yield
         // the correct positioning, but it would do much more work than needed.
@@ -1104,14 +1105,14 @@ public class ScrollPaneSkin extends ContainerSkin implements Viewport.Skin, Scro
     }
 
     @Override
-    public void viewChanged(Viewport viewport, Component previousView) {
+    public void viewChanged(final Viewport viewport, final Component previousView) {
         invalidateComponent();
     }
 
     // ScrollBarValueListener methods
 
     @Override
-    public void valueChanged(ScrollBar scrollBar, int previousValue) {
+    public void valueChanged(final ScrollBar scrollBar, final int previousValue) {
         ScrollPane scrollPane = (ScrollPane) getComponent();
 
         int value = scrollBar.getValue();

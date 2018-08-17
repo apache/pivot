@@ -115,7 +115,8 @@ public class ColorSchemeBuilderWindow extends Window implements Bindable {
             row.add(colorBoxPane);
 
             // Add listeners
-            ColorChooserButtonSelectionListener colorChooserButtonSelectionListener = new ColorChooserButtonSelectionListener() {
+            ColorChooserButtonSelectionListener colorChooserButtonSelectionListener =
+                new ColorChooserButtonSelectionListener() {
                 @Override
                 public void selectedColorChanged(ColorChooserButton colorChooserButtonArgument,
                     Color previousSelectedColor) {

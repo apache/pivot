@@ -85,22 +85,21 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
             int selectionLength = textPane.getSelectionLength();
             int selectionEnd = selectionStart + selectionLength - 1;
 
+            int offset;
             switch (scrollDirection) {
-                case UP: {
+                case UP:
                     // Get previous offset
-                    int offset = getNextInsertionPoint(mouseX, selectionStart, scrollDirection);
+                    offset = getNextInsertionPoint(mouseX, selectionStart, scrollDirection);
 
                     if (offset != -1) {
                         textPane.setSelection(offset, selectionEnd - offset + 1);
                         scrollCharacterToVisible(offset + 1);
                     }
-
                     break;
-                }
 
-                case DOWN: {
+                case DOWN:
                     // Get next offset
-                    int offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
+                    offset = getNextInsertionPoint(mouseX, selectionEnd, scrollDirection);
 
                     if (offset != -1) {
                         // If the next character is a paragraph terminator and is not the
@@ -114,13 +113,10 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
                         textPane.setSelection(selectionStart, offset - selectionStart);
                         scrollCharacterToVisible(offset - 1);
                     }
-
                     break;
-                }
 
-                default: {
+                default:
                     throw new RuntimeException();
-                }
             }
         }
     }
@@ -129,7 +125,7 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         return (TextPane) getComponent();
     }
 
-    private Rectangle getCaretRectangle(TextHitInfo textCaret) {
+    private Rectangle getCaretRectangle(final TextHitInfo textCaret) {
         TextPane textPane = getTextPane();
         AttributedStringCharacterIterator composedText = textPane.getComposedText();
 
@@ -144,7 +140,8 @@ public class TextPaneSkin extends ContainerSkin implements TextPane.Skin, TextPa
         // without the "doingCaretCalculations" flag to get back something non-null
         if (selectionStartBounds == null) {
             selectionStartBounds = getCharacterBounds(selectionStart);
-org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bounds: selectionStart=%1$d, updated bounds=%2$s", selectionStart, selectionStartBounds);
+org.apache.pivot.util.Console.getDefault().logMethod("****",
+    "null selection bounds: selectionStart=%1$d, updated bounds=%2$s", selectionStart, selectionStartBounds);
         }
 
         return GraphicsUtilities.getCaretRectangle(textCaret, composedText,
@@ -158,7 +155,8 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     private class TextInputMethodHandler implements TextInputMethodListener {
 
         @Override
-        public AttributedCharacterIterator getCommittedText(int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+        public AttributedCharacterIterator getCommittedText(final int beginIndex, final int endIndex,
+            final AttributedCharacterIterator.Attribute[] attributes) {
             return new AttributedStringCharacterIterator(getTextPane().getText(), beginIndex, endIndex, attributes);
         }
 
@@ -173,12 +171,12 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         }
 
         @Override
-        public TextHitInfo getLocationOffset(int x, int y) {
+        public TextHitInfo getLocationOffset(final int x, final int y) {
             return null;
         }
 
         @Override
-        public AttributedCharacterIterator getSelectedText(AttributedCharacterIterator.Attribute[] attributes) {
+        public AttributedCharacterIterator getSelectedText(final AttributedCharacterIterator.Attribute[] attributes) {
             String selectedText = getTextPane().getSelectedText();
             if (selectedText != null && !selectedText.isEmpty()) {
                 return new AttributedStringCharacterIterator(selectedText, attributes);
@@ -186,12 +184,12 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
             return null;
         }
 
-        private Rectangle offsetToScreen(Rectangle clientRectangle) {
+        private Rectangle offsetToScreen(final Rectangle clientRectangle) {
             return getTextPane().offsetToScreen(clientRectangle);
         }
 
         @Override
-        public Rectangle getTextLocation(TextHitInfo offset) {
+        public Rectangle getTextLocation(final TextHitInfo offset) {
             AttributedStringCharacterIterator composedText = getTextPane().getComposedText();
 
             if (composedText == null) {
@@ -203,7 +201,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
             }
         }
 
-        private String getCommittedText(AttributedCharacterIterator fullTextIter, int count) {
+        private String getCommittedText(final AttributedCharacterIterator fullTextIter, final int count) {
             StringBuilder buf = new StringBuilder(count);
             buf.setLength(count);
             if (fullTextIter != null) {
@@ -216,7 +214,8 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
             return buf.toString();
         }
 
-        private AttributedStringCharacterIterator getComposedText(AttributedCharacterIterator fullTextIter, int start) {
+        private AttributedStringCharacterIterator getComposedText(final AttributedCharacterIterator fullTextIter,
+            final int start) {
             if (fullTextIter != null) {
                 if (start < fullTextIter.getEndIndex()) {
                     return new AttributedStringCharacterIterator(fullTextIter, start, fullTextIter.getEndIndex());
@@ -226,7 +225,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         }
 
         @Override
-        public void inputMethodTextChanged(InputMethodEvent event) {
+        public void inputMethodTextChanged(final InputMethodEvent event) {
             TextPane textPane = getTextPane();
             AttributedCharacterIterator iter = event.getText();
             AttributedStringCharacterIterator composedIter = null;
@@ -258,7 +257,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         }
 
         @Override
-        public void caretPositionChanged(InputMethodEvent event) {
+        public void caretPositionChanged(final InputMethodEvent event) {
             // TODO:  so far I have not seen this called, so ???
         }
 
@@ -325,7 +324,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         TextPane textPane = (TextPane) component;
@@ -348,7 +347,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         int preferredWidth;
 
         if (documentView == null) {
@@ -363,7 +362,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         int preferredHeight;
 
         if (documentView == null || width == -1) {
@@ -403,7 +402,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
@@ -437,7 +436,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         super.paint(graphics);
 
         TextPane textPane = getTextPane();
@@ -445,8 +444,8 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         if (documentView != null) {
             // Draw the selection highlight
             if (selection != null) {
-                graphics.setColor(textPane.isFocused() && textPane.isEditable() ? selectionBackgroundColor
-                    : inactiveSelectionBackgroundColor);
+                graphics.setColor(textPane.isFocused() && textPane.isEditable()
+                    ? selectionBackgroundColor : inactiveSelectionBackgroundColor);
                 graphics.fill(selection);
             }
 
@@ -473,7 +472,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public int getInsertionPoint(int x, int y) {
+    public int getInsertionPoint(final int x, final int y) {
         int offset;
 
         if (documentView == null) {
@@ -496,7 +495,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public int getNextInsertionPoint(int x, int from, TextPane.ScrollDirection direction) {
+    public int getNextInsertionPoint(final int x, final int from, final TextPane.ScrollDirection direction) {
         int offset;
 
         if (documentView == null) {
@@ -509,7 +508,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public int getRowAt(int offset) {
+    public int getRowAt(final int offset) {
         int rowIndex;
 
         if (documentView == null) {
@@ -535,7 +534,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public Bounds getCharacterBounds(int offset) {
+    public Bounds getCharacterBounds(final int offset) {
         Bounds characterBounds;
 
         if (documentView == null) {
@@ -573,7 +572,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      * <tt>false</tt> (default) means <tt>TAB</tt> shifts focus and
      * <tt>Ctrl-TAB</tt> inserts spaces.
      */
-    public void setAcceptsTab(boolean acceptsTab) {
+    public void setAcceptsTab(final boolean acceptsTab) {
         this.acceptsTab = acceptsTab;
     }
 
@@ -582,13 +581,13 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return tabWidth;
     }
 
-    public void setTabWidth(int tabWidth) {
+    public void setTabWidth(final int tabWidth) {
         Utils.checkNonNegative(tabWidth, "tabWidth");
 
         this.tabWidth = tabWidth;
     }
 
-    private void scrollCharacterToVisible(int offset) {
+    private void scrollCharacterToVisible(final int offset) {
         Bounds characterBounds = getCharacterBounds(offset);
 
         if (characterBounds != null) {
@@ -609,7 +608,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param font The new font for all the text.
      */
-    public void setFont(Font font) {
+    public void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         this.font = font;
@@ -621,7 +620,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param font A {@link ComponentSkin#decodeFont(String) font specification}
      */
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         setFont(decodeFont(font));
     }
 
@@ -630,7 +629,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param font A dictionary {@link Theme#deriveFont describing a font}
      */
-    public final void setFont(Dictionary<String, ?> font) {
+    public final void setFont(final Dictionary<String, ?> font) {
         setFont(Theme.deriveFont(font));
     }
 
@@ -646,7 +645,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param color The new text color.
      */
-    public void setColor(Color color) {
+    public void setColor(final Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
@@ -659,7 +658,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
-    public final void setColor(String color) {
+    public final void setColor(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
@@ -667,14 +666,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return inactiveColor;
     }
 
-    public void setInactiveColor(Color inactiveColor) {
+    public void setInactiveColor(final Color inactiveColor) {
         Utils.checkNull(inactiveColor, "inactiveColor");
 
         this.inactiveColor = inactiveColor;
         repaintComponent();
     }
 
-    public final void setInactiveColor(String inactiveColor) {
+    public final void setInactiveColor(final String inactiveColor) {
         setColor(GraphicsUtilities.decodeColor(inactiveColor, "inactiveColor"));
     }
 
@@ -682,14 +681,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return selectionColor;
     }
 
-    public void setSelectionColor(Color selectionColor) {
+    public void setSelectionColor(final Color selectionColor) {
         Utils.checkNull(selectionColor, "selectionColor");
 
         this.selectionColor = selectionColor;
         repaintComponent();
     }
 
-    public final void setSelectionColor(String selectionColor) {
+    public final void setSelectionColor(final String selectionColor) {
         setSelectionColor(GraphicsUtilities.decodeColor(selectionColor, "selectionColor"));
     }
 
@@ -697,14 +696,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return selectionBackgroundColor;
     }
 
-    public void setSelectionBackgroundColor(Color selectionBackgroundColor) {
+    public void setSelectionBackgroundColor(final Color selectionBackgroundColor) {
         Utils.checkNull(selectionBackgroundColor, "selectionBackgroundColor");
 
         this.selectionBackgroundColor = selectionBackgroundColor;
         repaintComponent();
     }
 
-    public final void setSelectionBackgroundColor(String selectionBackgroundColor) {
+    public final void setSelectionBackgroundColor(final String selectionBackgroundColor) {
         setSelectionBackgroundColor(GraphicsUtilities.decodeColor(selectionBackgroundColor,
             "selectionBackgroundColor"));
     }
@@ -713,14 +712,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return inactiveSelectionColor;
     }
 
-    public void setInactiveSelectionColor(Color inactiveSelectionColor) {
+    public void setInactiveSelectionColor(final Color inactiveSelectionColor) {
         Utils.checkNull(inactiveSelectionColor, "inactiveSelectionColor");
 
         this.inactiveSelectionColor = inactiveSelectionColor;
         repaintComponent();
     }
 
-    public final void setInactiveSelectionColor(String inactiveSelectionColor) {
+    public final void setInactiveSelectionColor(final String inactiveSelectionColor) {
         setInactiveSelectionColor(GraphicsUtilities.decodeColor(inactiveSelectionColor,
             "inactiveSelectionColor"));
     }
@@ -729,14 +728,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return inactiveSelectionBackgroundColor;
     }
 
-    public void setInactiveSelectionBackgroundColor(Color inactiveSelectionBackgroundColor) {
+    public void setInactiveSelectionBackgroundColor(final Color inactiveSelectionBackgroundColor) {
         Utils.checkNull(inactiveSelectionBackgroundColor, "inactiveSelectionBackgroundColor");
 
         this.inactiveSelectionBackgroundColor = inactiveSelectionBackgroundColor;
         repaintComponent();
     }
 
-    public final void setInactiveSelectionBackgroundColor(String inactiveSelectionBackgroundColor) {
+    public final void setInactiveSelectionBackgroundColor(final String inactiveSelectionBackgroundColor) {
         setInactiveSelectionBackgroundColor(GraphicsUtilities.decodeColor(inactiveSelectionBackgroundColor,
             "inactiveSelectionBackgroundColor"));
     }
@@ -753,7 +752,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param margin The new set of margin values.
      */
-    public void setMargin(Insets margin) {
+    public void setMargin(final Insets margin) {
         Utils.checkNull(margin, "margin");
 
         this.margin = margin;
@@ -765,7 +764,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param margin A dictionary with keys in the set {top, left, bottom, right}.
      */
-    public final void setMargin(Dictionary<String, ?> margin) {
+    public final void setMargin(final Dictionary<String, ?> margin) {
         setMargin(new Insets(margin));
     }
 
@@ -774,7 +773,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param margin A sequence with values in the order [top, left, bottom, right].
      */
-    public final void setMargin(Sequence<?> margin) {
+    public final void setMargin(final Sequence<?> margin) {
         setMargin(new Insets(margin));
     }
 
@@ -783,7 +782,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param margin The single margin value for all edges.
      */
-    public final void setMargin(int margin) {
+    public final void setMargin(final int margin) {
         setMargin(new Insets(margin));
     }
 
@@ -792,7 +791,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      *
      * @param margin The new single margin value for all the edges.
      */
-    public final void setMargin(Number margin) {
+    public final void setMargin(final Number margin) {
         setMargin(new Insets(margin));
     }
 
@@ -802,7 +801,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
      * @param margin A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
-    public final void setMargin(String margin) {
+    public final void setMargin(final String margin) {
         setMargin(Insets.decode(margin));
     }
 
@@ -810,7 +809,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return wrapText;
     }
 
-    public void setWrapText(boolean wrapText) {
+    public void setWrapText(final boolean wrapText) {
         if (this.wrapText != wrapText) {
             this.wrapText = wrapText;
 
@@ -821,7 +820,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public boolean mouseMove(Component component, int x, int y) {
+    public boolean mouseMove(final Component component, final int x, final int y) {
         boolean consumed = super.mouseMove(component, x, y);
 
         if (Mouse.getCapturer() == component) {
@@ -871,7 +870,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
         if (button == Mouse.Button.LEFT) {
@@ -906,7 +905,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
         if (Mouse.getCapturer() == component) {
@@ -927,7 +926,8 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+    public boolean mouseClick(final Component component, final Mouse.Button button, final int x, final int y,
+        final int count) {
         boolean consumed = super.mouseClick(component, button, x, y, count);
 
         TextPane textPane = (TextPane) component;
@@ -951,7 +951,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public boolean keyTyped(final Component component, char character) {
+    public boolean keyTyped(final Component component, final char character) {
         boolean consumed = super.keyTyped(component, character);
 
         final TextPane textPane = getTextPane();
@@ -973,7 +973,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return consumed;
     }
 
-    private Node getParagraphAt(Document document, int index) {
+    private Node getParagraphAt(final Document document, final int index) {
         if (document != null) {
             Node node = document.getDescendantAt(index);
             while (node != null && !(node instanceof Paragraph)) {
@@ -984,7 +984,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return null;
     }
 
-    private int getRowOffset(Document document, int index) {
+    private int getRowOffset(final Document document, final int index) {
         Node node = getParagraphAt(document, index);
         // TODO: doesn't take into account the line wrapping within a paragraph
         if (node != null) {
@@ -993,7 +993,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return 0;
     }
 
-    private int getRowLength(Document document, int index) {
+    private int getRowLength(final Document document, final int index) {
         Node node = getParagraphAt(document, index);
         // TODO: doesn't take into account the line wrapping within a paragraph
         // Assuming the node is a Paragraph, the count includes the trailing \n, so discount it
@@ -1003,7 +1003,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         return 0;
     }
 
-    private CharSequence getRowCharacters(Document document, int index) {
+    private CharSequence getRowCharacters(final Document document, final int index) {
         Node node = getParagraphAt(document, index);
         // TODO: doesn't take into account the line wrapping within a paragraph
         if (node != null) {
@@ -1013,8 +1013,8 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public boolean keyPressed(final Component component, int keyCode,
-        Keyboard.KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, final int keyCode,
+        final Keyboard.KeyLocation keyLocation) {
         boolean consumed = false;
 
         final TextPane textPane = getTextPane();
@@ -1314,14 +1314,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
 
     // Component state events
     @Override
-    public void enabledChanged(Component component) {
+    public void enabledChanged(final Component component) {
         super.enabledChanged(component);
 
         repaintComponent();
     }
 
     @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
+    public void focusedChanged(final Component component, final Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
         TextPane textPane = getTextPane();
@@ -1337,7 +1337,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
 
     // Text pane events
     @Override
-    public void documentChanged(TextPane textPane, Document previousDocument) {
+    public void documentChanged(final TextPane textPane, final Document previousDocument) {
         if (documentView != null) {
             documentView.detach();
             documentView = null;
@@ -1353,14 +1353,14 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
     }
 
     @Override
-    public void editableChanged(TextPane textPane) {
+    public void editableChanged(final TextPane textPane) {
         // No-op
     }
 
     // Text pane selection events
     @Override
-    public void selectionChanged(TextPane textPane, int previousSelectionStart,
-        int previousSelectionLength) {
+    public void selectionChanged(final TextPane textPane, final int previousSelectionStart,
+        final int previousSelectionLength) {
         // If the document view is valid, repaint the selection state;
         // otherwise, the selection will be updated in layout()
         if (documentView != null && documentView.isValid()) {
@@ -1452,7 +1452,7 @@ org.apache.pivot.util.Console.getDefault().logMethod("****", "null selection bou
         }
     }
 
-    private void showCaret(boolean show) {
+    private void showCaret(final boolean show) {
         if (scheduledBlinkCaretCallback != null) {
             scheduledBlinkCaretCallback.cancel();
         }

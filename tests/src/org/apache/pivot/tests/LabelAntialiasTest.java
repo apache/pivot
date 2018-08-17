@@ -38,13 +38,13 @@ import org.apache.pivot.wtk.VerticalAlignment;
 import org.apache.pivot.wtk.Window;
 import org.apache.pivot.wtk.content.NumericSpinnerData;
 
-public class LabelAntialiasTest implements Application {
+public final class LabelAntialiasTest implements Application {
     private Window window = null;
     private TablePane.Row labelRow = null;
     private Spinner rotationAngleSpinner = null;
     private int currentRotationAngle = 0;
 
-    private Label buildLabel(double rotation) {
+    private Label buildLabel(final double rotation) {
         Label label = new Label();
 
         Font font = new Font("Arial", Font.BOLD, 64);
@@ -72,7 +72,8 @@ public class LabelAntialiasTest implements Application {
         System.out.println("Show Font Desktop Hints:");
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        java.util.Map<?, ?> fontDesktopHints = (java.util.Map<?, ?>) toolkit.getDesktopProperty("awt.font.desktophints");
+        java.util.Map<?, ?> fontDesktopHints =
+            (java.util.Map<?, ?>) toolkit.getDesktopProperty("awt.font.desktophints");
 
         System.out.println(fontDesktopHints);
     }
@@ -97,7 +98,7 @@ public class LabelAntialiasTest implements Application {
     }
 
     @Override
-    public void startup(Display display, Map<String, String> properties) {
+    public void startup(final Display display, final Map<String, String> properties) {
         window = new Window();
 
         showFontDesktopHints();
@@ -123,7 +124,7 @@ public class LabelAntialiasTest implements Application {
 
         rotationAngleSpinner.getSpinnerSelectionListeners().add(new SpinnerSelectionListener() {
             @Override
-            public void selectedItemChanged(Spinner spinner, Object previousSelectedItem) {
+            public void selectedItemChanged(final Spinner spinner, final Object previousSelectedItem) {
                 currentRotationAngle = (Integer) spinner.getSelectedItem();
                 if (labelRow.getLength() > 0) {
                     labelRow.remove(0, labelRow.getLength());
@@ -137,7 +138,7 @@ public class LabelAntialiasTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -145,7 +146,7 @@ public class LabelAntialiasTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(LabelAntialiasTest.class, args);
     }
 

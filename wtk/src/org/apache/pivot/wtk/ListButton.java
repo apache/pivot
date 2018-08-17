@@ -143,8 +143,10 @@ public class ListButton extends Button {
 
     private ListButtonListener.Listeners listButtonListeners = new ListButtonListener.Listeners();
     private ListButtonItemListener.Listeners listButtonItemListeners = new ListButtonItemListener.Listeners();
-    private ListButtonSelectionListener.Listeners listButtonSelectionListeners = new ListButtonSelectionListener.Listeners();
-    private ListButtonBindingListener.Listeners listButtonBindingListeners = new ListButtonBindingListener.Listeners();
+    private ListButtonSelectionListener.Listeners listButtonSelectionListeners =
+        new ListButtonSelectionListener.Listeners();
+    private ListButtonBindingListener.Listeners listButtonBindingListeners =
+        new ListButtonBindingListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonDataRenderer();
     private static final ListView.ItemRenderer DEFAULT_ITEM_RENDERER = new ListViewItemRenderer();

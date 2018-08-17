@@ -75,7 +75,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         Label label = (Label) getComponent();
@@ -83,7 +83,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         Label label = (Label) getComponent();
         String text = label.getText();
 
@@ -113,7 +113,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         Label label = (Label) getComponent();
         String text = label.getText();
 
@@ -214,7 +214,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         LineMetrics lm = font.getLineMetrics("", fontRenderContext);
         float ascent = lm.getAscent();
@@ -229,24 +229,20 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
         int baseline = -1;
         switch (verticalAlignment) {
-            case TOP: {
+            case TOP:
                 baseline = Math.round(padding.top + ascent);
                 break;
-            }
 
-            case CENTER: {
+            case CENTER:
                 baseline = Math.round((height - textHeightLocal) / 2 + ascent);
                 break;
-            }
 
-            case BOTTOM: {
+            case BOTTOM:
                 baseline = Math.round(height - (textHeightLocal + padding.bottom) + ascent);
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         return baseline;
@@ -317,7 +313,8 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         }
     }
 
-    private void appendLine(String text, int start, int end, FontRenderContext fontRenderContext) {
+    private void appendLine(final String text, final int start, final int end,
+        final FontRenderContext fontRenderContext) {
         StringCharacterIterator line = new StringCharacterIterator(text, start, end, start);
         GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, line);
         glyphVectors.add(glyphVector);
@@ -327,7 +324,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         Label label = (Label) this.getComponent();
 
         int width = getWidth();
@@ -356,24 +353,17 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
             float y = 0;
             switch (verticalAlignment) {
-                case TOP: {
+                case TOP:
                     y = padding.top;
                     break;
-                }
-
-                case BOTTOM: {
+                case BOTTOM:
                     y = height - (textHeight + padding.bottom);
                     break;
-                }
-
-                case CENTER: {
+                case CENTER:
                     y = (height - textHeight) / 2;
                     break;
-                }
-
-                default: {
+                default:
                     break;
-                }
             }
 
             for (int i = 0, n = glyphVectors.getLength(); i < n; i++) {
@@ -384,21 +374,17 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
 
                 float x = 0;
                 switch (horizontalAlignment) {
-                    case LEFT: {
+                    case LEFT:
                         x = padding.left;
                         break;
-                    }
-                    case RIGHT: {
+                    case RIGHT:
                         x = width - (lineWidth + padding.right);
                         break;
-                    }
-                    case CENTER: {
+                    case CENTER:
                         x = (width - lineWidth) / 2;
                         break;
-                    }
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 if (graphics instanceof PrintGraphics) {
@@ -418,17 +404,14 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
                     float offset = 0;
 
                     switch (textDecoration) {
-                        case UNDERLINE: {
+                        case UNDERLINE:
                             offset = y + ascent + 2;
                             break;
-                        }
-                        case STRIKETHROUGH: {
+                        case STRIKETHROUGH:
                             offset = y + lineHeight / 2 + 1;
                             break;
-                        }
-                        default: {
+                        default:
                             break;
-                        }
                     }
 
                     Line2D line = new Line2D.Float(x, offset, x + lineWidth, offset);
@@ -465,7 +448,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param font The new font to use to render the text.
      */
-    public void setFont(Font font) {
+    public void setFont(final Font font) {
         Utils.checkNull(font, "font");
 
         this.font = font;
@@ -477,7 +460,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param font A {@linkplain ComponentSkin#decodeFont(String) font specification}.
      */
-    public final void setFont(String font) {
+    public final void setFont(final String font) {
         Utils.checkNull(font, "font");
 
         setFont(decodeFont(font));
@@ -488,7 +471,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param font A dictionary {@linkplain Theme#deriveFont describing a font}.
      */
-    public final void setFont(Dictionary<String, ?> font) {
+    public final void setFont(final Dictionary<String, ?> font) {
         Utils.checkNull(font, "font");
 
         setFont(Theme.deriveFont(font));
@@ -506,7 +489,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param color The new foreground color for the label text.
      */
-    public void setColor(Color color) {
+    public void setColor(final Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
@@ -519,7 +502,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
-    public final void setColor(String color) {
+    public final void setColor(final String color) {
         Utils.checkNull(color, "color");
 
         setColor(GraphicsUtilities.decodeColor(color, "color"));
@@ -537,7 +520,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param color The new disabled text color.
      */
-    public void setDisabledColor(Color color) {
+    public void setDisabledColor(final Color color) {
         Utils.checkNull(color, "disabledColor");
 
         this.disabledColor = color;
@@ -550,7 +533,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param color Any of the {@linkplain GraphicsUtilities#decodeColor color
      * values recognized by Pivot}.
      */
-    public final void setDisabledColor(String color) {
+    public final void setDisabledColor(final String color) {
         Utils.checkNull(color, "disabledColor");
 
         setDisabledColor(GraphicsUtilities.decodeColor(color, "disabledColor"));
@@ -569,7 +552,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param backgroundColor The new background color for the label
      * (can be <tt>null</tt> to let the parent background show through).
      */
-    public void setBackgroundColor(Color backgroundColor) {
+    public void setBackgroundColor(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         repaintComponent();
     }
@@ -581,7 +564,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
      */
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
@@ -589,7 +572,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return textDecoration;
     }
 
-    public void setTextDecoration(TextDecoration textDecoration) {
+    public void setTextDecoration(final TextDecoration textDecoration) {
         this.textDecoration = textDecoration;
         repaintComponent();
     }
@@ -598,7 +581,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return horizontalAlignment;
     }
 
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+    public void setHorizontalAlignment(final HorizontalAlignment horizontalAlignment) {
         Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
@@ -609,7 +592,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
         return verticalAlignment;
     }
 
-    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+    public void setVerticalAlignment(final VerticalAlignment verticalAlignment) {
         Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
@@ -630,7 +613,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param padding The new value of the padding for each edge.
      */
-    public void setPadding(Insets padding) {
+    public void setPadding(final Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
@@ -643,7 +626,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
-    public final void setPadding(Dictionary<String, ?> padding) {
+    public final void setPadding(final Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -653,7 +636,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param padding A sequence with values in the order [top, left, bottom, right].
      */
-    public final void setPadding(Sequence<?> padding) {
+    public final void setPadding(final Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -663,7 +646,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param padding The new single padding value to use for all edges.
      */
-    public final void setPadding(int padding) {
+    public final void setPadding(final int padding) {
         setPadding(new Insets(padding));
     }
 
@@ -673,7 +656,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param padding The new (integer) padding value to use for all edges.
      */
-    public final void setPadding(Number padding) {
+    public final void setPadding(final Number padding) {
         setPadding(new Insets(padding));
     }
 
@@ -684,7 +667,7 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
-    public final void setPadding(String padding) {
+    public final void setPadding(final String padding) {
         setPadding(Insets.decode(padding));
     }
 
@@ -705,19 +688,19 @@ public class LabelSkin extends ComponentSkin implements LabelListener {
      *
      * @param wrapText Whether or not to wrap the Label's text within its width.
      */
-    public void setWrapText(boolean wrapText) {
+    public void setWrapText(final boolean wrapText) {
         this.wrapText = wrapText;
         invalidateComponent();
     }
 
     // Label events
     @Override
-    public void textChanged(Label label, String previousText) {
+    public void textChanged(final Label label, final String previousText) {
         invalidateComponent();
     }
 
     @Override
-    public void maximumLengthChanged(Label label, int previousMaximumLength) {
+    public void maximumLengthChanged(final Label label, final int previousMaximumLength) {
         invalidateComponent();
     }
 

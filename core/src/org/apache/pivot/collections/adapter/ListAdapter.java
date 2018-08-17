@@ -17,6 +17,7 @@
 package org.apache.pivot.collections.adapter;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ import org.apache.pivot.util.Utils;
 /**
  * Implementation of the {@link List} interface that is backed by an instance of
  * {@link java.util.List}.
+ * @param <T> Type of elements in the list.
  */
 public class ListAdapter<T> implements List<T>, Serializable {
     private static final long serialVersionUID = 1649736907064653706L;
@@ -43,14 +45,14 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
     private transient ListListenerList<T> listListeners = new ListListenerList<>();
 
-    public ListAdapter(java.util.List<T> list) {
+    public ListAdapter(final java.util.List<T> list) {
         Utils.checkNull(list, "list");
 
         this.list = list;
     }
 
     @SuppressWarnings("unchecked")
-    public ListAdapter(T... a) {
+    public ListAdapter(final T... a) {
         this.list = Arrays.asList(a);
     }
 
@@ -59,7 +61,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
-    public int add(T item) {
+    public int add(final T item) {
         int index = -1;
 
         if (comparator == null) {
@@ -79,7 +81,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
-    public void insert(T item, int index) {
+    public void insert(final T item, final int index) {
         if (comparator != null && Collections.binarySearch(list, item, comparator) != -(index + 1)) {
             throw new IllegalArgumentException(
                 "Given insertion point " + index + " does not match the sorted insertion location.");
@@ -90,7 +92,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
-    public T update(int index, T item) {
+    public T update(final int index, final T item) {
         if (comparator != null) {
             // Ensure that the new item is greater or equal to its
             // predecessor and less than or equal to its successor
@@ -127,7 +129,8 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
             if ((predecessor != null && comparator.compare(item, predecessor) < 0)
                 || (successor != null && comparator.compare(item, successor) > 0)) {
-                throw new IllegalArgumentException("Updated item at index " + index + " is not in correct sorted order.");
+                throw new IllegalArgumentException("Updated item at index " + index
+                    + " is not in correct sorted order.");
             }
         }
 
@@ -160,7 +163,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
-    public int remove(T item) {
+    public int remove(final T item) {
         int index = indexOf(item);
         if (index != -1) {
             remove(index, 1);
@@ -171,13 +174,13 @@ public class ListAdapter<T> implements List<T>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Sequence<T> remove(int index, int count) {
+    public Sequence<T> remove(final int index, final int count) {
         java.util.List<T> removedList = null;
         try {
-            removedList = list.getClass().newInstance();
-        } catch (IllegalAccessException exception) {
+            removedList = list.getClass().getDeclaredConstructor().newInstance();
+        } catch (IllegalAccessException | InstantiationException exception) {
             throw new RuntimeException(exception);
-        } catch (InstantiationException exception) {
+        } catch (NoSuchMethodException | InvocationTargetException exception) {
             throw new RuntimeException(exception);
         }
 
@@ -203,12 +206,12 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
-    public T get(int index) {
+    public T get(final int index) {
         return list.get(index);
     }
 
     @Override
-    public int indexOf(T item) {
+    public int indexOf(final T item) {
         return list.indexOf(item);
     }
 
@@ -228,7 +231,7 @@ public class ListAdapter<T> implements List<T>, Serializable {
     }
 
     @Override
-    public void setComparator(Comparator<T> comparator) {
+    public void setComparator(final Comparator<T> comparator) {
         Comparator<T> previousComparator = this.comparator;
 
         if (previousComparator != comparator) {

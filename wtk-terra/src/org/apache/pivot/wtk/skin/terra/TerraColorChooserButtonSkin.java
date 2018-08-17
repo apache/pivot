@@ -263,8 +263,8 @@ public class TerraColorChooserButtonSkin extends ColorChooserButtonSkin {
 
         if (colorChooserButton.isEnabled()) {
             backgroundColorLocal = this.backgroundColor;
-            bevelColorLocal = (pressed || (colorChooserPopup.isOpen() && !colorChooserPopup.isClosing())) ? pressedBevelColor
-                : this.bevelColor;
+            bevelColorLocal = (pressed || (colorChooserPopup.isOpen() && !colorChooserPopup.isClosing()))
+                ? pressedBevelColor : this.bevelColor;
             borderColorLocal = this.borderColor;
         } else {
             backgroundColorLocal = disabledBackgroundColor;

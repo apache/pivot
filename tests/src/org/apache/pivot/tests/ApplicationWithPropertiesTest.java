@@ -91,11 +91,13 @@ public class ApplicationWithPropertiesTest extends ApplicationWithProperties.Ada
         System.out.println("application instance = " + application);
 
         application.getProperties().put(SAMPLE_PROP_KEY, sample);
-        System.out.println("application sample external property \"" + SAMPLE_PROP_KEY + "\" = \""
-            + application.getProperties().get(SAMPLE_PROP_KEY) + "\"");
+        System.out.println("application sample external property \""
+                + SAMPLE_PROP_KEY + "\" = \""
+                + application.getProperties().get(SAMPLE_PROP_KEY) + "\"");
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         application.getProperties().put(SAMPLE_CLASSLOADER_PROP_KEY, classLoader);
-        System.out.println("application sample external classloader property \"" + SAMPLE_CLASSLOADER_PROP_KEY + "\" = \""
+        System.out.println("application sample external classloader property \""
+                + SAMPLE_CLASSLOADER_PROP_KEY + "\" = \""
                 + application.getProperties().get(SAMPLE_CLASSLOADER_PROP_KEY) + "\"");
 
         System.out.println("Executing application ...");

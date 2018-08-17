@@ -41,7 +41,7 @@ public class Accordion extends Container {
         }
 
         @Override
-        public int add(Component panel) {
+        public int add(final Component panel) {
             int index = getLength();
             insert(panel, index);
 
@@ -49,7 +49,7 @@ public class Accordion extends Container {
         }
 
         @Override
-        public void insert(Component panel, int index) {
+        public void insert(final Component panel, final int index) {
             Utils.checkNull(panel, "panel");
 
             // Add the panel to the component sequence
@@ -73,12 +73,12 @@ public class Accordion extends Container {
         }
 
         @Override
-        public Component update(int index, Component panel) {
+        public Component update(final int index, final Component panel) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public int remove(Component panel) {
+        public int remove(final Component panel) {
             int index = indexOf(panel);
             if (index != -1) {
                 remove(index, 1);
@@ -88,7 +88,7 @@ public class Accordion extends Container {
         }
 
         @Override
-        public Sequence<Component> remove(int index, int count) {
+        public Sequence<Component> remove(final int index, final int count) {
             // Remove the panels from the panel list
             Sequence<Component> removed = panels.remove(index, count);
 
@@ -121,12 +121,12 @@ public class Accordion extends Container {
         }
 
         @Override
-        public Component get(int index) {
+        public Component get(final int index) {
             return panels.get(index);
         }
 
         @Override
-        public int indexOf(Component panel) {
+        public int indexOf(final Component panel) {
             return panels.indexOf(panel);
         }
 
@@ -152,8 +152,10 @@ public class Accordion extends Container {
     private Button.DataRenderer headerDataRenderer = DEFAULT_HEADER_DATA_RENDERER;
 
     private AccordionListener.Listeners accordionListeners = new AccordionListener.Listeners();
-    private AccordionSelectionListener.Listeners accordionSelectionListeners = new AccordionSelectionListener.Listeners();
-    private AccordionAttributeListener.Listeners accordionAttributeListeners = new AccordionAttributeListener.Listeners();
+    private AccordionSelectionListener.Listeners accordionSelectionListeners =
+        new AccordionSelectionListener.Listeners();
+    private AccordionAttributeListener.Listeners accordionAttributeListeners =
+        new AccordionAttributeListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_HEADER_DATA_RENDERER = new AccordionHeaderDataRenderer();
 
@@ -169,7 +171,7 @@ public class Accordion extends Container {
         return selectedIndex;
     }
 
-    public void setSelectedIndex(int selectedIndex) {
+    public void setSelectedIndex(final int selectedIndex) {
         indexBoundsCheck("selectedIndex", selectedIndex, -1, panels.getLength() - 1);
 
         int previousSelectedIndex = this.selectedIndex;
@@ -194,7 +196,7 @@ public class Accordion extends Container {
         return headerDataRenderer;
     }
 
-    public void setHeaderDataRenderer(Button.DataRenderer headerDataRenderer) {
+    public void setHeaderDataRenderer(final Button.DataRenderer headerDataRenderer) {
         Utils.checkNull(headerDataRenderer, "headerDataRenderer");
 
         Button.DataRenderer previousHeaderDataRenderer = this.headerDataRenderer;
@@ -205,7 +207,7 @@ public class Accordion extends Container {
     }
 
     @Override
-    public Sequence<Component> remove(int index, int count) {
+    public Sequence<Component> remove(final int index, final int count) {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
 
@@ -230,11 +232,11 @@ public class Accordion extends Container {
         return accordionAttributeListeners;
     }
 
-    public static Object getHeaderData(Component component) {
+    public static Object getHeaderData(final Component component) {
         return component.getAttribute(Attribute.HEADER_DATA);
     }
 
-    public static void setHeaderData(Component component, Object headerData) {
+    public static void setHeaderData(final Component component, final Object headerData) {
         Object previousHeaderData = component.setAttribute(Attribute.HEADER_DATA, headerData);
 
         if (previousHeaderData != headerData) {
@@ -248,11 +250,11 @@ public class Accordion extends Container {
         }
     }
 
-    public static String getTooltipText(Component component) {
+    public static String getTooltipText(final Component component) {
         return (String) component.getAttribute(Attribute.TOOLTIP_TEXT);
     }
 
-    public static void setTooltipText(Component component, String tooltipText) {
+    public static void setTooltipText(final Component component, final String tooltipText) {
         String previousTooltipText = (String) component.setAttribute(Attribute.TOOLTIP_TEXT,
             tooltipText);
 

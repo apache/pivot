@@ -47,11 +47,11 @@ public abstract class ChartView extends Component {
             this(null, null);
         }
 
-        public Category(String key) {
+        public Category(final String key) {
             this(key, key);
         }
 
-        public Category(String key, String label) {
+        public Category(final String key, final String label) {
             this.key = key;
             this.label = label;
         }
@@ -64,7 +64,7 @@ public abstract class ChartView extends Component {
             return key;
         }
 
-        public void setKey(String key) {
+        public void setKey(final String key) {
             Utils.checkNull(key, "key");
 
             String previousKey = this.key;
@@ -83,7 +83,7 @@ public abstract class ChartView extends Component {
             return label;
         }
 
-        public void setLabel(String label) {
+        public void setLabel(final String label) {
             Utils.checkNull(label, "label");
 
             String previousLabel = this.label;
@@ -106,7 +106,7 @@ public abstract class ChartView extends Component {
         private int seriesIndex;
         private int elementIndex;
 
-        public Element(int seriesIndex, int elementIndex) {
+        public Element(final int seriesIndex, final int elementIndex) {
             this.seriesIndex = seriesIndex;
             this.elementIndex = elementIndex;
         }
@@ -134,8 +134,7 @@ public abstract class ChartView extends Component {
 
         @Override
         public String toString() {
-            String string = getClass().getName() + seriesIndex + ", " + elementIndex;
-            return string;
+            return getClass().getName() + seriesIndex + ", " + elementIndex;
         }
     }
 
@@ -151,7 +150,7 @@ public abstract class ChartView extends Component {
      */
     public final class CategorySequence implements Sequence<Category> {
         @Override
-        public int add(Category category) {
+        public int add(final Category category) {
             int index = getLength();
             insert(category, index);
 
@@ -159,7 +158,7 @@ public abstract class ChartView extends Component {
         }
 
         @Override
-        public void insert(Category category, int index) {
+        public void insert(final Category category, final int index) {
             Utils.checkNull(category, "category");
 
             if (category.getChartView() != null) {
@@ -174,12 +173,12 @@ public abstract class ChartView extends Component {
         }
 
         @Override
-        public Category update(int index, Category category) {
+        public Category update(final int index, final Category category) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public int remove(Category category) {
+        public int remove(final Category category) {
             int index = indexOf(category);
             if (index != -1) {
                 remove(index, 1);
@@ -189,7 +188,7 @@ public abstract class ChartView extends Component {
         }
 
         @Override
-        public Sequence<Category> remove(int index, int count) {
+        public Sequence<Category> remove(final int index, final int count) {
             Sequence<Category> removed = categories.remove(index, count);
 
             if (count > 0) {
@@ -204,12 +203,12 @@ public abstract class ChartView extends Component {
         }
 
         @Override
-        public Category get(int index) {
+        public Category get(final int index) {
             return categories.get(index);
         }
 
         @Override
-        public int indexOf(Category category) {
+        public int indexOf(final Category category) {
             return categories.indexOf(category);
         }
 
@@ -224,28 +223,28 @@ public abstract class ChartView extends Component {
      */
     private class ListHandler implements ListListener<Object> {
         @Override
-        public void itemInserted(List<Object> list, int index) {
+        public void itemInserted(final List<Object> list, final int index) {
             chartViewSeriesListeners.seriesInserted(ChartView.this, index);
         }
 
         @Override
-        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
+        public void itemsRemoved(final List<Object> list, final int index, final Sequence<Object> items) {
             int count = items.getLength();
             chartViewSeriesListeners.seriesRemoved(ChartView.this, index, count);
         }
 
         @Override
-        public void itemUpdated(List<Object> list, int index, Object previousItem) {
+        public void itemUpdated(final List<Object> list, final int index, final Object previousItem) {
             chartViewSeriesListeners.seriesUpdated(ChartView.this, index);
         }
 
         @Override
-        public void listCleared(List<Object> list) {
+        public void listCleared(final List<Object> list) {
             chartViewSeriesListeners.seriesCleared(ChartView.this);
         }
 
         @Override
-        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+        public void comparatorChanged(final List<Object> list, final Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 chartViewSeriesListeners.seriesSorted(ChartView.this);
             }
@@ -254,28 +253,27 @@ public abstract class ChartView extends Component {
 
     private class ValueMarkersHandler implements ListListener<ValueMarker> {
         @Override
-        public void itemInserted(List<ValueMarker> list, int index) {
+        public void itemInserted(final List<ValueMarker> list, final int index) {
             chartViewListeners.chartDataChanged(ChartView.this, getChartData());
         }
 
         @Override
-        public void itemsRemoved(List<ValueMarker> list, int index, Sequence<ValueMarker> items) {
+        public void itemsRemoved(final List<ValueMarker> list, final int index, final Sequence<ValueMarker> items) {
             chartViewListeners.chartDataChanged(ChartView.this, getChartData());
         }
 
         @Override
-        public void itemUpdated(List<ValueMarker> list, int index, ValueMarker previousItem) {
+        public void itemUpdated(final List<ValueMarker> list, final int index, final ValueMarker previousItem) {
             chartViewListeners.chartDataChanged(ChartView.this, getChartData());
         }
 
         @Override
-        public void listCleared(List<ValueMarker> list) {
+        public void listCleared(final List<ValueMarker> list) {
             chartViewListeners.chartDataChanged(ChartView.this, getChartData());
         }
 
         @Override
-        public void comparatorChanged(List<ValueMarker> list,
-            Comparator<ValueMarker> previousComparator) {
+        public void comparatorChanged(final List<ValueMarker> list, final Comparator<ValueMarker> previousComparator) {
             // No-op
         }
     }
@@ -317,7 +315,7 @@ public abstract class ChartView extends Component {
         this(DEFAULT_SERIES_NAME_KEY, new ArrayList<>());
     }
 
-    public ChartView(String seriesNameKey, List<?> chartData) {
+    public ChartView(final String seriesNameKey, final List<?> chartData) {
         setSeriesNameKey(seriesNameKey);
         setTitle(title);
         setChartData(chartData);
@@ -327,8 +325,9 @@ public abstract class ChartView extends Component {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void installSkin(Class<? extends Component> componentClass) {
-        Class<? extends org.apache.pivot.wtk.Skin> skinClass = provider.getSkinClass((Class<? extends ChartView>) componentClass);
+    protected void installSkin(final Class<? extends Component> componentClass) {
+        Class<? extends org.apache.pivot.wtk.Skin> skinClass =
+            provider.getSkinClass((Class<? extends ChartView>) componentClass);
 
         try {
             setSkin(skinClass.newInstance());
@@ -348,7 +347,7 @@ public abstract class ChartView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    public void setChartData(List<?> chartData) {
+    public void setChartData(final List<?> chartData) {
         Utils.checkNull(chartData, "chartData");
 
         List<?> previousChartData = this.chartData;
@@ -369,7 +368,7 @@ public abstract class ChartView extends Component {
         return seriesNameKey;
     }
 
-    public void setSeriesNameKey(String seriesNameKey) {
+    public void setSeriesNameKey(final String seriesNameKey) {
         Utils.checkNull(seriesNameKey, "seriesNameKey");
 
         String previousSeriesNameKey = this.seriesNameKey;
@@ -384,7 +383,7 @@ public abstract class ChartView extends Component {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         String previousTitle = this.title;
 
         if (previousTitle != title) {
@@ -397,7 +396,7 @@ public abstract class ChartView extends Component {
         return horizontalAxisLabel;
     }
 
-    public void setHorizontalAxisLabel(String horizontalAxisLabel) {
+    public void setHorizontalAxisLabel(final String horizontalAxisLabel) {
         String previousHorizontalAxisLabel = this.horizontalAxisLabel;
 
         if (previousHorizontalAxisLabel != horizontalAxisLabel) {
@@ -410,7 +409,7 @@ public abstract class ChartView extends Component {
         return verticalAxisLabel;
     }
 
-    public void setVerticalAxisLabel(String verticalAxisLabel) {
+    public void setVerticalAxisLabel(final String verticalAxisLabel) {
         String previousVerticalAxisLabel = this.verticalAxisLabel;
 
         if (previousVerticalAxisLabel != verticalAxisLabel) {
@@ -423,14 +422,14 @@ public abstract class ChartView extends Component {
         return showLegend;
     }
 
-    public void setShowLegend(boolean showLegend) {
+    public void setShowLegend(final boolean showLegend) {
         if (this.showLegend != showLegend) {
             this.showLegend = showLegend;
             chartViewListeners.showLegendChanged(this);
         }
     }
 
-    public Element getElementAt(int x, int y) {
+    public Element getElementAt(final int x, final int y) {
         return ((Skin) getSkin()).getElementAt(x, y);
     }
 
@@ -450,7 +449,7 @@ public abstract class ChartView extends Component {
         return valueMarkers;
     }
 
-    public void setValueMarkers(List<ValueMarker> valueMarkers) {
+    public void setValueMarkers(final List<ValueMarker> valueMarkers) {
         List<ValueMarker> previousValueMarkers = this.valueMarkers;
 
         if (previousValueMarkers != valueMarkers) {

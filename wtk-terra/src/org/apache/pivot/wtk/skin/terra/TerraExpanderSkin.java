@@ -559,7 +559,8 @@ public class TerraExpanderSkin extends ExpanderSkin implements ButtonPressListen
     }
 
     public final void setDisabledShadeButtonColor(String disabledShadeButtonColor) {
-        setDisabledShadeButtonColor(GraphicsUtilities.decodeColor(disabledShadeButtonColor, "disabledShadeButtonColor"));
+        setDisabledShadeButtonColor(
+            GraphicsUtilities.decodeColor(disabledShadeButtonColor, "disabledShadeButtonColor"));
     }
 
     public final void setDisabledShadeButtonColor(int disabledShadeButtonColor) {

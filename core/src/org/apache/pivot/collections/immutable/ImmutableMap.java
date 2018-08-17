@@ -27,30 +27,32 @@ import org.apache.pivot.util.Utils;
 
 /**
  * Unmodifiable implementation of the {@link Map} interface.
+ * @param <K> Key type for the elements of this map.
+ * @param <V> Value type for the map elements.
  */
-public class ImmutableMap<K, V> implements Map<K, V> {
+public final class ImmutableMap<K, V> implements Map<K, V> {
     private Map<K, V> map = null;
 
     private MapListener.Listeners<K, V> mapListeners = new MapListener.Listeners<>();
 
-    public ImmutableMap(Map<K, V> map) {
+    public ImmutableMap(final Map<K, V> map) {
         Utils.checkNull(map, "map");
 
         this.map = map;
     }
 
     @Override
-    public V get(K key) {
+    public V get(final K key) {
         return map.get(key);
     }
 
     @Override
-    public V put(K key, V value) {
+    public V put(final K key, final V value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public V remove(K key) {
+    public V remove(final K key) {
         throw new UnsupportedOperationException();
     }
 
@@ -60,7 +62,7 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public boolean containsKey(K key) {
+    public boolean containsKey(final K key) {
         return map.containsKey(key);
     }
 
@@ -80,7 +82,7 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public void setComparator(Comparator<K> comparator) {
+    public void setComparator(final Comparator<K> comparator) {
         throw new UnsupportedOperationException();
     }
 

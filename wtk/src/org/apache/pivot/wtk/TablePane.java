@@ -649,7 +649,8 @@ public class TablePane extends Container {
     private ColumnSequence columnSequence = new ColumnSequence();
 
     private TablePaneListener.Listeners tablePaneListeners = new TablePaneListener.Listeners();
-    private TablePaneAttributeListener.Listeners tablePaneAttributeListeners = new TablePaneAttributeListener.Listeners();
+    private TablePaneAttributeListener.Listeners tablePaneAttributeListeners =
+        new TablePaneAttributeListener.Listeners();
 
     public static final String RELATIVE_SIZE_INDICATOR = "*";
 

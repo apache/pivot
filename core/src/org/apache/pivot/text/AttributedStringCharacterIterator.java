@@ -82,7 +82,8 @@ public class AttributedStringCharacterIterator implements AttributedCharacterIte
         this.attributes = attributes;
     }
 
-    public AttributedStringCharacterIterator(String text, int beginIndex, int endIndex, AttributedCharacterIterator.Attribute[] attributes) {
+    public AttributedStringCharacterIterator(String text, int beginIndex, int endIndex,
+        AttributedCharacterIterator.Attribute[] attributes) {
         Utils.checkNull(text, "text");
         this.storage = new AttributedString(text.substring(beginIndex, endIndex));
         this.length = endIndex - beginIndex;

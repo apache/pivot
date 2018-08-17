@@ -308,7 +308,8 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
         Orientation orientation = splitPane.getOrientation();
 
         if (splitPane.getResizeMode() == SplitPane.ResizeMode.PRIMARY_REGION
-            && ((previousWidth != width && orientation == Orientation.HORIZONTAL) || (previousHeight != height && orientation == Orientation.VERTICAL))) {
+            && ((previousWidth != width && orientation == Orientation.HORIZONTAL)
+             || (previousHeight != height && orientation == Orientation.VERTICAL))) {
             SplitPane.Region primaryRegion = splitPane.getPrimaryRegion();
             float splitRatio = splitPane.getSplitRatio();
 

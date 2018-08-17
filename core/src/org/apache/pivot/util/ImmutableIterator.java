@@ -26,19 +26,18 @@ import java.util.Iterator;
  * <p>Note: the <tt>remove()</tt> method implementation here has
  * been taken out because there is now a default implementation
  * in the {@link Iterator} interface itself in Java 8.
+ * @param <T> The type of elements we are iterating over.
  */
-public class ImmutableIterator<T> implements Iterator<T> {
+public final class ImmutableIterator<T> implements Iterator<T> {
     private Iterator<T> iterator;
 
     /**
-     * Construct an immutable iterator over the base iterator
-     * given here.
+     * Construct an immutable iterator over the base iterator given here.
      *
-     * @param iterator The base iterator we want to protect
-     * from change.
+     * @param iterator The base iterator we want to protect from change.
      * @throws IllegalArgumentException if the iterator is <tt>null</tt>.
      */
-    public ImmutableIterator(Iterator<T> iterator) {
+    public ImmutableIterator(final Iterator<T> iterator) {
         Utils.checkNull(iterator, "iterator");
 
         this.iterator = iterator;

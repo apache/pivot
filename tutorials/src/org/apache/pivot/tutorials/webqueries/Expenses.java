@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.Display;
 /**
  * Query servlet tutorial client application.
  */
-public class Expenses implements Application {
+public final class Expenses implements Application {
     private String hostname = null;
     private int port = 0;
     private boolean secure = false;
@@ -43,12 +43,13 @@ public class Expenses implements Application {
     }
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         // Get startup properties
         URL origin = ApplicationContext.getOrigin();
         if (origin == null) {
-            System.out.println("Warning: Origin null, so for this application to run you have to set the following properties: \n"
-                + SECURE_KEY + ", " + HOSTNAME_KEY + ", " + PORT_KEY + "\n");
+            System.out.println(
+                "Warning: Origin null, so for this application to run you have to set the following properties:\n"
+              + SECURE_KEY + ", " + HOSTNAME_KEY + ", " + PORT_KEY + "\n");
             System.exit(1);
             return; // make Eclipse's null checker happy
         }
@@ -79,7 +80,7 @@ public class Expenses implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (expensesWindow != null) {
             expensesWindow.close();
         }
@@ -99,7 +100,7 @@ public class Expenses implements Application {
         return secure;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(Expenses.class, args);
     }
 

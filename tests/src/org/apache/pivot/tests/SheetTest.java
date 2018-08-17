@@ -42,13 +42,18 @@ import org.apache.pivot.wtk.WindowStateListener;
 import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.media.Picture;
 
-public class SheetTest implements Application {
+public final class SheetTest implements Application {
     private Frame frame = null;
     private Sheet sheet = null;
 
+    private static final String LICENSE_TEXT =
+        "Unless required by applicable law or agreed to in writing, software distributed under the License "
+      + "is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express "
+      + "or implied.";
+
     @SuppressWarnings("unused")
     @Override
-    public void startup(final Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         Picture picture = (Picture) Image.load(getClass().getResource("IMG_0767_2.jpg"));
         picture.resample(120);
 
@@ -76,29 +81,26 @@ public class SheetTest implements Application {
 
         row0.add(sheetContent);
 
-        Label promptBody = new Label(
-            "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
+        Label promptBody = new Label(LICENSE_TEXT);
         promptBody.getStyles().put(Style.wrapText, true);
 
-        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<>("OK"),
-            promptBody);
+        final Prompt prompt = new Prompt(MessageType.INFO, "Prompt", new ArrayList<>("OK"), promptBody);
         prompt.setTitle("Prompt");
         prompt.getStyles().put(Style.resizable, true);
 
         prompt.getComponentMouseListeners().add(new ComponentMouseListener() {
             @Override
-            public void mouseOver(Component component) {
+            public void mouseOver(final Component component) {
                 System.out.println("Mouse Over");
             }
 
             @Override
-            public void mouseOut(Component component) {
+            public void mouseOut(final Component component) {
                 System.out.println("Mouse out");
             }
         });
 
-        Label alertBody = new Label(
-            "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.");
+        Label alertBody = new Label(LICENSE_TEXT);
         alertBody.getStyles().put(Style.wrapText, true);
 
         final Alert alert = new Alert(MessageType.INFO, "Alert", new ArrayList<>("OK"), alertBody);
@@ -117,14 +119,14 @@ public class SheetTest implements Application {
 
         closeButton.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button buttonArgument) {
+            public void buttonPressed(final Button buttonArgument) {
                 buttonArgument.getWindow().close();
             }
         });
 
         button.getButtonPressListeners().add(new ButtonPressListener() {
             @Override
-            public void buttonPressed(Button buttonArgument) {
+            public void buttonPressed(final Button buttonArgument) {
                 prompt.open(frame);
 
                 Display displayLocal = DesktopApplicationContext.createDisplay(640, 480, 100, 100,
@@ -140,7 +142,7 @@ public class SheetTest implements Application {
 
         sheet.getWindowStateListeners().add(new WindowStateListener() {
             @Override
-            public void windowOpened(Window window) {
+            public void windowOpened(final Window window) {
                 closeButton.requestFocus();
             }
         });
@@ -149,7 +151,7 @@ public class SheetTest implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (frame != null) {
             frame.close();
         }
@@ -157,7 +159,7 @@ public class SheetTest implements Application {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(SheetTest.class, args);
     }
 }

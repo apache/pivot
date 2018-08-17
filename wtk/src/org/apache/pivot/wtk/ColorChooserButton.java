@@ -43,8 +43,10 @@ public class ColorChooserButton extends Button {
     private BindType selectedColorBindType = BindType.BOTH;
     private ColorChooser.SelectedColorBindMapping selectedColorBindMapping = null;
 
-    private ColorChooserButtonSelectionListener.Listeners colorChooserButtonSelectionListeners = new ColorChooserButtonSelectionListener.Listeners();
-    private ColorChooserButtonBindingListener.Listeners colorChooserButtonBindingListeners = new ColorChooserButtonBindingListener.Listeners();
+    private ColorChooserButtonSelectionListener.Listeners colorChooserButtonSelectionListeners =
+        new ColorChooserButtonSelectionListener.Listeners();
+    private ColorChooserButtonBindingListener.Listeners colorChooserButtonBindingListeners =
+        new ColorChooserButtonBindingListener.Listeners();
 
     private static final Button.DataRenderer DEFAULT_DATA_RENDERER = new ListButtonColorItemRenderer();
 
@@ -52,7 +54,7 @@ public class ColorChooserButton extends Button {
         this(null);
     }
 
-    public ColorChooserButton(Object buttonData) {
+    public ColorChooserButton(final Object buttonData) {
         super(buttonData);
 
         setDataRenderer(DEFAULT_DATA_RENDERER);
@@ -60,7 +62,7 @@ public class ColorChooserButton extends Button {
     }
 
     @Override
-    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+    protected void setSkin(final org.apache.pivot.wtk.Skin skin) {
         checkSkin(skin, ColorChooserButton.Skin.class);
 
         super.setSkin(skin);
@@ -78,7 +80,7 @@ public class ColorChooserButton extends Button {
      * ColorChooserButton.
      */
     @Override
-    public void setToggleButton(boolean toggleButton) {
+    public void setToggleButton(final boolean toggleButton) {
         throw new UnsupportedOperationException("Color chooser buttons cannot be toggle buttons.");
     }
 
@@ -96,7 +98,7 @@ public class ColorChooserButton extends Button {
      * @param selectedColor The color to select, or <tt>null</tt> to clear the
      * selection.
      */
-    public void setSelectedColor(Color selectedColor) {
+    public void setSelectedColor(final Color selectedColor) {
         Color previousSelectedColor = this.selectedColor;
 
         if (previousSelectedColor != selectedColor
@@ -112,7 +114,7 @@ public class ColorChooserButton extends Button {
      * @param selectedColor A string representing a color.
      * @throws IllegalArgumentException if the string is {@code null}.
      */
-    public final void setSelectedColor(String selectedColor) {
+    public final void setSelectedColor(final String selectedColor) {
         setSelectedColor(GraphicsUtilities.decodeColor(selectedColor, "selectedColor"));
     }
 
@@ -128,7 +130,7 @@ public class ColorChooserButton extends Button {
      *
      * @param selectedColorKey The binding key for the selected color.
      */
-    public void setSelectedColorKey(String selectedColorKey) {
+    public void setSelectedColorKey(final String selectedColorKey) {
         String previousSelectedColorKey = this.selectedColorKey;
 
         if (previousSelectedColorKey != selectedColorKey) {
@@ -142,7 +144,7 @@ public class ColorChooserButton extends Button {
         return selectedColorBindType;
     }
 
-    public void setSelectedColorBindType(BindType selectedColorBindType) {
+    public void setSelectedColorBindType(final BindType selectedColorBindType) {
         Utils.checkNull(selectedColorBindType, "selectedColorBindType");
 
         BindType previousSelectedColorBindType = this.selectedColorBindType;
@@ -158,7 +160,7 @@ public class ColorChooserButton extends Button {
         return selectedColorBindMapping;
     }
 
-    public void setSelectedColorBindMapping(ColorChooser.SelectedColorBindMapping bindMapping) {
+    public void setSelectedColorBindMapping(final ColorChooser.SelectedColorBindMapping bindMapping) {
         ColorChooser.SelectedColorBindMapping previousSelectedColorBindMapping = this.selectedColorBindMapping;
 
         if (previousSelectedColorBindMapping != bindMapping) {
@@ -173,7 +175,7 @@ public class ColorChooserButton extends Button {
      * picker button's bind key, if one is set.
      */
     @Override
-    public void load(Object context) {
+    public void load(final Object context) {
         if (selectedColorKey != null && JSON.containsKey(context, selectedColorKey)
             && selectedColorBindType != BindType.STORE) {
             Object value = JSON.get(context, selectedColorKey);
@@ -199,7 +201,7 @@ public class ColorChooserButton extends Button {
      * color picker button's bind key, if one is set.
      */
     @Override
-    public void store(Object context) {
+    public void store(final Object context) {
         if (selectedColorKey != null && selectedColorBindType != BindType.LOAD) {
             JSON.put(context, selectedColorKey, (selectedColorBindMapping == null) ? selectedColor
                 : selectedColorBindMapping.valueOf(selectedColor));
