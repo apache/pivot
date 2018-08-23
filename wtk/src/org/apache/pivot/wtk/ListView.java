@@ -1595,7 +1595,7 @@ public class ListView extends Component {
         }
 
         switch (selectMode) {
-            case SINGLE: {
+            case SINGLE:
                 // Bind using selected item key
                 if (selectedItemKey != null && selectedItemBindType != BindType.STORE
                     && JSON.containsKey(context, selectedItemKey)) {
@@ -1612,9 +1612,8 @@ public class ListView extends Component {
                 }
 
                 break;
-            }
 
-            case MULTI: {
+            case MULTI:
                 // Bind using selected items key
                 if (selectedItemsKey != null && selectedItemsBindType != BindType.STORE
                     && JSON.containsKey(context, selectedItemsKey)) {
@@ -1639,15 +1638,12 @@ public class ListView extends Component {
                 }
 
                 break;
-            }
 
-            case NONE: {
+            case NONE:
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         if (checkmarksEnabled) {
@@ -1719,7 +1715,7 @@ public class ListView extends Component {
         }
 
         switch (selectMode) {
-            case SINGLE: {
+            case SINGLE:
                 // Bind using selected item key
                 if (selectedItemKey != null && selectedItemBindType != BindType.LOAD) {
                     Object item;
@@ -1739,9 +1735,8 @@ public class ListView extends Component {
                 }
 
                 break;
-            }
 
-            case MULTI: {
+            case MULTI:
                 // Bind using selected items key
                 if (selectedItemsKey != null && selectedItemsBindType != BindType.LOAD) {
                     ArrayList<Object> items = new ArrayList<>();
@@ -1766,15 +1761,12 @@ public class ListView extends Component {
                 }
 
                 break;
-            }
 
-            case NONE: {
+            case NONE:
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         if (checkmarksEnabled) {

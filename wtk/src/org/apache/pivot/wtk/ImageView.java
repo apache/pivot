@@ -120,7 +120,7 @@ public class ImageView extends Component {
      *
      * @param image The initial image to set, or <tt>null</tt> for no image.
      */
-    public ImageView(Image image) {
+    public ImageView(final Image image) {
         setImage(image);
 
         installSkin(ImageView.class);
@@ -131,7 +131,7 @@ public class ImageView extends Component {
      *
      * @return The current image, or <tt>null</tt> if no image is set.
      */
-    public Image getImage() {
+    public final Image getImage() {
         return image;
     }
 
@@ -140,7 +140,7 @@ public class ImageView extends Component {
      *
      * @param image The image to set, or <tt>null</tt> for no image.
      */
-    public void setImage(Image image) {
+    public final void setImage(final Image image) {
         Image previousImage = this.image;
 
         if (previousImage != image) {
@@ -179,7 +179,7 @@ public class ImageView extends Component {
                 } else {
                     Image.load(imageURL, new TaskAdapter<>(new TaskListener<Image>() {
                         @Override
-                        public void taskExecuted(Task<Image> task) {
+                        public void taskExecuted(final Task<Image> task) {
                             Image imageLoadedLocal = task.getResult();
 
                             // Update the contents of all image views that requested this image
@@ -194,7 +194,7 @@ public class ImageView extends Component {
                         }
 
                         @Override
-                        public void executeFailed(Task<Image> task) {
+                        public void executeFailed(final Task<Image> task) {
                             // No-op
                         }
                     }));
@@ -217,7 +217,7 @@ public class ImageView extends Component {
      * @see #setImage(URL)
      * @see ImageUtils#findByName(String,String)
      */
-    public final void setImage(String imageName) {
+    public final void setImage(final String imageName) {
         setImage(ImageUtils.findByName(imageName, "image"));
     }
 
@@ -238,7 +238,7 @@ public class ImageView extends Component {
      * loaded in the background; <tt>false</tt> if they will be loaded
      * synchronously.
      */
-    public void setAsynchronous(boolean asynchronous) {
+    public void setAsynchronous(final boolean asynchronous) {
         if (this.asynchronous != asynchronous) {
             this.asynchronous = asynchronous;
             imageViewListeners.asynchronousChanged(this);
@@ -259,7 +259,7 @@ public class ImageView extends Component {
      *
      * @param imageKey The image key, or <tt>null</tt> to clear the binding.
      */
-    public void setImageKey(String imageKey) {
+    public void setImageKey(final String imageKey) {
         String previousImageKey = this.imageKey;
 
         if (previousImageKey != imageKey) {
@@ -272,7 +272,7 @@ public class ImageView extends Component {
         return imageBindType;
     }
 
-    public void setImageBindType(BindType imageBindType) {
+    public void setImageBindType(final BindType imageBindType) {
         Utils.checkNull(imageBindType, "imageBindType");
 
         BindType previousImageBindType = this.imageBindType;
@@ -287,7 +287,7 @@ public class ImageView extends Component {
         return imageBindMapping;
     }
 
-    public void setImageBindMapping(ImageBindMapping imageBindMapping) {
+    public void setImageBindMapping(final ImageBindMapping imageBindMapping) {
         ImageBindMapping previousImageBindMapping = this.imageBindMapping;
 
         if (previousImageBindMapping != imageBindMapping) {
@@ -297,31 +297,27 @@ public class ImageView extends Component {
     }
 
     @Override
-    public void load(Object context) {
+    public void load(final Object context) {
         if (imageKey != null && JSON.containsKey(context, imageKey)
             && imageBindType != BindType.STORE) {
             Object value = JSON.get(context, imageKey);
 
             if (imageBindMapping != null) {
                 switch (imageBindMapping.getType()) {
-                    case IMAGE: {
+                    case IMAGE:
                         value = imageBindMapping.toImage(value);
                         break;
-                    }
 
-                    case URL: {
+                    case URL:
                         value = imageBindMapping.toImageURL(value);
                         break;
-                    }
 
-                    case NAME: {
+                    case NAME:
                         value = imageBindMapping.toImageName(value);
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             }
 
@@ -332,14 +328,13 @@ public class ImageView extends Component {
             } else if (value instanceof String) {
                 setImage((String) value);
             } else {
-                throw new IllegalArgumentException(getClass().getName() + " can't bind to " + value
-                    + ".");
+                throw new IllegalArgumentException(getClass().getName() + " can't bind to " + value + ".");
             }
         }
     }
 
     @Override
-    public void store(Object context) {
+    public void store(final Object context) {
         if (imageKey != null && imageBindType != BindType.LOAD) {
             JSON.put(context, imageKey,
                 (imageBindMapping == null) ? image : imageBindMapping.valueOf(image));

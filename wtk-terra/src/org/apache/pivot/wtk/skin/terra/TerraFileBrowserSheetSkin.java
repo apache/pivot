@@ -285,12 +285,11 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                 switch (mode) {
                     case OPEN:
                     case OPEN_MULTIPLE:
-                    case SAVE_TO: {
+                    case SAVE_TO:
                         fileBrowserSheet.setSelectedFiles(fileBrowser.getSelectedFiles());
                         break;
-                    }
 
-                    case SAVE_AS: {
+                    case SAVE_AS:
                         String fileName = saveAsTextInput.getText();
                         // Contents of the entry field could be:
                         // 1. Just a new file name in the current root directory
@@ -339,11 +338,9 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
                             fileBrowserSheet.setSelectedFiles(new ArrayList<>(selectedFile));
                         }
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 updatingSelection = false;
@@ -364,33 +361,28 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
             (mode != FileBrowserSheet.Mode.SAVE_TO));
 
         switch (mode) {
-            case OPEN: {
+            case OPEN:
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
                 break;
-            }
 
-            case OPEN_MULTIPLE: {
+            case OPEN_MULTIPLE:
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(true);
                 break;
-            }
 
-            case SAVE_AS: {
+            case SAVE_AS:
                 saveAsBoxPane.setVisible(true);
                 fileBrowser.setMultiSelect(false);
                 break;
-            }
 
-            case SAVE_TO: {
+            case SAVE_TO:
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         updateDisabledFileFilter();
@@ -451,24 +443,20 @@ public class TerraFileBrowserSheetSkin extends TerraSheetSkin implements FileBro
 
         switch (mode) {
             case OPEN:
-            case OPEN_MULTIPLE: {
+            case OPEN_MULTIPLE:
                 okButton.setEnabled(selectedFiles.getLength() > 0 && selectedDirectoryCount == 0);
                 break;
-            }
 
-            case SAVE_AS: {
+            case SAVE_AS:
                 okButton.setEnabled(saveAsTextInput.getCharacterCount() > 0);
                 break;
-            }
 
-            case SAVE_TO: {
+            case SAVE_TO:
                 okButton.setEnabled(selectedDirectoryCount > 0);
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
     }
 

@@ -39,7 +39,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     private boolean fill = false;
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         BoxPane boxPane = (BoxPane) component;
@@ -47,7 +47,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         BoxPane boxPane = (BoxPane) getComponent();
 
         int preferredWidth = 0;
@@ -93,7 +93,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         BoxPane boxPane = (BoxPane) getComponent();
 
         int preferredHeight = 0;
@@ -145,12 +145,11 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
         int preferredWidth = 0;
         int preferredHeight = 0;
+        int j = 0;
 
         switch (boxPane.getOrientation()) {
-            case HORIZONTAL: {
-                // Preferred width is the sum of the preferred widths of all
-                // components
-                int j = 0;
+            case HORIZONTAL:
+                // Preferred width is the sum of the preferred widths of all components
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
 
@@ -168,11 +167,9 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                 }
 
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 // Preferred height is the sum of the preferred heights of all components
-                int j = 0;
                 for (int i = 0, n = boxPane.getLength(); i < n; i++) {
                     Component component = boxPane.get(i);
 
@@ -190,11 +187,9 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                 }
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         // Include padding
@@ -205,14 +200,14 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         BoxPane boxPane = (BoxPane) getComponent();
 
         int baseline = -1;
         int contentHeight = 0;
 
         switch (boxPane.getOrientation()) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 if (fill) {
                     int clientHeight = Math.max(height - padding.getHeight(), 0);
 
@@ -239,20 +234,16 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
                             if (componentBaseline != -1) {
                                 switch (verticalAlignment) {
-                                    case CENTER: {
+                                    case CENTER:
                                         componentBaseline += (contentHeight - size.height) / 2;
                                         break;
-                                    }
-                                    case BOTTOM: {
+                                    case BOTTOM:
                                         componentBaseline += contentHeight - size.height;
                                         break;
-                                    }
-                                    case TOP: {
+                                    case TOP:
                                         break;
-                                    }
-                                    default: {
+                                    default:
                                         break;
-                                    }
                                 }
                             }
 
@@ -262,9 +253,8 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                 }
 
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 int clientWidth = Math.max(width - padding.getWidth(), 0);
 
                 for (Component component : boxPane) {
@@ -291,11 +281,9 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                 contentHeight -= spacing;
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         if (baseline != -1) {
@@ -303,24 +291,20 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                 baseline += padding.top;
             } else {
                 switch (verticalAlignment) {
-                    case TOP: {
+                    case TOP:
                         baseline += padding.top;
                         break;
-                    }
 
-                    case CENTER: {
+                    case CENTER:
                         baseline += (height - contentHeight) / 2;
                         break;
-                    }
 
-                    case BOTTOM: {
+                    case BOTTOM:
                         baseline += height - (contentHeight + padding.bottom);
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             }
         }
@@ -344,20 +328,16 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
             int x = 0;
 
             switch (horizontalAlignment) {
-                case CENTER: {
+                case CENTER:
                     x = (width - preferredWidth) / 2;
                     break;
-                }
-                case RIGHT: {
+                case RIGHT:
                     x = width - preferredWidth;
                     break;
-                }
-                case LEFT: {
+                case LEFT:
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
 
             x += padding.left;
@@ -373,7 +353,6 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
                     if (fill) {
                         componentHeight = Math.max(height - padding.getHeight(), 0);
-
                         componentWidth = component.getPreferredWidth(componentHeight);
                     } else {
                         Dimensions preferredComponentSize = component.getPreferredSize();
@@ -382,24 +361,20 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                     }
 
                     switch (verticalAlignment) {
-                        case TOP: {
+                        case TOP:
                             y = padding.top;
                             break;
-                        }
 
-                        case CENTER: {
+                        case CENTER:
                             y = (height - componentHeight) / 2;
                             break;
-                        }
 
-                        case BOTTOM: {
+                        case BOTTOM:
                             y = height - padding.bottom - componentHeight;
                             break;
-                        }
 
-                        default: {
+                        default:
                             break;
-                        }
                     }
 
                     // Set the component's size and position
@@ -417,21 +392,19 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
             int y = 0;
 
             switch (verticalAlignment) {
-                case CENTER: {
+                case CENTER:
                     y = (height - preferredHeight) / 2;
                     break;
-                }
 
-                case BOTTOM: {
+                case BOTTOM:
                     y = height - preferredHeight;
                     break;
-                }
+
                 case TOP:
                     break;
 
-                default: {
+                default:
                     break;
-                }
             }
 
             y += padding.top;
@@ -447,7 +420,6 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
 
                     if (fill) {
                         componentWidth = Math.max(width - padding.getWidth(), 0);
-
                         componentHeight = component.getPreferredHeight(componentWidth);
                     } else {
                         Dimensions preferredComponentSize = component.getPreferredSize();
@@ -456,21 +428,17 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
                     }
 
                     switch (horizontalAlignment) {
-                        case LEFT: {
+                        case LEFT:
                             x = padding.left;
                             break;
-                        }
-                        case CENTER: {
+                        case CENTER:
                             x = (width - componentWidth) / 2;
                             break;
-                        }
-                        case RIGHT: {
+                        case RIGHT:
                             x = width - padding.right - componentWidth;
                             break;
-                        }
-                        default: {
+                        default:
                             break;
-                        }
                     }
 
                     // Set the component's size and position
@@ -485,8 +453,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * @return The horizontal alignment of the BoxPane's components within the
-     * pane.
+     * @return The horizontal alignment of the BoxPane's components within the pane.
      */
     public HorizontalAlignment getHorizontalAlignment() {
         return horizontalAlignment;
@@ -503,7 +470,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param horizontalAlignment The new horizontal alignment for our children.
      */
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+    public void setHorizontalAlignment(final HorizontalAlignment horizontalAlignment) {
         Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
@@ -511,8 +478,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
     }
 
     /**
-     * @return The vertical alignment of the BoxPane's components within the
-     * pane.
+     * @return The vertical alignment of the BoxPane's components within the pane.
      */
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
@@ -529,7 +495,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param verticalAlignment The new horizontal alignment for our children.
      */
-    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+    public void setVerticalAlignment(final VerticalAlignment verticalAlignment) {
         Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
@@ -550,7 +516,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param padding The new padding values for all edges.
      */
-    public void setPadding(Insets padding) {
+    public void setPadding(final Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
@@ -563,7 +529,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
-    public final void setPadding(Dictionary<String, ?> padding) {
+    public final void setPadding(final Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -573,7 +539,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param padding A sequence with values in the order [top, left, bottom, right].
      */
-    public final void setPadding(Sequence<?> padding) {
+    public final void setPadding(final Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -583,7 +549,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param padding The new padding value for all edges.
      */
-    public final void setPadding(int padding) {
+    public final void setPadding(final int padding) {
         setPadding(new Insets(padding));
     }
 
@@ -593,7 +559,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param padding The integer value to use for padding on all edges.
      */
-    public final void setPadding(Number padding) {
+    public final void setPadding(final Number padding) {
         setPadding(new Insets(padding));
     }
 
@@ -604,7 +570,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
-    public final void setPadding(String padding) {
+    public final void setPadding(final String padding) {
         setPadding(Insets.decode(padding));
     }
 
@@ -620,7 +586,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param spacing The new amount of spacing between components.
      */
-    public void setSpacing(int spacing) {
+    public void setSpacing(final int spacing) {
         Utils.checkNonNegative(spacing, "spacing");
 
         this.spacing = spacing;
@@ -632,7 +598,7 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      *
      * @param spacing The new amount of spacing to use between components.
      */
-    public final void setSpacing(Number spacing) {
+    public final void setSpacing(final Number spacing) {
         Utils.checkNull(spacing, "spacing");
 
         setSpacing(spacing.intValue());
@@ -664,14 +630,14 @@ public class BoxPaneSkin extends ContainerSkin implements BoxPaneListener {
      * preferredHeight/preferredWidth just set, depending on the pane's
      * orientation.
      */
-    public void setFill(boolean fill) {
+    public void setFill(final boolean fill) {
         this.fill = fill;
         invalidateComponent();
     }
 
     // Box pane events
     @Override
-    public void orientationChanged(BoxPane boxPane) {
+    public void orientationChanged(final BoxPane boxPane) {
         invalidateComponent();
     }
 }

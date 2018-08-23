@@ -60,7 +60,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         public final Component toCard;
         public final int direction;
 
-        public SelectionChangeTransition(int from, int to) {
+        public SelectionChangeTransition(final int from, final int to) {
             super(selectionChangeDuration, selectionChangeRate, false);
 
             this.from = from;
@@ -92,12 +92,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         private FadeDecorator fadeOutDecorator = new FadeDecorator();
         private FadeDecorator fadeInDecorator = new FadeDecorator();
 
-        public CrossfadeTransition(int from, int to) {
+        public CrossfadeTransition(final int from, final int to) {
             super(from, to);
         }
 
         @Override
-        public void start(TransitionListener transitionListener) {
+        public void start(final TransitionListener transitionListener) {
             if (fromCard != null) {
                 fromCard.getDecorators().add(fadeOutDecorator);
             }
@@ -145,12 +145,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     public class SlideTransition extends SelectionChangeTransition {
         private Easing slideEasing = new Quartic();
 
-        public SlideTransition(int from, int to) {
+        public SlideTransition(final int from, final int to) {
             super(from, to);
         }
 
         @Override
-        public void start(TransitionListener transitionListener) {
+        public void start(final TransitionListener transitionListener) {
             toCard.setVisible(true);
 
             super.start(transitionListener);
@@ -191,13 +191,13 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         private double theta;
         private ScaleDecorator scaleDecorator = new ScaleDecorator();
 
-        public FlipTransition(Orientation orientation, int from, int to) {
+        public FlipTransition(final Orientation orientation, final int from, final int to) {
             super(from, to);
             this.orientation = orientation;
         }
 
         @Override
-        public void start(TransitionListener transitionListener) {
+        public void start(final TransitionListener transitionListener) {
             theta = 0;
             getComponent().getDecorators().add(scaleDecorator);
 
@@ -215,7 +215,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         protected void update() {
             float percentComplete = getPercentComplete();
 
-            if (percentComplete < 1f) {
+            if (percentComplete < 1.0f) {
                 theta = Math.PI * percentComplete;
 
                 float scale = (float) Math.abs(Math.cos(theta));
@@ -241,12 +241,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         private ScaleDecorator fromScaleDecorator = new ScaleDecorator();
         private ScaleDecorator toScaleDecorator = new ScaleDecorator();
 
-        public ZoomTransition(int from, int to) {
+        public ZoomTransition(final int from, final int to) {
             super(from, to);
         }
 
         @Override
-        public void start(TransitionListener transitionListener) {
+        public void start(final TransitionListener transitionListener) {
             if (fromCard != null) {
                 fromCard.getDecorators().add(fromScaleDecorator);
             }
@@ -302,7 +302,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     private static final int DEFAULT_SELECTION_CHANGE_RATE = 30;
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         CardPane cardPane = (CardPane) component;
@@ -310,7 +310,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         int preferredWidth = 0;
 
         CardPane cardPane = (CardPane) getComponent();
@@ -353,7 +353,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         int preferredHeight = 0;
 
         CardPane cardPane = (CardPane) getComponent();
@@ -457,7 +457,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         int baseline = -1;
 
         if (sizeToSelection) {
@@ -497,7 +497,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @return The amount of space between the edge of the CardPane and its
      * content.
      */
-    public Insets getPadding() {
+    public final Insets getPadding() {
         return padding;
     }
 
@@ -507,7 +507,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @param padding The new padding values for all edges.
      */
-    public void setPadding(Insets padding) {
+    public final void setPadding(final Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
@@ -520,7 +520,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
-    public final void setPadding(Dictionary<String, ?> padding) {
+    public final void setPadding(final Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -530,7 +530,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @param padding A sequence with values in the order [top, left, bottom, right].
      */
-    public final void setPadding(Sequence<?> padding) {
+    public final void setPadding(final Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -540,7 +540,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @param padding The new single padding value to use for all edges.
      */
-    public final void setPadding(int padding) {
+    public final void setPadding(final int padding) {
         setPadding(new Insets(padding));
     }
 
@@ -550,7 +550,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      *
      * @param padding The new integer value to use for the padding on all edges.
      */
-    public void setPadding(Number padding) {
+    public final void setPadding(final Number padding) {
         setPadding(new Insets(padding));
     }
 
@@ -561,7 +561,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @param padding A string containing an integer or a JSON dictionary with
      * keys top, left, bottom, and/or right.
      */
-    public final void setPadding(String padding) {
+    public final void setPadding(final String padding) {
         setPadding(Insets.decode(padding));
     }
 
@@ -569,7 +569,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return sizeToSelection;
     }
 
-    public void setSizeToSelection(boolean sizeToSelection) {
+    public void setSizeToSelection(final boolean sizeToSelection) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
         }
@@ -582,7 +582,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return selectionChangeEffect;
     }
 
-    public void setSelectionChangeEffect(SelectionChangeEffect selectionChangeEffect) {
+    public void setSelectionChangeEffect(final SelectionChangeEffect selectionChangeEffect) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
         }
@@ -594,7 +594,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return selectionChangeDuration;
     }
 
-    public void setSelectionChangeDuration(int selectionChangeDuration) {
+    public void setSelectionChangeDuration(final int selectionChangeDuration) {
         this.selectionChangeDuration = selectionChangeDuration;
     }
 
@@ -602,7 +602,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
         return selectionChangeRate;
     }
 
-    public void setSelectionChangeRate(int selectionChangeRate) {
+    public void setSelectionChangeRate(final int selectionChangeRate) {
         this.selectionChangeRate = selectionChangeRate;
     }
 
@@ -640,12 +640,12 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
      * @param circular <tt>true</tt> if directional transitions should be
      * circular; <tt>false</tt> otherwise
      */
-    public void setCircular(boolean circular) {
+    public void setCircular(final boolean circular) {
         this.circular = circular;
     }
 
     @Override
-    public void componentInserted(Container container, int index) {
+    public void componentInserted(final Container container, final int index) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
         }
@@ -664,7 +664,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+    public void componentsRemoved(final Container container, final int index, final Sequence<Component> removed) {
         if (selectionChangeTransition != null) {
             selectionChangeTransition.end();
         }
@@ -680,7 +680,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public Vote previewSelectedIndexChange(CardPane cardPane, int selectedIndex) {
+    public Vote previewSelectedIndexChange(final CardPane cardPane, final int selectedIndex) {
         Vote vote;
 
         if (cardPane.isShowing() && selectionChangeEffect != null
@@ -688,48 +688,42 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
             int previousSelectedIndex = cardPane.getSelectedIndex();
 
             switch (selectionChangeEffect) {
-                case CROSSFADE: {
+                case CROSSFADE:
                     selectionChangeTransition = new CrossfadeTransition(previousSelectedIndex,
                         selectedIndex);
                     break;
-                }
 
                 case HORIZONTAL_SLIDE:
-                case VERTICAL_SLIDE: {
+                case VERTICAL_SLIDE:
                     if (previousSelectedIndex != -1 && selectedIndex != -1) {
                         selectionChangeTransition = new SlideTransition(previousSelectedIndex,
                             selectedIndex);
                     }
                     break;
-                }
 
-                case HORIZONTAL_FLIP: {
+                case HORIZONTAL_FLIP:
                     if (previousSelectedIndex != -1 && selectedIndex != -1) {
                         selectionChangeTransition = new FlipTransition(Orientation.HORIZONTAL,
                             previousSelectedIndex, selectedIndex);
                     }
                     break;
-                }
 
-                case VERTICAL_FLIP: {
+                case VERTICAL_FLIP:
                     if (previousSelectedIndex != -1 && selectedIndex != -1) {
                         selectionChangeTransition = new FlipTransition(Orientation.VERTICAL,
                             previousSelectedIndex, selectedIndex);
                     }
                     break;
-                }
 
-                case ZOOM: {
+                case ZOOM:
                     if (previousSelectedIndex != -1 && selectedIndex != -1) {
                         selectionChangeTransition = new ZoomTransition(previousSelectedIndex,
                             selectedIndex);
                     }
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             if (selectionChangeTransition != null) {
@@ -758,7 +752,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public void selectedIndexChangeVetoed(CardPane cardPane, Vote reason) {
+    public void selectedIndexChangeVetoed(final CardPane cardPane, final Vote reason) {
         if (reason == Vote.DENY && selectionChangeTransition != null) {
             // NOTE We stop, rather than end, the transition so the completion
             // event isn't fired; if the event fires, the listener will set
@@ -773,7 +767,7 @@ public class CardPaneSkin extends ContainerSkin implements CardPaneListener {
     }
 
     @Override
-    public void selectedIndexChanged(CardPane cardPane, int previousSelectedIndex) {
+    public void selectedIndexChanged(final CardPane cardPane, final int previousSelectedIndex) {
         int selectedIndex = cardPane.getSelectedIndex();
 
         if (selectedIndex != previousSelectedIndex) {

@@ -53,7 +53,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     private ComponentMouseButtonListener calendarPopupMouseButtonListener = new ComponentMouseButtonListener() {
         @Override
-        public boolean mouseClick(Component component, Mouse.Button button, int x, int y, int count) {
+        public boolean mouseClick(final Component component, final Mouse.Button button,
+            final int x, final int y, final int count) {
             CalendarButton calendarButton = (CalendarButton) getComponent();
 
             calendarPopup.close();
@@ -69,23 +70,21 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         /**
          * {@link KeyCode#ESCAPE ESCAPE} Close the popup.<br>
          * {@link KeyCode#ENTER ENTER} Choose the selected date.<br>
-         * {@link KeyCode#TAB TAB} Choose the selected date and transfer focus
-         * forwards.<br> {@link KeyCode#TAB TAB} +
-         * {@link Modifier#SHIFT SHIFT} Choose the selected date and
+         * {@link KeyCode#TAB TAB} Choose the selected date and transfer focus forwards.<br>
+         * {@link KeyCode#TAB TAB} + {@link Modifier#SHIFT SHIFT} Choose the selected date and
          * transfer focus backwards.
          */
         @Override
-        public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+        public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
             CalendarButton calendarButton = (CalendarButton) getComponent();
 
             switch (keyCode) {
-                case KeyCode.ESCAPE: {
+                case KeyCode.ESCAPE:
                     calendarPopup.close();
                     break;
-                }
 
                 case KeyCode.TAB:
-                case KeyCode.ENTER: {
+                case KeyCode.ENTER:
                     calendarPopup.close();
 
                     if (keyCode == KeyCode.TAB) {
@@ -98,11 +97,9 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
                     calendarButton.setSelectedDate(date);
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             return false;
@@ -111,7 +108,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     private WindowStateListener calendarPopupWindowStateListener = new WindowStateListener() {
         @Override
-        public void windowOpened(Window window) {
+        public void windowOpened(final Window window) {
             Display display = window.getDisplay();
             display.getContainerMouseListeners().add(displayMouseListener);
 
@@ -119,7 +116,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         }
 
         @Override
-        public Vote previewWindowClose(Window window) {
+        public Vote previewWindowClose(final Window window) {
             if (window.containsFocus()) {
                 getComponent().requestFocus();
             }
@@ -128,14 +125,14 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         }
 
         @Override
-        public void windowCloseVetoed(Window window, Vote reason) {
+        public void windowCloseVetoed(final Window window, final Vote reason) {
             if (reason == Vote.DENY) {
                 window.requestFocus();
             }
         }
 
         @Override
-        public void windowClosed(Window window, Display display, Window owner) {
+        public void windowClosed(final Window window, final Display display, final Window owner) {
             display.getContainerMouseListeners().remove(displayMouseListener);
 
             Window componentWindow = getComponent().getWindow();
@@ -147,7 +144,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     private ContainerMouseListener displayMouseListener = new ContainerMouseListener() {
         @Override
-        public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+        public boolean mouseDown(final Container container, final Mouse.Button button, final int x, final int y) {
             Display display = (Display) container;
             Component descendant = display.getDescendantAt(x, y);
 
@@ -160,8 +157,8 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         }
 
         @Override
-        public boolean mouseWheel(Container container, Mouse.ScrollType scrollType,
-            int scrollAmount, int wheelRotation, int x, int y) {
+        public boolean mouseWheel(final Container container, final Mouse.ScrollType scrollType,
+            final int scrollAmount, final int wheelRotation, final int x, final int y) {
             boolean consumed = false;
 
             Display display = (Display) container;
@@ -179,13 +176,13 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         calendar = new Calendar();
         calendar.getCalendarListeners().add(new CalendarListener() {
             @Override
-            public void yearChanged(Calendar calendarArgument, int previousYear) {
+            public void yearChanged(final Calendar calendarArgument, final int previousYear) {
                 CalendarButton calendarButton = (CalendarButton) getComponent();
                 calendarButton.setYear(calendarArgument.getYear());
             }
 
             @Override
-            public void monthChanged(Calendar calendarArgument, int previousMonth) {
+            public void monthChanged(final Calendar calendarArgument, final int previousMonth) {
                 CalendarButton calendarButton = (CalendarButton) getComponent();
                 calendarButton.setMonth(calendarArgument.getMonth());
             }
@@ -198,7 +195,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
     }
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         CalendarButton calendarButton = (CalendarButton) component;
@@ -208,6 +205,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
         calendar.setLocale(calendarButton.getLocale());
     }
 
+
     // CalendarButton.Skin methods
     @Override
     public Window getCalendarPopup() {
@@ -216,7 +214,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     // Component state events
     @Override
-    public void enabledChanged(Component component) {
+    public void enabledChanged(final Component component) {
         super.enabledChanged(component);
 
         if (!component.isEnabled()) {
@@ -229,7 +227,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
     }
 
     @Override
-    public void focusedChanged(Component component, Component obverseComponent) {
+    public void focusedChanged(final Component component, final Component obverseComponent) {
         super.focusedChanged(component, obverseComponent);
 
         repaintComponent();
@@ -247,7 +245,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     // Component mouse events
     @Override
-    public void mouseOut(Component component) {
+    public void mouseOut(final Component component) {
         super.mouseOut(component);
 
         pressed = false;
@@ -255,7 +253,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
     }
 
     @Override
-    public boolean mouseDown(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseDown(component, button, x, y);
 
         pressed = true;
@@ -271,7 +269,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
     }
 
     @Override
-    public boolean mouseUp(Component component, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(final Component component, final Mouse.Button button, final int x, final int y) {
         boolean consumed = super.mouseUp(component, button, x, y);
 
         pressed = false;
@@ -287,7 +285,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
      * @see #keyReleased(Component, int, Keyboard.KeyLocation)
      */
     @Override
-    public boolean keyPressed(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyPressed(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == KeyCode.SPACE) {
@@ -312,7 +310,7 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
      * {@link KeyCode#SPACE SPACE} 'presses' the button.
      */
     @Override
-    public boolean keyReleased(Component component, int keyCode, KeyLocation keyLocation) {
+    public boolean keyReleased(final Component component, final int keyCode, final KeyLocation keyLocation) {
         boolean consumed = false;
 
         if (keyCode == KeyCode.SPACE) {
@@ -327,29 +325,29 @@ public abstract class CalendarButtonSkin extends ButtonSkin implements CalendarB
 
     // Calendar button events
     @Override
-    public void yearChanged(CalendarButton calendarButton, int previousYear) {
+    public void yearChanged(final CalendarButton calendarButton, final int previousYear) {
         calendar.setYear(calendarButton.getYear());
     }
 
     @Override
-    public void monthChanged(CalendarButton calendarButton, int previousMonth) {
+    public void monthChanged(final CalendarButton calendarButton, final int previousMonth) {
         calendar.setMonth(calendarButton.getMonth());
     }
 
     @Override
-    public void localeChanged(CalendarButton calendarButton, Locale previousLocale) {
+    public void localeChanged(final CalendarButton calendarButton, final Locale previousLocale) {
         calendar.setLocale(calendarButton.getLocale());
     }
 
     @Override
-    public void disabledDateFilterChanged(CalendarButton calendarButton,
-        Filter<CalendarDate> previousDisabledDateFilter) {
+    public void disabledDateFilterChanged(final CalendarButton calendarButton,
+        final Filter<CalendarDate> previousDisabledDateFilter) {
         calendar.setDisabledDateFilter(calendarButton.getDisabledDateFilter());
     }
 
     // Calendar button selection events
     @Override
-    public void selectedDateChanged(CalendarButton calendarButton, CalendarDate previousSelectedDate) {
+    public void selectedDateChanged(final CalendarButton calendarButton, final CalendarDate previousSelectedDate) {
         // Set the selected date as the button data
         CalendarDate date = calendarButton.getSelectedDate();
         calendarButton.setButtonData(date);

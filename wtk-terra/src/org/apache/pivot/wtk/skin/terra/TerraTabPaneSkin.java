@@ -162,7 +162,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
             int preferredWidth = 0;
             int preferredHeight = 0;
             switch (tabOrientation) {
-                case HORIZONTAL: {
+                case HORIZONTAL:
                     preferredWidth = preferredContentSize.width + buttonPadding.left
                         + buttonPadding.right + 2;
 
@@ -174,9 +174,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                     }
 
                     break;
-                }
 
-                case VERTICAL: {
+                case VERTICAL:
                     preferredWidth = preferredContentSize.height + buttonPadding.top
                         + buttonPadding.bottom + 2;
 
@@ -188,11 +187,9 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                     }
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             Dimensions preferredSize = new Dimensions(preferredWidth, preferredHeight);
@@ -242,89 +239,75 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
 
             if (!themeIsFlat()) {
                 switch (tabOrientation) {
-                    case HORIZONTAL: {
+                    case HORIZONTAL:
                         graphics.setPaint(new GradientPaint(width / 2f, 0, buttonBevelColor,
                             width / 2f, height / 2f, backgroundColor));
                         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1
                             + buttonCornerRadius, buttonCornerRadius, buttonCornerRadius));
                         break;
-                    }
 
-                    case VERTICAL: {
+                    case VERTICAL:
                         graphics.setPaint(new GradientPaint(0, height / 2f, buttonBevelColor,
                             width / 2f, height / 2f, backgroundColor));
                         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1
                             + buttonCornerRadius, height - 1, buttonCornerRadius, buttonCornerRadius));
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 // Draw the border
-                graphics.setPaint((tabButton.isSelected() || active) ? borderColor
-                    : inactiveBorderColor);
+                graphics.setPaint((tabButton.isSelected() || active) ? borderColor : inactiveBorderColor);
                 graphics.setStroke(new BasicStroke(1));
 
                 switch (tabOrientation) {
-                    case HORIZONTAL: {
+                    case HORIZONTAL:
                         graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height
                             + buttonCornerRadius - 1, buttonCornerRadius, buttonCornerRadius));
                         break;
-                    }
 
-                    case VERTICAL: {
+                    case VERTICAL:
                         graphics.draw(new RoundRectangle2D.Double(0.5, 0.5, width + buttonCornerRadius
                             - 1, height - 1, buttonCornerRadius, buttonCornerRadius));
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 if (!(tabButton.isSelected() || active)) {
                     graphics.setPaint(borderColor);
                     // Draw divider
                     switch (tabOrientation) {
-                        case HORIZONTAL: {
-                            graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5,
-                                height - 0.5));
+                        case HORIZONTAL:
+                            graphics.draw(new Line2D.Double(0.5, height - 0.5, width - 0.5, height - 0.5));
                             break;
-                        }
 
-                        case VERTICAL: {
+                        case VERTICAL:
                             graphics.draw(new Line2D.Double(width - 0.5, 0.5, width - 0.5, height - 0.5));
                             break;
-                        }
 
-                        default: {
+                        default:
                             break;
-                        }
                     }
                 }
             } else {
                 switch (tabOrientation) {
-                    case HORIZONTAL: {
+                    case HORIZONTAL:
                         graphics.setPaint(backgroundColor);
                         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1, height - 1
                             + buttonCornerRadius, buttonCornerRadius, buttonCornerRadius));
                         break;
-                    }
 
-                    case VERTICAL: {
+                    case VERTICAL:
                         graphics.setPaint(backgroundColor);
                         graphics.fill(new RoundRectangle2D.Double(0.5, 0.5, width - 1
                             + buttonCornerRadius, height - 1, buttonCornerRadius, buttonCornerRadius));
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
             }
@@ -336,40 +319,39 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
             Graphics2D contentGraphics = (Graphics2D) graphics.create();
             GraphicsUtilities.setAntialiasingOff(contentGraphics);
 
+            int contentWidth;
+
             switch (tabOrientation) {
-                case HORIZONTAL: {
-                    int contentWidth = getWidth() - (buttonPadding.left + buttonPadding.right + 2);
+                case HORIZONTAL:
+                    contentWidth = getWidth() - (buttonPadding.getWidth() + 2);
                     if (tabPane.isCloseable() && tabButton.isSelected()) {
                         contentWidth -= (CLOSE_TRIGGER_SIZE + buttonSpacing);
                     }
 
                     dataRenderer.setSize(Math.max(contentWidth, 0),
-                        Math.max(getHeight() - (buttonPadding.top + buttonPadding.bottom + 2), 0));
+                        Math.max(getHeight() - (buttonPadding.getHeight() + 2), 0));
 
                     contentGraphics.translate(buttonPadding.left + 1, buttonPadding.top + 1);
 
                     break;
-                }
 
-                case VERTICAL: {
-                    int contentWidth = getHeight() - (buttonPadding.top + buttonPadding.bottom + 2);
+                case VERTICAL:
+                    contentWidth = getHeight() - (buttonPadding.getHeight() + 2);
                     if (tabPane.isCloseable() && tabButton.isSelected()) {
                         contentWidth -= (CLOSE_TRIGGER_SIZE + buttonSpacing);
                     }
 
                     dataRenderer.setSize(Math.max(contentWidth, 0),
-                        Math.max(getWidth() - (buttonPadding.left + buttonPadding.right + 2), 0));
+                        Math.max(getWidth() - (buttonPadding.getWidth() + 2), 0));
 
                     contentGraphics.translate(buttonPadding.top + 1, buttonPadding.left + 1);
                     contentGraphics.rotate(-Math.PI / 2d);
                     contentGraphics.translate(-dataRenderer.getWidth(), 0);
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             contentGraphics.clipRect(0, 0, dataRenderer.getWidth(), dataRenderer.getHeight());
@@ -384,27 +366,24 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 int x = 0;
                 int y = 0;
                 switch (tabOrientation) {
-                    case HORIZONTAL: {
+                    case HORIZONTAL:
                         x = width - (buttonPadding.right + CLOSE_TRIGGER_SIZE + 1);
                         y = (height - CLOSE_TRIGGER_SIZE) / 2;
                         break;
-                    }
 
-                    case VERTICAL: {
+                    case VERTICAL:
                         x = (width - CLOSE_TRIGGER_SIZE) / 2;
                         y = height - (buttonPadding.bottom + CLOSE_TRIGGER_SIZE + 1);
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
-                graphics.draw(new Line2D.Double(x, y, x + CLOSE_TRIGGER_SIZE - 1, y
-                    + CLOSE_TRIGGER_SIZE - 1));
-                graphics.draw(new Line2D.Double(x, y + CLOSE_TRIGGER_SIZE - 1, x
-                    + CLOSE_TRIGGER_SIZE - 1, y));
+                graphics.draw(new Line2D.Double(x, y, x + CLOSE_TRIGGER_SIZE - 1,
+                    y + CLOSE_TRIGGER_SIZE - 1));
+                graphics.draw(new Line2D.Double(x, y + CLOSE_TRIGGER_SIZE - 1,
+                    x + CLOSE_TRIGGER_SIZE - 1, y));
             }
         }
 
@@ -453,23 +432,20 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
 
             // Include an extra 2 pixels around the trigger for ease of use
             switch (tabOrientation) {
-                case HORIZONTAL: {
+                case HORIZONTAL:
                     bounds = new Bounds(getWidth() - (CLOSE_TRIGGER_SIZE + buttonPadding.right + 1)
                         - 2, (getHeight() - CLOSE_TRIGGER_SIZE) / 2 - 2, CLOSE_TRIGGER_SIZE + 4,
                         CLOSE_TRIGGER_SIZE + 4);
                     break;
-                }
 
-                case VERTICAL: {
+                case VERTICAL:
                     bounds = new Bounds((getWidth() - CLOSE_TRIGGER_SIZE) / 2 - 2, getHeight()
                         - (CLOSE_TRIGGER_SIZE + buttonPadding.bottom + 1) - 2,
                         CLOSE_TRIGGER_SIZE + 4, CLOSE_TRIGGER_SIZE + 4);
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             return bounds;
@@ -646,7 +622,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         Component corner = tabPane.getCorner();
 
         switch (tabOrientation) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 if (height != -1) {
                     if (corner != null) {
                         height = Math.max(
@@ -671,9 +647,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 preferredWidth = Math.max(preferredWidth, buttonAreaPreferredWidth);
 
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 if (height != -1) {
                     height = Math.max(height - (padding.top + padding.bottom + 2), 0);
                 }
@@ -699,11 +674,9 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 }
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         return preferredWidth;
@@ -719,7 +692,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         Component corner = tabPane.getCorner();
 
         switch (tabOrientation) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 if (width != -1) {
                     width = Math.max(width - (padding.left + padding.right + 2), 0);
                 }
@@ -745,9 +718,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 }
 
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 if (width != -1) {
                     if (corner != null) {
                         width = Math.max(
@@ -771,11 +743,9 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 preferredHeight = Math.max(preferredHeight, buttonAreaPreferredHeight);
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         return preferredHeight;
@@ -792,7 +762,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         Component corner = tabPane.getCorner();
 
         switch (tabOrientation) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 if (selectedTab == null && selectionChangeTransition == null) {
                     preferredWidth = getPreferredTabWidth(-1) + (padding.left + padding.right + 2);
                     preferredHeight = 1;
@@ -823,9 +793,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 preferredWidth = Math.max(preferredWidth, buttonAreaPreferredWidth);
 
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 if (selectedTab == null && selectionChangeTransition == null) {
                     preferredWidth = 1;
                     preferredHeight = getPreferredTabHeight(-1)
@@ -858,12 +827,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 preferredHeight = Math.max(preferredHeight, buttonAreaPreferredHeight);
 
                 break;
-            }
 
-            default: {
+            default:
                 preferredWidth = 0;
                 preferredHeight = 0;
-            }
+                break;
         }
 
         return new Dimensions(preferredWidth, preferredHeight);
@@ -933,12 +901,14 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
 
         Component corner = tabPane.getCorner();
         Dimensions buttonPanoramaSize = tabButtonPanorama.getPreferredSize();
+        int buttonPanoramaWidth, buttonPanoramaHeight;
+        int buttonPanoramaX, buttonPanoramaY;
 
         switch (tabOrientation) {
-            case HORIZONTAL: {
-                int buttonPanoramaWidth = Math.min(width, buttonPanoramaSize.width);
-                int buttonPanoramaHeight = buttonPanoramaSize.height;
-                int buttonPanoramaY = 0;
+            case HORIZONTAL:
+                buttonPanoramaWidth = Math.min(width, buttonPanoramaSize.width);
+                buttonPanoramaHeight = buttonPanoramaSize.height;
+                buttonPanoramaY = 0;
 
                 if (corner != null) {
                     int cornerWidth = Math.max(width - buttonPanoramaWidth - 2,
@@ -972,12 +942,11 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                     0);
 
                 break;
-            }
 
-            case VERTICAL: {
-                int buttonPanoramaWidth = buttonPanoramaSize.width;
-                int buttonPanoramaHeight = Math.min(height, buttonPanoramaSize.height);
-                int buttonPanoramaX = 0;
+            case VERTICAL:
+                buttonPanoramaWidth = buttonPanoramaSize.width;
+                buttonPanoramaHeight = Math.min(height, buttonPanoramaSize.height);
+                buttonPanoramaX = 0;
 
                 if (corner != null) {
                     int cornerHeight = Math.max(height - buttonPanoramaHeight - 2,
@@ -1009,11 +978,9 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 tabHeight = Math.max(height - (padding.top + padding.bottom + 2), 0);
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         // Lay out the tabs
@@ -1024,19 +991,16 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 clipDecorator.setSize(tabWidth, tabHeight);
 
                 switch (tabOrientation) {
-                    case HORIZONTAL: {
+                    case HORIZONTAL:
                         tab.setSize(tabWidth, getPreferredTabHeight(tabWidth));
                         break;
-                    }
 
-                    case VERTICAL: {
+                    case VERTICAL:
                         tab.setSize(getPreferredTabWidth(tabHeight), tabHeight);
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             } else {
                 tab.setSize(tabWidth, tabHeight);
@@ -1060,27 +1024,24 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         int height = 0;
 
         switch (tabOrientation) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 x = 0;
                 y = Math.max(tabButtonPanorama.getY() + tabButtonPanorama.getHeight() - 1, 0);
                 width = tabPaneBounds.width;
                 height = Math.max(tabPaneBounds.height - y, 0);
 
                 break;
-            }
 
-            case VERTICAL: {
+            case VERTICAL:
                 x = Math.max(tabButtonPanorama.getX() + tabButtonPanorama.getWidth() - 1, 0);
                 y = 0;
                 width = Math.max(tabPaneBounds.width - x, 0);
                 height = tabPaneBounds.height;
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         TabButton activeTabButton;
@@ -1114,36 +1075,32 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                 graphics.draw(new Line2D.Double(left, bottom, right, bottom));
 
                 // Draw the left and top borders
+                Point selectedTabButtonLocation;
                 switch (tabOrientation) {
-                    case HORIZONTAL: {
+                    case HORIZONTAL:
                         graphics.draw(new Line2D.Double(left, top, left, bottom));
 
-                        Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
-                            0, 0);
+                        selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane, 0, 0);
                         graphics.draw(new Line2D.Double(left, top, selectedTabButtonLocation.x + 0.5,
                             top));
                         graphics.draw(new Line2D.Double(selectedTabButtonLocation.x
                             + activeTabButton.getWidth() - 0.5, top, right, top));
 
                         break;
-                    }
 
-                    case VERTICAL: {
+                    case VERTICAL:
                         graphics.draw(new Line2D.Double(left, top, right, top));
 
-                        Point selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane,
-                            0, 0);
+                        selectedTabButtonLocation = activeTabButton.mapPointToAncestor(tabPane, 0, 0);
                         graphics.draw(new Line2D.Double(left, top, left,
                             selectedTabButtonLocation.y + 0.5));
                         graphics.draw(new Line2D.Double(left, selectedTabButtonLocation.y
                             + activeTabButton.getHeight() - 0.5, left, bottom));
 
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             }
         }
@@ -1377,17 +1334,14 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         tabButtonBoxPane.setOrientation(tabOrientation);
 
         switch (tabOrientation) {
-            case HORIZONTAL: {
+            case HORIZONTAL:
                 tabButtonBoxPane.getStyles().put(Style.horizontalAlignment, HorizontalAlignment.LEFT);
                 break;
-            }
-            case VERTICAL: {
+            case VERTICAL:
                 tabButtonBoxPane.getStyles().put(Style.verticalAlignment, VerticalAlignment.TOP);
                 break;
-            }
-            default: {
+            default:
                 break;
-            }
         }
     }
 
@@ -1431,58 +1385,49 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
 
             switch (keyCode) {
                 case KeyCode.KEYPAD_1:
-                case KeyCode.N1: {
+                case KeyCode.N1:
                     selectedIndex = 0;
                     break;
-                }
 
                 case KeyCode.KEYPAD_2:
-                case KeyCode.N2: {
+                case KeyCode.N2:
                     selectedIndex = 1;
                     break;
-                }
 
                 case KeyCode.KEYPAD_3:
-                case KeyCode.N3: {
+                case KeyCode.N3:
                     selectedIndex = 2;
                     break;
-                }
 
                 case KeyCode.KEYPAD_4:
-                case KeyCode.N4: {
+                case KeyCode.N4:
                     selectedIndex = 3;
                     break;
-                }
 
                 case KeyCode.KEYPAD_5:
-                case KeyCode.N5: {
+                case KeyCode.N5:
                     selectedIndex = 4;
                     break;
-                }
 
                 case KeyCode.KEYPAD_6:
-                case KeyCode.N6: {
+                case KeyCode.N6:
                     selectedIndex = 5;
                     break;
-                }
 
                 case KeyCode.KEYPAD_7:
-                case KeyCode.N7: {
+                case KeyCode.N7:
                     selectedIndex = 6;
                     break;
-                }
 
                 case KeyCode.KEYPAD_8:
-                case KeyCode.N8: {
+                case KeyCode.N8:
                     selectedIndex = 7;
                     break;
-                }
 
                 case KeyCode.KEYPAD_9:
-                case KeyCode.N9: {
+                case KeyCode.N9:
                     selectedIndex = 8;
                     break;
-                }
 
                 case KeyCode.TAB:
                     selectedIndex = tabPane.getSelectedIndex();
@@ -1501,9 +1446,8 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
                     }
                     break;
 
-                default: {
+                default:
                     break;
-                }
             }
 
             if (selectedIndex >= 0 && selectedIndex < tabs.getLength()

@@ -42,12 +42,12 @@ public class TagDecorator implements Decorator {
         this(null);
     }
 
-    public TagDecorator(Visual tag) {
+    public TagDecorator(final Visual tag) {
         this(tag, HorizontalAlignment.RIGHT, VerticalAlignment.TOP, 0, 0);
     }
 
-    public TagDecorator(Visual tag, HorizontalAlignment horizontalAlignment,
-        VerticalAlignment verticalAlignment, int xOffset, int yOffset) {
+    public TagDecorator(final Visual tag, final HorizontalAlignment horizontalAlignment,
+        final VerticalAlignment verticalAlignment, final int xOffset, final int yOffset) {
         Utils.checkNull(horizontalAlignment, "horizontalAlignment");
         Utils.checkNull(verticalAlignment, "verticalAlignment");
 
@@ -62,7 +62,7 @@ public class TagDecorator implements Decorator {
         return tag;
     }
 
-    public void setTag(Visual tag) {
+    public void setTag(final Visual tag) {
         this.tag = tag;
     }
 
@@ -70,7 +70,7 @@ public class TagDecorator implements Decorator {
         return horizontalAlignment;
     }
 
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+    public void setHorizontalAlignment(final HorizontalAlignment horizontalAlignment) {
         Utils.checkNull(horizontalAlignment, "horizontalAlignment");
 
         this.horizontalAlignment = horizontalAlignment;
@@ -80,7 +80,7 @@ public class TagDecorator implements Decorator {
         return verticalAlignment;
     }
 
-    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+    public void setVerticalAlignment(final VerticalAlignment verticalAlignment) {
         Utils.checkNull(verticalAlignment, "verticalAlignment");
 
         this.verticalAlignment = verticalAlignment;
@@ -90,7 +90,7 @@ public class TagDecorator implements Decorator {
         return xOffset;
     }
 
-    public void setXOffset(int xOffset) {
+    public void setXOffset(final int xOffset) {
         this.xOffset = xOffset;
     }
 
@@ -98,12 +98,12 @@ public class TagDecorator implements Decorator {
         return yOffset;
     }
 
-    public void setYOffset(int yOffset) {
+    public void setYOffset(final int yOffset) {
         this.yOffset = yOffset;
     }
 
     @Override
-    public Graphics2D prepare(Component component, Graphics2D graphicsArgument) {
+    public Graphics2D prepare(final Component component, final Graphics2D graphicsArgument) {
         if (tag != null) {
             bounds = getBounds(component);
             this.graphics = graphicsArgument;
@@ -123,57 +123,49 @@ public class TagDecorator implements Decorator {
     }
 
     @Override
-    public Bounds getBounds(Component component) {
-        Bounds localBounds;
+    public Bounds getBounds(final Component component) {
+        Bounds localBounds = null;
 
-        if (tag == null) {
-            localBounds = null;
-        } else {
-            int x, y;
+        if (tag != null) {
+            int x = 0, y = 0;
+            int tagWidth = tag.getWidth();
+            int tagHeight = tag.getHeight();
 
             switch (horizontalAlignment) {
-                case LEFT: {
-                    x = xOffset;
+                case LEFT:
                     break;
-                }
 
-                case RIGHT: {
-                    x = component.getWidth() - tag.getWidth() + xOffset;
+                case RIGHT:
+                    x = component.getWidth() - tagWidth;
                     break;
-                }
 
-                case CENTER: {
-                    x = (component.getWidth() - tag.getWidth()) / 2 + xOffset;
+                case CENTER:
+                    x = (component.getWidth() - tagWidth) / 2;
                     break;
-                }
 
-                default: {
+                default:
                     throw new UnsupportedOperationException();
-                }
             }
+            x += xOffset;
 
             switch (verticalAlignment) {
-                case TOP: {
-                    y = yOffset;
+                case TOP:
                     break;
-                }
 
-                case BOTTOM: {
-                    y = component.getHeight() - tag.getHeight() + yOffset;
+                case BOTTOM:
+                    y = component.getHeight() - tagHeight;
                     break;
-                }
 
-                case CENTER: {
-                    y = (component.getHeight() - tag.getHeight()) / 2 + yOffset;
+                case CENTER:
+                    y = (component.getHeight() - tagHeight) / 2;
                     break;
-                }
 
-                default: {
+                default:
                     throw new UnsupportedOperationException();
-                }
             }
+            y += yOffset;
 
-            localBounds = new Bounds(x, y, tag.getWidth(), tag.getHeight());
+            localBounds = new Bounds(x, y, tagWidth, tagHeight);
         }
 
         return localBounds;

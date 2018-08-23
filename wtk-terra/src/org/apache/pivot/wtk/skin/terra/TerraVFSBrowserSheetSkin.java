@@ -360,16 +360,15 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                 switch (mode) {
                     case OPEN:
                     case OPEN_MULTIPLE:
-                    case SAVE_TO: {
+                    case SAVE_TO:
                         try {
                             fileBrowserSheet.setSelectedFiles(fileBrowser.getSelectedFiles());
                         } catch (FileSystemException fse) {
                             throw new RuntimeException(fse);
                         }
                         break;
-                    }
 
-                    case SAVE_AS: {
+                    case SAVE_AS:
                         String fileName = saveAsTextInput.getText();
                         // Contents of the entry field could be:
                         // 1. Just a new file name in the current root directory
@@ -427,7 +426,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
                             vote = Vote.DENY;
                         }
                         break;
-                    }
+
                     default:
                         break;
                 }
@@ -455,29 +454,26 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
             (mode != VFSBrowserSheet.Mode.SAVE_TO));
 
         switch (mode) {
-            case OPEN: {
+            case OPEN:
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
                 break;
-            }
 
-            case OPEN_MULTIPLE: {
+            case OPEN_MULTIPLE:
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(true);
                 break;
-            }
 
-            case SAVE_AS: {
+            case SAVE_AS:
                 saveAsBoxPane.setVisible(true);
                 fileBrowser.setMultiSelect(false);
                 break;
-            }
 
-            case SAVE_TO: {
+            case SAVE_TO:
                 saveAsBoxPane.setVisible(false);
                 fileBrowser.setMultiSelect(false);
                 break;
-            }
+
             default:
                 break;
         }
@@ -525,8 +521,7 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
             if (fileBrowser.getSelectedFiles().getLength() == 0 && selectedFiles.getLength() == 1) {
                 // The file does not currently exist; set the file name in the
-                // text input if the parent directory is the same as the root
-                // directory
+                // text input if the parent directory is the same as the root directory
                 FileObject selectedFile = selectedFiles.get(0);
 
                 try {
@@ -567,20 +562,18 @@ public class TerraVFSBrowserSheetSkin extends TerraSheetSkin implements VFSBrows
 
         switch (mode) {
             case OPEN:
-            case OPEN_MULTIPLE: {
+            case OPEN_MULTIPLE:
                 okButton.setEnabled(selectedFiles.getLength() > 0 && selectedDirectoryCount == 0);
                 break;
-            }
 
-            case SAVE_AS: {
+            case SAVE_AS:
                 okButton.setEnabled(saveAsTextInput.getCharacterCount() > 0);
                 break;
-            }
 
-            case SAVE_TO: {
+            case SAVE_TO:
                 okButton.setEnabled(selectedDirectoryCount > 0);
                 break;
-            }
+
             default:
                 break;
         }

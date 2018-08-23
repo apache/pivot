@@ -45,7 +45,7 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredWidth = 0;
@@ -74,7 +74,7 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         FlowPane flowPane = (FlowPane) getComponent();
 
         int preferredHeight;
@@ -199,7 +199,7 @@ public class FlowPaneSkin extends ContainerSkin {
     }
 
     @Override
-    public int getBaseline(int width, int height) {
+    public int getBaseline(final int width, final int height) {
         FlowPane flowPane = (FlowPane) getComponent();
 
         int baseline = -1;
@@ -293,21 +293,17 @@ public class FlowPaneSkin extends ContainerSkin {
 
             int x = 0;
             switch (alignment) {
-                case LEFT: {
+                case LEFT:
                     x = padding.left;
                     break;
-                }
-                case CENTER: {
+                case CENTER:
                     x = (width - rowWidth) / 2;
                     break;
-                }
-                case RIGHT: {
+                case RIGHT:
                     x = width - rowWidth - padding.right;
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
 
             for (Component component : row) {
@@ -334,7 +330,7 @@ public class FlowPaneSkin extends ContainerSkin {
         return alignment;
     }
 
-    public void setAlignment(HorizontalAlignment alignment) {
+    public void setAlignment(final HorizontalAlignment alignment) {
         Utils.checkNull(alignment, "alignment");
 
         this.alignment = alignment;
@@ -355,7 +351,7 @@ public class FlowPaneSkin extends ContainerSkin {
      *
      * @param padding The individual padding values for each edge.
      */
-    public void setPadding(Insets padding) {
+    public void setPadding(final Insets padding) {
         Utils.checkNull(padding, "padding");
 
         this.padding = padding;
@@ -368,7 +364,7 @@ public class FlowPaneSkin extends ContainerSkin {
      *
      * @param padding A dictionary with keys in the set {top, left, bottom, right}.
      */
-    public final void setPadding(Dictionary<String, ?> padding) {
+    public final void setPadding(final Dictionary<String, ?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -378,7 +374,7 @@ public class FlowPaneSkin extends ContainerSkin {
      *
      * @param padding A sequence with values in the order [top, left, bottom, right].
      */
-    public final void setPadding(Sequence<?> padding) {
+    public final void setPadding(final Sequence<?> padding) {
         setPadding(new Insets(padding));
     }
 
@@ -388,7 +384,7 @@ public class FlowPaneSkin extends ContainerSkin {
      *
      * @param padding The single padding value for all four sides.
      */
-    public final void setPadding(int padding) {
+    public final void setPadding(final int padding) {
         setPadding(new Insets(padding));
     }
 
@@ -398,7 +394,7 @@ public class FlowPaneSkin extends ContainerSkin {
      *
      * @param padding The single padding value for all four sides.
      */
-    public final void setPadding(Number padding) {
+    public final void setPadding(final Number padding) {
         setPadding(new Insets(padding));
     }
 
@@ -409,7 +405,7 @@ public class FlowPaneSkin extends ContainerSkin {
      * @param padding A string containing an integer or a JSON dictionary with
      * keys left, top, bottom, and/or right.
      */
-    public final void setPadding(String padding) {
+    public final void setPadding(final String padding) {
         setPadding(Insets.decode(padding));
     }
 
@@ -417,14 +413,14 @@ public class FlowPaneSkin extends ContainerSkin {
         return horizontalSpacing;
     }
 
-    public void setHorizontalSpacing(int horizontalSpacing) {
+    public void setHorizontalSpacing(final int horizontalSpacing) {
         Utils.checkNonNegative(horizontalSpacing, "horizontalSpacing");
 
         this.horizontalSpacing = horizontalSpacing;
         invalidateComponent();
     }
 
-    public final void setHorizontalSpacing(Number horizontalSpacing) {
+    public final void setHorizontalSpacing(final Number horizontalSpacing) {
         Utils.checkNull(horizontalSpacing, "horizontalSpacing");
 
         setHorizontalSpacing(horizontalSpacing.intValue());
@@ -434,14 +430,14 @@ public class FlowPaneSkin extends ContainerSkin {
         return verticalSpacing;
     }
 
-    public void setVerticalSpacing(int verticalSpacing) {
+    public void setVerticalSpacing(final int verticalSpacing) {
         Utils.checkNonNegative(verticalSpacing, "verticalSpacing");
 
         this.verticalSpacing = verticalSpacing;
         invalidateComponent();
     }
 
-    public final void setVerticalSpacing(Number verticalSpacing) {
+    public final void setVerticalSpacing(final Number verticalSpacing) {
         Utils.checkNull(verticalSpacing, "verticalSpacing");
 
         setVerticalSpacing(verticalSpacing.intValue());
@@ -451,7 +447,7 @@ public class FlowPaneSkin extends ContainerSkin {
         return alignToBaseline;
     }
 
-    public void setAlignToBaseline(boolean alignToBaseline) {
+    public void setAlignToBaseline(final boolean alignToBaseline) {
         this.alignToBaseline = alignToBaseline;
         invalidateComponent();
     }

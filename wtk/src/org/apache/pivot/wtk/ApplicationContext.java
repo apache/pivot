@@ -957,20 +957,17 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             super.processComponentEvent(event);
 
             switch (event.getID()) {
-                case ComponentEvent.COMPONENT_RESIZED: {
+                case ComponentEvent.COMPONENT_RESIZED:
                     if (scale == 1) {
                         display.setSize(Math.max(getWidth(), 0), Math.max(getHeight(), 0));
                     } else {
                         display.setSize(Math.max((int) Math.ceil(getWidth() / scale), 0),
                             Math.max((int) Math.ceil(getHeight() / scale), 0));
                     }
-
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
         }
 
@@ -979,25 +976,20 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             super.processFocusEvent(event);
 
             switch (event.getID()) {
-                case FocusEvent.FOCUS_GAINED: {
+                case FocusEvent.FOCUS_GAINED:
                     if (focusedComponent != null && focusedComponent.isShowing()
                         && !focusedComponent.isBlocked()) {
                         focusedComponent.requestFocus();
                     }
-
                     break;
-                }
 
-                case FocusEvent.FOCUS_LOST: {
+                case FocusEvent.FOCUS_LOST:
                     focusedComponent = Component.getFocusedComponent();
                     Component.clearFocus();
-
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
         }
 
@@ -1034,24 +1026,20 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             // Get the button associated with this event
             Mouse.Button button = null;
             switch (event.getButton()) {
-                case MouseEvent.BUTTON1: {
+                case MouseEvent.BUTTON1:
                     button = Mouse.Button.LEFT;
                     break;
-                }
 
-                case MouseEvent.BUTTON2: {
+                case MouseEvent.BUTTON2:
                     button = Mouse.Button.MIDDLE;
                     break;
-                }
 
-                case MouseEvent.BUTTON3: {
+                case MouseEvent.BUTTON3:
                     button = Mouse.Button.RIGHT;
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             // Process the event
@@ -1059,19 +1047,16 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             if (eventID == MouseEvent.MOUSE_ENTERED || eventID == MouseEvent.MOUSE_EXITED) {
                 try {
                     switch (eventID) {
-                        case MouseEvent.MOUSE_ENTERED: {
+                        case MouseEvent.MOUSE_ENTERED:
                             display.mouseOver();
                             break;
-                        }
 
-                        case MouseEvent.MOUSE_EXITED: {
+                        case MouseEvent.MOUSE_EXITED:
                             display.mouseOut();
                             break;
-                        }
 
-                        default: {
+                        default:
                             break;
-                        }
                     }
                 } catch (Throwable exception) {
                     handleUncaughtException(exception);
@@ -1096,12 +1081,14 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
 
                 // Delegate the event to the owner
                 try {
+                    boolean consumed;
+
                     switch (eventID) {
-                        case MouseEvent.MOUSE_PRESSED: {
+                        case MouseEvent.MOUSE_PRESSED:
                             requestFocus();
                             requestFocusInWindow();
 
-                            boolean consumed = mouseOwner.mouseDown(button, x, y);
+                            consumed = mouseOwner.mouseDown(button, x, y);
 
                             if (button == Mouse.Button.LEFT) {
                                 dragLocation = new Point(x, y);
@@ -1138,8 +1125,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                     }
                                 } while (component != null && component.isEnabled());
 
-                                // Show the context menu if it contains any
-                                // sections
+                                // Show the context menu if it contains any sections
                                 if (menu.getSections().getLength() > 0) {
                                     menuPopup = new MenuPopup(menu);
 
@@ -1173,11 +1159,10 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             }
 
                             break;
-                        }
 
-                        case MouseEvent.MOUSE_RELEASED: {
+                        case MouseEvent.MOUSE_RELEASED:
                             if (dragDescendant == null) {
-                                boolean consumed = mouseOwner.mouseUp(button, x, y);
+                                consumed = mouseOwner.mouseUp(button, x, y);
 
                                 if (consumed) {
                                     event.consume();
@@ -1212,11 +1197,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             dragLocation = null;
 
                             break;
-                        }
 
-                        default: {
+                        default:
                             break;
-                        }
                     }
                 } catch (Throwable exception) {
                     handleUncaughtException(exception);
@@ -1235,7 +1218,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             try {
                 switch (event.getID()) {
                     case MouseEvent.MOUSE_MOVED:
-                    case MouseEvent.MOUSE_DRAGGED: {
+                    case MouseEvent.MOUSE_DRAGGED:
                         if (dragDescendant == null) {
                             // A drag is not active
                             Component mouseCapturer = Mouse.getCapturer();
@@ -1254,8 +1237,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                 if (dragLocation != null
                                     && (Math.abs(x - dragLocation.x) > dragThreshold
                                     ||  Math.abs(y - dragLocation.y) > dragThreshold)) {
-                                    // The user has dragged the mouse past the
-                                    // drag threshold; try
+                                    // The user has dragged the mouse past the drag threshold; try
                                     // to find a drag source
                                     dragDescendant = display.getDescendantAt(dragLocation.x,
                                         dragLocation.y);
@@ -1266,14 +1248,12 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                     }
 
                                     if (dragDescendant == null || dragDescendant.isBlocked()) {
-                                        // There was nothing to drag, so clear
-                                        // the drag location
+                                        // There was nothing to drag, so clear the drag location
                                         dragDescendant = null;
                                         dragLocation = null;
                                     } else {
                                         DragSource dragSource = dragDescendant.getDragSource();
-                                        dragLocation = dragDescendant.mapPointFromAncestor(display,
-                                            x, y);
+                                        dragLocation = dragDescendant.mapPointFromAncestor(display, x, y);
                                         if (dragLocation == null) {
                                             dragLocation = display.getMouseLocation();
                                         }
@@ -1283,11 +1263,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                                 dragLocation.x, dragLocation.y)) {
                                                 // A drag has started
                                                 if (dragSource.isNative()) {
-                                                    startNativeDrag(dragSource, dragDescendant,
-                                                        event);
+                                                    startNativeDrag(dragSource, dragDescendant, event);
 
-                                                    // Clear the drag state since it
-                                                    // is not used for
+                                                    // Clear the drag state since it is not used for
                                                     // native drags
                                                     dragDescendant = null;
                                                     dragLocation = null;
@@ -1306,8 +1284,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                                                     // Get the drag content
                                                     dragManifest = dragSource.getContent();
 
-                                                    // Get the initial user drop
-                                                    // action
+                                                    // Get the initial user drop action
                                                     userDropAction = getUserDropAction(event);
 
                                                     // Repaint the drag visual
@@ -1341,8 +1318,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             if (dragLocation != null) {
                                 DragSource dragSource = dragDescendant.getDragSource();
 
-                                // Get the previous and current drop descendant
-                                // and call
+                                // Get the previous and current drop descendant and call
                                 // move or exit/enter as appropriate
                                 Component previousDropDescendant = dropDescendant;
                                 dropDescendant = getDropDescendant(x, y);
@@ -1390,11 +1366,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                         }
 
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             } catch (Throwable exception) {
                 handleUncaughtException(exception);
@@ -1412,25 +1386,22 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             // Get the scroll type
             Mouse.ScrollType scrollType = null;
             switch (event.getScrollType()) {
-                case MouseWheelEvent.WHEEL_BLOCK_SCROLL: {
+                case MouseWheelEvent.WHEEL_BLOCK_SCROLL:
                     scrollType = Mouse.ScrollType.BLOCK;
                     break;
-                }
 
-                case MouseWheelEvent.WHEEL_UNIT_SCROLL: {
+                case MouseWheelEvent.WHEEL_UNIT_SCROLL:
                     scrollType = Mouse.ScrollType.UNIT;
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             // Process the event
             try {
                 switch (event.getID()) {
-                    case MouseEvent.MOUSE_WHEEL: {
+                    case MouseEvent.MOUSE_WHEEL:
                         if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                             && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
                             // Mouse wheel scaling
@@ -1466,11 +1437,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                             }
                         }
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             } catch (Throwable exception) {
                 handleUncaughtException(exception);
@@ -1510,40 +1479,36 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             // Get the key location
             Keyboard.KeyLocation keyLocation = null;
             switch (awtKeyLocation) {
-                case KeyEvent.KEY_LOCATION_STANDARD: {
+                case KeyEvent.KEY_LOCATION_STANDARD:
                     keyLocation = Keyboard.KeyLocation.STANDARD;
                     break;
-                }
 
-                case KeyEvent.KEY_LOCATION_LEFT: {
+                case KeyEvent.KEY_LOCATION_LEFT:
                     keyLocation = Keyboard.KeyLocation.LEFT;
                     break;
-                }
 
-                case KeyEvent.KEY_LOCATION_RIGHT: {
+                case KeyEvent.KEY_LOCATION_RIGHT:
                     keyLocation = Keyboard.KeyLocation.RIGHT;
                     break;
-                }
 
-                case KeyEvent.KEY_LOCATION_NUMPAD: {
+                case KeyEvent.KEY_LOCATION_NUMPAD:
                     keyLocation = Keyboard.KeyLocation.KEYPAD;
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             if (dragDescendant == null) {
                 // Process the event
                 Component focusedComponentLocal = Component.getFocusedComponent();
 
-                switch (event.getID()) {
-                    case KeyEvent.KEY_PRESSED: {
-                        boolean consumed = false;
+                boolean consumed = false;
+                int keyCode;
 
-                        int keyCode = event.getKeyCode();
+                switch (event.getID()) {
+                    case KeyEvent.KEY_PRESSED:
+                        keyCode = event.getKeyCode();
 
                         if (Keyboard.isPressed(Keyboard.Modifier.CTRL)
                             && Keyboard.isPressed(Keyboard.Modifier.SHIFT)) {
@@ -1581,12 +1546,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                         }
 
                         break;
-                    }
 
-                    case KeyEvent.KEY_RELEASED: {
-                        boolean consumed = false;
-
-                        int keyCode = event.getKeyCode();
+                    case KeyEvent.KEY_RELEASED:
+                        keyCode = event.getKeyCode();
 
                         try {
                             if (focusedComponentLocal == null) {
@@ -1612,11 +1574,8 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                         }
 
                         break;
-                    }
 
-                    case KeyEvent.KEY_TYPED: {
-                        boolean consumed = false;
-
+                    case KeyEvent.KEY_TYPED:
                         char keyChar = event.getKeyChar();
 
                         try {
@@ -1642,11 +1601,9 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                         }
 
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             } else {
                 DragSource dragSource = dragDescendant.getDragSource();
@@ -2183,24 +2140,20 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
         DropAction dropAction = null;
 
         switch (nativeDropAction) {
-            case DnDConstants.ACTION_COPY: {
+            case DnDConstants.ACTION_COPY:
                 dropAction = DropAction.COPY;
                 break;
-            }
 
-            case DnDConstants.ACTION_MOVE: {
+            case DnDConstants.ACTION_MOVE:
                 dropAction = DropAction.MOVE;
                 break;
-            }
 
-            case DnDConstants.ACTION_LINK: {
+            case DnDConstants.ACTION_LINK:
                 dropAction = DropAction.LINK;
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         return dropAction;
@@ -2229,21 +2182,20 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
 
         if (dropAction != null) {
             switch (dropAction) {
-                case COPY: {
+                case COPY:
                     nativeDropAction = DnDConstants.ACTION_COPY;
                     break;
-                }
-                case MOVE: {
+
+                case MOVE:
                     nativeDropAction = DnDConstants.ACTION_MOVE;
                     break;
-                }
-                case LINK: {
+
+                case LINK:
                     nativeDropAction = DnDConstants.ACTION_LINK;
                     break;
-                }
-                default: {
+
+                default:
                     break;
-                }
             }
         }
 
@@ -2258,21 +2210,20 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
             // Show the cursor for the drop action returned by the
             // drop target
             switch (dropAction) {
-                case COPY: {
+                case COPY:
                     cursor = java.awt.dnd.DragSource.DefaultCopyDrop;
                     break;
-                }
-                case MOVE: {
+
+                case MOVE:
                     cursor = java.awt.dnd.DragSource.DefaultMoveDrop;
                     break;
-                }
-                case LINK: {
+
+                case LINK:
                     cursor = java.awt.dnd.DragSource.DefaultLinkDrop;
                     break;
-                }
-                default: {
+
+                default:
                     break;
-                }
             }
         }
 

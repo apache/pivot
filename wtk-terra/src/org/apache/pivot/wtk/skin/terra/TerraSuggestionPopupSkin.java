@@ -160,7 +160,7 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
             TextInput textInput = suggestionPopup.getTextInput();
 
             switch (keyCode) {
-                case KeyCode.TAB: {
+                case KeyCode.TAB:
                     returnFocusToTextInput = false;
                     suggestionPopup.close(true);
 
@@ -169,11 +169,9 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
                     textInput.transferFocus(direction);
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             return false;
@@ -300,19 +298,16 @@ public class TerraSuggestionPopupSkin extends WindowSkin implements SuggestionPo
         SuggestionPopup suggestionPopup = (SuggestionPopup) getComponent();
 
         switch (keyCode) {
-            case KeyCode.ENTER: {
+            case KeyCode.ENTER:
                 suggestionPopup.close(true);
                 break;
-            }
 
-            case KeyCode.ESCAPE: {
+            case KeyCode.ESCAPE:
                 suggestionPopup.close(false);
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
 
         return false;

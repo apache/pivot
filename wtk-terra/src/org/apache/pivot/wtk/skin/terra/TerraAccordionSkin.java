@@ -759,62 +759,52 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
 
                 switch (keyCode) {
                     case KeyCode.KEYPAD_1:
-                    case KeyCode.N1: {
+                    case KeyCode.N1:
                         selectedIndex = 0;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_2:
-                    case KeyCode.N2: {
+                    case KeyCode.N2:
                         selectedIndex = 1;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_3:
-                    case KeyCode.N3: {
+                    case KeyCode.N3:
                         selectedIndex = 2;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_4:
-                    case KeyCode.N4: {
+                    case KeyCode.N4:
                         selectedIndex = 3;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_5:
-                    case KeyCode.N5: {
+                    case KeyCode.N5:
                         selectedIndex = 4;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_6:
-                    case KeyCode.N6: {
+                    case KeyCode.N6:
                         selectedIndex = 5;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_7:
-                    case KeyCode.N7: {
+                    case KeyCode.N7:
                         selectedIndex = 6;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_8:
-                    case KeyCode.N8: {
+                    case KeyCode.N8:
                         selectedIndex = 7;
                         break;
-                    }
 
                     case KeyCode.KEYPAD_9:
-                    case KeyCode.N9: {
+                    case KeyCode.N9:
                         selectedIndex = 8;
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 if (selectedIndex >= 0 && selectedIndex < panels.getLength()
@@ -827,25 +817,22 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
                 int selectedIndex = accordion.getSelectedIndex();
 
                 switch (keyCode) {
-                    case KeyCode.UP: {
+                    case KeyCode.UP:
                         do {
                             selectedIndex--;
                         } while (selectedIndex >= 0 && !panels.get(selectedIndex).isEnabled());
 
                         break;
-                    }
 
-                    case KeyCode.DOWN: {
+                    case KeyCode.DOWN:
                         do {
                             selectedIndex++;
                         } while (selectedIndex < n && !panels.get(selectedIndex).isEnabled());
 
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 if (selectedIndex >= 0 && selectedIndex < n

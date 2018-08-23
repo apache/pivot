@@ -95,17 +95,14 @@ public final class GraphicsUtilities {
         final int length, final Orientation orientation, final int thickness) {
         if (length > 0 && thickness > 0) {
             switch (orientation) {
-                case HORIZONTAL: {
+                case HORIZONTAL:
                     graphics.fillRect(x, y, length, thickness);
                     break;
-                }
-                case VERTICAL: {
+                case VERTICAL:
                     graphics.fillRect(x, y, thickness, length);
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
         }
     }
@@ -199,7 +196,7 @@ public final class GraphicsUtilities {
      * formats listed above.
      * @see CSSColor
      */
-    public static Color decodeColor(final String value, String argument) throws NumberFormatException {
+    public static Color decodeColor(final String value, final String argument) throws NumberFormatException {
         Utils.checkNullOrEmpty(value, argument == null ? "color" : argument);
 
         Color color = null;
@@ -272,7 +269,7 @@ public final class GraphicsUtilities {
      * @param alpha The opacity value (0.0 - 1.0).
      * @return The full color value from these two parts.
      */
-    public static Color getColor(int rgb, float alpha) {
+    public static Color getColor(final int rgb, final float alpha) {
         float red = ((rgb >> 16) & 0xff) / 255f;
         float green = ((rgb >> 8) & 0xff) / 255f;
         float blue = (rgb >> 0 & 0xff) / 255f;
@@ -291,7 +288,7 @@ public final class GraphicsUtilities {
      * @throws IllegalArgumentException if the given value is {@code null} or
      * empty or there is a problem decoding the value.
      */
-    public static Paint decodePaint(String value) {
+    public static Paint decodePaint(final String value) {
         Utils.checkNullOrEmpty(value, "paint");
 
         Paint paint;
@@ -333,7 +330,7 @@ public final class GraphicsUtilities {
      * @return The fully decoded paint value.
      * @throws IllegalArgumentException if there is no paint type key found.
      */
-    public static Paint decodePaint(Dictionary<String, ?> dictionary) {
+    public static Paint decodePaint(final Dictionary<String, ?> dictionary) {
         Utils.checkNull(dictionary, "paint dictionary");
 
         String paintType = JSON.get(dictionary, PAINT_TYPE_KEY);
@@ -342,33 +339,32 @@ public final class GraphicsUtilities {
         }
 
         Paint paint;
-        switch (PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH))) {
-            case SOLID_COLOR: {
-                String color = JSON.get(dictionary, COLOR_KEY);
-                paint = decodeColor(color);
-                break;
-            }
+        float startX, startY;
+        float endX, endY;
 
-            case GRADIENT: {
-                float startX = JSON.getFloat(dictionary, START_X_KEY);
-                float startY = JSON.getFloat(dictionary, START_Y_KEY);
-                float endX = JSON.getFloat(dictionary, END_X_KEY);
-                float endY = JSON.getFloat(dictionary, END_Y_KEY);
+        switch (PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH))) {
+            case SOLID_COLOR:
+                paint = decodeColor((String) JSON.get(dictionary, COLOR_KEY));
+                break;
+
+            case GRADIENT:
+                startX = JSON.getFloat(dictionary, START_X_KEY);
+                startY = JSON.getFloat(dictionary, START_Y_KEY);
+                endX = JSON.getFloat(dictionary, END_X_KEY);
+                endY = JSON.getFloat(dictionary, END_Y_KEY);
                 Color startColor = decodeColor((String) JSON.get(dictionary, START_COLOR_KEY));
                 Color endColor = decodeColor((String) JSON.get(dictionary, END_COLOR_KEY));
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
                 break;
-            }
 
             case LINEAR_GRADIENT: {
-                float startX = JSON.getFloat(dictionary, START_X_KEY);
-                float startY = JSON.getFloat(dictionary, START_Y_KEY);
-                float endX = JSON.getFloat(dictionary, END_X_KEY);
-                float endY = JSON.getFloat(dictionary, END_Y_KEY);
+                startX = JSON.getFloat(dictionary, START_X_KEY);
+                startY = JSON.getFloat(dictionary, START_Y_KEY);
+                endX = JSON.getFloat(dictionary, END_X_KEY);
+                endY = JSON.getFloat(dictionary, END_Y_KEY);
 
                 @SuppressWarnings("unchecked")
-                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(
-                    dictionary, STOPS_KEY);
+                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -393,8 +389,7 @@ public final class GraphicsUtilities {
                 float radius = JSON.getFloat(dictionary, RADIUS_KEY);
 
                 @SuppressWarnings("unchecked")
-                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(
-                    dictionary, STOPS_KEY);
+                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(dictionary, STOPS_KEY);
 
                 int n = stops.getLength();
                 float[] fractions = new float[n];
@@ -413,9 +408,8 @@ public final class GraphicsUtilities {
                 break;
             }
 
-            default: {
+            default:
                 throw new UnsupportedOperationException();
-            }
         }
 
         return paint;
@@ -427,7 +421,7 @@ public final class GraphicsUtilities {
      * @param graphics          The graphics object to initialize.
      * @param fontRenderContext The source of the font rendering hints.
      */
-    public static void setFontRenderingHints(Graphics2D graphics, FontRenderContext fontRenderContext) {
+    public static void setFontRenderingHints(final Graphics2D graphics, final FontRenderContext fontRenderContext) {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
             fontRenderContext.getAntiAliasingHint());
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
@@ -442,8 +436,8 @@ public final class GraphicsUtilities {
      * @param font              The font to use.
      * @param color             The foreground color for the text.
      */
-    public static void prepareForText(Graphics2D graphics, FontRenderContext fontRenderContext,
-            Font font, Color color) {
+    public static void prepareForText(final Graphics2D graphics, final FontRenderContext fontRenderContext,
+            final Font font, final Color color) {
         setFontRenderingHints(graphics, fontRenderContext);
 
         graphics.setFont(font);
@@ -457,7 +451,7 @@ public final class GraphicsUtilities {
      * @param  graphics The graphics object to prepare.
      * @return          The {@link Platform#getFontRenderContext} value.
      */
-    public static FontRenderContext prepareForText(Graphics2D graphics) {
+    public static FontRenderContext prepareForText(final Graphics2D graphics) {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
         setFontRenderingHints(graphics, fontRenderContext);
@@ -474,7 +468,7 @@ public final class GraphicsUtilities {
      * @param color     The foreground color for the text.
      * @return          The font render context for the platform.
      */
-    public static FontRenderContext prepareForText(Graphics2D graphics, Font font, Color color) {
+    public static FontRenderContext prepareForText(final Graphics2D graphics, final Font font, final Color color) {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         prepareForText(graphics, fontRenderContext, font, color);
         return fontRenderContext;
@@ -489,7 +483,7 @@ public final class GraphicsUtilities {
      * @return The bounding rectangle to use for the average character size.
      * @see Platform#getFontRenderContext
      */
-    public static Dimensions getAverageCharacterSize(Font font) {
+    public static Dimensions getAverageCharacterSize(final Font font) {
         int missingGlyphCode = font.getMissingGlyphCode();
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
 
@@ -513,8 +507,8 @@ public final class GraphicsUtilities {
      * @param topOffset Same for vertical offset.
      * @return The resulting rectangle for the caret.
      */
-    public static Rectangle getCaretRectangle(TextHitInfo caret, AttributedCharacterIterator text,
-            int leftOffset, int topOffset) {
+    public static Rectangle getCaretRectangle(final TextHitInfo caret, final AttributedCharacterIterator text,
+            final int leftOffset, final int topOffset) {
         FontRenderContext fontRenderContext = Platform.getFontRenderContext();
         TextLayout layout = new TextLayout(text, fontRenderContext);
         Shape caretShape = layout.getCaretShape(caret);
@@ -533,8 +527,8 @@ public final class GraphicsUtilities {
      * @param bottom The bottom interior coordinate (height - 1)
      * @param right The right interior coordinate (width - 1)
      */
-    public static void drawBorders(Graphics2D graphics, Borders borders, int top, int left,
-            int bottom, int right) {
+    public static void drawBorders(final Graphics2D graphics, final Borders borders, final int top, final int left,
+            final int bottom, final int right) {
         // The single line/object cases, or the first of the multiple line cases
         switch (borders) {
             default:

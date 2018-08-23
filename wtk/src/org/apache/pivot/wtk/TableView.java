@@ -84,7 +84,7 @@ public class TableView extends Component {
          *
          * @param name The column name.
          */
-        public Column(String name) {
+        public Column(final String name) {
             this(null, name, null, DEFAULT_WIDTH, false);
         }
 
@@ -94,7 +94,7 @@ public class TableView extends Component {
          * @param name The column name.
          * @param headerData The column header data.
          */
-        public Column(String name, Object headerData) {
+        public Column(final String name, final Object headerData) {
             this(null, name, headerData, DEFAULT_WIDTH, false);
         }
 
@@ -105,7 +105,7 @@ public class TableView extends Component {
          * @param headerData The column header data.
          * @param width The width of the column.
          */
-        public Column(String name, Object headerData, int width) {
+        public Column(final String name, final Object headerData, final int width) {
             this(null, name, headerData, width, false);
         }
 
@@ -118,27 +118,28 @@ public class TableView extends Component {
          * @param relative If <tt>true</tt>, specifies a relative column width;
          * otherwise, specifies a fixed column width.
          */
-        public Column(String name, Object headerData, int width, boolean relative) {
+        public Column(final String name, final Object headerData, final int width, final boolean relative) {
             this(null, name, headerData, width, relative);
         }
 
-        public Column(TableView tableView) {
+        public Column(final TableView tableView) {
             this(tableView, null, null, DEFAULT_WIDTH, false);
         }
 
-        public Column(TableView tableView, String name) {
+        public Column(final TableView tableView, final String name) {
             this(tableView, name, null, DEFAULT_WIDTH, false);
         }
 
-        public Column(TableView tableView, String name, Object headerData) {
+        public Column(final TableView tableView, final String name, final Object headerData) {
             this(tableView, name, headerData, DEFAULT_WIDTH, false);
         }
 
-        public Column(TableView tableView, String name, Object headerData, int width) {
+        public Column(final TableView tableView, final String name, final Object headerData, final int width) {
             this(tableView, name, headerData, width, false);
         }
 
-        public Column(TableView tableView, String name, Object headerData, int width, boolean relative) {
+        public Column(final TableView tableView, final String name, final Object headerData, final int width,
+            final boolean relative) {
             setName(name);
             setHeaderData(headerData);
             setWidth(width, relative);
@@ -171,7 +172,7 @@ public class TableView extends Component {
          *
          * @param name The column name.
          */
-        public void setName(String name) {
+        public void setName(final String name) {
             String previousName = this.name;
 
             if (previousName != name) {
@@ -199,7 +200,7 @@ public class TableView extends Component {
          * @param headerData The column header data, or <tt>null</tt> for no
          * header data.
          */
-        public void setHeaderData(Object headerData) {
+        public void setHeaderData(final Object headerData) {
             Object previousHeaderData = this.headerData;
 
             if (previousHeaderData != headerData) {
@@ -224,7 +225,7 @@ public class TableView extends Component {
          *
          * @param headerDataRenderer The new renderer for the header data.
          */
-        public void setHeaderDataRenderer(HeaderDataRenderer headerDataRenderer) {
+        public void setHeaderDataRenderer(final HeaderDataRenderer headerDataRenderer) {
             Utils.checkNull(headerDataRenderer, "Header data renderer");
 
             HeaderDataRenderer previousHeaderDataRenderer = this.headerDataRenderer;
@@ -262,7 +263,7 @@ public class TableView extends Component {
          *
          * @param width The absolute width of the column.
          */
-        public void setWidth(int width) {
+        public void setWidth(final int width) {
             setWidth(width, false);
         }
 
@@ -273,7 +274,7 @@ public class TableView extends Component {
          * the '*' character, it is treated as a relative value. Otherwise, it
          * is considered an absolute value.
          */
-        public void setWidth(String width) {
+        public void setWidth(final String width) {
             boolean relativeLocal = false;
 
             if (width.endsWith("*")) {
@@ -292,7 +293,7 @@ public class TableView extends Component {
          * @param relative <tt>true</tt> if the column width is relative,
          * <tt>false</tt> if it is fixed.
          */
-        public void setWidth(int width, boolean relative) {
+        public void setWidth(final int width, final boolean relative) {
             if (width < (relative ? 0 : -1)) {
                 throw new IllegalArgumentException("illegal width " + width);
             }
@@ -324,7 +325,7 @@ public class TableView extends Component {
          * @param minimumWidth Column width cannot be smaller than this size.
          * @param maximumWidth Column width cannot be greater than this size.
          */
-        public void setWidthLimits(int minimumWidth, int maximumWidth) {
+        public void setWidthLimits(final int minimumWidth, final int maximumWidth) {
             if (minimumWidth < 0) {
                 throw new IllegalArgumentException("Minimum width is negative, " + minimumWidth);
             }
@@ -353,7 +354,7 @@ public class TableView extends Component {
          *
          * @param widthLimits The new width limits.
          */
-        public void setWidthLimits(Limits widthLimits) {
+        public void setWidthLimits(final Limits widthLimits) {
             setWidthLimits(widthLimits.minimum, widthLimits.maximum);
         }
 
@@ -371,7 +372,7 @@ public class TableView extends Component {
          *
          * @param minimumWidth Minimum column width.
          */
-        public void setMinimumWidth(int minimumWidth) {
+        public void setMinimumWidth(final int minimumWidth) {
             setWidthLimits(minimumWidth, maximumWidth);
         }
 
@@ -389,7 +390,7 @@ public class TableView extends Component {
          *
          * @param maximumWidth Maximum column width.
          */
-        public void setMaximumWidth(int maximumWidth) {
+        public void setMaximumWidth(final int maximumWidth) {
             setWidthLimits(minimumWidth, maximumWidth);
         }
 
@@ -408,7 +409,7 @@ public class TableView extends Component {
          *
          * @param filter The column's filter, or <tt>null</tt> for no filter.
          */
-        public void setFilter(Object filter) {
+        public void setFilter(final Object filter) {
             Object previousFilter = this.filter;
 
             if (previousFilter != filter) {
@@ -436,7 +437,7 @@ public class TableView extends Component {
          * @param cellRenderer The cell renderer that is used to draw the
          * contents of this column.
          */
-        public void setCellRenderer(CellRenderer cellRenderer) {
+        public void setCellRenderer(final CellRenderer cellRenderer) {
             Utils.checkNull(cellRenderer, "Cell renderer");
 
             CellRenderer previousCellRenderer = this.cellRenderer;
@@ -631,7 +632,7 @@ public class TableView extends Component {
      */
     public final class ColumnSequence implements Sequence<Column>, Iterable<Column> {
         @Override
-        public int add(Column column) {
+        public int add(final Column column) {
             int index = getLength();
             insert(column, index);
 
@@ -639,7 +640,7 @@ public class TableView extends Component {
         }
 
         @Override
-        public void insert(Column column, int index) {
+        public void insert(final Column column, final int index) {
             Utils.checkNull(column, "Column");
 
             if (column.tableView != null) {
@@ -654,12 +655,12 @@ public class TableView extends Component {
         }
 
         @Override
-        public Column update(int index, Column column) {
+        public Column update(final int index, final Column column) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public int remove(Column column) {
+        public int remove(final Column column) {
             int index = indexOf(column);
             if (index != -1) {
                 remove(index, 1);
@@ -669,7 +670,7 @@ public class TableView extends Component {
         }
 
         @Override
-        public Sequence<Column> remove(int index, int count) {
+        public Sequence<Column> remove(final int index, final int count) {
             Sequence<Column> removed = columns.remove(index, count);
 
             if (count > 0) {
@@ -684,12 +685,12 @@ public class TableView extends Component {
         }
 
         @Override
-        public Column get(int index) {
+        public Column get(final int index) {
             return columns.get(index);
         }
 
         @Override
-        public int indexOf(Column column) {
+        public int indexOf(final Column column) {
             return columns.indexOf(column);
         }
 
@@ -710,12 +711,12 @@ public class TableView extends Component {
     public final class SortDictionary implements Dictionary<String, SortDirection>,
         Iterable<String> {
         @Override
-        public SortDirection get(String columnName) {
+        public SortDirection get(final String columnName) {
             return sortMap.get(columnName);
         }
 
         @Override
-        public SortDirection put(String columnName, SortDirection sortDirection) {
+        public SortDirection put(final String columnName, final SortDirection sortDirection) {
             SortDirection previousSortDirection;
 
             if (sortDirection == null) {
@@ -737,7 +738,7 @@ public class TableView extends Component {
         }
 
         @Override
-        public SortDirection remove(String columnName) {
+        public SortDirection remove(final String columnName) {
             SortDirection sortDirection = null;
 
             if (containsKey(columnName)) {
@@ -750,7 +751,7 @@ public class TableView extends Component {
         }
 
         @Override
-        public boolean containsKey(String columnName) {
+        public boolean containsKey(final String columnName) {
             return sortMap.containsKey(columnName);
         }
 
@@ -758,7 +759,7 @@ public class TableView extends Component {
             return sortMap.isEmpty();
         }
 
-        public Dictionary.Pair<String, SortDirection> get(int index) {
+        public Dictionary.Pair<String, SortDirection> get(final int index) {
             String columnName = sortList.get(index);
             SortDirection sortDirection = sortMap.get(columnName);
 
@@ -806,7 +807,7 @@ public class TableView extends Component {
 
     private ListListener<Object> tableDataListener = new ListListener<Object>() {
         @Override
-        public void itemInserted(List<Object> list, int index) {
+        public void itemInserted(final List<Object> list, final int index) {
             // Increment selected ranges
             int updated = rangeSelection.insertIndex(index);
 
@@ -820,7 +821,7 @@ public class TableView extends Component {
         }
 
         @Override
-        public void itemsRemoved(List<Object> list, int index, Sequence<Object> items) {
+        public void itemsRemoved(final List<Object> list, final int index, final Sequence<Object> items) {
             int count = items.getLength();
 
             int previousSelectedIndex;
@@ -847,12 +848,12 @@ public class TableView extends Component {
         }
 
         @Override
-        public void itemUpdated(List<Object> list, int index, Object previousItem) {
+        public void itemUpdated(final List<Object> list, final int index, final Object previousItem) {
             tableViewRowListeners.rowUpdated(TableView.this, index);
         }
 
         @Override
-        public void listCleared(List<Object> list) {
+        public void listCleared(final List<Object> list) {
             int cleared = rangeSelection.getLength();
             rangeSelection.clear();
 
@@ -869,7 +870,7 @@ public class TableView extends Component {
         }
 
         @Override
-        public void comparatorChanged(List<Object> list, Comparator<Object> previousComparator) {
+        public void comparatorChanged(final List<Object> list, final Comparator<Object> previousComparator) {
             if (list.getComparator() != null) {
                 int cleared = rangeSelection.getLength();
                 rangeSelection.clear();
@@ -910,13 +911,13 @@ public class TableView extends Component {
      *
      * @param tableData The initial data for this table view.
      */
-    public TableView(List<?> tableData) {
+    public TableView(final List<?> tableData) {
         setTableData(tableData);
         installSkin(TableView.class);
     }
 
     @Override
-    protected void setSkin(org.apache.pivot.wtk.Skin skin) {
+    protected void setSkin(final org.apache.pivot.wtk.Skin skin) {
         checkSkin(skin, TableView.Skin.class);
 
         super.setSkin(skin);
@@ -952,7 +953,7 @@ public class TableView extends Component {
      * @param tableData The data to be presented by the table view.
      */
     @SuppressWarnings("unchecked")
-    public void setTableData(List<?> tableData) {
+    public void setTableData(final List<?> tableData) {
         Utils.checkNull(tableData, "Table data");
 
         List<?> previousTableData = this.tableData;
@@ -989,9 +990,9 @@ public class TableView extends Component {
      * Sets the table data.
      *
      * @param tableData A JSON string (must begin with <tt>[</tt> and end with
-     * <tt>]</tt>) denoting the data to be presented by the table view.
+     * <tt>]</tt>, denoting a list) which will be the data to be presented by the table view.
      */
-    public final void setTableData(String tableData) {
+    public final void setTableData(final String tableData) {
         Utils.checkNull(tableData, "Table data");
 
         try {
@@ -1007,7 +1008,7 @@ public class TableView extends Component {
      * @param tableData A URL referring to a JSON file containing the data to be
      * presented by the table view.
      */
-    public void setTableData(URL tableData) {
+    public void setTableData(final URL tableData) {
         Utils.checkNull(tableData, "URL for table data");
 
         JSONSerializer jsonSerializer = new JSONSerializer();
@@ -1025,7 +1026,7 @@ public class TableView extends Component {
         return columnSource;
     }
 
-    public void setColumnSource(TableView columnSource) {
+    public void setColumnSource(final TableView columnSource) {
         TableView previousColumnSource = this.columnSource;
 
         if (previousColumnSource != columnSource) {
@@ -1048,7 +1049,7 @@ public class TableView extends Component {
      *
      * @param rowEditor The row editor for the list.
      */
-    public void setRowEditor(RowEditor rowEditor) {
+    public void setRowEditor(final RowEditor rowEditor) {
         RowEditor previousRowEditor = this.rowEditor;
 
         if (previousRowEditor != rowEditor) {
@@ -1071,7 +1072,7 @@ public class TableView extends Component {
      *
      * @param index The index to select, or <tt>-1</tt> to clear the selection.
      */
-    public void setSelectedIndex(int index) {
+    public void setSelectedIndex(final int index) {
         if (index == -1) {
             clearSelection();
         } else {
@@ -1088,7 +1089,7 @@ public class TableView extends Component {
      * @param start The start of the selection range.
      * @param end The end of the range.
      */
-    public void setSelectedRange(int start, int end) {
+    public void setSelectedRange(final int start, final int end) {
         ArrayList<Span> selectedRanges = new ArrayList<>();
         selectedRanges.add(new Span(start, end));
 
@@ -1115,7 +1116,7 @@ public class TableView extends Component {
      * @param selectedRanges The new sequence of selected ranges.
      * @return The ranges that were actually set.
      */
-    public Sequence<Span> setSelectedRanges(Sequence<Span> selectedRanges) {
+    public Sequence<Span> setSelectedRanges(final Sequence<Span> selectedRanges) {
         Utils.checkNull(selectedRanges, "Selected ranges");
 
         // When we're in mode NONE, the only thing we can do is to clear the
@@ -1165,7 +1166,7 @@ public class TableView extends Component {
      * @return The ranges that were actually set.
      * @see #setSelectedRanges(Sequence)
      */
-    public final Sequence<Span> setSelectedRanges(String selectedRanges) {
+    public final Sequence<Span> setSelectedRanges(final String selectedRanges) {
         Utils.checkNull(selectedRanges, "Selected ranges");
 
         try {
@@ -1178,7 +1179,7 @@ public class TableView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    private static Sequence<Span> parseSelectedRanges(String json) throws SerializationException {
+    private static Sequence<Span> parseSelectedRanges(final String json) throws SerializationException {
         ArrayList<Span> selectedRanges = new ArrayList<>();
 
         List<?> list = JSONSerializer.parseList(json);
@@ -1216,7 +1217,7 @@ public class TableView extends Component {
      * @return <tt>true</tt> if the index was added to the selection;
      * <tt>false</tt>, otherwise.
      */
-    public boolean addSelectedIndex(int index) {
+    public boolean addSelectedIndex(final int index) {
         Sequence<Span> addedRanges = addSelectedRange(index, index);
         return (addedRanges.getLength() > 0);
     }
@@ -1228,7 +1229,7 @@ public class TableView extends Component {
      * @param end The last index in the range.
      * @return The ranges that were added to the selection.
      */
-    public Sequence<Span> addSelectedRange(int start, int end) {
+    public Sequence<Span> addSelectedRange(final int start, final int end) {
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("Table view is not in multi-select mode.");
         }
@@ -1262,7 +1263,7 @@ public class TableView extends Component {
      * @param range The range to add.
      * @return The ranges that were added to the selection.
      */
-    public Sequence<Span> addSelectedRange(Span range) {
+    public Sequence<Span> addSelectedRange(final Span range) {
         Utils.checkNull(range, "Range");
 
         return addSelectedRange(range.start, range.end);
@@ -1275,7 +1276,7 @@ public class TableView extends Component {
      * @return <tt>true</tt> if the index was removed from the selection;
      * <tt>false</tt>, otherwise.
      */
-    public boolean removeSelectedIndex(int index) {
+    public boolean removeSelectedIndex(final int index) {
         Sequence<Span> removedRanges = removeSelectedRange(index, index);
         return (removedRanges.getLength() > 0);
     }
@@ -1287,7 +1288,7 @@ public class TableView extends Component {
      * @param end The end of the range to remove.
      * @return The ranges that were removed from the selection.
      */
-    public Sequence<Span> removeSelectedRange(int start, int end) {
+    public Sequence<Span> removeSelectedRange(final int start, final int end) {
         if (selectMode != SelectMode.MULTI) {
             throw new IllegalStateException("Table view is not in multi-select mode.");
         }
@@ -1322,7 +1323,7 @@ public class TableView extends Component {
      * @param range The range to remove.
      * @return The ranges that were removed from the selection.
      */
-    public Sequence<Span> removeSelectedRange(Span range) {
+    public Sequence<Span> removeSelectedRange(final Span range) {
         Utils.checkNull(range, "Range");
 
         return removeSelectedRange(range.start, range.end);
@@ -1350,7 +1351,7 @@ public class TableView extends Component {
      * @param index The index whose selection state is to be tested.
      * @return <tt>true</tt> if the index is selected; <tt>false</tt>, otherwise.
      */
-    public boolean isRowSelected(int index) {
+    public boolean isRowSelected(final int index) {
         indexBoundsCheck("index", index, 0, tableData.getLength() - 1);
 
         return rangeSelection.containsIndex(index);
@@ -1368,7 +1369,7 @@ public class TableView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedRow(Object row) {
+    public void setSelectedRow(final Object row) {
         setSelectedIndex((row == null) ? -1 : ((List<Object>) tableData).indexOf(row));
     }
 
@@ -1388,7 +1389,7 @@ public class TableView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedRows(Sequence<Object> rows) {
+    public void setSelectedRows(final Sequence<Object> rows) {
         Utils.checkNull(rows, "Selected rows");
 
         ArrayList<Span> selectedRanges = new ArrayList<>();
@@ -1420,7 +1421,7 @@ public class TableView extends Component {
      *
      * @param selectMode The new selection mode.
      */
-    public void setSelectMode(SelectMode selectMode) {
+    public void setSelectMode(final SelectMode selectMode) {
         Utils.checkNull(selectMode, "Select mode");
 
         SelectMode previousSelectMode = this.selectMode;
@@ -1452,9 +1453,8 @@ public class TableView extends Component {
      * @return The new sort criteria.
      */
     @SuppressWarnings("unchecked")
-    public Dictionary<String, SortDirection> setSort(String columnName, SortDirection sortDirection) {
-        Dictionary.Pair<String, SortDirection> sort = new Dictionary.Pair<>(columnName,
-            sortDirection);
+    public Dictionary<String, SortDirection> setSort(final String columnName, final SortDirection sortDirection) {
+        Dictionary.Pair<String, SortDirection> sort = new Dictionary.Pair<>(columnName, sortDirection);
 
         setSort(new ArrayList<>(sort));
 
@@ -1470,7 +1470,7 @@ public class TableView extends Component {
      * @throws IllegalArgumentException if the sort parameter is {@code null}.
      */
     public Dictionary<String, SortDirection> setSort(
-        Sequence<Dictionary.Pair<String, SortDirection>> sort) {
+        final Sequence<Dictionary.Pair<String, SortDirection>> sort) {
         Utils.checkNull(sort, "Sort");
 
         sortMap.clear();
@@ -1499,7 +1499,7 @@ public class TableView extends Component {
      * @throws IllegalArgumentException if the sort parameter is {@code null}
      * or can't be parsed from the JSON input.
      */
-    public final Dictionary<String, SortDirection> setSort(String sort) {
+    public final Dictionary<String, SortDirection> setSort(final String sort) {
         Utils.checkNull(sort, "Sort");
 
         try {
@@ -1512,7 +1512,7 @@ public class TableView extends Component {
     }
 
     @SuppressWarnings("unchecked")
-    private static Sequence<Dictionary.Pair<String, SortDirection>> parseSort(String json)
+    private static Sequence<Dictionary.Pair<String, SortDirection>> parseSort(final String json)
         throws SerializationException {
         ArrayList<Dictionary.Pair<String, SortDirection>> sort = new ArrayList<>();
 
@@ -1547,7 +1547,7 @@ public class TableView extends Component {
      * @return <tt>true</tt> if the row is disabled; <tt>false</tt>, otherwise.
      */
     @SuppressWarnings("unchecked")
-    public boolean isRowDisabled(int index) {
+    public boolean isRowDisabled(final int index) {
         boolean disabled = false;
 
         if (disabledRowFilter != null) {
@@ -1574,7 +1574,7 @@ public class TableView extends Component {
      * @param disabledRowFilter The disabled row filter, or <tt>null</tt> for no
      * disabled row filter.
      */
-    public void setDisabledRowFilter(Filter<?> disabledRowFilter) {
+    public void setDisabledRowFilter(final Filter<?> disabledRowFilter) {
         Filter<?> previousDisabledRowFilter = this.disabledRowFilter;
 
         if (previousDisabledRowFilter != disabledRowFilter) {
@@ -1587,7 +1587,7 @@ public class TableView extends Component {
         return tableDataKey;
     }
 
-    public void setTableDataKey(String tableDataKey) {
+    public void setTableDataKey(final String tableDataKey) {
         String previousTableDataKey = this.tableDataKey;
 
         if (previousTableDataKey != tableDataKey) {
@@ -1600,7 +1600,7 @@ public class TableView extends Component {
         return tableDataBindType;
     }
 
-    public void setTableDataBindType(BindType tableDataBindType) {
+    public void setTableDataBindType(final BindType tableDataBindType) {
         Utils.checkNull(tableDataBindType, "Table data bind type");
 
         BindType previousTableDataBindType = this.tableDataBindType;
@@ -1615,7 +1615,7 @@ public class TableView extends Component {
         return tableDataBindMapping;
     }
 
-    public void setTableDataBindMapping(TableDataBindMapping tableDataBindMapping) {
+    public void setTableDataBindMapping(final TableDataBindMapping tableDataBindMapping) {
         TableDataBindMapping previousTableDataBindMapping = this.tableDataBindMapping;
 
         if (previousTableDataBindMapping != tableDataBindMapping) {
@@ -1629,7 +1629,7 @@ public class TableView extends Component {
         return selectedRowKey;
     }
 
-    public void setSelectedRowKey(String selectedRowKey) {
+    public void setSelectedRowKey(final String selectedRowKey) {
         String previousSelectedRowKey = this.selectedRowKey;
 
         if (previousSelectedRowKey != selectedRowKey) {
@@ -1642,7 +1642,7 @@ public class TableView extends Component {
         return selectedRowBindType;
     }
 
-    public void setSelectedRowBindType(BindType selectedRowBindType) {
+    public void setSelectedRowBindType(final BindType selectedRowBindType) {
         Utils.checkNull(selectedRowBindType, "Selected row bind type");
 
         BindType previousSelectedRowBindType = this.selectedRowBindType;
@@ -1656,7 +1656,7 @@ public class TableView extends Component {
         return selectedRowBindMapping;
     }
 
-    public void setSelectedRowBindMapping(SelectedRowBindMapping selectedRowBindMapping) {
+    public void setSelectedRowBindMapping(final SelectedRowBindMapping selectedRowBindMapping) {
         SelectedRowBindMapping previousSelectedRowBindMapping = this.selectedRowBindMapping;
 
         if (previousSelectedRowBindMapping != selectedRowBindMapping) {
@@ -1670,7 +1670,7 @@ public class TableView extends Component {
         return selectedRowsKey;
     }
 
-    public void setSelectedRowsKey(String selectedRowsKey) {
+    public void setSelectedRowsKey(final String selectedRowsKey) {
         String previousSelectedRowsKey = this.selectedRowsKey;
 
         if (previousSelectedRowsKey != selectedRowsKey) {
@@ -1683,7 +1683,7 @@ public class TableView extends Component {
         return selectedRowsBindType;
     }
 
-    public void setSelectedRowsBindType(BindType selectedRowsBindType) {
+    public void setSelectedRowsBindType(final BindType selectedRowsBindType) {
         Utils.checkNull(selectedRowsBindType, "Selected rows bind type");
 
         BindType previousSelectedRowsBindType = this.selectedRowsBindType;
@@ -1698,7 +1698,7 @@ public class TableView extends Component {
         return selectedRowsBindMapping;
     }
 
-    public void setSelectedRowsBindMapping(SelectedRowBindMapping selectedRowsBindMapping) {
+    public void setSelectedRowsBindMapping(final SelectedRowBindMapping selectedRowsBindMapping) {
         SelectedRowBindMapping previousSelectedRowsBindMapping = this.selectedRowsBindMapping;
 
         if (previousSelectedRowsBindMapping != selectedRowsBindMapping) {
@@ -1710,7 +1710,7 @@ public class TableView extends Component {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Object context) {
+    public void load(final Object context) {
         // Bind to list data
         if (tableDataKey != null && tableDataBindType != BindType.STORE
             && JSON.containsKey(context, tableDataKey)) {
@@ -1727,7 +1727,7 @@ public class TableView extends Component {
         }
 
         switch (selectMode) {
-            case SINGLE: {
+            case SINGLE:
                 // Bind using selected row key
                 if (selectedRowKey != null && selectedRowBindType != BindType.STORE
                     && JSON.containsKey(context, selectedRowKey)) {
@@ -1744,9 +1744,8 @@ public class TableView extends Component {
                 }
 
                 break;
-            }
 
-            case MULTI: {
+            case MULTI:
                 // Bind using selected rows key
                 if (selectedRowsKey != null && selectedRowsBindType != BindType.STORE
                     && JSON.containsKey(context, selectedRowsKey)) {
@@ -1771,20 +1770,17 @@ public class TableView extends Component {
                 }
 
                 break;
-            }
 
-            case NONE: {
+            case NONE:
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
     }
 
     @Override
-    public void store(Object context) {
+    public void store(final Object context) {
         // Bind to table data
         if (tableDataKey != null && tableDataBindType != BindType.LOAD) {
             Object value;
@@ -1798,7 +1794,7 @@ public class TableView extends Component {
         }
 
         switch (selectMode) {
-            case SINGLE: {
+            case SINGLE:
                 // Bind using selected row key
                 if (selectedRowKey != null && selectedRowBindType != BindType.LOAD) {
                     Object row;
@@ -1818,9 +1814,8 @@ public class TableView extends Component {
                 }
 
                 break;
-            }
 
-            case MULTI: {
+            case MULTI:
                 // Bind using selected rows key
                 if (selectedRowsKey != null && selectedRowsBindType != BindType.LOAD) {
                     ArrayList<Object> rows = new ArrayList<>();
@@ -1845,15 +1840,12 @@ public class TableView extends Component {
                 }
 
                 break;
-            }
 
-            case NONE: {
+            case NONE:
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
     }
 
@@ -1875,7 +1867,7 @@ public class TableView extends Component {
      * @return The row index, or <tt>-1</tt> if there is no row at the given
      * y-coordinate.
      */
-    public int getRowAt(int y) {
+    public int getRowAt(final int y) {
         TableView.Skin tableViewSkin = (TableView.Skin) getSkin();
         return tableViewSkin.getRowAt(y);
     }
@@ -1887,7 +1879,7 @@ public class TableView extends Component {
      * @return The column index, or <tt>-1</tt> if there is no column at the
      * given x-coordinate.
      */
-    public int getColumnAt(int x) {
+    public int getColumnAt(final int x) {
         TableView.Skin tableViewSkin = (TableView.Skin) getSkin();
         return tableViewSkin.getColumnAt(x);
     }
@@ -1898,7 +1890,7 @@ public class TableView extends Component {
      * @param rowIndex The row index.
      * @return The bounding area of the row.
      */
-    public Bounds getRowBounds(int rowIndex) {
+    public Bounds getRowBounds(final int rowIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin) getSkin();
         return tableViewSkin.getRowBounds(rowIndex);
     }
@@ -1909,7 +1901,7 @@ public class TableView extends Component {
      * @param columnIndex The column index.
      * @return The bounding area of the column.
      */
-    public Bounds getColumnBounds(int columnIndex) {
+    public Bounds getColumnBounds(final int columnIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin) getSkin();
         return tableViewSkin.getColumnBounds(columnIndex);
     }
@@ -1921,7 +1913,7 @@ public class TableView extends Component {
      * @param columnIndex The column index of the cell.
      * @return The bounding area of the cell.
      */
-    public Bounds getCellBounds(int rowIndex, int columnIndex) {
+    public Bounds getCellBounds(final int rowIndex, final int columnIndex) {
         TableView.Skin tableViewSkin = (TableView.Skin) getSkin();
         return tableViewSkin.getCellBounds(rowIndex, columnIndex);
     }

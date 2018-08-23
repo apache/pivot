@@ -551,45 +551,36 @@ public class TerraSplitPaneSkin extends ContainerSkin implements SplitPaneListen
 
         if (!splitPane.isLocked()) {
             switch (splitPane.getOrientation()) {
-                case HORIZONTAL: {
+                case HORIZONTAL:
                     switch (splitPane.getPrimaryRegion()) {
-                        case TOP_LEFT: {
+                        case TOP_LEFT:
                             cursor = Cursor.RESIZE_EAST;
                             break;
-                        }
-                        case BOTTOM_RIGHT: {
+                        case BOTTOM_RIGHT:
                             cursor = Cursor.RESIZE_WEST;
                             break;
-                        }
-                        default: {
+                        default:
                             break;
-                        }
                     }
 
                     break;
-                }
 
-                case VERTICAL: {
+                case VERTICAL:
                     switch (splitPane.getPrimaryRegion()) {
-                        case TOP_LEFT: {
+                        case TOP_LEFT:
                             cursor = Cursor.RESIZE_SOUTH;
                             break;
-                        }
-                        case BOTTOM_RIGHT: {
+                        case BOTTOM_RIGHT:
                             cursor = Cursor.RESIZE_NORTH;
                             break;
-                        }
-                        default: {
+                        default:
                             break;
-                        }
                     }
 
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
         }
 

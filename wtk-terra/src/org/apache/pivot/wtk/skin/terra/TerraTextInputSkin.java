@@ -448,25 +448,26 @@ public class TerraTextInputSkin extends ComponentSkin implements TextInput.Skin,
 
     private int getAlignmentDeltaX(final TextLayout textLayout) {
         int alignmentDeltaX = 0;
+
+        TextInput textInput;
+        int txtWidth, availWidth;
+
         switch (horizontalAlignment) {
             case LEFT:
             default:
                 break;
-            case CENTER: {
-                TextInput textInput = (TextInput) getComponent();
-                int txtWidth = getTextWidth(textLayout);
-                int availWidth = textInput.getWidth() - (padding.getWidth() + 2);
+            case CENTER:
+                textInput = (TextInput) getComponent();
+                txtWidth = getTextWidth(textLayout);
+                availWidth = textInput.getWidth() - (padding.getWidth() + 2);
                 alignmentDeltaX = (availWidth - txtWidth) / 2;
                 break;
-            }
-            case RIGHT: {
-                TextInput textInput = (TextInput) getComponent();
-                int txtWidth = getTextWidth(textLayout);
-                int availWidth = textInput.getWidth()
-                    - (padding.getWidth() + 2 + caret.width);
+            case RIGHT:
+                textInput = (TextInput) getComponent();
+                txtWidth = getTextWidth(textLayout);
+                availWidth = textInput.getWidth() - (padding.getWidth() + 2 + caret.width);
                 alignmentDeltaX = (availWidth - txtWidth);
                 break;
-            }
         }
 
         return alignmentDeltaX;

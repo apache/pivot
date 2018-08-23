@@ -50,13 +50,13 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
             this(false);
         }
 
-        public IndexFocusTraversalPolicy(boolean wrap) {
+        public IndexFocusTraversalPolicy(final boolean wrap) {
             this.wrap = wrap;
         }
 
         @Override
-        public Component getNextComponent(Container container, Component component,
-            FocusTraversalDirection direction) {
+        public Component getNextComponent(final Container container, final Component component,
+            final FocusTraversalDirection direction) {
             Utils.checkNull(container, "container");
             Utils.checkNull(direction, "direction");
 
@@ -65,7 +65,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
             int n = container.getLength();
             if (n > 0) {
                 switch (direction) {
-                    case FORWARD: {
+                    case FORWARD:
                         if (component == null) {
                             // Return the first component in the sequence
                             nextComponent = container.get(0);
@@ -86,9 +86,8 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
                         }
 
                         break;
-                    }
 
-                    case BACKWARD: {
+                    case BACKWARD:
                         if (component == null) {
                             // Return the last component in the sequence
                             nextComponent = container.get(n - 1);
@@ -109,11 +108,9 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
                         }
 
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             }
 
@@ -126,7 +123,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
     private static final FocusTraversalPolicy DEFAULT_FOCUS_TRAVERSAL_POLICY = new IndexFocusTraversalPolicy();
 
     @Override
-    public void install(Component component) {
+    public void install(final Component component) {
         super.install(component);
 
         Container container = (Container) component;
@@ -140,17 +137,17 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
     }
 
     @Override
-    public int getPreferredWidth(int height) {
+    public int getPreferredWidth(final int height) {
         return 0;
     }
 
     @Override
-    public int getPreferredHeight(int width) {
+    public int getPreferredHeight(final int width) {
         return 0;
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         if (backgroundPaint != null) {
             graphics.setPaint(backgroundPaint);
             graphics.fillRect(0, 0, getWidth(), getHeight());
@@ -183,7 +180,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      *
      * @param backgroundPaint The new {@link Paint} object to paint the background.
      */
-    public void setBackgroundPaint(Paint backgroundPaint) {
+    public void setBackgroundPaint(final Paint backgroundPaint) {
         this.backgroundPaint = backgroundPaint;
         repaintComponent();
     }
@@ -194,7 +191,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * @param backgroundPaint A string recognized by Pivot as a
      * {@linkplain GraphicsUtilities#decodePaint(String) Color or Paint value}.
      */
-    public final void setBackgroundPaint(String backgroundPaint) {
+    public final void setBackgroundPaint(final String backgroundPaint) {
         setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
@@ -204,7 +201,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * @param backgroundPaint A dictionary containing a
      * {@linkplain GraphicsUtilities#decodePaint(Dictionary) Paint description}.
      */
-    public final void setBackgroundPaint(Dictionary<String, ?> backgroundPaint) {
+    public final void setBackgroundPaint(final Dictionary<String, ?> backgroundPaint) {
         setBackgroundPaint(GraphicsUtilities.decodePaint(backgroundPaint));
     }
 
@@ -221,7 +218,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      *
      * @param backgroundColor The new background color for the container.
      */
-    public void setBackgroundColor(Color backgroundColor) {
+    public void setBackgroundColor(final Color backgroundColor) {
         setBackgroundPaint(backgroundColor);
     }
 
@@ -232,7 +229,7 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      * {@linkplain GraphicsUtilities#decodeColor color values recognized by
      * Pivot}.
      */
-    public final void setBackgroundColor(String backgroundColor) {
+    public final void setBackgroundColor(final String backgroundColor) {
         setBackgroundColor(GraphicsUtilities.decodeColor(backgroundColor, "backgroundColor"));
     }
 
@@ -241,51 +238,51 @@ public abstract class ContainerSkin extends ComponentSkin implements ContainerLi
      *
      * @param backgroundColor An index into the theme's color palette.
      */
-    public final void setBackgroundColor(int backgroundColor) {
+    public final void setBackgroundColor(final int backgroundColor) {
         Theme theme = currentTheme();
         setBackgroundColor(theme.getColor(backgroundColor));
     }
 
     // Container events
     @Override
-    public void componentInserted(Container container, int index) {
+    public void componentInserted(final Container container, final int index) {
         // No-op
     }
 
     @Override
-    public void componentsRemoved(Container container, int index, Sequence<Component> removed) {
+    public void componentsRemoved(final Container container, final int index, final Sequence<Component> removed) {
         // No-op
     }
 
     @Override
-    public void componentMoved(Container container, int from, int to) {
+    public void componentMoved(final Container container, final int from, final int to) {
         // No-op
     }
 
     @Override
-    public void focusTraversalPolicyChanged(Container container,
-        FocusTraversalPolicy previousFocusTraversalPolicy) {
+    public void focusTraversalPolicyChanged(final Container container,
+        final FocusTraversalPolicy previousFocusTraversalPolicy) {
         // No-op
     }
 
     @Override
-    public boolean mouseMove(Container container, int x, int y) {
+    public boolean mouseMove(final Container container, final int x, final int y) {
         return false;
     }
 
     @Override
-    public boolean mouseDown(Container container, Mouse.Button button, int x, int y) {
+    public boolean mouseDown(final Container container, final Mouse.Button button, final int x, final int y) {
         return false;
     }
 
     @Override
-    public boolean mouseUp(Container container, Mouse.Button button, int x, int y) {
+    public boolean mouseUp(final Container container, final Mouse.Button button, final int x, final int y) {
         return false;
     }
 
     @Override
-    public boolean mouseWheel(Container container, Mouse.ScrollType scrollType, int scrollAmount,
-        int wheelRotation, int x, int y) {
+    public boolean mouseWheel(final Container container, final Mouse.ScrollType scrollType, final int scrollAmount,
+        final int wheelRotation, final int x, final int y) {
         return false;
     }
 }

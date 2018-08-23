@@ -251,39 +251,39 @@ public class TerraCalendarSkin extends CalendarSkin {
                 int columnIndex = cellIndex % 7;
 
                 Component nextButton;
+                TablePane.Row row;
+
                 switch (keyCode) {
-                    case KeyCode.UP: {
+                    case KeyCode.UP:
                         do {
                             rowIndex--;
                             if (rowIndex < 0) {
                                 rowIndex = 5;
                             }
 
-                            TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
+                            row = calendarTablePane.getRows().get(rowIndex + 2);
                             nextButton = row.get(columnIndex);
                         } while (!nextButton.isEnabled());
 
                         nextButton.requestFocus();
                         break;
-                    }
 
-                    case KeyCode.DOWN: {
+                    case KeyCode.DOWN:
                         do {
                             rowIndex++;
                             if (rowIndex > 5) {
                                 rowIndex = 0;
                             }
 
-                            TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
+                            row = calendarTablePane.getRows().get(rowIndex + 2);
                             nextButton = row.get(columnIndex);
                         } while (!nextButton.isEnabled());
 
                         nextButton.requestFocus();
                         break;
-                    }
 
-                    case KeyCode.LEFT: {
-                        TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
+                    case KeyCode.LEFT:
+                        row = calendarTablePane.getRows().get(rowIndex + 2);
 
                         do {
                             columnIndex--;
@@ -296,10 +296,9 @@ public class TerraCalendarSkin extends CalendarSkin {
 
                         nextButton.requestFocus();
                         break;
-                    }
 
-                    case KeyCode.RIGHT: {
-                        TablePane.Row row = calendarTablePane.getRows().get(rowIndex + 2);
+                    case KeyCode.RIGHT:
+                        row = calendarTablePane.getRows().get(rowIndex + 2);
 
                         do {
                             columnIndex++;
@@ -312,11 +311,9 @@ public class TerraCalendarSkin extends CalendarSkin {
 
                         nextButton.requestFocus();
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
 
                 consumed = true;

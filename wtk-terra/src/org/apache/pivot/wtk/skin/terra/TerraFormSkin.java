@@ -129,33 +129,28 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                                 Color messageBackgroundColor = null;
 
                                 switch (messageType) {
-                                    case ERROR: {
+                                    case ERROR:
                                         messageColor = errorMessageColor;
                                         messageBackgroundColor = errorMessageBackgroundColor;
                                         break;
-                                    }
 
-                                    case WARNING: {
+                                    case WARNING:
                                         messageColor = warningMessageColor;
                                         messageBackgroundColor = warningMessageBackgroundColor;
                                         break;
-                                    }
 
-                                    case QUESTION: {
+                                    case QUESTION:
                                         messageColor = questionMessageColor;
                                         messageBackgroundColor = questionMessageBackgroundColor;
                                         break;
-                                    }
 
-                                    case INFO: {
+                                    case INFO:
                                         messageColor = infoMessageColor;
                                         messageBackgroundColor = infoMessageBackgroundColor;
                                         break;
-                                    }
 
-                                    default: {
+                                    default:
                                         break;
-                                    }
                                 }
 
                                 // Draw the label
@@ -263,33 +258,28 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                         Color color = null;
                         Color backgroundColor = null;
                         switch (messageType) {
-                            case ERROR: {
+                            case ERROR:
                                 color = errorMessageColor;
                                 backgroundColor = errorMessageBackgroundColor;
                                 break;
-                            }
 
-                            case WARNING: {
+                            case WARNING:
                                 color = warningMessageColor;
                                 backgroundColor = warningMessageBackgroundColor;
                                 break;
-                            }
 
-                            case QUESTION: {
+                            case QUESTION:
                                 color = questionMessageColor;
                                 backgroundColor = questionMessageBackgroundColor;
                                 break;
-                            }
 
-                            case INFO: {
+                            case INFO:
                                 color = infoMessageColor;
                                 backgroundColor = infoMessageBackgroundColor;
                                 break;
-                            }
 
-                            default: {
+                            default:
                                 break;
-                            }
                         }
 
                         flagMessageLabel.getStyles().put(Style.color, color);
@@ -828,26 +818,21 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                             Image flagIcon = null;
 
                             switch (messageType) {
-                                case ERROR: {
+                                case ERROR:
                                     flagIcon = errorIcon;
                                     break;
-                                }
-                                case WARNING: {
+                                case WARNING:
                                     flagIcon = warningIcon;
                                     break;
-                                }
-                                case QUESTION: {
+                                case QUESTION:
                                     flagIcon = questionIcon;
                                     break;
-                                }
-                                case INFO: {
+                                case INFO:
                                     flagIcon = infoIcon;
                                     break;
-                                }
-                                default: {
+                                default:
                                     flagIcon = infoIcon;
                                     break;
-                                }
                             }
 
                             Label label = labels.get(sectionIndex).get(fieldIndex);
@@ -865,29 +850,24 @@ public class TerraFormSkin extends ContainerSkin implements FormListener, FormAt
                             Color highlightColor = null;
 
                             switch (messageType) {
-                                case ERROR: {
+                                case ERROR:
                                     highlightColor = errorHighlightColor;
                                     break;
-                                }
 
-                                case WARNING: {
+                                case WARNING:
                                     highlightColor = warningHighlightColor;
                                     break;
-                                }
 
-                                case QUESTION: {
+                                case QUESTION:
                                     highlightColor = questionHighlightColor;
                                     break;
-                                }
 
-                                case INFO: {
+                                case INFO:
                                     highlightColor = infoHighlightColor;
                                     break;
-                                }
 
-                                default: {
+                                default:
                                     break;
-                                }
                             }
 
                             Bounds fieldBounds = field.getBounds();

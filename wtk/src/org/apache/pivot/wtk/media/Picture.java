@@ -41,7 +41,7 @@ public class Picture extends Image {
 
     private int baseline = -1;
 
-    public Picture(BufferedImage bufferedImage) {
+    public Picture(final BufferedImage bufferedImage) {
         Utils.checkNull(bufferedImage, "bufferedImage");
 
         this.bufferedImage = bufferedImage;
@@ -61,11 +61,11 @@ public class Picture extends Image {
         return bufferedImage.getHeight();
     }
 
-    public void resample(int size) {
+    public void resample(final int size) {
         resample(size, Interpolation.NEAREST_NEIGHBOR);
     }
 
-    public void resample(int size, Interpolation interpolation) {
+    public void resample(final int size, final Interpolation interpolation) {
         int width = getWidth();
         int height = getHeight();
 
@@ -81,11 +81,11 @@ public class Picture extends Image {
         resample(width, height, interpolation);
     }
 
-    public void resample(int width, int height) {
+    public void resample(final int width, final int height) {
         resample(width, height, Interpolation.NEAREST_NEIGHBOR);
     }
 
-    public void resample(int width, int height, Interpolation interpolation) {
+    public void resample(final int width, final int height, final Interpolation interpolation) {
         Utils.checkNull(interpolation, "interpolation");
 
         int previousWidth = getWidth();
@@ -111,21 +111,17 @@ public class Picture extends Image {
             // Set the interpolation
             Object interpolationHint = 0;
             switch (interpolation) {
-                case NEAREST_NEIGHBOR: {
+                case NEAREST_NEIGHBOR:
                     interpolationHint = RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR;
                     break;
-                }
-                case BILINEAR: {
+                case BILINEAR:
                     interpolationHint = RenderingHints.VALUE_INTERPOLATION_BILINEAR;
                     break;
-                }
-                case BICUBIC: {
+                case BICUBIC:
                     interpolationHint = RenderingHints.VALUE_INTERPOLATION_BICUBIC;
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
 
             bufferedImageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -149,7 +145,7 @@ public class Picture extends Image {
         return baseline;
     }
 
-    public void setBaseline(int baseline) {
+    public void setBaseline(final int baseline) {
         int previousBaseline = this.baseline;
 
         if (baseline != previousBaseline) {
@@ -159,7 +155,7 @@ public class Picture extends Image {
     }
 
     @Override
-    public void paint(Graphics2D graphics) {
+    public void paint(final Graphics2D graphics) {
         graphics.drawImage(bufferedImage, 0, 0, null);
     }
 }

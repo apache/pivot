@@ -52,13 +52,17 @@ public class XMLSerializer implements Serializer<Element> {
     public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final String XML_EXTENSION = "xml";
     public static final String MIME_TYPE = "text/xml";
-    public static final int BUFFER_SIZE = 2048;
+    /**
+     * Buffer size to use while reading and writing (should be bigger than the default for
+     * BufferedReader or BufferedWriter, which seems to be 8192 as of Java 7).
+     */
+    public static final int BUFFER_SIZE = 16384;
 
     public XMLSerializer() {
         this(Charset.forName(DEFAULT_CHARSET_NAME));
     }
 
-    public XMLSerializer(Charset charset) {
+    public XMLSerializer(final Charset charset) {
         Utils.checkNull(charset, "charset");
 
         this.charset = charset;
@@ -69,7 +73,7 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     @Override
-    public Element readObject(InputStream inputStream) throws IOException, SerializationException {
+    public Element readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
@@ -78,7 +82,7 @@ public class XMLSerializer implements Serializer<Element> {
         return element;
     }
 
-    public Element readObject(Reader reader) throws SerializationException {
+    public Element readObject(final Reader reader) throws SerializationException {
         Utils.checkNull(reader, "reader");
 
         // Parse the XML stream
@@ -96,7 +100,7 @@ public class XMLSerializer implements Serializer<Element> {
                 int event = xmlStreamReader.next();
 
                 switch (event) {
-                    case XMLStreamConstants.CHARACTERS: {
+                    case XMLStreamConstants.CHARACTERS:
                         if (!xmlStreamReader.isWhiteSpace()) {
                             TextNode textNode = new TextNode(xmlStreamReader.getText());
 
@@ -111,9 +115,8 @@ public class XMLSerializer implements Serializer<Element> {
                         }
 
                         break;
-                    }
 
-                    case XMLStreamConstants.START_ELEMENT: {
+                    case XMLStreamConstants.START_ELEMENT:
                         // Create the element
                         String prefix = xmlStreamReader.getPrefix();
                         if (prefix != null && prefix.length() == 0) {
@@ -165,9 +168,8 @@ public class XMLSerializer implements Serializer<Element> {
                         current = element;
 
                         break;
-                    }
 
-                    case XMLStreamConstants.END_ELEMENT: {
+                    case XMLStreamConstants.END_ELEMENT:
                         // Notify listeners
                         if (xmlSerializerListeners != null) {
                             xmlSerializerListeners.endElement(this);
@@ -179,11 +181,9 @@ public class XMLSerializer implements Serializer<Element> {
                         }
 
                         break;
-                    }
 
-                    default: {
+                    default:
                         break;
-                    }
                 }
             }
         } catch (XMLStreamException exception) {
@@ -194,7 +194,7 @@ public class XMLSerializer implements Serializer<Element> {
     }
 
     @Override
-    public void writeObject(Element element, OutputStream outputStream) throws IOException,
+    public void writeObject(final Element element, final OutputStream outputStream) throws IOException,
         SerializationException {
         Utils.checkNull(outputStream, "outputStream");
 
@@ -204,7 +204,7 @@ public class XMLSerializer implements Serializer<Element> {
         writer.flush();
     }
 
-    public void writeObject(Element element, Writer writer) throws SerializationException {
+    public void writeObject(final Element element, final Writer writer) throws SerializationException {
         Utils.checkNull(writer, "writer");
         Utils.checkNull(element, "element");
 
@@ -220,7 +220,7 @@ public class XMLSerializer implements Serializer<Element> {
         }
     }
 
-    private void writeElement(Element element, XMLStreamWriter xmlStreamWriter)
+    private void writeElement(final Element element, final XMLStreamWriter xmlStreamWriter)
         throws XMLStreamException, SerializationException {
         String namespacePrefix = element.getNamespacePrefix();
         String localName = element.getLocalName();
@@ -286,13 +286,13 @@ public class XMLSerializer implements Serializer<Element> {
         }
     }
 
-    private static void writeTextNode(TextNode textNode, XMLStreamWriter xmlStreamWriter)
+    private static void writeTextNode(final TextNode textNode, final XMLStreamWriter xmlStreamWriter)
         throws XMLStreamException {
         xmlStreamWriter.writeCharacters(textNode.getText());
     }
 
     @Override
-    public String getMIMEType(Element object) {
+    public String getMIMEType(final Element object) {
         return MIME_TYPE;
     }
 

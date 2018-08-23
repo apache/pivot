@@ -240,17 +240,14 @@ public final class DesktopApplicationContext extends ApplicationContext {
             super.processWindowEvent(event);
 
             switch (event.getID()) {
-                case WindowEvent.WINDOW_CLOSING: {
+                case WindowEvent.WINDOW_CLOSING:
                     exit();
                     break;
-                }
-                case WindowEvent.WINDOW_CLOSED: {
+                case WindowEvent.WINDOW_CLOSED:
                     System.exit(0);
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
         }
 
@@ -259,25 +256,22 @@ public final class DesktopApplicationContext extends ApplicationContext {
             super.processWindowStateEvent(event);
 
             switch (event.getID()) {
-                case WindowEvent.WINDOW_ICONIFIED: {
+                case WindowEvent.WINDOW_ICONIFIED:
                     try {
                         application.suspend();
                     } catch (Throwable exception) {
                         handleUncaughtException(exception);
                     }
                     break;
-                }
-                case WindowEvent.WINDOW_DEICONIFIED: {
+                case WindowEvent.WINDOW_DEICONIFIED:
                     try {
                         application.resume();
                     } catch (Throwable exception) {
                         handleUncaughtException(exception);
                     }
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
         }
     }
@@ -331,9 +325,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
         public void processWindowEvent(WindowEvent event) {
             super.processWindowEvent(event);
 
+            Display display;
             switch (event.getID()) {
-                case WindowEvent.WINDOW_OPENED: {
-                    Display display = this.displayHost.getDisplay();
+                case WindowEvent.WINDOW_OPENED:
+                    display = this.displayHost.getDisplay();
                     displays.add(display);
 
                     if (this.displayCloseListener != null) {
@@ -341,26 +336,20 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
 
                     this.displayHost.requestFocus();
-
                     break;
-                }
-                case WindowEvent.WINDOW_CLOSING: {
+                case WindowEvent.WINDOW_CLOSING:
                     dispose();
                     break;
-                }
-                case WindowEvent.WINDOW_CLOSED: {
-                    Display display = this.displayHost.getDisplay();
+                case WindowEvent.WINDOW_CLOSED:
+                    display = this.displayHost.getDisplay();
                     displays.remove(display);
 
                     if (this.displayCloseListener != null) {
                         this.displayCloseListener.hostWindowClosed(display);
                     }
-
                     break;
-                }
-                default: {
+                default:
                     break;
-                }
             }
         }
     }
@@ -893,9 +882,12 @@ public final class DesktopApplicationContext extends ApplicationContext {
 
     /**
      * Utility method to make it easier to define <tt>main()</tt> entry-points
-     * into applications. For example: <code> public class MyApp implements
-     * Application { public static void main(String[] args) throws Exception {
-     * DesktopApplicationContext.main(MyApp.class, args); } } </code>
+     * into applications. For example:
+     * <pre> public class MyApp implements Application {
+     *   public static void main(String[] args) throws Exception {
+     *     DesktopApplicationContext.main(MyApp.class, args);
+     *   }
+     * } </pre>
      *
      * @param applicationClass the class of Application entry point
      * @param applicationArgs application arguments

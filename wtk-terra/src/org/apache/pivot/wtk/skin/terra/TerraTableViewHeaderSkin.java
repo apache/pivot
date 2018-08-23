@@ -74,23 +74,20 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
             GeneralPath shape = new GeneralPath();
 
             switch (sortDirection) {
-                case ASCENDING: {
+                case ASCENDING:
                     shape.moveTo(0, 3);
                     shape.lineTo(3, 0);
                     shape.lineTo(6, 3);
                     break;
-                }
 
-                case DESCENDING: {
+                case DESCENDING:
                     shape.moveTo(0, 0);
                     shape.lineTo(3, 3);
                     shape.lineTo(6, 0);
                     break;
-                }
 
-                default: {
+                default:
                     break;
-                }
             }
 
             shape.closePath();
@@ -325,19 +322,16 @@ public class TerraTableViewHeaderSkin extends ComponentSkin implements TableView
 
                 if (sortDirection != null) {
                     switch (sortDirection) {
-                        case ASCENDING: {
+                        case ASCENDING:
                             sortImage = sortAscendingImage;
                             break;
-                        }
 
-                        case DESCENDING: {
+                        case DESCENDING:
                             sortImage = sortDescendingImage;
                             break;
-                        }
 
-                        default: {
+                        default:
                             break;
-                        }
                     }
                 }
 

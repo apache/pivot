@@ -1673,7 +1673,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
         SelectMode selectMode = treeView.getSelectMode();
 
         switch (keyCode) {
-            case KeyCode.UP: {
+            case KeyCode.UP:
                 if (selectMode != SelectMode.NONE) {
                     Path firstSelectedPath = treeView.getFirstSelectedPath();
 
@@ -1703,9 +1703,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     consumed = true;
                 }
                 break;
-            }
 
-            case KeyCode.DOWN: {
+            case KeyCode.DOWN:
                 if (selectMode != SelectMode.NONE) {
                     Path lastSelectedPath = treeView.getLastSelectedPath();
 
@@ -1736,9 +1735,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     consumed = true;
                 }
                 break;
-            }
 
-            case KeyCode.LEFT: {
+            case KeyCode.LEFT:
                 if (showBranchControls) {
                     Sequence<Path> paths = treeView.getSelectedPaths();
 
@@ -1755,9 +1753,8 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     }
                 }
                 break;
-            }
 
-            case KeyCode.RIGHT: {
+            case KeyCode.RIGHT:
                 if (showBranchControls) {
                     Sequence<Path> paths = treeView.getSelectedPaths();
 
@@ -1774,7 +1771,6 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
                     }
                 }
                 break;
-            }
 
             default:
                 consumed = super.keyPressed(component, keyCode, keyLocation);
