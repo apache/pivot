@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.Utils;
 
 /**
@@ -41,7 +42,6 @@ public class StringSerializer implements Serializer<String> {
 
     public static final String TEXT_EXTENSION = "txt";
     public static final String MIME_TYPE = "text/plain";
-    public static final int BUFFER_SIZE = 16384;
 
     public StringSerializer() {
         this(StandardCharsets.UTF_8);
@@ -72,10 +72,10 @@ public class StringSerializer implements Serializer<String> {
         String result = null;
 
         try {
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, Constants.BUFFER_SIZE);
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 
-            byte[] buffer = new byte[BUFFER_SIZE];
+            byte[] buffer = new byte[Constants.BUFFER_SIZE];
             int read;
             while ((read = bufferedInputStream.read(buffer)) != -1) {
                 byteOutputStream.write(buffer, 0, read);
@@ -105,7 +105,7 @@ public class StringSerializer implements Serializer<String> {
         Utils.checkNull(outputStream, "outputStream");
 
         try {
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, Constants.BUFFER_SIZE);
             bufferedOutputStream.write(text.getBytes(charset));
             bufferedOutputStream.flush();
         } catch (IOException exception) {

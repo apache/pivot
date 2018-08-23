@@ -29,6 +29,7 @@ import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Constants;
 
 /**
  * Implementation of the {@link Serializer} interface that reads and writes
@@ -36,8 +37,6 @@ import org.apache.pivot.serialization.Serializer;
  */
 public class FileSerializer implements Serializer<File> {
     private File tempFileDirectory;
-
-    public static final int BUFFER_SIZE = 1024;
 
     private static final MimetypesFileTypeMap MIME_TYPES_FILE_MAP = new MimetypesFileTypeMap();
 
@@ -56,7 +55,7 @@ public class FileSerializer implements Serializer<File> {
      * @param tempFileDirectory The directory in which to store temporary
      * files (can be {@code null} to use the system default location).
      */
-    public FileSerializer(File tempFileDirectory) {
+    public FileSerializer(final File tempFileDirectory) {
         if (tempFileDirectory != null && !tempFileDirectory.isDirectory()) {
             throw new IllegalArgumentException("Temp file directory '" + tempFileDirectory + "' is not a directory.");
         }
@@ -69,12 +68,12 @@ public class FileSerializer implements Serializer<File> {
      * and must be deleted by the caller.
      */
     @Override
-    public File readObject(InputStream inputStream) throws IOException, SerializationException {
+    public File readObject(final InputStream inputStream) throws IOException, SerializationException {
         File file = File.createTempFile(getClass().getName(), null, tempFileDirectory);
         OutputStream outputStream = null;
 
         try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(file), BUFFER_SIZE);
+            outputStream = new BufferedOutputStream(new FileOutputStream(file), Constants.BUFFER_SIZE);
             for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
                 outputStream.write((byte) data);
             }
@@ -91,12 +90,12 @@ public class FileSerializer implements Serializer<File> {
      * Writes a file to an output stream.
      */
     @Override
-    public void writeObject(File file, OutputStream outputStream) throws IOException,
+    public void writeObject(final File file, final OutputStream outputStream) throws IOException,
         SerializationException {
         InputStream inputStream = null;
 
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(file), BUFFER_SIZE);
+            inputStream = new BufferedInputStream(new FileInputStream(file), Constants.BUFFER_SIZE);
             for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
                 outputStream.write((byte) data);
             }
@@ -108,7 +107,7 @@ public class FileSerializer implements Serializer<File> {
     }
 
     @Override
-    public String getMIMEType(File file) {
+    public String getMIMEType(final File file) {
         return MIME_TYPES_FILE_MAP.getContentType(file);
     }
 }

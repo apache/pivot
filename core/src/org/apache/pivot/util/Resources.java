@@ -19,6 +19,7 @@ package org.apache.pivot.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -39,23 +40,23 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     private Map<String, Object> resourceMap = null;
 
-    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+    public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     public Resources(final String baseName) throws IOException, SerializationException {
-        this(null, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
+        this(null, baseName, Locale.getDefault(), DEFAULT_CHARSET);
     }
 
     public Resources(final Resources parent, final String baseName) throws IOException, SerializationException {
-        this(parent, baseName, Locale.getDefault(), Charset.forName(DEFAULT_CHARSET_NAME));
+        this(parent, baseName, Locale.getDefault(), DEFAULT_CHARSET);
     }
 
     public Resources(final String baseName, final Locale locale) throws IOException, SerializationException {
-        this(null, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
+        this(null, baseName, locale, DEFAULT_CHARSET);
     }
 
     public Resources(final Resources parent, final String baseName, final Locale locale) throws IOException,
         SerializationException {
-        this(parent, baseName, locale, Charset.forName(DEFAULT_CHARSET_NAME));
+        this(parent, baseName, locale, DEFAULT_CHARSET);
     }
 
     public Resources(final String baseName, final Charset charset) throws IOException, SerializationException {

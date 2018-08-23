@@ -28,6 +28,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.Utils;
 
 /**
@@ -38,12 +39,11 @@ public class PlainTextSerializer implements Serializer<Document> {
     private Charset charset = null;
 
     public static final String MIME_TYPE = "text/plain";
-    public static final int BUFFER_SIZE = 16_384;
 
     private boolean expandTabs = false;
     private int tabWidth = 4;
 
-    private int bufferSize = BUFFER_SIZE;
+    private int bufferSize = Constants.BUFFER_SIZE;
 
 
     public PlainTextSerializer() {
@@ -92,7 +92,7 @@ public class PlainTextSerializer implements Serializer<Document> {
 
     /**
      * Sets the buffer size used internally for reading and writing.  The
-     * default value is {@link #BUFFER_SIZE}.  A value of <tt>0</tt> will
+     * default value is {@link Constants#BUFFER_SIZE}.  A value of <tt>0</tt> will
      * use the default value in the {@link BufferedReader} and {@link BufferedWriter}
      * classes (probably 8192).
      *

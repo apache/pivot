@@ -29,6 +29,7 @@ import java.io.Writer;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayAdapter;
@@ -39,6 +40,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.io.EchoReader;
 import org.apache.pivot.io.EchoWriter;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 
@@ -56,19 +58,17 @@ public class CSVSerializer implements Serializer<List<?>> {
     private boolean verbose = false;
 
     private int c = -1;
-    private static final int BOM = 0xFEFF;
 
     private CSVSerializerListener.Listeners csvSerializerListeners = null;
 
-    public static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
+    public static final Charset DEFAULT_CHARSET = StandardCharsets.ISO_8859_1;
     public static final Type DEFAULT_ITEM_TYPE = HashMap.class;
 
     public static final String CSV_EXTENSION = "csv";
     public static final String MIME_TYPE = "text/csv";
-    public static final int BUFFER_SIZE = 16384;
 
     public CSVSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_ITEM_TYPE);
+        this(DEFAULT_CHARSET, DEFAULT_ITEM_TYPE);
     }
 
     public CSVSerializer(final Charset charset) {
@@ -76,7 +76,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     }
 
     public CSVSerializer(final Type itemType) {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), itemType);
+        this(DEFAULT_CHARSET, itemType);
     }
 
     public CSVSerializer(final Charset charset, final Type itemType) {
@@ -190,7 +190,7 @@ public class CSVSerializer implements Serializer<List<?>> {
     public List<?> readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), Constants.BUFFER_SIZE);
         if (verbose) {
             reader = new EchoReader(reader);
         }
@@ -243,7 +243,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         c = lineNumberReader.read();
 
         // Ignore Byte Order Mark (if present)
-        if (c == BOM) {
+        if (c == Constants.BYTE_ORDER_MARK) {
             c = lineNumberReader.read();
         }
 
@@ -416,7 +416,7 @@ public class CSVSerializer implements Serializer<List<?>> {
         Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-            BUFFER_SIZE);
+            Constants.BUFFER_SIZE);
         if (verbose) {
             writer = new EchoWriter(writer);
         }

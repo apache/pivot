@@ -34,6 +34,7 @@ import org.apache.pivot.io.IOTask;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 
@@ -98,10 +99,6 @@ public abstract class Query<V> extends IOTask<V> {
 
     public static final int DEFAULT_PORT = -1;
 
-    private static final String HTTP_PROTOCOL = "http";
-    private static final String HTTPS_PROTOCOL = "https";
-    private static final String URL_ENCODING = "UTF-8";
-
     static {
         try {
             // See http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
@@ -122,11 +119,13 @@ public abstract class Query<V> extends IOTask<V> {
      * @param executorService The executor to use for running the query (in the background).
      * @throws IllegalArgumentException if the {@code URL} cannot be constructed.
      */
-    public Query(String hostname, int port, String path, boolean secure, ExecutorService executorService) {
+    public Query(final String hostname, final int port, final String path, final boolean secure,
+        final ExecutorService executorService) {
         super(executorService);
 
         try {
-            locationContext = new URL(secure ? HTTPS_PROTOCOL : HTTP_PROTOCOL, hostname, port, path);
+            locationContext =
+                new URL(secure ? Constants.HTTPS_PROTOCOL : Constants.HTTP_PROTOCOL, hostname, port, path);
         } catch (MalformedURLException exception) {
             throw new IllegalArgumentException("Unable to construct context URL.", exception);
         }
@@ -148,14 +147,14 @@ public abstract class Query<V> extends IOTask<V> {
 
     public boolean isSecure() {
         String protocol = locationContext.getProtocol();
-        return protocol.equalsIgnoreCase(HTTPS_PROTOCOL);
+        return protocol.equalsIgnoreCase(Constants.HTTPS_PROTOCOL);
     }
 
     public HostnameVerifier getHostnameVerifier() {
         return hostnameVerifier;
     }
 
-    public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
+    public void setHostnameVerifier(final HostnameVerifier hostnameVerifier) {
         this.hostnameVerifier = hostnameVerifier;
     }
 
@@ -175,7 +174,7 @@ public abstract class Query<V> extends IOTask<V> {
      * @param proxy This query's proxy, or <tt>null</tt> to use the default JVM
      * proxy settings
      */
-    public void setProxy(Proxy proxy) {
+    public void setProxy(final Proxy proxy) {
         this.proxy = proxy;
     }
 
@@ -189,8 +188,8 @@ public abstract class Query<V> extends IOTask<V> {
                         queryStringBuilder.append("&");
                     }
 
-                    queryStringBuilder.append(URLEncoder.encode(key, URL_ENCODING) + "="
-                        + URLEncoder.encode(parameters.get(key, index), URL_ENCODING));
+                    queryStringBuilder.append(URLEncoder.encode(key, Constants.URL_ENCODING) + "="
+                        + URLEncoder.encode(parameters.get(key, index), Constants.URL_ENCODING));
                 } catch (UnsupportedEncodingException exception) {
                     throw new IllegalStateException("Unable to construct query string.", exception);
                 }
@@ -263,7 +262,7 @@ public abstract class Query<V> extends IOTask<V> {
      * @param serializer The serializer (must be non-null).
      * @throws IllegalArgumentException if the input is {@code null}.
      */
-    public void setSerializer(Serializer<?> serializer) {
+    public void setSerializer(final Serializer<?> serializer) {
         Utils.checkNull(serializer, "serializer");
 
         this.serializer = serializer;
@@ -353,7 +352,7 @@ public abstract class Query<V> extends IOTask<V> {
 
             // Set the request headers
             if (result != null) {
-                connection.setRequestProperty("Content-Type", serializerLocal.getMIMEType(result));
+                connection.setRequestProperty(Constants.CONTENT_TYPE_HEADER, serializerLocal.getMIMEType(result));
             }
 
             for (String key : requestHeaders) {

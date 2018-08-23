@@ -32,6 +32,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.collections.ArrayList;
@@ -46,6 +47,7 @@ import org.apache.pivot.io.EchoWriter;
 import org.apache.pivot.serialization.MacroReader;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 
@@ -65,16 +67,14 @@ public class JSONSerializer implements Serializer<Object> {
 
     private JSONSerializerListener.Listeners jsonSerializerListeners = null;
 
-    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+    public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     public static final Type DEFAULT_TYPE = Object.class;
 
     public static final String JSON_EXTENSION = "json";
     public static final String MIME_TYPE = "application/json";
-    public static final int BUFFER_SIZE = 2048;
-    public static final int BYTE_ORDER_MARK = 0xFEFF;
 
     public JSONSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), DEFAULT_TYPE);
+        this(DEFAULT_CHARSET, DEFAULT_TYPE);
     }
 
     public JSONSerializer(final Charset charset) {
@@ -82,7 +82,7 @@ public class JSONSerializer implements Serializer<Object> {
     }
 
     public JSONSerializer(final Type type) {
-        this(Charset.forName(DEFAULT_CHARSET_NAME), type);
+        this(DEFAULT_CHARSET, type);
     }
 
     public JSONSerializer(final Charset charset, final Type type) {
@@ -182,7 +182,7 @@ public class JSONSerializer implements Serializer<Object> {
     public Object readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), Constants.BUFFER_SIZE);
         if (verbose) {
             reader = new EchoReader(reader);
         }
@@ -221,7 +221,7 @@ public class JSONSerializer implements Serializer<Object> {
         c = realReader.read();
 
         // Ignore BOM (if present)
-        if (c == BYTE_ORDER_MARK) {
+        if (c == Constants.BYTE_ORDER_MARK) {
             c = realReader.read();
         }
 
@@ -792,7 +792,7 @@ public class JSONSerializer implements Serializer<Object> {
         Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-            BUFFER_SIZE);
+            Constants.BUFFER_SIZE);
         if (verbose) {
             writer = new EchoWriter(writer);
         }

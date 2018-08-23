@@ -28,6 +28,7 @@ import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSON;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskListener;
@@ -84,7 +85,7 @@ public class SuggestionDemo extends Window implements Bindable {
         // Get the query text
         String text;
         try {
-            text = URLEncoder.encode(textInput.getText(), "UTF-8");
+            text = URLEncoder.encode(textInput.getText(), Constants.URL_ENCODING);
         } catch (UnsupportedEncodingException exception) {
             throw new RuntimeException(exception);
         }
@@ -118,7 +119,7 @@ public class SuggestionDemo extends Window implements Bindable {
                                 if (suggestionPopupArgument.getResult()) {
                                     String textLocal;
                                     try {
-                                        textLocal = URLEncoder.encode(textInput.getText(), "UTF-8");
+                                        textLocal = URLEncoder.encode(textInput.getText(), Constants.URL_ENCODING);
                                     } catch (UnsupportedEncodingException exception) {
                                         throw new RuntimeException(exception);
                                     }

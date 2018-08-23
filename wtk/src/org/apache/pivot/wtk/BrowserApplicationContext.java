@@ -30,6 +30,7 @@ import netscape.javascript.JSObject;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.immutable.ImmutableMap;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.Utils;
 
 /**
@@ -104,7 +105,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                             String key = property[0].trim();
                             String value;
                             try {
-                                value = URLDecoder.decode(property[1].trim(), "UTF-8");
+                                value = URLDecoder.decode(property[1].trim(), Constants.URL_ENCODING);
                             } catch (UnsupportedEncodingException exception) {
                                 throw new RuntimeException(exception);
                             }
@@ -148,7 +149,7 @@ public final class BrowserApplicationContext extends ApplicationContext {
                                 } else {
                                     String value;
                                     try {
-                                        value = URLDecoder.decode(propertyValue, "UTF-8");
+                                        value = URLDecoder.decode(propertyValue, Constants.URL_ENCODING);
                                     } catch (UnsupportedEncodingException exception) {
                                         throw new RuntimeException(exception);
                                     }

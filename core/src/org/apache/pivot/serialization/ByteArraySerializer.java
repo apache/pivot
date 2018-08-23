@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.Utils;
 
 /**
@@ -34,8 +35,6 @@ import org.apache.pivot.util.Utils;
 public class ByteArraySerializer implements Serializer<byte[]> {
     public static final String MIME_TYPE = "application/octet-stream";
 
-    public static final int BUFFER_SIZE = 16384;
-
     /**
      * Reads a byte array from an input stream.
      */
@@ -46,10 +45,10 @@ public class ByteArraySerializer implements Serializer<byte[]> {
         byte[] result = null;
 
         try {
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, Constants.BUFFER_SIZE);
             ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 
-            byte[] buffer = new byte[BUFFER_SIZE];
+            byte[] buffer = new byte[Constants.BUFFER_SIZE];
             int read;
             while ((read = bufferedInputStream.read(buffer)) != -1) {
                 byteOutputStream.write(buffer, 0, read);
@@ -76,7 +75,7 @@ public class ByteArraySerializer implements Serializer<byte[]> {
         Utils.checkNull(outputStream, "outputStream");
 
         try {
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, Constants.BUFFER_SIZE);
             bufferedOutputStream.write(bytes);
             bufferedOutputStream.flush();
         } catch (IOException exception) {

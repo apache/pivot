@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -36,6 +37,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 
@@ -49,17 +51,11 @@ public class XMLSerializer implements Serializer<Element> {
 
     public static final String XMLNS_ATTRIBUTE_PREFIX = "xmlns";
 
-    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
     public static final String XML_EXTENSION = "xml";
     public static final String MIME_TYPE = "text/xml";
-    /**
-     * Buffer size to use while reading and writing (should be bigger than the default for
-     * BufferedReader or BufferedWriter, which seems to be 8192 as of Java 7).
-     */
-    public static final int BUFFER_SIZE = 16384;
 
     public XMLSerializer() {
-        this(Charset.forName(DEFAULT_CHARSET_NAME));
+        this(StandardCharsets.UTF_8);
     }
 
     public XMLSerializer(final Charset charset) {
@@ -76,7 +72,7 @@ public class XMLSerializer implements Serializer<Element> {
     public Element readObject(final InputStream inputStream) throws IOException, SerializationException {
         Utils.checkNull(inputStream, "inputStream");
 
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), BUFFER_SIZE);
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, charset), Constants.BUFFER_SIZE);
         Element element = readObject(reader);
 
         return element;
@@ -199,7 +195,7 @@ public class XMLSerializer implements Serializer<Element> {
         Utils.checkNull(outputStream, "outputStream");
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, charset),
-            BUFFER_SIZE);
+            Constants.BUFFER_SIZE);
         writeObject(element, writer);
         writer.flush();
     }

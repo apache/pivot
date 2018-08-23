@@ -36,6 +36,7 @@ import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.serialization.Serializer;
+import org.apache.pivot.util.Constants;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.web.Query;
 import org.apache.pivot.web.QueryDictionary;
@@ -57,12 +58,12 @@ public abstract class QueryServlet extends HttpServlet {
             this(new String[] {});
         }
 
-        public Path(String[] elements) {
+        public Path(final String[] elements) {
             this.elements = new ArrayList<>(elements);
         }
 
         @Override
-        public int add(String element) {
+        public int add(final String element) {
             throw new UnsupportedOperationException();
         }
 
@@ -72,27 +73,27 @@ public abstract class QueryServlet extends HttpServlet {
         }
 
         @Override
-        public String update(int index, String element) {
+        public String update(final int index, final String element) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public int remove(String element) {
+        public int remove(final String element) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public Sequence<String> remove(int index, int count) {
+        public Sequence<String> remove(final int index, final int count) {
             return elements.remove(index, count);
         }
 
         @Override
-        public String get(int index) {
+        public String get(final int index) {
             return elements.get(index);
         }
 
         @Override
-        public int indexOf(String element) {
+        public int indexOf(final String element) {
             return elements.indexOf(element);
         }
 
@@ -132,14 +133,6 @@ public abstract class QueryServlet extends HttpServlet {
     private transient ThreadLocal<QueryDictionary> parameters = new ThreadLocal<>();
     private transient ThreadLocal<QueryDictionary> requestHeaders = new ThreadLocal<>();
     private transient ThreadLocal<QueryDictionary> responseHeaders = new ThreadLocal<>();
-
-    public static final String HTTP_PROTOCOL = "http";
-    public static final String HTTPS_PROTOCOL = "https";
-    public static final String URL_ENCODING = "UTF-8";
-
-    public static final String CONTENT_TYPE_HEADER = "Content-Type";
-    public static final String CONTENT_LENGTH_HEADER = "Content-Length";
-    public static final String LOCATION_HEADER = "Location";
 
     /**
      * Gets the host name that was requested.
@@ -189,7 +182,7 @@ public abstract class QueryServlet extends HttpServlet {
      * on the {@link #isSecure} setting.
      */
     public String getProtocol() {
-        return isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL;
+        return isSecure() ? Constants.HTTPS_PROTOCOL : Constants.HTTP_PROTOCOL;
     }
 
     /**
@@ -199,7 +192,7 @@ public abstract class QueryServlet extends HttpServlet {
     public URL getLocation() {
         URL location;
         try {
-            location = new URL(isSecure() ? HTTPS_PROTOCOL : HTTP_PROTOCOL, getHostname(),
+            location = new URL(isSecure() ? Constants.HTTPS_PROTOCOL : Constants.HTTP_PROTOCOL, getHostname(),
                 getPort(), getContextPath() + getServletPath() + "/");
         } catch (MalformedURLException exception) {
             throw new RuntimeException(exception);
@@ -266,7 +259,7 @@ public abstract class QueryServlet extends HttpServlet {
      * @param path The path to the server resources.
      * @throws QueryException if there is a problem, Houston.
      */
-    protected void validate(Query.Method method, Path path) throws QueryException {
+    protected void validate(final Query.Method method, final Path path) throws QueryException {
         // No-op
     }
 
@@ -278,7 +271,7 @@ public abstract class QueryServlet extends HttpServlet {
      * @return The result of the GET.
      * @throws QueryException on any error.
      */
-    protected Object doGet(Path path) throws QueryException {
+    protected Object doGet(final Path path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -292,7 +285,7 @@ public abstract class QueryServlet extends HttpServlet {
      * <tt>null</tt> if operation did not result in the creation of a resource.
      * @throws QueryException on errors.
      */
-    protected URL doPost(Path path, Object value) throws QueryException {
+    protected URL doPost(final Path path, final Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -306,7 +299,7 @@ public abstract class QueryServlet extends HttpServlet {
      * resource; <tt>false</tt>, otherwise.
      * @throws QueryException on any error.
      */
-    protected boolean doPut(Path path, Object value) throws QueryException {
+    protected boolean doPut(final Path path, final Object value) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -317,7 +310,7 @@ public abstract class QueryServlet extends HttpServlet {
      * @param path The server path for this request.
      * @throws QueryException if there was a problem.
      */
-    protected void doDelete(Path path) throws QueryException {
+    protected void doDelete(final Path path) throws QueryException {
         throw new QueryException(Query.Status.METHOD_NOT_ALLOWED);
     }
 
@@ -334,7 +327,7 @@ public abstract class QueryServlet extends HttpServlet {
         throws QueryException;
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response)
+    protected void service(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         try {
             try {
@@ -343,7 +336,7 @@ public abstract class QueryServlet extends HttpServlet {
                 port.set(Integer.valueOf(request.getLocalPort()));
                 contextPath.set(request.getContextPath());
                 servletPath.set(request.getServletPath());
-                secure.set(Boolean.valueOf(url.getProtocol().equalsIgnoreCase(HTTPS_PROTOCOL)));
+                secure.set(Boolean.valueOf(url.getProtocol().equalsIgnoreCase(Constants.HTTPS_PROTOCOL)));
             } catch (MalformedURLException exception) {
                 throw new ServletException(exception);
             }
@@ -361,8 +354,8 @@ public abstract class QueryServlet extends HttpServlet {
                 for (int i = 0, n = pairs.length; i < n; i++) {
                     String[] pair = pairs[i].split("=");
 
-                    String key = URLDecoder.decode(pair[0], URL_ENCODING);
-                    String value = URLDecoder.decode((pair.length > 1) ? pair[1] : "", URL_ENCODING);
+                    String key = URLDecoder.decode(pair[0], Constants.URL_ENCODING);
+                    String value = URLDecoder.decode((pair.length > 1) ? pair[1] : "", Constants.URL_ENCODING);
 
                     parametersDictionary.add(key, value);
                 }
@@ -408,7 +401,7 @@ public abstract class QueryServlet extends HttpServlet {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected final void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected final void doGet(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         Path path = getPath(request);
 
@@ -443,7 +436,7 @@ public abstract class QueryServlet extends HttpServlet {
                 }
 
                 // Set the content length header
-                response.setHeader(CONTENT_LENGTH_HEADER, String.valueOf(tempFile.length()));
+                response.setHeader(Constants.CONTENT_LENGTH_HEADER, String.valueOf(tempFile.length()));
 
                 // Write the contents of the file out to the response
                 try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
@@ -469,7 +462,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
-    protected final void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected final void doPost(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         Path path = getPath(request);
 
@@ -496,7 +489,7 @@ public abstract class QueryServlet extends HttpServlet {
                 response.setStatus(Query.Status.NO_CONTENT);
             } else {
                 response.setStatus(Query.Status.CREATED);
-                response.setHeader(LOCATION_HEADER, location.toString());
+                response.setHeader(Constants.LOCATION_HEADER, location.toString());
             }
 
             setResponseHeaders(response);
@@ -505,7 +498,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
-    protected final void doPut(HttpServletRequest request, HttpServletResponse response)
+    protected final void doPut(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         Path path = getPath(request);
 
@@ -536,7 +529,7 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
-    protected final void doDelete(HttpServletRequest request, HttpServletResponse response)
+    protected final void doDelete(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         try {
             Path path = getPath(request);
@@ -556,27 +549,27 @@ public abstract class QueryServlet extends HttpServlet {
     }
 
     @Override
-    protected final void doHead(HttpServletRequest request, HttpServletResponse response)
+    protected final void doHead(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         response.flushBuffer();
     }
 
     @Override
-    protected final void doOptions(HttpServletRequest request, HttpServletResponse response)
+    protected final void doOptions(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         response.flushBuffer();
     }
 
     @Override
-    protected final void doTrace(HttpServletRequest request, HttpServletResponse response)
+    protected final void doTrace(final HttpServletRequest request, final HttpServletResponse response)
         throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
         response.flushBuffer();
     }
 
-    private static Path getPath(HttpServletRequest request) {
+    private static Path getPath(final HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
         Path path;
         if (pathInfo == null || pathInfo.length() == 0) {
@@ -588,7 +581,7 @@ public abstract class QueryServlet extends HttpServlet {
         return path;
     }
 
-    private void setResponseHeaders(HttpServletResponse response) {
+    private void setResponseHeaders(final HttpServletResponse response) {
         QueryDictionary responseHeaderDictionary = responseHeaders.get();
 
         for (String key : responseHeaderDictionary) {
