@@ -32,7 +32,7 @@ import org.apache.pivot.wtk.content.BaseContent;
 /**
  * Node representing a live Pivot component to be inserted into a {@link TextPane}.
  */
-public class ComponentNode extends Block {
+public class ComponentNode extends Node {
     private Component component = null;
 
     private ComponentNodeListener.Listeners componentNodeListeners = new ComponentNodeListener.Listeners();
@@ -149,7 +149,7 @@ public class ComponentNode extends Block {
     }
 
     @Override
-    public Element getRange(int offset, int characterCount) {
+    public Node getRange(int offset, int characterCount) {
         // Note: only supports getting the complete range of text
         String componentText = getText();
         if (offset < 0 || offset >= componentText.length()) {
@@ -164,7 +164,7 @@ public class ComponentNode extends Block {
     }
 
     @Override
-    public Element duplicate(boolean recursive) {
+    public Node duplicate(boolean recursive) {
         return new ComponentNode(this);
     }
 

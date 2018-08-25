@@ -40,10 +40,10 @@ public class Document extends Block {
 
     @Override
     public void insert(final Node node, final int index) {
-        if (!(node instanceof Block)) {
+        if (!(node instanceof Block) && !(node instanceof ComponentNode)) {
             throw new IllegalArgumentException("Child node ("
                 + node.getClass().getSimpleName() + ") must be an instance of "
-                + Block.class.getName());
+                + Block.class.getName() + " or " + ComponentNode.class.getName());
         }
 
         super.insert(node, index);
