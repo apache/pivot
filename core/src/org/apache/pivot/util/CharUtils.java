@@ -38,9 +38,13 @@ public final class CharUtils {
      * @param start The starting location from which to get a "word" selection.
      * @return The {@link CharSpan} (start and length) that describes the selected
      * word around the given starting point, or {@code null} if a word selection
-     * cannot be made.
+     * cannot be made (which could be because the input sequence is {@code null}).
      */
     public static CharSpan selectWord(final CharSequence sequence, final int start) {
+        if (sequence == null) {
+            return null;
+        }
+
         int length = sequence.length();
         int adjustedStart = start;
         char ch;

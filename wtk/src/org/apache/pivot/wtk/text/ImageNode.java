@@ -27,7 +27,7 @@ import org.apache.pivot.wtk.media.Image;
 /**
  * Node representing an image to be inserted into a {@link TextPane}.
  */
-public class ImageNode extends Block {
+public class ImageNode extends Node {
     private Image image = null;
 
     private ImageNodeListener.Listeners imageNodeListeners = new ImageNodeListener.Listeners();
@@ -109,7 +109,7 @@ public class ImageNode extends Block {
     }
 
     @Override
-    public Element getRange(int offset, int characterCount) {
+    public Node getRange(int offset, int characterCount) {
         Utils.checkIndexBounds(offset, 0, 1);
 
         if (characterCount != 1) {
@@ -120,7 +120,12 @@ public class ImageNode extends Block {
     }
 
     @Override
-    public Element duplicate(boolean recursive) {
+    public CharSequence getCharacters() {
+        return "";
+    }
+
+    @Override
+    public Node duplicate(boolean recursive) {
         return new ImageNode(this);
     }
 

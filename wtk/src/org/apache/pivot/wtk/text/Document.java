@@ -16,6 +16,8 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.util.ClassUtils;
+
 /**
  * Node representing the root of an element hierarchy.
  */
@@ -40,10 +42,12 @@ public class Document extends Block {
 
     @Override
     public void insert(final Node node, final int index) {
-        if (!(node instanceof Block) && !(node instanceof ComponentNode)) {
+        if (!ClassUtils.instanceOf(node, Block.class, ComponentNode.class, ImageNode.class)) {
             throw new IllegalArgumentException("Child node ("
                 + node.getClass().getSimpleName() + ") must be an instance of "
-                + Block.class.getName() + " or " + ComponentNode.class.getName());
+                + Block.class.getName() + " or "
+                + ComponentNode.class.getName() + " or "
+                + ImageNode.class.getName());
         }
 
         super.insert(node, index);
