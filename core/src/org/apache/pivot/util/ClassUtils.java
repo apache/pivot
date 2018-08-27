@@ -78,12 +78,12 @@ public final class ClassUtils {
      * <p> Specifically checks if the given object is an instance of any of the
      * given classes.
      * @param obj The (non-null) object to test.
-     * @param clazz The list of classes.
+     * @param classes The list of classes.
      * @return <tt>true</tt> if the object is non-null and an instance of ANY of
      * the given classes, <tt>false</tt> otherwise.
      */
-    public static boolean instanceOf(Object obj, Class<?> ...clazz) {
-        for (Class<?> cls : clazz) {
+    public static boolean instanceOf(final Object obj, final Class<?>... classes) {
+        for (Class<?> cls : classes) {
             if (cls.isInstance(obj)) {
                 return true;
             }

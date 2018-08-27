@@ -35,19 +35,19 @@ public class ImageNode extends Node {
     public ImageNode() {
     }
 
-    public ImageNode(ImageNode imageNode) {
+    public ImageNode(final ImageNode imageNode) {
         setImage(imageNode.getImage());
     }
 
-    public ImageNode(Image image) {
+    public ImageNode(final Image image) {
         setImage(image);
     }
 
-    public ImageNode(URL image) {
+    public ImageNode(final URL image) {
         setImage(image);
     }
 
-    public ImageNode(String image) {
+    public ImageNode(final String image) {
         setImage(image);
     }
 
@@ -55,7 +55,7 @@ public class ImageNode extends Node {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(final Image image) {
         Image previousImage = this.image;
 
         if (previousImage != image) {
@@ -72,7 +72,7 @@ public class ImageNode extends Node {
      *
      * @param imageURL The location of the image to set.
      */
-    public void setImage(URL imageURL) {
+    public void setImage(final URL imageURL) {
         setImage(Image.loadFromCache(imageURL));
     }
 
@@ -84,12 +84,17 @@ public class ImageNode extends Node {
      * @see #setImage(URL)
      * @see ImageUtils#findByName(String,String)
      */
-    public void setImage(String imageName) {
+    public void setImage(final String imageName) {
         setImage(ImageUtils.findByName(imageName, "image"));
     }
 
     @Override
-    public char getCharacterAt(int offset) {
+    public CharSequence getCharacters() {
+        return "";
+    }
+
+    @Override
+    public char getCharacterAt(final int offset) {
         return 0x00;
     }
 
@@ -99,17 +104,17 @@ public class ImageNode extends Node {
     }
 
     @Override
-    public void insertRange(Node range, int offset) {
+    public void insertRange(final Node range, final int offset) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Node removeRange(int offset, int span) {
+    public Node removeRange(final int offset, final int span) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Node getRange(int offset, int characterCount) {
+    public Node getRange(final int offset, final int characterCount) {
         Utils.checkIndexBounds(offset, 0, 1);
 
         if (characterCount != 1) {
@@ -120,12 +125,7 @@ public class ImageNode extends Node {
     }
 
     @Override
-    public CharSequence getCharacters() {
-        return "";
-    }
-
-    @Override
-    public Node duplicate(boolean recursive) {
+    public Node duplicate(final boolean recursive) {
         return new ImageNode(this);
     }
 
