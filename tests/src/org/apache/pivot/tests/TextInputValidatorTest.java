@@ -133,7 +133,7 @@ public final class TextInputValidatorTest implements Application {
 
         // textinputFloat.setText("123456.789");
         // new, show different ways to format decimal values in i18n format
-        Double value = new Double(testValue);
+        Double value = Double.valueOf(testValue);
         // textinputFloat.setText(value.toString());
         // textinputFloat.setText(String.format(customDecimalFormat, value)); // sample using String.format
         // formatter.format(customDecimalFormat, value); // sample using Formatter
@@ -146,7 +146,7 @@ public final class TextInputValidatorTest implements Application {
         // standard float range model
         // note that float approximations could give errors,
         // try to increment/decrement the initial value near a range end, to see problems ...
-        textinputFloatRange.setText(nf.format(new Float(testValue)));
+        textinputFloatRange.setText(nf.format(Float.valueOf(testValue)));
         textinputFloatRange.setValidator(new FloatRangeValidator(2.0f, 123456789f));
 
         // test the listener by updating a label

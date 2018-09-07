@@ -852,7 +852,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
         boolean active = window.isActive();
 
         titleLabel.getStyles().put(Style.color, active ? titleBarColor : inactiveTitleBarColor);
-        iconImageView.getStyles().put(Style.opacity, active ? new Float(1.0f) : new Float(INACTIVE_ICON_OPACITY));
+        iconImageView.getStyles().put(Style.opacity, Float.valueOf(active ? 1.0f : INACTIVE_ICON_OPACITY));
 
         updateButtonStyles(minimizeButton, active);
         updateButtonStyles(maximizeButton, active);

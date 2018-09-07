@@ -77,7 +77,7 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public int compareTo(final Version version) {
-        return new Long(getNumber()).compareTo(version.getNumber());
+        return Long.compare(getNumber(), version.getNumber());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public int hashCode() {
-        return new Long(getNumber()).hashCode();
+        return Long.valueOf(getNumber()).hashCode();
     }
 
     @Override

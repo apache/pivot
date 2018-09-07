@@ -57,12 +57,12 @@ public class OptionTest {
         OptionCompanion<Object> o = OptionCompanion.getInstance();
         assertNotNull(o);
 
-        Option<Object> oo = o.fromValue(new String("Hello"));
+        Option<Object> oo = o.fromValue(new StringBuilder("Hello"));
         assertNotNull(oo);
         assertTrue(oo instanceof Some);
         assertTrue(oo.hasValue());
         Object ooValue = oo.getValue();
-        assertTrue(ooValue instanceof String);
+        assertTrue(ooValue instanceof StringBuilder);
         System.out.println("companionObjectTest(), value stored is " + ooValue);
     }
 
@@ -85,7 +85,7 @@ public class OptionTest {
         OptionCompanion<Number> o = OptionCompanion.getInstance();
         assertNotNull(o);
 
-        Option<Number> on = o.fromValue(new Double(Math.PI));
+        Option<Number> on = o.fromValue(Double.valueOf(Math.PI));
         assertNotNull(on);
         assertTrue(on instanceof Some);
         assertTrue(on.hasValue());

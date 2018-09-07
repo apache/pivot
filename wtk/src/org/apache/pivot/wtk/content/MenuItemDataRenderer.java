@@ -102,7 +102,7 @@ public class MenuItemDataRenderer extends TablePane implements Button.DataRender
 
         imageView.setImage(icon);
         imageView.setPreferredWidth(margin - padding.left * 2);
-        imageView.getStyles().put(Style.opacity, button.isEnabled() ? new Float(1.0f) : new Float(0.5f));
+        imageView.getStyles().put(Style.opacity, Float.valueOf(button.isEnabled() ? 1.0f : 0.5f));
 
         // Update the labels
         textLabel.setText(text != null ? text : "");
