@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import org.apache.pivot.beans.BeanAdapter;
@@ -576,10 +577,9 @@ public abstract class Component implements ConstrainedVisual {
 
         if (type == componentClass) {
             try {
-                setSkin(skinClass.newInstance());
-            } catch (InstantiationException exception) {
-                throw new IllegalArgumentException(exception);
-            } catch (IllegalAccessException exception) {
+                setSkin(skinClass.getDeclaredConstructor().newInstance());
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                   | InvocationTargetException exception) {
                 throw new IllegalArgumentException(exception);
             }
         }

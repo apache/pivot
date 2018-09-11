@@ -30,6 +30,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URL;
@@ -644,13 +645,10 @@ public final class DesktopApplicationContext extends ApplicationContext {
             if (useApplicationInstance) {
                 // application has already been set, before calling this method
             } else {
-                application = (Application) applicationClass.newInstance();
+                application = (Application) applicationClass.getDeclaredConstructor().newInstance();
             }
-        } catch (ClassNotFoundException exception) {
-            exception.printStackTrace();
-        } catch (InstantiationException exception) {
-            exception.printStackTrace();
-        } catch (IllegalAccessException exception) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+               | NoSuchMethodException | InvocationTargetException exception) {
             exception.printStackTrace();
         }
 
@@ -725,7 +723,7 @@ public final class DesktopApplicationContext extends ApplicationContext {
                     }
                 };
 
-                Object eawtApplication = eawtApplicationClass.newInstance();
+                Object eawtApplication = eawtApplicationClass.getDeclaredConstructor().newInstance();
 
                 setEnabledAboutMenuMethod.invoke(eawtApplication,
                     Boolean.valueOf(application instanceof Application.AboutHandler));

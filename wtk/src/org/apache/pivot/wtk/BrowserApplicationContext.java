@@ -226,7 +226,8 @@ public final class BrowserApplicationContext extends ApplicationContext {
                 } else {
                     try {
                         Class<?> applicationClass = Class.forName(applicationClassName);
-                        HostApplet.this.application = (Application) applicationClass.newInstance();
+                        HostApplet.this.application =
+                            (Application) applicationClass.getDeclaredConstructor().newInstance();
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                     }

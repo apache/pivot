@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
@@ -289,10 +290,10 @@ public class CSVSerializer implements Serializer<List<?>> {
                 if (itemType instanceof ParameterizedType) {
                     ParameterizedType parameterizedItemType = (ParameterizedType) itemType;
                     Class<?> rawItemType = (Class<?>) parameterizedItemType.getRawType();
-                    item = rawItemType.newInstance();
+                    item = rawItemType.getDeclaredConstructor().newInstance();
                 } else {
                     Class<?> classItemType = (Class<?>) itemType;
-                    item = classItemType.newInstance();
+                    item = classItemType.getDeclaredConstructor().newInstance();
                 }
 
                 if (item instanceof Dictionary<?, ?>) {
@@ -300,9 +301,8 @@ public class CSVSerializer implements Serializer<List<?>> {
                 } else {
                     itemDictionary = new BeanAdapter(item);
                 }
-            } catch (IllegalAccessException exception) {
-                throw new SerializationException(exception);
-            } catch (InstantiationException exception) {
+            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException
+                   | InvocationTargetException exception) {
                 throw new SerializationException(exception);
             }
 

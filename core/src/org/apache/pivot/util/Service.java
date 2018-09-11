@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -100,10 +101,9 @@ public final class Service {
         Object provider = null;
         if (providerClass != null) {
             try {
-                provider = providerClass.newInstance();
-            } catch (InstantiationException exception) {
-                // No-op
-            } catch (IllegalAccessException exception) {
+                provider = providerClass.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                   | InvocationTargetException exception) {
                 // No-op
             }
         }

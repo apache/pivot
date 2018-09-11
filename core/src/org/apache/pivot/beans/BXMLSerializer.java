@@ -933,9 +933,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
             Serializer<?> serializer;
             try {
                 serializer = newIncludeSerializer(serializerClass);
-            } catch (InstantiationException exception) {
-                throw new SerializationException(exception);
-            } catch (IllegalAccessException exception) {
+            } catch (InstantiationException | IllegalAccessException
+                   | NoSuchMethodException | InvocationTargetException exception) {
                 throw new SerializationException(exception);
             }
 
@@ -1645,8 +1644,8 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
 
     /**
      * Creates a new serializer to be used on a nested include. The base
-     * implementation simply calls {@code Class.newInstance()}. Subclasses may
-     * override this method to provide an alternate instantiation mechanism,
+     * implementation simply calls {@code Class.getDeclaredConstructor().newInstance()}.
+     * Subclasses may override this method to provide an alternate instantiation mechanism,
      * such as dependency-injected construction.
      *
      * @param type The type of serializer being requested.
@@ -1654,16 +1653,19 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws InstantiationException if an object of the given type cannot be instantiated.
      * @throws IllegalAccessException if the class cannot be accessed in the
      * current security environment.
+     * @throws NoSuchMethodException if there is not a no-arg constructor declared in the class.
+     * @throws InvocationTargetException if there was an exception thrown by the constructor.
      */
     protected Serializer<?> newIncludeSerializer(final Class<? extends Serializer<?>> type)
-        throws InstantiationException, IllegalAccessException {
-        return type.newInstance();
+        throws InstantiationException, IllegalAccessException, NoSuchMethodException,
+               InvocationTargetException {
+        return type.getDeclaredConstructor().newInstance();
     }
 
     /**
      * Creates a new typed object as part of the deserialization process. The
-     * base implementation simply calls {@code Class.newInstance()}. Subclasses
-     * may override this method to provide an alternate instantiation mechanism,
+     * base implementation simply calls {@code Class.getDeclaredConstructor().newInstance()}.
+     * Subclasses may override this method to provide an alternate instantiation mechanism,
      * such as dependency-injected construction.
      *
      * @param type The type of object being requested.
@@ -1671,10 +1673,13 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
      * @throws InstantiationException if an object of the given type cannot be instantiated.
      * @throws IllegalAccessException if the class cannot be accessed in the
      * current security environment.
+     * @throws NoSuchMethodException if there is not a no-arg constructor declared in the class.
+     * @throws InvocationTargetException if there was an exception thrown by the constructor.
      */
     protected Object newTypedObject(final Class<?> type)
-        throws InstantiationException, IllegalAccessException {
-        return type.newInstance();
+        throws InstantiationException, IllegalAccessException, NoSuchMethodException,
+               InvocationTargetException {
+        return type.getDeclaredConstructor().newInstance();
     }
 
     /**

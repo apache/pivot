@@ -28,6 +28,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -555,8 +556,9 @@ public class JSONSerializer implements Serializer<Object> {
             }
 
             try {
-                sequence = (Sequence<Object>) sequenceType.newInstance();
-            } catch (InstantiationException | IllegalAccessException exception) {
+                sequence = (Sequence<Object>) sequenceType.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                    | InvocationTargetException exception) {
                 throw new RuntimeException(exception);
             }
         }
@@ -656,8 +658,9 @@ public class JSONSerializer implements Serializer<Object> {
                 Class<?> beanType = (Class<?>) typeArgument;
 
                 try {
-                    dictionary = new BeanAdapter(beanType.newInstance());
-                } catch (InstantiationException | IllegalAccessException exception) {
+                    dictionary = new BeanAdapter(beanType.getDeclaredConstructor().newInstance());
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                        | InvocationTargetException exception) {
                     throw new RuntimeException(exception);
                 }
             } else {
@@ -670,8 +673,9 @@ public class JSONSerializer implements Serializer<Object> {
                 }
 
                 try {
-                    dictionary = (Dictionary<String, Object>) dictionaryType.newInstance();
-                } catch (InstantiationException | IllegalAccessException exception) {
+                    dictionary = (Dictionary<String, Object>) dictionaryType.getDeclaredConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                        | InvocationTargetException exception) {
                     throw new RuntimeException(exception);
                 }
             }

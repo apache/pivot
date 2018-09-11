@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.charts;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 
 import org.apache.pivot.annotations.UnsupportedOperation;
@@ -332,10 +333,9 @@ public abstract class ChartView extends Component {
             provider.getSkinClass((Class<? extends ChartView>) componentClass);
 
         try {
-            setSkin(skinClass.newInstance());
-        } catch (InstantiationException exception) {
-            throw new IllegalArgumentException(exception);
-        } catch (IllegalAccessException exception) {
+            setSkin(skinClass.getDeclaredConstructor().newInstance());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+               | InvocationTargetException exception) {
             throw new IllegalArgumentException(exception);
         }
     }
