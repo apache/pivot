@@ -17,6 +17,7 @@
 package org.apache.pivot.functional.monad;
 
 import java.util.Iterator;
+import org.apache.pivot.annotations.UnsupportedOperation;
 
 /**
  * Definition of a generic Monad.
@@ -90,6 +91,7 @@ public abstract class Try<T> extends Monad<T> implements Iterable<T> {
         }
 
         @Override
+        @UnsupportedOperation
         public void remove() {
             throw new UnsupportedOperationException();
         }

@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -67,6 +68,7 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
         }
 
         @Override
+        @UnsupportedOperation
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -152,8 +154,10 @@ public class EnumSet<E extends Enum<E>> implements Set<E>, Serializable {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(final Comparator<E> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "Cannot set a comparator because an Enum Set is always ordered by its underlying enum.");
     }
 
     @Override

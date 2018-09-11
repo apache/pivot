@@ -20,18 +20,18 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.commons.vfs2.FileObject;
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.adapter.ListAdapter;
 
 /**
  * Collection representing a list of files. Each entry in the list is unique;
- * i.e. a single file can't be added to the list more than once. TODO: compute
- * new serailVersionUIDs
+ * i.e. a single file can't be added to the list more than once.
  */
 public class FileObjectList extends ListAdapter<FileObject> {
-    private static final long serialVersionUID = -6741822480264805279L;
+    private static final long serialVersionUID = 1327073299912864048L;
 
     private static class FilePathComparator implements Comparator<FileObject>, Serializable {
-        private static final long serialVersionUID = 6341769187574031281L;
+        private static final long serialVersionUID = -4470959470309721902L;
 
         @Override
         public int compare(FileObject file1, FileObject file2) {
@@ -66,16 +66,19 @@ public class FileObjectList extends ListAdapter<FileObject> {
     }
 
     @Override
+    @UnsupportedOperation
     public void insert(FileObject file, int index) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public FileObject update(int index, FileObject file) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(Comparator<FileObject> comparator) {
         throw new UnsupportedOperationException();
     }

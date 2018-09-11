@@ -45,6 +45,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.util.StreamReaderDelegate;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.LinkedList;
@@ -1512,7 +1513,11 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
         exception.printStackTrace(System.err);
     }
 
+    /**
+     * @throws UnsupportedOperationException because we don't support writing BXML objects.
+     */
     @Override
+    @UnsupportedOperation
     public void writeObject(final Object object, final OutputStream outputStream) throws IOException,
         SerializationException {
         throw new UnsupportedOperationException();
@@ -1681,16 +1686,19 @@ public class BXMLSerializer implements Serializer<Object>, Resolvable {
     protected final XMLStreamReader getXMLStreamReader() {
         return new StreamReaderDelegate(xmlStreamReader) {
             @Override
+            @UnsupportedOperation
             public void close() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
+            @UnsupportedOperation
             public int next() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
+            @UnsupportedOperation
             public int nextTag() {
                 throw new UnsupportedOperationException();
             }

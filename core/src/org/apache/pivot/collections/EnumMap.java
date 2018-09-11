@@ -20,12 +20,12 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 
 /**
- * Implementation of the {@link Set} interface whose keys are backed by a set of
- * enum values.
+ * Implementation of the {@link Map} interface whose keys are backed by an enum.
  */
 public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     private static final long serialVersionUID = -8446839779287452516L;
@@ -116,8 +116,10 @@ public class EnumMap<E extends Enum<E>, V> implements Map<E, V>, Serializable {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(Comparator<E> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+            "Cannot set a comparator because an Enum Map is always ordered by its underlying enum.");
     }
 
     @Override

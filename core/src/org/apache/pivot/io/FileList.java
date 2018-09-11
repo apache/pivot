@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.adapter.ListAdapter;
 
 /**
@@ -65,16 +66,19 @@ public class FileList extends ListAdapter<File> {
     }
 
     @Override
+    @UnsupportedOperation
     public void insert(File file, int index) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public File update(int index, File file) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(Comparator<File> comparator) {
         throw new UnsupportedOperationException();
     }

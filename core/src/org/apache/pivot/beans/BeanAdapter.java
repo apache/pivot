@@ -364,7 +364,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException This method is not supported.
+     * @throws UnsupportedOperationException This operation is not supported.
      */
     @Override
     @UnsupportedOperation
@@ -373,7 +373,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException This method is not supported.
+     * @throws UnsupportedOperationException This operation is not supported.
      */
     @Override
     @UnsupportedOperation
@@ -402,7 +402,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException This method is not supported.
+     * @throws UnsupportedOperationException This operation is not supported.
      */
     @Override
     @UnsupportedOperation
@@ -411,7 +411,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException This method is not supported.
+     * @throws UnsupportedOperationException This operation is not supported.
      */
     @Override
     @UnsupportedOperation
@@ -425,7 +425,7 @@ public class BeanAdapter implements Map<String, Object> {
     }
 
     /**
-     * @throws UnsupportedOperationException This method is not supported.
+     * @throws UnsupportedOperationException This operation is not supported.
      */
     @Override
     @UnsupportedOperation

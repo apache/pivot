@@ -42,6 +42,8 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
+    private static final String ERROR_MSG = "Resources are immutable.";
+
     public Resources(final String baseName) throws IOException, SerializationException {
         this(null, baseName, Locale.getDefault(), DEFAULT_CHARSET);
     }
@@ -170,12 +172,12 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
 
     @Override
     public Object put(final String key, final Object value) {
-        throw new UnsupportedOperationException("Resources are immutable.");
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
     public Object remove(final String key) {
-        throw new UnsupportedOperationException("Resources are immutable.");
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override

@@ -19,6 +19,7 @@ package org.apache.pivot.collections.immutable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Set;
 import org.apache.pivot.collections.SetListener;
 import org.apache.pivot.util.ImmutableIterator;
@@ -34,6 +35,8 @@ public final class ImmutableSet<E> implements Set<E> {
 
     private SetListener.Listeners<E> setListeners = new SetListener.Listeners<>();
 
+    private static final String ERROR_MSG = "An Immutable Set cannot be modified.";
+
     public ImmutableSet(final Set<E> set) {
         Utils.checkNull(set, "set");
 
@@ -41,18 +44,21 @@ public final class ImmutableSet<E> implements Set<E> {
     }
 
     @Override
+    @UnsupportedOperation
     public boolean add(final E element) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public boolean remove(final E element) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
@@ -76,8 +82,9 @@ public final class ImmutableSet<E> implements Set<E> {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(final Comparator<E> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override

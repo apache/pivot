@@ -22,14 +22,17 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
 
 /**
- * Implementation of the {@link List} interface that is backed by an enum.
+ * A read-only implementation of the {@link List} interface that is backed by an enum.
  */
 public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     private static final long serialVersionUID = 5104856822133576300L;
+
+    private static final String ERROR_MSG = "An Enum List cannot be modified.";
 
     private class ItemIterator implements Iterator<E> {
         private int i = 0;
@@ -49,8 +52,9 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         }
 
         @Override
+        @UnsupportedOperation
         public void remove() {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(ERROR_MSG);
         }
     }
 
@@ -69,33 +73,39 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     }
 
     @Override
+    @UnsupportedOperation
     public int add(E item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void insert(E item, int index) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public E update(int index, E item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public int remove(E item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public Sequence<E> remove(int index, int count) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
@@ -130,8 +140,9 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(Comparator<E> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override

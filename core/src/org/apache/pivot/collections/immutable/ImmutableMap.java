@@ -19,6 +19,7 @@ package org.apache.pivot.collections.immutable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.collections.MapListener;
 import org.apache.pivot.util.ImmutableIterator;
@@ -35,6 +36,8 @@ public final class ImmutableMap<K, V> implements Map<K, V> {
 
     private MapListener.Listeners<K, V> mapListeners = new MapListener.Listeners<>();
 
+    private static final String ERROR_MSG = "An Immutable Map cannot be modified.";
+
     public ImmutableMap(final Map<K, V> map) {
         Utils.checkNull(map, "map");
 
@@ -47,18 +50,21 @@ public final class ImmutableMap<K, V> implements Map<K, V> {
     }
 
     @Override
+    @UnsupportedOperation
     public V put(final K key, final V value) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public V remove(final K key) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
@@ -82,8 +88,9 @@ public final class ImmutableMap<K, V> implements Map<K, V> {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(final Comparator<K> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override

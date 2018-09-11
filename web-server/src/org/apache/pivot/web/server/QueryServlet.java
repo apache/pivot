@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.serialization.SerializationException;
@@ -63,21 +64,25 @@ public abstract class QueryServlet extends HttpServlet {
         }
 
         @Override
+        @UnsupportedOperation
         public int add(final String element) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public void insert(String element, int index) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public String update(final int index, final String element) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public int remove(final String element) {
             throw new UnsupportedOperationException();
         }

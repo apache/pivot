@@ -21,9 +21,11 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
+
 /**
  * Converts a file size into a human-readable representation using binary
- * prefixes (1KB = 1024 bytes).
+ * prefixes (1KB = 1024 bytes).  Only supports display and not parsing.
  */
 public final class FileSizeFormat extends Format {
     private static final long serialVersionUID = 9126510513247641698L;
@@ -84,6 +86,7 @@ public final class FileSizeFormat extends Format {
      * @throws UnsupportedOperationException always.
      */
     @Override
+    @UnsupportedOperation
     public Object parseObject(final String arg0, final ParsePosition arg1) {
         throw new UnsupportedOperationException();
     }

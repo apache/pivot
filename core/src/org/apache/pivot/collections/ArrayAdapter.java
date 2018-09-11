@@ -18,10 +18,11 @@ package org.apache.pivot.collections;
 
 import java.io.Serializable;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.Utils;
 
 /**
- * Implementation of the {@link Sequence} interface that wraps an array.
+ * A read-only implementation of the {@link Sequence} interface that wraps an array.
  */
 public class ArrayAdapter<T> implements Sequence<T>, Serializable {
     private static final long serialVersionUID = 1143706808122308239L;
@@ -36,26 +37,31 @@ public class ArrayAdapter<T> implements Sequence<T>, Serializable {
     }
 
     @Override
+    @UnsupportedOperation
     public int add(T item) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public void insert(T item, int index) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public T update(int index, T item) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public int remove(T item) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public Sequence<T> remove(int index, int count) {
         throw new UnsupportedOperationException();
     }

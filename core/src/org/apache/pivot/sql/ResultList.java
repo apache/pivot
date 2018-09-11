@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayAdapter;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -160,6 +161,7 @@ public class ResultList implements List<Map<String, Object>> {
         }
 
         @Override
+        @UnsupportedOperation
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -170,6 +172,9 @@ public class ResultList implements List<Map<String, Object>> {
     private boolean includeNullValues = false;
 
     private ListListenerList<Map<String, Object>> listListeners = new ListListenerList<>();
+
+    private static final String ERROR_MSG =
+        "Result List is not suited for random access or modification, but must be used via an iterator.";
 
     public ResultList(ResultSet resultSet) {
         Utils.checkNull(resultSet, "resultSet");
@@ -206,48 +211,57 @@ public class ResultList implements List<Map<String, Object>> {
     }
 
     @Override
+    @UnsupportedOperation
     public int add(Map<String, Object> item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void insert(Map<String, Object> item, int index) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public Map<String, Object> update(int index, Map<String, Object> item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public int remove(Map<String, Object> item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public Sequence<Map<String, Object>> remove(int index, int count) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public Map<String, Object> get(int index) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public int indexOf(Map<String, Object> item) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public boolean isEmpty() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
@@ -261,8 +275,9 @@ public class ResultList implements List<Map<String, Object>> {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(Comparator<Map<String, Object>> comparator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override

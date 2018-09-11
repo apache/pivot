@@ -18,6 +18,7 @@ package org.apache.pivot.charts;
 
 import java.util.Comparator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.charts.content.ValueMarker;
 import org.apache.pivot.collections.ArrayList;
@@ -173,6 +174,7 @@ public abstract class ChartView extends Component {
         }
 
         @Override
+        @UnsupportedOperation
         public Category update(final int index, final Category category) {
             throw new UnsupportedOperationException();
         }

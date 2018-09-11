@@ -270,7 +270,7 @@ public interface Sequence<T> {
             @Override
             public Path getPath() {
                 if (previousPath == null) {
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("'getPath' called before 'next' during iteration");
                 }
 
                 return previousPath;

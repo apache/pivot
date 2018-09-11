@@ -19,6 +19,7 @@ package org.apache.pivot.collections.immutable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
 import org.apache.pivot.collections.Sequence;
@@ -35,7 +36,7 @@ public final class ImmutableList<T> implements List<T> {
 
     private ListListenerList<T> listListeners = new ListListenerList<>();
 
-    private static final String ERROR_MSG = "Immutable list cannot be modified.";
+    private static final String ERROR_MSG = "An Immutable List cannot be modified.";
 
     public ImmutableList(final List<T> list) {
         Utils.checkNull(list, "list");
@@ -44,31 +45,37 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     @Override
+    @UnsupportedOperation
     public int add(final T item) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void insert(final T item, final int index) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public T update(final int index, final T item) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public int remove(final T item) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public Sequence<T> remove(final int index, final int count) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public void clear() {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
@@ -99,6 +106,7 @@ public final class ImmutableList<T> implements List<T> {
     }
 
     @Override
+    @UnsupportedOperation
     public void setComparator(final Comparator<T> comparator) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
