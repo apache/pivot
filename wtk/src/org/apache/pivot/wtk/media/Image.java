@@ -40,16 +40,17 @@ import com.kitfox.svg.SVGDiagram;
  */
 public abstract class Image implements Visual {
     /**
-     * Task that executes an image load operation.
+     * Background {@link org.apache.pivot.util.concurrent.Task} that
+     * executes an image load operation.
      */
-    public static class LoadTask extends IOTask<Image> {
+    public static final class LoadTask extends IOTask<Image> {
         private URL location = null;
 
-        public LoadTask(URL location) {
+        public LoadTask(final URL location) {
             this(location, DEFAULT_EXECUTOR_SERVICE);
         }
 
-        public LoadTask(URL location, ExecutorService executorService) {
+        public LoadTask(final URL location, final ExecutorService executorService) {
             super(executorService);
             this.location = location;
         }
@@ -91,7 +92,7 @@ public abstract class Image implements Visual {
         return -1;
     }
 
-    public void update(int x, int y, int width, int height) {
+    public void update(final int x, final int y, final int width, final int height) {
         imageListeners.regionUpdated(this, x, y, width, height);
     }
 
@@ -101,21 +102,49 @@ public abstract class Image implements Visual {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [" + getWidth() + "," + getHeight() + "]";
+        return getClass().getSimpleName() + " [" + getWidth() + "x" + getHeight() + "]";
     }
 
-    public static Image load(URL location) throws TaskExecutionException {
+    /**
+     * Load an image from the given URL location, but without any listener.  The load will
+     * be done synchronously, on the current thread.  Any errors will be wrapped in the
+     * {@link TaskExecutionException} that is thrown.
+     *
+     * @param location The URL where the image can be found.
+     * @return The loaded image.
+     * @throws TaskExecutionException if there were problems loading the image.
+     * @see LoadTask
+     */
+    public static Image load(final URL location) throws TaskExecutionException {
         LoadTask loadTask = new LoadTask(location);
         return loadTask.execute();
     }
 
-    public static Image.LoadTask load(URL location, TaskListener<Image> loadListener) {
+    /**
+     * Load an image from the given URL location, in the background, and return a reference
+     * to the background task.
+     *
+     * @param location The URL where the image can be found.
+     * @param loadListener A listener for completion of the background task.
+     * @return A reference to the background task.
+     */
+    public static Image.LoadTask load(final URL location, final TaskListener<Image> loadListener) {
         LoadTask loadTask = new LoadTask(location);
         loadTask.execute(loadListener);
         return loadTask;
     }
 
-    public static Image loadFromCache(URL location) {
+    /**
+     * Load an image.  First try to find it in the resource cached kept by the
+     * {@link ApplicationContext}.  If not found, load it in the foreground and
+     * cache the result.
+     *
+     * @param location The URL where the image can be found.
+     * @return The loaded image.
+     * @throws IllegalArgumentException wrapping the TaskExecutionException, which
+     * in turn will wrap the underlying problem.
+     */
+    public static Image loadFromCache(final URL location) {
         Utils.checkNull(location, "image location");
 
         Image image = (Image) ApplicationContext.getResourceCache().get(location);
