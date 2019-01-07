@@ -138,7 +138,7 @@ public class Expander extends Container {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
             if (component == content) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot directly remove the content from Expander.");
             }
         }
 

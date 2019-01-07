@@ -19,6 +19,7 @@ package org.apache.pivot.xml;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -227,6 +228,7 @@ public class Element extends Node implements List<Node> {
          * Use {@link Attribute#setValue(String)} instead.
          */
         @Override
+        @UnsupportedOperation
         public Attribute update(int index, Attribute item) {
             throw new UnsupportedOperationException();
         }
@@ -652,6 +654,7 @@ public class Element extends Node implements List<Node> {
      * @throws UnsupportedOperationException This method is not supported.
      */
     @Override
+    @UnsupportedOperation
     public Node update(int index, Node node) {
         throw new UnsupportedOperationException();
     }
@@ -754,6 +757,7 @@ public class Element extends Node implements List<Node> {
      * @throws UnsupportedOperationException Elements cannot be sorted.
      */
     @Override
+    @UnsupportedOperation
     public void setComparator(Comparator<Node> comparator) {
         throw new UnsupportedOperationException();
     }

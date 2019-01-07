@@ -25,6 +25,7 @@ import java.awt.geom.AffineTransform;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.beans.IDProperty;
 import org.apache.pivot.beans.PropertyNotFoundException;
@@ -135,6 +136,7 @@ public abstract class Component implements ConstrainedVisual {
          * @throws UnsupportedOperationException always.
          */
         @Override
+        @UnsupportedOperation
         public Object remove(String key) {
             throw new UnsupportedOperationException();
         }
@@ -1262,6 +1264,7 @@ public abstract class Component implements ConstrainedVisual {
      * @throws UnsupportedOperationException This method is not currently
      * implemented.
      */
+    @UnsupportedOperation
     public boolean contains(int xValue, int yValue) {
         // TODO
         throw new UnsupportedOperationException();

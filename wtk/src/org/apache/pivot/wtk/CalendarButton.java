@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Locale;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.json.JSONSerializer;
@@ -102,6 +103,7 @@ public class CalendarButton extends Button {
      * CalendarButton.
      */
     @Override
+    @UnsupportedOperation
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Calendar buttons cannot be toggle buttons.");
     }

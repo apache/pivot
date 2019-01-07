@@ -122,7 +122,7 @@ public class Frame extends Window {
         for (int i = index, n = index + count; i < n; i++) {
             Component component = get(i);
             if (component == menuBar) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot directly remove the menu bar from a Frame.");
             }
         }
 

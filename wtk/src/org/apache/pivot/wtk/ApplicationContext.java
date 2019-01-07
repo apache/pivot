@@ -62,6 +62,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -1702,6 +1703,7 @@ public abstract class ApplicationContext implements Application.UncaughtExceptio
                 }
 
                 @Override
+                @UnsupportedOperation
                 public void remove() {
                     throw new UnsupportedOperationException();
                 }

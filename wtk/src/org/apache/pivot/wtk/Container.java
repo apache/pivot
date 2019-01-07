@@ -22,6 +22,7 @@ import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
@@ -86,6 +87,7 @@ public abstract class Container extends Component implements Sequence<Component>
     }
 
     @Override
+    @UnsupportedOperation
     public Component update(int index, Component component) {
         throw new UnsupportedOperationException();
     }

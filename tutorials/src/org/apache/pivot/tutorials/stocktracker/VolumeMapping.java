@@ -18,6 +18,7 @@ package org.apache.pivot.tutorials.stocktracker;
 
 import java.text.DecimalFormat;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.wtk.Label;
 
 /**
@@ -31,9 +32,12 @@ public class VolumeMapping implements Label.TextBindMapping {
         return FORMAT.format(value);
     }
 
+    /**
+     * @throws UnsupportedOperationException because this mapping is for load only.
+     */
     @Override
+    @UnsupportedOperation
     public Object valueOf(String text) {
-        // Not needed; this mapping is for load only
         throw new UnsupportedOperationException();
     }
 }

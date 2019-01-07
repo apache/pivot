@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.awt.Graphics2D;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.wtk.skin.DisplaySkin;
 
 /**
@@ -49,26 +50,31 @@ public final class Display extends Container {
     }
 
     @Override
+    @UnsupportedOperation
     protected void setSkin(Skin skin) {
         throw new UnsupportedOperationException("Can't replace Display skin.");
     }
 
     @Override
+    @UnsupportedOperation
     protected void setParent(Container parent) {
         throw new UnsupportedOperationException("Display can't have a parent.");
     }
 
     @Override
+    @UnsupportedOperation
     public void setLocation(int x, int y) {
         throw new UnsupportedOperationException("Can't change the location of the display.");
     }
 
     @Override
+    @UnsupportedOperation
     public void setVisible(boolean visible) {
         throw new UnsupportedOperationException("Can't change the visibility of the display.");
     }
 
     @Override
+    @UnsupportedOperation
     public void setTooltipText(String tooltipText) {
         throw new UnsupportedOperationException("Can't set a tooltip on the display.");
     }

@@ -25,6 +25,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Group;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.HashSet;
@@ -66,11 +67,13 @@ public class EventLogger extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public boolean add(Method event) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public boolean remove(Method event) {
             throw new UnsupportedOperationException();
         }

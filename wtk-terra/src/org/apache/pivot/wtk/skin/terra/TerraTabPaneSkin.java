@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.Utils;
@@ -87,6 +88,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         }
 
         @Override
+        @UnsupportedOperation
         public void setButtonData(Object buttonData) {
             throw new UnsupportedOperationException();
         }
@@ -98,6 +100,7 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         }
 
         @Override
+        @UnsupportedOperation
         public void setDataRenderer(Button.DataRenderer dataRenderer) {
             throw new UnsupportedOperationException();
         }
@@ -108,16 +111,19 @@ public class TerraTabPaneSkin extends TabPaneSkin implements TabPaneListener,
         }
 
         @Override
+        @UnsupportedOperation
         public void setTooltipText(String tooltipText) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public void setTriState(boolean triState) {
             throw new UnsupportedOperationException();
         }

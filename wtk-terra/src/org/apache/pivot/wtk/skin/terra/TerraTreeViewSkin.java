@@ -26,6 +26,7 @@ import java.awt.geom.GeneralPath;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.List;
@@ -156,6 +157,7 @@ public class TerraTreeViewSkin extends ComponentSkin implements TreeView.Skin, T
          * @throws UnsupportedOperationException always since this is unsupported.
          */
         @Override
+        @UnsupportedOperation
         public void remove() {
             throw new UnsupportedOperationException();
         }

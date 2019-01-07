@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -73,6 +74,7 @@ public class Accordion extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Component update(final int index, final Component panel) {
             throw new UnsupportedOperationException();
         }
@@ -212,7 +214,7 @@ public class Accordion extends Container {
             Component component = get(i);
 
             if (panels.indexOf(component) >= 0) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot remove a panel directly from the Accordion.");
             }
         }
 

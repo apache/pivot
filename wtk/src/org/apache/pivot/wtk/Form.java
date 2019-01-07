@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -90,6 +91,7 @@ public class Form extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Component update(int index, Component field) {
             throw new UnsupportedOperationException();
         }
@@ -177,6 +179,7 @@ public class Form extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Section update(int index, Section section) {
             throw new UnsupportedOperationException();
         }
@@ -438,7 +441,7 @@ public class Form extends Container {
 
             for (Section section : sections) {
                 if (section.indexOf(component) >= 0) {
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException("Cannot directly remove a Form Section.");
                 }
             }
         }
@@ -448,8 +451,6 @@ public class Form extends Container {
     }
 
     /**
-     * Returns the form listener list.
-     *
      * @return The form listener list.
      */
     public ListenerList<FormListener> getFormListeners() {
@@ -457,8 +458,6 @@ public class Form extends Container {
     }
 
     /**
-     * Returns the form attribute listener list.
-     *
      * @return The form attribute listener list.
      */
     public ListenerList<FormAttributeListener> getFormAttributeListeners() {

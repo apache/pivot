@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.awt.Color;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -80,6 +81,7 @@ public class ColorChooserButton extends Button {
      * ColorChooserButton.
      */
     @Override
+    @UnsupportedOperation
     public void setToggleButton(final boolean toggleButton) {
         throw new UnsupportedOperationException("Color chooser buttons cannot be toggle buttons.");
     }

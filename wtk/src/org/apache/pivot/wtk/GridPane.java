@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -204,6 +205,7 @@ public class GridPane extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Row update(int index, Row row) {
             throw new UnsupportedOperationException();
         }
@@ -412,7 +414,7 @@ public class GridPane extends Container {
 
             for (Row row : rows) {
                 if (row.indexOf(component) >= 0) {
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException("Cannot directly remove a row from a GridPane.");
                 }
             }
         }

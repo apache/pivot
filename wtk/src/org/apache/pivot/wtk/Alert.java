@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -63,6 +64,7 @@ public class Alert extends Dialog {
         }
 
         @Override
+        @UnsupportedOperation
         public Component update(int index, Object option) {
             throw new UnsupportedOperationException();
         }
@@ -166,27 +168,26 @@ public class Alert extends Dialog {
         setOptions((options == null) ? new ArrayList<>(resources.get("defaultOption")) : options);
         setBody(body);
 
-        if (messageType == null) {
-            setTitle(resources.getString("defaultTitle"));
-        } else {
+        String titleKey = "defaultTitle";
+        if (messageType != null) {
             switch (messageType) {
                 case ERROR:
-                    setTitle(resources.getString("defaultErrorTitle"));
+                    titleKey = "defaultErrorTitle";
                     break;
                 case WARNING:
-                    setTitle(resources.getString("defaultWarningTitle"));
+                    titleKey = "defaultWarningTitle";
                     break;
                 case QUESTION:
-                    setTitle(resources.getString("defaultQuestionTitle"));
+                    titleKey = "defaultQuestionTitle";
                     break;
                 case INFO:
-                    setTitle(resources.getString("defaultInfoTitle"));
+                    titleKey = "defaultInfoTitle";
                     break;
                 default:
-                    setTitle(resources.getString("defaultTitle"));
                     break;
             }
         }
+        setTitle(resources.getString(titleKey));
 
         installSkin(Alert.class);
     }
