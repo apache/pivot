@@ -20,6 +20,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Bounds;
@@ -135,6 +136,7 @@ public class TerraPanoramaSkin extends ContainerSkin implements Viewport.Skin, V
         }
 
         @Override
+        @UnsupportedOperation
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException("Scroll buttons cannot be toggle buttons.");
         }

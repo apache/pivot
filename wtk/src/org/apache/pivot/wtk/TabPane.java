@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -74,6 +75,7 @@ public class TabPane extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Component update(int index, Component tab) {
             throw new UnsupportedOperationException();
         }

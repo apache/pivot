@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -130,6 +131,7 @@ public class MenuBar extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException("Menu bar items cannot be toggle buttons.");
         }
@@ -200,6 +202,7 @@ public class MenuBar extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Item update(int index, Item item) {
             throw new UnsupportedOperationException();
         }

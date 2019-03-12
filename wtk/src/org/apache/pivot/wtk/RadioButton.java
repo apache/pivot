@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.wtk.content.ButtonDataRenderer;
 
@@ -60,11 +61,13 @@ public class RadioButton extends Button {
     }
 
     @Override
+    @UnsupportedOperation
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Radio buttons are always toggle buttons.");
     }
 
     @Override
+    @UnsupportedOperation
     public void setTriState(boolean triState) {
         throw new UnsupportedOperationException("Radio buttons can't be tri-state.");
     }

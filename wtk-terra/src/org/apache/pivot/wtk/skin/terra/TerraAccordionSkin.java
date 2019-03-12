@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Sequence;
@@ -74,6 +75,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
 
         @Override
+        @UnsupportedOperation
         public void setButtonData(Object buttonData) {
             throw new UnsupportedOperationException();
         }
@@ -85,6 +87,7 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
 
         @Override
+        @UnsupportedOperation
         public void setDataRenderer(Button.DataRenderer dataRenderer) {
             throw new UnsupportedOperationException();
         }
@@ -95,16 +98,19 @@ public class TerraAccordionSkin extends ContainerSkin implements AccordionListen
         }
 
         @Override
+        @UnsupportedOperation
         public void setTooltipText(String tooltipText) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public void setTriState(boolean triState) {
             throw new UnsupportedOperationException();
         }

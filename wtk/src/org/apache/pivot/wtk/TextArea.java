@@ -25,6 +25,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.LinkedStack;
 import org.apache.pivot.collections.Sequence;
@@ -369,6 +370,7 @@ public class TextArea extends Component {
         }
 
         @Override
+        @UnsupportedOperation
         public Paragraph update(int index, Paragraph paragraph) {
             throw new UnsupportedOperationException();
         }

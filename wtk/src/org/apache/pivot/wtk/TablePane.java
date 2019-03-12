@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -489,6 +490,7 @@ public class TablePane extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Row update(int index, Row row) {
             throw new UnsupportedOperationException();
         }
@@ -578,6 +580,7 @@ public class TablePane extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Column update(int index, Column column) {
             throw new UnsupportedOperationException();
         }

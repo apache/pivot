@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.json.JSON;
 import org.apache.pivot.serialization.SerializationException;
@@ -82,11 +83,13 @@ public class TerraCalendarSkin extends CalendarSkin {
         }
 
         @Override
+        @UnsupportedOperation
         public void setToggleButton(boolean toggleButton) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public void setTriState(boolean triState) {
             throw new UnsupportedOperationException();
         }

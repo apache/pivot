@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.text;
 
 import java.net.URL;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.ImageUtils;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -104,11 +105,13 @@ public class ImageNode extends Node {
     }
 
     @Override
+    @UnsupportedOperation
     public void insertRange(final Node range, final int offset) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public Node removeRange(final int offset, final int span) {
         throw new UnsupportedOperationException();
     }

@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.text.CharSpan;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -139,11 +140,13 @@ public class ComponentNode extends Node {
     }
 
     @Override
+    @UnsupportedOperation
     public void insertRange(Node range, int offset) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @UnsupportedOperation
     public Node removeRange(int offset, int span) {
         throw new UnsupportedOperationException();
     }

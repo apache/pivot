@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
@@ -362,6 +363,7 @@ public abstract class Element extends Node implements Sequence<Node>, Iterable<N
     }
 
     @Override
+    @UnsupportedOperation
     public Node update(final int index, final Node node) {
         throw new UnsupportedOperationException();
     }

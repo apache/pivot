@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Locale;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
@@ -655,6 +656,7 @@ public class TableView extends Component {
         }
 
         @Override
+        @UnsupportedOperation
         public Column update(final int index, final Column column) {
             throw new UnsupportedOperationException();
         }

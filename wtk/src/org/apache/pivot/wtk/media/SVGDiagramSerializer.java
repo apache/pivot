@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.serialization.Serializer;
 
 import com.kitfox.svg.SVGCache;
@@ -46,6 +47,7 @@ public class SVGDiagramSerializer implements Serializer<SVGDiagram> {
     }
 
     @Override
+    @UnsupportedOperation
     public void writeObject(SVGDiagram diagram, OutputStream outputStream) {
         throw new UnsupportedOperationException();
     }

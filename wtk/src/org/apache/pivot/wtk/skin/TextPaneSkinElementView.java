@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
 import org.apache.pivot.util.ImmutableIterator;
@@ -96,6 +97,7 @@ abstract class TextPaneSkinElementView extends TextPaneSkinNodeView implements
     }
 
     @Override
+    @UnsupportedOperation
     public TextPaneSkinNodeView update(int index, TextPaneSkinNodeView nodeView) {
         throw new UnsupportedOperationException();
     }

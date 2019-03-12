@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.wtk.content.LinkButtonDataRenderer;
 
@@ -38,6 +39,7 @@ public class LinkButton extends Button {
     }
 
     @Override
+    @UnsupportedOperation
     public void setToggleButton(boolean toggleButton) {
         throw new UnsupportedOperationException("Link buttons cannot be toggle buttons.");
     }

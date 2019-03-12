@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
@@ -171,11 +172,13 @@ public class Resources implements Dictionary<String, Object>, Iterable<String> {
     }
 
     @Override
+    @UnsupportedOperation
     public Object put(final String key, final Object value) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }
 
     @Override
+    @UnsupportedOperation
     public Object remove(final String key) {
         throw new UnsupportedOperationException(ERROR_MSG);
     }

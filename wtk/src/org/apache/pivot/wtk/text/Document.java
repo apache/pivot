@@ -16,6 +16,7 @@
  */
 package org.apache.pivot.wtk.text;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.ClassUtils;
 
 /**
@@ -31,6 +32,7 @@ public class Document extends Block {
     }
 
     @Override
+    @UnsupportedOperation
     protected void setParent(final Element parent) {
         throw new UnsupportedOperationException();
     }

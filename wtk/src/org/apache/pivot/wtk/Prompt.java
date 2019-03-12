@@ -18,6 +18,7 @@ package org.apache.pivot.wtk;
 
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Sequence;
@@ -63,6 +64,7 @@ public class Prompt extends Sheet {
         }
 
         @Override
+        @UnsupportedOperation
         public Component update(int index, Object option) {
             throw new UnsupportedOperationException();
         }

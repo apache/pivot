@@ -18,6 +18,7 @@ package org.apache.pivot.wtk.content;
 
 import java.awt.Graphics2D;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.Dictionary;
 import org.apache.pivot.collections.HashMap;
@@ -42,11 +43,13 @@ public class TableViewMultiCellRenderer implements TableView.CellRenderer {
         }
 
         @Override
+        @UnsupportedOperation
         public Object put(String key, Object value) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public Object remove(String key) {
             throw new UnsupportedOperationException();
         }

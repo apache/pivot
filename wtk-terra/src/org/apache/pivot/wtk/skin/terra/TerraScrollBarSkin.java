@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Component;
@@ -414,16 +415,19 @@ public class TerraScrollBarSkin extends ContainerSkin implements ScrollBarListen
         }
 
         @Override
+        @UnsupportedOperation
         public int getPreferredWidth(int height) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public int getPreferredHeight(int width) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public Dimensions getPreferredSize() {
             throw new UnsupportedOperationException();
         }

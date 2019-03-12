@@ -19,6 +19,7 @@ package org.apache.pivot.wtk;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.beans.DefaultProperty;
 import org.apache.pivot.collections.ArrayList;
 import org.apache.pivot.collections.HashMap;
@@ -163,11 +164,13 @@ public class Window extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public void insert(ActionMapping actionMapping, int index) {
             throw new UnsupportedOperationException();
         }
 
         @Override
+        @UnsupportedOperation
         public ActionMapping update(int index, ActionMapping actionMapping) {
             throw new UnsupportedOperationException();
         }
@@ -234,6 +237,7 @@ public class Window extends Container {
         }
 
         @Override
+        @UnsupportedOperation
         public Image update(int index, Image image) {
             throw new UnsupportedOperationException();
         }
