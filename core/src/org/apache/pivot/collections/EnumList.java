@@ -28,6 +28,13 @@ import org.apache.pivot.util.Utils;
 
 /**
  * A read-only implementation of the {@link List} interface that is backed by an enum.
+ * <p> An {@code EnumList} cannot be modified once constructed and only ever contains all the
+ * enum constant values defined in the class. As such, the {@code "add"} and {@code "remove"}
+ * (and related) methods throw exceptions.
+ * <p> This class is meant to facilitate using enum constants as elements in a dropdown list
+ * (for instance). A useful way to do this is to override the {@code "toString()"} method of
+ * the enum to provide a human-readable version of the enum constant value, which will then
+ * appear in the UI.
  */
 public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
     private static final long serialVersionUID = 5104856822133576300L;
@@ -63,6 +70,11 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
     private transient ListListenerList<E> listListeners = new ListListenerList<>();
 
+    /**
+     * Construct the full list populated by the enum constants of the given class.
+     *
+     * @param enumClass The enum class whose constant values are used to fully populate the list.
+     */
     public EnumList(Class<E> enumClass) {
         this.enumClass = enumClass;
         items = enumClass.getEnumConstants();
