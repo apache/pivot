@@ -19,11 +19,10 @@ package org.apache.pivot.io;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 import javax.activation.MimetypesFileTypeMap;
 
@@ -70,16 +69,11 @@ public class FileSerializer implements Serializer<File> {
     @Override
     public File readObject(final InputStream inputStream) throws IOException, SerializationException {
         File file = File.createTempFile(getClass().getName(), null, tempFileDirectory);
-        OutputStream outputStream = null;
 
-        try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(file), Constants.BUFFER_SIZE);
+        try (OutputStream outputStream =
+                 new BufferedOutputStream(Files.newOutputStream(file.toPath()), Constants.BUFFER_SIZE)) {
             for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
                 outputStream.write((byte) data);
-            }
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
             }
         }
 
@@ -91,17 +85,11 @@ public class FileSerializer implements Serializer<File> {
      */
     @Override
     public void writeObject(final File file, final OutputStream outputStream) throws IOException,
-        SerializationException {
-        InputStream inputStream = null;
-
-        try {
-            inputStream = new BufferedInputStream(new FileInputStream(file), Constants.BUFFER_SIZE);
+            SerializationException {
+        try (InputStream inputStream =
+                new BufferedInputStream(Files.newInputStream(file.toPath()), Constants.BUFFER_SIZE)) {
             for (int data = inputStream.read(); data != -1; data = inputStream.read()) {
                 outputStream.write((byte) data);
-            }
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
             }
         }
     }

@@ -17,13 +17,13 @@
 package org.apache.pivot.web.server;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -434,7 +434,7 @@ public abstract class QueryServlet extends HttpServlet {
                 File tempFile = File.createTempFile(getClass().getName(), null);
 
                 // Serialize the result to an intermediary file
-                try (FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
+                try (OutputStream fileOutputStream = Files.newOutputStream(tempFile.toPath())) {
                     serializer.writeObject(result, fileOutputStream);
                 } catch (SerializationException exception) {
                     throw new ServletException(exception);
@@ -444,7 +444,7 @@ public abstract class QueryServlet extends HttpServlet {
                 response.setHeader(Constants.CONTENT_LENGTH_HEADER, String.valueOf(tempFile.length()));
 
                 // Write the contents of the file out to the response
-                try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
+                try (InputStream fileInputStream = Files.newInputStream(tempFile.toPath())) {
                     byte[] buffer = new byte[1024];
                     int nBytes;
                     do {
