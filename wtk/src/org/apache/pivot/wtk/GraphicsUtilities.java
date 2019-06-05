@@ -50,7 +50,14 @@ public final class GraphicsUtilities {
      * Enumeration representing a paint type.
      */
     public enum PaintType {
-        SOLID_COLOR, GRADIENT, LINEAR_GRADIENT, RADIAL_GRADIENT
+        /** A solid color value. */
+        SOLID_COLOR,
+        /** A gradient that proceeds smoothly from the starting (X,Y) to the ending (X,Y) positions. */
+        GRADIENT,
+        /** A gradient that proceeds smoothly from color to color along the line from start to end position. */
+        LINEAR_GRADIENT,
+        /** A gradient that proceeds from color to color starting from a central position out to a given radius. */
+        RADIAL_GRADIENT
     }
 
     public static final String PAINT_TYPE_KEY = "paintType";
@@ -72,26 +79,79 @@ public final class GraphicsUtilities {
     public static final String STOPS_KEY = "stops";
     public static final String OFFSET_KEY = "offset";
 
+    /** A bit mask for 8 bits (max size of a color value). */
+    private static final int EIGHT_BITS = 0xff;
+    /** A scale factor used to divide an 8-bit color value by to get a fraction from 0.0 to 1.0. */
+    private static final float EIGHT_BIT_FLOAT = 255f;
+    /** The default thickness of lines and borders. */
+    private static final int DEFAULT_THICKNESS = 1;
 
+    /** Number of digits in a hex RGB color value. */
+    private static final int RGB_DIGIT_LENGTH = 6;
+    /** Number of digits in a hex full color value (including alpha). */
+    private static final int FULL_DIGIT_LENGTH = RGB_DIGIT_LENGTH + 2;
+    /** Radix for hex digit values. */
+    private static final int HEX_RADIX = 16;
+
+    /** Shift value for 16 bits (or two color values). */
+    private static final int TWO_BYTES = 16;
+    /** Shift value for 8 bits (or one color value). */
+    private static final int ONE_BYTE = 8;
+
+
+    /** Utility classes should not have public constructors. */
     private GraphicsUtilities() {
     }
 
-    public static final void setAntialiasingOn(final Graphics2D graphics) {
+    /**
+     * Set anti-aliasing on for the given graphics context.
+     *
+     * @param graphics The 2D graphics context to set the attribute for.
+     */
+    public static void setAntialiasingOn(final Graphics2D graphics) {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
-    public static final void setAntialiasingOff(final Graphics2D graphics) {
+    /**
+     * Set anti-aliasing of for the given graphics context.
+     *
+     * @param graphics The 2D graphics context to clear the attribute for.
+     */
+    public static void setAntialiasingOff(final Graphics2D graphics) {
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 
-    public static final void drawLine(final Graphics2D graphics, final int x, final int y,
+    /**
+     * Draw a straight line in the given graphics context from a start position for a given
+     * length along the given horizontal or vertical direction with default thickness.
+     *
+     * @param graphics     The graphics context to draw in.
+     * @param x            Starting X position.
+     * @param y            Starting Y position.
+     * @param length       Length along the desired direction.
+     * @param orientation  Whether the line is vertical or horizontal for the given length.
+     * @see #drawLine(Graphics2D, int, int, int, Orientation, int)
+     */
+    public static void drawLine(final Graphics2D graphics, final int x, final int y,
         final int length, final Orientation orientation) {
-        drawLine(graphics, x, y, length, orientation, 1);
+        drawLine(graphics, x, y, length, orientation, DEFAULT_THICKNESS);
     }
 
-    public static final void drawLine(final Graphics2D graphics, final int x, final int y,
+    /**
+     * Draw a straight line in the given graphics context from a start position for a given
+     * length along the given horizontal or vertical direction with given thickness.
+     *
+     * @param graphics     The graphics context to draw in.
+     * @param x            Starting X position.
+     * @param y            Starting Y position.
+     * @param length       Length along the desired direction.
+     * @param orientation  Whether the line is vertical or horizontal for the given length.
+     * @param thickness    The pixel thickness of the line.
+     * @see #drawLine(Graphics2D, int, int, int, Orientation)
+     */
+    public static void drawLine(final Graphics2D graphics, final int x, final int y,
         final int length, final Orientation orientation, final int thickness) {
         if (length > 0 && thickness > 0) {
             switch (orientation) {
@@ -102,13 +162,13 @@ public final class GraphicsUtilities {
                     graphics.fillRect(x, y, thickness, length);
                     break;
                 default:
-                    break;
+                    throw new UnsupportedOperationException("Unknown orientation " + orientation);
             }
         }
     }
 
     /**
-     * Draws a rectangle with a thickness of 1 pixel at the specified
+     * Draws a rectangle with a thickness of one pixel at the specified
      * coordinates whose <u>outer border</u> is the specified width and height.
      * In other words, the distance from the left edge of the leftmost pixel to
      * the left edge of the rightmost pixel is <tt>width - 1</tt>. <p> This
@@ -119,16 +179,16 @@ public final class GraphicsUtilities {
      * Pivot supports scaling the display host, it is recommended that skins use
      * this method over <tt>java.awt.Graphics#drawRect</tt>.
      *
-     * @param graphics The graphics context that will be used to perform the
-     * operation.
-     * @param x The x-coordinate of the upper-left corner of the rectangle.
-     * @param y The y-coordinate of the upper-left corner of the rectangle.
-     * @param width The <i>outer width</i> of the rectangle.
-     * @param height The <i>outer height</i> of the rectangle.
+     * @param graphics The graphics context that will be used to perform the operation.
+     * @param x        The x-coordinate of the upper-left corner of the rectangle.
+     * @param y        The y-coordinate of the upper-left corner of the rectangle.
+     * @param width    The <i>outer width</i> of the rectangle.
+     * @param height   The <i>outer height</i> of the rectangle.
+     * @see #drawRect(Graphics2D, int, int, int, int, int)
      */
-    public static final void drawRect(final Graphics2D graphics, final int x, final int y,
+    public static void drawRect(final Graphics2D graphics, final int x, final int y,
         final int width, final int height) {
-        drawRect(graphics, x, y, width, height, 1);
+        drawRect(graphics, x, y, width, height, DEFAULT_THICKNESS);
     }
 
     /**
@@ -143,15 +203,15 @@ public final class GraphicsUtilities {
      * Pivot supports scaling the display host, it is recommended that skins use
      * this method over <tt>java.awt.Graphics#drawRect</tt>.
      *
-     * @param graphics The graphics context that will be used to perform the
-     * operation.
-     * @param x The x-coordinate of the upper-left corner of the rectangle.
-     * @param y The y-coordinate of the upper-left corner of the rectangle.
-     * @param width The <i>outer width</i> of the rectangle.
-     * @param height The <i>outer height</i> of the rectangle.
+     * @param graphics  The graphics context that will be used to perform the operation.
+     * @param x         The x-coordinate of the upper-left corner of the rectangle.
+     * @param y         The y-coordinate of the upper-left corner of the rectangle.
+     * @param width     The <i>outer width</i> of the rectangle.
+     * @param height    The <i>outer height</i> of the rectangle.
      * @param thickness The thickness of each edge.
+     * @see #drawRect(Graphics2D, int, int, int, int)
      */
-    public static final void drawRect(final Graphics2D graphics, final int x, final int y,
+    public static void drawRect(final Graphics2D graphics, final int x, final int y,
         final int width, final int height, final int thickness) {
         Graphics2D rectGraphics = graphics;
 
@@ -202,23 +262,26 @@ public final class GraphicsUtilities {
         Color color = null;
         if (value.startsWith("0x") || value.startsWith("0X")) {
             String digits = value.substring(2);
-            if (digits.length() != 8) {
+            if (digits.length() != FULL_DIGIT_LENGTH) {
                 throw new IllegalArgumentException(
-                    "Incorrect Color format.  Expecting exactly 8 digits after the '0x' prefix.");
+                    "Incorrect Color format.  Expecting exactly " + FULL_DIGIT_LENGTH
+                            + " digits after the '0x' prefix.");
             }
 
-            int rgb = Integer.parseInt(digits.substring(0, 6), 16);
-            float alpha = Integer.parseInt(digits.substring(6, 8), 16) / 255f;
+            int rgb = Integer.parseInt(digits.substring(0, RGB_DIGIT_LENGTH), HEX_RADIX);
+            float alpha = Integer.parseInt(digits.substring(RGB_DIGIT_LENGTH, FULL_DIGIT_LENGTH), HEX_RADIX)
+                    / EIGHT_BIT_FLOAT;
 
             color = getColor(rgb, alpha);
         } else if (value.startsWith("#")) {
             String digits = value.substring(1);
-            if (digits.length() != 6) {
+            if (digits.length() != RGB_DIGIT_LENGTH) {
                 throw new IllegalArgumentException(
-                    "Incorrect Color format.  Expecting exactly 6 digits after the '#' prefix.");
+                    "Incorrect Color format.  Expecting exactly " + RGB_DIGIT_LENGTH
+                            + " digits after the '#' prefix.");
             }
 
-            int rgb = Integer.parseInt(digits, 16);
+            int rgb = Integer.parseInt(digits, HEX_RADIX);
             float alpha = 1.0f;
 
             color = getColor(rgb, alpha);
@@ -270,9 +333,9 @@ public final class GraphicsUtilities {
      * @return The full color value from these two parts.
      */
     public static Color getColor(final int rgb, final float alpha) {
-        float red = ((rgb >> 16) & 0xff) / 255f;
-        float green = ((rgb >> 8) & 0xff) / 255f;
-        float blue = (rgb >> 0 & 0xff) / 255f;
+        float red = ((rgb >> TWO_BYTES) & EIGHT_BITS) / EIGHT_BIT_FLOAT;
+        float green = ((rgb >> ONE_BYTE) & EIGHT_BITS) / EIGHT_BIT_FLOAT;
+        float blue = (rgb & EIGHT_BITS) / EIGHT_BIT_FLOAT;
 
         return new Color(red, green, blue, alpha);
     }
