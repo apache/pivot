@@ -642,9 +642,8 @@ public final class DesktopApplicationContext extends ApplicationContext {
         // Load the application
         try {
             Class<?> applicationClass = Class.forName(applicationClassName);
-            if (useApplicationInstance) {
-                // application has already been set, before calling this method
-            } else {
+            // If the application has not already been set before calling this method...
+            if (!useApplicationInstance) {
                 application = (Application) applicationClass.getDeclaredConstructor().newInstance();
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException

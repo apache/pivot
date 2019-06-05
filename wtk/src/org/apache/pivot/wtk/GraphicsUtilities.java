@@ -342,7 +342,8 @@ public final class GraphicsUtilities {
         float startX, startY;
         float endX, endY;
 
-        switch (PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH))) {
+        PaintType pType = PaintType.valueOf(paintType.toUpperCase(Locale.ENGLISH));
+        switch (pType) {
             case SOLID_COLOR:
                 paint = decodeColor((String) JSON.get(dictionary, COLOR_KEY));
                 break;
@@ -357,12 +358,8 @@ public final class GraphicsUtilities {
                 paint = new GradientPaint(startX, startY, startColor, endX, endY, endColor);
                 break;
 
-            case LINEAR_GRADIENT: {
-                startX = JSON.getFloat(dictionary, START_X_KEY);
-                startY = JSON.getFloat(dictionary, START_Y_KEY);
-                endX = JSON.getFloat(dictionary, END_X_KEY);
-                endY = JSON.getFloat(dictionary, END_Y_KEY);
-
+            case LINEAR_GRADIENT:
+            case RADIAL_GRADIENT:
                 @SuppressWarnings("unchecked")
                 List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(dictionary, STOPS_KEY);
 
@@ -379,37 +376,24 @@ public final class GraphicsUtilities {
                     colors[i] = color;
                 }
 
-                paint = new LinearGradientPaint(startX, startY, endX, endY, fractions, colors);
-                break;
-            }
+                if (pType == PaintType.LINEAR_GRADIENT) {
+                    startX = JSON.getFloat(dictionary, START_X_KEY);
+                    startY = JSON.getFloat(dictionary, START_Y_KEY);
+                    endX = JSON.getFloat(dictionary, END_X_KEY);
+                    endY = JSON.getFloat(dictionary, END_Y_KEY);
 
-            case RADIAL_GRADIENT: {
-                float centerX = JSON.getFloat(dictionary, CENTER_X_KEY);
-                float centerY = JSON.getFloat(dictionary, CENTER_Y_KEY);
-                float radius = JSON.getFloat(dictionary, RADIUS_KEY);
+                    paint = new LinearGradientPaint(startX, startY, endX, endY, fractions, colors);
+                } else {
+                    float centerX = JSON.getFloat(dictionary, CENTER_X_KEY);
+                    float centerY = JSON.getFloat(dictionary, CENTER_Y_KEY);
+                    float radius = JSON.getFloat(dictionary, RADIUS_KEY);
 
-                @SuppressWarnings("unchecked")
-                List<Dictionary<String, ?>> stops = (List<Dictionary<String, ?>>) JSON.get(dictionary, STOPS_KEY);
-
-                int n = stops.getLength();
-                float[] fractions = new float[n];
-                Color[] colors = new Color[n];
-                for (int i = 0; i < n; i++) {
-                    Dictionary<String, ?> stop = stops.get(i);
-
-                    float offset = JSON.getFloat(stop, OFFSET_KEY);
-                    fractions[i] = offset;
-
-                    Color color = decodeColor((String) JSON.get(stop, COLOR_KEY));
-                    colors[i] = color;
+                    paint = new RadialGradientPaint(centerX, centerY, radius, fractions, colors);
                 }
-
-                paint = new RadialGradientPaint(centerX, centerY, radius, fractions, colors);
                 break;
-            }
 
             default:
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Paint type " + paintType + " is not supported.");
         }
 
         return paint;

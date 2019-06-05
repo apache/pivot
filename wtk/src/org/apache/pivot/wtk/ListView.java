@@ -1785,11 +1785,10 @@ public class ListView extends Component {
                             item = itemsStateBindMapping.get(listData, index.intValue());
                         }
 
-                        if (itemsStateBindMapping == null) {
-                            // TODO: ?? what to do here?  we need to set the MIXED state for the item
-                        } else {
+                        if (itemsStateBindMapping != null) {
                             itemsStateBindMapping.setState(item, Button.State.MIXED);
                         }
+                        // TODO: else ?? what to do here?  we need to set the MIXED state for the item
 
                         items.add(item);
                     }
@@ -1806,11 +1805,10 @@ public class ListView extends Component {
                             item = itemsStateBindMapping.get(listData, index.intValue());
                         }
 
-                        if (itemsStateBindMapping == null) {
-                            // TODO: ?? what to do here?  we need to set the SELECTED state for the item
-                        } else {
+                        if (itemsStateBindMapping != null) {
                             itemsStateBindMapping.setState(item, Button.State.SELECTED);
                         }
+                        // TODO: else ?? what to do here?  we need to set the SELECTED state for the item
 
                         items.add(item);
                     }
