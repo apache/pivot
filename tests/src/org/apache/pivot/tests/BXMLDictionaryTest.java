@@ -20,7 +20,10 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.json.JSONSerializer;
 
-public class BXMLDictionaryTest {
+public final class BXMLDictionaryTest {
+    /** Hide utility class constructor. */
+    private BXMLDictionaryTest() { }
+
     public static void main(String[] args) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         @SuppressWarnings("unchecked")

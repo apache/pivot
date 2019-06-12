@@ -28,7 +28,10 @@ import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.apache.pivot.sql.ResultList;
 
-public class ResultListTest {
+public final class ResultListTest {
+    /** Hide utility class constructor. */
+    private ResultListTest() { }
+
     public static void main(String[] args) throws Exception {
         // e.g. jdbc:mysql://localhost/test
         String connectionURL = args[0];

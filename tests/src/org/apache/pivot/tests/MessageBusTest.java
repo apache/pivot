@@ -19,7 +19,10 @@ package org.apache.pivot.tests;
 import org.apache.pivot.util.MessageBus;
 import org.apache.pivot.util.MessageBusListener;
 
-public class MessageBusTest {
+public final class MessageBusTest {
+    /** Hide utility class constructor. */
+    private MessageBusTest() { }
+
     public enum TestMessage {
         HELLO, GOODBYE
     }
@@ -36,7 +39,6 @@ public class MessageBusTest {
         MessageBus.sendMessage(TestMessage.HELLO); // a message will be printed
 
         MessageBus.unsubscribe(TestMessage.class, testMessageListener); // unsubscribe
-        MessageBus.sendMessage(TestMessage.GOODBYE); // the message will not be
-                                                     // printed
+        MessageBus.sendMessage(TestMessage.GOODBYE); // the message will not be printed
     }
 }

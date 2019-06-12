@@ -18,7 +18,7 @@ package org.apache.pivot.tests;
 
 import org.apache.pivot.json.JSONSerializer;
 
-public class JSONBeanTest {
+public final class JSONBeanTest {
     public static class A {
         public String greeting = "Hello World";
 
@@ -41,6 +41,9 @@ public class JSONBeanTest {
             return flag;
         }
     }
+
+    /** Hide utility class constructor. */
+    private JSONBeanTest() { }
 
     public static void main(String[] args) throws Exception {
         A a = new A();

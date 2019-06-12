@@ -21,7 +21,10 @@ import org.apache.pivot.wtk.Label;
 import org.apache.pivot.wtk.TabPane;
 import org.apache.pivot.wtk.TabPaneSelectionListener;
 
-public class Pivot751WithoutGUI implements Application {
+public final class Pivot751WithoutGUI implements Application {
+
+    /** Hide utility class constructor. */
+    private Pivot751WithoutGUI() { }
 
     public static void main(String[] args) {
         final TabPane tabPane = new TabPane();

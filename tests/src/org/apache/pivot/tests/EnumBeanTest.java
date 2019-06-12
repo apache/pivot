@@ -24,17 +24,18 @@ import org.apache.pivot.beans.BeanAdapter;
 import org.apache.pivot.serialization.SerializationException;
 import org.apache.pivot.wtk.Orientation;
 
-public class EnumBeanTest {
-    public static void main(String[] args) {
+public final class EnumBeanTest {
+    /** Hide utility class constructor. */
+    private EnumBeanTest() { }
 
+    public static void main(String[] args) {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
+
         try {
             EnumBean enumBean = (EnumBean) bxmlSerializer.readObject(EnumBeanTest.class,
                 "enum_bean.bxml");
             System.out.println("Bean read OK - " + enumBean);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SerializationException e) {
+        } catch (IOException | SerializationException e) {
             e.printStackTrace();
         }
 
