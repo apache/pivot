@@ -18,9 +18,10 @@ package org.apache.pivot.tutorials.bxmlexplorer;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -205,7 +206,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
         ParserConfigurationException, SAXException {
         BXMLSerializer serializer = new BXMLSerializer();
         serializer.setLocation(f.toURI().toURL());
-        try (FileInputStream in = new FileInputStream(f)) {
+        try (InputStream in = Files.newInputStream(f.toPath())) {
             Object obj = serializer.readObject(in);
             if (!(obj instanceof Component)) {
                 throw new IllegalStateException("obj " + obj + " is of class " + obj.getClass()
@@ -231,7 +232,7 @@ public class BXMLExplorerDocument extends CardPane implements Bindable {
             this.loadedComponent = (Component) obj;
             playgroundCardPane.add((Component) obj);
         }
-        try (FileInputStream in2 = new FileInputStream(f)) {
+        try (InputStream in2 = Files.newInputStream(f.toPath())) {
             CreateHighlightedXML xml = new CreateHighlightedXML();
             bxmlSourceTextPane.setDocument(xml.prettyPrint(in2));
         }
