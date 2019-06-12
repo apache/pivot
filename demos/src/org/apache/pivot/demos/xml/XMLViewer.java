@@ -54,7 +54,7 @@ import org.apache.pivot.xml.XMLSerializer;
  * Utility application that allows the user to browse an XML DOM using a tree
  * view component.
  */
-public class XMLViewer implements Application {
+public final class XMLViewer implements Application {
     private Window window = null;
 
     @BXML private TreeView treeView = null;
@@ -69,7 +69,7 @@ public class XMLViewer implements Application {
     public static final String WINDOW_TITLE = "XML Viewer";
 
     @Override
-    public void startup(Display display, Map<String, String> properties) throws Exception {
+    public void startup(final Display display, final Map<String, String> properties) throws Exception {
         BXMLSerializer bxmlSerializer = new BXMLSerializer();
         bxmlSerializer.getNamespace().put(APPLICATION_KEY, this);
 
@@ -97,7 +97,7 @@ public class XMLViewer implements Application {
     }
 
     @Override
-    public boolean shutdown(boolean optional) {
+    public boolean shutdown(final boolean optional) {
         if (window != null) {
             window.close();
         }
@@ -122,7 +122,7 @@ public class XMLViewer implements Application {
         }
     }
 
-    public DropAction drop(Manifest dragContent) {
+    public DropAction drop(final Manifest dragContent) {
         DropAction dropAction = null;
 
         try {
@@ -164,6 +164,7 @@ public class XMLViewer implements Application {
 
         if (node == null) {
             // no selection, but it's ok
+            return;
         } else if (node instanceof TextNode) {
             TextNode textNode = (TextNode) node;
             textArea.setText(textNode.getText());
@@ -212,7 +213,7 @@ public class XMLViewer implements Application {
         }
     }
 
-    private void setDocument(Element document) {
+    private void setDocument(final Element document) {
         // Remove prompt decorator now that we have real data to show
         if (promptDecorator != null) {
             treeView.getDecorators().remove(promptDecorator);
@@ -228,7 +229,11 @@ public class XMLViewer implements Application {
         treeView.setSelectedPath(path);
     }
 
-    public static void main(String[] args) {
+    /**
+     * Run the program on the desktop.
+     * @param args The command line arguments (if any, not used).
+     */
+    public static void main(final String[] args) {
         DesktopApplicationContext.main(XMLViewer.class, args);
     }
 

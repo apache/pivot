@@ -36,11 +36,11 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
      * Supported image formats.
      */
     public enum Format {
-        PNG ("png",  "image/png"),
+        PNG("png", "image/png"),
+        BMP("bmp", "image/bmp"),
+        GIF("gif", "image/gif"),
         JPEG("jpeg", "image/jpeg"),
-        BMP ("bmp",  "image/bmp"),
-        WBMP("wbmp", "image/vnd.wap.wbmp"),
-        GIF ("gif",  "image/gif");
+        WBMP("wbmp", "image/vnd.wap.wbmp");
 
         private String name;
         private String mimeType;
@@ -126,7 +126,7 @@ public class BufferedImageSerializer implements Serializer<BufferedImage> {
     }
 
     @Override
-    public String getMIMEType(final BufferedImage bufferedImage) {
+    public final String getMIMEType(final BufferedImage bufferedImage) {
         return outputFormat.getMIMEType();
     }
 }

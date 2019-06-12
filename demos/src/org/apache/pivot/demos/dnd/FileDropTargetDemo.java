@@ -44,10 +44,11 @@ import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.Window;
 
 public class FileDropTargetDemo extends Window implements Bindable {
-    @BXML
-    private TableView fileTableView;
-    @BXML
-    private PushButton uploadButton;
+    @BXML private TableView fileTableView;
+    @BXML private PushButton uploadButton;
+
+    /** Flag whether to expand directories recursively when dropped. TODO: implement in GUI. */
+    private static boolean expandDirectories = false;
 
     private FileList fileList = null;
 
@@ -122,6 +123,19 @@ public class FileDropTargetDemo extends Window implements Bindable {
                 return (dragContent.containsFileList() ? DropAction.COPY : null);
             }
 
+            private void addFile(File file, FileList tableData) {
+                if (file.isDirectory()) {
+                    tableData.add(file);
+                    if (expandDirectories) {
+                        for (File subdirFile : file.listFiles()) {
+                            addFile(subdirFile, tableData);
+                        }
+                    }
+                } else {
+                    tableData.add(file);
+                }
+            }
+
             @Override
             public DropAction drop(Component component, Manifest dragContent,
                 int supportedDropActions, int x, int y, DropAction userDropAction) {
@@ -130,13 +144,8 @@ public class FileDropTargetDemo extends Window implements Bindable {
                 if (dragContent.containsFileList()) {
                     try {
                         FileList tableData = (FileList) fileTableView.getTableData();
-                        FileList fileListLocal = dragContent.getFileList();
-                        for (File file : fileListLocal) {
-                            if (file.isDirectory()) {
-                                // TODO Expand recursively
-                            }
-
-                            tableData.add(file);
+                        for (File file : dragContent.getFileList()) {
+                            addFile(file, tableData);
                         }
 
                         dropAction = DropAction.COPY;
