@@ -43,6 +43,7 @@ import org.apache.pivot.wtk.media.Image;
 import org.apache.pivot.wtk.skin.ContainerSkin;
 import org.apache.pivot.wtk.skin.terra.TerraFrameSkin.FrameButton;
 import org.apache.pivot.wtk.skin.terra.TerraTheme;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener {
 
@@ -139,8 +140,8 @@ public class FakeWindowSkin extends ContainerSkin implements FakeWindowListener 
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(new Color(contentBorderColor.getRed(), contentBorderColor.getGreen(),
-                contentBorderColor.getBlue(), ALPHA));
+            graphics.setPaint(ColorUtilities.toTransparentColor(contentBorderColor, ALPHA));
+
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);

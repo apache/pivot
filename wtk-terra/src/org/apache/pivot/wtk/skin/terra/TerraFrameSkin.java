@@ -193,7 +193,7 @@ public class TerraFrameSkin extends WindowSkin implements FrameListener {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(ColorUtilities.setTransparencyInColor(contentBorderColor, ALPHA_IMAGE));
+            graphics.setPaint(ColorUtilities.toTransparentColor(contentBorderColor, ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);

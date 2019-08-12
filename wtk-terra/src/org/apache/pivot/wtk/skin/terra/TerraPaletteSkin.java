@@ -109,7 +109,7 @@ public class TerraPaletteSkin extends WindowSkin {
             graphics.fillRect(0, 3, 2, 1);
             graphics.fillRect(3, 3, 2, 1);
 
-            graphics.setPaint(ColorUtilities.setTransparencyInColor(contentBorderColor, ALPHA_IMAGE));
+            graphics.setPaint(ColorUtilities.toTransparentColor(contentBorderColor, ALPHA_IMAGE));
             graphics.fillRect(3, 1, 2, 1);
             graphics.fillRect(0, 4, 2, 1);
             graphics.fillRect(3, 4, 2, 1);
@@ -165,7 +165,7 @@ public class TerraPaletteSkin extends WindowSkin {
     public TerraPaletteSkin() {
         Theme theme = currentTheme();
         Color backgroundColor = theme.getColor(10);
-        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
+        setBackgroundColor(ColorUtilities.toTransparentColor(backgroundColor, ALPHA));
 
         titleBarColor = theme.getColor(4);
         titleBarBackgroundColor = theme.getColor(14);

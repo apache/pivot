@@ -24,6 +24,7 @@ import org.apache.pivot.beans.NamespaceBinding;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 public class PropertyBinding extends Window implements Bindable {
     @Override
@@ -47,6 +48,6 @@ public class PropertyBinding extends Window implements Bindable {
     }
 
     public static String toHex(Color color) {
-        return String.format("#%02X%02X%02X", color.getRed(), color.getBlue(), color.getGreen());
+        return ColorUtilities.toStringValue(color);
     }
 }

@@ -52,7 +52,7 @@ public class ColorUtilitiesTest {
                     + almostBlack.toString() + " does not match any CSS color.");
         }
 
-        Color translucentOrange = ColorUtilities.setTransparencyInColor(CSSColor.Orange, 128);
+        Color translucentOrange = ColorUtilities.toTransparentColor(CSSColor.Orange, 128);
         assertEquals(ColorUtilities.toStringValue(translucentOrange), "0xFFC80080");
         try {
             CSSColor resultOrange = CSSColor.fromColor(translucentOrange);
@@ -83,7 +83,7 @@ public class ColorUtilitiesTest {
         for (CSSColor color : CSSColor.values()) {
             transparency = (transparency + 1) % 256;
             Color originalColor = color.getColor();
-            Color translucentColor = ColorUtilities.setTransparencyInColor(color, transparency);
+            Color translucentColor = ColorUtilities.toTransparentColor(color, transparency);
             String value = (transparency == 255)
                 ? String.format("#%02X%02X%02X",
                     originalColor.getRed(), originalColor.getGreen(), originalColor.getBlue())

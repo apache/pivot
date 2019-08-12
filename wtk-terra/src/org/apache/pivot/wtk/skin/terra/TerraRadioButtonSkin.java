@@ -168,7 +168,7 @@ public class TerraRadioButtonSkin extends RadioButtonSkin {
         // Paint the focus state
         if (radioButton.isFocused()) {
             if (buttonData == null) {
-                Color focusColor = ColorUtilities.setTransparencyInColor(buttonSelectionColor, ALPHA);
+                Color focusColor = ColorUtilities.toTransparentColor(buttonSelectionColor, ALPHA);
                 graphics.setColor(focusColor);
                 graphics.fillOval(0, 0, BUTTON_DIAMETER - 1, BUTTON_DIAMETER - 1);
             } else {

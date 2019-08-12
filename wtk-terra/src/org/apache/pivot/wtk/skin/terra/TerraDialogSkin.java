@@ -99,7 +99,7 @@ public class TerraDialogSkin extends TerraFrameSkin implements DialogListener, D
         super();
 
         Color backgroundColor = getBackgroundColor();
-        setBackgroundColor(ColorUtilities.setTransparencyInColor(backgroundColor, ALPHA));
+        setBackgroundColor(ColorUtilities.toTransparentColor(backgroundColor, ALPHA));
     }
 
     @Override

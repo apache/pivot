@@ -28,7 +28,7 @@ import org.apache.pivot.wtk.CSSColor;
 public final class ColorUtilities {
 
     /**
-     * Private constructor.
+     * Private constructor since this is a utility class (all static methods).
      */
     private ColorUtilities() {
     }
@@ -144,16 +144,22 @@ public final class ColorUtilities {
     }
 
     /**
+     * @return A solid color from the given color value (that is, with the transparency removed
+     * from the original).
+     * @param original The original (potentially transparent) color.
+     */
+    public static Color toSolidColor(final Color original) {
+        return new Color(original.getRed(), original.getGreen(), original.getBlue());
+    }
+
+    /**
      * Returns a modified version of the given Color.
      * @param original The original color
      * @param transparency The desired transparency (alpha) to set.
      * @return An updated version of the color, with the given transparency.
      */
-    public static Color setTransparencyInColor(final Color original, final int transparency) {
-        Color updated = new Color(original.getRed(), original.getGreen(), original.getBlue(),
-            transparency);
-
-        return updated;
+    public static Color toTransparentColor(final Color original, final int transparency) {
+        return new Color(original.getRed(), original.getGreen(), original.getBlue(), transparency);
     }
 
     /**
@@ -162,9 +168,9 @@ public final class ColorUtilities {
      * @param transparency The transparency value to set in the color.
      * @return An updated version of the color, with the given transparency.
      */
-    public static Color setTransparencyInColor(final int colorIndex, final int transparency) {
+    public static Color toTransparentColor(final int colorIndex, final int transparency) {
         Theme theme = Theme.getTheme();
-        return setTransparencyInColor(theme.getColor(colorIndex), transparency);
+        return toTransparentColor(theme.getColor(colorIndex), transparency);
     }
 
     /**
@@ -173,8 +179,44 @@ public final class ColorUtilities {
      * @param transparency The desired transparency (alpha) to set.
      * @return An color value updated from the original with the given transparency.
      */
+    public static Color toTransparentColor(final CSSColor original, final int transparency) {
+        return toTransparentColor(original.getColor(), transparency);
+    }
+
+    /**
+     * Returns a modified version of the given Color.
+     * <p> Deprecated in favor of new {@link #toTransparentColor(Color,int)} method (same functionality, nicer name).
+     * @param original The original color
+     * @param transparency The desired transparency (alpha) to set.
+     * @return An updated version of the color, with the given transparency.
+     */
+    @Deprecated
+    public static Color setTransparencyInColor(final Color original, final int transparency) {
+        return toTransparentColor(original, transparency);
+    }
+
+    /**
+     * Returns a modified version of the given Theme color.
+     * <p> Deprecated in favor of new {@link #toTransparentColor(int,int)} method (same functionality, nicer name).
+     * @param colorIndex Index into the Theme color palette of the color to modify.
+     * @param transparency The transparency value to set in the color.
+     * @return An updated version of the color, with the given transparency.
+     */
+    @Deprecated
+    public static Color setTransparencyInColor(final int colorIndex, final int transparency) {
+        return toTransparentColor(colorIndex, transparency);
+    }
+
+    /**
+     * Returns a modified version of the given {@link CSSColor}.
+     * <p> Deprecated in favor of new {@link #toTransparentColor(CSSColor,int)} method (same functionality, nicer name).
+     * @param original The original color.
+     * @param transparency The desired transparency (alpha) to set.
+     * @return An color value updated from the original with the given transparency.
+     */
+    @Deprecated
     public static Color setTransparencyInColor(final CSSColor original, final int transparency) {
-        return setTransparencyInColor(original.getColor(), transparency);
+        return toTransparentColor(original, transparency);
     }
 
     /**

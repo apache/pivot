@@ -170,7 +170,7 @@ public class TerraCheckboxSkin extends CheckboxSkin {
         // Paint the focus state
         if (checkbox.isFocused()) {
             if (buttonData == null) {
-                Color focusColor = ColorUtilities.setTransparencyInColor(buttonSelectionColor, ALPHA);
+                Color focusColor = ColorUtilities.toTransparentColor(buttonSelectionColor, ALPHA);
                 graphics.setColor(focusColor);
                 graphics.fillRect(0, 0, CHECKBOX_SIZE, CHECKBOX_SIZE);
             } else {

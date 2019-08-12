@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.pivot.wtk.util.ColorUtilities;
+
 /**
  * The complete enumeration of the CSS3/X11 color names and values,
  * taken from here:
@@ -230,7 +232,7 @@ public enum CSSColor {
      * @throws IllegalArgumentException if the color value cannot be found.
      */
     public static CSSColor fromColor(final Color color) {
-        Color solidColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+        Color solidColor = ColorUtilities.toSolidColor(color);
         CSSColor cssColor = colorValueMap.get(solidColor);
         if (cssColor == null) {
             throw new IllegalArgumentException("Incorrect Color value.  "

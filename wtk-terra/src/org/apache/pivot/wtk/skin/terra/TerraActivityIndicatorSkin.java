@@ -24,6 +24,7 @@ import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.Theme;
 import org.apache.pivot.wtk.skin.ActivityIndicatorSkin;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * Activity indicator skin.
@@ -103,7 +104,7 @@ public class TerraActivityIndicatorSkin extends ActivityIndicatorSkin {
         colors = new Color[12];
         for (int i = 0; i < 12; i++) {
             float alpha = 255f * i / 12;
-            colors[i] = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) alpha);
+            colors[i] = ColorUtilities.toTransparentColor(color, (int) alpha);
         }
     }
 

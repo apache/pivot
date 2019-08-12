@@ -23,6 +23,7 @@ import org.apache.pivot.collections.List;
 import org.apache.pivot.util.Utils;
 import org.apache.pivot.wtk.CSSColor;
 import org.apache.pivot.wtk.GraphicsUtilities;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * List item representing a color.
@@ -35,21 +36,21 @@ public class ColorItem {
         this(Color.BLACK, null);
     }
 
-    public ColorItem(Color color) {
+    public ColorItem(final Color color) {
         this(color, null);
     }
 
-    public ColorItem(Color color, String name) {
+    public ColorItem(final Color color, final String name) {
         setColor(color);
         setName(name);
     }
 
-    public ColorItem(String color) {
+    public ColorItem(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
         setName(color);
     }
 
-    public ColorItem(CSSColor cssColor) {
+    public ColorItem(final CSSColor cssColor) {
         setColor(cssColor.getColor());
         setName(cssColor.toString());
     }
@@ -58,13 +59,13 @@ public class ColorItem {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(final Color color) {
         Utils.checkNull(color, "color");
 
         this.color = color;
     }
 
-    public void setColor(String color) {
+    public void setColor(final String color) {
         setColor(GraphicsUtilities.decodeColor(color, "color"));
     }
 
@@ -72,10 +73,14 @@ public class ColorItem {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Set the name value for this color item.
+     * @param name The new name for this item. If {@code null} then the
+     * {@link ColorUtilities#toStringValue} is used instead.
+     */
+    public void setName(final String name) {
         if (name == null) {
-            this.name = String.format("#%02X%02X%02X",
-                color.getRed(), color.getGreen(), color.getBlue());
+            this.name = ColorUtilities.toStringValue(color);
         } else {
             this.name = name;
         }
@@ -83,7 +88,7 @@ public class ColorItem {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         return (o instanceof ColorItem && ((ColorItem) o).color.equals(color));
     }
 

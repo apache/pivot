@@ -23,6 +23,7 @@ import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.GraphicsUtilities;
 import org.apache.pivot.wtk.ListView;
 import org.apache.pivot.wtk.media.Image;
+import org.apache.pivot.wtk.util.ColorUtilities;
 
 /**
  * List view renderer for displaying color swatches.
@@ -94,8 +95,7 @@ public class ListViewColorItemRenderer extends ListViewItemRenderer {
             Color color = colorItem.getColor();
             String name = colorItem.getName();
 
-            colorBadge.setColor(listView.isEnabled() ? color : new Color(color.getRed(),
-                color.getGreen(), color.getBlue(), ALPHA));
+            colorBadge.setColor(listView.isEnabled() ? color : ColorUtilities.toTransparentColor(color, ALPHA));
             listItem.setText(name);
         }
 
