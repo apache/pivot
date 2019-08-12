@@ -22,7 +22,7 @@ import java.util.Iterator;
 import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
-import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.ReadOnlySequence;
 import org.apache.pivot.util.ImmutableIterator;
 import org.apache.pivot.util.ListenerList;
 import org.apache.pivot.util.Utils;
@@ -31,12 +31,12 @@ import org.apache.pivot.util.Utils;
  * Unmodifiable implementation of the {@link List} interface.
  * @param <T> Type of elements in this list.
  */
-public final class ImmutableList<T> implements List<T> {
+public final class ImmutableList<T> extends ReadOnlySequence<T> implements List<T> {
+    private static final long serialVersionUID = 3506674138756807777L;
+
     private List<T> list = null;
 
-    private ListListenerList<T> listListeners = new ListListenerList<>();
-
-    private static final String ERROR_MSG = "An Immutable List cannot be modified.";
+    private transient ListListenerList<T> listListeners = new ListListenerList<>();
 
     public ImmutableList(final List<T> list) {
         Utils.checkNull(list, "list");
@@ -46,38 +46,8 @@ public final class ImmutableList<T> implements List<T> {
 
     @Override
     @UnsupportedOperation
-    public int add(final T item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public void insert(final T item, final int index) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public T update(final int index, final T item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public int remove(final T item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public Sequence<T> remove(final int index, final int count) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
     public void clear() {
-        throw new UnsupportedOperationException(ERROR_MSG);
+        throw new UnsupportedOperationException(unsupportedOperationMsg);
     }
 
     @Override
@@ -108,7 +78,7 @@ public final class ImmutableList<T> implements List<T> {
     @Override
     @UnsupportedOperation
     public void setComparator(final Comparator<T> comparator) {
-        throw new UnsupportedOperationException(ERROR_MSG);
+        throw new UnsupportedOperationException(unsupportedOperationMsg);
     }
 
     @Override

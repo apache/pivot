@@ -154,7 +154,7 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     /**
-     * Construct a new ArrayList sorted by the given comparator, with the
+     * Construct a new ArrayList to be sorted by the given comparator, with the
      * default capacity.
      *
      * @param comparator A comparator to sort the entries in the list.
@@ -174,6 +174,18 @@ public class ArrayList<T> implements List<T>, Serializable {
         Utils.checkNonNegative(capacity, "capacity");
 
         items = new Object[capacity];
+    }
+
+    /**
+     * Construct a new ArrayList to be sorted by the given comparator,
+     * with the given capacity.
+     *
+     * @param capacity The initial capacity for this list.
+     * @param comparator The comparator to use when sorting the list.
+     */
+    public ArrayList(final int capacity, final Comparator<T> comparator) {
+        this(capacity);
+        this.comparator = comparator;
     }
 
     /**
@@ -465,17 +477,6 @@ public class ArrayList<T> implements List<T>, Serializable {
     }
 
     /**
-     * Add all the elements of the given collection to this list.
-     *
-     * @param collection The collection whose elements should be added.
-     */
-    public void addAll(final Collection<T> collection) {
-        for (T item : collection) {
-            add(item);
-        }
-    }
-
-    /**
      * Trim the internal storage for this list to exactly fit the current
      * number of items in it.
      */
@@ -676,16 +677,18 @@ public class ArrayList<T> implements List<T>, Serializable {
      * @param <T> Type of the list elements.
      * @param arrayList The list to search.
      * @param item The item to search for in the list.
-     * @param comparator Comparator to use for testing.
+     * @param comparator Comparator to use for testing; if {@code null} then the "natural" ordering of the objects
+     * is used (see the caveats of {@link Arrays#binarySearch(Object[], Object)}).
      * @return The index of the item in the list if found, or -1 if the item cannot be found in the list.
      */
     @SuppressWarnings("unchecked")
     public static <T> int binarySearch(final ArrayList<T> arrayList, final T item, final Comparator<T> comparator) {
         Utils.checkNull(arrayList, "arrayList");
-        Utils.checkNull(comparator, "comparator");
         Utils.checkNull(item, "item");
 
-        int index = Arrays.binarySearch((T[]) arrayList.items, 0, arrayList.length, item, comparator);
+        int index = (comparator == null)
+              ? Arrays.binarySearch((T[]) arrayList.items, 0, arrayList.length, item)
+              : Arrays.binarySearch((T[]) arrayList.items, 0, arrayList.length, item, comparator);
 
         return index;
     }
@@ -699,7 +702,7 @@ public class ArrayList<T> implements List<T>, Serializable {
      * @return The index of the item in the list if found, or -1 if the item is not found.
      */
     public static <T extends Comparable<? super T>> int binarySearch(final ArrayList<T> arrayList, final T item) {
-        return binarySearch(arrayList, item, (o1, o2) -> o1.compareTo(o2));
+        return binarySearch(arrayList, item, null);
     }
 
 }

@@ -18,63 +18,35 @@ package org.apache.pivot.collections;
 
 import java.io.Serializable;
 
-import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.util.Utils;
 
 /**
  * A read-only implementation of the {@link Sequence} interface that wraps an array.
+ * <p> Used to interface between a Java array and a Pivot control that expects a
+ * {@link Sequence} of objects (such as a {@code TablePane}, {@code Menu}, {@code ListView}
+ * or similar).
+ *
+ * @param <T> The underlying type of the array objects.
  */
-public class ArrayAdapter<T> implements Sequence<T>, Serializable {
+public class ArrayAdapter<T> extends ReadOnlySequence<T> implements Serializable {
     private static final long serialVersionUID = 1143706808122308239L;
-
-    private static final String ERROR_MSG = "An Array Adapter is immutable.";
 
     private T[] array;
 
     @SuppressWarnings({ "unchecked" })
-    public ArrayAdapter(T... array) {
+    public ArrayAdapter(final T... array) {
         Utils.checkNull(array, "array");
 
         this.array = array;
     }
 
     @Override
-    @UnsupportedOperation
-    public int add(T item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public void insert(T item, int index) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public T update(int index, T item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public int remove(T item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public Sequence<T> remove(int index, int count) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    public T get(int index) {
+    public T get(final int index) {
         return array[index];
     }
 
     @Override
-    public int indexOf(T item) {
+    public int indexOf(final T item) {
         for (int index = 0; index < array.length; index++) {
             if ((item == null && array[index] == null) || item.equals(array[index])) {
                 return index;

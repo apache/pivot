@@ -102,6 +102,9 @@ public class ArrayListTest {
 
         iterator.toStart();
         assertEquals(iterator.next(), "M");
+
+        ArrayList.sort(list);
+        assertEquals(ArrayList.binarySearch(list, "N"), 4);
     }
 
     @Test

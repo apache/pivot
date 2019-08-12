@@ -35,11 +35,11 @@ import org.apache.pivot.util.Utils;
  * (for instance). A useful way to do this is to override the {@code "toString()"} method of
  * the enum to provide a human-readable version of the enum constant value, which will then
  * appear in the UI.
+ *
+ * @param <E> The underlying enum type that backs this list.
  */
-public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
+public class EnumList<E extends Enum<E>> extends ReadOnlySequence<E> implements List<E>, Serializable {
     private static final long serialVersionUID = 5104856822133576300L;
-
-    private static final String ERROR_MSG = "An Enum List cannot be modified.";
 
     private class ItemIterator implements Iterator<E> {
         private int i = 0;
@@ -61,7 +61,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         @Override
         @UnsupportedOperation
         public void remove() {
-            throw new UnsupportedOperationException(ERROR_MSG);
+            throw new UnsupportedOperationException(unsupportedOperationMsg);
         }
     }
 
@@ -75,7 +75,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
      *
      * @param enumClass The enum class whose constant values are used to fully populate the list.
      */
-    public EnumList(Class<E> enumClass) {
+    public EnumList(final Class<E> enumClass) {
         this.enumClass = enumClass;
         items = enumClass.getEnumConstants();
     }
@@ -86,47 +86,17 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
     @Override
     @UnsupportedOperation
-    public int add(E item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public void insert(E item, int index) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public E update(int index, E item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public int remove(E item) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
-    public Sequence<E> remove(int index, int count) {
-        throw new UnsupportedOperationException(ERROR_MSG);
-    }
-
-    @Override
-    @UnsupportedOperation
     public void clear() {
-        throw new UnsupportedOperationException(ERROR_MSG);
+        throw new UnsupportedOperationException(unsupportedOperationMsg);
     }
 
     @Override
-    public E get(int index) {
+    public E get(final int index) {
         return items[index];
     }
 
     @Override
-    public int indexOf(E item) {
+    public int indexOf(final E item) {
         Utils.checkNull(item, "item");
 
         return item.ordinal();
@@ -146,15 +116,25 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
         return Arrays.copyOf(items, items.length);
     }
 
+    /**
+     * Always returns {@code null} because there can never be a {@link Comparator}
+     * set to change from the "natural" ordering of the {@code Enum}.
+     * @return {@code null} always.
+     */
     @Override
     public Comparator<E> getComparator() {
         return null;
     }
 
+    /**
+     * Unsupported because the list is always ordered in the "natural" order of the
+     * backing {@code Enum}.
+     * @throws UnsupportedOperationException always.
+     */
     @Override
     @UnsupportedOperation
-    public void setComparator(Comparator<E> comparator) {
-        throw new UnsupportedOperationException(ERROR_MSG);
+    public void setComparator(final Comparator<E> comparator) {
+        throw new UnsupportedOperationException(unsupportedOperationMsg);
     }
 
     @Override
@@ -189,7 +169,7 @@ public class EnumList<E extends Enum<E>> implements List<E>, Serializable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         return (o instanceof EnumList<?> && ((EnumList<E>) o).enumClass == enumClass);
     }
 

@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 import org.apache.pivot.annotations.UnsupportedOperation;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.ListListener;
-import org.apache.pivot.collections.Sequence;
+import org.apache.pivot.collections.ReadOnlySequence;
 import org.apache.pivot.util.ListenerList;
 
 /**
@@ -34,7 +34,7 @@ import org.apache.pivot.util.ListenerList;
  * <i>fail-fast</i>: if the bounds of the enclosing spinner data change during
  * iteration, a <tt>ConcurrentModificationException</tt> will be thrown.
  */
-public class NumericSpinnerData implements List<Integer> {
+public class NumericSpinnerData extends ReadOnlySequence<Integer> implements List<Integer> {
 
     private class DataIterator implements Iterator<Integer> {
         // Parity members to support ConcurrentModificationException check
@@ -72,11 +72,13 @@ public class NumericSpinnerData implements List<Integer> {
         }
     }
 
+    private static final long serialVersionUID = 6703972744166403263L;
+
     private int lowerBound;
     private int upperBound;
     private int increment;
 
-    private ListListenerList<Integer> listListeners = new ListListenerList<>();
+    private transient ListListenerList<Integer> listListeners = new ListListenerList<>();
 
     /**
      * Creates a new <tt>NumericSpinnerData</tt> instance bounded from
@@ -94,7 +96,7 @@ public class NumericSpinnerData implements List<Integer> {
      * @param lowerBound The lower bound for the data.
      * @param upperBound The upper bound for the data.
      */
-    public NumericSpinnerData(int lowerBound, int upperBound) {
+    public NumericSpinnerData(final int lowerBound, final int upperBound) {
         this(lowerBound, upperBound, 1);
     }
 
@@ -106,7 +108,7 @@ public class NumericSpinnerData implements List<Integer> {
      * @param upperBound The upper bound for the data.
      * @param increment  The increment between values.
      */
-    public NumericSpinnerData(int lowerBound, int upperBound, int increment) {
+    public NumericSpinnerData(final int lowerBound, final int upperBound, final int increment) {
         if (lowerBound >= upperBound) {
             throw new IllegalArgumentException("Lower bound must be less than upper bound.");
         }
@@ -126,7 +128,7 @@ public class NumericSpinnerData implements List<Integer> {
         return lowerBound;
     }
 
-    public void setLowerBound(int lowerBound) {
+    public void setLowerBound(final int lowerBound) {
         this.lowerBound = lowerBound;
     }
 
@@ -134,7 +136,7 @@ public class NumericSpinnerData implements List<Integer> {
         return upperBound;
     }
 
-    public void setUpperBound(int upperBound) {
+    public void setUpperBound(final int upperBound) {
         this.upperBound = upperBound;
     }
 
@@ -142,62 +144,12 @@ public class NumericSpinnerData implements List<Integer> {
         return increment;
     }
 
-    public void setIncrement(int increment) {
+    public void setIncrement(final int increment) {
         this.increment = increment;
     }
 
-    /**
-     * Not supported in this class.
-     * @throws UnsupportedOperationException always.
-     */
-    @UnsupportedOperation
     @Override
-    public int add(Integer item) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Not supported in this class.
-     * @throws UnsupportedOperationException always.
-     */
-    @UnsupportedOperation
-    @Override
-    public void insert(Integer item, int index) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Not supported in this class.
-     * @throws UnsupportedOperationException always.
-     */
-    @UnsupportedOperation
-    @Override
-    public Integer update(int index, Integer item) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Not supported in this class.
-     * @throws UnsupportedOperationException always.
-     */
-    @UnsupportedOperation
-    @Override
-    public int remove(Integer item) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Not supported in this class.
-     * @throws UnsupportedOperationException always.
-     */
-    @UnsupportedOperation
-    @Override
-    public Sequence<Integer> remove(int index, int count) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Integer get(int index) {
+    public Integer get(final int index) {
         if (index < 0 || index >= getLength()) {
             throw new IndexOutOfBoundsException("Invalid index: " + index);
         }
@@ -206,7 +158,7 @@ public class NumericSpinnerData implements List<Integer> {
     }
 
     @Override
-    public int indexOf(Integer item) {
+    public int indexOf(final Integer item) {
         int index = -1;
 
         if (item >= lowerBound && item <= upperBound) {
@@ -228,7 +180,7 @@ public class NumericSpinnerData implements List<Integer> {
     @UnsupportedOperation
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(unsupportedOperationMsg);
     }
 
     @Override
@@ -256,8 +208,8 @@ public class NumericSpinnerData implements List<Integer> {
      */
     @UnsupportedOperation
     @Override
-    public void setComparator(Comparator<Integer> comparator) {
-        throw new UnsupportedOperationException();
+    public void setComparator(final Comparator<Integer> comparator) {
+        throw new UnsupportedOperationException(unsupportedOperationMsg);
     }
 
     @Override
