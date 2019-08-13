@@ -52,9 +52,7 @@ public class RESTDemoServlet extends QueryServlet {
         try {
             JSONSerializer jsonSerializer = new JSONSerializer();
             value = jsonSerializer.readObject(new FileInputStream(file));
-        } catch (IOException exception) {
-            throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
-        } catch (SerializationException exception) {
+        } catch (IOException | SerializationException exception) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -76,9 +74,7 @@ public class RESTDemoServlet extends QueryServlet {
 
             JSONSerializer jsonSerializer = new JSONSerializer();
             jsonSerializer.writeObject(value, new FileOutputStream(file));
-        } catch (IOException exception) {
-            throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
-        } catch (SerializationException exception) {
+        } catch (IOException | SerializationException exception) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -110,9 +106,7 @@ public class RESTDemoServlet extends QueryServlet {
         try {
             JSONSerializer jsonSerializer = new JSONSerializer();
             jsonSerializer.writeObject(value, new FileOutputStream(file));
-        } catch (IOException exception) {
-            throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
-        } catch (SerializationException exception) {
+        } catch (IOException | SerializationException exception) {
             throw new QueryException(Query.Status.INTERNAL_SERVER_ERROR);
         }
 
