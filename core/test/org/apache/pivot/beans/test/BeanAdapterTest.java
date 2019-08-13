@@ -27,6 +27,9 @@ import java.math.MathContext;
 import java.util.Date;
 import java.util.Random;
 
+import org.apache.pivot.beans.BeanAdapter;
+import org.apache.pivot.collections.HashMap;
+import org.apache.pivot.collections.Map;
 import org.apache.pivot.json.JSONSerializer;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -173,6 +176,44 @@ public class BeanAdapterTest {
 
         System.out.println("targetTest.getString() = \"" + targetTest.getString() + "\"");
         assertEquals(srcTest.getString(), targetTest.getString());
+    }
+
+    @Test
+    public void testPutAll() {
+        Map<String, Object> sourceMap = new HashMap<>();
+        sourceMap.put("bd", BigDecimal.TEN);
+        sourceMap.put("bi", BigInteger.TWO);
+        sourceMap.put("string", "This is a test of the Emergency Broadcast System");
+
+        BeanAdapter obj = new BeanAdapter(srcTest);
+        obj.putAll(sourceMap);
+
+        try {
+            jsonSerializer.writeObject(srcTest, writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+            return;
+        }
+
+        System.out.println("json string from srcTest = " + writer.toString());
+
+        reader = new StringReader(writer.toString());
+
+        try {
+            targetTest = (BeanAdapterSampleObject) jsonSerializer.readObject(reader);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+            return;
+        }
+
+        System.out.println("targetTest.getString() = \"" + targetTest.getString() + "\"");
+        System.out.println("targetTest.getBd() = " + targetTest.getBd());
+        System.out.println("targetTest.getBi() = " + targetTest.getBi());
+        assertEquals(srcTest.getString(), targetTest.getString());
+        assertEquals(srcTest.getBd(), targetTest.getBd());
+        assertEquals(srcTest.getBi(), targetTest.getBi());
     }
 
 }

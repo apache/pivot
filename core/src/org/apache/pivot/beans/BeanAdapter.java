@@ -320,23 +320,6 @@ public class BeanAdapter implements Map<String, Object> {
      * Invokes the setter methods for all the given properties that are present
      * in the map. The method signatures are determined by the type of the
      * values. If any value is <tt>null</tt>, the return type of the getter
-     * method is used.
-     *
-     * @param valueMap The map of keys and values to be set.
-     * @throws PropertyNotFoundException If any of the given properties do not
-     * exist or are read-only.
-     */
-    @Override
-    public void putAll(final Map<String, Object> valueMap) {
-        for (String key : valueMap) {
-            put(key, valueMap.get(key));
-        }
-    }
-
-    /**
-     * Invokes the setter methods for all the given properties that are present
-     * in the map. The method signatures are determined by the type of the
-     * values. If any value is <tt>null</tt>, the return type of the getter
      * method is used. There is an option to ignore (that is, not throw)
      * exceptions during the process, but to return status if any exceptions
      * were caught and ignored.
