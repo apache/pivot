@@ -182,7 +182,7 @@ public class BeanAdapterTest {
     public void testPutAll() {
         Map<String, Object> sourceMap = new HashMap<>();
         sourceMap.put("bd", BigDecimal.TEN);
-        sourceMap.put("bi", BigInteger.TWO);
+        sourceMap.put("bi", BigInteger.ONE);
         sourceMap.put("string", "This is a test of the Emergency Broadcast System");
 
         BeanAdapter obj = new BeanAdapter(srcTest);
